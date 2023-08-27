@@ -7,7 +7,7 @@ some.
 **!!! NOTE !!!**
 This repo's prior patch history resides with the
 [dotfiles-archive-2023](https://github.com/sdothum/dotfiles-archive-2023)
-repo -- which had become quite large, prompting this instance.
+repo -- which had become quite unwieldy, prompting this instance.
 
 ## installation
 
