@@ -4,6 +4,11 @@ These are the dotfiles referenced in
 [the darnedest thing](http://thedarnedestthing.com/colophon), and then
 some.
 
+!!! NOTE !!!
+This repo's prior patch history resides with the
+[dotfiles-archive-2023](https://github.com/sdothum/dotfiles-archive-2023)
+repo (which had become quite large) prompting this instance.
+
 ## installation
 
 <pre>git clone --depth 1 https://github.com/sdothum/dotfiles.git</pre>
