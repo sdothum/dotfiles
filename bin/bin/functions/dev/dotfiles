@@ -11,7 +11,7 @@
 usage() {
   echo "usage: $(basename $0) [<stowdir>] add [-f] <package>[/<filespec>]* | rm <filespec>
                 amend|comment [<comment>] | redo|undo
-                init | bulk <comment> | sync
+                init [<comment>] | bulk <comment> | sync
                 dry-run | folders|ignore | list | log"
   ditto rules "$DOTFILES"
   exit 1
@@ -45,7 +45,7 @@ init() {
   git push -u origin main
   git remote set-url origin git+ssh://git@github.com/sdothum/dotfiles.git
 
-  dotfiles bulk "fresh commit"
+  dotfiles bulk "$DESC"
 }
 
 commit() {
@@ -124,7 +124,7 @@ case $1 in
 
   folder*) vim -g $DOTFILES .gitignore $(messages) ;;
   ignore ) vim -g .gitignore $DOTFILES $(messages) ;;
-  init   ) init ;;
+  init   ) DESC="${2:-fresh commit}"; init ;;
   list   ) git log --pretty=format:"%h - %an, %ar : %s" ;;
   log    ) git log | less ;;
   
