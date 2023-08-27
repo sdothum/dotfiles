@@ -87,12 +87,12 @@ while : ;do
   fi
 
   case $attr in
-      a) ;;
-      n) ;;
-      o) ;;
-      u) ;;
-      c) ;;
-      *) echo $value | grep -q '[^0-9]' && { usage; continue; }
+    a) ;;
+    n) ;;
+    o) ;;
+    u) ;;
+    c) ;;
+    *) echo $value | grep -q '[^0-9]' && { usage; continue; }
   esac
 
   case $attr in
