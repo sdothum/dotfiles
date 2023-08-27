@@ -9,12 +9,12 @@ usage() { echo "usage: [ALPINE=<hostname> [SERVER=<hostname>]] $(basename $0) 0 
 [ $1 ] || usage
 while [ $1 ] ;do
   case $1 in
-  [0-5]  ) stage=$1     ;;
-  33     ) stage=$1     ;;
-  edge   ) EDGE=true    ;;
-  vpstest) VPSTEST=true ;;
-  vps    ) VPS=true     ;;
-  *      ) usage        ;;
+    [0-5]  ) stage=$1     ;;
+    33     ) stage=$1     ;;
+    edge   ) EDGE=true    ;;
+    vpstest) VPSTEST=true ;;
+    vps    ) VPS=true     ;;
+    *      ) usage        ;;
   esac
   shift
 done
@@ -39,9 +39,9 @@ vga()  { lspci | grep VGA | grep -q "$1"; }
 migrate() {
   EXCLUDE="--exclude='lost+found' --exclude='sync-conflict' --exclude='.deprecated' --exclude='.git' --exclude='.hg' --exclude='arch' --exclude='debian' --exclude='nixos' --exclude='obarun' --exclude='void'"
   case $1 in
-  pull) source="${SERVER}:"; mkdir -p $HOME/stow/ ;;
-  push) target="${ALPINE}:" ;;
-  *   ) info "migrate push | pull <package>*"; exit 1 ;;
+    pull) source="${SERVER}:"; mkdir -p $HOME/stow/ ;;
+    push) target="${ALPINE}:" ;;
+    *   ) info "migrate push | pull <package>*"; exit 1 ;;
   esac
   shift
   list=$(echo " $@" | sed "s|  *| ${source}$HOME/stow/|g")

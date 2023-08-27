@@ -55,75 +55,75 @@ altmono() { altmono='a-toothless f-extended G-hookless+'; }
 cmdopts() {
   while [ $1 ] ;do
     case $1 in
-    # shapes
-    kindle                                   ) ereader=$1 ;;
-    kobo                                     ) ereader=$1 ;;
-    quasi-ext*                               ) quasi=$1 ;;
-    quasi-pro*                               ) quasi=$1 ;;
+      # shapes
+      kindle      ) ereader=$1 ;;
+      kobo        ) ereader=$1 ;;
+      quasi-ext*  ) quasi=$1 ;;
+      quasi-pro*  ) quasi=$1 ;;
 
-    # language
-    latin+greek                              ) language=$1 ;;
-    cyrillic                                 ) language=$1 ;;
-    fluent                                   ) language=$1 ;;
+      # language
+      latin+greek ) language=$1 ;;
+      cyrillic    ) language=$1 ;;
+      fluent      ) language=$1 ;;
 
-    # glyphs
-    D-serifless                              ) D=$1 ;;
-    G-hookless                               ) G=$1 ;;
-    G-toothless                              ) G=$1 ;;
-    I-descending                             ) I=$1 ;;
-    I-serifless                              ) I=$1 ;;                  # source code variant
-    J-descending                             ) J=$1 ;;
-    Q-bar                                    ) Q=$1 ;;
-    Q-crossing                               ) Q=$1 ;;
-    Q-detached                               ) Q=$1 ;;
-    Q-hook                                   ) Q=$1 ;;
-    Q-horizontal                             ) Q=$1 ;;
-    Q-open                                   ) Q=$1 ;;
-    Q-straight                               ) Q=$1 ;;
+      # glyphs
+      D-serifless ) D=$1 ;;
+      G-hookless  ) G=$1 ;;
+      G-toothless ) G=$1 ;;
+      I-descending) I=$1 ;;
+      I-serifless ) I=$1 ;;        # source code variant
+      J-descending) J=$1 ;;
+      Q-bar       ) Q=$1 ;;
+      Q-crossing  ) Q=$1 ;;
+      Q-detached  ) Q=$1 ;;
+      Q-hook      ) Q=$1 ;;
+      Q-horizontal) Q=$1 ;;
+      Q-open      ) Q=$1 ;;
+      Q-straight  ) Q=$1 ;;
 
-    a-earless                                ) a=$1 ;;
-    a-rounded                                ) a=$1 ;;
-    a-single                                 ) a=$1 ;;
-    b-rounded                                ) glyph b $1 ;;            # unolexic
-    d-tailed                                 ) glyph d $1 ;;            # ebook variant
-    d-toothless                              ) glyph d $1 ;;            # with p-eared
-    f-extended                               ) f=$1 ;;                  # unolexic (homage to universal grotesk)
-    j-serifed                                ) j=$1 ;;
-    m-rounded                                ) m=$1 ;;
-    p-eared                                  ) glyph p $1 ;;
-    p-serifed                                ) glyph p $1 ;;
-    q-hook                                   ) q=$1 ;;                  # ebook variant
+      a-earless   ) a=$1 ;;
+      a-rounded   ) a=$1 ;;
+      a-single    ) a=$1 ;;
+      b-rounded   ) glyph b $1 ;;  # unolexic
+      d-tailed    ) glyph d $1 ;;  # ebook variant
+      d-toothless ) glyph d $1 ;;  # with p-eared
+      f-extended  ) f=$1 ;;        # unolexic (homage to universal grotesk)
+      j-serifed   ) j=$1 ;;
+      m-rounded   ) m=$1 ;;
+      p-eared     ) glyph p $1 ;;
+      p-serifed   ) glyph p $1 ;;
+      q-hook      ) q=$1 ;;        # ebook variant
 
-    0-split                                  ) zero=$1 ;;
-    at-tall                                  ) at=$1 ;;                 # source code variant
-    paren-flat                               ) paren=$1 ;;              # source code variant
+      0-split     ) zero=$1 ;;
+      at-tall     ) at=$1 ;;       # source code variant
+      paren-flat  ) paren=$1 ;;    # source code variant
 
-    # typefaces
-    coding                                   ) coding=true ;;
-    grotesk                                  ) style=$1 ;;
-    mu                                       ) mu=true ;;
-    test                                     ) test=true ;;
-    web                                      ) web=true ;;
-    ypsilon                                  ) ypsilon=true ;;
+      # typefaces
+      coding      ) coding=true ;;
+      grotesk     ) style=$1 ;;
+      mu          ) mu=true ;;
+      test        ) test=true ;;
+      web         ) web=true ;;
+      ypsilon     ) ypsilon=true ;;
 
-    # styles
-    altmono                                  ) altmono ;;   # alternate "monospace" coding font
-    book+regular                             ) adjust=$1 ;;
-    ebook                                    ) ebook=true ;;
-    family                                   ) [ $ereader ] && [ $2 ] && { family=$2; shift; } || usage ;;
-    open                                     ) open=$1; f=f-extended ;;
-    source-only                              ) source_only=true ;;
-    space                                    ) [ $2 ] && { space="$1 $2"; shift; } || usage ;;
-    
-    # geometry
-    ascender                                 ) [ $2 ] && { ascender="$1 $2"; shift; } || usage ;;
-    cap                                      ) [ $2 ] && { [ $2 = 'off' ] && unset cap || cap="$1 $2"; shift; } || usage ;;
-    leading                                  ) [ $2 ] && { leading="$1 $2"; shift; } || usage ;;
-    sb                                       ) [ $2 ] && { sb="$1 $2"; shift; } || usage ;;
+      # styles
+      altmono     ) altmono ;;     # alternate "monospace" coding font
+      book+regular) adjust=$1 ;;
+      ebook       ) ebook=true ;;
+      family      ) [ $ereader ] && [ $2 ] && { family=$2; shift; } || usage ;;
+      open        ) open=$1; f=f-extended ;;
+      source-only ) source_only=true ;;
+      space       ) [ $2 ] && { space="$1 $2"; shift; } || usage ;;
+      
+      # geometry
+      ascender    ) [ $2 ] && { ascender="$1 $2"; shift; } || usage ;;
+      cap         ) [ $2 ] && { [ $2 = 'off' ] && unset cap || cap="$1 $2"; shift; } || usage ;;
+      leading     ) [ $2 ] && { leading="$1 $2"; shift; } || usage ;;
+      sb          ) [ $2 ] && { sb="$1 $2"; shift; } || usage ;;
 
-    nocopy                                   ) unset ecopy ;;
-    --                                       ) shift; . $HOME/bin/functions/font/iosevka $@; exit ;;
-    *                                        ) usage ;;
+      nocopy      ) unset ecopy ;;
+      --          ) shift; . $HOME/bin/functions/font/iosevka $@; exit ;;
+      *           ) usage ;;
     esac
     shift
   done
