@@ -30,7 +30,7 @@ usage() {
                [english | latin+greek | cyrillic | fluent | ligature <name>]
 
                [grotesque (default) | atkinson | geometric | jost]
-               [elementary | grotesk | descenders | open | a-[single|toothless] | b-corner | D-serifless | d-[tailed|toothless] | FP-descending | f-extended | G-[corner|hookless[+]|rounded|toothed|toothless] | g-double | I-[serifed|serifless|descending] | i-serifed | J-[descending|flat] | j-[serifed|serifless] | l-[hooky|serifless] | p-[eared|serifed] | Q-[bar|bend|crossing|detached|hook|open|straight|custom] | q-[hook|tailed] | T-descending | t-[cross | descending] | u-toothed | Y-descending | y-straight | asterisk-high | at-tall | 0-split | 4-open[+] | paren-flat]*
+               [elementary | grotesk | descenders | open | a-[single|toothless] | b-corner | D-serifless | d-[tailed|toothless] | FP-descending | f-extended | G-[corner|hookless[+]|rounded|toothed|toothless] | g-double | I-[serifed|serifless|descending] | i-serifed | J-[descending|flat] | j-[serifed|serifless] | l-[hooky|serifless] | p-[eared|serifed] | Q-[bar|bend|crossing|detached|hook|open|straight|custom] | q-[hook|tailed] | T-descending | t-[cross|descending] | u-toothed | Y-descending | y-straight | asterisk-high | at-tall | 0-split | 4-open[+] | paren-flat]*
 
                [proof | menu | book+regular | kindle | kobo | leading <decimal>]
                [double] [space M|<decimal>] [ emdash <decimal> ]
