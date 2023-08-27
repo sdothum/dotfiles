@@ -20,9 +20,9 @@ mode() {
 }
 
 case $1 in
-on|true  ) mode SideLodeMode true  ;;
-off|false) mode SideLodeMode false ;;
-*        ) mode SideLodeMode; usage ;;
+  on|true  ) mode SideLodeMode true  ;;
+  off|false) mode SideLodeMode false ;;
+  *        ) mode SideLodeMode; usage ;;
 esac
 
 # vim: set ft=sh: #
