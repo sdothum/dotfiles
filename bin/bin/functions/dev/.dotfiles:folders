@@ -10,6 +10,7 @@ dunst
 fish
 fonts/.fonts/Iosevka*
 georgi/qmk_firmware/keyboards/gboards/georgi
+.gitignore
 helix
 herbstluftwm
 kb-layout-evaluation/layout_evaluation
