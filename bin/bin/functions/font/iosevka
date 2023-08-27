@@ -8,7 +8,7 @@
 
 # NOTE: new git versions may introduce new glyph style names !!
 #
-#       This script is compatible with Iosevka v25.x
+#       This script is compatible with Iosevka v26.x
 
 # eg. source code and desktop fonts..
 #     iosevka expanded I-serifless at-tall 
@@ -23,7 +23,7 @@
 #     iosevka ebook atkinson english         (strict hyperlegible variants)
 #     iosevka expanded geometric jost proof  (expanded width jost prose font)
 
-# type -t usage | grep -q 'shell function' ||  # see make_install
+# see make_install
 
 usage() {
   echo "usage: iosevka [normal (default) | extended | expanded | ebook | dyslexic | heading]
@@ -466,7 +466,7 @@ cyrl-zhe = 'straight'                     # ж
 cyrl-yeri = 'round'                       # ь
 cyrl-yery = 'round'                       # Ы
 dollar = '$dollar'                        # $
-eszet = 'sulzbacher'                      # ß
+eszet = 'sulzbacher-serifless'            # ß
 long-s = 'bent-hook-serifless'            # ſ
 lower-iota = 'flat-tailed'                # ι
 # lower-lambda = 'straight-turn'          # λ
