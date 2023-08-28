@@ -6,7 +6,7 @@
 
 # .................................................................... FONT_RAMP
 
-usage() { echo "usage: $(basename $0) <size> <exponent>"; exit 1; }
+usage() { usage: "$(basename $0) <size> <exponent>"; }
 
 [ $1 ] && start=$1    || start=5.435
 [ $2 ] && exponent=$2 || exponent=1.05

@@ -6,7 +6,7 @@
 
 # ............................................................. kindle FONT_RAMP
 
-usage() { echo "usage: $(basename $0) <power> <fontsize>, in decimals e.g. 1.05 5.48"; exit 1; }
+usage() { usage: "$(basename $0) <power> <fontsize>, in decimals e.g. 1.05 5.48"; }
 
 [ $2 ] || usage
 

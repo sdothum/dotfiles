@@ -6,7 +6,7 @@
 
 # ................................................................. Visual timer
 
-usage() { echo "usage: $(basename $0) <seconds> | <test>"; exit 1; }
+usage() { usage: "$(basename $0) <seconds> | <test>"; }
 
 trap 'echo && exit 1' 2
 

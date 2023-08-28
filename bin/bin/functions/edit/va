@@ -6,7 +6,7 @@
 
 # ....................................................................... Editor
 
-usage() { echo "usage: $(basename $0) <regex>"; exit 1; }
+usage() { usage: "$(basename $0) <regex>"; }
 
 # v by content
 [ "$1"     ] && files=$(al "$@") || usage

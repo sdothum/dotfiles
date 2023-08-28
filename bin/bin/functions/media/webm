@@ -8,7 +8,7 @@
 
 # ................................................................... Screencast
 
-usage() { echo "usage: $(basename $0) DVI-'0 | DVI-'1 | l'eft | r'ight | a'll"; exit 1; }
+usage() { usage: "$(basename $0) DVI-'0 | DVI-'1 | l'eft | r'ight | a'll"; }
 
 target=/net/media/videos/recordings
 delay=${delay:-1}

@@ -6,7 +6,7 @@
 
 # ................................................................ E-book author
 
-usage() { echo "usage: $(basename $0) <title - author.ext>"; exit 1; }
+usage() { usage: "$(basename $0) <title - author.ext>"; }
 
 # rox -> ebooks "$@"
 author=$(echo "${1%.*}" | sed 's/ - /:/g' | rev | cut -d: -f1 | rev)

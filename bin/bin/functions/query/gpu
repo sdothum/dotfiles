@@ -6,7 +6,7 @@
 
 # .......................................................................... GPU
 
-usage() { echo "usage: $(basename $0) [display | nvidia | ati | intel | macbook]"; exit 1; }
+usage() { usage: "$(basename $0) [display | nvidia | ati | intel | macbook]"; }
 
 vga() {
   lspci 2>/dev/null | grep VGA | grep -qi "$1" || return 1

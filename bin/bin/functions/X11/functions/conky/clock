@@ -6,7 +6,7 @@
 # ........................................................................ Conky
 
 # Usage: conky clock
-usage() { echo "usage: $(basename $0) clock [auto | stop | on | off]"; exit 1; }
+usage() { usage: "$(basename $0) clock [auto | stop | on | off]"; }
 
 CONKYRC=$HOME/.conkyrc.qclocktwo
 [ -e $CONKYRC ] || exit

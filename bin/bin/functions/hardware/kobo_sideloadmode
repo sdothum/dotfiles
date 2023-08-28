@@ -6,7 +6,7 @@
 
 # ................................................................ Sideload Mode
 
-usage() { echo "usage: $(basename $0) on | true | off | false"; exit 1; }
+usage() { usage: "$(basename $0) on | true | off | false"; }
 
 CONF="/run/media/$USER/KOBOeReader/.kobo/Kobo/Kobo eReader.conf"
 

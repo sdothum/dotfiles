@@ -6,7 +6,7 @@
 
 # ................................................................. Conky colorN
 
-usage() { echo "usage: rice $(basename $0) <color>"; exit 1; }
+usage() { usage: "rice $(basename $0) <color>"; }
 
 COLORS=$PALETTE/.theme
 

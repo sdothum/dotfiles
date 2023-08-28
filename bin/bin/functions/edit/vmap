@@ -6,11 +6,7 @@
 
 # ....................................................................... Editor
 
-usage() {
-  echo "usage: $(basename $0) [vim]"
-  echo '       see vim command :Map'
-  exit 1
-}
+usage() { usage: "$(basename $0) [vim], see vim command :Map"; }
 
 vimrc="$STOW/vim/.vimrc $HOME/.vim/config/*.vim"
 index=$CACHEDIR/vmap

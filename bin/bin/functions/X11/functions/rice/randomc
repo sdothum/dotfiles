@@ -6,7 +6,7 @@
 
 # ................................................................. Random color
 
-usage() { echo "usage: $(basename $0) randomc [-#]"; exit 1; }
+usage() { usage: "$(basename $0) randomc [-#]"; }
 
 case $1 in
   '' ) hash='#' ;;

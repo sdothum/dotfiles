@@ -7,12 +7,12 @@
 # ...................................................................... Syncing
 
 usage() {
-  echo "usage: $(basename $0)(server) 'start/show | c'lient | I'nitialize | l'ist | q'uit | r@'te <queue>"
-  echo "usage: $(basename $0)(queue) B|b'ottom | D|d'elete | P|p'ause | R|r'esume | s'earch | T|t'op <queue>"
-  echo "usage: $(basename $0)(queue) C'lear"
-  echo ' -> nzb d <GID,GID-GID,..>'
-  echo ' -> nzb D <title>'
-  echo ' -> nzb C == nzb D queue'
+  echo "$(basename $0) (server) 'start/show | c'lient | I'nitialize | l'ist | q'uit | r@'te <queue>
+$(basename $0) (queue) B|b'ottom | D|d'elete | P|p'ause | R|r'esume | s'earch | T|t'op <queue>
+$(basename $0) (queue) C'lear
+-> nzb d <GID,GID-GID,..>
+-> nzb D <title>
+-> nzb C == nzb D queue" | usage:
   exit 1
 }
 

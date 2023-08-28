@@ -1,0 +1,28 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Shell
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Usage message
+
+# Usage: .. | usage [ $0 | "<command> <parameter>*" ]
+#        $0 assumes dir/script/functions/script folder hierarchy
+
+USAGE=/tmp/usage:content
+
+if [ "$1" ] ;then
+  if [ -e "$1" ] ;then
+    name=$(basename $1)
+    message="$name $(ls -1 $(dirname $1)/functions/$name | tr '\n' ' ' | sed 's/ / \| /g')"
+  fi
+
+  echo "${BROWN}Usage: ${WHITE}$(echo "${message:-$1}" | sed -r "s/^ *([^ ]+ )/\1${cyan}/")${NOCOLOR}"
+  exit 1
+else
+  cat >$USAGE
+  command=$(head -1 $USAGE | cut -d' ' -f1)
+  echo "${BROWN}Usage: $(sed -r "s/($command )/${WHITE}\1${cyan}/g; s/^/       /g; 1s/^ *//;" $USAGE)"
+fi
+
+# vim: set ft=sh: #

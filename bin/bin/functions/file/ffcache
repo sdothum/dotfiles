@@ -7,8 +7,8 @@
 # ........................................................... Concatenate caches
 
 usage() {
-  echo "usage: $(basename $0) [-] <catlg> <cache> [<cache>]*"
-  echo '       where, <cache> -> <path> [<options>]*, see fcache'
+  echo "$(basename $0) [-] <catlg> <cache> [<cache>]*
+where, <cache> -> <path> [<options>]*, see fcache" | usage:
   exit 1
 }
 

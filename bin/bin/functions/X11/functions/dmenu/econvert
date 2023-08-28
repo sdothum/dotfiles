@@ -5,7 +5,7 @@
 
 # ...................................................................... E-books
 
-usage() { echo "usage: $(basename $0) econvert [azw3 | epub | reformat] [default | justify | noindent | poetry | all] [<file> | '<regex>', default '*epub']"; exit 1; }
+usage() { usage: "$(basename $0) econvert [azw3 | epub | reformat] [default | justify | noindent | poetry | all] [<file> | '<regex>', default '*epub']"; }
 
 KINDLE=/run/media/$USER/Kindle
 [ -d $KINDLE ] && sudo mount -o remount,rw $(mount | grep $KINDLE | cut -d' ' -f1) $KINDLE

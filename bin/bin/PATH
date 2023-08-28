@@ -6,7 +6,7 @@
 
 # ................................................ PATH + ($USER) directory tree
 
-usage() { echo "usage: . \$HOME/bin/PATH [<directory>], default \$USER/bin"; exit 1; }
+usage() { usage: ". \$HOME/bin/PATH [<directory>], default \$USER/bin"; }
 
 [ $USER = root ] && exit
 ROOT=${1:-$HOME/bin}

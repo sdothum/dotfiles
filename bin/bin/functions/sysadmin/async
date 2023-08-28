@@ -6,7 +6,7 @@
 
 # ........................................................... async optimization
 
-usage() { echo "usage: $(basename $0) on | off"; exit 1; }
+usage() { usage: "$(basename $0) on | off"; }
 
 BOOT='networking wpa_supplicant'
 DEFAULT='nfs nfsmount openntpd'

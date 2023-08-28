@@ -8,20 +8,20 @@
 # see make_install iosevka
 
 usage() { 
-  echo "usage: $(basename $0) Q_hook | q_hook | descending <shape>
-       $(basename $0) I_descending <shape>
-       $(basename $0) Q_custom <shape>
-       $(basename $0) Q_horizontal <shape>
-       $(basename $0) T_descending <shape>
-       $(basename $0) t_descending <shape>
-       $(basename $0) Y_descending <shape>
-       $(basename $0) FP_descending <shape>
-       $(basename $0) punctuation <emdash> <shape>
-       $(basename $0) ligature <width> <shape>
-       $(basename $0) space <space>
-       $(basename $0) bookweight [book+regular]
-       $(basename $0) copy <family> <name>, font alias via commandline only
-       $(basename $0) map  <family> <glyph> <glyph>, map U+<glyph> via commandline only"
+  echo "$(basename $0) Q_hook | q_hook | descending <shape>
+$(basename $0) I_descending <shape>
+$(basename $0) Q_custom <shape>
+$(basename $0) Q_horizontal <shape>
+$(basename $0) T_descending <shape>
+$(basename $0) t_descending <shape>
+$(basename $0) Y_descending <shape>
+$(basename $0) FP_descending <shape>
+$(basename $0) punctuation <emdash> <shape>
+$(basename $0) ligature <width> <shape>
+$(basename $0) space <space>
+$(basename $0) bookweight [book+regular]
+$(basename $0) copy <family> <name>, font alias via commandline only
+$(basename $0) map  <family> <glyph> <glyph>, map U+<glyph> via commandline only" | usage:
   exit 1
 }
 

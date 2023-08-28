@@ -8,7 +8,7 @@
 
 # ............................................................... Window manager
 
-usage() { echo "usage: $(basename $0) 'start [-<delay>] | 2bwm | awesome | bspwm | budgie | cinnamon | dwm | gnome | goomwwm | guile | herbstluftwm | i3 | kde | lxde | lxqt | notion | openbox | ratpoison | razor-qt | spectrwm | stumpwm | subtle | shell | windowchef | wmii | wmutils | wtftw | xfce4 | xmonad"; rm -f $BOOTWM; exit 1; }
+usage() { usage: "$(basename $0) 'start [-<delay>] | 2bwm | awesome | bspwm | budgie | cinnamon | dwm | gnome | goomwwm | guile | herbstluftwm | i3 | kde | lxde | lxqt | notion | openbox | ratpoison | razor-qt | spectrwm | stumpwm | subtle | shell | windowchef | wmii | wmutils | wtftw | xfce4 | xmonad"; rm -f $BOOTWM; }
 
 BOOTWM=$SESSION/boot:wm  # see console_login, user_login
 WM=$HOME/.windowmanager

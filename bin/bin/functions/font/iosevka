@@ -26,23 +26,23 @@
 # see make_install
 
 usage() {
-  echo "usage: iosevka [normal (default) | extended | expanded | ebook | dyslexic | heading]
-               [english | latin+greek | cyrillic | fluent | ligature <name>]
+  echo "$(basename $0) [normal (default) | extended | expanded | ebook | dyslexic | heading]
+        [english | latin+greek | cyrillic | fluent | ligature <name>]
 
-               [grotesque (default) | atkinson | geometric | jost]
-               [elementary | grotesk | descenders | open | a-[single|toothless] | b-corner | D-serifless | d-[tailed|toothless] | FP-descending | f-extended | G-[corner|hookless[+]|rounded|toothed|toothless] | g-double | I-[serifed|serifless|descending] | i-serifed | J-[descending|flat] | j-[serifed|serifless] | l-[hooky|serifless] | p-[eared|serifed] | Q-[bar|bend|crossing|detached|hook|open|straight|custom] | q-[hook|tailed] | T-descending | t-[cross|descending] | u-toothed | Y-descending | y-straight | asterisk-high | at-tall | 0-split | 4-open[+] | paren-flat]*
+        [grotesque (default) | atkinson | geometric | jost]
+        [elementary | grotesk | descenders | open | a-[single|toothless] | b-corner | D-serifless | d-[tailed|toothless] | FP-descending | f-extended | G-[corner|hookless[+]|rounded|toothed|toothless] | g-double | I-[serifed|serifless|descending] | i-serifed | J-[descending|flat] | j-[serifed|serifless] | l-[hooky|serifless] | p-[eared|serifed] | Q-[bar|bend|crossing|detached|hook|open|straight|custom] | q-[hook|tailed] | T-descending | t-[cross|descending] | u-toothed | Y-descending | y-straight | asterisk-high | at-tall | 0-split | 4-open[+] | paren-flat]*
 
-               [proof | menu | book+regular | kindle | kobo | leading <decimal>]
-               [double] [space M|<decimal>] [ emdash <decimal> ]
-               [family <name> | <prefix>Monolexic]
+        [proof | menu | book+regular | kindle | kobo | leading <decimal>]
+        [double] [space M|<decimal>] [ emdash <decimal> ]
+        [family <name> | <prefix>Monolexic]
 
-               [ascender [+-]<integer>]
-               [cap [-+]<integer> | extended]
-               [quasi-[proportional|extension]]
-               [noround | sb <decimal>]
-               [shape <emu>]
-               [weight <integer> <name> | webfont]
-               [xheight [-+]<decimal>]"
+        [ascender [+-]<integer>]
+        [cap [-+]<integer> | extended]
+        [quasi-[proportional|extension]]
+        [noround | sb <decimal>]
+        [shape <emu>]
+        [weight <integer> <name> | webfont]
+        [xheight [-+]<decimal>]" | usage:
   exit 1
 }
 
@@ -376,6 +376,7 @@ while [ $1 ] ;do
     weight       ) weight $2 $3 || usage; shift 2 ;;                               # custom font weight
     xheight      ) xheight $2   || usage; shift ;;                                 # height of x (experimental for larger fontsizes)
 
+    help         ) usage ;;
     *            ) usage ;;
   esac
   shift

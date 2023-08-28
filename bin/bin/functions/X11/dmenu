@@ -71,7 +71,7 @@ if [ $(basename $0) = dmenu ] ;then
     shift
     . $CONFIG/$msg $@
   else
-    usage $0
+    usage: $0
   fi
   # restore
   gui && [ $fullscreen ] && toggle fullscreen

@@ -7,9 +7,9 @@
 # ........................................................... Package management
 
 usage() {
-  echo "usage: $(basename $0) edge | testing | v<version> package*  (add)"
-  echo "           repo [ lts | edge | testing | latest-stable | v<version> ]  (set)"
-  echo "           <command...>"
+  echo "$(basename $0) edge | testing | v<version> package*, add package from repo
+$(basename $0) repo [ lts | edge | testing | latest-stable | v<version> ], set active repo
+$(basename $0) <command...>" | usage:
   exit 1
 }
 

@@ -7,16 +7,16 @@
 # ........................................................ Random word generator
 
 usage() {
-  echo "usage: $(basename $0) [option]* [<regex>*]"
-  echo "       options: wordlen=<length>,   max word length, default '30'"
-  echo "                size=<count>,       corpus selection from dictionary, default '30000'"
-  echo "                ISE,                convert 'ize' to British 'ise'"
-  echo "                mixed|simple,       punctuation, default 'simple'"
-  echo "                <words>*,           per sentence, typical '8 11 14 17', default '5 6 7 8'"
-  echo "                corpus=<filename>,  default 'Amphetype:<regex>.words**'"
-  echo "                output=<filename>,  default 'Amphetype:size-<corpus-punctuation>.txt**'"
-  echo "                                    ** <...> == <filename> substitution"
-  echo "                <regex>,            word match [<regex>], default 'a-z'"
+  echo "$(basename $0) [option]* [<regex>*]
+options: wordlen=<length>,   max word length, default '30'
+         size=<count>,       corpus selection from dictionary, default '30000'
+         ISE,                convert 'ize' to British 'ise'
+         mixed|simple,       punctuation, default 'simple'
+         <words>*,           per sentence, typical '8 11 14 17', default '5 6 7 8'
+         corpus=<filename>,  default 'Amphetype:<regex>.words**'
+         output=<filename>,  default 'Amphetype:size-<corpus-punctuation>.txt**'
+                             ** <...> == <filename> substitution
+         <regex>,            word match [<regex>], default 'a-z'" | usage:
   exit 1
 }
 

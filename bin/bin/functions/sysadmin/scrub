@@ -13,8 +13,8 @@
 # crontab: 0 0 * * * [ -s /tmp/scrub ] && <path>/scrub $(cat /tmp/scrub)
 
 usage() { 
-  echo "usage: $(basename $0) a'll | [[-] boot | root | net | share | backup]"
-  echo "       $(basename $0) c'ancel | s'tatus | I'nitialize  [boot | root | net | share | backup]"
+  echo "$(basename $0) a'll | { [-] boot | root | net | share | backup }
+$(basename $0) { c'ancel | s'tatus | I'nitialize } [boot | root | net | share | backup]" | usage:
   exit 1
 }
 

@@ -7,15 +7,17 @@
 # ................................................................... Find cache
 
 usage() {
-  echo "usage: $(basename $0) I'nitialize"
-  echo "usage: $(basename $0) [type] <dir> [<options>*], type -> find -type <type>"
-  echo "usage: $(basename $0) - <dir> [<options>*], force directory cache update"
+  echo "$(basename $0) I'nitialize
+$(basename $0) [type] <dir> [<options>*], type -> find -type <type>
+$(basename $0) - <dir> [<options>*], force directory cache update
+" | usage:
   ls -l $FCACHE:*
   exit 1
 }
 
 FCACHE=$CACHEDIR/fcache
 BOOKMARKS="$(dirname $0)/.fcache:bookmarks"
+[ $1 ] || usage
 
 # Note: non-directory caches automatically update their associated directory caches via stest
 #       but directory caches (used in fuzzy jumping) require manual updating, as required,

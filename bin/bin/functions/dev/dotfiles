@@ -9,11 +9,12 @@
 # .......................................................................... Git
 
 usage() {
-  echo "usage: $(basename $0) [<stowdir>] add [-f] <package>[/<filespec>]* | rm <filespec>
-                amend|comment [<comment>] | redo|undo
-                init [<comment>] | bulk <comment> | sync
-                dry-run | folders|ignore | list | log"
-  ditto rules "$DOTFILES"
+  echo "$(basename $0) [<stowdir>] add [-f] <package>[/<filespec>]* | rm <filespec>
+$(basename $0) amend|comment [<comment>] | redo|undo
+$(basename $0) init [<comment>] | bulk <comment> | sync
+$(basename $0) dry-run | folders|ignore | list | log
+
+see $DOTFILES" | usage:
   exit 1
 }
 

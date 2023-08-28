@@ -6,7 +6,7 @@
 
 # ................................................................... Dictionary
 
-usage() { echo "usage: $(basename $0) [[-=]<maxlen> | -] <word>, '-' (include phrases)"; exit 1; }
+usage() { usage: "$(basename $0) [[-=]<maxlen> | -] <word>, '-' (include phrases)"; }
 
 alpine && exec sdcv -th $@
 

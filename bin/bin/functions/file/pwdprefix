@@ -6,7 +6,7 @@
 
 # ....................................................................... Rename
 
-usage() { echo "usage: $(basename $0) filename [<directory>]"; exit 1; }
+usage() { usage: "$(basename $0) filename [<directory>]"; }
 
 # rename files with parent (directory) name
 # thunar custom action can pass file and directory names

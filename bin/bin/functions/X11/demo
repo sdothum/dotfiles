@@ -37,7 +37,7 @@ if [ -e $(dirname $0)/functions/demo/$msg ] ;then
   . $(dirname $0)/functions/demo/$msg
   demo
 else
-  usage $0
+  usage: $0
 fi
 
 # vim: set ft=sh: #

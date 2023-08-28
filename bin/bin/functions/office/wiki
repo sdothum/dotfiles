@@ -6,7 +6,7 @@
 
 # .......................................................... the darnedest thing
 
-function usage; echo "usage: "(basename (status filename))" <search>"; exit 1; end
+function usage; eval usage: '"'(basename (status filename)) \<search\>'"'; exit 1; end
 
 test "$argv[1]" || usage
 cd $HOME/vimwiki

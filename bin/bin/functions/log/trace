@@ -8,7 +8,7 @@
 
 # .......................................................................... Log
 
-usage() { echo "usage: $(basename $0) [<level>] [--]** [<message> [<detail>]], ** [--] start/stop elapse time"; exit 1; }
+usage() { usage: "$(basename $0) [<level>] [--]** [<message> [<detail>]], ** [--] start/stop elapse time"; }
 
 CHRONO=/tmp/trace:chrono
 

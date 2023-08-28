@@ -7,32 +7,32 @@
 # ........................................................... Package management
 
 usage() {
-  echo "usage: $(basename $0) [-] S[S] | D | U | R | H | Q [-<options>] [--<option>]* <package>"
-  echo "        S .. sync noconfirm"
-  echo "       -S .. sync confirm"
-  echo "       SS .. sync force noconfirm"
-  echo "       -S    update repos"
-  echo "        D .. downgrade"
-  echo "        U .. update noconfirm"
-  echo "       -U .. update confirm"
-  echo "        R .. remove recursive"
-  echo "       -R .. remove non-recursive"
-  echo "        H .. hold"
-  echo "       -H .. unhold"
-  echo "        Q .. installed"
-  echo "    .. $(basename $0) B | C | H | S | U"
-  echo "        B    backup cache"
-  echo "        C    check database"
-  echo "        H    held (list)"
-  echo "        S    installed (count)"
-  echo "        U    upgrade system"
-  echo "    .. $(basename $0) [/ | f** | [-]d | h] [<package> | <file>**]"
-  echo "        / .. search (package and description)"
-  echo "        f .. find (file)"
-  echo "        d .. dependencies"
-  echo "        h .. history"
-  echo "        r .. required by"
-  echo "          .. query"
+  echo "$(basename $0) [-] S[S] | D | U | R | H | Q [-<options>] [--<option>]* <package>
+        S .. sync noconfirm
+       -S .. sync confirm
+       SS .. sync force noconfirm
+       -S    update repos
+        D .. downgrade
+        U .. update noconfirm
+       -U .. update confirm
+        R .. remove recursive
+       -R .. remove non-recursive
+        H .. hold
+       -H .. unhold
+        Q .. installed
+$(basename $0) B | C | H | S | U
+        B    backup cache
+        C    check database
+        H    held (list)
+        S    installed (count)
+        U    upgrade system
+$(basename $0) [/ | f** | [-]d | h] [<package> | <file>**]
+        / .. search (package and description)
+        f .. find (file)
+        d .. dependencies
+        h .. history
+        r .. required by
+          .. query" | usage:
   exit 1
 }
 

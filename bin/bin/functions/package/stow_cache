@@ -9,7 +9,7 @@
 # Note: this is additive only, permitting multiple <repo> paths with successive calls
 #       restored wita a single stow call!
 
-usage() { echo "usage: $(basename $0) <repo> <path[/file]> [<hostname>]"; exit 1; }
+usage() { usage: "$(basename $0) <repo> <path[/file]> [<hostname>]"; }
 
 STOW=$HOME/stow          # update master
 

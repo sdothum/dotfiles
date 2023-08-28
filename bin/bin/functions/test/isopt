@@ -6,7 +6,7 @@
 
 # ....................................................................... Option
 
-usage() { echo "usage: $(basename $0) -[-]<option>"; exit 1; }
+usage() { usage: "$(basename $0) -[-]<option>"; }
 
 [ $# -gt 0 ] || usage
 echo "$1" | grep -E -q "^[-][-]?[[:alnum:]|-]*$"

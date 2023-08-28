@@ -9,11 +9,11 @@
 # Usage: rice [<message>], see functions/rice
 
 msg=$1
-[ $msg ] && shift || usage $0
+[ $msg ] && shift || usage: $0
 if [ -e $(dirname $0)/functions/rice/$msg ] ;then
   . $(dirname $0)/functions/rice/$msg $@
 else
-  usage $0
+  usage: $0
 fi
 
 # vim: set ft=sh: #

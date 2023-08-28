@@ -6,7 +6,7 @@
 
 # ................................................................... Dictionary
 
-usage() { echo "usage: $(basename $0) [-t] <word>"; exit 1; }
+usage() { usage: "$(basename $0) [-t] <word>"; }
 
 dict() { /usr/bin/dict $1 | sed '/^.*Moby Thesaurus/,$d' | grep -v 'Moby Thesaurus'; }
 
