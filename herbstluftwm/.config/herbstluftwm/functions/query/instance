@@ -5,10 +5,8 @@
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ............................................................... Instance winid
-usage() {
-  echo "usage: $(basename $0) instance <instance>"
-  exit 1
-}
+
+usage() { usage: "$(basename $0) instance <instance>"; }
 
 [ $1 ] || usage
 
