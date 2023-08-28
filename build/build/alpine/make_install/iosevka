@@ -6,13 +6,15 @@
 # ...................................................................... iosevka
 
 usage() { 
-  echo "usage: $(basename $0) iosevka [kindle | kobo | ebook | web] [nocopy] [family <name>]
-                            [book+regular | latin+greek | cyrillic | fluent]
-                            [quasi-extension | space <parm>]
-                            [mu | test | altmono | coding | grotesk | open ]
-                            [ D-serifless | G-[hookless[+]|toothless|default] | [t]I-[serifless|descending] | J-descending | j-serifed | m-rounded | Q-[bar|horizontal|open|straight|default] | Q-[bar|crossing|detached|hook|straight|custom] | a-[single|earless|rounded] | b-rounded | d-[tailed|toothless] | f-extended | p-[eared|serifed] | q-hook | at-tall | 0-split | paren-flat ]
-                            [ascender <parm> | cap <parm> | leading <parm> | sb <parm>]
-                            [-- <options>*]"
+  echo "$(basename $0) iosevka [kindle | kobo | ebook | web] [nocopy] [family <name>]
+                     [book+regular | latin+greek | cyrillic | fluent]
+                     [quasi-extension | space <parm>]
+                     [mu | test | altmono | coding | grotesk | open ]
+                     [ D-serifless | G-[hookless[+]|toothless] | [I]-[serifless|descending] | J-descending | Q-[bar|crossing|detached|hook|horizontal|open|straight]
+                     [ a-[single|earless|rounded] | b-rounded | d-[tailed|toothless] | f-extended | j-serifed | m-rounded | p-[eared|serifed] | q-hook ]
+                     [ 0-split | at-tall | paren-flat ]
+                     [ascender <parm> | cap <parm> | leading <parm> | sb <parm>]
+                     [-- <options>*]" | usage:
   exit 1
 }
 
@@ -123,6 +125,7 @@ cmdopts() {
 
       nocopy      ) unset ecopy ;;
       --          ) shift; . $HOME/bin/functions/font/iosevka $@; exit ;;
+      help        ) usage ;;
       *           ) usage ;;
     esac
     shift
