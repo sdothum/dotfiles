@@ -52,6 +52,7 @@ commit() {
   echo
   git commit --message="$DESC"
   git push --force --set-upstream origin main
+  COMMIT=true  # see bulk
 }
 
 pending() {
@@ -110,7 +111,7 @@ unset pending
 case $1 in
   help   ) usage ;;
   ''     ) dotfiles dry-run; grep -q "$UPTODATE" $MESSAGES || { ifyes "update repo" && repo; } ;;
-  bulk   ) NOPROMPT=true; DESC="${2:-bulk commit}"; repo ;;
+  bulk   ) NOPROMPT=true; DESC="${2:-bulk commit}"; repo; [ $COMMIT ] && { underline; dotfiles dry-run; } ;;
 
   add    ) shift; [ "$1" = '-f' ] && { force=-f; shift; }
            while [ "$1" ] ;do add "$1"; shift ;done ;;  # handle filename spaces
