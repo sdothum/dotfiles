@@ -8,31 +8,31 @@
 
 usage() {
   echo "$(basename $0) [-] S[S] | D | U | R | H | Q [-<options>] [--<option>]* <package>
-        S .. sync noconfirm
-       -S .. sync confirm
-       SS .. sync force noconfirm
-       -S    update repos
-        D .. downgrade
-        U .. update noconfirm
-       -U .. update confirm
-        R .. remove recursive
-       -R .. remove non-recursive
-        H .. hold
-       -H .. unhold
-        Q .. installed
+<       S .. sync noconfirm
+<      -S .. sync confirm
+<      SS .. sync force noconfirm
+<      -S    update repos
+<       D .. downgrade
+<       U .. update noconfirm
+<      -U .. update confirm
+<       R .. remove recursive
+<      -R .. remove non-recursive
+<       H .. hold
+<      -H .. unhold
+<       Q .. installed
 $(basename $0) B | C | H | S | U
-        B    backup cache
-        C    check database
-        H    held (list)
-        S    installed (count)
-        U    upgrade system
+<       B    backup cache
+<       C    check database
+<       H    held (list)
+<       S    installed (count)
+<       U    upgrade system
 $(basename $0) [/ | f** | [-]d | h] [<package> | <file>**]
-        / .. search (package and description)
-        f .. find (file)
-        d .. dependencies
-        h .. history
-        r .. required by
-          .. query" | usage:
+<       / .. search (package and description)
+<       f .. find (file)
+<       d .. dependencies
+<       h .. history
+<       r .. required by
+<         .. query" | usage:
   exit 1
 }
 

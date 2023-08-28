@@ -22,7 +22,8 @@ if [ "$1" ] ;then
 else
   cat >$USAGE
   command=$(head -1 $USAGE | cut -d' ' -f1)
-  echo "${BROWN}Usage: $(sed -r "s/($command )/${WHITE}\1${cyan}/g; s/^/       /g; 1s/^ *//;" $USAGE)"
+  echo "${BROWN}Usage: $(sed -r "s/($command )/${WHITE}\1${cyan}/g; s/^< /  /g; s/^/       /g; 1s/^ *//;" $USAGE)"  # "< " anti-tab
+  # exit 1  # is responsibility of calling script 
 fi
 
 # vim: set ft=sh: #
