@@ -258,6 +258,7 @@
 **/nnn/.config/nnn/plugins/wallpaper
 **/nnn/.config/nnn/plugins/x2sel
 **/nnn/.config/nnn/plugins/xdgdefault
+**/nnn/.config/nnn/.selection
 **/nnn/.config/nnn/sessions
 **/nohup.out
 **/notes
