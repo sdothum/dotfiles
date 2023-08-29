@@ -106,13 +106,14 @@ sync() {
 
 repo()     { while read file <&3 ;do add "$file" ;done 3< $DOTFILES; }  # input file descriptor to handle filename spaces
 messages() { [ -e $MESSAGES ] && echo $MESSAGES; }
+status()   { underline; dotfiles dry-run; }
 
 # $@ substitution within complex expressions is more predictably handled by var substitution
 unset pending
 case $1 in
   help   ) usage ;;
-  ''     ) dotfiles dry-run; grep -q "$UPTODATE" $MESSAGES || { ifyes "update repo" && repo; } ;;
-  bulk   ) NOPROMPT=true; DESC="${2:-bulk commit}"; repo; [ $COMMIT ] && { underline; dotfiles dry-run; } ;;
+  ''     ) dotfiles dry-run; grep -q "$UPTODATE" $MESSAGES || { ifyes "update repo" && repo; status; } ;;
+  bulk   ) NOPROMPT=true; DESC="${2:-bulk commit}"; repo; [ $COMMIT ] && status; ;;
 
   add    ) shift; [ "$1" = '-f' ] && { force=-f; shift; }
            while [ "$1" ] ;do add "$1"; shift ;done ;;  # handle filename spaces
