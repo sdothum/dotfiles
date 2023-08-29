@@ -11,16 +11,16 @@
 #        draw refresh [shuffle | select | toggle], see draw root
 
 if is display +min ;then
-  if is primary || [ "$1" = force ] ;then
-    if [ -e $CONKY ] ;then
-      # dynamic desktop width with conky panel
-      is fullscreen && draw monitor conky fullscreen || draw monitor conky
-    else
-      is fullscreen && draw monitor fullscreen || draw monitor fullframe
-    fi
-  else
-    is fullscreen && draw monitor secondary fullscreen || draw monitor secondary
-  fi
+	if is primary || [ "$1" = force ] ;then
+		if [ -e $CONKY ] ;then
+			# dynamic desktop width with conky panel
+			is fullscreen && draw monitor conky fullscreen || draw monitor conky
+		else
+			is fullscreen && draw monitor fullscreen || draw monitor fullframe
+		fi
+	else
+		is fullscreen && draw monitor secondary fullscreen || draw monitor secondary
+	fi
 fi
 
 # optionally shuffle background

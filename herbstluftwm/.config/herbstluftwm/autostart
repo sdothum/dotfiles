@@ -11,20 +11,20 @@ hook=1  # emit_hook initialization window
 
 # chain herbstclient commands (note: keybind chains use ".")
 hc() {
-  # cannot chain parameters "'containing spaces'"
-  chain=true
-  for i ;do [ "${i% *}" != "$i" ] && { unset chain; break; } ;done
-  [ $chain ] && cmds="$cmds , $@" || { [ $TRACE ] && echo herbstclient $@ >>$TRACE; eval herbstclient $@; }
+	# cannot chain parameters "'containing spaces'"
+	chain=true
+	for i ;do [ "${i% *}" != "$i" ] && { unset chain; break; } ;done
+	[ $chain ] && cmds="$cmds , $@" || { [ $TRACE ] && echo herbstclient $@ >>$TRACE; eval herbstclient $@; }
 }
 
 dohc() {
-  if [ $TRACE ] ;then
-    echo -n '> herbstclient chain' >>$TRACE
-    echo "$cmds" | sed 's/ , /\n -> /g' >>$TRACE
-    # echo herbstclient chain $cmds >>$TRACE
-  fi
-  herbstclient chain $cmds &
-  unset cmds
+	if [ $TRACE ] ;then
+		echo -n '> herbstclient chain' >>$TRACE
+		echo "$cmds" | sed 's/ , /\n -> /g' >>$TRACE
+		# echo herbstclient chain $cmds >>$TRACE
+	fi
+	herbstclient chain $cmds &
+	unset cmds
 }
 
 # ................................................................... Initialize
@@ -50,11 +50,11 @@ dohc
 
 # for i in $HOME/.config/herbstluftwm/config/*
 for i in $(dirname $0)/config/* ;do
-  ditto "loading herbstluftwm config ${i##*/}"
-  . $i
-  # add dummy hc cmd for any sources that don't e.g. ENV
-  hc echo done ${i##*/}
-  dohc
+	ditto "loading herbstluftwm config ${i##*/}"
+	. $i
+	# add dummy hc cmd for any sources that don't e.g. ENV
+	hc echo done ${i##*/}
+	dohc
 done
 
 # monitor dependent env must be set after detect monitors
@@ -74,16 +74,16 @@ draw layout tags
 # ..................................................................... Monitors
 
 if [ -e $CONKY ] ;then
-  toggle conky
-  # deprecated with primary:secondary as left:right..
-  # if is multihead ;then
-  #   draw monitor secondary
-  #   # enable panel for secondary monitor by default
-  #   touch $PANEL:1
-  # fi
+	toggle conky
+	# deprecated with primary:secondary as left:right..
+	# if is multihead ;then
+	#   draw monitor secondary
+	#   # enable panel for secondary monitor by default
+	#   touch $PANEL:1
+	# fi
 else
-  draw monitor fullframe
-  # toggle panel
+	draw monitor fullframe
+	# toggle panel
 fi
 
 # ................................................................ Startup suite
@@ -92,25 +92,25 @@ fi
 
 # session startup stuff, see .xinitrc
 if [ ! -e $HLWM:autostart ] ;then
-  # fresh installation has yet to install X apps!
-  if which xdotool >/dev/null 2>&1 ;then
-    # lock out desktop switching flickering
-    herbstclient lock
-    $HOME/bin/autostart
-    herbstclient unlock
-  fi
+	# fresh installation has yet to install X apps!
+	if which xdotool >/dev/null 2>&1 ;then
+		# lock out desktop switching flickering
+		herbstclient lock
+		$HOME/bin/autostart
+		herbstclient unlock
+	fi
 fi
 touch $HLWM:autostart
 
 sleep $hook  # wait for slowest process launch before selecting monitor / tag
 
 if [ $(herbstclient list_monitors | wc -l) -gt 1 ] ;then
-  herbstclient chain . focus_monitor 1 . use 2
-  # xdotool search --sync --onlyvisible --limit 1 --classname IRC >/dev/null
-  herbstclient chain . focus_monitor 0 . use 1
-  # xdotool search --sync --onlyvisible --limit 1 --classname $BROWSER >/dev/null
+	herbstclient chain . focus_monitor 1 . use 2
+	# xdotool search --sync --onlyvisible --limit 1 --classname IRC >/dev/null
+	herbstclient chain . focus_monitor 0 . use 1
+	# xdotool search --sync --onlyvisible --limit 1 --classname $BROWSER >/dev/null
 else
-  herbstclient use 1
+	herbstclient use 1
 fi
 
 # .................................................................... Emit hook

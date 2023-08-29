@@ -40,9 +40,9 @@ cardinal=0  # directions
 OCCUPIED='■'
 FREE='□'
 case $(query display width) in
-  3440) TAG_PAD='      '; STATPAD='   ' ;;  # tag bar separator (visual spacing)
-  1920) TAG_PAD='     ' ; STATPAD='  '  ;;
-  *   ) TAG_PAD='    '  ; STATPAD='  '  ;;
+	3440) TAG_PAD='      '; STATPAD='   ' ;;  # tag bar separator (visual spacing)
+	1920) TAG_PAD='     ' ; STATPAD='  '  ;;
+	*   ) TAG_PAD='    '  ; STATPAD='  '  ;;
 esac
 [ $(query display width) -lt 1920 ] && scaledown=true
 [ $scaledown ] && { LSEP=${LSEP# }; LSEP=${LSEP% }; RSEP=${RSEP# }; RSEP=${RSEP% }; }
@@ -69,8 +69,8 @@ monitor=$(herbstclient attr monitors.focus.index)
 # geometry has the format: X Y W H
 geometry='X:Y:W:H'
 for i in $(herbstclient monitor_rect $monitor) ;do
-  eval monitor${geometry%%:*}=$i
-  geometry=${geometry#*:}
+	eval monitor${geometry%%:*}=$i
+	geometry=${geometry#*:}
 done
 
 fontsize=$(fontsize)
@@ -102,43 +102,43 @@ panel_offsetX=$(( $monitorX + $indent ))
 # ................................................................... Tag status
 
 desktops() {
-  active=$(query tag)
-  inactive=$(query tag inactive)
-  unset tags
-  for i in $(query winids) ;do tags="$tags $(herbstclient attr clients.$i.tag)" ;done
-  unset desktops viewscreen
-  for i in $TAGS ;do
-    format="%{B$DEFAULT_BG}"
-    if echo $tags | grep -q $i ;then
-      echo $tags | grep -E -q "^$i| $i" && visible=true || unset visible
-      echo $tags | grep -q "'$i" && hidden=true || unset hidden
-      [ $visible ] && tag=$OCCUPIED || tag=$FREE
-      if [ $i = "$active" ] ;then
-        [ $visible ] && format="${format}%{F$ACTIVE_FG}"
-        [ $hidden  ] && format="${format}%{F$ACTIVE_FG}%{U$ACTIVE_FG}%{+u}"
-      elif [ $i = "$inactive" ] ;then
-        [ $visible ] && format="${format}%{F$INACTIVE_FG}"
-        [ $hidden  ] && format="${format}%{F$INACTIVE_FG}%{U$INACTIVE_FG}%{+u}"
-      else
-        [ $visible ] && format="${format}%{F$OCCUPIED_FG}"
-        [ $hidden  ] && format="${format}%{F$OCCUPIED_FG}%{U$OCCUPIED_FG}%{+u}"
-      fi
-    else
-      unset visible
-      unset hidden
-      tag=$FREE
-      if [ $i = "$active" ] ;then
-        format="${format}%{F$ACTIVE_FG}"
-      elif [ $i = "$inactive" ] ;then
-        format="${format}%{F$INACTIVE_FG}"
-      else
-        format="${format}%{F$FREE_FG}"
-      fi
-    fi
-    desktops="${desktops}${TAG_PAD}${format}${tag}%{-u}%{U-}%{B-}%{F-}"
-    viewscreen="${viewscreen} ${format} ${tag}"  # star trek!
-  done
-  [ -e $STAT ] || desktops="${desktops}$TAG_PAD"  # center tags with triple padding, see $stat
+	active=$(query tag)
+	inactive=$(query tag inactive)
+	unset tags
+	for i in $(query winids) ;do tags="$tags $(herbstclient attr clients.$i.tag)" ;done
+	unset desktops viewscreen
+	for i in $TAGS ;do
+		format="%{B$DEFAULT_BG}"
+		if echo $tags | grep -q $i ;then
+			echo $tags | grep -E -q "^$i| $i" && visible=true || unset visible
+			echo $tags | grep -q "'$i" && hidden=true || unset hidden
+			[ $visible ] && tag=$OCCUPIED || tag=$FREE
+			if [ $i = "$active" ] ;then
+				[ $visible ] && format="${format}%{F$ACTIVE_FG}"
+				[ $hidden  ] && format="${format}%{F$ACTIVE_FG}%{U$ACTIVE_FG}%{+u}"
+			elif [ $i = "$inactive" ] ;then
+				[ $visible ] && format="${format}%{F$INACTIVE_FG}"
+				[ $hidden  ] && format="${format}%{F$INACTIVE_FG}%{U$INACTIVE_FG}%{+u}"
+			else
+				[ $visible ] && format="${format}%{F$OCCUPIED_FG}"
+				[ $hidden  ] && format="${format}%{F$OCCUPIED_FG}%{U$OCCUPIED_FG}%{+u}"
+			fi
+		else
+			unset visible
+			unset hidden
+			tag=$FREE
+			if [ $i = "$active" ] ;then
+				format="${format}%{F$ACTIVE_FG}"
+			elif [ $i = "$inactive" ] ;then
+				format="${format}%{F$INACTIVE_FG}"
+			else
+				format="${format}%{F$FREE_FG}"
+			fi
+		fi
+		desktops="${desktops}${TAG_PAD}${format}${tag}%{-u}%{U-}%{B-}%{F-}"
+		viewscreen="${viewscreen} ${format} ${tag}"  # star trek!
+	done
+	[ -e $STAT ] || desktops="${desktops}$TAG_PAD"  # center tags with triple padding, see $stat
 }
 
 # .................................................................... Cpu stats
@@ -149,52 +149,52 @@ cpu_stat() { stat="${TAG_PAD}${STATPAD}$cpu_usage ${STATPAD}$cpu_temp${STATPAD}$
 
 # tag desktop description
 title() {
-  tag=$(herbstclient attr monitors.focus.tag)
-  title=$(query tname $tag)
+	tag=$(herbstclient attr monitors.focus.tag)
+	title=$(query tname $tag)
 }
 
 # desktop details
 active_window() {
-  title
-  count=$(herbstclient attr tags.focus.client_count)
-  tickcount=$(herbstclient attr "tags.by-name.'$tag.client_count" 2>/dev/null)
-  [ $tickcount ] || tickcount=0
-  if [ $count -gt 1 ] || [ $tickcount -gt 0 ] ;then
-    if [ $count -gt 1 ] && [ $tickcount -gt 0 ] ;then
-      title="${title}${LSEP}${count}${LSEP}%{U$DEFAULT_FG}%{+u}${tickcount}%{-u}%{U-}"
-    elif [ ${count} -gt 1 ] ;then
-      title="${title}${LSEP}${count}"
-    else
-      title="${title}${LSEP}%{U$DEFAULT_FG}%{+u}${tickcount}%{-u}%{U-}"
-    fi
-  fi
-  unset hiding
-  if is fullscreen ;then
-    [ $count -gt 1 ] && hiding=true
-  elif herbstclient compare tags.by-name.$tag.curframe_wcount gt 1 ;then
-    is layout max && hiding=true
-  fi
-  if [ $count -gt 0 ] ;then
-    if [ "$(query wname)" = "${line#?}" ] ;then
-      name=$(echo "${line#?}" | sed -r 's/^(.)/\u\1/')
-      if [ $hiding ] ;then
-        title="${title}${LSEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}%{U$ACTIVE_FG}%{+u}$name%{-u}%{U-}%{F-}%{B-}%{F$DEFAULT_FG}"
-      else
-        title="${title}${LSEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}$name%{F-}%{B-}%{F$DEFAULT_FG}"
-      fi
-    else
-      name=$(query wname | sed -r 's/^(.)/\u\1/')
-      if [ $hiding ] ;then
-        title="${title}${LSEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}%{U$ACTIVE_FG}%{+u}$name%{-u}%{U-}%{F$DEFAULT_FG}"
-      else
-        title="${title}${LSEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}$name%{F$DEFAULT_FG}"
-      fi
-      echo $line | grep -q '.*_changed' || {  # never caught this in void.. dunno why!
-        desc=$(asciititle ${line#?})
-        [ "$desc" ] && title="${title}${LSEP}${desc}%{B-}%{F-}"
-      }
-    fi
-  fi
+	title
+	count=$(herbstclient attr tags.focus.client_count)
+	tickcount=$(herbstclient attr "tags.by-name.'$tag.client_count" 2>/dev/null)
+	[ $tickcount ] || tickcount=0
+	if [ $count -gt 1 ] || [ $tickcount -gt 0 ] ;then
+		if [ $count -gt 1 ] && [ $tickcount -gt 0 ] ;then
+			title="${title}${LSEP}${count}${LSEP}%{U$DEFAULT_FG}%{+u}${tickcount}%{-u}%{U-}"
+		elif [ ${count} -gt 1 ] ;then
+			title="${title}${LSEP}${count}"
+		else
+			title="${title}${LSEP}%{U$DEFAULT_FG}%{+u}${tickcount}%{-u}%{U-}"
+		fi
+	fi
+	unset hiding
+	if is fullscreen ;then
+		[ $count -gt 1 ] && hiding=true
+	elif herbstclient compare tags.by-name.$tag.curframe_wcount gt 1 ;then
+		is layout max && hiding=true
+	fi
+	if [ $count -gt 0 ] ;then
+		if [ "$(query wname)" = "${line#?}" ] ;then
+			name=$(echo "${line#?}" | sed -r 's/^(.)/\u\1/')
+			if [ $hiding ] ;then
+				title="${title}${LSEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}%{U$ACTIVE_FG}%{+u}$name%{-u}%{U-}%{F-}%{B-}%{F$DEFAULT_FG}"
+			else
+				title="${title}${LSEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}$name%{F-}%{B-}%{F$DEFAULT_FG}"
+			fi
+		else
+			name=$(query wname | sed -r 's/^(.)/\u\1/')
+			if [ $hiding ] ;then
+				title="${title}${LSEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}%{U$ACTIVE_FG}%{+u}$name%{-u}%{U-}%{F$DEFAULT_FG}"
+			else
+				title="${title}${LSEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}$name%{F$DEFAULT_FG}"
+			fi
+			echo $line | grep -q '.*_changed' || {  # never caught this in void.. dunno why!
+				desc=$(asciititle ${line#?})
+				[ "$desc" ] && title="${title}${LSEP}${desc}%{B-}%{F-}"
+			}
+		fi
+	fi
 }
 
 # ....................................................................... Clocks
@@ -203,70 +203,70 @@ dot()     { [ "$tic" = '●' ] && tic='○' || tic='●'; }
 seconds() { tic=${line#*| }; tic=${tic%|*}; }
 
 circle() {
-  [ "$tic" = '◓' ] && tic='◑' ||
-  { [ "$tic" = '◑' ] && tic='◒' ||
-    { [ "$tic" = '◒' ] && tic='◐' || tic='◓'; };}
+	[ "$tic" = '◓' ] && tic='◑' ||
+	{ [ "$tic" = '◑' ] && tic='◒' ||
+		{ [ "$tic" = '◒' ] && tic='◐' || tic='◓'; };}
 }
 
 square() {
-  [ "$tic" = '⬒' ] && tic='⬔' ||
-  { [ "$tic" = '⬔' ] && tic='◨' ||
-    { [ "$tic" = '◨' ] && tic='◪' ||
-      { [ "$tic" = '◪' ] && tic='⬓' ||
-        { [ "$tic" = '⬓' ] && tic='⬕' ||
-          { [ "$tic" = '⬕' ] && tic='◧' ||
-            { [ "$tic" = '◧' ] && tic='◩' || tic='⬒'; };};};};};}
+	[ "$tic" = '⬒' ] && tic='⬔' ||
+	{ [ "$tic" = '⬔' ] && tic='◨' ||
+		{ [ "$tic" = '◨' ] && tic='◪' ||
+			{ [ "$tic" = '◪' ] && tic='⬓' ||
+				{ [ "$tic" = '⬓' ] && tic='⬕' ||
+					{ [ "$tic" = '⬕' ] && tic='◧' ||
+						{ [ "$tic" = '◧' ] && tic='◩' || tic='⬒'; };};};};};}
 }
 
 bar() {
-  tic=${line#*|}
-  tic=${tic%|*}
-  case $tic in
-    00      ) tic=' ' ;;
-    0[2468] ) tic="%{F$DEFAULT_FG}▁%{F-}" ;;
-    0[13579]) tic="%{F$DEFAULT_FG}▂%{F-}" ;;
-    10      ) tic="%{F$DEFAULT_FG}▁%{F-}" ;;
-    1[2468] ) tic="%{F$DEFAULT_FG}▂%{F-}" ;;
-    1[13579]) tic="%{F$DEFAULT_FG}▃%{F-}" ;;
-    20      ) tic="%{F$DEFAULT_FG}▂%{F-}" ;;
-    2[2468] ) tic="%{F$DEFAULT_FG}▃%{F-}" ;;
-    2[13579]) tic="%{F$DEFAULT_FG}▄%{F-}" ;;
-    30      ) tic="%{F$DEFAULT_FG}▃%{F-}" ;;
-    3[2468] ) tic="%{F$DEFAULT_FG}▄%{F-}" ;;
-    3[13579]) tic="%{F$DEFAULT_FG}▅%{F-}" ;;
-    40      ) tic="%{F$DEFAULT_FG}▄%{F-}" ;;
-    4[2468] ) tic="%{F$DEFAULT_FG}▅%{F-}" ;;
-    4[13579]) tic="%{F$DEFAULT_FG}▆%{F-}" ;;
-    50      ) tic="%{F$DEFAULT_FG}│%{F-}" ;;
-    51      ) tic="%{F$DEFAULT_FG}┃%{F-}" ;;
-    52      ) tic="%{F$DEFAULT_FG}█%{F-}" ;;
-    53      ) tic="%{F$DEFAULT_FG}▇%{F-}" ;;
-    54      ) tic="%{F$DEFAULT_FG}▆%{F-}" ;;
-    55      ) tic="%{F$DEFAULT_FG}▅%{F-}" ;;
-    56      ) tic="%{F$DEFAULT_FG}▄%{F-}" ;;
-    57      ) tic="%{F$DEFAULT_FG}▃%{F-}" ;;
-    58      ) tic="%{F$DEFAULT_FG}▂%{F-}" ;;
-    59      ) tic="%{F$DEFAULT_FG}▁%{F-}" ;;
-  esac
+	tic=${line#*|}
+	tic=${tic%|*}
+	case $tic in
+		00      ) tic=' ' ;;
+		0[2468] ) tic="%{F$DEFAULT_FG}▁%{F-}" ;;
+		0[13579]) tic="%{F$DEFAULT_FG}▂%{F-}" ;;
+		10      ) tic="%{F$DEFAULT_FG}▁%{F-}" ;;
+		1[2468] ) tic="%{F$DEFAULT_FG}▂%{F-}" ;;
+		1[13579]) tic="%{F$DEFAULT_FG}▃%{F-}" ;;
+		20      ) tic="%{F$DEFAULT_FG}▂%{F-}" ;;
+		2[2468] ) tic="%{F$DEFAULT_FG}▃%{F-}" ;;
+		2[13579]) tic="%{F$DEFAULT_FG}▄%{F-}" ;;
+		30      ) tic="%{F$DEFAULT_FG}▃%{F-}" ;;
+		3[2468] ) tic="%{F$DEFAULT_FG}▄%{F-}" ;;
+		3[13579]) tic="%{F$DEFAULT_FG}▅%{F-}" ;;
+		40      ) tic="%{F$DEFAULT_FG}▄%{F-}" ;;
+		4[2468] ) tic="%{F$DEFAULT_FG}▅%{F-}" ;;
+		4[13579]) tic="%{F$DEFAULT_FG}▆%{F-}" ;;
+		50      ) tic="%{F$DEFAULT_FG}│%{F-}" ;;
+		51      ) tic="%{F$DEFAULT_FG}┃%{F-}" ;;
+		52      ) tic="%{F$DEFAULT_FG}█%{F-}" ;;
+		53      ) tic="%{F$DEFAULT_FG}▇%{F-}" ;;
+		54      ) tic="%{F$DEFAULT_FG}▆%{F-}" ;;
+		55      ) tic="%{F$DEFAULT_FG}▅%{F-}" ;;
+		56      ) tic="%{F$DEFAULT_FG}▄%{F-}" ;;
+		57      ) tic="%{F$DEFAULT_FG}▃%{F-}" ;;
+		58      ) tic="%{F$DEFAULT_FG}▂%{F-}" ;;
+		59      ) tic="%{F$DEFAULT_FG}▁%{F-}" ;;
+	esac
 }
 
 tape() {
-  tic=${line#*|}
-  tic=${tic%|*}
-  if [ "${tic%%:*}" -lt 10 ] ;then
-    # hours 0 - 9, cycle aligns on ten second intervals
-    len=11
-    pos=${tic##*:}
-    # pos=$(( ${pos%??} % 10 ))  # crashes in dash (memory leak on arm?)
-    pos=$(echo "${pos%??} % 10" | bc)
-    [ $pos = 0 ] && pos=10
-  else
-    # hours 10 - 12, format string continously cycles
-    len=12
-    pos=$(( ${pos:-0} + 1 ))
-    [ $pos -gt 10 ] && pos=0
-  fi
-  tic="$(echo "$tic" | tail -c $(( $len - $pos )))$(echo "$tic" | head -c $pos)"
+	tic=${line#*|}
+	tic=${tic%|*}
+	if [ "${tic%%:*}" -lt 10 ] ;then
+		# hours 0 - 9, cycle aligns on ten second intervals
+		len=11
+		pos=${tic##*:}
+		# pos=$(( ${pos%??} % 10 ))  # crashes in dash (memory leak on arm?)
+		pos=$(echo "${pos%??} % 10" | bc)
+		[ $pos = 0 ] && pos=10
+	else
+		# hours 10 - 12, format string continously cycles
+		len=12
+		pos=$(( ${pos:-0} + 1 ))
+		[ $pos -gt 10 ] && pos=0
+	fi
+	tic="$(echo "$tic" | tail -c $(( $len - $pos )))$(echo "$tic" | head -c $pos)"
 }
 
 # ................................................................ Weather watch
@@ -284,57 +284,57 @@ cpu_temp=$(cat /tmp/${STAT##*/}:temp)
 mem_usage=$(cat /tmp/${STAT##*/}:mem)
 
 currently() {
-  line=$(echo "$line" | sed -r 's/#[{]/%{/g; s/(AM|PM)/\L\1/')  # recover lemonbar format strings, see clock below
-  if [ -e $STARTREK ] ;then
-    [ $counter -lt $tagcount ] && counter=$(( $counter + 1 )) || { counter=1; cardinal=0; }
-    if [ -e $STARTREK:cardinal ] ;then
-      [ $cardinal -lt 8 ] && cardinal=$(( $cardinal + 1 )) || cardinal=1
-      TRIANGLE=$(echo $TRIANGLES | cut -d' ' -f$cardinal)
-    else
-      # TRIANGLE='⬤'
-      TRIANGLE=${TRIANGLES%% *}
-    fi
-    set -- ${viewscreen}
-    unset desktops
-    for i in $TAGS ;do
-      [ $counter = $i ] && tag="${VIEWSCREEN}$TRIANGLE" || tag=$2
-      desktops="${desktops}${TAG_PAD}$1${tag}%{-u}%{U-}%{B-}%{F-}"
-      shift 2
-    done
-    [ -e $STAT ] || desktops="${desktops}$TAG_PAD"  # center tags with triple padding, see $stat
-  fi
+	line=$(echo "$line" | sed -r 's/#[{]/%{/g; s/(AM|PM)/\L\1/')  # recover lemonbar format strings, see clock below
+	if [ -e $STARTREK ] ;then
+		[ $counter -lt $tagcount ] && counter=$(( $counter + 1 )) || { counter=1; cardinal=0; }
+		if [ -e $STARTREK:cardinal ] ;then
+			[ $cardinal -lt 8 ] && cardinal=$(( $cardinal + 1 )) || cardinal=1
+			TRIANGLE=$(echo $TRIANGLES | cut -d' ' -f$cardinal)
+		else
+			# TRIANGLE='⬤'
+			TRIANGLE=${TRIANGLES%% *}
+		fi
+		set -- ${viewscreen}
+		unset desktops
+		for i in $TAGS ;do
+			[ $counter = $i ] && tag="${VIEWSCREEN}$TRIANGLE" || tag=$2
+			desktops="${desktops}${TAG_PAD}$1${tag}%{-u}%{U-}%{B-}%{F-}"
+			shift 2
+		done
+		[ -e $STAT ] || desktops="${desktops}$TAG_PAD"  # center tags with triple padding, see $stat
+	fi
 
-  unset clock
-  if [ $TIC ] ;then
-    case $TIC in
-      b* ) bar ;;
-      c* ) circle ;;
-      d* ) dot ;;
-      sq*) square ;;
-      s* ) seconds ;;
-      t* ) tape ;;
-    esac
-    ticker="%{F$DEFAULT_FG}$tic%{F-}"
-    case $TIC in
-      se*) clock="$ticker" ;;
-      t* ) clock="$ticker" ;;
-      *  ) clock="  $ticker" ;;
-    esac
-  fi
+	unset clock
+	if [ $TIC ] ;then
+		case $TIC in
+			b* ) bar ;;
+			c* ) circle ;;
+			d* ) dot ;;
+			sq*) square ;;
+			s* ) seconds ;;
+			t* ) tape ;;
+		esac
+		ticker="%{F$DEFAULT_FG}$tic%{F-}"
+		case $TIC in
+			se*) clock="$ticker" ;;
+			t* ) clock="$ticker" ;;
+			*  ) clock="  $ticker" ;;
+		esac
+	fi
 
-  # refresh weather every 10 minutes
-  if [ -e $WEATHER ] ;then
-    minute=${line#*:?}    # hh:mm:ss.* -> m:ss.*
-    case ${minute%:*} in  #            -> m
-      0) [ $update_weather ] && weather ;;
-      *) update_weather=true ;;
-    esac
-  fi
-  [ -s /tmp/${WEATHER##*/} ] && [ "$(cat /tmp/${WEATHER##*/})" != '' ] && current_weather=$(cat /tmp/${WEATHER##*/})  # prevent blanking during update, see weather()
+	# refresh weather every 10 minutes
+	if [ -e $WEATHER ] ;then
+		minute=${line#*:?}    # hh:mm:ss.* -> m:ss.*
+		case ${minute%:*} in  #            -> m
+			0) [ $update_weather ] && weather ;;
+			*) update_weather=true ;;
+		esac
+	fi
+	[ -s /tmp/${WEATHER##*/} ] && [ "$(cat /tmp/${WEATHER##*/})" != '' ] && current_weather=$(cat /tmp/${WEATHER##*/})  # prevent blanking during update, see weather()
 
-  line="${line%%^*}${current_weather}${line#*^}"
-  line="${line%%|*}${clock}%{F-}${line##*|}"
-  system="%{F$DEFAULT_FG}%{B$DEFAULT_BG}${line#?}%{B-}%{F-}"
+	line="${line%%^*}${current_weather}${line#*^}"
+	line="${line%%|*}${clock}%{F-}${line##*|}"
+	system="%{F$DEFAULT_FG}%{B$DEFAULT_BG}${line#?}%{B-}%{F-}"
 }
 
 # ............................................................... FIFO read loop
@@ -344,29 +344,29 @@ musl && MUSL=true || GLIBC=true
 alpine && { GLIBC=true; unset MUSL; }
 
 panel() {
-  desktops  # initialize
-  while read -r line ;do
-    case $line in
-      S*        ) currently                     ;;  # clock based info
-      X*        ) active_window; desktops       ;;
-      C*        ) [ "${line#?}" = '  0%' ] || cpu_usage=${line#?}; cpu_stat ;;  # ignore 0%
-      T*        ) cpu_temp=${line#?};  cpu_stat ;;
-      M*        ) mem_usage=${line#?}; cpu_stat ;;
-      !*        ) echo "$cpu_usage" >/tmp/${STAT##*/}:cpu; echo "$cpu_temp" >/tmp/${STAT##*/}:temp; echo "$mem_usage" >/tmp/${STAT##*/}:mem ;;  # save stats for draw root redraw
-      *_changed*) active_window; desktops ;;
-    esac
-    
-    [ $MUSL ] && { line=$(xtitle -f 'X%s'); active_window; desktops; }  # see below
+	desktops  # initialize
+	while read -r line ;do
+		case $line in
+			S*        ) currently                     ;;  # clock based info
+			X*        ) active_window; desktops       ;;
+			C*        ) [ "${line#?}" = '  0%' ] || cpu_usage=${line#?}; cpu_stat ;;  # ignore 0%
+			T*        ) cpu_temp=${line#?};  cpu_stat ;;
+			M*        ) mem_usage=${line#?}; cpu_stat ;;
+			!*        ) echo "$cpu_usage" >/tmp/${STAT##*/}:cpu; echo "$cpu_temp" >/tmp/${STAT##*/}:temp; echo "$mem_usage" >/tmp/${STAT##*/}:mem ;;  # save stats for draw root redraw
+			*_changed*) active_window; desktops ;;
+		esac
+		
+		[ $MUSL ] && { line=$(xtitle -f 'X%s'); active_window; desktops; }  # see below
 
-    # empty desktop does not generate T message
-    [ "$title"    ] || title
-    [ "$desktops" ] || desktops
-    # restrict title to left hand side of panel
-    chop=$(( $mid_point + $(echo "$title"| wc -c) - $(echo "$title" | sed 's/%[{][^}]*[}]//g' | wc -c) ))
-    title=$(echo "$title" | cut -b -$chop)
-    printf "%s\n" "%{l}${title}%{c}${desktops}${stat}%{r}${system}"
-    unset line
-  done
+		# empty desktop does not generate T message
+		[ "$title"    ] || title
+		[ "$desktops" ] || desktops
+		# restrict title to left hand side of panel
+		chop=$(( $mid_point + $(echo "$title"| wc -c) - $(echo "$title" | sed 's/%[{][^}]*[}]//g' | wc -c) ))
+		title=$(echo "$title" | cut -b -$chop)
+		printf "%s\n" "%{l}${title}%{c}${desktops}${stat}%{r}${system}"
+		unset line
+	done
 }
 
 # ......................................................................... FIFO
@@ -379,28 +379,29 @@ echo $PANEL_FIFO:$fifo >$PANEL_FIFO
 # note physical linebreaks for each format specification (to accomodate slow processors, notably arm)
 # NOTE: lemonbar %{F..} changed to #{F..} for alpine "clock" (fails on % char, see function currently)
 case $TIC in
-  se*) clock -i 1 -sf "S^${RSEP}#{F$ACTIVE_FG}| %-I:%M %S%p|#{F-}${RSEP}%a %-d %b '%y" >$PANEL_FIFO:$fifo & ;;
-  t* ) clock -i 1 -sf "S^${RSEP}#{F$ACTIVE_FG}| %-I:%M:%S%p|#{F-}${RSEP}%a %-d %b '%y" >$PANEL_FIFO:$fifo & ;;
-  *  ) clock -i 1 -sf "S^${RSEP}#{F$ACTIVE_FG}%-I:%M#{F-} %p|%S|${RSEP}%a %-d %b '%y"  >$PANEL_FIFO:$fifo & ;;
+	se*) clock -i 1 -sf "S^${RSEP}#{F$ACTIVE_FG}| %-I:%M %S%p|#{F-}${RSEP}%a %-d %b '%y" >$PANEL_FIFO:$fifo & ;;
+	t* ) clock -i 1 -sf "S^${RSEP}#{F$ACTIVE_FG}| %-I:%M:%S%p|#{F-}${RSEP}%a %-d %b '%y" >$PANEL_FIFO:$fifo & ;;
+	*  ) clock -i 1 -sf "S^${RSEP}#{F$ACTIVE_FG}%-I:%M#{F-} %p|%S|${RSEP}%a %-d %b '%y"  >$PANEL_FIFO:$fifo & ;;
 esac
 
 # event driven panel update
 if [ $GLIBC ] ;then
-  herbstclient --idle '.*_changed' >$PANEL_FIFO:$fifo &
-  xtitle -sf 'X%s\n'               >$PANEL_FIFO:$fifo 2>/dev/null &  # see emit_hook
-  draw border &  # non-panel related redundancy check for latent frame handling, see emit_hook
+	herbstclient --idle '.*_changed' >$PANEL_FIFO:$fifo &
+	xtitle -sf 'X%s\n'               >$PANEL_FIFO:$fifo 2>/dev/null &  # see emit_hook
+	draw border &  # non-panel related redundancy check for latent frame handling, see emit_hook
 fi
 
 # cpu usage, cpu temperature, memory usage stats
 if [ -e $STAT ] ;then
-  while : ;do sar -u --dec=0 1 1 | tail -1 | sed 's/  */ /g' | cut -d' ' -f3 | sed -r 's/^/00/; s/.*(.)(..)$/\1.\2/' | awk '{ printf "C%3.2fᵁ\n", $1 }' >$PANEL_FIFO:$fifo ;done &  # cycle >~ 1 second
-  while : ;do echo "T$(cpu_temp)°" >$PANEL_FIFO:$fifo; sleep 2; done &
-  while : ;do free -h | grep 'Mem:' | sed -r 's/^[^ ]* *[^ ]* *([0-9.]*)Mi.*/\1ᴹ/; s/^[^ ]* *[^ ]* *([0-9.]*)Gi.*/\1ᴳ/; s/^/M/' >$PANEL_FIFO:$fifo; sleep 3; done &
+	while : ;do sar -u --dec=0 1 1 | tail -1 | sed 's/  */ /g' | cut -d' ' -f3 | sed -r 's/^/00/; s/.*(.)(..)$/\1.\2/' | awk '{ printf "C%3.2fᵁ\n", $1 }' >$PANEL_FIFO:$fifo ;done &  # cycle >~ 1 second
+	while : ;do echo "T$(cpu_temp)°" >$PANEL_FIFO:$fifo; sleep 2; done &
+	while : ;do free -h | grep 'Mem:' | sed -r 's/^[^ ]* *[^ ]* *([0-9.]*)Mi.*/\1ᴹ/; s/^[^ ]* *[^ ]* *([0-9.]*)Gi.*/\1ᴳ/; s/^/M/' >$PANEL_FIFO:$fifo; sleep 3; done &
 fi
 
-cat $PANEL_FIFO:$fifo | panel | lemonbar -d -n "lemonbar:$fifo" \
-                                         -g ${panel_width}x$PANEL_HEIGHT+$panel_offsetX+$panel_offsetY \
-                                         -u $PANEL_UNDERLINE \
-                                         -f "$PANEL_FONT:size=$fontsize" -F "$DEFAULT_FG" -B "$DEFAULT_BG" &
+cat $PANEL_FIFO:$fifo | panel                                    \
+| lemonbar -d -n "lemonbar:$fifo"                                \
+	-g ${panel_width}x$PANEL_HEIGHT+$panel_offsetX+$panel_offsetY \
+	-u $PANEL_UNDERLINE                                           \
+	-f "$PANEL_FONT:size=$fontsize" -F "$DEFAULT_FG" -B "$DEFAULT_BG" &
 
 # vim: set ft=sh: #

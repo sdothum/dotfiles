@@ -9,15 +9,15 @@
 # Usage: toggle focus [fsplit | status]
 
 case $1 in
-  ''    ) [ -e $DYNAMIC ] && rm $DYNAMIC || touch $DYNAMIC; [ -e $DYNAMIC ] && focus window ;;  # see emit_hook and focus functions
-  fsplit) [ -s $DYNAMIC ] && { rm $DYNAMIC; touch $DYNAMIC; } || echo frames >$DYNAMIC ;;       # see focus frame
-  status) ;;
+	''    ) [ -e $DYNAMIC ] && rm $DYNAMIC || touch $DYNAMIC; [ -e $DYNAMIC ] && focus window ;;  # see emit_hook and focus functions
+	fsplit) [ -s $DYNAMIC ] && { rm $DYNAMIC; touch $DYNAMIC; } || echo frames >$DYNAMIC ;;       # see focus frame
+	status) ;;
 esac
 
 if [ -e $DYNAMIC ] ;then
-  [ -s $DYNAMIC ] && notify "Dynamic Frames" On || notify "Dynamic Focus" On
+	[ -s $DYNAMIC ] && notify "Dynamic Frames" On || notify "Dynamic Focus" On
 else
-  notify low "Dynamic Focus" Off
+	notify low "Dynamic Focus" Off
 fi
 
 # vim: set ft=sh: #

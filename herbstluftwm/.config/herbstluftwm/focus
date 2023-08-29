@@ -17,16 +17,16 @@ TAG=$(herbstclient attr monitors.focus.tag)
 msg=$1
 [ $msg ] && shift || usage $0
 if [ -e $(dirname $0)/functions/focus/$msg ] ;then
-  . $(dirname $0)/functions/focus/$msg $@
-  # force panel refresh
-  xtitle -f 'X%s
+	. $(dirname $0)/functions/focus/$msg $@
+	# force panel refresh
+	xtitle -f 'X%s
 ' >$(cat $PANEL_FIFO)
 elif which $msg >/dev/null 2>&1 ;then
-  # dynamic app window creation
-  [ -e $DYNAMIC ] && focus frame
-  $msg $@ &
+	# dynamic app window creation
+	[ -e $DYNAMIC ] && focus frame
+	$msg $@ &
 else
-  usage $0
+	usage $0
 fi
 
 # vim: set ft=sh: #

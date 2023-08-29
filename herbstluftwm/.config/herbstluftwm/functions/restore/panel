@@ -10,9 +10,9 @@
 which lemonbar >/dev/null 2>&1 || exit
 
 if is primary ;then
-  [ -e $CONKY   ] && conky=:conky
-  [ -e $MONOCLE ] && monocle=:monocle
-  [ -z "$conky$monocle" ] && pkill -f "draw panel"  # resync panels
+	[ -e $CONKY   ] && conky=:conky
+	[ -e $MONOCLE ] && monocle=:monocle
+	[ -z "$conky$monocle" ] && pkill -f "draw panel"  # resync panels
 fi
 
 fifo="$(herbstclient attr monitors.focus.index)$conky$monocle"

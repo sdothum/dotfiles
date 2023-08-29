@@ -13,17 +13,17 @@ frames=$(query fcount $TAG)
 lock cycle_frame -1
 
 for i in $(seq 1 $frames) ;do
-  herbstclient cycle_frame 1
-  herbstclient compare tags.by-name.$TAG.curframe_wcount gt 0 && break
-  # empty desktop, return to original frame
-  if [ $i -ge $frames ] ;then
-    herbstclient cycle_frame 1
-    # clear any prior title info
-    [ "$PANEL_FIFO" ] || . $XDG_CONFIG_HOME/herbstluftwm/config/ENV
-    # see restore panel
-    echo 'T ' >$(cat $PANEL_FIFO)
-    break
-  fi
+	herbstclient cycle_frame 1
+	herbstclient compare tags.by-name.$TAG.curframe_wcount gt 0 && break
+	# empty desktop, return to original frame
+	if [ $i -ge $frames ] ;then
+		herbstclient cycle_frame 1
+		# clear any prior title info
+		[ "$PANEL_FIFO" ] || . $XDG_CONFIG_HOME/herbstluftwm/config/ENV
+		# see restore panel
+		echo 'T ' >$(cat $PANEL_FIFO)
+		break
+	fi
 done
 
 unlock

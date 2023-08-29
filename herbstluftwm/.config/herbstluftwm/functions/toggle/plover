@@ -7,9 +7,9 @@
 # ................................................................ Toggle plover
 
 if pgrep -f '.*python.*plover.*' >/dev/null ;then
-  pkill -KILL -f '.*plover.*' 2>/dev/null
+	pkill -KILL -f '.*plover.*' 2>/dev/null
 else
-  plover
+	plover
 fi
 
 # vim: set ft=sh: #

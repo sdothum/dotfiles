@@ -16,11 +16,11 @@ cpu arm && is fullscreen && toggle fullscreen
 lock use $1
 focus frame
 if [ $2 ] ;then
-  # use_previous restores unexpected tag if movement is to already visible tag
-  herbstclient chain . bring $winid . use $tag
-  focus window
+	# use_previous restores unexpected tag if movement is to already visible tag
+	herbstclient chain . bring $winid . use $tag
+	focus window
 else
-  herbstclient bring $winid
+	herbstclient bring $winid
 fi
 unlock
 

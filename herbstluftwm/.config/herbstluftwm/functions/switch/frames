@@ -11,14 +11,14 @@
 
 herbstclient lock
 if is fullscreen ;then
-  # fullscreen=true
-  # retain monocle view
-  if [ -e $MONOCLE ] ;then
-    toggle fullscreen
-    toggle monocle
-  else
-    toggle fullscreen
-  fi
+	# fullscreen=true
+	# retain monocle view
+	if [ -e $MONOCLE ] ;then
+		toggle fullscreen
+		toggle monocle
+	else
+		toggle fullscreen
+	fi
 fi
 
 herbstclient $@

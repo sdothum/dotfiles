@@ -10,18 +10,18 @@
 herbstclient lock
 restore tiled
 if is display +min ;then
-  if is primary ;then
-    # allow transitioning monocle directly to fullscreen
-    [ -e $MONOCLE ] && toggle monocle fullscreen
-    if conky search --onlyvisible ;then
-      is fullscreen && draw monitor conky || draw monitor conky fullscreen
-    else
-      # handle frame no conky
-      is fullscreen && draw monitor fullframe || draw monitor fullscreen
-    fi
-  else
-    is fullscreen && draw monitor secondary || draw monitor secondary fullscreen
-  fi
+	if is primary ;then
+		# allow transitioning monocle directly to fullscreen
+		[ -e $MONOCLE ] && toggle monocle fullscreen
+		if conky search --onlyvisible ;then
+			is fullscreen && draw monitor conky || draw monitor conky fullscreen
+		else
+			# handle frame no conky
+			is fullscreen && draw monitor fullframe || draw monitor fullscreen
+		fi
+	else
+		is fullscreen && draw monitor secondary || draw monitor secondary fullscreen
+	fi
 fi
 herbstclient chain . fullscreen toggle . unlock
 

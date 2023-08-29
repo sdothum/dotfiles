@@ -14,17 +14,20 @@ void && order=tac || order=cat  # xrandr --primary not ordering stdout
 monitor() { [ $1 ] && monitor=$1 || monitor=$(herbstclient attr monitors.focus.index); }
 
 case $1 in
-  # default, display current monitor display height
-  height) monitor $2
-          xrandr 2>/dev/null | grep -E '[*+] |[*+]$' | $order | cut -dx -f2 | cut -d' ' -f1 | sed "$(( $monitor + 1 ))q ;d" ;;
+	# default, display current monitor display height
+	height)
+		monitor $2
+		xrandr 2>/dev/null | grep -E '[*+] |[*+]$' | $order | cut -dx -f2 | cut -d' ' -f1 | sed "$(( $monitor + 1 ))q ;d" ;;
 
-  # default, display current monitor display width
-  width ) monitor $2
-          xrandr 2>/dev/null | grep -E '[*+] |[*+]$' | $order | cut -dx -f1 | sed "$(( $monitor + 1 ))q ;d" | sed 's/ //g' ;;
+	# default, display current monitor display width
+	width )
+		monitor $2
+		xrandr 2>/dev/null | grep -E '[*+] |[*+]$' | $order | cut -dx -f1 | sed "$(( $monitor + 1 ))q ;d" | sed 's/ //g' ;;
 
-  # typically, set -- $(query display) to reference X Y as $1 $2
-  *     ) [ $2 ] && secondary=-r
-          xrandr 2>/dev/null | grep -E '[*+] |[*+]$' | sort $secondary | tail -1 | tr 'x' ' '   ;;
+	# typically, set -- $(query display) to reference X Y as $1 $2
+	*     )
+		[ $2 ] && secondary=-r
+		xrandr 2>/dev/null | grep -E '[*+] |[*+]$' | sort $secondary | tail -1 | tr 'x' ' '   ;;
 esac
 
 # vim: set ft=sh: #

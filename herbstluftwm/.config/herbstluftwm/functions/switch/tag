@@ -9,17 +9,17 @@
 # Usage: switch tag [<tag>]
 
 tag() { 
-  is nonempty "'$tag" && notify low 1 "[$tag]" "$(query tname $tag)" || notify 1 "\\$tag" "$(query tname $tag)"
-  [ -e $SPANEL ] || weather
+	is nonempty "'$tag" && notify low 1 "[$tag]" "$(query tname $tag)" || notify 1 "\\$tag" "$(query tname $tag)"
+	[ -e $SPANEL ] || weather
 }
 
 # swap monitors (special case) to utilize fullscreen / monocle persistence handling
 [ "$(query tag)" = "$1" ] && { tag=$1; tag; exit; }
 if is multihead ;then
-  if [ "$(query tag unfocused)" = "$1" ] ;then
-    is primary && switch monitor 0 || switch monitor 1
-    exit
-  fi
+	if [ "$(query tag unfocused)" = "$1" ] ;then
+		is primary && switch monitor 0 || switch monitor 1
+		exit
+	fi
 fi
 
 # check layout (fullscreen or monocle)
