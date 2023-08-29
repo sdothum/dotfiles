@@ -18,26 +18,26 @@ DELAY=1
 #   xdotool key command (everything else)
 
 demo() {
-  echo "$PLAYBACK" | while read line ;do
-    [ $TRACE ] && echo $line
-    set -- $(echo $line)
-    case $1 in
-      '#') continue ;;
-      '!') shift; $@ ;;
-      *  ) [ "$line" ] && xdotool key --delay 5 $line ;;
-    esac
-    sleep $DELAY
-  done
+	echo "$PLAYBACK" | while read line ;do
+		[ $TRACE ] && echo $line
+		set -- $(echo $line)
+		case $1 in
+			'#') continue ;;
+			'!') shift; $@ ;;
+			*  ) [ "$line" ] && xdotool key --delay 5 $line ;;
+		esac
+		sleep $DELAY
+	done
 }
 
 msg=$1
 shift
 if [ -e $(dirname $0)/functions/demo/$msg ] ;then
-  [ "$1" = capture ] && { capture DVI-1 & sleep $DELAY; }
-  . $(dirname $0)/functions/demo/$msg
-  demo
+	[ "$1" = capture ] && { capture DVI-1 & sleep $DELAY; }
+	. $(dirname $0)/functions/demo/$msg
+	demo
 else
-  usage: $0
+	usage: $0
 fi
 
 # vim: set ft=sh: #

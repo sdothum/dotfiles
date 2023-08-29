@@ -18,9 +18,9 @@ size=800
 [ "$files" ] || usage
 
 for i in $files ;do
-  output=${i%.jpg}x$size.jpg
-  ditto convert "$output"
-  convert $i -resize $size -quality $quality $output
+	output=${i%.jpg}x$size.jpg
+	ditto convert "$output"
+	convert $i -resize $size -quality $quality $output
 done
 
 # vim: set ft=sh: #

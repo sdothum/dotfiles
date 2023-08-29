@@ -25,11 +25,11 @@ master=${master##*/}
 
 # musl diversion
 [ -L bin/kobopatch-linux-64bit ] || {
-  mv -v bin/kobopatch-linux-64bit bin/kobopatch-linux-64bit.glibc
-  cp -v /net/depot/kobopatch/build/kobopatch-linux-64bit.musl bin/
-  cd bin
-  ln -s kobopatch-linux-64bit.musl kobopatch-linux-64bit
-  cd -
+	mv -v bin/kobopatch-linux-64bit bin/kobopatch-linux-64bit.glibc
+	cp -v /net/depot/kobopatch/build/kobopatch-linux-64bit.musl bin/
+	cd bin
+	ln -s kobopatch-linux-64bit.musl kobopatch-linux-64bit
+	cd -
 }
 
 [ -e $RULES.original ] && { ifno "overwrite $RULES" && exit; } || original $RULES
@@ -42,10 +42,10 @@ RULES=../$RULES
 echo "overrides:" >>$RULES
 
 for i in *yaml ;do
-  [ $i = $RULES ] && continue
-  dos2unix $i 2>/dev/null
-  echo "\n  src/$i:" >>$RULES
-  perl -0777 -pe 's/([[:alpha:]].*)\n.*Enabled:(.*)/\1\2/g' $i | grep '^[[:alpha:]]' | sed 's/^/    /' >>$RULES
+	[ $i = $RULES ] && continue
+	dos2unix $i 2>/dev/null
+	echo "\n  src/$i:" >>$RULES
+	perl -0777 -pe 's/([[:alpha:]].*)\n.*Enabled:(.*)/\1\2/g' $i | grep '^[[:alpha:]]' | sed 's/^/    /' >>$RULES
 done
 
 cd ..

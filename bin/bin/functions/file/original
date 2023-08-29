@@ -10,25 +10,25 @@ usage() { usage: "$(basename $0) [-f | -q]* <file>"; }
 
 V=-v
 while : ;do
-  case "$1" in
-    -f) eval sudo rm -rf "\$$#.original"; shift; continue ;;
-    -q) unset V;                          shift; continue ;;
-    '') usage ;;
-    * ) break ;;
-  esac
+	case "$1" in
+		-f) eval sudo rm -rf "\$$#.original"; shift; continue ;;
+		-q) unset V;                          shift; continue ;;
+		'') usage ;;
+		* ) break ;;
+	esac
 done
 
 [ -e "$1.original" ] && exit 1
 
 # save distribution original
 if [ -e "$1" ] ;then
-  if [ $V ] ;then
-    ditto copy "$(sudo cp -pR $V "$1" "$1.original")"
-  else
-    ditto copy "'$1' -> '$1.original'"
-    sudo cp -pR "$1" "$1.original"
-  fi
-  exit 0
+	if [ $V ] ;then
+		ditto copy "$(sudo cp -pR $V "$1" "$1.original")"
+	else
+		ditto copy "'$1' -> '$1.original'"
+		sudo cp -pR "$1" "$1.original"
+	fi
+	exit 0
 fi
 exit 1
 

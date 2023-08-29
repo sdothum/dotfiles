@@ -11,13 +11,13 @@ usage() { usage: "$(basename $0) <package>*"; }
 conf=/etc/pacman.conf
 
 if [ -z $1 ] ;then
-  grep '^ *IgnorePkg.*' $conf
-  usage
+	grep '^ *IgnorePkg.*' $conf
+	usage
 fi
 
 for i in $@ ;do
-  grep -q "^ *IgnorePkg.*$i" $conf && sudo sed -i "/^ *IgnorePkg.*$i/s/ $i//" $conf
-  pm S $i
+	grep -q "^ *IgnorePkg.*$i" $conf && sudo sed -i "/^ *IgnorePkg.*$i/s/ $i//" $conf
+	pm S $i
 done
 
 # vim: set ft=sh: #

@@ -18,32 +18,32 @@ wrappaur=$(aurwrapper)
 [ -e $conf ] || touch $conf
 
 add_pkg() {
-  for i in $@ ;do
-    pkg=$(am $i)
-    if [ $(echo $pkg | wc -l) -eq 2 ] ;then
-      echo "$i:$(echo $pkg | head -1 | sed 's/ (.*)//')" >>$conf
-      sort -uo $conf $conf
-    else
-      ditto ERROR package "\"$i\" not found"
-    fi
-  done
-  trackpkg
+	for i in $@ ;do
+		pkg=$(am $i)
+		if [ $(echo $pkg | wc -l) -eq 2 ] ;then
+			echo "$i:$(echo $pkg | head -1 | sed 's/ (.*)//')" >>$conf
+			sort -uo $conf $conf
+		else
+			ditto ERROR package "\"$i\" not found"
+		fi
+	done
+	trackpkg
 }
 
 del_pkg() {
-  ifyes "no longer track:  $(grep "^$@" $conf | cut -d: -f2)" &&
-    for i in $@ ;do sed -i "/^$i/d" $conf ;done
-  trackpkg
+	ifyes "no longer track:  $(grep "^$@" $conf | cut -d: -f2)" &&
+		for i in $@ ;do sed -i "/^$i/d" $conf ;done
+	trackpkg
 }
 
 chk_pkg() {
-  for i in $(cut -d: -f1 $conf) ;do
-    j=$(grep "^$i" $conf | cut -d: -f1)
-    k=$(grep "^$i" $conf | cut -d: -f2)
-    # echo $j :: $k
-    l=$($wrappaur -Ss $j)
-    [ "$k" = "$l" ] && echo $k || echo "$k  =>  $l"
-  done
+	for i in $(cut -d: -f1 $conf) ;do
+		j=$(grep "^$i" $conf | cut -d: -f1)
+		k=$(grep "^$i" $conf | cut -d: -f2)
+		# echo $j :: $k
+		l=$($wrappaur -Ss $j)
+		[ "$k" = "$l" ] && echo $k || echo "$k  =>  $l"
+	done
 }
 
 if   [ -z $1 ]                           ;then chk_pkg

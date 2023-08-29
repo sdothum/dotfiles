@@ -13,10 +13,10 @@ TRACE=${TRACE:-/tmp/trace.log}
 unset ljust
 
 parent() {
-  proc=$(ancestor)
-  [ $ljust ] &&
-    echo "$proc                  " | sed -r 's/^(..................).*/\1/' ||
-    echo "                  $proc" | sed -r 's/.*(..................)$/\1/'
+	proc=$(ancestor)
+	[ $ljust ] &&
+		echo "$proc                  " | sed -r 's/^(..................).*/\1/' ||
+		echo "                  $proc" | sed -r 's/.*(..................)$/\1/'
 }
 
 echo "$(date "+%M'%S\"")  $(parent) -> $CHILD" >>$TRACE

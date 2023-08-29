@@ -18,8 +18,8 @@ THESAURUS='thesaurus'
 selection=$(xsel -o | head -1)
 xsel -c
 if [ "$selection" ] ;then
-  echo "$selection" | grep -q ' ' && unset selection
-  echo "$selection" | grep -q '^[[:alpha:]]*$' || unset selection
+	echo "$selection" | grep -q ' ' && unset selection
+	echo "$selection" | grep -q '^[[:alpha:]]*$' || unset selection
 fi
 
 if [ "$selection" ] ;then word=$selection
@@ -30,13 +30,13 @@ word=$(unquote $word)
 
 # swap stderr with stdout to capture dict word not found hints
 while hints=$(dict "$word" >/dev/null 2>&1 | cut -d: -f2 | xargs -n1 | sort -uf) ;do
-  [ "$hints" ] || break
-  # "No definitions found for $word" sorted above, hence, ordered match..
-  echo "$hints" | tr '\n' ' ' | grep -E -q 'definitions.*for.*found.*No'
-  if [ $? -eq 0 ] ;then word=$(echo | rmenu "No definitions found for \"$word\"") || exit
-  else                  word=$(echo "$hints" | rmenu 'Spelling Hints')            || exit
-  fi
-  word=$(unquote $word)
+	[ "$hints" ] || break
+	# "No definitions found for $word" sorted above, hence, ordered match..
+	echo "$hints" | tr '\n' ' ' | grep -E -q 'definitions.*for.*found.*No'
+	if [ $? -eq 0 ] ;then word=$(echo | rmenu "No definitions found for \"$word\"") || exit
+	else                  word=$(echo "$hints" | rmenu 'Spelling Hints')            || exit
+	fi
+	word=$(unquote $word)
 done
 
 # spawn ddict within terminal command to select (hilight) next word

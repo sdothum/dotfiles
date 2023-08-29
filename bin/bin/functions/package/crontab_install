@@ -9,10 +9,10 @@
 usage() { usage: "$(basename $0) <regex> <crontab>"; }
 
 cron() {
-  entry=$(sudo grep "$1" /var/spool/cron/$USER 2>/dev/null)
-  [ "$entry" ] || return 1
-  ditto cron "$entry"
-  return 0 
+	entry=$(sudo grep "$1" /var/spool/cron/$USER 2>/dev/null)
+	[ "$entry" ] || return 1
+	ditto cron "$entry"
+	return 0 
 }
 
 [ $# -eq 2 ] || usage

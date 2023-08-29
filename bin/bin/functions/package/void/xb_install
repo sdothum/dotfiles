@@ -11,21 +11,21 @@
 # Usage: xb_install [--confirm | --init] <package>
 
 case $1 in
-  --confirm) confirm=true; shift ;;
-  --init   ) init=true;    shift ;;
+	--confirm) confirm=true; shift ;;
+	--init   ) init=true;    shift ;;
 esac
 
 if ! xb_query $@ ;then
-  heading : $@
-  time=$(chrono)
-  pre_install $@
-  if ! xbps-query -S $@ >/dev/null ;then
-    [ $confirm ] && sudo xbps-install $@ || sudo xbps-install -y $@
-  fi
-  post_install $@
-  chrono $time
+	heading : $@
+	time=$(chrono)
+	pre_install $@
+	if ! xbps-query -S $@ >/dev/null ;then
+		[ $confirm ] && sudo xbps-install $@ || sudo xbps-install -y $@
+	fi
+	post_install $@
+	chrono $time
 elif [ $init ] ;then
-  [ -s $HOME/build/void/post_install/$1 ] || [ -s $HOME/build/void/user_install/$1 ] && post_install $@
+	[ -s $HOME/build/void/post_install/$1 ] || [ -s $HOME/build/void/user_install/$1 ] && post_install $@
 fi
 
 unset confirm

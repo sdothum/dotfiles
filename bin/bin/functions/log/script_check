@@ -8,9 +8,9 @@
 
 # abort condition
 if ! pstat script ;then
-  ditto INFO 'run "script" to log stdout messages'
-  # kill script called from
-  exit
+	ditto INFO 'run "script" to log stdout messages'
+	# kill script called from
+	exit
 fi
 
 # vim: set ft=sh: #

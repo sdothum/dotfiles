@@ -10,9 +10,9 @@ usage() { usage: "$(basename $0) d'irectory | f'ile <path> <name> <file>*"; }
 
 [ $# -lt 4 ] && usage
 case $1 in
-  d) dir=$1; shift ;;
-  f) shift ;;
-  *) usage ;;
+	d) dir=$1; shift ;;
+	f) shift ;;
+	*) usage ;;
 esac
 
 # watchman
@@ -24,17 +24,17 @@ VERBOSE=$SESSION/$NAME:verbose
 LOG=/tmp/$NAME.log
 
 info() {
-  trace "$1 ${ROOT##*/}" "$name" >>$LOG
-  [ -e $VERBOSE ] && notify X "$1 ${ROOT##*/}" "$name"
+	trace "$1 ${ROOT##*/}" "$name" >>$LOG
+	[ -e $VERBOSE ] && notify X "$1 ${ROOT##*/}" "$name"
 }
 
 for i in $@ ;do
-  [ -n "$i" ] || continue
-  name=$(echo $i | exclude)
-  [ -n "$name" ] && [ -e "$ROOT/$i" ] || continue
-  [ $dir ] && file="$ROOT/${i%/*}" || { file="$ROOT/$i"; [ -d "$file" ] && continue; }
-  info Register
-  grep -qx "$file" $WATCH || echo "$file" >>$WATCH
+	[ -n "$i" ] || continue
+	name=$(echo $i | exclude)
+	[ -n "$name" ] && [ -e "$ROOT/$i" ] || continue
+	[ $dir ] && file="$ROOT/${i%/*}" || { file="$ROOT/$i"; [ -d "$file" ] && continue; }
+	info Register
+	grep -qx "$file" $WATCH || echo "$file" >>$WATCH
 done
 
 # vim: set ft=sh: #

@@ -13,10 +13,10 @@ GALLERY=/srv/http/thedarnedestthing.com/application/public/images
 [ $1 ] || usage
 
 for i in $@ ;do
-  [ "$i" ] && jpeg=$i
-  [ "${i##*.}" = jpg ] && name=$jpeg || name="${i%.*}.jpg"
-  ditto add "$(basename $GALLERY)/$name"
-  convert $jpeg -resize 1600 -quality $quality $GALLERY/$name
+	[ "$i" ] && jpeg=$i
+	[ "${i##*.}" = jpg ] && name=$jpeg || name="${i%.*}.jpg"
+	ditto add "$(basename $GALLERY)/$name"
+	convert $jpeg -resize 1600 -quality $quality $GALLERY/$name
 done
 
 # vim: set ft=sh: #

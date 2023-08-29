@@ -18,15 +18,15 @@ usage() { usage: "$(basename $0) [-time] [<utcstart> [<utcstop>]]"; }
 H='°'  # hours symbol
 
 elapsed() {
-  bc <<EOF
-    secs = $2 - $1
-    mins = secs / 60
-    hrs = mins / 60
-    # print hrs, " ", mins, "'", secs, "\q", "\n"
-    mins = mins - hrs * 60
-    secs = secs - hrs * 3600 - mins * 60
-    # if (hrs) print hrs, "${H}", mins, "'", secs, "\q", "\n" else if (mins) print mins, "'", secs, "\q", "\n" else print secs, "\q", "\n"
-    if (hrs) print hrs, "${H}", mins, "'", secs, "\q", "\n" else print mins, "'", secs, "\q", "\n"
+	bc <<EOF
+		secs = $2 - $1
+		mins = secs / 60
+		hrs = mins / 60
+		# print hrs, " ", mins, "'", secs, "\q", "\n"
+		mins = mins - hrs * 60
+		secs = secs - hrs * 3600 - mins * 60
+		# if (hrs) print hrs, "${H}", mins, "'", secs, "\q", "\n" else if (mins) print mins, "'", secs, "\q", "\n" else print secs, "\q", "\n"
+		if (hrs) print hrs, "${H}", mins, "'", secs, "\q", "\n" else print mins, "'", secs, "\q", "\n"
 EOF
 }
 

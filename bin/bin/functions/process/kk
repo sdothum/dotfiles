@@ -9,16 +9,16 @@
 usage() { usage: "$(basename $0) [sig=<signal>] <name>.."; }
 
 case $1 in
-  sig=*) eval $1; shift ;;
-      *) sig=${sig:--TERM} ;;
+	sig=*) eval $1; shift ;;
+	*    ) sig=${sig:--TERM} ;;
 esac
 
 # quick kill processes by name
 if [ $1 ] ;then
-  if p $@ | grep -v $0 ;then
-    pids=$(p $@ | grep -v $0 | awk '{ print $2 }')
-    ifyes "kill /$@/ $pids" && sudo kill $sig $pids
-  fi
+	if p $@ | grep -v $0 ;then
+		pids=$(p $@ | grep -v $0 | awk '{ print $2 }')
+		ifyes "kill /$@/ $pids" && sudo kill $sig $pids
+	fi
 fi
 
 # vim: set ft=sh: #

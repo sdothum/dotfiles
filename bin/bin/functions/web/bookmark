@@ -7,12 +7,12 @@
 # ................................................................. Bookmark url
 
 url() {
-  search '--sync --onlyvisible' >/dev/null
-  xdotool key y y
-  URL=$(xsel -b)
-  echo "$URL" | grep -q http || exit
-  echo "$URL" >$SESSION/bookmark
-  notify bookmark "$URL"
+	search '--sync --onlyvisible' >/dev/null
+	xdotool key y y
+	URL=$(xsel -b)
+	echo "$URL" | grep -q http || exit
+	echo "$URL" >$SESSION/bookmark
+	notify bookmark "$URL"
 }
 
 (sleep 1 && url) &

@@ -7,7 +7,7 @@
 # .......................................................................... CPU
 
 # Usage: echo $(cpu_temp)C
- 
+
 sensors | grep 'Package id 0:' | sed -r 's/.*: *[+]([[:digit:]]*).*/\1/'
 
 # vim: set ft=sh: #

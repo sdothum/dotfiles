@@ -12,31 +12,31 @@ usage() { usage: "$(basename $0) c'olemak | q'werty | t'oggle"; }
 
 # the finger friendly layout
 colemak() {
-  if [ -e $HOME/.Xmodmap ] ;then
-    xmodmap $HOME/.Xmodmap
-    layout=Shift-DH
-  else
-    setxkbmap us -variant colemak
-    left_shift_key
-  fi
-  sudo sed -i '/^KEYMAP/cKEYMAP=colemak' /etc/vconsole.conf
-  notify low 'Keyboard Layout' "Colemak $layout"
+	if [ -e $HOME/.Xmodmap ] ;then
+		xmodmap $HOME/.Xmodmap
+		layout=Shift-DH
+	else
+		setxkbmap us -variant colemak
+		left_shift_key
+	fi
+	sudo sed -i '/^KEYMAP/cKEYMAP=colemak' /etc/vconsole.conf
+	notify low 'Keyboard Layout' "Colemak $layout"
 }
 
 # ugh.. only if you insist!
 qwerty() {
-  setxkbmap us -variant basic
-  left_shift_key
-  sudo sed -i '/^KEYMAP/cKEYMAP=us' /etc/vconsole.conf
-  notify low 'Keyboard Layout' 'Qwerty'
+	setxkbmap us -variant basic
+	left_shift_key
+	sudo sed -i '/^KEYMAP/cKEYMAP=us' /etc/vconsole.conf
+	notify low 'Keyboard Layout' 'Qwerty'
 }
 
 # toggle qwerty and colemak variants
 case $1 in
-  c*) colemak ;;
-  q*) qwerty ;;
-  t*) grep -q qwerty /etc/vconsole.conf && colemak || qwerty ;;
-  * ) usage ;;
+	c*) colemak ;;
+	q*) qwerty ;;
+	t*) grep -q qwerty /etc/vconsole.conf && colemak || qwerty ;;
+	* ) usage ;;
 esac
 
 # vim: set ft=sh: #

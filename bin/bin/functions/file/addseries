@@ -15,12 +15,12 @@ ifno "$title" && exit
 folder() { echo "$@" | grep -q 'e$' && echo "${@%e}E" || echo "$@"; }
 
 for i in $(seq 1 99) ;do
-  [ $i -lt 10 ] && j=0$i || j=$i
-  episode=$(find -maxdepth 1 -regextype posix-extended -regex ".*${title}$j.*([Mm]kv|avi)" | grep -iv sample)
-  [ -e "$episode" ] || continue
-  folder="$(folder "$title")$j"
-  mkdir -pv "$folder" || exit 1
-  find -maxdepth 1 -type f -name "$folder.*" -exec mv -v {} "$folder/" \;
+	[ $i -lt 10 ] && j=0$i || j=$i
+	episode=$(find -maxdepth 1 -regextype posix-extended -regex ".*${title}$j.*([Mm]kv|avi)" | grep -iv sample)
+	[ -e "$episode" ] || continue
+	folder="$(folder "$title")$j"
+	mkdir -pv "$folder" || exit 1
+	find -maxdepth 1 -type f -name "$folder.*" -exec mv -v {} "$folder/" \;
 done
 
 # vim: set ft=sh: #

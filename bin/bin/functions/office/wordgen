@@ -7,7 +7,7 @@
 # ........................................................ Random word generator
 
 usage() {
-  echo "$(basename $0) [option]* [<regex>*]
+	echo "$(basename $0) [option]* [<regex>*]
 options: wordlen=<length>,   max word length, default '30'
 <        size=<count>,       corpus selection from dictionary, default '30000'
 <        ISE,                convert 'ize' to British 'ise'
@@ -17,26 +17,26 @@ options: wordlen=<length>,   max word length, default '30'
 <        output=<filename>,  default 'Amphetype:size-<corpus-punctuation>.txt**'
 <                            ** <...> == <filename> substitution
 <        <regex>,            word match [<regex>], default 'a-z'" | usage:
-  exit 1
+	exit 1
 }
 
 DICTIONARY=${DICTIONARY:-$HOME/.config/Amphetype/unique.words}
 CORPUS=$DICTIONARY.corpus
 
 while : ;do
-  case "$1" in
-    help     ) usage ;;
-    wordlen=*) eval $1 ;;
-    size=*   ) eval $1 ;;
-    ISE      ) ise='s/(...[^s])iz((e[drs]*|ation)([ -]|$))/\1is\2/gI' ;;
-    mixed    ) punctuation=$1 ;;
-    simple   ) punctuation=$1 ;;
-    [0-9]*   ) sentences="$sentences $1" ;;
-    corpus=* ) eval $1 ;;
-    output=* ) eval $1 ;;
-    *        ) regex=$@; break ;;
-  esac
-  shift
+	case "$1" in
+		help     ) usage ;;
+		wordlen=*) eval $1 ;;
+		size=*   ) eval $1 ;;
+		ISE      ) ise='s/(...[^s])iz((e[drs]*|ation)([ -]|$))/\1is\2/gI' ;;
+		mixed    ) punctuation=$1 ;;
+		simple   ) punctuation=$1 ;;
+		[0-9]*   ) sentences="$sentences $1" ;;
+		corpus=* ) eval $1 ;;
+		output=* ) eval $1 ;;
+		*        ) regex=$@; break ;;
+	esac
+	shift
 done
 
 [ $wordlen     ] || wordlen=30
@@ -60,14 +60,14 @@ trap "rm $words $lines $paragraphs" EXIT
 
 # build corpus from wordfile
 [ -e $CORPUS ] || {
-  # arbitrarily remove all questionable spellings
-  cat $DICTIONARY | aspell --ignore-case list >$DICTIONARY.undefined
-  diff $DICTIONARY $DICTIONARY.undefined | sed '/^[>0-9]/d; s/< //' | grep -v '^#!' >$CORPUS
+	# arbitrarily remove all questionable spellings
+	cat $DICTIONARY | aspell --ignore-case list >$DICTIONARY.undefined
+	diff $DICTIONARY $DICTIONARY.undefined | sed '/^[>0-9]/d; s/< //' | grep -v '^#!' >$CORPUS
 }
 
 # build common word dictionary (ignore majority of 1-2 character word acronyms)
 shuf $CORPUS | sed -r 's/\t.*//; s/(.*)/\L\1/' |  # strip frequency count if present
-    grep -E "[$regex]" | grep -E -v '^(.|..)$' | grep -E -x ".{1,$wordlen}" | head -$size >$corpus.words
+		grep -E "[$regex]" | grep -E -v '^(.|..)$' | grep -E -x ".{1,$wordlen}" | head -$size >$corpus.words
 
 typefile="$CACHEDIR/$(cat $corpus.words | wc -l)-$output.txt"
 
@@ -78,57 +78,57 @@ random() { od -An -N1 -i /dev/random | grep -q "$1" && echo "$2" || echo "$3"; }
 
 # proper case sentences
 wordcase() {
-  if [ $punctuation = simple ] ;then
-    cat $lines | sed -r 's/^(.)/\U\1/; s/ $/./'
-  else
-    # inject random punctuation
-    while read line <&3 ;do
-      echo "$line" | 
-          sed -re 's/^(.)/\U\1/' \
-              -e "s/\"(.)([^\"]*)\"/\"\U\1\E\2$(random 3 '?' '')\", /g" \
-              -e 's/  */ /g' \
-              -e "s/ *$/$(random 6 '?' '.')/" \
-              -e 's/^\. //' \
-              -e 's/ \././g' \
-              -e 's/[,\-]\.$/./'
-    done 3< $lines
-  fi
+	if [ $punctuation = simple ] ;then
+		cat $lines | sed -r 's/^(.)/\U\1/; s/ $/./'
+	else
+		# inject random punctuation
+		while read line <&3 ;do
+			echo "$line"                                                 \
+			| sed -re 's/^(.)/\U\1/'                                     \
+				-e "s/\"(.)([^\"]*)\"/\"\U\1\E\2$(random 3 '?' '')\", /g" \
+				-e 's/  */ /g'                                            \
+				-e "s/ *$/$(random 6 '?' '.')/"                           \
+				-e 's/^\. //'                                             \
+				-e 's/ \././g'                                            \
+				-e 's/[,\-]\.$/./'
+		done 3< $lines
+	fi
 }
 
 # quote phrases?
 wordquote() {
-  if [ $punctuation = simple ] ;then
-    cat $words
-  else
-    # inject random enclosing quotation marks
-    while read line <&3 ;do
-      quote=$(random 1 '\"' '')
-      echo "$line" | sed -r "s/(.*) /$quote\1$quote /"
-    done 3< $words
-  fi
+	if [ $punctuation = simple ] ;then
+		cat $words
+	else
+		# inject random enclosing quotation marks
+		while read line <&3 ;do
+			quote=$(random 1 '\"' '')
+			echo "$line" | sed -r "s/(.*) /$quote\1$quote /"
+		done 3< $words
+	fi
 }
 
 # fold word groups
 wordhypen() {
-  if [ $punctuation = simple ] ;then
-    shuf $corpus.words | tr '\n' ' '
-  else
-    # inject random hyphens
-    for i in $(shuf $corpus.words) ;do
-      echo $i | tr '\n' "$(random 2 '-' ' ')"
-    done
-  # apply ise conversion
-  fi | sed -r "$ise" | fold -s --width=$(( $1 * 5 ))
+	if [ $punctuation = simple ] ;then
+		shuf $corpus.words | tr '\n' ' '
+	else
+		# inject random hyphens
+		for i in $(shuf $corpus.words) ;do
+			echo $i | tr '\n' "$(random 2 '-' ' ')"
+		done
+	# apply ise conversion
+	fi | sed -r "$ise" | fold -s --width=$(( $1 * 5 ))
 }
 
 # ................................................................... Paragraphs
 
 for i in $sentences ;do
-  ditto "sentence length $i words"
-  wordhypen $i >$words
-  wordquote >$lines
-  wordcase >>$paragraphs
-  echo >>$paragraphs
+	ditto "sentence length $i words"
+	wordhypen $i >$words
+	wordquote >$lines
+	wordcase >>$paragraphs
+	echo >>$paragraphs
 done
 
 # add paragraph markers (reduced by subsequent shuf)

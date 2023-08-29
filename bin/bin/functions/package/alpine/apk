@@ -7,45 +7,47 @@
 # ........................................................... Package management
 
 usage() {
-  echo "$(basename $0) edge | testing | v<version> package*, add package from repo
+	echo "$(basename $0) edge | testing | v<version> package*, add package from repo
 $(basename $0) repo [ lts | edge | testing | latest-stable | v<version> ], set active repo
 $(basename $0) <command...>" | usage:
-  exit 1
+	exit 1
 }
 
 REPOS=/etc/apk/repositories
 
 # apk wrapper
 case $1 in
-  ''      ) usage ;;
+	''      ) usage ;;
 
-  # install package version
-  edge    |\
-  testing |\
-  v[3-9]* ) [ $2 ] || usage
-            case $1 in
-              edge   ) ;;
-              testing) repo=$1 ;;
-              v*     ) branch=${1#-} ;;
-            esac
-            shift
-            doas /sbin/apk add -U --upgrade --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/${branch:-edge}/${repo:-community} $@ ;;
+	# install package version
+	edge    |\
+	testing |\
+	v[3-9]* )
+		[ $2 ] || usage
+		case $1 in
+			edge   ) ;;
+			testing) repo=$1 ;;
+			v*     ) branch=${1#-} ;;
+		esac
+		shift
+		doas /sbin/apk add -U --upgrade --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/${branch:-edge}/${repo:-community} $@ ;;
 
-  # set default repo
-  repo    ) [ $2 ] || usage
-            case $2 in
-              ''     ) ;;
-              lts    ) doas sed -i 's/^http:/#http:/; /main/s/^#//; /community/s/^#//; /\/edge\//s/^http:/#http:/' $REPOS ;;
-              edge   ) doas sed -i 's/^http:/#http:/; /\/edge\//s/^#//; /testing/s/^/#/'                           $REPOS ;;
-              testing) doas sed -i 's/^http:/#http:/; /\/edge\//s/^#//'                                            $REPOS ;;
-              latest*) doas sed -i "s/v[0-9][^/]*/lastest-stable/;"                             $REPOS; exec apk repo lts ;; 
-              v[3-9]*) doas sed -i "s/v[0-9][^/]*/$1/; s/lastest-stable/$1/"                    $REPOS; exec apk repo lts ;; 
-              *      ) usage ;;
-            esac
-            cat $REPOS ;;
+	# set default repo
+	repo    )
+		[ $2 ] || usage
+		case $2 in
+			''     ) ;;
+			lts    ) doas sed -i 's/^http:/#http:/; /main/s/^#//; /community/s/^#//; /\/edge\//s/^http:/#http:/' $REPOS ;;
+			edge   ) doas sed -i 's/^http:/#http:/; /\/edge\//s/^#//; /testing/s/^/#/'                           $REPOS ;;
+			testing) doas sed -i 's/^http:/#http:/; /\/edge\//s/^#//'                                            $REPOS ;;
+			latest*) doas sed -i "s/v[0-9][^/]*/lastest-stable/;"                             $REPOS; exec apk repo lts ;; 
+			v[3-9]*) doas sed -i "s/v[0-9][^/]*/$1/; s/lastest-stable/$1/"                    $REPOS; exec apk repo lts ;; 
+			*      ) usage ;;
+		esac
+		cat $REPOS ;;
 
-  # do command
-  *       ) doas /sbin/apk $@ ;;
+	# do command
+	*       ) doas /sbin/apk $@ ;;
 esac
 
 # vim: set ft=sh: #

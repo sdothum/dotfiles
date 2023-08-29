@@ -9,11 +9,11 @@
 # ..................................................................... Annotate
 
 usage() {
-  echo "$(basename $0) [ ERROR | WARNING | INFO ] @ *<desc> | [-t | <desc> | -- | ..]* <message>
+	echo "$(basename $0) [ ERROR | WARNING | INFO ] @ *<desc> | [-t | <desc> | -- | ..]* <message>
 where, default <desc> -> "note"
 <                  -- -> line separator
 <                  .. -> justify leader" | usage:
-  exit 1
+	exit 1
 }
 
 [ "$1" ] || usage
@@ -23,37 +23,37 @@ ATTCOLOR=${TURQUOISE}
 MSGCOLOR=${green}
 
 while [ "$1" ] ;do
-  case $1 in
-    ERR*) ATTCOLOR=${RED}; MSGCOLOR=${brown}   ;;
-    WAR*) ATTCOLOR=${BROWN} MSGCOLOR=${orange} ;;
-    INF*) ATTCOLOR=${WHITE} MSGCOLOR=${cyan} ;;
-    @   ) [ "$2" ] || usage; desc=$2; message=' ';     shift ;;
-    @*  ) [ "$2" ] && usage; desc=${1#@}; message=' '        ;;
-    -t  ) timestamp="${WHITE}$(date "+%-H %M'%S\" ")"                ;;
-    ..  ) [ "$2" ] || usage; justify=true; message=$2; shift ;;
-    --  ) separator=true ;;
-    *   ) [ "$message" ] && desc=$message; message=$1 ;;
-  esac
-  shift
+	case $1 in
+		ERR*) ATTCOLOR=${RED}; MSGCOLOR=${brown}   ;;
+		WAR*) ATTCOLOR=${BROWN} MSGCOLOR=${orange} ;;
+		INF*) ATTCOLOR=${WHITE} MSGCOLOR=${cyan} ;;
+		@   ) [ "$2" ] || usage; desc=$2; message=' ';     shift ;;
+		@*  ) [ "$2" ] && usage; desc=${1#@}; message=' '        ;;
+		-t  ) timestamp="${WHITE}$(date "+%-H %M'%S\" ")"                ;;
+		..  ) [ "$2" ] || usage; justify=true; message=$2; shift ;;
+		--  ) separator=true ;;
+		*   ) [ "$message" ] && desc=$message; message=$1 ;;
+	esac
+	shift
 done
 # [ "$desc" = "$message" ] && usage
 [ "$desc" ] || desc=note
 
 justify() {
-  while read line ;do
-    # indent=$(echo "$(tput cols) - $(echo $line | wc -L) - 3" | bc)
-    indent=$(( $(tput cols) - $(echo $line | wc -L) - 3 ))
-    [ $indent -gt 0 ] && leader=$(head -c $indent </dev/zero | tr '\0' "$leader")
-    log "${ATTCOLOR}@ $leader ${MSGCOLOR}$line${NOCOLOR}"
-    leader=' '
-  done
+	while read line ;do
+		# indent=$(echo "$(tput cols) - $(echo $line | wc -L) - 3" | bc)
+		indent=$(( $(tput cols) - $(echo $line | wc -L) - 3 ))
+		[ $indent -gt 0 ] && leader=$(head -c $indent </dev/zero | tr '\0' "$leader")
+		log "${ATTCOLOR}@ $leader ${MSGCOLOR}$line${NOCOLOR}"
+		leader=' '
+	done
 }
 
 annotate() {
-  [ $separator ] && drawline $leader
-  while read line ;do
-    log "$timestamp${ATTCOLOR}@${desc} ${MSGCOLOR}$line${NOCOLOR}"
-  done
+	[ $separator ] && drawline $leader
+	while read line ;do
+		log "$timestamp${ATTCOLOR}@${desc} ${MSGCOLOR}$line${NOCOLOR}"
+	done
 }
 
 echo "$message" | sed '/^$/d' | { [ $justify ] && justify || annotate; }  # omit blank lines

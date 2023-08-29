@@ -12,15 +12,15 @@
 USAGE=/tmp/usage:content
 
 if [ "$1" ] ;then
-  if [ -e "$1" ] ;then
-    name=$(basename $1)
-    message="$name $(ls -1 $(dirname $1)/functions/$name | tr '\n' ' ' | sed 's/ / \| /g')"
-  fi
-  echo "${BROWN}Usage: ${WHITE}$(echo "${message:-$1}" | sed -r "s/^ *([^ ]+ )/\1${cyan}/")${NOCOLOR}"
+	if [ -e "$1" ] ;then
+		name=$(basename $1)
+		message="$name $(ls -1 $(dirname $1)/functions/$name | tr '\n' ' ' | sed 's/ / \| /g')"
+	fi
+	echo "${BROWN}Usage: ${WHITE}$(echo "${message:-$1}" | sed -r "s/^ *([^ ]+ )/\1${cyan}/")${NOCOLOR}"
 else
-  cat >$USAGE
-  command=$(head -1 $USAGE | cut -d' ' -f1)
-  echo "${BROWN}Usage: $(sed -r "s/($command )/${WHITE}\1${cyan}/g; s/^< /  /g; s/^/       /g; 1s/^ *//;" $USAGE)"  # "< " anti-tab (space) placeholder
+	cat >$USAGE
+	command=$(head -1 $USAGE | cut -d' ' -f1)
+	echo "${BROWN}Usage: $(sed -r "s/($command )/${WHITE}\1${cyan}/g; s/^< /  /g; s/^/       /g; 1s/^ *//;" $USAGE)"  # "< " anti-tab (space) placeholder
 fi
 
 exit 1  # return code only (no termination) for ".. | usage:"

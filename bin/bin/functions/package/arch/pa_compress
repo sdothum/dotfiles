@@ -15,8 +15,8 @@ sudo paccache -ruk0
 exists pacman-optimize && sudo pacman-optimize
 
 ifno 'remove ALL local archived packages' || {
-  sudo pacman -Sc --noconfirm
-  rm -rf $HOME/.cache/$wrappaur/*
+	sudo pacman -Sc --noconfirm
+	rm -rf $HOME/.cache/$wrappaur/*
 }
 
 # vim: set ft=sh: #

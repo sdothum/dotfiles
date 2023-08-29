@@ -10,23 +10,23 @@ usage() { usage: "$(basename $0) [i7 | celeron | atom | arm]"; }
 
 # usage: processor <name> <field> <delimeter>
 processor() {
-  [ "$(cat /proc/cpuinfo | grep 'model name' | sed 's/model name.*: //' | uniq | cut -d' ' -f$2 | cut -d$3 -f1)" = $1 ] || return
-  echo "$1" | lowercase
-  exit
+	[ "$(cat /proc/cpuinfo | grep 'model name' | sed 's/model name.*: //' | uniq | cut -d' ' -f$2 | cut -d$3 -f1)" = $1 ] || return
+	echo "$1" | lowercase
+	exit
 }
 
 case $1 in
-  ''     ) processor i7      '3' '-'
-           processor Celeron '2' '('
-           processor Atom    '2' '('
-           processor ARM     '1' 'v' ;;
-  
-  i7       |\
-  arm      |\
-  atom     |\
-  celeron) [ "$(cpu)" = $1 ] ;;
-  
-  *      ) usage ;;
+	''     )
+		processor i7      '3' '-'
+		processor Celeron '2' '('
+		processor Atom    '2' '('
+		processor ARM     '1' 'v' ;;
+	
+	i7     |\
+	arm    |\
+	atom   |\
+	celeron)	[ "$(cpu)" = $1 ] ;;
+	*      )	usage ;;
 esac
 
 # vim: set ft=sh: #

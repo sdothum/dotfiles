@@ -21,9 +21,9 @@ shift
 [ $1 ] && files="$@" || files=$(ls *.jpg)
 
 for i in $files ;do
-  ditto INFO adding "$gallery $i"
-  convert $i -resize 1600 -quality $quality $GALLERY/$i
-  convert $i -resize 320  -quality $quality $GALLERY/{i%.jpg}_1.jpg
+	ditto INFO adding "$gallery $i"
+	convert $i -resize 1600 -quality $quality $GALLERY/$i
+	convert $i -resize 320  -quality $quality $GALLERY/{i%.jpg}_1.jpg
 done
 
 # vim: set ft=sh: #

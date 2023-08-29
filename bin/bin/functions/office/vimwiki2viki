@@ -19,34 +19,34 @@ ifno "convert $dir" && check=true
 wikis=$(mktemp)
 trap "rm -f $wikis" EXIT
 [ $check ] && find -L $dir -name '*wiki' | grep -E -v '\.deprecated|diary' >$wikis ||
-  find -L $dir -name '*wiki' | grep -v '\.deprecated' >$wikis
+	find -L $dir -name '*wiki' | grep -v '\.deprecated' >$wikis
 
 gs() {
-  action=$(grep -E "$(echo "$1" | sed -r 's,.*s/([^/]*)/.*,\1,')" "$wiki" | sed -r "$1")
-  [ "$action" ] || return
-  ditto -- "$1"
-  echo "$action"
-  [ $check ] || sed -i -r "$1" "$wiki"
+	action=$(grep -E "$(echo "$1" | sed -r 's,.*s/([^/]*)/.*,\1,')" "$wiki" | sed -r "$1")
+	[ "$action" ] || return
+	ditto -- "$1"
+	echo "$action"
+	[ $check ] || sed -i -r "$1" "$wiki"
 }
 
 while read wiki <&3 ;do
-  [ -d "$wiki" ] && continue
-  heading "$wiki"
-  gs "s/^[*][*]($W)/__\1/g"
-  gs "s/($NONWORD)[*][*]($W)/\1__\2/g"
-  gs "s/($W)[*][*]($NONWORD)/\1__\2/g"
-  gs "s/($W)[*][*]$/\1__/g"
-  gs "s/^[*]($W)/''\1/g"
-  gs "s/($NONWORD)[*]($W)/\1''\2/g"
-  gs "s/($W)[*]($NONWORD)/\1''\2/g"
-  gs "s/($W)[*]$/\1''/g"
-  gs '/^====== /s/^====== (.*) ======/****** \1/'
-  gs '/^===== /s/^===== (.*) =====/***** \1/'
-  gs '/^==== /s/^==== (.*) ====/**** \1/'
-  gs '/^=== /s/^=== (.*) ===/*** \1/'
-  gs '/^== /s/^== (.*) ==/** \1/'
-  gs '/^= /s/^= (.*) =/* \1/'
-  [ $check ] && { ifyes "$wiki" || exit 1; }
+	[ -d "$wiki" ] && continue
+	heading "$wiki"
+	gs "s/^[*][*]($W)/__\1/g"
+	gs "s/($NONWORD)[*][*]($W)/\1__\2/g"
+	gs "s/($W)[*][*]($NONWORD)/\1__\2/g"
+	gs "s/($W)[*][*]$/\1__/g"
+	gs "s/^[*]($W)/''\1/g"
+	gs "s/($NONWORD)[*]($W)/\1''\2/g"
+	gs "s/($W)[*]($NONWORD)/\1''\2/g"
+	gs "s/($W)[*]$/\1''/g"
+	gs '/^====== /s/^====== (.*) ======/****** \1/'
+	gs '/^===== /s/^===== (.*) =====/***** \1/'
+	gs '/^==== /s/^==== (.*) ====/**** \1/'
+	gs '/^=== /s/^=== (.*) ===/*** \1/'
+	gs '/^== /s/^== (.*) ==/** \1/'
+	gs '/^= /s/^= (.*) =/* \1/'
+	[ $check ] && { ifyes "$wiki" || exit 1; }
 done 3< $wikis
 
 # vim: set ft=sh: #

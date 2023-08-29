@@ -15,7 +15,7 @@ ROOT=${1:-$HOME/bin}
 # set PATH so it includes user's private bin if it exists
 for i in $(find -L $ROOT -type d | grep -v '/\.' | sort -r)
 do
-  PATH="${i}:$PATH"
+	PATH="${i}:$PATH"
 done
 
 # vim: set ft=sh: #

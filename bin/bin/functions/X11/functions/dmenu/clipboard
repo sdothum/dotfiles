@@ -17,11 +17,11 @@ clipboard() { gpaste-client --oneline | cut -c -$truncate | sed "s/://" | tac >$
 # delete from the bottom of the queue to preserve indexes
 clipboard
 while read index word <&3 ;do
-  len=$(echo "$word" | wc -c)
-  if [ $len -ge 6 ] && [ $len -le 12 ] ;then
-    notify 3 critical "$word" "Delete clipboard $index"
-    gpaste-client delete $index
-  fi
+	len=$(echo "$word" | wc -c)
+	if [ $len -ge 6 ] && [ $len -le 12 ] ;then
+		notify 3 critical "$word" "Delete clipboard $index"
+		gpaste-client delete $index
+	fi
 done 3< $clipboard
 
 # any deletes above will resequence the clipboard history
@@ -29,10 +29,10 @@ clipboard
 clip=$(tac $clipboard | sed "s/ /^$SEP /" | column -s^ -t | rmenu 'Clipboard' -no-custom)
 
 if [ "$clip" ] ;then
-  clip=$(echo $clip | cut -d' ' -f1)
-  xdotool type --delay 0 "$(gpaste-client get $clip)"
-  # gpaste add removes duplicate entries and pushes stack :-)
-  clipboard "$(gpaste-client get $clip)"
+	clip=$(echo $clip | cut -d' ' -f1)
+	xdotool type --delay 0 "$(gpaste-client get $clip)"
+	# gpaste add removes duplicate entries and pushes stack :-)
+	clipboard "$(gpaste-client get $clip)"
 fi
 
 # vim: set ft=sh: #

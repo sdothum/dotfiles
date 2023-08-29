@@ -9,13 +9,13 @@
 usage() { usage: "$(basename $0) [off] [tty<#>]"; }
 
 while : ;do
-  case $1 in
-    off ) disable=true ;;
-    tty*) tty=$1 ;;
-    *   ) usage ;;
-  esac
-  shift
-  [ $# -eq 0 ] && break
+	case $1 in
+		off ) disable=true ;;
+		tty*) tty=$1 ;;
+		*   ) usage ;;
+	esac
+	shift
+	[ $# -eq 0 ] && break
 done
 [ $tty ] || tty=tty1
 
@@ -24,13 +24,13 @@ console || ditto WARNING 'run autologin from console tty'
 [ $(tty) = /dev/$tty ] && ditto WARNING "cannot alter active $tty, login to alternate tty"
 
 if [ $disable ] ;then
-  service disable agetty-autologin-$tty
-  service enable agetty-$tty
+	service disable agetty-autologin-$tty
+	service enable agetty-$tty
 else
-  sudo cp -R /etc/sv/agetty-$tty /etc/sv/agetty-autologin-$tty
-  echo "GETTY_ARGS=\"--autologin $USER --noclear\"" | sudo tee -a /etc/sv/agetty-autologin-$tty/conf
-  service disable agetty-$tty
-  service enable agetty-autologin-$tty
+	sudo cp -R /etc/sv/agetty-$tty /etc/sv/agetty-autologin-$tty
+	echo "GETTY_ARGS=\"--autologin $USER --noclear\"" | sudo tee -a /etc/sv/agetty-autologin-$tty/conf
+	service disable agetty-$tty
+	service enable agetty-autologin-$tty
 fi
 
 # vim: set ft=sh: #

@@ -11,8 +11,8 @@ heading : $1
 
 uri=$(source_install $1)
 if [ -z $uri ] ;then
-  ditto -- "missing pre_install/$1 \"echo git://uri\""
-  exit
+	ditto -- "missing pre_install/$1 \"echo git://uri\""
+	exit
 fi
 
 repo=/net/depot/$1

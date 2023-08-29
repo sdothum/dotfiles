@@ -9,31 +9,29 @@
 usage() { usage: "$(basename $0) [display | nvidia | ati | intel | macbook]"; }
 
 vga() {
-  lspci 2>/dev/null | grep VGA | grep -qi "$1" || return 1
-  echo $1
-  card=true
-  return 0
+	lspci 2>/dev/null | grep VGA | grep -qi "$1" || return 1
+	echo $1
+	card=true
+	return 0
 }
 
 case $1 in
-  ''      ) vga Intel
-            vga NVIDIA
-            vga ATI
-            vga 'GeForce 8600M GT'
-            vga 'GeForce GT 650M'
-            
-            # lspci fails on raspberry pi
-            [ $card ] || echo arm ;;
-  
-  display ) xrandr 2>/dev/null | grep '*' | awk '{ print $1 }' ;;
-  
-  ati       |\
-  intel     |\
-  nvidia  ) vga $1 >/dev/null ;;
-  
-  macbook ) vga 'GeForce 8600M GT' >/dev/null ;;
-  inspiron) vga 'GeForce GT 650M'  >/dev/null ;;
-  *       ) usage ;;
+	''      )
+		vga Intel
+		vga NVIDIA
+		vga ATI
+		vga 'GeForce 8600M GT'
+		vga 'GeForce GT 650M'
+		# lspci fails on raspberry pi
+		[ $card ] || echo arm ;;
+	
+	display ) xrandr 2>/dev/null | grep '*' | awk '{ print $1 }' ;;
+	ati     |\
+	intel   |\
+	nvidia  ) vga $1 >/dev/null ;;
+	macbook ) vga 'GeForce 8600M GT' >/dev/null ;;
+	inspiron) vga 'GeForce GT 650M'  >/dev/null ;;
+	*       ) usage ;;
 esac
 
 # vim: set ft=sh: #

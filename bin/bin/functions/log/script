@@ -10,9 +10,9 @@ SESSION=$HOME/session.log
 
 # new session log
 script() {
-  ditto "saving previous to $HOME/log/${SESSION##*/}"
-  mkdir -pv $HOME/log || exit 1
-  mv $SESSION $HOME/log
+	ditto "saving previous to $HOME/log/${SESSION##*/}"
+	mkdir -pv $HOME/log || exit 1
+	mv $SESSION $HOME/log
 }
 
 # capture automated install script output

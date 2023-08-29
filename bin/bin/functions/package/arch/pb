@@ -14,8 +14,8 @@ $wrappaur -Qu
 ifyes 'upgrade system' || exit
 
 for i in $($wrappaur -Qu | nocolor | awk '{ print $3 }') ;do
-  heading $i
-  $wrappaur -S $i
+	heading $i
+	$wrappaur -S $i
 done
 
 # vim: set ft=sh: #

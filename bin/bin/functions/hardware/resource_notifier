@@ -17,11 +17,11 @@ threshold=$(( $mem / 10 ))
 thrash=$(( $swap / 10 ))
 
 if [ $free -lt $threshold ] ;then
-  if [ $used -gt $thrash ] ;then
-    ditto ERROR "${free}M free memory" "${used}M used swap"
-    notify critical "${free}M free memory" "${used}M used swap"
-    exit
-  fi
+	if [ $used -gt $thrash ] ;then
+		ditto ERROR "${free}M free memory" "${used}M used swap"
+		notify critical "${free}M free memory" "${used}M used swap"
+		exit
+	fi
 fi
 ditto 'memory / swap usage OK'
 

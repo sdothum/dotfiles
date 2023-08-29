@@ -11,8 +11,8 @@ usage() { usage: "$(basename $0) [-link | -test] <[path/]file> [<hostname>]"; }
 ROOT=$HOME/build/cfg        # restore customizations
 
 case $1 in
-  -test) test=true; shift ;;  # check only
-  -link) link=true; shift ;;  # link vs copy
+	-test) test=true; shift ;;  # check only
+	-link) link=true; shift ;;  # link vs copy
 esac
 
 [ $1 ] || usage
@@ -26,14 +26,14 @@ DIR=${1%/*}/
 mkdir -pv $DIR || exit 1
 
 if [ $link ] ;then
-  ditto link "$(sudo ln -sfv $ROOT$1$host $1)"
+	ditto link "$(sudo ln -sfv $ROOT$1$host $1)"
 elif [ -d $ROOT$1$host ] ;then
-  sudo mkdir -pv $1
-  alpine && ditto copy "$(sudo cp -rv -p $ROOT$1$host/* $1)" ||
-            ditto copy "$(sudo cp -rv --preserve=mode --no-preserve=ownership $ROOT$1$host/* $1)"
+	sudo mkdir -pv $1
+	alpine && ditto copy "$(sudo cp -rv -p $ROOT$1$host/* $1)" ||
+		ditto copy "$(sudo cp -rv --preserve=mode --no-preserve=ownership $ROOT$1$host/* $1)"
 else
-  alpine && ditto copy "$(sudo cp -v -p $ROOT$DIR$FILE$host $1)" ||
-            ditto copy "$(sudo cp -v --preserve=mode --no-preserve=ownership $ROOT$DIR$FILE$host $1)"
+	alpine && ditto copy "$(sudo cp -v -p $ROOT$DIR$FILE$host $1)" ||
+		ditto copy "$(sudo cp -v --preserve=mode --no-preserve=ownership $ROOT$DIR$FILE$host $1)"
 fi
 
 [ "${1##$HOME/}" = $1 ] || sudo chown -R $USER:users $1  # user config

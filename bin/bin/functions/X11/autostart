@@ -40,26 +40,26 @@ server && ipfilter &
 xrdb -merge $HOME/.Xresources &
 
 if xinput list --name-only | grep -E -q 'Georgi|Splitography' ;then
-  if [ -e $PLOVER ] ;then
-    switch tag $SYSTEM
-    plover &
-  fi
+	if [ -e $PLOVER ] ;then
+		switch tag $SYSTEM
+		plover &
+	fi
 fi
 
 # force hdmi audio functionality
 if [ -e $PULSEAUDIO ] ;then
-  pavucontrol 2>/dev/null &               # suppress gtk warnings
-  exists pulseaudio-equalizer-gtk && {
-    pulseaudio-equalizer enable
-    pulseaudio-equalizer-gtk 2>/dev/null &  # suppress config file access errors
-  }
+	pavucontrol 2>/dev/null &               # suppress gtk warnings
+	exists pulseaudio-equalizer-gtk && {
+		pulseaudio-equalizer enable
+		pulseaudio-equalizer-gtk 2>/dev/null &  # suppress config file access errors
+	}
 fi
 
 # ........................................................... Daemons and caches
 
 # pstat dunst || dunst 2>/dev/null &
 if server && ! pstat mpd ;then
-  exists mpd && mpd &
+	exists mpd && mpd &
 fi
 # pstat urxvtd || urxvtd -q -o -f &
 # pstat xflux || xflux -l 45.4 -g -75.7
@@ -67,10 +67,10 @@ dmenu movies cache &
 dmenu series cache &
 
 if [ -e $AUTOCONNECT ] ;then
-  killall autoconnect
-  term 'autoconnect' autoconnect
+	killall autoconnect
+	term 'autoconnect' autoconnect
 else
-  [ -e $CMST ] && cmst &
+	[ -e $CMST ] && cmst &
 fi
 
 [ $FCCACHE ] && { (fc-cache -f; rm -f $FCCACHE) & }  # see iosevka
@@ -100,14 +100,14 @@ pstat gpaste-client || gpaste-client start &
 # ................................................................ Terminal apps
 
 if [ -e $JABBER ] ;then
-  # is multihead && herbstclient focus_monitor 1 || switch tag $HANGOUT
-  # wait for window visibility before switching monitors, for urxvt font handling
-  tmux_session jabber mcabber &
+	# is multihead && herbstclient focus_monitor 1 || switch tag $HANGOUT
+	# wait for window visibility before switching monitors, for urxvt font handling
+	tmux_session jabber mcabber &
 fi
 if [ -e $IRC ] ;then
-  # is multihead && herbstclient focus_monitor 1 || switch tag $HANGOUT
-  # wait for window visibility before switching monitors, for urxvt font handling
-  tmux_session irc weechat &
+	# is multihead && herbstclient focus_monitor 1 || switch tag $HANGOUT
+	# wait for window visibility before switching monitors, for urxvt font handling
+	tmux_session irc weechat &
 fi
 server && herbstclient focus_monitor 0
 [ -e $CALENDAR ] && term 'calendar' wyrd &

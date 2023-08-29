@@ -10,15 +10,15 @@
 #        conky, start daemon
 
 if [ $1 ] ;then
-  msg=$1
-  shift
-  if [ -e $(dirname $0)/functions/conky/$msg ] ;then
-    . $(dirname $0)/functions/conky/$msg $@
-  else
-    usage: $0
-  fi
+	msg=$1
+	shift
+	if [ -e $(dirname $0)/functions/conky/$msg ] ;then
+		. $(dirname $0)/functions/conky/$msg $@
+	else
+		usage: $0
+	fi
 else
-  /usr/bin/conky -q &
+	/usr/bin/conky -q &
 fi
 
 # vim: set ft=sh: #

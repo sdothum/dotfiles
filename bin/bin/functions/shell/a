@@ -13,6 +13,6 @@ usage() { usage: "$(basename $0) [-w] <regex>"; }
 
 # see .agignore and al
 ag --color --color-path='1;32' --color-line-number='1;37' --color-match='1;33' \
-   --nobreak --noheading --smart-case --follow --hidden --skip-vcs-ignores $AG $w "$@"
+		--nobreak --noheading --smart-case --follow --hidden --skip-vcs-ignores $AG $w "$@"
 
 # vim: set ft=sh: #

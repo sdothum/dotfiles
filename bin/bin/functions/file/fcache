@@ -7,12 +7,12 @@
 # ................................................................... Find cache
 
 usage() {
-  echo "$(basename $0) I'nitialize
+	echo "$(basename $0) I'nitialize
 $(basename $0) [type] <dir> [<options>*], type -> find -type <type>
 $(basename $0) - <dir> [<options>*], force directory cache update
 " | usage:
-  ls -l $FCACHE:*
-  exit 1
+	ls -l $FCACHE:*
+	exit 1
 }
 
 FCACHE=$CACHEDIR/fcache
@@ -30,18 +30,18 @@ find $CACHEDIR -name 'fcache:*' -size 0c -exec rm {} \; 2>/dev/null
 # speed up fuzzy searches (especially arm), see shell/j j.fish
 
 while [ $1 ] ;do
-  case $1 in
-    I*        ) rm -fv $FCACHE*; exit ;;
-    !         ) not=! ;;
-    [bcdflps] ) type=$1 ;;
-    '-'       ) refresh=true ;;
-    -maxdepth ) maxdepth="-maxdepth $2"; shift ;;
-    -perm     ) perm="$not -perm $2"; unset not; shift ;;
-    -regex    ) regex="$regex $not -regex '$2'"; type=f; filter=cat; unset not; shift ;;
-    -regextype) regextype="-regextype $2"; shift ;;
-    *         ) [ -d $1 ] && node=$1 || usage; [ $type ] || type=d ;;
-  esac
-  shift
+	case $1 in
+		I*        ) rm -fv $FCACHE*; exit ;;
+		!         ) not=! ;;
+		[bcdflps] ) type=$1 ;;
+		'-'       ) refresh=true ;;
+		-maxdepth ) maxdepth="-maxdepth $2"; shift ;;
+		-perm     ) perm="$not -perm $2"; unset not; shift ;;
+		-regex    ) regex="$regex $not -regex '$2'"; type=f; filter=cat; unset not; shift ;;
+		-regextype) regextype="-regextype $2"; shift ;;
+		*         ) [ -d $1 ] && node=$1 || usage; [ $type ] || type=d ;;
+	esac
+	shift
 done
 
 cname() { echo $node | tr '/' ':'; }
@@ -52,7 +52,7 @@ dcache=$FCACHE:d$(cname $node)
 # if unchanged files in non-directory search, return cache
 # Note: always returns directory cache
 if [ -e $cache ] && [ -e $dcache ] && [ -z $refresh ] ;then
-  [ $type != d ] && stest -dqr -n $dcache $(cat $dcache) || exec cat $cache $BOOKMARKS  # append bookmarks
+	[ $type != d ] && stest -dqr -n $dcache $(cat $dcache) || exec cat $cache $BOOKMARKS  # append bookmarks
 fi
 
 notify "$node" 'Updating fcache'

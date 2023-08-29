@@ -17,8 +17,8 @@ usage() { usage: "$(basename $0) filename [<directory>]"; }
 echo "$prefix => $parent"
 cd $parent
 for i in $prefix* ;do
-  suffix=$(echo $i | sed "s/^$prefix//")
-  mv -i $i $parent$suffix
+	suffix=$(echo $i | sed "s/^$prefix//")
+	mv -i $i $parent$suffix
 done
 
 # vim: set ft=sh: #

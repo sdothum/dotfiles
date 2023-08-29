@@ -7,9 +7,9 @@
 # ......................................................................... diff
 
 while [ $1 ] ;do
-  [ -e $1 ] && break
-  opts="$opts $1"
-  shift
+	[ -e $1 ] && break
+	opts="$opts $1"
+	shift
 done
 
 # 2 column ouptut if any diff..
