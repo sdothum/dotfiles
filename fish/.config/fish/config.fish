@@ -135,9 +135,9 @@ and set -x BROWSER qutebrowser
 
 # source shell variables
 function SOURCE --description 'usage: SOURCE <script>'
-    for i in (grep '^export ' $argv)
-        eval $i
-    end
+		for i in (grep '^export ' $argv)
+				eval $i
+		end
 end
 
 # for alot mail
@@ -166,13 +166,13 @@ set -x splito $HOME/stow/splitography/qmk_firmware/keyboards/splitography/keymap
 
 console_login
 if [ -s $SESSION/boot:wm ] 
-  pgrep -f "sshd: $USER" >/dev/null || user_login &
+	pgrep -f "sshd: $USER" >/dev/null || user_login &
 else
-  user_login
+	user_login
 end
 # clear 'fish' tmux window name
 pidof tmux >/dev/null 
-  and begin 
-    console 
-      or tmux rename-window '' 
-  end
+	and begin 
+		console 
+			or tmux rename-window '' 
+	end

@@ -6,9 +6,9 @@
 # ...................................................................... Package
 
 if arch
-  abbr pkgs 'comm -23 <(pacman -Qeq | sort) <(pacman -Qgq base base-devel | sort)'
-  abbr pn 'env D=N pd'
-  abbr pq 'pacman -Qii'
+	abbr pkgs 'comm -23 <(pacman -Qeq | sort) <(pacman -Qgq base base-devel | sort)'
+	abbr pn 'env D=N pd'
+	abbr pq 'pacman -Qii'
 end
 
 # ...................................................................... Process
@@ -17,33 +17,33 @@ abbr K 'env sig=-KILL k'
 abbr KK 'env sig=-KILL kk'
 abbr sv 'sv'  # override service abbrev (from fish-completions)
 if alpine
-  abbr sva  'sv add'
-  abbr svd  'sv delete'
-  abbr svi  'sv status'
-  abbr svl  'sv list'
-  abbr svq  'sv status'
-  abbr svr  'sv restart'
-  abbr svs  'sv start'
-  abbr svx  'sv stop'
+	abbr sva  'sv add'
+	abbr svd  'sv delete'
+	abbr svi  'sv status'
+	abbr svl  'sv list'
+	abbr svq  'sv status'
+	abbr svr  'sv restart'
+	abbr svs  'sv start'
+	abbr svx  'sv stop'
 else if void
-  abbr svd  'sv disable'
-  abbr svdn 'sv down'
-  abbr sve  'sv enable'
-  abbr svm  'sv mask'  # at boot
-  abbr svr  'sv restart'
-  abbr svs  'sv status'
-  abbr svu  'sv up'
-  abbr svup 'sv UP'
+	abbr svd  'sv disable'
+	abbr svdn 'sv down'
+	abbr sve  'sv enable'
+	abbr svm  'sv mask'  # at boot
+	abbr svr  'sv restart'
+	abbr svs  'sv status'
+	abbr svu  'sv up'
+	abbr svup 'sv UP'
 else
-  abbr svd  'sv disable'
-  abbr sve  'sv enable'
-  abbr svi  'sv info'
-  abbr svl  'sv reload'
-  abbr svm  'sv mask'
-  abbr svr  'sv restart'
-  abbr svs  'sv start'
-  abbr svx  'sv stop'  # terminate
-  abbr svu  'sv unmask'
+	abbr svd  'sv disable'
+	abbr sve  'sv enable'
+	abbr svi  'sv info'
+	abbr svl  'sv reload'
+	abbr svm  'sv mask'
+	abbr svr  'sv restart'
+	abbr svs  'sv start'
+	abbr svx  'sv stop'  # terminate
+	abbr svu  'sv unmask'
 end
 
 # ....................................................................... Device
@@ -163,7 +163,7 @@ abbr vsh "v $HOME/.local/share/fish/fish_history"
 abbr list "ls -A1 | tr '\n' ' ' | sed 's/ /|/g; s/|\$//'"
 
 # .................................................................. Development
- 
+
 # abbr ghc 'ghc -dynamic'  # arch repo only
 abbr ghc 'stack ghc'
 abbr ghcc 'stack build'
@@ -189,14 +189,14 @@ abbr bc 'bcd'
 abbr calc 'speedcrunch'
 abbr color 'pastel format hex'
 if exists /usr/bin/sdcv
-  abbr D  'dict'
-  abbr d  'sdcv -wn'
-  abbr de 'sdcv -uk'
-  abbr di 'sdcv -di'
-  abbr th 'sdcv -th'
+	abbr D  'dict'
+	abbr d  'sdcv -wn'
+	abbr de 'sdcv -uk'
+	abbr di 'sdcv -di'
+	abbr th 'sdcv -th'
 else
-  abbr d 'dict'
-  abbr di 'dict -t'
+	abbr d 'dict'
+	abbr di 'dict -t'
 end
 abbr dot 'rlwrap -n dotfiles'
 abbr gif 'nsxiv -a'
