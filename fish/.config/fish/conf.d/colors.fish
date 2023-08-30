@@ -47,6 +47,10 @@ set -x TURQUOISE     (printf "\e[1m\e[38;5;039m")
 
 set -x brown         (printf "\e[38;5;215m")
 set -x BROWN         (printf "\e[1m\e[38;5;221m")
+set -x gray          (printf "\e[1m\e[38;5;242m")
+set -x GRAY          (printf "\e[1m\e[38;5;248m")
+set -x grey          $gray
+set -x GREY          $GRAY
 set -x orange        (printf "\e[38;5;208m")
 set -x ORANGE        (printf "\e[1m\e[38;5;214m")
 set -x pink          (printf "\e[38;5;206m")
