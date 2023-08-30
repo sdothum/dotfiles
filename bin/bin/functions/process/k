@@ -6,7 +6,7 @@
 
 # ......................................................................... Kill
 
-usage() { usage: "$(basename $0) [sig=<signal>] <regex>"; }
+usage() { usage: "$(basename $0) [sig=<signal>] <regex>"; exit 1; }
 
 case $1 in
 	sig=*) eval $1; shift ;;

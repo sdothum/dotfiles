@@ -6,7 +6,7 @@
 
 # ........................................................ Directory differences
 
-usage() { usage: "$(basename $0) [<source>] <target>"; }
+usage() { usage: "$(basename $0) [<source>] <target>"; exit 1; }
 
 [ $# -eq 2 ] && { SOURCE=$1; shift; } || SOURCE=$(pwd)
 [ "$1" ] || usage

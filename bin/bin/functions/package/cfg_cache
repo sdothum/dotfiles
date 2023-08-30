@@ -6,7 +6,7 @@
 
 # ......................................................... Distribution install
 
-usage() { usage: "$(basename $0) <[path/]file> [<hostname>]"; }
+usage() { usage: "$(basename $0) <[path/]file> [<hostname>]"; exit 1; }
 
 ROOT=$HOME/build/cfg      # update master
 

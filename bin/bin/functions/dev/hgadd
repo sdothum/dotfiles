@@ -6,7 +6,7 @@
 
 # .................................................................. Add to repo
 
-usage() { usage: "$(basename $0) <path>.., where <path> is relative to $REPO"; }
+usage() { usage: "$(basename $0) <path>.., where <path> is relative to $REPO"; exit 1; }
 
 REPO=${REPO:-$STOW}
 IGNORE=$REPO/.hgadd:ignore

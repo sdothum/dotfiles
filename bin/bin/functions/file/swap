@@ -6,7 +6,7 @@
 
 # ......................................................................... Copy
 
-usage() { usage: "$(basename $0) <link> | <file> <file>"; }
+usage() { usage: "$(basename $0) <link> | <file> <file>"; exit 1; }
 
 # swap file file
 swap() {

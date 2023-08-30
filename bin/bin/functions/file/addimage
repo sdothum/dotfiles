@@ -6,7 +6,7 @@
 
 # ........................................................... Update web gallery
 
-usage() { usage: "$(basename $0) [-100] <jpeg> [<name>]*"; }
+usage() { usage: "$(basename $0) [-100] <jpeg> [<name>]*"; exit 1; }
 
 GALLERY=/srv/http/thedarnedestthing.com/application/public/images
 [ "$1" = '-100' ] && { quality=100; shift; } || quality=92

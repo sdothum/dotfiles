@@ -6,7 +6,7 @@
 
 # ..................................................... kobopatch override rules
 
-usage() { usage: "$(basename $0) kobopatch_<new>"; }
+usage() { usage: "$(basename $0) kobopatch_<new>"; exit 1; }
 
 # create kobopatch.yaml overrides: section
 # configure $RULES (yes/no)

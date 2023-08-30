@@ -6,7 +6,7 @@
 
 # ...................................................................... History
 
-usage() { usage: "$(basename $0) [shell=<shell>] [[-] <regex>]"; }
+usage() { usage: "$(basename $0) [shell=<shell>] [[-] <regex>]"; exit 1; }
 
 BASH=$HOME/.bash_history
 FISH=$HOME/.local/share/fish/fish_history

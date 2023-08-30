@@ -6,7 +6,7 @@
 
 # ................................................................. Random color
 
-usage() { usage: "$(basename $0) randomc [-#]"; }
+usage() { usage: "$(basename $0) randomc [-#]"; exit 1; }
 
 case $1 in
 	'' ) hash='#' ;;

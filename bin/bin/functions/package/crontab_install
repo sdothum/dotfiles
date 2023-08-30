@@ -6,7 +6,7 @@
 
 # ......................................................... Distribution install
 
-usage() { usage: "$(basename $0) <regex> <crontab>"; }
+usage() { usage: "$(basename $0) <regex> <crontab>"; exit 1; }
 
 cron() {
 	entry=$(sudo grep "$1" /var/spool/cron/$USER 2>/dev/null)

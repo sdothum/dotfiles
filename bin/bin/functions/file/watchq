@@ -6,7 +6,7 @@
 
 # ............................................................... watchman queue
 
-usage() { usage: "$(basename $0) d'irectory | f'ile <path> <name> <file>*"; }
+usage() { usage: "$(basename $0) d'irectory | f'ile <path> <name> <file>*"; exit 1; }
 
 [ $# -lt 4 ] && usage
 case $1 in

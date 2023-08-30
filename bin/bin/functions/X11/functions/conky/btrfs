@@ -6,7 +6,7 @@
 # ........................................................................ Conky
 
 # btrfs filesystem disk free stats
-usage() { usage: "$(basename $0) btrfs fs [decimal | percent]"; }
+usage() { usage: "$(basename $0) btrfs fs [decimal | percent]"; exit 1; }
 
 [ $1 ] || usage
 

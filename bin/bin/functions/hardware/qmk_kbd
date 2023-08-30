@@ -6,7 +6,7 @@
 
 # ................................................................. QMK firmware
 
-usage() { usage: "$(basename $0) <keyboard> <keymap> [steno [nomouse]] [<string> [<string>]] [flash]"; }
+usage() { usage: "$(basename $0) <keyboard> <keymap> [steno [nomouse]] [<string> [<string>]] [flash]"; exit 1; }
 
 [ $2 ] || usage
 model=$1

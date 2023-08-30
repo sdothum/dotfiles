@@ -6,7 +6,7 @@
 
 # .......................................................................... CPU
 
-usage() { usage: "$(basename $0) [i7 | celeron | atom | arm]"; }
+usage() { usage: "$(basename $0) [i7 | celeron | atom | arm]"; exit 1; }
 
 # usage: processor <name> <field> <delimeter>
 processor() {

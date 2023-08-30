@@ -6,7 +6,7 @@
 
 # ................................................................... Dictionary
 
-usage() { usage: "$(basename $0) -dict | -th [[-=]<maxlen> | -] <word>, '-' (include phrases)"; }
+usage() { usage: "$(basename $0) -dict | -th [[-=]<maxlen> | -] <word>, '-' (include phrases)"; exit 1; }
 
 SDCV=/usr/bin/sdcv
 WORDNET="$SDCV -c -n -u 'WordNet® 3.0 (En-En)'"

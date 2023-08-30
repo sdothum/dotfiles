@@ -6,7 +6,7 @@
 
 # .................................................................. Syndication
 
-usage() { usage: "$(basename $0) 'start | I'nitialize | i'mport <opml>"; }
+usage() { usage: "$(basename $0) 'start | I'nitialize | i'mport <opml>"; exit 1; }
 
 rss() {
 	if pong $SERVER ;then

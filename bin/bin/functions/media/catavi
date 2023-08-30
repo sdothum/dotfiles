@@ -7,7 +7,7 @@
 # ................................................................... Screenshot
 
 # see http://www.doctort.org/adam/nerd-notes/concatenating-avi-files.html
-usage() { usage: "$(basename $0) <file>*"; }
+usage() { usage: "$(basename $0) <file>*"; exit 1; }
 
 TEMPFILE=$(mktemp)
 trap "rm -f $TEMPFILE" EXIT

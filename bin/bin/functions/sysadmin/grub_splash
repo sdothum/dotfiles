@@ -6,7 +6,7 @@
 
 # .................................................................. Boot splash
 
-usage() { usage: "$(basename $0) [<theme> | <file.png>]"; }
+usage() { usage: "$(basename $0) [<theme> | <file.png>]"; exit 1; }
 
 theme=enterprise  # default images/grub/<theme>
 # set loglevel to (3) critical messages only (4) warning messages e.g. acpi missing symbol

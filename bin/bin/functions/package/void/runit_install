@@ -6,7 +6,7 @@
 
 # ......................................................... Distribution install
 
-usage() { usage: "$(basename $0) <service>"; }
+usage() { usage: "$(basename $0) <service>"; exit 1; }
 
 [ $1 ] || usage
 

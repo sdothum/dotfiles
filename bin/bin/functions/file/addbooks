@@ -6,7 +6,7 @@
 
 # ................................................................. ebook folder
 
-usage() { usage: "$(basename $0) mobi | epub | <ebook>, from current directory"; }
+usage() { usage: "$(basename $0) mobi | epub | <ebook>, from current directory"; exit 1; }
 
 case "$@" in
 	mobi ) find -maxdepth 1 -name '*.mobi' -exec addbooks {} \; ;;

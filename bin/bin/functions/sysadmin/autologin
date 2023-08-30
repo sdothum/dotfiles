@@ -6,7 +6,7 @@
 
 # ................................................................ tty autologin
 
-usage() { usage: "$(basename $0) [off] [tty<#>]"; }
+usage() { usage: "$(basename $0) [off] [tty<#>]"; exit 1; }
 
 while : ;do
 	case $1 in

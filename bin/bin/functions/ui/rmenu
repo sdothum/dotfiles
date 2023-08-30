@@ -15,7 +15,7 @@
 #   - Temporary ncurses mode set with variable TERMINAL, see X11/dmenu
 #   - rofi matching method can be set with env variable "matching"
 
-usage() { usage: "$(basename $0) '<prompt>' [['<select>' | <row>]] [<option>]*"; }
+usage() { usage: "$(basename $0) '<prompt>' [['<select>' | <row>]] [<option>]*"; exit 1; }
 
 . $(which dmenu)  # to outdent X() menu options
 

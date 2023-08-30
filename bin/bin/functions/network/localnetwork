@@ -6,7 +6,7 @@
 
 # .................................................. Laptop network applications
 
-usage() { usage: "$(basename $0) on | off"; }
+usage() { usage: "$(basename $0) on | off"; exit 1; }
 
 case $1 in
 	off)  # use wicd-menu to connect to public wifi

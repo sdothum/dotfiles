@@ -6,7 +6,7 @@
 
 # ........................................................... Package management
 
-usage() { usage: "$(basename $0) <package>*"; }
+usage() { usage: "$(basename $0) <package>*"; exit 1; }
 
 conf=/etc/pacman.conf
 

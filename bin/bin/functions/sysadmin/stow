@@ -6,7 +6,7 @@
 
 # ................................................................. Stow wrapper
 
-usage() { usage: "$(basename $0) sync | clean | check | [D | R] <directory[/<subdirectory>]>*"; }
+usage() { usage: "$(basename $0) sync | clean | check | [D | R] <directory[/<subdirectory>]>*"; exit 1; }
 
 STOW=$HOME/stow
 

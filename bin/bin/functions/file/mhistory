@@ -15,7 +15,7 @@
 #        Under dash, scripts can execute this command, but shells with in-built
 #        command history tracking cannot without full pathname reference
 
-usage() { usage: "$(basename $0) <name> | <path> [<string>]"; }
+usage() { usage: "$(basename $0) <name> | <path> [<string>]"; exit 1; }
 
 HISTORY=${HISTORY:-$HOME/tmp/.history}
 

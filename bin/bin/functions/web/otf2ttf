@@ -6,7 +6,7 @@
 
 # ................................................................. Convert font
 
-usage() { usage: "$(basename $0) <otf> [<fontname>]"; }
+usage() { usage: "$(basename $0) <otf> [<fontname>]"; exit 1; }
 
 FORGE=/tmp/otf2ttf.py
 

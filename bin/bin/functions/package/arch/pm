@@ -6,7 +6,7 @@
 
 # ........................................................... Package management
 
-usage() { usage: "$(basename $0) S | R | -<options> [--<option>]*] <package>"; }
+usage() { usage: "$(basename $0) S | R | -<options> [--<option>]*] <package>"; exit 1; }
 
 [ $1 ] || usage
 

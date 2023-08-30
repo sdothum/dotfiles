@@ -7,7 +7,7 @@
 # ......................................................... Init service wrapper
 
 openrc() {
-	usage() { usage: "$(basename $0) [add | delete | show | start | stop | restart | status | list] <service> [runlevel]"; }
+	usage() { usage: "$(basename $0) [add | delete | show | start | stop | restart | status | list] <service> [runlevel]"; exit 1; }
 
 	sv() { eval doas rc-update  $1 $2 $3; }
 	rc() { eval doas rc-service $1 $2 $3; }
@@ -29,7 +29,7 @@ openrc() {
 }
 
 runit() {
-	usage() { usage: "$(basename $0) [UP | [status | disable | enable | up | down | restart | mask] <service>]"; }
+	usage() { usage: "$(basename $0) [UP | [status | disable | enable | up | down | restart | mask] <service>]"; exit 1; }
 
 	check()   { [ $service ] && [ -e /etc/sv/$service ] || usage; }
 	enabled() { [ -L /var/service/$service ]; }
@@ -68,7 +68,7 @@ runit() {
 }
 
 s6() {
-	usage() { usage: "$(basename $0) [info | disable | enable | start | stop | restart | toggle] <service>"; }
+	usage() { usage: "$(basename $0) [info | disable | enable | start | stop | restart | toggle] <service>"; exit 1; }
 
 	sv() { eval sudo 66-$1 $2 $3; }
 
@@ -93,7 +93,7 @@ s6() {
 }
 
 systemd() {
-	usage() { usage: "$(basename $0) [status | disable | enable | start | stop | restart | toggle | [-f] mask | unmask | reload] <service>"; }
+	usage() { usage: "$(basename $0) [status | disable | enable | start | stop | restart | toggle | [-f] mask | unmask | reload] <service>"; exit 1; }
 
 	sv() { eval sudo systemctl $@; }
 

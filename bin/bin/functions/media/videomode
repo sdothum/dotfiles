@@ -6,7 +6,7 @@
 
 # ................................................................ Media session
 
-usage() { usage: "$(basename $0) on | off"; }
+usage() { usage: "$(basename $0) on | off"; exit 1; }
 
 V_DYNAMIC=/tmp/$(basename $0):dynamic
 

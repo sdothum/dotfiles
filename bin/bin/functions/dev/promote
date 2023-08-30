@@ -6,7 +6,7 @@
 
 # .............................................................. Promote Updates
 
-usage() { usage: "$(basename $0) [-f] <path> <project>* | [-f] <path>* -- <project>*"; }
+usage() { usage: "$(basename $0) [-f] <path> <project>* | [-f] <path>* -- <project>*"; exit 1; }
 
 [ "$1" = '-f' ] && { update=--force; shift; } || update=--update
 [ $2 ] || usage

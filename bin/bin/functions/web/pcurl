@@ -6,7 +6,7 @@
 
 # .............................................................. Perl strip curl
 
-usage() { usage: "$(basename $0) <url>"; }
+usage() { usage: "$(basename $0) <url>"; exit 1; }
 
 [ "$1" ] || usage
 

@@ -6,7 +6,7 @@
 
 # ....................................................................... Device
 
-usage() { usage: "$(basename $0) ata | label | path | usb | uuid"; }
+usage() { usage: "$(basename $0) ata | label | path | usb | uuid"; exit 1; }
 
 # list device identifiers
 case $1 in

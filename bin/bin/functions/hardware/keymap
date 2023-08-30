@@ -6,7 +6,7 @@
 
 # ..................................................................... Keyboard
 
-usage() { usage: "$(basename $0) c'olemak | q'werty | t'oggle"; }
+usage() { usage: "$(basename $0) c'olemak | q'werty | t'oggle"; exit 1; }
 
 [ -e /etc/vconsole.conf ] || echo qwerty | sudo tee /etc/vconsole.conf
 

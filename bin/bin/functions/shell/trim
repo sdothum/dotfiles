@@ -6,7 +6,7 @@
 
 # .................................................................... Trim line
 
-usage() { usage: "$(basename $0) <width>"; }
+usage() { usage: "$(basename $0) <width>"; exit 1; }
 
 [ $1 ] || usage
 

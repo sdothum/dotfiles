@@ -6,7 +6,7 @@
 
 # ........................................................................ Print
 
-usage() { usage: "$(basename $0) [on | off | toggle]"; }
+usage() { usage: "$(basename $0) [on | off | toggle]"; exit 1; }
 
 PROOF=${PROOF:-$SESSION/proof}
 

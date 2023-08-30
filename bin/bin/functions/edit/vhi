@@ -6,7 +6,7 @@
 
 # ....................................................................... Editor
 
-usage() { usage: "$(basename $0) [<colorscheme>], see vim command :Hi"; }
+usage() { usage: "$(basename $0) [<colorscheme>], see vim command :Hi"; exit 1; }
 
 vhi=/tmp/vim:hi
 

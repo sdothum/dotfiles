@@ -6,7 +6,7 @@
 
 # ....................................................................... Editor
 
-usage() { usage: "$(basename $0) <search>"; }
+usage() { usage: "$(basename $0) <search>"; exit 1; }
 
 # v by content
 [ "$1" ] || usage

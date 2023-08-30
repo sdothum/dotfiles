@@ -7,7 +7,7 @@
 
 # for a monospaced font e.g. https://fonts.google.com/specimen/Major+Mono+Display?query=major
 
-usage() { usage: "$(basename $0) qclocktwo [{voffset <pos>} [{offset <pos>}]] | [-- [<hour> <minute>] [-x] [clear | scroll [<delay>]]]"; }
+usage() { usage: "$(basename $0) qclocktwo [{voffset <pos>exit 1; } [{offset <pos>}]] | [-- [<hour> <minute>] [-x] [clear | scroll [<delay>]]]"; }
 
 # terminal debug testing configurations..
 # no $DEBUG -> one trace

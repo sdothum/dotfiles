@@ -6,7 +6,7 @@
 
 # ......................................................................... Date
 
-usage() { usage: "$(basename $0) <wiki> <yy-mm-dd>"; }
+usage() { usage: "$(basename $0) <wiki> <yy-mm-dd>"; exit 1; }
 
 [ $# -eq 2 ] || usage
 [ -e "$1" ]  || usage

@@ -6,7 +6,7 @@
 
 # .................................................................... epubcheck
 
-usage() { usage: "$(basename $0) <epub> | <dir> | ."; }
+usage() { usage: "$(basename $0) <epub> | <dir> | ."; exit 1; }
 
 CATLG=/tmp/epubcheck:catlg
 LOG=/tmp/epubcheck.log

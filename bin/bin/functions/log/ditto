@@ -20,7 +20,7 @@ where, default <desc> -> "note"
 [ $leader ] || leader=.  # initial leader
 
 ATTCOLOR=${TURQUOISE}
-MSGCOLOR=${green}
+MSGCOLOR=${CYAN}
 
 while [ "$1" ] ;do
 	case $1 in

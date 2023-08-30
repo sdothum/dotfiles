@@ -6,7 +6,7 @@
 
 # ....................................................................... Tablet
 
-usage() { usage: "$(basename $0) DVI-'0 | DVI-'1 | l'eft | r'ight | a'll"; }
+usage() { usage: "$(basename $0) DVI-'0 | DVI-'1 | l'eft | r'ight | a'll"; exit 1; }
 
 case $@ in
 	l* | *0) xsetwacom --set 'Wacom Intuos4 WL stylus' MapToOutput '1680x1050+0+0' ;;

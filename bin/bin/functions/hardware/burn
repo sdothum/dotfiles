@@ -6,7 +6,7 @@
 
 # ................................................................ Optical media
 
-usage() { usage: "$(basename $0) dvd | iso | <data>"; }
+usage() { usage: "$(basename $0) dvd | iso | <data>"; exit 1; }
 
 # when k3b fails try manually..
 case $@ in

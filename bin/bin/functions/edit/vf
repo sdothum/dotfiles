@@ -6,7 +6,7 @@
 
 # ....................................................................... Editor
 
-usage() { usage: "$(basename $0) <maxdepth> | <name>"; }
+usage() { usage: "$(basename $0) <maxdepth> | <name>"; exit 1; }
 
 v0() { exclude | sort | tr '\n' '\0x00' | xargs -r0 v; }
 

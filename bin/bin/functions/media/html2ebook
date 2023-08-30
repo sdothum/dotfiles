@@ -6,7 +6,7 @@
 
 # ........................................................................ ebook
 
-usage() { usage: "$(basename $0) <stow> <title> <author> [<format>]"; }
+usage() { usage: "$(basename $0) <stow> <title> <author> [<format>]"; exit 1; }
 
 format=${4:-azw3}
 

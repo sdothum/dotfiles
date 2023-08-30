@@ -6,7 +6,7 @@
 
 # ..................................................................... Keyboard
 
-usage() { usage: "$(basename $0) [on | off | toggle | swap]"; }
+usage() { usage: "$(basename $0) [on | off | toggle | swap]"; exit 1; }
 
 hint() {
 		notify 'Typewriter Sounds' '↑ Super-Shift Minus\n↓ Super-Minus'

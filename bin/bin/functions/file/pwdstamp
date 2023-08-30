@@ -6,7 +6,7 @@
 
 # ....................................................................... Rename
 
-usage() { usage: "$(basename $0) filename"; }
+usage() { usage: "$(basename $0) filename"; exit 1; }
 
 [ $1 ] || usage
 

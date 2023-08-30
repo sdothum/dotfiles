@@ -6,7 +6,7 @@
 
 # ................................................................ Random chance
 
-usage() { usage: "$(basename $0) <number>"; }
+usage() { usage: "$(basename $0) <number>"; exit 1; }
 
 [ $1 ] || usage
 

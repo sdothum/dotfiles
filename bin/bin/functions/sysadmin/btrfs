@@ -6,7 +6,7 @@
 
 # ................................................................ Btrfs wrapper
 
-usage() { usage: "$(basename $0) balance | <command>"; }
+usage() { usage: "$(basename $0) balance | <command>"; exit 1; }
 
 rootbtrfs() { grep -Pq '[ \t]/[ \t].*btrfs' /etc/fstab; }  # Perl-style regex for tab char
 

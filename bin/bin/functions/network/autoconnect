@@ -6,7 +6,7 @@
 
 # .......................................................... Connman autoconnect
 
-usage() { usage: "$(basename $0) [quiet] [service]"; }
+usage() { usage: "$(basename $0) [quiet] [service]"; exit 1; }
 
 # for really poor wifi connections
 SERVICE=$HOME/.session/service

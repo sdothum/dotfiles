@@ -6,7 +6,7 @@
 
 # ........................................................... Package management
 
-usage() { usage: "$(basename $0) [core | extra | community | ..]"; }
+usage() { usage: "$(basename $0) [core | extra | community | ..]"; exit 1; }
 
 [ "$1" = help ] && usage
 
