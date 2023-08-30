@@ -19,14 +19,14 @@ where, default <desc> -> "note"
 [ "$1" ] || usage
 [ $leader ] || leader=.  # initial leader
 
-ATTCOLOR=${TURQUOISE}
-MSGCOLOR=${CYAN}
+ATTCOLOR=${CYAN}
+MSGCOLOR=${TURQUOISE}
 
 while [ "$1" ] ;do
 	case $1 in
-		ERR*) ATTCOLOR=${RED}; MSGCOLOR=${brown}   ;;
-		WAR*) ATTCOLOR=${BROWN} MSGCOLOR=${orange} ;;
-		INF*) ATTCOLOR=${WHITE} MSGCOLOR=${cyan} ;;
+		ERR*) ATTCOLOR=${RED}; MSGCOLOR=${MAGENTA}   ;;
+		WAR*) ATTCOLOR=${YELLOW} MSGCOLOR=${ORANGE} ;;
+		INF*) ATTCOLOR=${WHITE} MSGCOLOR=${GREY} ;;
 		@   ) [ "$2" ] || usage; desc=$2; message=' ';     shift ;;
 		@*  ) [ "$2" ] && usage; desc=${1#@}; message=' '        ;;
 		-t  ) timestamp="${WHITE}$(date "+%-H %M'%S\" ")"                ;;

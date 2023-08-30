@@ -8,7 +8,7 @@
 
 usage() { usage: "$(basename $0) case | do | if | [<begin> [<end>]] [<file>]"; exit 1; }
 
-# for shell script development
+# for shell script inspection/review
 
 lines=4  # nuxber of lines after match
 
@@ -37,9 +37,9 @@ filter() {
 }
 
 match() {
-	# clear; ditto $type $1
+	clear; ditto $type $1
 	cat $1 | filter | print
-	[ $file ] || { ifno "edit $i" || vim -g -f $1; }
+	[ $file ] || { ifno "edit $1" || vim -g -f $1; }
 }
 
 if [ $file ] ;then
