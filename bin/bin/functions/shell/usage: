@@ -14,7 +14,7 @@ USAGE=/tmp/usage:content
 if [ "$1" ] ;then
 	if [ -e "$1" ] ;then
 		name=$(basename $1)
-		message="$name $(ls -1 $(dirname $1)/functions/$name | tr '\n' ' ' | sed 's/ / \| /g')"
+		message="$name $(ls -1 $(dirname $1)/functions/$name | tr '\n' ' ' | sed 's/ $//; s/ / \| /g')"
 	fi
 	echo "${BROWN}Usage: ${WHITE}$(echo "${message:-$1}" | sed -r "s/^ *([^ ]+ )/\1${cyan}/")${NOCOLOR}"
 else
