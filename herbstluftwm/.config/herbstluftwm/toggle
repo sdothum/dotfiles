@@ -82,7 +82,7 @@ toggle_app() {
 # ....................................................................... Toggle
 
 msg=$1
-[ $msg ] && shift || usage $0
+[ $msg ] && shift || usage: $0
 if [ -e ${0%/toggle}/functions/toggle/$msg ] ;then
 	. ${0%/toggle}/functions/toggle/$msg $@
 elif [ $msg = term ] ;then
@@ -90,7 +90,7 @@ elif [ $msg = term ] ;then
 elif which $msg >/dev/null 2>&1 ;then
 	toggle_app $@
 else
-	usage $0
+	usage: $0
 fi
 herbstclient emit_hook focus_changed
 

@@ -29,11 +29,11 @@ emit_hook() {
 }
 
 msg=$1
-[ $msg ] && shift || usage $0
+[ $msg ] && shift || usage: $0
 if [ -e ${0%/restore}/functions/restore/$msg ] ;then
 	. ${0%/restore}/functions/restore/$msg $@
 else
-	usage $0
+	usage: $0
 fi
 
 # vim: set ft=sh: #
