@@ -6,7 +6,7 @@
 
 # ................................................................ Toggle layout
 
-usage() { usage: "$(basename $0) layout horizontal | vertical | grid | max"; }
+usage() { usage: "$(basename $0) layout horizontal | vertical | grid | max"; exit 1; }
 
 case $1 in
 	horizontal) ;;

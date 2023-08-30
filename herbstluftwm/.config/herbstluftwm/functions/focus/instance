@@ -6,7 +6,7 @@
 
 # ............................................................... Focus instance
 
-usage() { usage: "$(basename $0) instance <instance>"; }
+usage() { usage: "$(basename $0) instance <instance>"; exit 1; }
 
 [ $1 ] || usage
 
