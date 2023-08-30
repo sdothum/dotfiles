@@ -393,7 +393,7 @@ fi
 
 # cpu usage, cpu temperature, memory usage stats
 if [ -e $STAT ] ;then
-	while : ;do sar -u --dec=0 1 1 | tail -1 | sed 's/  */ /g' | cut -d' ' -f3 | sed -r 's/^/00/; s/.*(.)(..)$/\1.\2/' | awk '{ printf "C%3.2fᵁ\n", $1 }' >$PANEL_FIFO:$fifo ;done &  # cycle >~ 1 second
+	while : ;do sar -u --dec=0 1 1 | tail -1 | sed 's/  */ /g' | cut -d' ' -f3 | sed -r 's/^/00/; s/.*(.)(..)$/\1.\2/' | awk '{ printf "C%3.2fᵁ\n", $1 }' | sed 's/0\./ ./' >$PANEL_FIFO:$fifo ;done &  # cycle >~ 1 second
 	while : ;do echo "T$(cpu_temp)°" >$PANEL_FIFO:$fifo; sleep 2; done &
 	while : ;do free -h | grep 'Mem:' | sed -r 's/^[^ ]* *[^ ]* *([0-9.]*)Mi.*/\1ᴹ/; s/^[^ ]* *[^ ]* *([0-9.]*)Gi.*/\1ᴳ/; s/^/M/' >$PANEL_FIFO:$fifo; sleep 3; done &
 fi
