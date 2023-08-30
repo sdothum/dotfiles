@@ -19,14 +19,14 @@ fi
 
 xsync 'Gmail'
 
-if [ $QUTEBROWSER ] ;then
+if [ $BROWSER = qutebrowser ] ;then
 	if [ -e $HLWM:hangouts ] ;then
 		keyboard off  # disable keyboard to prevent disrupting following :command
 		sleep 2       # pause long enough for window focus
 		xdotool key 'Y'
 		keyboard on   # enable keyboard
 	else
-		notify 15 critical 'MESSAGE \ hangouts' '"Permission request" response required'
+		notify critical 'MESSAGE \ hangouts' '"Permission request" response required'
 		touch $HLWM:hangouts
 	fi
 fi
