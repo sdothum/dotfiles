@@ -10,7 +10,9 @@
 
 OUTPUT=/tmp/print:output
 
+softtab() { sed "s/\t/   /g" $OUTPUT; }  # convert scripts
+
 [ $1 ] && OUTPUT=$1 || cat >$OUTPUT
-[ $(tput lines) -gt $(wc -l $OUTPUT | cut -d' ' -f1) ] && cat $OUTPUT || less $OUTPUT
+[ $(tput lines) -gt $(wc -l $OUTPUT | cut -d' ' -f1) ] && softtab || softtab | less
 
 # vim: set ft=sh: #
