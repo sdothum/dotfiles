@@ -1,4 +1,4 @@
-function j --description 'usage: j [-] [<dir>] [<pattern>]'
+function j --description 'Usage: j [-] [<dir>] [<pattern>]'
 	if test (count $argv) -gt 0
 		if test $argv[1] = '--'
 			fcache I

@@ -134,7 +134,7 @@ and set -x BROWSER qutebrowser
 # ................................................................. Applications
 
 # source shell variables
-function SOURCE --description 'usage: SOURCE <script>'
+function SOURCE --description 'Usage: SOURCE <script>'
 		for i in (grep '^export ' $argv)
 				eval $i
 		end
