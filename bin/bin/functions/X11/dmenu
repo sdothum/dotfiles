@@ -60,7 +60,7 @@ if [ $(basename $0) = dmenu ] ;then
 	msg=$1
 	# unhide desktop
 	console || { is multihead || conky clock off; }
-	if [ -f $CONFIG/$msg ] ;then
+	if [ -f "$CONFIG/$msg" ] ;then
 		case $msg in
 			econvert|\
 			media   |\
