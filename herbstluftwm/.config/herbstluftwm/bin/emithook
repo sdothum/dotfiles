@@ -38,9 +38,9 @@ herbstclient --idle '(focus_.*|rule|tag_.*)' | while read hook rule winid ;do
 			case $hook in
 				focus_changed)
 					if herbstclient compare monitors.focus.index != $monitor ;then
-                  monitor=$(herbstclient attr monitors.focus.index)
-                  restore panel &
-               fi ;;
+						monitor=$(herbstclient attr monitors.focus.index)
+						restore panel &
+					fi ;;
 
 				focus_window ) [ -e $DYNAMIC ] && (focus window &) || panel_refresh ;;
 				focus_frame  ) [ -e $DYNAMIC ] && (focus frame  &) || panel_refresh ;;
