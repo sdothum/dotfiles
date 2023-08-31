@@ -356,10 +356,12 @@
 **/.vim/job
 **/.vim/.netrwhist
 **/.vim/plugged
+!**/.vim/config
 !**/.vim/plugged/core
 !**/.vim/plugged/heading
 !**/.vim/plugged/info
 !**/.vim/plugged/ui
+!**/.vim/plugged/vim-duochrome
 **/.vim/plugin
 **/.vim/spell
 **/.vim/texput*
