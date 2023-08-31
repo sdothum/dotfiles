@@ -16,4 +16,3 @@ make config=release_x64
 doas cp -v bin/release-x64/otfcc* /usr/bin
 
 # vim: set ft=sh: #
-

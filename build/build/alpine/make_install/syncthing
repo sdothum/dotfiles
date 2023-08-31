@@ -21,5 +21,3 @@ doas rc-service syncthing start
 
 
 # vim: set ft=sh: #
-
-

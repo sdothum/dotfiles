@@ -16,4 +16,3 @@ make
 doas make install
 
 # vim: set ft=sh: #
-

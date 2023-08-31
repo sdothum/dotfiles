@@ -48,4 +48,3 @@ doas rc-update add miniflux
 doas rc-service miniflux start
 
 # vim: set ft=sh: #
-

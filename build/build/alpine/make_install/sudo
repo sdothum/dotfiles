@@ -15,4 +15,3 @@ doas sed -i '/^#.*wheel.*NOPASSWD/s/^# *//' /etc/sudoers
 doas chmod 440 /etc/sudoers
 
 # vim: set ft=sh: #
-

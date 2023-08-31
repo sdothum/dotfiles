@@ -17,4 +17,3 @@ doas mv advcp /usr/local/bin/cpg
 doas mv advmv /usr/local/bin/mvg
 
 # vim: set ft=sh: #
-

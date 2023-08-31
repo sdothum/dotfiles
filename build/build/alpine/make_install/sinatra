@@ -36,8 +36,8 @@ doas gem install xapian-ruby                   # xapian does not work with ruby 
 # final version corrections..
 doas ln -sv /usrlib/libreadline.so.8 /usr/lib/libreadline.so.7  # puma @ rb_file_s_stat errno
 if [ $(gem list rack | grep -q '^rack ' | wc -l) -gt 1 ] ;then
-  ditto rake "downgrade gem rack-3.x to 2.x"
-  doas gem uninstall rack
+	ditto rake "downgrade gem rack-3.x to 2.x"
+	doas gem uninstall rack
 fi
 
 # web site

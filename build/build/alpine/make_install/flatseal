@@ -26,4 +26,3 @@ chmod 755 $HOME/.local/bin/flatseal
 # doas flatpak override --env=GTK_THEME=Arc-Dark
 
 # vim: set ft=sh: #
-

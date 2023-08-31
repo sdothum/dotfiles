@@ -12,4 +12,3 @@ ditto apikey "https://platform.openai.com/account/api-keys"
 ditto export "OPENAI_API_KEY=..."
 
 # vim: set ft=sh: #
-

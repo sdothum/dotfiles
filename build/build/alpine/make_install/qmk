@@ -38,4 +38,3 @@ mv -v qmk_firmware/users/dennytom qmk_firmware/users/dennytom.original
 cp -rv /net/depot/qmk_firmware.dennytom/users/dennytom qmk_firmware/users/dennytom
 
 # vim: set ft=sh: #
-

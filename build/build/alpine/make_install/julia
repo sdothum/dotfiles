@@ -16,4 +16,3 @@ ln -s julia-* julia
 addpath $HOME/julia/bin
 
 # vim: set ft=sh: #
-

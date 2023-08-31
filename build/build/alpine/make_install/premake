@@ -14,4 +14,3 @@ doas cp -v bin/release/premake5 /usr/bin
 
 
 # vim: set ft=sh: #
-

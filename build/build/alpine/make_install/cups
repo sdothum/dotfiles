@@ -14,10 +14,10 @@ doas addgroup $USER lpadmin
 doas rc-update add cupsd boot
 
 if [ $(hostname) = lumen ] ;then
-  cupsctl --share-printers
-  lpadmin -p $PRINTER -o printer-is-shared=true
-  lpadmin -p $PRINTER -E -v ipp://$(hostname)/printers/$PRINTER -m everywhere
-  driverless ipp://$(hostname)/printers/$PRINTER | tee /etc/cups/ppd/printer.ppd
+	cupsctl --share-printers
+	lpadmin -p $PRINTER -o printer-is-shared=true
+	lpadmin -p $PRINTER -E -v ipp://$(hostname)/printers/$PRINTER -m everywhere
+	driverless ipp://$(hostname)/printers/$PRINTER | tee /etc/cups/ppd/printer.ppd
 fi
 
 ditto http://localhost:631 'configure cups-pdf and network shared printers'
