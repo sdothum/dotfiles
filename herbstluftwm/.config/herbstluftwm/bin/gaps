@@ -9,12 +9,13 @@
 # ................................................................. Tweak layout
 
 usage() { 
-	echo "${WHITE}toggle:${cyan} list c'olors | O'verlap (rm) | d'ynamic | frame spl'it | p'anel | s'pine"
-	echo "${WHITE}tuples:${cyan} f'rame_gap | m'argin | panel h'eight | panel i'ndent | s'pine | w'indow_gap | font siz'e  <value>"
-	echo "        a'ctive color | in'active color | o'verlap color | u'rgent color | pulsar c'olor <value>"
-	echo "        where, indent: '' -> default"
-	echo "               spine:  0 -> off"
-	echo "               color:  <name> or #<hex>${NOCOLOR}"
+	echo "$(basename $0) (interative mode.. <Return> to exit)
+> ${GREEN}toggle:${cyan} list c'olors | O'verlap (rm) | d'ynamic | frame spl'it | p'anel | s'pine
+> ${GREEN}tuples:${cyan} f'rame_gap | m'argin | panel h'eight | panel i'ndent | s'pine | w'indow_gap | font siz'e  <value>
+>         a'ctive color | in'active color | o'verlap color | u'rgent color | pulsar c'olor <value>
+>         where, indent: '' -> default
+>                spine:  0 -> off
+>                color:  <name> or #<hex>${NOCOLOR}" | usage:
 }
 
 # ricing parameters
