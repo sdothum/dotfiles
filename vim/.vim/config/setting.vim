@@ -471,6 +471,21 @@ xmap T <Plug>Sneak_T
 omap t <Plug>Sneak_t
 omap T <Plug>Sneak_T
 
+" ........................................................................ Stabs
+
+let g:stabs_maps = 'boO='
+
+" Use tab for trigger completion with characters ahead and navigate.
+inoremap <silent><expr> <TAB>
+	\ pumvisible() ? "\<C-n>" :
+	\ <SID>check_back_space() ? StabsTab():
+	\ coc#refresh()
+
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter.
+inoremap <silent><expr> <CR> pumvisible() ? coc#_select_confirm()
+	\: "\<C-g>u".StabsCR()."\<c-r>=coc#on_enter()\<CR>"
+
 " ....................................................................... Tagbar
 " let g:tagbar_ctags_bin    = 'ctags-exuberant'
 let g:tagbar_map_togglesort = 'r'  " preserve sneak s
