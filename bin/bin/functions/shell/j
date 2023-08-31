@@ -6,13 +6,13 @@
 
 # ................................................................... Fuzzy jump
 
-usage() { echo "usage: $(basename $0) -- | [-] [dir] [<pattern>]"; }
+usage() { usage: "$(basename $0) -- | [-] [dir] [<pattern>]"; exit 1; }
 
 # refresh directory cache, see fcache
 case $1 in
-	'') usage; sleep 1 ;;
-	--) exec fcache I ;;
-	- ) refresh=$1; shift ;;
+	help) usage ;;
+	--  ) exec fcache I ;;
+	-   ) refresh=$1; shift ;;
 esac
 
 # fish shell ignores non-fish cd's, see j.fish

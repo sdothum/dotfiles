@@ -6,8 +6,14 @@
 
 # ................................................................ Usage message
 
-# Usage: .. | usage [ $0 | "<command> <parameter>*" ]
+# Usage: .. | usage: [ $0 | "<command> <description>" ]
 #        $0 assumes dir/script/functions/script folder hierarchy
+#        "[[^ ] | < | >] <description>"* | usage:
+#           <multiline pipe content> contains "<command> <description>" with successive lines..
+#              [^ ]  -> print below "command"
+#              "< "  -> print below "command" (prevent leading space hard tab insertions while editing script)
+#              "> "  -> print indented after "command"
+#              ">> " -> print indented after "command" "name", e.g. make_install iosevka ..
 
 USAGE=/tmp/usage:content
 
@@ -20,7 +26,9 @@ if [ "$1" ] ;then
 else
 	cat >$USAGE
 	command=$(head -1 $USAGE | cut -d' ' -f1)
-	echo "${BROWN}Usage: $(sed -r "s/($command )/${WHITE}\1${cyan}/g; s/^< /  /g; s/^/       /g; 1s/^ *//;" $USAGE)"  # "< " anti-tab (space) placeholder
+	indent=$(echo $command | sed 's/./ /g')
+	indents=$(head -1 $USAGE | cut -d' ' -f1-2 | sed 's/./ /g')
+	echo "${BROWN}Usage: $(sed -r "s/($command )/${WHITE}\1${cyan}/g; s/^> /$indent /; s/^>> /$indents /; s/^< /  /g; s/^/       /g; 1s/^ *//;" $USAGE)"  # "< " anti-tab (space) placeholder
 fi
 
 exit 1  # must still exit from parent process

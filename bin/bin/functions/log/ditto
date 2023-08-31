@@ -10,9 +10,9 @@
 
 usage() {
 	echo "$(basename $0) [ ERROR | WARNING | INFO ] @ *<desc> | [-t | <desc> | -- | ..]* <message>
-where, default <desc> -> "note"
-<                  -- -> line separator
-<                  .. -> justify leader" | usage:
+> where, default <desc> -> "note"
+>                    -- -> line separator
+>                    .. -> justify leader" | usage:
 	exit 1
 }
 

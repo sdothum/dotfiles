@@ -15,4 +15,3 @@ mkdir -p $HOME/stow/
 rsync -a $EXCLUDE $list $HOME/stow/
 
 # vim: set ft=sh: #
-

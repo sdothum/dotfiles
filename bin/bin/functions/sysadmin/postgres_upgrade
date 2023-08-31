@@ -8,8 +8,8 @@
 
 usage() {
 	echo "$(basename $0) dump | pre | post [<version.X>]
-Note: - pre upgrade workflow assumes "ignorepkg postgresql" has been set
-<     - post upgrade workflow assumes no postgresql <version.X> has been skipped" | usage:
+> -> pre upgrade workflow assumes "ignorepkg postgresql" has been set
+> -> post upgrade workflow assumes no postgresql <version.X> has been skipped" | usage:
 	exit 1
 }
 
