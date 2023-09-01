@@ -9,7 +9,7 @@ usage() {
 	echo "$(basename $0) iosevka [kindle | kobo | ebook | web] [nocopy] [family <name>]
 >> [book+regular | latin+greek | cyrillic | fluent]
 >> [quasi-extension | space <parm>> ]
->> [mu | test | altmono | coding | grotesk | open ]
+>> [classic | mu | test | altmono | coding | grotesk | open ]
 >> [ D-serifless | G-[hookless[+]|toothless] | [I]-[serifless|descending] | J-descending | Q-[bar|crossing|detached|hook|horizontal|open|straight]
 >> [ a-[single|earless|rounded] | b-rounded | d-[tailed|toothless] | f-extended | j-serifed | m-rounded | p-[eared|serifed] | q-hook ]
 >> [ 0-split | at-tall | paren-flat ]
@@ -101,6 +101,7 @@ cmdopts() {
 			paren-flat  ) paren=$1 ;;    # source code variant
 
 			# typefaces
+			classic     ) classic=true ;;
 			coding      ) coding=true ;;
 			grotesk     ) style=$1 ;;
 			mu          ) mu=true ;;
@@ -179,21 +180,26 @@ e_ink() {
 # e_ink Iota        ${cap:-cap extended} a-single f-extended j-serifed G-hookless+ I-descending Q-straight open ${space:-space 1.3333}
 # e_ink Ypsilon     ${cap:-cap extended} a-single f-extended j-serifed G-hookless+ Y-descending Q-straight open ${space:-space 1.3333}
 
-dfont() { iosevka extended a-toothless j-serifed q-hook Q-bar $(options $@) at-tall $cap; }
+dfont() { iosevka extended j-serifed q-hook Q-bar $(options $@) at-tall $cap; }
 # wfont() { iosevka english  j-serifed G-hookless+ Q-bar $(options $@) asterisk-high; }  # override dyslexic "asterisk-low"
-wfont() { iosevka english j-serifed G-hookless+ Q-straight $(options $@) asterisk-high emdash $emdash; }
+wfont() { iosevka english a-double j-serifed G-hookless+ Q-straight $(options $@) asterisk-high emdash $emdash; }
 efont() { iosevka $language $(options $@); }
 
-if [ "$mu" ] ;then
+if [ "$classic" ] ;then
 	cmdopts quasi-ext ${space:-space M}
 	[ $ereader = kobo ] && emdash=$emkobo || emdash=$emkindle  # == M + space width
-	# e_ink articulate  ${cap:-cap extended}                                  G-toothed               J-serifless Q-crossing
-	# e_ink typograffic ${cap:-cap extended}             f-extended           G-rounded   I-serifless J-flat      Q-straight
-	# # e_ink groot       ${cap:-cap extended} a-toothless j-serifed           G-hookless+              J-flat      Q-straight      4-open
-	# e_ink groot       ${cap:-cap extended} a-toothless j-serifed           G-hookless+ I-descending J-flat      Q-straight open 4-open+
-	e_ink mu          ${cap:-cap extended} a-toothless f-extended j-serifed G-hookless+ I-descending            Q-straight open 4-open+
-	# e_ink mudra       ${cap:-cap extended} a-toothless f-extended j-serifed G-hookless+ Y-descending            Q-straight open 4-open+
-	# e_ink umami       ${cap:-cap extended} a-single    f-extended j-serifed G-hookless+ Y-descending            Q-straight open 4-open+
+	e_ink articulate  ${cap:-cap extended} a-double                         G-toothed               J-serifless Q-crossing
+	e_ink typograffic ${cap:-cap extended} a-double    f-extended           G-rounded   I-serifless J-flat      Q-straight
+
+elif [ "$mu" ] ;then
+	cmdopts quasi-ext ${space:-space M}
+	[ $ereader = kobo ] && emdash=$emkobo || emdash=$emkindle  # == M + space width
+	e_ink groot       ${cap:-cap extended}             j-serifed           G-hookless+ I-descending J-flat      Q-straight open 4-open+
+	# e_ink graal       ${cap:-cap extended} a-single    j-serifed           G-hookless+ I-descending J-flat      Q-straight open 4-open+
+	e_ink mu          ${cap:-cap extended}             f-extended j-serifed G-hookless+ I-descending            Q-straight open 4-open+
+	# e_ink mua         ${cap:-cap extended} a-single    f-extended j-serifed G-hookless+ I-descending            Q-straight open 4-open+
+	e_ink mudra       ${cap:-cap extended}             f-extended j-serifed G-hookless+ Y-descending            Q-straight open 4-open+
+	e_ink umami       ${cap:-cap extended} a-single    f-extended j-serifed G-hookless+ Y-descending            Q-straight open 4-open+
 
 elif [ "$test" ] ;then
 	unset ecopy; cmdopts quasi-ext space 1.15 m-rounded
@@ -204,21 +210,21 @@ elif [ "$test" ] ;then
 elif [ $family ] ;then                    # custom e-ink font (non-published)
 	e_ink $family
 
-elif [ $ereader ] && [ $dyslexic ] ;then  # e-ink fonts (dyslexic default)
-	e_ink iMonolexic
-	e_ink Monolexic I-serifless
-	e_ink iUnolexic f-extended Q-bar
-	e_ink Unolexic  f-extended Q-bar      I-serifless
-	e_ink iGeolexic a-single   Q-straight
-	e_ink Geolexic  a-single   Q-straight I-serifless
+# elif [ $ereader ] && [ $dyslexic ] ;then  # e-ink fonts (dyslexic default)
+#    e_ink iMonolexic
+#    e_ink Monolexic I-serifless
+#    e_ink iUnolexic f-extended Q-bar
+#    e_ink Unolexic  f-extended Q-bar      I-serifless
+#    e_ink iGeolexic a-single   Q-straight
+#    e_ink Geolexic  a-single   Q-straight I-serifless
 
-elif [ $ebook ] ;then                     # e-reader fonts
-	efont ebook
-	efont ebook                       I-serifless
-	efont ebook    quasi-proportional
-	efont ebook    quasi-proportional I-serifless
-	efont dyslexic quasi-proportional
-	efont dyslexic quasi-proportional I-serifless
+# elif [ $ebook ] ;then                     # e-reader fonts
+#    efont ebook
+#    efont ebook                       I-serifless
+#    efont ebook    quasi-proportional
+#    efont ebook    quasi-proportional I-serifless
+#    efont dyslexic quasi-proportional
+#    efont dyslexic quasi-proportional I-serifless
 
 elif [ $web ] ;then                       # www fonts
 	unset cap; emdash=$emkobo
