@@ -9,15 +9,15 @@
 usage() {
 	echo "$(basename $0) case | do | if <file> -> code block (shell)
 $(basename $0) <begin> <end> <file>  -> code block
-> - nested code blocks may not fully resolve outer blocks
-> - comment lines may match code block keywords
+> - nested code blocks may result in incomplete outer block printing
+> - keywords (in comments or vars) may trigger false code block printing
 $(basename $0) <begin> <file>        -> match .. +$lines lines" | usage:
 	exit 1
 }
 
 # for shell script inspection/review
 
-lines=4  # nuxber of lines after match
+lines=4  # nuxber of lines to print after match
 
 while [ "$1" ] ;do
 	case $1 in

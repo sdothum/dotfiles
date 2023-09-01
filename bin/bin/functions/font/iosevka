@@ -31,7 +31,7 @@ usage() {
 > [grotesque (default) | atkinson | geometric | jost | elementary | grotesk | descenders | open]
 
 > [D-serifless | FP-descending | G-[corner|hookless[+]|rounded|toothed|toothless] | I-[serifed|serifless|descending] | J-[descending|flat|serifless] | Q-[bar|bend|crossing|detached|hook|horizontal|open|straight|custom] | T-descending | Y-descending]*
-> [a-[earless|single|toothless] | b-corner | d-[tailed|toothless] | f-[extended|serifless] | g-double | i-serifed | j-[serifed|serifless] | l-[hooky|serifless] | m-[rounded|serifless] | p-[eared|serifed] | q-[hook|tailed] | t-[cross|descending] | u-toothed | y-straight]*
+> [a-[double|earless|single|toothless] | b-corner | d-[tailed|toothless] | f-[extended|serifless] | g-double | i-serifed | j-[serifed|serifless] | l-[hooky|serifless] | m-[rounded|serifless] | p-[eared|serifed] | q-[hook|tailed] | t-[cross|descending] | u-toothed | y-straight]*
 > [0-split | 4-open[+] | asterisk-high | at-tall | paren-flat]*
 
 > [proof | menu | book+regular | kindle | kobo | leading <decimal>]
@@ -86,7 +86,7 @@ grotesque() {
 	capital_p=closed-serifless
 	capital_q=straight
 	capital_r=straight-serifless
-	a=double-storey-serifless
+	a=double-storey-toothless-corner
 	b=toothless-rounded-serifless
 	d=toothed-serifless
 	f=flat-hook-serifless-crossbar-at-x-height
@@ -187,6 +187,7 @@ variant() {
 			Q-straight   ) glyph capital_q=straight ;;
 			R-open       ) glyph capital_r=straight-open-serifless ;;
 
+			a-double     ) glyph a=double-storey-serifless ;;
 			a-single     ) glyph a=single-storey-serifless ;;
 			a-earless    ) glyph a=single-storey-earless-corner-serifless ;;
 			a-rounded    ) glyph a=single-storey-earless-rounded-serifless ;;
@@ -318,6 +319,7 @@ while [ $1 ] ;do
 		T-descending ) variant 'T=DESCENDING I=DESCENDING'; T_descending=true; I_descending=true; baseline=true ;;
 		Y-descending ) variant I-serifless 'DESCENDING T=DESCENDING Y=DESCENDING'; I_descending=true; T_descending=true; Y_descending=true; baseline=true ;;
 
+		a-double     ) variant $1 ;;
 		a-earless    ) variant $1 ;;
 		a-rounded    ) variant $1 ;;
 		a-single     ) variant $1 ;;
