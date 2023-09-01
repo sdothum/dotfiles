@@ -473,12 +473,18 @@ omap T <Plug>Sneak_T
 
 " ........................................................................ Stabs
 
-let g:stabs_maps = 'boO='
+let g:stabs_maps = 'b='
+
+" s:check_back_space does not register, cannot reference as <SID>check_back_space in map below ??
+function! Check_back_space() abort
+	let col = col('.') - 1
+	return !col || getline('.')[col - 1] =~# '\s'
+endfunction
 
 " Use tab for trigger completion with characters ahead and navigate.
 inoremap <silent><expr> <TAB>
 	\ pumvisible() ? "\<C-n>" :
-	\ <SID>check_back_space() ? StabsTab():
+	\ Check_back_space() ? StabsTab():
 	\ coc#refresh()
 
 " Make <CR> auto-select the first completion item and notify coc.nvim to
