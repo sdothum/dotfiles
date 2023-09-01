@@ -6,7 +6,14 @@
 
 # ............................................................. Print code block
 
-usage() { usage: "$(basename $0) case | do | if | [<begin> [<end>]] [<file>]"; exit 1; }
+usage() {
+	echo "$(basename $0) case | do | if <file> -> code block (shell)
+$(basename $0) <begin> <end> <file>  -> code block
+> - nested code blocks may not fully resolve outer blocks
+> - comment lines may match code block keywords
+$(basename $0) <begin> <file>        -> match .. +$lines lines" | usage:
+	exit 1
+}
 
 # for shell script inspection/review
 
@@ -28,9 +35,9 @@ done
 
 filter() {
 	case $type in
-		case) sed -nr '/case .* in/,/\besac\b/p' ;;
-		do  ) sed -nr '/(for|while) .*; *do/,/\bdone\b/p' ;;
-		if  ) sed -nr '/if .*; *then/,/\bfi\b/p' ;;
+		case) sed -nr '/\bcase\b .* in/,/\besac\b/p' ;;
+		do  ) sed -nr '/(\bfor\b|\bwhile\b) .*; *do/,/\bdone\b/p' ;;
+		if  ) sed -nr '/\bif\b .*; *then/,/\bfi\b/p' ;;
 		blk ) sed -nr "/$begin/,/$end/p" ;;
 		stmt) grep -A$lines -E "$begin" ;;
 	esac
