@@ -1,0 +1,31 @@
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................. language servers
+
+BINARY_HOME="${HOME}/.local/bin"
+DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+
+doas npm install -g bash-language-server                   # shell
+doas npm install -g typescript typescript-language-server  # javascript
+doas npm install -g vscode-langservers-extracted           # css / html / json
+doas npm install -g yaml-language-server@next              # yaml
+cargo install taplo-cli --locked --features lsp            # toml
+
+# markdown
+ltexLsVersion=15.2.0
+ltexLsBinaryPath="${BINARY_HOME}/ltex-ls"
+ltexLsBaseFileName="ltex-ls-${ltexLsVersion}"
+ltexLsFileNameWithPlatform="${ltexLsBaseFileName}-linux-x64"
+ltexLsAppDirectory="${DATA_HOME}/${ltexLsBaseFileName}"
+rm "${ltexLsBinaryPath}"
+rm -rf "${ltexLsAppDirectory}"
+wget "https://github.com/valentjn/ltex-ls/releases/download/${ltexLsVersion}/${ltexLsFileNameWithPlatform}.tar.gz"
+gunzip "${ltexLsFileNameWithPlatform}.tar.gz"
+tar xf "${ltexLsFileNameWithPlatform}.tar"
+mv "${ltexLsBaseFileName}" "${DATA_HOME}"
+ln -s "${ltexLsAppDirectory}/bin/ltex-ls" "${ltexLsBinaryPath}"
+
+# vim: set ft=sh: #

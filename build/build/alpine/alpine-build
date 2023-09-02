@@ -475,6 +475,9 @@ stage_33() {
 	info .................................................................. editor
 	doas apk add gvim
 	stow vim
+	doas apk add helix
+	doas apk add kakoune
+	# make_install lsp
 
 	doas apk add lowdown
 	doas apk add ctags

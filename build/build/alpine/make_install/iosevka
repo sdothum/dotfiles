@@ -6,14 +6,39 @@
 # ...................................................................... iosevka
 
 usage() { 
-	echo "$(basename $0) iosevka [kindle | kobo | ebook | web] [nocopy] [family <name>]
->> [book+regular | latin+greek | cyrillic | fluent]
->> [quasi-extension | space <parm>> ]
->> [classic | mu | test | altmono | coding | grotesk | open ]
->> [ D-serifless | G-[hookless[+]|toothless] | [I]-[serifless|descending] | J-descending | Q-[bar|crossing|detached|hook|horizontal|open|straight]
->> [ a-[single|earless|rounded] | b-rounded | d-[tailed|toothless] | f-extended | j-serifed | m-rounded | p-[eared|serifed] | q-hook ]
->> [ 0-split | at-tall | paren-flat ]
->> [ascender <parm>> | cap <parm>> | leading <parm>> | sb <parm>> ]
+	echo ">$(basename $0) iosevka ebook | kindle | kobo
+>> cyrillic | fluent | latin+greek
+>> classic | coding | mu | test | web
+>> altmono | book+regular | open 
+
+>> D-serifless
+>> G-[hookless[+]|toothless]
+>> I-[serifless|descending]
+>> J-descending
+>> Q-[bar|crossing|detached|hook|horizontal|open|straight]
+
+>> a-[earless|rounded|single]
+>> b-rounded
+>> d-[tailed|toothless]
+>> f-extended
+>> j-serifed
+>> m-rounded
+>> p-[eared|serifed]
+>> q-hook
+
+>> 0-split
+>> at-tall
+>> paren-flat 
+
+>> ascender <parm>
+>> cap <parm>
+>> leading <parm>
+>> quasi-[extension|proportional]
+>> sb <parm> 
+>> space <parm>> 
+
+>> family <name>
+>> nocopy
 >> [-- <options>> *]" | usage:
 	exit 1
 }
@@ -58,19 +83,31 @@ cmdopts() {
 	while [ $1 ] ;do
 		case $1 in
 			# shapes
+			ebook       ) ebook=true ;;
 			kindle      ) ereader=$1 ;;
 			kobo        ) ereader=$1 ;;
-			quasi-ext*  ) quasi=$1 ;;
-			quasi-pro*  ) quasi=$1 ;;
 
 			# language
-			latin+greek ) language=$1 ;;
 			cyrillic    ) language=$1 ;;
 			fluent      ) language=$1 ;;
+			latin+greek ) language=$1 ;;
+
+			# typefaces
+			classic     ) classic=true ;;
+			coding      ) coding=true ;;
+			mu          ) mu=true ;;
+			test        ) test=true ;;
+			web         ) web=true ;;
+
+			# styles
+			altmono     ) altmono ;;     # alternate "monospace" coding font
+			book+regular) adjust=$1 ;;
+			open        ) open=$1; f=f-extended ;;
 
 			# glyphs
 			D-serifless ) D=$1 ;;
 			G-hookless  ) G=$1 ;;
+			G-hookless+ ) G=$1 ;;
 			G-toothless ) G=$1 ;;
 			I-descending) I=$1 ;;
 			I-serifless ) I=$1 ;;        # source code variant
@@ -99,31 +136,17 @@ cmdopts() {
 			0-split     ) zero=$1 ;;
 			at-tall     ) at=$1 ;;       # source code variant
 			paren-flat  ) paren=$1 ;;    # source code variant
-
-			# typefaces
-			classic     ) classic=true ;;
-			coding      ) coding=true ;;
-			grotesk     ) style=$1 ;;
-			mu          ) mu=true ;;
-			test        ) test=true ;;
-			web         ) web=true ;;
-			ypsilon     ) ypsilon=true ;;
-
-			# styles
-			altmono     ) altmono ;;     # alternate "monospace" coding font
-			book+regular) adjust=$1 ;;
-			ebook       ) ebook=true ;;
-			family      ) [ $ereader ] && [ $2 ] && { family=$2; shift; } || usage ;;
-			open        ) open=$1; f=f-extended ;;
-			source-only ) source_only=true ;;
-			space       ) [ $2 ] && { space="$1 $2"; shift; } || usage ;;
 			
 			# geometry
 			ascender    ) [ $2 ] && { ascender="$1 $2"; shift; } || usage ;;
 			cap         ) [ $2 ] && { [ $2 = 'off' ] && unset cap || cap="$1 $2"; shift; } || usage ;;
 			leading     ) [ $2 ] && { leading="$1 $2"; shift; } || usage ;;
+			quasi-ext*  ) quasi=$1 ;;
+			quasi-pro*  ) quasi=$1 ;;
 			sb          ) [ $2 ] && { sb="$1 $2"; shift; } || usage ;;
+			space       ) [ $2 ] && { space="$1 $2"; shift; } || usage ;;
 
+			family      ) [ $ereader ] && [ $2 ] && { family=$2; shift; } || usage ;;
 			nocopy      ) unset ecopy ;;
 			--          ) shift; . $HOME/bin/functions/font/iosevka $@; exit ;;
 			help        ) usage ;;
