@@ -6,15 +6,15 @@
 
 # ................................................................ Usage message
 
-# Usage: .. | usage: [ $0 | "<command> <description>" ]
+# Usage: .. | usage: [ $0 | "<command> <content>" ]
 #        $0 assumes dir/script/functions/script folder hierarchy
-#        "[[^ ] | < | >] <description>"* | usage:
-#           <multiline pipe content> contains "<command> [.] <description>" with successive lines
+#        "[[^ ] | < | >] <content>"* | usage:
+#           <multiline pipe content> contains "<command> [.] <content>" with successive lines
 #           "command . name" in the first line indicates a "compound command" e.g. "make_install iosevka" ..
-#              [^ ] (non-blank) -> print below "command"
-#              "< "  -> print below "command" (to avoid leading hard tab insertions while editing code)
-#              "> "  -> print indented after "command"
-#              ">> " -> print indented after "compound command"
+#              [^ ] (non-blank) -> print content below "command"
+#              "< "  -> print content below "command" (to avoid leading hard tab insertions while indenting content)
+#              "> "  -> print content indented after "command"
+#              ">> " -> print content indented after "compound command"
 
 USAGE=/tmp/usage:content
 
