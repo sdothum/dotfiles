@@ -31,7 +31,7 @@ else
 	cat >$USAGE
 fi
 
-dotcommand='regex:mismatch'
+dotcommand='<off by default>'
 command=$(head -1 $USAGE | cut -d' ' -f1 | sed 's/^>//')
 indent=$(echo $command | sed 's/./ /g')
 if [ $(head -1 $USAGE | cut -d' ' -f2) = '.' ] ;then                       # compound command
