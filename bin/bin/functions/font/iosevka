@@ -26,22 +26,50 @@
 # see make_install
 
 usage() {
-	echo "$(basename $0) [normal (default) | extended | expanded | ebook | dyslexic | heading]
-> [english | latin+greek | cyrillic | fluent | ligature <name>]
-> [grotesque (default) | atkinson | geometric | jost | elementary | grotesk | descenders | open]
+	echo "$(basename $0) normal (default) | dyslexic | ebook | expanded | extended | heading | kindle | kobo | menu | proof
+> english | latin+greek | cyrillic | fluent | ligature <name>
+> grotesque (default) | <prefix>Monolexic | atkinson | elementary | geometric | grotesk | jost | webfont 
 
-> [D-serifless | FP-descending | G-[corner|hookless[+]|rounded|toothed|toothless] | I-[serifed|serifless|descending] | J-[descending|flat|serifless] | Q-[bar|bend|crossing|detached|hook|horizontal|open|straight|custom] | T-descending | Y-descending]*
-> [a-[double|earless|single|toothless] | b-corner | d-[tailed|toothless] | f-[extended|serifless] | g-double | i-serifed | j-[serifed|serifless] | l-[hooky|serifless] | m-[rounded|serifless] | p-[eared|serifed] | q-[hook|tailed] | t-[cross|descending] | u-toothed | y-straight]*
-> [0-split | 4-open[+] | asterisk-high | at-tall | paren-flat]*
+> book+regular | descenders | double | open
+> emdash <decimal> 
+> family <name>
+> space [M|<decimal>]
 
-> [proof | menu | book+regular | kindle | kobo | leading <decimal>]
-> [double] [space M|<decimal>] [ emdash <decimal> ]
-> [family <name> | <prefix>Monolexic | webfont]
+> D-serifless
+> FP-descending (experimental)
+> G-[corner|hookless[+]|rounded|toothed|toothless]
+> I-[serifed|serifless|descending]
+> J-[descending|flat|serifless]
+> Q-[bar|bend|crossing|detached|hook|horizontal|open|straight|custom]
+> T-descending (includes I-descending)
+> Y-descending (includes I-descending T-descending)
+
+> a-[double|earless|single|toothless]
+> b-corner
+> d-[tailed|toothless]
+> f-[extended|serifless]
+> g-double
+> i-serifed
+> j-[serifed|serifless]
+> l-[hooky|serifless]
+> m-[rounded|serifless]
+> p-[eared|serifed]
+> q-[hook|tailed]
+> t-[cross|descending]
+> u-toothed
+> y-straight
+
+> 0-split
+> 4-open[+]
+> asterisk-high
+> at-tall
+> paren-flat
 
 > [ascender [+-]<integer>]
 > [cap [-+]<integer> | extended]
-> [quasi-[proportional|extension]]
+> [leading <decimal>]
 > [noround | sb <decimal>]
+> [quasi-[proportional|extension]]
 > [shape <emu>]
 > [weight <integer> <name>]
 > [xheight [-+]<decimal>]" | usage:
@@ -283,15 +311,33 @@ while [ $1 ] ;do
 		menu         ) leading 1.5000; sb 0.9000; build=-menu ;;                                     # rofi menu
 		normal       ) shape 500; sb 0.7000 ;;                                                       # normal width
 		proof        ) leading 2.0000; sb 0.8000; build=${build}-proof ;;                            # for pure writing :)
-		quasi-ext*   ) spacing quasi-proportional-extension-only; unset width ;;
-		quasi-pro*   ) spacing quasi-proportional; sb 0.7500; leading 1.2500; space 2; ebook quasi$(echo $family | sed -r 's/.*(Hyper|Mono|Quasi)//'); variant I-serifed ;;
 
 		# language
-		english      ) english_only; ditto char_set "$1" ;;
-		latin+greek  ) latin_greek;  ditto char_set "$1" ;;
 		cyrillic     ) cyrillic;     ditto char_set "$1" ;;
+		english      ) english_only; ditto char_set "$1" ;;
 		fluent       ) fluent; ditto char_set "$1" ;;
+		latin+greek  ) latin_greek;  ditto char_set "$1" ;;
 		ligature     ) ligature $2  || usage; shift ;;
+
+		# typefaces
+		*Monolexic   ) initial ${1%Monolexic} ;;
+		atkinson     ) grotesque; ebook hyperlegible; variant a-double b-toothed G-toothed J-serifless p-eared Q-crossing q-tailed u-toothed ampersand at number_sign percent ;;
+		elementary   ) variant I-serifless a-single ;;
+		geometric    ) geometric; cap extended; build=-jost ;;
+		grotesk      ) variant I-serifless f-extended ;;
+		grotesque    ) grotesque ;;
+		jost         ) geometric; cap extended; build=-jost; variant a-single J-serifless Q-crossing u-toothed ampersand at dollar number_sign percent question ;;
+		# webfont    ) weight 500 medium; initial w; regular=medium ;;                 # heavier font for web usage
+		webfont      ) leading 1; initial w ;;
+
+		# styles
+		book+regular ) adjust="book+regular" ;;                                        # see fforge bookweight
+		descenders   ) variant 'FP=DESCENDING'; FP_descending=true; baseline=true ;;
+		double       ) unset mono ;;
+		emdash       ) emdash $2    || usage; shift ;;                                 # emdash width
+		family       ) family $2    || usage; shift ;;
+		open         ) variant B-open P-open R-open ;;
+		space        ) space $2     || usage; shift; [ $space = 1 ] && unset space ;;  # space width
 
 		# glyphs
 		D-serifless  ) variant $1 ;;
@@ -352,32 +398,14 @@ while [ $1 ] ;do
 		paren-flat   ) variant $1 ;;
 		asterisk-high) variant $1 ;;
 		at-tall      ) variant $1 ;;
-
-		# typefaces
-		*Monolexic   ) initial ${1%Monolexic} ;;
-		atkinson     ) grotesque; ebook hyperlegible; variant b-toothed G-toothed J-serifless p-eared Q-crossing q-tailed u-toothed ampersand at number_sign percent ;;
-		elementary   ) variant I-serifless a-single ;;
-		geometric    ) geometric; cap extended; build=-jost ;;
-		grotesk      ) variant I-serifless f-extended ;;
-		grotesque    ) grotesque ;;
-		jost         ) geometric; cap extended; build=-jost; variant a-single J-serifless Q-crossing u-toothed ampersand at dollar number_sign percent question ;;
-		# webfont    ) weight 500 medium; initial w; regular=medium ;;                 # heavier font for web usage
-		webfont      ) leading 1; initial w ;;
-
-		# styles
-		book+regular ) adjust="book+regular" ;;                                        # see fforge bookweight
-		descenders   ) variant 'FP=DESCENDING'; FP_descending=true; baseline=true ;;
-		double       ) unset mono ;;
-		emdash       ) emdash $2    || usage; shift ;;                                 # emdash width
-		family       ) family $2    || usage; shift ;;
-		open         ) variant B-open P-open R-open ;;
-		space        ) space $2     || usage; shift; [ $space = 1 ] && unset space ;;  # space width
 		
 		# geometry
 		ascender     ) ascender $2  || usage; shift ;;                                 # affects descender as well
 		cap          ) cap $2       || usage; shift ;;                                 # H height
 		leading      ) leading $2   || usage; shift ;;                                 # line spacing > 1.0
 		noround      ) unset sb ;;
+		quasi-ext*   ) spacing quasi-proportional-extension-only; unset width ;;
+		quasi-pro*   ) spacing quasi-proportional; sb 0.7500; leading 1.2500; space 2; ebook quasi$(echo $family | sed -r 's/.*(Hyper|Mono|Quasi)//'); variant I-serifed ;;
 		sb           ) sb $2        || usage; shift ;;                                 # side bearing (spacing)
 		shape        ) shape $2     || usage; shift ;;                                 # cell width
 		weight       ) weight $2 $3 || usage; shift 2 ;;                               # custom font weight

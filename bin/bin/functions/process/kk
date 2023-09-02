@@ -19,6 +19,8 @@ if [ $1 ] ;then
 		pids=$(p $@ | grep -v $0 | awk '{ print $2 }')
 		ifyes "kill /$@/ $pids" && sudo kill $sig $pids
 	fi
+else
+	usage
 fi
 
 # vim: set ft=sh: #

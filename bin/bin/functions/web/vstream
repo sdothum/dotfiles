@@ -6,7 +6,7 @@
 
 # ...................................................................... Browser
 
-usage() { usage: "$(basename $0)  dust | netflix | prime"; exit 0; }
+usage() { usage: "$(basename $0) dust | netflix | prime"; exit 0; }
 
 BROWSER=firefox
 BROWSER=chromium-browser          # alpine
