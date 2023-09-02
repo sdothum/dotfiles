@@ -6,7 +6,7 @@
 # ...................................................................... iosevka
 
 usage() { 
-	echo ">$(basename $0) iosevka ebook | kindle | kobo
+	echo "$(basename $0) . iosevka ebook | kindle | kobo
 >> cyrillic | fluent | latin+greek
 >> classic | coding | mu | test | web
 >> altmono | book+regular | open 
