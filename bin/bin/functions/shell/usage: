@@ -9,12 +9,12 @@
 # Usage: .. | usage: [ $0 | "<command> <description>" ]
 #        $0 assumes dir/script/functions/script folder hierarchy
 #        "[[^ ] | < | >] <description>"* | usage:
-#           <multiline pipe content> contains "[>]<command> <description>" with successive lines..
-#              [^ ]  -> print below "command"
-#              "< "  -> print below "command" (prevent leading space hard tab insertions while editing script)
+#           <multiline pipe content> contains "<command> [.] <description>" with successive lines
+#           "command . name" in the first line indicates a "compound command" e.g. "make_install iosevka" ..
+#              [^ ] (non-blank) -> print below "command"
+#              "< "  -> print below "command" (to avoid leading hard tab insertions while editing code)
 #              "> "  -> print indented after "command"
-#              ">> " -> print indented after "command name", e.g. "make_install iosevka" ..
-#              >command in first line indicates "command name" (double word invocation)
+#              ">> " -> print indented after "compound command"
 
 USAGE=/tmp/usage:content
 
@@ -31,13 +31,17 @@ else
 	cat >$USAGE
 fi
 
+dotcommand='regex:mismatch'
 command=$(head -1 $USAGE | cut -d' ' -f1 | sed 's/^>//')
 indent=$(echo $command | sed 's/./ /g')
-if $(head -1 $USAGE | grep -q '^>') ;then  # >dot command
-	command=$(head -1 $USAGE | cut -d' ' -f1-2 | sed 's/^>//')
+if [ $(head -1 $USAGE | cut -d' ' -f2) = '.' ] ;then                       # compound command
+	dotcommand=$(head -1 $USAGE | cut -d' ' -f1-3 | sed 's/ \. / [.]* */')  # successive command references do not need dot '.'
+	command=$(head -1 $USAGE | cut -d' ' -f1,3)
 	indents=$(echo $command | sed 's/./ /g')
 fi
-echo "${BROWN}Usage: $(cat $USAGE | sed -r "1s/^>//; s/($command )/${WHITE}\1${cyan}/g; s/^> /$indent /; s/^>> /$indents /; s/^< /  /g; s/^/       /g; 1s/^ *//;")"
+
+# hilight "command name"
+echo "${BROWN}Usage: $(sed -r "s/^$dotcommand/$command/; s/($command )/${WHITE}\1${cyan}/g; s/^> /$indent /; s/^>> /$indents /; s/^< /  /g; s/^/       /g; 1s/^ *//;" $USAGE)"
 
 exit 1  # must still exit from parent process
 
