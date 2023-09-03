@@ -489,8 +489,8 @@ inoremap <silent><expr> <TAB>
 
 " Make <CR> auto-select the first completion item and notify coc.nvim to
 " format on enter.
-inoremap <silent><expr> <CR> pumvisible() ? coc#_select_confirm()
-	\: "\<C-g>u".StabsCR()."\<c-r>=coc#on_enter()\<CR>"
+" inoremap <silent><expr> <CR> pumvisible() ? coc#_select_confirm()
+"    \: "\<C-g>u".StabsCR()."\<c-r>=coc#on_enter()\<CR>"
 
 " ....................................................................... Tagbar
 " let g:tagbar_ctags_bin    = 'ctags-exuberant'
