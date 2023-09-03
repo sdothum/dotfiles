@@ -6,13 +6,13 @@
 
 # ................................................................ Usage message
 
-# Usage: .. | usage: [ $0 | "<command> <content>" ]
+# Usage: .. | usage: [ $0 | "<command> <content**>" ]
 #        $0 assumes dir/script/functions/script folder hierarchy
-#        "[[^ ] | < | >] <content>"* | usage:
-#           <multiline pipe content> contains "<command> [.] <content>" with successive lines
-#           "command . name" in the first line indicates a "compound command" e.g. "make_install iosevka" ..
-#              [^ ] (non-blank) -> print content below "command"
-#              "< "  -> print content below "command" (to avoid leading hard tab insertions while indenting content)
+#        "[[^ ]|< | >] <content**>.." | usage:
+#           <multiline pipe content> starts with "<command> <content**>" with successive content lines
+#           **content starting with ". name" in the first line indicates a "compound command" e.g. "make_install iosevka" ..
+#              [^ ] (non-blank) -> print content below "command" (hilight repeated command name)
+#              "< "  -> print content below "command" (respect spaces to indent content)
 #              "> "  -> print content indented after "command"
 #              ">> " -> print content indented after "compound command"
 
@@ -31,18 +31,18 @@ else
 	cat >$USAGE
 fi
 
-dotcommand='<off by default>'
+dotcommand='<off by default>'                                              # nullify compound command hilight conversion
 command=$(head -1 $USAGE | cut -d' ' -f1 | sed 's/^>//')
 indent=$(echo $command | sed 's/./ /g')
 if [ $(head -1 $USAGE | cut -d' ' -f2) = '.' ] ;then                       # compound command
-	dotcommand=$(head -1 $USAGE | cut -d' ' -f1-3 | sed 's/ \. / [.]* */')  # successive command references do not need dot '.'
+	dotcommand=$(head -1 $USAGE | cut -d' ' -f1-3 | sed 's/ \. / [.]* */')  # regex dot '.' reference
 	command=$(head -1 $USAGE | cut -d' ' -f1,3)
 	indents=$(echo $command | sed 's/./ /g')
 fi
 
-# hilight "command name"
+# hilight "command [name]" (removing dot reference)
 echo "${BROWN}Usage: $(sed -r "s/^$dotcommand/$command/; s/($command )/${WHITE}\1${cyan}/g; s/^> /$indent /; s/^>> /$indents /; s/^< /  /g; s/^/       /g; 1s/^ *//;" $USAGE)"
 
-exit 1  # must still exit from parent process
+exit 1  # parent process must still exercise "exit"
 
 # vim: set ft=sh: #

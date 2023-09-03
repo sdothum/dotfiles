@@ -6,8 +6,8 @@
 
 # .............................................................. Google hangouts
 
-# BROWSER=qutebrowser
-BROWSER=luakit  # has better input handling than qutebrowser ..but hanging xorg lately
+# BROWSER=luakit  # has better input handling ..but recent GLib errors hang access to google account
+BROWSER=qutebrowser
 HANGOUTS=$SESSION/hangouts
 
 # surf -z1.15 -C $(dirname $0)/.hangouts:stylesheet.css $(cat $HANGOUTS) &  # fit input field
