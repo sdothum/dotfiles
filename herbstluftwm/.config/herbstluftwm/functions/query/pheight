@@ -1,3 +1,4 @@
+#!/usr/bin/dash
 # sdothum - 2024 (c) wtfpl
 # [ $TRACE ] && CHILD="query/pheight $@" . $PARENT
 
