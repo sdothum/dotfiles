@@ -8,7 +8,7 @@ some.
 
 This repo's prior patch history resides with the
 [dotfiles-archive-2023](https://github.com/sdothum/dotfiles-archive-2023)
-repo -- which had become quite unwieldy, prompting the generation of
+repo -- which had become quite unwieldly, prompting the generation of
 this instance. Some folders have been deprecated -- removed with
 workflow changes and the
 transition to Alpine Linux.
