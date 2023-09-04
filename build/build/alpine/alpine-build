@@ -476,8 +476,10 @@ stage_33() {
 	doas apk add gvim
 	stow vim
 	doas apk add helix
+	hx --grammar fetch
+	hx --grammar build
 	doas apk add kakoune
-	# make_install lsp
+	make_install lsp
 
 	doas apk add lowdown
 	doas apk add ctags

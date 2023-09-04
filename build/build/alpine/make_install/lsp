@@ -1,3 +1,4 @@
+#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
 # Make_install
@@ -15,17 +16,8 @@ doas npm install -g yaml-language-server@next              # yaml
 cargo install taplo-cli --locked --features lsp            # toml
 
 # markdown
-ltexLsVersion=15.2.0
-ltexLsBinaryPath="${BINARY_HOME}/ltex-ls"
-ltexLsBaseFileName="ltex-ls-${ltexLsVersion}"
-ltexLsFileNameWithPlatform="${ltexLsBaseFileName}-linux-x64"
-ltexLsAppDirectory="${DATA_HOME}/${ltexLsBaseFileName}"
-rm "${ltexLsBinaryPath}"
-rm -rf "${ltexLsAppDirectory}"
-wget "https://github.com/valentjn/ltex-ls/releases/download/${ltexLsVersion}/${ltexLsFileNameWithPlatform}.tar.gz"
-gunzip "${ltexLsFileNameWithPlatform}.tar.gz"
-tar xf "${ltexLsFileNameWithPlatform}.tar"
-mv "${ltexLsBaseFileName}" "${DATA_HOME}"
-ln -s "${ltexLsAppDirectory}/bin/ltex-ls" "${ltexLsBinaryPath}"
+wget -P /tmp https://github.com/artempyanykh/marksman/releases/download/2023-07-25/marksman-linux-x64
+mv /tmp/marksman-linux-x64 $HOME/.local/bin/marksman
+chmod +x $HOME/.local/bin/marksman
 
 # vim: set ft=sh: #
