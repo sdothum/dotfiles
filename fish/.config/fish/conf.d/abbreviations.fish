@@ -160,6 +160,7 @@ abbr vsh "v $HOME/.local/share/fish/fish_history"
 
 # ........................................................................ Regex
 
+abbr indent "env tab=soft print"
 abbr list "ls -A1 | tr '\n' ' ' | sed 's/ /|/g; s/|\$//'"
 
 # .................................................................. Development
