@@ -1,0 +1,28 @@
+
+[[language]]
+name            = "bash"
+file-types      = ["sh", { suffix = "functions" }]
+comment-token   = "#"
+indent          = { tab-width = 3, unit = "\t" }
+scope           = "source.sh"
+text-width      = 80
+roots           = []
+
+[[language]]
+name            = "mail"
+file-types      = ["eml"]
+comment-token   = "#"
+indent          = { tab-width = 3, unit = "   " }
+text-width      = 80
+scope           = "source.eml"
+roots           = []
+
+[[language]]
+name            = "markdown"
+file-types      = ["md", "mkd", "wiki"]
+language-server = { command = "marksman" }
+indent          = { tab-width = 3, unit = "   " }
+scope           = "source.md"
+text-width      = 80
+roots           = []
+

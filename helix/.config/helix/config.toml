@@ -1,54 +1,108 @@
-theme                  = "nord_light"
+theme                       = "duochrome"
 
 [editor]
-auto-completion        = true
-auto-format            = true
-auto-info              = true
-auto-pairs             = false
-completion-trigger-len = 2
-line-number            = "relative"
-mouse                  = true
-scroll-lines           = 1
-shell                  = ["fish", "-c"]
-true-color             = true
-
-[editor.cursor-shape]
-insert                 = "bar"
-normal                 = "block"
-select                 = "underline"
-
-[editor.file-picker]
-hidden                 = false
-
-[editor.lsp]
-display-messages       = true
-
-[editor.search]
-smart-case             = true
-wrap-around            = true
+auto-completion             = true
+auto-format                 = true
+auto-info                   = true
+auto-pairs                  = false
+auto-save                   = true
+bufferline                  = "never"
+color-modes                 = false
+completion-replace          = false
+completion-trigger-len      = 1
+cursorcolumn                = false
+cursorline                  = false
+gutters                     = ["spacer", "spacer", "spacer", "spacer", "spacer", "spacer", "spacer", "diagnostics", "spacer", "spacer", "line-numbers", "spacer", "spacer", "diff", "spacer", "spacer", "spacer", "spacer", "spacer", "spacer"]
+idle-timeout                = 400
+line-number                 = "relative"
+middle-click-paste          = true
+mouse                       = true
+rulers                      = []
+scroll-lines                = 3
+scrolloff                   = 5
+shell                       = ["fish", "-c"]
+text-width                  = 80
+true-color                  = false
+undercurl                   = false
+workspace-lsp-roots         = []
 
 [editor.statusline]
-# left                   = ["mode", "diagnostics"]
-# center                 = ["file-name"]
-# right                  = ["selections", "file-type", "file-encoding", "position-percentage", "position"]
-left                   = ["spacer", "file-name"]
-center                 = ["selections", "spacer", "spacer", "spacer", "mode", "spacer", "spacer", "spacer", "position" ]
-right                  = ["position-percentage", "spacer"]
+separator                   = "│"
+mode.normal                 = ""
+mode.insert                 = ""
+mode.select                 = ""
+left                        = ["spacer", "file-modification-indicator", "file-name", "spacer", "file-type", "spacer", "file-encoding"]
+center                      = ["selections", "spacer", "spacer", "spacer", "mode", "spacer", "spacer", "spacer", "position" ]
+right                       = ["diagnostics", "spacer", "spacer", "position-percentage", "spacer", "spacer", "spinner", "spacer", "spacer"]
+
+[editor.lsp]
+enable                      = true
+display-messages            = false
+auto-signature-help         = true
+display-inlay-hints         = false
+display-signature-help-docs = true
+snippets                    = true
+
+[editor.cursor-shape]
+insert                      = "bar"
+normal                      = "block"
+select                      = "underline"
+
+[editor.file-picker]
+hidden                      = false
+follow-symlinks             = true
+deduplicate-links           = true
+parents                     = true
+ignore                      = true
+git-ignore                  = true
+git-global                  = true
+git-exclude                 = true
+max-depth                   = 10
+
+[editor.search]
+smart-case                  = true
+wrap-around                 = true
+
+# or control each character
+[editor.whitespace.render]
+space                       = "none"
+tab                         = "none"
+newline                     = "none"
+
+[editor.whitespace.characters]
+space                       = "·"
+nbsp                        = "⍽"
+tab                         = "→"
+newline                     = "⏎"
+tabpad                      = "·"
+
+[editor.indent-guides]
+render                      = true
+character                   = "┊"  # Some characters that work well: "▏", "╎", "┆", "┊", "⸽"
+skip-levels                 = 1
+
+[editor.soft-wrap]
+enable                      = true
+max-wrap                    = 20
+max-indent-retain           = 40
+wrap-indicator              = "  ↪ "
+wrap-at-text-width          = false
 
 [keys.insert]
-C-space                = "completion"
-j                      = { k = "normal_mode" }  # Maps `jk` to exit insert mode
-# Move cursor in insert mode
-A-h                    = "move_char_left"
-A-j                    = "move_line_down"
-A-k                    = "move_line_up"
-A-l                    = "move_char_right"
-A-o                    = "open_below"
-A-O                    = "open_above"
+C-space                     = "completion"
+A-h                         = "move_char_left"
+j                           = { k = "normal_mode" }  # Maps `jk` to exit insert mode
+A-j                         = "move_line_down"
+A-k                         = "move_line_up"
+A-l                         = "move_char_right"
+A-O                         = "open_above"
+A-o                         = "open_below"
 
 [keys.normal]
-"ret"                  = ["move_line_down", "goto_first_nonwhitespace"]  # Maps the enter key to move to start of next line
-D                      = "delete_char_backward"
-X                      = "extend_line_above"
-g                      = { a = "code_action", o = "goto_last_accessed_file" }  # Maps `ga` to show possible code actions
-
+esc                         = ["collapse_selection", "keep_primary_selection"]
+ret                         = ["move_line_down", "goto_first_nonwhitespace"]        # Maps the enter key to move to start of next line
+D                           = "delete_char_backward"
+g                           = { a = "code_action", o = "goto_last_accessed_file" }  # Maps `ga` to show possible code actions
+X                           = "extend_line_above"
+C-p                         = ["move_line_up", "scroll_up"]
+C-n                         = ["move_line_down", "scroll_down"]
