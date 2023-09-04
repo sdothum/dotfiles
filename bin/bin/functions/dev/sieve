@@ -45,7 +45,7 @@ filter() {
 
 match() {
 	clear; ditto $type $1
-	cat $1 | filter | print
+	cat $1 | filter | env tab=soft print
 	[ $file ] || { ifno "edit $1" || vim -g -f $1; }
 }
 

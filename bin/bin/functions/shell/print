@@ -6,11 +6,11 @@
 
 # ........................................................... term print wrapper
 
-# Usgae: .. | print [<file>]
+# Usgae: .. | [env tab=soft] print [<file>], (hard) tab -> soft tab
 
 OUTPUT=/tmp/print:output
 
-softtab() { sed "s/\t/   /g" $OUTPUT; }  # convert scripts
+softtab() { [ $tab ] && sed "s/\t/   /g" $OUTPUT || cat $OUTPUT; }  # convert scripts
 
 [ $1 ] && OUTPUT=$1 || cat >$OUTPUT
 [ $(tput lines) -gt $(wc -l $OUTPUT | cut -d' ' -f1) ] && softtab || softtab | less
