@@ -482,6 +482,7 @@ stage_33() {
 	make_install lsp
 
 	doas apk add lowdown
+	doas apk add mercurial
 	doas apk add ctags
 	# doas apk add texlive
 
