@@ -8,7 +8,7 @@
 
 hc keybind Super-space              spawn dmenu run
 hc keybind Super-Control-space      spawn dmenu apps
-hc keybind Super-Shift-space        spawn dmenu manpages
+# hc keybind Super-Shift-space      spawn dmenu manpages
 hc keybind Super-Alt-space          spawn killall -KILL dmenu
 hc keybind Control-space            spawn dunstctl close
 hc keybind Control-Shift-space      spawn dunstctl close-all
@@ -64,12 +64,12 @@ hc keybind Super-Alt-t              spawn dmenu reminder
 hc keybind Super-v                  spawn dmenu media
 hc keybind Super-Control-v          spawn dmenu audio
 hc keybind Super-Alt-Control-v      chain . spawn pkill '(mpv|omxplayer)' . emit_hook focus_window
-hc keybind Super-Shift-w            spawn dmenu wiki
+hc keybind Super-w                  spawn dmenu wiki
 hc keybind Super-Control-w          spawn dmenu wiki diary
 hc keybind Super-Alt-w              spawn weather time
 hc keybind Super-x                  spawn toggle nnn TMUX
 hc keybind Super-Control-x          spawn toggle pcmanfm
 # hc keybind Super-z                spawn toggle rox
-hc keybind Super-Control-z          spawn dmenu screensaver
+# hc keybind Super-Control-z        spawn dmenu screensaver
 
 # vim: set ft=sh: #

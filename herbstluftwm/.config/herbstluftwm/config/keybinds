@@ -15,10 +15,10 @@ if [ -e $BEAKL ] ;then
 		UP=d
 		RIGHT=s
 	else  # beaklwi
-		LEFT=t
-		DOWN=r
+		LEFT=p
+		DOWN=l
 		UP=n
-		RIGHT=s
+		RIGHT=f
 	fi
 fi
 
@@ -26,7 +26,7 @@ fi
 hc keybind Super-Shift-q           chain . spawn kill -KILL $BROWSER . spawn quit  # qutebrowser (re)startx issue (qt5 ??)
 hc keybind Super-Alt-Shift-q       chain . spawn kill -KILL $BROWSER . spawn pkill -KILL -f startx
 hc keybind Super-Alt-Shift-r       reload
-hc keybind Super-w                 chain . close_or_remove . emit_hook focus_window
+hc keybind Super-q                 chain . close_or_remove . emit_hook focus_window
 hc keybind Super-Return            spawn toggle scratchpad scratchy
 hc keybind Super-Alt-Return        spawn toggle scratchpad itchy
 hc keybind Super-Shift-Return      spawn term 'term'
@@ -45,13 +45,13 @@ hc keybind Super-Shift-i           spawn toggle picom
 
 # wallpaper background (toggle) blur
 hc keybind Super-r                 spawn draw root select
-hc keybind Super-Shift-r           spawn draw root shuffle
-hc keybind Super-Alt-r             spawn draw root blur
+hc keybind Super-Shift-r           spawn draw root blur
+hc keybind Super-Alt-r             spawn draw root shuffle
 hc keybind Super-d                 spawn dmenu root
 hc keybind Super-Shift-d           spawn dmenu root save
 hc keybind Super-Alt-d             spawn draw root color   # random background color
 hc keybind Super-Alt-Shift-d       spawn draw root invert  # toggle panel theme
-hc keybind Super-Alt-Shift-p       spawn draw root invert  # toggle panel theme
+hc keybind Super-Alt-Shift-r       spawn draw root invert  # toggle panel theme
 
 # focus monitor
 # hc keybind                       Super-apostrophe    cycle_monitor
@@ -77,10 +77,10 @@ hc keybind Super-Shift-$LEFT       chain . shift left  . emit_hook focus_changed
 hc keybind Super-Shift-$DOWN       chain . shift down  . emit_hook focus_changed
 hc keybind Super-Shift-$UP         chain . shift up    . emit_hook focus_changed
 hc keybind Super-Shift-$RIGHT      chain . shift right . emit_hook focus_changed
-hc keybind Super-Shift-Page_Down   spawn pin monitor 1
-hc keybind Super-Shift-Page_Up     spawn pin monitor 0
-hc keybind Super-Alt-Page_Down     spawn switch monitor 1
-hc keybind Super-Alt-Page_Up       spawn switch monitor 0
+# hc keybind Super-Shift-Page_Down spawn pin monitor 1
+# hc keybind Super-Shift-Page_Up   spawn pin monitor 0
+# hc keybind Super-Alt-Page_Down   spawn switch monitor 1
+# hc keybind Super-Alt-Page_Up     spawn switch monitor 0
 
 # cycle frames
 hc keybind Super-Tab               spawn switch frames cycle_all +1
@@ -93,7 +93,7 @@ hc keybind Super-Shift-1           jumpto urgent
 
 # split frames
 # create an empty frame at the specified direction
-hc keybind Super-q                 chain . remove . set_layout max . spawn draw border
+hc keybind Super-Control-d         chain . remove . set_layout max . spawn draw border
 hc keybind Super-k                 spawn draw fsplit y 0.5
 hc keybind Super-Shift-k           spawn draw fsplit y 0.666666
 hc keybind Super-Alt-k             spawn draw fsplit y 0.333333
@@ -104,10 +104,10 @@ hc keybind Super-Alt-h             spawn draw fsplit x 0.333333
 hc keybind Super-Alt-Shift-space   spawn restore frames
 
 # rotate frames
-hc keybind Super-Alt-Shift-l       spawn switch orientation -2
-hc keybind Super-Alt-l             spawn switch orientation -1
-hc keybind Super-l                 spawn switch orientation +1
-hc keybind Super-Shift-l           spawn switch orientation +2
+hc keybind Super-Alt-Shift-o       spawn switch orientation -2
+hc keybind Super-Alt-o             spawn switch orientation -1
+hc keybind Super-o                 spawn switch orientation +1
+hc keybind Super-Shift-o           spawn switch orientation +2
 
 # resize frames
 resizestep=0.025
@@ -141,9 +141,9 @@ hc keybind Super-Alt-7             spawn draw layout 1:2
 hc keybind Super-Alt-8             spawn draw layout spread
 hc keybind Super-0                 spawn toggle layout max
 hc keybind Super-Shift-0           spawn switch layout
-hc keybind Super-Shift-f           chain . floating toggle . emit_hook focus_changed
-hc keybind Super-f                 spawn toggle fullscreen
-hc keybind Super-Alt-f             chain . pseudotile toggle . emit_hook focus_changed
+hc keybind Super-Shift-z           chain . floating toggle . emit_hook focus_changed
+hc keybind Super-z                 spawn toggle fullscreen
+hc keybind Super-Alt-z             chain . pseudotile toggle . emit_hook focus_changed
 
 # hide (pseudo minimize) and restore windows
 hc keybind Super-m                 spawn pin ttag
