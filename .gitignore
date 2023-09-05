@@ -122,6 +122,7 @@
 **/guake
 **/hbro
 **/HEAD
+!**/herbstluftwm/config
 **/.hg*
 **/hg
 **/.history
