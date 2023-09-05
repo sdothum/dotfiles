@@ -1,0 +1,163 @@
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="config/keybinds $@" . $PARENT
+
+# herbstluftwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................... BEAKL Wi Keybindings
+
+BEAKL=$SESSION/beakl
+
+if [ -e $BEAKL ] ;then
+	if [ $(cat $BEAKL) = 'beaklhi' ] ;then
+		LEFT=n
+		DOWN=t
+		UP=d
+		RIGHT=s
+	else  # beaklwi
+		LEFT=t
+		DOWN=r
+		UP=n
+		RIGHT=s
+	fi
+fi
+
+# window manager
+hc keybind Super-Shift-q           chain . spawn kill -KILL $BROWSER . spawn quit  # qutebrowser (re)startx issue (qt5 ??)
+hc keybind Super-Alt-Shift-q       chain . spawn kill -KILL $BROWSER . spawn pkill -KILL -f startx
+hc keybind Super-Alt-Shift-r       reload
+hc keybind Super-w                 chain . close_or_remove . emit_hook focus_window
+hc keybind Super-Return            spawn toggle scratchpad scratchy
+hc keybind Super-Alt-Return        spawn toggle scratchpad itchy
+hc keybind Super-Shift-Return      spawn term 'term'
+hc keybind Super-Escape            spawn toggle focus
+hc keybind Super-Shift-Escape      spawn toggle focus fsplit
+# number layer thumb swap
+hc keybind Super-0                 spawn toggle focus
+
+# UI appearance
+hc keybind Super-Control-b         spawn focus border $(cat $SPINE)
+hc keybind Super-Shift-b           spawn toggle border
+hc keybind Super-Alt-Shift-b       spawn toggle border overlap
+# hc keybind Super-h               chain . spawn term 'gaps' rlwrap gaps . spawn draw panel  # disappears on closing gaps
+hc keybind Super-i                 spawn toggle unclutter
+hc keybind Super-Shift-i           spawn toggle picom
+
+# wallpaper background (toggle) blur
+hc keybind Super-r                 spawn draw root select
+hc keybind Super-Shift-r           spawn draw root shuffle
+hc keybind Super-Alt-r             spawn draw root blur
+hc keybind Super-d                 spawn dmenu root
+hc keybind Super-Shift-d           spawn dmenu root save
+hc keybind Super-Alt-d             spawn draw root color   # random background color
+hc keybind Super-Alt-Shift-d       spawn draw root invert  # toggle panel theme
+hc keybind Super-Alt-Shift-p       spawn draw root invert  # toggle panel theme
+
+# focus monitor
+# hc keybind                       Super-apostrophe    cycle_monitor
+# hc keybind                       Super-Page_Down     focus_monitor 1
+# hc keybind                       Super-Page_Up       focus_monitor 0
+
+# focus client
+hc keybind Super-Left              focus_edge left
+hc keybind Super-Down              focus_edge down
+hc keybind Super-Up                focus_edge up
+hc keybind Super-Right             focus_edge right
+hc keybind Super-$LEFT             focus left
+hc keybind Super-$DOWN             focus down
+hc keybind Super-$UP               focus up
+hc keybind Super-$RIGHT            focus right
+
+# move window
+hc keybind Super-Shift-Left        shift_edge left
+hc keybind Super-Shift-Down        shift_edge down
+hc keybind Super-Shift-Up          shift_edge up
+hc keybind Super-Shift-Right       shift_edge right
+hc keybind Super-Shift-$LEFT       chain . shift left  . emit_hook focus_changed
+hc keybind Super-Shift-$DOWN       chain . shift down  . emit_hook focus_changed
+hc keybind Super-Shift-$UP         chain . shift up    . emit_hook focus_changed
+hc keybind Super-Shift-$RIGHT      chain . shift right . emit_hook focus_changed
+hc keybind Super-Shift-Page_Down   spawn pin monitor 1
+hc keybind Super-Shift-Page_Up     spawn pin monitor 0
+hc keybind Super-Alt-Page_Down     spawn switch monitor 1
+hc keybind Super-Alt-Page_Up       spawn switch monitor 0
+
+# cycle frames
+hc keybind Super-Tab               spawn switch frames cycle_all +1
+hc keybind Super-Shift-Tab         spawn switch frames cycle_all -1
+hc keybind Super-c                 spawn switch frames cycle +1
+hc keybind Super-Shift-c           spawn switch frames cycle -1
+hc keybind Super-period            spawn switch frames cycle_frame +1
+hc keybind Super-comma             spawn switch frames cycle_frame -1
+hc keybind Super-Shift-1           jumpto urgent
+
+# split frames
+# create an empty frame at the specified direction
+hc keybind Super-q                 chain . remove . set_layout max . spawn draw border
+hc keybind Super-k                 spawn draw fsplit y 0.5
+hc keybind Super-Shift-k           spawn draw fsplit y 0.666666
+hc keybind Super-Alt-k             spawn draw fsplit y 0.333333
+hc keybind Super-h                 spawn draw fsplit x 0.5
+hc keybind Super-Shift-h           spawn draw fsplit x 0.666666
+hc keybind Super-Alt-h             spawn draw fsplit x 0.333333
+# let the current frame explode into subframes
+hc keybind Super-Alt-Shift-space   spawn restore frames
+
+# rotate frames
+hc keybind Super-Alt-Shift-l       spawn switch orientation -2
+hc keybind Super-Alt-l             spawn switch orientation -1
+hc keybind Super-l                 spawn switch orientation +1
+hc keybind Super-Shift-l           spawn switch orientation +2
+
+# resize frames
+resizestep=0.025
+hc keybind Super-Alt-$LEFT         resize left  +$resizestep
+hc keybind Super-Alt-$DOWN         resize down  +$resizestep
+hc keybind Super-Alt-$UP           resize up    +$resizestep
+hc keybind Super-Alt-$RIGHT        resize right +$resizestep
+hc keybind Super-Alt-Left          resize left  +$resizestep
+hc keybind Super-Alt-Down          resize down  +$resizestep
+hc keybind Super-Alt-Up            resize up    +$resizestep
+hc keybind Super-Alt-Right         resize right +$resizestep
+
+# cycle through tags
+hc keybind Super-j                 use_index +1 --skip-visible
+hc keybind Super-Shift-j           use_index -1 --skip-visible
+hc keybind Super-BackSpace         spawn switch tag
+
+# set layout
+# hc keybind Super-Alt-space       spawn toggle monocle
+hc keybind Super-Alt-0             spawn toggle monocle
+hc keybind Super-g                 spawn toggle layout grid
+hc keybind Super-Shift-g           spawn draw layout
+hc keybind Super-Alt-minus         spawn draw layout default
+hc keybind Super-Alt-1             spawn draw layout max
+hc keybind Super-Alt-2             spawn draw layout halves
+hc keybind Super-Alt-3             spawn draw layout thirds
+hc keybind Super-Alt-4             spawn draw layout quarters
+hc keybind Super-Alt-5             spawn draw layout 2:3
+hc keybind Super-Alt-6             spawn draw layout 1:3
+hc keybind Super-Alt-7             spawn draw layout 1:2
+hc keybind Super-Alt-8             spawn draw layout spread
+hc keybind Super-0                 spawn toggle layout max
+hc keybind Super-Shift-0           spawn switch layout
+hc keybind Super-Shift-f           chain . floating toggle . emit_hook focus_changed
+hc keybind Super-f                 spawn toggle fullscreen
+hc keybind Super-Alt-f             chain . pseudotile toggle . emit_hook focus_changed
+
+# hide (pseudo minimize) and restore windows
+hc keybind Super-m                 spawn pin ttag
+hc keybind Super-Alt-m             spawn restore window
+hc keybind Super-Alt-Shift-m       spawn restore windows
+hc keybind Super-Shift-m           spawn restore hidden
+hc keybind Super-Shift-BackSpace   spawn focus hlwm
+hc keybind Super-Control-BackSpace spawn focus hlwm raise
+hc keybind Super-Alt-BackSpace     spawn focus hlwm close
+
+# mouse
+hc mouseunbind --all
+hc mousebind Super-Button1         move
+hc mousebind Super-Button2         zoom
+hc mousebind Super-Button3         resize
+
+# vim: set ft=sh: #
