@@ -14,7 +14,7 @@ wrappaur=$(aurwrapper)
 package=$1
 cd $HOME/.cache/$wrappaur/$package 2>/dev/null || exit
 
-v -f PKGBUILD
+vi -f PKGBUILD
 makepkg -Acfs
 sudo pacman -U --noconfirm $package*tar.xz
 

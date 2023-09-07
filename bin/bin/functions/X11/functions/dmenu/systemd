@@ -48,7 +48,7 @@ while : ;do
 					status ) status; continue ;;
 					enable ) sv enable $service; sv start $service; status ;;
 					disable) sv stop $service; sv disable $service; status ;;
-					edit   ) v -f $lib/$service; continue ;;
+					edit   ) vi -f $lib/$service; continue ;;
 				esac
 				break
 			done ;;

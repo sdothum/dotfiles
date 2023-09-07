@@ -14,6 +14,6 @@ usage() { usage: "$(basename $0) <search>"; exit 1; }
 files=$(a "$@" | fZf --multi | nocolor | cut -d: -f1 | uniq | quote)
 [ "$files" ] || exit
 
-v $files
+vi $files
 
 # vim: set ft=sh: #

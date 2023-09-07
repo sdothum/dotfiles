@@ -6,7 +6,7 @@
 
 # .................................................................. Auto backup
 
-# Usage: vhg [<queue>], see v(im) script and buffers.vim
+# Usage: vhg [<queue>], see vi(m) script and buffers.vim
 
 REPO=${REPO:-$STOW}
 JOB=$HOME/.vim/job

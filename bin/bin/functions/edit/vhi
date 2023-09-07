@@ -22,6 +22,6 @@ esac
 
 # capture all highlight settings
 eval vim $theme -c "'redir! >$vhi | silent! hi | redir END | quit'"
-v $vhi
+vi $vhi
 	
 # vim: set ft=sh: #

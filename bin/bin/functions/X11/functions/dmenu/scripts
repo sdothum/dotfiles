@@ -10,6 +10,8 @@
 
 REFRESH='refresh cache'  # catalogue, see ffcache
 EXCLUDE='(AppImage|.service|-module|.mp3|-multilib)$'
+# EDITOR=v
+EDITOR=${EDITOR:-term helix hx}
 
 # search these project library folders..
 sources=$(cat $CONFIG/.scriptsrc | sed "s|\$HOME|$HOME|g")  # manual eval of $HOME
@@ -60,9 +62,9 @@ while : ;do
 	fi
 
 	if expand $file >/dev/null ;then
-		v $(expand $file)
+		$EDITOR $(expand $file)
 		# history file cleanup usually precedes impending edit
-		expand $file | grep -q 'dmenu/\.history' && { pwait "vim.*$(expand $file)"; dmenu edit; }
+		# expand $file | grep -q 'dmenu/\.history' && { pwait "vim.*$(expand $file)"; dmenu edit; }
 	else
 		error=": ${file##*/} ∉ ${file%/*}"
 		sed -i "\|${file##*/}.$SEP ${file%/*}$|d" $HISTORY/scripts
