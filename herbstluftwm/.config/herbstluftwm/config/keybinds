@@ -1,3 +1,4 @@
+#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 # [ $TRACE ] && CHILD="config/keybinds $@" . $PARENT
 
@@ -33,7 +34,7 @@ hc keybind Super-Shift-Return      spawn term 'term'
 hc keybind Super-Escape            spawn toggle focus
 hc keybind Super-Shift-Escape      spawn toggle focus fsplit
 # number layer thumb swap
-hc keybind Super-0                 spawn toggle focus
+hc keybind Super-Alt-0             spawn toggle focus
 
 # UI appearance
 hc keybind Super-Control-b         spawn focus border $(cat $SPINE)
@@ -126,19 +127,19 @@ hc keybind Super-Shift-j           use_index -1 --skip-visible
 hc keybind Super-BackSpace         spawn switch tag
 
 # set layout
-# hc keybind Super-Alt-space       spawn toggle monocle
-hc keybind Super-Alt-0             spawn toggle monocle
+# hc keybind Super-Control-space   spawn toggle monocle
+hc keybind Super-Control-0         spawn toggle monocle
 hc keybind Super-g                 spawn toggle layout grid
 hc keybind Super-Shift-g           spawn draw layout
-hc keybind Super-Alt-minus         spawn draw layout default
-hc keybind Super-Alt-1             spawn draw layout max
-hc keybind Super-Alt-2             spawn draw layout halves
-hc keybind Super-Alt-3             spawn draw layout thirds
-hc keybind Super-Alt-4             spawn draw layout quarters
-hc keybind Super-Alt-5             spawn draw layout 2:3
-hc keybind Super-Alt-6             spawn draw layout 1:3
-hc keybind Super-Alt-7             spawn draw layout 1:2
-hc keybind Super-Alt-8             spawn draw layout spread
+hc keybind Super-Control-minus     spawn draw layout default
+hc keybind Super-Control-1         spawn draw layout max
+hc keybind Super-Control-2         spawn draw layout halves
+hc keybind Super-Control-3         spawn draw layout thirds
+hc keybind Super-Control-4         spawn draw layout quarters
+hc keybind Super-Control-5         spawn draw layout 2:3
+hc keybind Super-Control-6         spawn draw layout 1:3
+hc keybind Super-Control-7         spawn draw layout 1:2
+hc keybind Super-Control-8         spawn draw layout spread
 hc keybind Super-0                 spawn toggle layout max
 hc keybind Super-Shift-0           spawn switch layout
 hc keybind Super-Shift-z           chain . floating toggle . emit_hook focus_changed
