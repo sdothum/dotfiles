@@ -10,7 +10,7 @@
 
 REFRESH='refresh cache'  # catalogue, see ffcache
 EXCLUDE='(AppImage|.service|-module|.mp3|-multilib)$'
-# EDITOR=v
+
 EDITOR=${EDITOR:-term helix hx}
 
 # search these project library folders..

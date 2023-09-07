@@ -12,7 +12,7 @@
 #                      eval     - posix shell expression that evaluates to a list of *non-blank* filenames
 
 EDIT='edit tags'
-# EDITOR=vi
+
 EDITOR=${EDITOR:-term helix hx}
 
 # tag file containing project specs

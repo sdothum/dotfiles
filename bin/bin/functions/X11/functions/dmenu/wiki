@@ -10,7 +10,7 @@
 
 EDIT='new'
 DIARY='diary'
-# EDITOR=vi
+
 EDITOR=${EDITOR:-term helix WAIT hx}
 
 WIKIS="$HOME/vimwiki"
@@ -26,14 +26,15 @@ expand() {
 	return 0
 }
 
-file_name() {  echo "$file" | tr ' ' '_'; }
+filename() {  echo "$file" | tr ' ' '_'; }
 
 # apostrophes in filename cannot be handled by duochrome statusline..
-apostrophe_check() {
+filename_check
+filename_check() {
 	# so substitute a linked file with carets
 	[ "${file%\'*}" = "$file" ] || { link=/tmp/$(echo "${file##*/}" | tr \' ^); ln -sf "$file" "$link"; file=$link; }
 	# simplify file name handling of spaces by adding '_' symbolic link (to spare escape horror)
-	[ "${file%\ *}" = "$file" ] || { file_name=$(file_name); ln -sf "$file" $file_name; file=$file_name; }
+	[ "${file%\ *}" = "$file" ] || { filename=$(filename); ln -sf "$file" $filename; file=$filename; }
 }
 
 add() {
@@ -43,9 +44,10 @@ add() {
 	file=$WIKIS/$wiki/$title.wiki
 	# prepend h1 title
 	echo "# $title\n\n" >$file
-	apostrophe_check
+	filename_check
+	filename_check
 	$EDITOR "$file"
-	[ $file_name ] && rm -f $file_name
+	[ $filename ] && rm -f $filename
 }
 
 wiki() {
@@ -53,9 +55,10 @@ wiki() {
 	file=$(echo $file | sed -r "s,(.*)  *$SEP  *(.*),\2/\1,")
 	if expand "$file" >/dev/null ;then
 		file="$(expand "$file")"
-		apostrophe_check
+		filename_check
+		filename_check
 		$EDITOR "$file"
-		[ $file_name ] && rm -f $file_name
+		[ $filename ] && rm -f $filename
 		# history file cleanup usually precedes impending edit
 		# expand "$file" | grep -q dmenu/.history && { pwait "vim.*"$(expand "$file")""; dmenu edit; }
 	else

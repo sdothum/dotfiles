@@ -9,9 +9,8 @@
 # Usage: dmenu configs [cache]
 
 REFRESH='refresh cache'  # catalogue, see ffcache
-# EDITOR='vim -g'
-EDITOR=${EDITOR:-term helix hx}
 
+EDITOR=${EDITOR:-term helix hx}
 # system conf files
 INCLUDE='.*(cfg|conf(ig)*|ini|[^.][^s]rc)$'
 

@@ -8,7 +8,6 @@
 
 usage() { usage: "$(basename $0) <regex>"; exit 1; }
 
-# EDITOR=vi
 EDITOR=${EDITOR:-hx}
 
 # v by content
