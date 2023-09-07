@@ -75,9 +75,11 @@ set -x NNTPSERVER news.sunnyusenet.com
 
 # default editor
 # set -x EDITOR 'vi -e'
-set -x EDITOR vim
+# set -x EDITOR vim
 # set -x VISUAL 'gvim -f'
-set -x VISUAL 'vim -g -f' # foreground required for crontab -e ..avoids gvim library errors (?)
+# set -x VISUAL 'vim -g -f' # foreground required for crontab -e ..avoids gvim library errors (?)
+# let scripts set helix calls (whether term, foreground or not)
+set -x VISUAL 'hx'
 
 set -x XIVIEWER feh
 set -x PLAYER mpv
