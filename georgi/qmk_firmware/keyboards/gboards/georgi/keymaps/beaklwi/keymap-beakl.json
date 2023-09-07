@@ -73,7 +73,7 @@
           "set": "rows",
           "keycodes": [
             "DF(FNC)"        ,           ":",           "Y",           "O",           "U", "-",        "G",           "D",           "N",            "M",           "X", "DF(SYMBOL)",
-            "TO(1)"          , "KK(Q, LGUI)", "KK(H, LCTL)", "KK(E, LALT)", "KK(A, LSFT)", "W",        "C", "KK(T, RSFT)", "KK(R, RALT)",  "KK(S, RCTL)", "KK(Z, RGUI)",    "DF(NAV)",
+            "TO(1)"          , "KK(Q, LALT)", "KK(H, LCTL)", "KK(E, LGUI)", "KK(A, LSFT)", "W",        "C", "KK(T, RSFT)", "KK(R, RGUI)",  "KK(S, RCTL)", "KK(Z, RALT)",    "DF(NAV)",
             "M(hexpad, 0, 3)",           "J",           ",",           ".",           "K", "'",        "B",           "P",           "L",            "F",           "V",    "DF(NUM)",
                                                                        " ",           " ", " ",        " ",           " ",           " "
           ]
@@ -284,7 +284,7 @@
           "set": "rows",
           "keycodes": [
             " ",            " ",               "A",               "B",           "AS(C)", " ",        "/" , "4", "5", "9", "*", "M(hexpad, 0, 1)",
-            " ",         "LGUI",     "KK(D, LCTL)",     "KK(E, LALT)",     "KK(F, LSFT)", " ",        "." , "1", "2", "3", "-", "M(hexpad, 0, 3)",
+            " ",         "LALT",     "KK(D, LCTL)",     "KK(E, LGUI)",     "KK(F, LSFT)", " ",        "." , "1", "2", "3", "-", "M(hexpad, 0, 3)",
             " ", "MO(QUICKEYS)", "M(hexpad, 2, 1)", "M(hexpad, 2, 2)", "M(hexpad, 1, 0)", " ",        "," , "8", "6", "7", "+", "M(hexpad, 0, 2)",
                                                     "M(hexpad, 0, 0)",               " ", " ",        "\\", "0", "="
           ]
@@ -336,7 +336,7 @@
           "set": "rows",
           "keycodes": [
             "M(hexpad, 0, 0)",    " ",    " ",    " ",    " ", " ",        " ", "F4", "F5", "F9", "F12", " ",
-            " "              , "LGUI", "LCTL", "LALT", "LSFT", " ",        " ", "F1", "F2", "F3", "F11", " ",
+            " "              , "LALT", "LCTL", "LGUI", "LSFT", " ",        " ", "F1", "F2", "F3", "F11", " ",
             " "              ,    " ",    " ",    " ",    " ", " ",        " ", "F8", "F6", "F7", "F10", " ",
                                     "M(hexpad, 0, 0)",    " ", " ",        " ",  " ",  " "
           ]
@@ -351,7 +351,7 @@
           "set": "rows",
           "keycodes": [
             " ",                 " ",                 " ", "MK(KC_LCTL, KC_LSFT, KC_C)", "MK(KC_LCTL, KC_LSFT, KC_V)",    " ",        " ",                 "HOME",   "UP",                   "END", "PGUP",               " ",
-            " ",              "LGUI",              "LCTL",                       "LALT",                       "LSFT",    " ",        " ", "MK(KC_LCTL, KC_LEFT)",    " ", "MK(KC_LCTL, KC_RIGHT)",    " ", "M(hexpad, 0, 0)",
+            " ",              "LALT",              "LCTL",                       "LGUI",                       "LSFT",    " ",        " ", "MK(KC_LCTL, KC_LEFT)",    " ", "MK(KC_LCTL, KC_RIGHT)",    " ", "M(hexpad, 0, 0)",
             " ", "MK(KC_LCTL, KC_Z)", "MK(KC_LCTL, KC_X)",          "MK(KC_LCTL, KC_C)",          "MK(KC_LCTL, KC_V)",    " ",        " ",                 "LEFT", "DOWN",                 "RIGHT", "PGDN",               " ",
                                                                       "M(hexpad, 0, 0)",                          " ",    " ",        " ",                   " ",    " "
           ]
@@ -374,7 +374,7 @@
           "set": "rows",
           "keycodes": [
             "RESET",    " ",    " ",    " ",    " ", " ",        " ", "KC_WH_L", "MS_U", "KC_WH_R", "WH_U", " ",
-            " "    , "LGUI", "LCTL", "LALT", "LSFT", " ",        " ",       " ",    " ",       " ",    " ", " ",
+            " "    , "LALT", "LCTL", "LGUI", "LSFT", " ",        " ",       " ",    " ",       " ",    " ", " ",
             " "    ,    " ", "BTN3", "BTN2", "BTN1", " ",        " ",    "MS_L", "MS_D",    "MS_R", "WH_D", " ",
                                         " ",    " ", " ",        " ",       " ",    " "
           ]
