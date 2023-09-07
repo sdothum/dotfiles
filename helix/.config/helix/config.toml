@@ -31,7 +31,7 @@ separator                   = "│"
 mode.normal                 = ""
 mode.insert                 = ""
 mode.select                 = ""
-left                        = ["spacer", "file-modification-indicator", "file-name", "spacer", "file-type", "spacer", "file-encoding"]
+left                        = ["spacer", "file-modification-indicator", "file-base-name", "spacer", "file-type", "spacer", "file-encoding"]
 center                      = ["selections", "spacer", "spacer", "spacer", "mode", "spacer", "spacer", "spacer", "position" ]
 right                       = ["diagnostics", "spacer", "spacer", "position-percentage", "spacer", "spacer", "spinner", "spacer", "spacer"]
 
