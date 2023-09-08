@@ -25,9 +25,9 @@ fi
 
 # window manager
 hc keybind Super-Shift-q           chain . spawn kill -KILL $BROWSER . spawn quit  # qutebrowser (re)startx issue (qt5 ??)
-hc keybind Super-Alt-Shift-q       chain . spawn kill -KILL $BROWSER . spawn pkill -KILL -f startx
+# hc keybind Super-Alt-Shift-q     chain . spawn kill -KILL $BROWSER . spawn pkill -KILL -f startx
 hc keybind Super-Alt-Shift-r       reload
-hc keybind Super-q                 chain . close_or_remove . emit_hook focus_window
+hc keybind Super-w                 chain . close_or_remove . emit_hook focus_window
 hc keybind Super-Return            spawn toggle scratchpad scratchy
 hc keybind Super-Alt-Return        spawn toggle scratchpad itchy
 hc keybind Super-Shift-Return      spawn term 'term'

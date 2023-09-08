@@ -24,8 +24,9 @@ hc keybind Control-BackSpace        spawn dunstctl history-pop
 # hc keybind Super-6                spawn sudo xbacklight +5
 # hc keybind Super-equal            spawn dmenu calc
 # hc keybind Super-Control-equal    spawn toggle plover
-hc keybind Super-apostrophe         spawn toggle panel
-hc keybind Super-Shift-apostrophe   spawn toggle conky
+hc keybind Super-apostrophe         spawn dmenu pass
+hc keybind Super-Shift-apostrophe   spawn toggle panel
+hc keybind Super-Control-apostrophe spawn toggle conky
 # hc keybind Super-F1               spawn keymap toggle
 hc keybind Super-F1                 spawn dmenu menu
 hc keybind Super-a                  spawn toggle scratchpad mail aerc
@@ -44,6 +45,7 @@ hc keybind Super-e                  spawn dmenu scripts
 hc keybind Super-Shift-e            spawn dmenu projects
 hc keybind Super-Control-e          spawn dmenu edit
 hc keybind Super-Alt-e              spawn hardcopy eject
+hc keybind Super-Alt-Control-e      spawn proof toggle
 # hc keybind Super-h                spawn hangouts
 # hc keybind Super-Control-h        spawn dmenu shistory
 # hc keybind Super-Control-k        spawn clack toggle
@@ -51,8 +53,6 @@ hc keybind Super-Alt-e              spawn hardcopy eject
 # hc keybind Super-l                spawn lock_screen
 hc keybind Super-n                  spawn dmenu notes poem
 hc keybind Super-Control-n          spawn dmenu notes
-hc keybind Super-p                  spawn dmenu pass
-hc keybind Super-Control-p          spawn proof toggle
 # hc keybind Super-Alt-p            spawn pulse restart
 hc keybind Super-Control-q          spawn dmenu halt
 # hc keybind Super-r                spawn dmenu clipboard
@@ -66,9 +66,9 @@ hc keybind Super-Shift-t            spawn dmenu reminder
 hc keybind Super-v                  spawn dmenu media
 hc keybind Super-Shift-v            spawn dmenu audio
 hc keybind Super-Alt-v              chain . spawn pkill '(mpv|omxplayer)' . emit_hook focus_window
-hc keybind Super-w                  spawn dmenu wiki
-hc keybind Super-Shift-w            spawn dmenu wiki diary
-hc keybind Super-Control-w          spawn weather time
+hc keybind Super-u                  spawn dmenu wiki
+hc keybind Super-Shift-u            spawn dmenu wiki diary
+# hc keybind Super-Control-w        spawn weather time
 hc keybind Super-x                  spawn toggle nnn TMUX
 hc keybind Super-Shift-x            spawn toggle pcmanfm
 # hc keybind Super-z                spawn toggle rox
