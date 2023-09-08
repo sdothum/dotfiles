@@ -37,7 +37,7 @@ ditto "$KEYBOARD" "$keymap"
 
 # update keymap from stow repo
 mkdir -p $KEYMAP 2>/dev/null
-rsync -av -KL --exclude .deprecated $SOURCE $KEYBOARD/keymaps/
+rsync -av --exclude .deprecated $SOURCE $KEYBOARD/keymaps/
 # not in official repo..
 # [ ${KBD#*/} = georgi ] && rsync -avq --no-r -KL ${SOURCE%/keymaps/*}/* $KEYBOARD
 # [ $KBD = splitography ] && rsync -avq --no-r -KL ${SOURCE%/keymaps/*}/* $KEYBOARD

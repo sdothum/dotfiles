@@ -10,6 +10,7 @@ dunst
 fish
 fonts/.fonts/Iosevka*
 georgi/qmk_firmware/keyboards/gboards/georgi
+georgi/qmk_firmware/users/sdothum/chording_engine
 .gitignore
 helix
 herbstluftwm
