@@ -27,4 +27,3 @@ indent                       = { tab-width = 3, unit = "   " }
 scope                        = "source.md"
 text-width                   = 80
 roots                        = []
-
