@@ -37,9 +37,6 @@ python3 -m pip install --user qmk
 doas cp -v $USER/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
 qmk setup
 
-# chording keybaard
-ditto dennytom "use latest chording engine for georgi keybaard"
-mv -v qmk_firmware/users/dennytom qmk_firmware/users/dennytom.original
-cp -rv /net/depot/qmk_firmware.dennytom/users/dennytom qmk_firmware/users/dennytom
+ditto georgi "use sdothum chording_engine"
 
 # vim: set ft=sh: #
