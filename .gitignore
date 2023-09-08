@@ -284,6 +284,7 @@
 **/.projectsrc
 **/pulse
 **/*.pyc
+**/__pycache__
 **/pyradio
 **/pyroom
 **/quikey/.local/share/quikey/*.log
