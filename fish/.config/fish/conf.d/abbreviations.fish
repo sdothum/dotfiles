@@ -151,12 +151,12 @@ abbr dp 'dmenu - projects'
 abbr dr 'dmenu - run'
 abbr ds 'dmenu - scripts'
 abbr nv 'nvpy'
-abbr vd 'v -d --role=gvimdiff'
-abbr vdn 'v -d --role=gvimdiff (nnn -p -)'  # file picker mode
+abbr vd 'vi -d --role=gvimdiff'
+abbr vdn 'vi -d --role=gvimdiff (nnn -p -)'  # file picker mode
 abbr sd 'sdiff -b -E -W -w(tput cols)'
 abbr vdarchive 'dirdiff ./ /net/archive(pwd)'
 abbr vdbackup 'dirdiff ./ /net/backup(pwd)'
-abbr vsh "v $HOME/.local/share/fish/fish_history"
+abbr vsh "vi $HOME/.local/share/fish/fish_history"
 
 # ........................................................................ Regex
 
@@ -203,7 +203,7 @@ abbr dot 'rlwrap -n dotfiles'
 abbr gif 'nsxiv -a'
 abbr handbrake 'ghb'
 abbr hdel 'history delete'
-abbr hv "v $HOME/.local/share/fish/fish_history"
+abbr hv "vi $HOME/.local/share/fish/fish_history"
 abbr hex 'hexdump -C'
 abbr kc "kconvert '*epub'"
 abbr kindle 'dmenu econvert azw3'
