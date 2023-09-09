@@ -1,5 +1,8 @@
 
-## sdothum corrected lbrc, rbrc, bsls and scln keycodes (replacing older names)
+## Based on dennytom's original chording engine
+
+- Fix obsoleted keycode names (QMK #defines)
+- Fix STR key action string pointers 
 
 # README
 

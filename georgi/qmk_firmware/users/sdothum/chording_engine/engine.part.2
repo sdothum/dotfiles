@@ -305,7 +305,7 @@ void string_in(const struct Chord* self) {
         strcpy_P(buffer, (char*)pgm_read_word(&(strings[self->value1])));
         send_string(buffer);
         // clear(self);  // this clears STR+raise issue BUT raises layer immediately after STR
-        tap_key(KC_NO);  // KLUDGE to prevent layer key value being issued immediately after STR+raise
+        tap_key(KC_NO);  // clear layer key (down) tap value on STR+raise
     }
 }
 
