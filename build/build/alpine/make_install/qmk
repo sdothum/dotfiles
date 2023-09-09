@@ -11,32 +11,31 @@ doas apk add gcc-avr avr-libc
 doas apk add avrdude binutils-avr
 apk testing dfu-programmer dfu-util
 
-doas addgroup shum dialout
-doas setup-devd udev
-echo 'TAG=="uaccess", ENV{MAJOR}!="", MODE="0660", GROUP="plugdev" | doas tee /etc/udev/rules.d/73-uaccess-group.rules
-doas addgroup shum plugdev
-ditto /dev/ttyACM "reboot required for $USER group pemission to access device"
-
+# SUPERCEDED by sdothum chording engine mods
+ditto georgi "see sdothum chording_engine"
 # install dennytom chording engine first 'cause util/qmk_install.sh fails (alpine unsupported OS)
-cd /net/depot
-rm -rf qmk_firmware
-git clone https://github.com/DennyTom/qmk_firmware.git
-cd qmk_firmware
-git checkout 8ed3fce
-cd ..
-mv qmk_firmware qmk_firmware.dennytom
+# cd /net/depot
+# rm -rf qmk_firmware
+# git clone https://github.com/DennyTom/qmk_firmware.git
+# cd qmk_firmware
+# git checkout 8ed3fce
+# cd ..
+# mv qmk_firmware qmk_firmware.dennytom
 
 # manual qmk install required for alpine
-
 cd $HOME
 git clone https://github.com/qmk/qmk_firmware.git
 cd qmk_firmware
 
 python3 -m pip install --user qmk
-
-doas cp -v $USER/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
+doas cp -v $HOME/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
 qmk setup
 
-ditto georgi "use sdothum chording_engine"
+# udev permissions required for $USER flashing
+doas addgroup shum dialout
+doas setup-devd udev
+echo 'TAG=="uaccess", ENV{MAJOR}!="", MODE="0660", GROUP="plugdev" | doas tee /etc/udev/rules.d/73-uaccess-group.rules
+doas addgroup shum plugdev
+ditto /dev/ttyACM "reboot required for $USER group pemission to access device"
 
 # vim: set ft=sh: #
