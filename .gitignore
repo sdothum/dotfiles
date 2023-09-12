@@ -122,6 +122,7 @@
 **/guake
 **/hbro
 **/HEAD
+**/helix/runtime
 !**/herbstluftwm/config
 **/.hg*
 **/hg
@@ -361,6 +362,7 @@
 **/.vim/job
 **/.vim/.netrwhist
 **/.vim/plugged
+!**/.vim/plugged/vim-duochrome
 **/.vim/plugin
 **/.vim/spell
 **/.vim/texput*
