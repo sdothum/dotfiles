@@ -328,6 +328,7 @@
 **/*.tgz
 **/thedarnedestthing
 **/themes
+!**/helix/themes
 **/thunar
 **/timestamp
 **/tint2
