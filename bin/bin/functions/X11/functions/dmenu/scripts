@@ -11,7 +11,7 @@
 REFRESH='refresh cache'  # catalogue, see ffcache
 EXCLUDE='(AppImage|.service|-module|.mp3|-multilib)$'
 
-EDITOR=${EDITOR:-term helix hx}
+EDITOR=${EDITOR:-helix}
 
 # search these project library folders..
 sources=$(cat $CONFIG/.scriptsrc | sed "s|\$HOME|$HOME|g")  # manual eval of $HOME

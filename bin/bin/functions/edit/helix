@@ -6,8 +6,6 @@
 
 # ....................................................................... Editor
 
-# Usage: vx [<file>]*
-
-hx $(escape "$@")
+term helix PAPER hx $@
 
 # vim: set ft=sh: #

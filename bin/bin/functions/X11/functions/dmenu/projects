@@ -13,7 +13,7 @@
 
 EDIT='edit tags'
 
-EDITOR=${EDITOR:-term helix hx}
+EDITOR=${EDITOR:-helix}
 
 # tag file containing project specs
 PROJECTS=$CONFIG/.projectsrc

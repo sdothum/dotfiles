@@ -8,7 +8,7 @@
 
 usage() { usage: "$(basename $0) <regex>"; exit 1; }
 
-EDITOR=${EDITOR:-hx}
+EDITOR=${EDITOR:-helix}
 
 # v by content
 [ "$1"     ] && files=$(al "$@") || usage

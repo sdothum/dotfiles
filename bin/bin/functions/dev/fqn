@@ -1,0 +1,58 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Dev
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................... fully qualify name
+
+usage() { 
+	echo "$(basename $0) [tab | 2 | 3 | 4 | 8] [[d]d'ot] <input> [<output>], default \"2 d\"
+> input: [<Tab> | <Space>*]* <name> [= assignment], <name> may be enclosed in double quotes
+>        where indents (3)..
+>              name1       -> name1
+>                 name2    -> name1.name2
+>                    name3 -> name1.name2.name3" | usage:
+	exit 1
+}
+
+# generate fully qualified names based on ordered indentation levels
+
+OUTPUT=/tmp/fqn:output
+rm -f $OUTPUT
+
+while [ $1 ] ;do
+	case $1 in
+		tab  ) tab=true ;;
+		[2-8]) for i in $(seq $1) ;do INDENT="$INDENT " ;done ;;
+	   dd*ot) DOT=.. ;;
+	   d*ot ) DOT=.  ;;
+	   *    ) break  ;;
+	esac
+	shift
+done
+
+[ -e "$1" ] || usage
+I=${INDENT:-  }
+DOT=${DOT:-.}
+
+# comment unassigned variables
+output() { echo "$@" | sed "s/\"${DOT}\"/$DOT/g; s/>>//; /= *$/s/^/#/" >>$OUTPUT; } 
+
+while IFS= read -r line <&3 ;do  # IFS= -r to read leading tabs and spaces
+	name=$(echo "$line" | sed -r 's/^[> \t]*([^ ]+)[ \t].*/\1/')
+	rest=$(echo "$line" | sed -r 's/^[> \t]*[^ ]+([ \t].*)/\1/')
+	[ $tab ] && line="$(echo "$line" | sed "s/\t/  /g")"
+	case "$line" in
+		$I$I$I$I$I*) L5=${L4}$DOT$name; output "$L5$rest" ;;
+		$I$I$I$I*) L4=${L3}$DOT$name; output "$L4$rest" ;;
+		$I$I$I*) L3=${L2}$DOT$name; output "$L3$rest" ;;
+		$I$I*) L2=${L1}$DOT$name; output "$L2$rest" ;;
+		$I*) L1=${L0}$DOT$name; output "$L1$rest" ;;
+		*) L0=$name; output "$L0$rest" ;;
+	esac
+done 3< $1
+
+[ $2 ] && cp $OUTPUT $2 || cat $OUTPUT
+
+# vim: set ft=sh: #

@@ -11,7 +11,7 @@
 EDIT='new'
 DIARY='diary'
 
-EDITOR=${EDITOR:-term helix WAIT hx}
+EDITOR=${EDITOR:-term helix WAIT PAPER hx}
 
 WIKIS="$HOME/vimwiki"
 [ $1 ] && prompt=Diary || { option=-v; prompt=Wiki; menu="\n$(X $DIARY)"; }
@@ -29,7 +29,6 @@ expand() {
 filename() {  echo "$file" | tr ' ' '_'; }
 
 # apostrophes in filename cannot be handled by duochrome statusline..
-filename_check
 filename_check() {
 	# so substitute a linked file with carets
 	[ "${file%\'*}" = "$file" ] || { link=/tmp/$(echo "${file##*/}" | tr \' ^); ln -sf "$file" "$link"; file=$link; }
@@ -45,7 +44,6 @@ add() {
 	# prepend h1 title
 	echo "# $title\n\n" >$file
 	filename_check
-	filename_check
 	$EDITOR "$file"
 	[ $filename ] && rm -f $filename
 }
@@ -55,7 +53,6 @@ wiki() {
 	file=$(echo $file | sed -r "s,(.*)  *$SEP  *(.*),\2/\1,")
 	if expand "$file" >/dev/null ;then
 		file="$(expand "$file")"
-		filename_check
 		filename_check
 		$EDITOR "$file"
 		[ $filename ] && rm -f $filename
