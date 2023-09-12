@@ -40,6 +40,7 @@ tt-rss
 vim
 vim/.vim/after
 vim/.vim/config
+vim/.vim/plugged/vim-duochrome
 weechat
 wyrd
 X11
