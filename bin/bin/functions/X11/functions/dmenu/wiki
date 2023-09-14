@@ -11,7 +11,8 @@
 EDIT='new'
 DIARY='diary'
 
-EDITOR=${EDITOR:-term helix WAIT PAPER hx}
+EDITOR=${EDITOR:-helix WAIT}
+export MONOFONT="Iosevka-proof"
 
 WIKIS="$HOME/vimwiki"
 [ $1 ] && prompt=Diary || { option=-v; prompt=Wiki; menu="\n$(X $DIARY)"; }

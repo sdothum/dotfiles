@@ -10,6 +10,7 @@
 
 [ $1   ] && { export TMUX=$1; shift; } || export TMUX=tmux
 [ "$1" ] || fortune=FORTUNE
+[ "$1" = aerc ] && export MONOFONT=Iosevka-proof
 # force rox terminal sessions to open in current rox directory
 [ $TMUX = roxterm ] && pkill -f ' -s roxterm'  # <space> -s, as pattern 
 

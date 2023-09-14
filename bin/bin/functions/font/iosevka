@@ -55,7 +55,7 @@ usage() {
 > m-[rounded|serifless]
 > p-[eared|serifed]
 > q-[hook|tailed]
-> t-[cross|descending]
+> t-[asymmetric|cross|descending]
 > u-toothed
 > y-straight
 
@@ -237,6 +237,7 @@ variant() {
 			p-eared      ) glyph p=eared-serifless ;;
 			p-serifed    ) glyph p=motion-serifed ;;
 			q-tailed     ) glyph q=tailed-serifless ;;
+			t-asymmetric ) glyph t=flat-hook-asymmetric-short-neck2 ;;
 			t-cross      ) glyph t=cross-short-neck2 ;;
 			u-toothed    ) glyph u=toothed ;;
 			y-straight   ) glyph y=straight-serifless ;;
@@ -387,6 +388,7 @@ while [ $1 ] ;do
 		p-serifed    ) variant $1 sb 0.7650 ;;         # add air for serif corner
 		q-hook       ) variant 'q=HOOK-TAILED'; q_hook=true; baseline=true ;;
 		q-tailed     ) variant $1; unset q_hook ;;
+		t-asymmetric ) variant $1 ;;
 		t-cross      ) variant $1 ;;
 		t-descending ) variant t-cross 'DESCENDING'; t_descending=true; baseline=true ;;
 		u-toothed    ) variant $1 ;;
