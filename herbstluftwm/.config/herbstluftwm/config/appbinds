@@ -13,7 +13,7 @@
 hc keybind Super-Shift-space        spawn dmenu run
 # hc keybind Super-Shift-space      spawn dmenu apps
 # hc keybind Super-Shift-space      spawn dmenu manpages
-hc keybind Super-Alt-space          spawn killall -KILL dmenu
+hc keybind Super-Alt-Shift-space    spawn killall -KILL dmenu
 hc keybind Control-space            spawn dunstctl close
 hc keybind Control-Shift-space      spawn dunstctl close-all
 hc keybind Control-BackSpace        spawn dunstctl history-pop
@@ -47,8 +47,8 @@ hc keybind Super-Alt-b              chain . spawn qutebrowser closeall . emit_ho
 hc keybind Super-e                  spawn dmenu scripts
 hc keybind Super-Shift-e            spawn dmenu projects
 hc keybind Super-Control-e          spawn dmenu edit
-hc keybind Super-Alt-e              spawn hardcopy eject
-hc keybind Super-Alt-Control-e      spawn proof toggle
+# hc keybind Super-Alt-e            spawn hardcopy eject
+# hc keybind Super-Alt-Control-e    spawn proof toggle
 # hc keybind Super-h                spawn hangouts
 # hc keybind Super-Control-h        spawn dmenu shistory
 # hc keybind Super-Control-k        spawn clack toggle

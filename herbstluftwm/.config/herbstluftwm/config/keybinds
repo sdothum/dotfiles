@@ -102,7 +102,7 @@ hc keybind Super-h                 spawn draw fsplit x 0.5
 hc keybind Super-Shift-h           spawn draw fsplit x 0.666666
 hc keybind Super-Alt-h             spawn draw fsplit x 0.333333
 # let the current frame explode into subframes
-hc keybind Super-Alt-Shift-space   spawn restore frames
+hc keybind Super-Alt-space         spawn restore frames
 
 # rotate frames
 hc keybind Super-Alt-Shift-o       spawn switch orientation -2
