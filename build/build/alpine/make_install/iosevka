@@ -26,6 +26,7 @@ usage() {
 >> m-rounded
 >> p-[eared|serifed]
 >> q-hook
+>> t-asymmetric
 
 >> 0-split
 >> at-tall
@@ -78,7 +79,7 @@ trap "rm -f $MAKE_INSTALL; pkill -f iosevka" EXIT INT
 shift
 
 glyph()   { unset b d p; eval $1=$2; GLYPH=$2; }
-altmono() { altmono='a-toothless f-extended G-hookless+'; }
+altmono() { altmono='a-toothless t-asymmetric G-hookless+ J-flat'; }
 
 cmdopts() {
 	while [ $1 ] ;do
@@ -133,6 +134,7 @@ cmdopts() {
 			p-eared     ) glyph p $1 ;;
 			p-serifed   ) glyph p $1 ;;
 			q-hook      ) q=$1 ;;        # ebook variant
+			t-asymmetric) t=$1 ;;
 
 			0-split     ) zero=$1 ;;
 			at-tall     ) at=$1 ;;       # source code variant
@@ -183,7 +185,7 @@ update() {
 	done
 }
 
-options() { echo $adjust $ascender $cap $quasi $leading $sb $style $D $G $I $J $Q $a $b $d $f $j $m $p $q $zero $at $paren $@; }  # list
+options() { echo $adjust $ascender $cap $quasi $leading $sb $style $D $G $I $J $Q $a $b $d $f $j $m $p $q $t $zero $at $paren $@; }  # list
 
 # family [options]*
 e_ink() {
@@ -207,16 +209,16 @@ if [ "$classic" ] ;then
 elif [ "$mu" ] ;then
 	cmdopts quasi-ext ${space:-space M}
 	[ $ereader = kobo ] && emdash=$emkobo || emdash=$emkindle  # == M + space width
-	# e_ink groot       ${cap:-cap extended}             j-serifed           G-hookless+ I-descending J-flat      Q-straight open 4-open+
-	# e_ink mu          ${cap:-cap extended}             f-extended j-serifed G-hookless+ I-descending            Q-straight open 4-open+
-	# e_ink mudra       ${cap:-cap extended}             f-extended j-serifed G-hookless+ Y-descending            Q-straight open 4-open+
+	e_ink groot       ${cap:-cap extended}             j-serifed           G-hookless+  I-descending J-flat     Q-straight open 4-open+
+	e_ink graal       ${cap:-cap extended} a-single    j-serifed           G-hookless+  I-descending J-flat     Q-straight open 4-open+
+	e_ink mu          ${cap:-cap extended}             f-extended j-serifed G-hookless+ I-descending            Q-straight open 4-open+
+	e_ink mudra       ${cap:-cap extended}             f-extended j-serifed G-hookless+ Y-descending            Q-straight open 4-open+
 	e_ink tundra      ${cap:-cap extended} a-single    f-extended j-serifed G-hookless+ Y-descending            Q-straight open 4-open+
 
 elif [ "$test" ] ;then
-	unset ecopy; cmdopts quasi-ext space 1.15 m-rounded
+	unset ecopy; cmdopts quasi-ext space 1.15 m-rounded altmono
 	[ $ereader = kobo ] && emdash=$emkobo || emdash=$emkindle  # == M + space width
-	e_ink graal       ${cap:-cap extended} a-single    j-serifed           G-hookless+ I-descending J-flat      Q-straight open 4-open+
-	e_ink mua         ${cap:-cap extended} a-single    f-extended j-serifed G-hookless+ I-descending            Q-straight open 4-open+
+	e_ink mu          ${cap:-cap extended}             f-extended j-serifed G-hookless+ I-descending            Q-straight open 4-open+
 
 elif [ $family ] ;then                    # custom e-ink font (non-published)
 	e_ink $family
@@ -263,12 +265,12 @@ elif [ $coding ] ;then                    # classic coding font
 
 else                                      # desktop fonts
 	cmdopts cap extended altmono
-	# dfont $leading $altmono  I-serifed    f-serifless     J-flat
-	# dfont proof    $altmono  I-descending Q-straight
-	# dfont menu     $altmono  I-descending Q-straight
-	# # dfont dyslexic $altmono             Q-straight      J-flat   space 2   family qclocktwo leading 1.40
-	# dfont dyslexic $altmono               Q-straight      J-flat   space 2.2 family qclocktwo    # conky qclocktwo font
-	dfont dyslexic $altmono  f-serifless  quasi-extension J-flat   space M   family monograffic  # panel/dunst/browser font
+	# dfont $leading $altmono  I-serifed    f-serifless    
+	dfont proof    $altmono  I-descending Q-straight     
+	dfont menu     $altmono  I-descending Q-straight     
+	# dfont dyslexic $altmono             Q-straight      space 2   family qclocktwo leading 1.40
+	# dfont dyslexic $altmono               Q-straight      space 2.2 family qclocktwo    # conky qclocktwo font
+	# dfont dyslexic $altmono               quasi-extension space M   family monograffic  # panel/dunst/browser font
 fi
 
 # vim: set ft=sh: #
