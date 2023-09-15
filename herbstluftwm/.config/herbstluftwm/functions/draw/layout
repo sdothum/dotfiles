@@ -258,7 +258,7 @@ case $1 in
 		$(layout $layout) $TAG ;;          # exec draw layout $layout
 esac
 
-if [ $windows -gt 1 ] &&  [ "$layout" != max ] ;then
+if [ $windows -gt 1 ] && [ "$layout" != max ] ;then
 	herbstclient jumpto $winid
 	focus border
 fi
