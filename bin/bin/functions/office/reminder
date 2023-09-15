@@ -11,7 +11,6 @@
 #        reminder alarms
 
 REMINDERS=${REMINDERS:-$HOME/.reminders}  # required by cron (root invocaion)
-EDITOR=${EDITOR:-helix}
 
 # import user path
 . $HOME/bin/functions/shell/user_path
@@ -40,13 +39,10 @@ reminders() {
 	date --date "$day" >/dev/null 2>&1 || day=tomorrow
 	echo $day | grep -E -q ':|[ap]m' && M=%M || M=00
 	sed --follow-symlinks -i "$ aREM $(date "+%b %d %Y AT %H:$M" --date "$day") DURATION 1:00 MSG " $REMINDERS
-	case $EDITOR in
-		helix) $EDITOR WAIT $REMINDERS:9999  # positions to eof (not on actual last line)
-		vi   ) $EDITOR -f -c 'normal|G' $REMINDERS
-	esac
+	vi -f -c 'normal|G' $REMINDERS  # helix file:row positions cursor at eof (not last line)
 }
 
-case $1 in
+case "$1" in
 	''        ) list +4 ;;
 	0         ) list ;;
 	[1-9]     |\

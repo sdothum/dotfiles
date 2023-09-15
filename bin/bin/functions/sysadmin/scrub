@@ -18,11 +18,11 @@ $(basename $0) { c'ancel | s'tatus | I'nitialize } [boot | root | net | share | 
 	exit 1
 }
 
-interval=${interval:-300}                     # default 5 minute interval reporting
-CRON=/tmp/scrub                               # see crontab -l
+interval=${interval:-300}              # default 5 minute interval reporting
+CRON=/tmp/scrub                        # see crontab -l
 
 # import user path
-. $HOME/bin/functions/shell/user_path colors  # bash shell required for cron colors
+. $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
 
 # butterfs maintenance
 volume() {
