@@ -35,6 +35,7 @@ hc rule title=RSS                          tag=1 index=1 focus=off
 hc rule title=thedarnedestthing            tag=2 index=1
 hc rule windowrole="'the darnedest thing'" tag=2 index=1 focus=on
 hc rule class=Gvim                         tag=2 focus=on switchtag=on hook=max
+hc rule class=helix                        tag=2 focus=on switchtag=on hook=max
 # hc rule windowrole=gvimdiff              tag=2 focus=on fullscreen=on hook=fullscreen
 hc rule windowrole=gvimdiff                tag=2 focus=on hook=max
 # hc rule title=IM                         tag=3 index=0 focus=on

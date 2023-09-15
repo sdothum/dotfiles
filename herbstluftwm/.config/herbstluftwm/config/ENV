@@ -17,6 +17,7 @@ export DESKTOP=$SESSION/desktop
 export UI=$SESSION/herbstluftwm
 export PICOMCONF=$XDG_CONFIG_HOME/picom/picom.conf
 export CONKYRC=$HOME/.conkyrc
+export DMENU=$HOME/bin/functions/X11/functions/dmenu
 
 echo $DISPLAY >$SESSION/display  # for cron notifications, see notify
 
