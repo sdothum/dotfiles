@@ -42,11 +42,11 @@ nmap <leader>D          :Singleton<CR>
 nmap <silent><leader>qq :quitall!<CR>
 
 " .................................................................. Auto backup
-command! QueueFile    silent! call buffer#QueueFile()
+" command! QueueFile    silent! call buffer#QueueFile()
 command! QueueBuffers silent! call buffer#QueueBuffers()
 
 " auto backup
-autocmd buffer BufWrite  * QueueFile
+" autocmd buffer BufWrite  * QueueFile
 " save on losing focus, :wall on FocusLost does not trigger s:queueFile() (?)
 autocmd buffer FocusLost * QueueBuffers
 

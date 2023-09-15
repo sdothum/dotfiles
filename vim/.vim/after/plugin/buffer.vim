@@ -26,14 +26,14 @@ function! s:home(dir)
 endfunction
 
 " .................................................................. Auto backup
-" queue files written for vhg (may contain repeated update entries)
-let s:repo = empty($STOW) ? s:home('.vim') : $STOW  " directory to auto backup
-
-function! buffer#QueueFile()
-	if empty($QUEUE) | return | endif  " see vi script (sets QUEUE and invokes vhg)
-	let l:path = resolve(expand('%:p'))
-	if l:path =~ s:repo | call system('echo ' . substitute(l:path, s:repo, '', '') . ' >>' . s:home('.vim/job/') . $QUEUE) | endif
-endfunction
+" " queue files written for vhg (may contain repeated update entries)
+" let s:repo = empty($STOW) ? s:home('.vim') : $STOW  " directory to auto backup
+" 
+" function! buffer#QueueFile()
+" 	if empty($QUEUE) | return | endif  " see vi script (sets QUEUE and invokes vhg)
+" 	let l:path = resolve(expand('%:p'))
+" 	if l:path =~ s:repo | call system('echo ' . substitute(l:path, s:repo, '', '') . ' >>' . s:home('.vim/job/') . $QUEUE) | endif
+" endfunction
 
 " :wall on FocusLost does not trigger autocmd BufWrite (?)
 function! buffer#QueueBuffers()
@@ -44,7 +44,7 @@ function! buffer#QueueBuffers()
 		if l:buf.changed
 			execute 'buffer' . l:buf.bufnr
 			update
-			QueueFile
+			" QueueFile
 		endif
 	endfor
 	execute 'buffer' . l:cur_buffer
