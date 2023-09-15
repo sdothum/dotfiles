@@ -19,6 +19,7 @@
 
 SHELL=/usr/bin/dash
 options='FLOAT|STACK|MAX|VERTICAL|HORIZONTAL|GRID|BLACKBOARD|PAPER|VISIBLE|WAIT|FORTUNE|SHELL'
+unset name  # for inadvertant env var conflict usage in calling scripts
 
 [ -e /usr/bin/alacritty ] && TERM=alacritty || TERM=urxvt
 case $TERM in
