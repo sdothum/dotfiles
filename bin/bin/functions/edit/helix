@@ -6,21 +6,11 @@
 
 # ....................................................................... Editor
 
-REPO=${REPO:-$STOW}
-output=quiet  # verbose
-
 [ "$1" = WAIT ] && { WAIT=$1; shift; }  # foreground process?
 [ -e "$1" ] || { notify ERROR 'Helix' "$1\nnot found"; exit 1; }
 
-# snapshot sources (in lieu of persistent undo)
-for i in $@ ;do
-	file=$(find $REPO -regex ".*${i#$HOME/}")
-	hg add --$output --cwd $REPO "$file" 2>/dev/null
-	files="$files  $file"
-done
-notify 'Mercurial' "$(echo ${files#  } | sed 's, /,\n/,g')"  # newline on /path
-# see hgl alias (hg log) for compact listing
-hg commit --$output --cwd $REPO -m "$(date -R | cut -d- -f1) ..$files"
+# snapshot sources (in lieu of persistent undo avalability)
+hgadd $@ &  # don' wait :)
 
 cd $(dirname $1)
 term helix PAPER $WAIT hx $@

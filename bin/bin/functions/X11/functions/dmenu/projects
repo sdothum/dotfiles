@@ -16,7 +16,7 @@ EDIT='edit tags'
 EDITOR=${EDITOR:-helix}
 
 # tag file containing project specs
-PROJECTS=$CONFIG/.projectsrc
+PROJECTS=$DMENU/.projectsrc
 history=$HISTORY/projects
 
 projects() { sed "s/  *::  */^$SEP /" $PROJECTS | mhistory projects | column -s^ -t | sed "2i$(X $EDIT)"; }

@@ -1,4 +1,4 @@
-!/usr/bin/bash
+#!/usr/bin/bash
 # sdothum - 2016 (c) wtfpl
 
 # Dev
@@ -6,33 +6,35 @@
 
 # .................................................................. Add to repo
 
-usage() { usage: "$(basename $0) <path>.., where <path> is relative to $REPO"; exit 1; }
+usage() { echo "$(basename $0) <file>* <path>*
+> where, <path> is relative to $REPO
+>        <path> only adds files maxdepth 1
+>        <file> symlinks are ignored" | usage:
+	exit 1
+}
 
 REPO=${REPO:-$STOW}
 IGNORE=$REPO/.hgadd:ignore
-QUEUE=$(date '+%y%m%d%H%M%S')
-JOB=$HOME/.vim/job/$QUEUE
+output=quiet  # verbose
 
 [ "$1" ] || usage
-
-xadd() {
-	ditto hgadd "$@"
-	echo "$@" >>$JOB
-}
-# bash export function for xargs
-export -f xadd
-export JOB
-
 cd $REPO
 exclude=${exclude:-$(cat $IGNORE | tr '\n' '|' | sed 's/[|]*$//')}
 
-[ $# -eq 1 ] && echo "$@" | grep -E -qv "$exclude" || exit
-trace "$@"
+exclude()   { grep -E -v "$exclude"; }  # exclude projects not in $STOW
+changed()   { hg files --cwd $REPO "$file" >/dev/null || return 0; hg diff --stat --cwd $REPO "$file" | grep -q "changed"; }
+hgadd()     { [ -L "$file" ] || ! changed && return; hg add --$output --cwd $REPO "$file" 2>/dev/null; files="$files  ${file#$REPO/}"; }
+addfile()   { for file in $(find $REPO -regex ".*${i#$HOME/}" | exclude) ;do hgadd ;done }  # handle multifile name match
+addfolder() { for file in $(find $i -maxdepth 1 -type f | exclude) ;do hgadd ;done }
+
 for i in $@ ;do
-	[ -d "$i" ] && find $i -maxdepth 1 -type f | grep -E -v "$exclude" | xargs -d'\n' -I '{}' bash -c 'xadd "{}"' || xadd "$i"
+	[ -d $i ] && { addfolder ; continue; }
+	[ -e $i ] && { addfile   ; continue; }
+	notify critical hgadd "$i\nnot found"
 done
 
-# reusing the vim hg update mechanism
-vhg $QUEUE
+[ "$files" ] || exit 1  # non-interested source changes
+notify 'Mercurial' "$(echo "${files#  }" | sed 's,  ,\n,g')"            # newline on /path
+hg commit --$output --cwd $REPO -m "$(date -R | cut -d- -f1) ..$files"  # see hgl alias (hg log) for compact listing
 
 # vim: set ft=sh: #

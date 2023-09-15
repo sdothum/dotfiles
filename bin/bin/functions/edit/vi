@@ -10,7 +10,6 @@
 
 # va va voom
 SHELL=/usr/bin/dash
-export QUEUE=$(date '+%y%m%d%H%M%S')
 VIMTRACE=$HOME/.session/vim:trace
 
 LOG=/tmp/vim:trace
@@ -63,10 +62,5 @@ console || { gui=-g; [ -e $DYNAMIC ] && focus frame; }
 # --quote used for single space separated filename
 session="vim $gui $role $fg $cmd $file"
 eval $sudo $session 2>>$LOG
-
-# if exists hg ;then
-# 	cpu arm && sleep 5  # prevent premature startup termination on slower processors
-# 	(pwait "vim.*$file" && vhg $QUEUE) &
-# fi
 
 # vim: set ft=sh: #

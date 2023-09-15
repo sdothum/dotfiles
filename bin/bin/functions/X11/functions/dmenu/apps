@@ -12,7 +12,7 @@ EDIT='edit menu'
 #             e.g. term 'title' program
 #                  program  # description
 
-pgms=$CONFIG/.appsrc
+pgms=$DMENU/.appsrc
 
 apps() {
 	while read app <&3 ;do

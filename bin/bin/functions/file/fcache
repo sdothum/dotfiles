@@ -39,7 +39,7 @@ while [ $1 ] ;do
 		-perm     ) perm="$not -perm $2"; unset not; shift ;;
 		-regex    ) regex="$regex $not -regex '$2'"; type=f; filter=cat; unset not; shift ;;
 		-regextype) regextype="-regextype $2"; shift ;;
-		*         ) [ -d $1 ] && node=$1 || usage; [ $type ] || type=d ;;
+		*         ) [ -d $1 ] && node=$1; [ $type ] || type=d ;;
 	esac
 	shift
 done

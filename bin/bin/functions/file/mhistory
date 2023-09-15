@@ -17,7 +17,7 @@
 
 usage() { usage: "$(basename $0) <name> | <path> [<string>]"; exit 1; }
 
-HISTORY=${HISTORY:-$HOME/tmp/.history}
+HISTORY=${HISTORY:-$DMENU/.history}
 
 [ "$1" ] || usage
 echo $1 | grep -qv '/' && history="$HISTORY/$1" || history="$1"

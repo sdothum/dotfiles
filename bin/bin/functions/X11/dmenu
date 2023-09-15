@@ -12,8 +12,7 @@
 #        source dmenu
 #        POSIX standard for use with dash shell
 
-CONFIG=$(dirname $0)/functions/dmenu
-export HISTORY=$CONFIG/.history
+HISTORY=${HISTORY:-$DMENU/.history}
 # currently playing, see music, radia
 MUSIC=/tmp/audio:music
 RADIO=/tmp/audio:radio
@@ -60,7 +59,7 @@ if [ $(basename $0) = dmenu ] ;then
 	msg=$1
 	# unhide desktop
 	console || { is multihead || conky clock off; }
-	if [ -f "$CONFIG/$msg" ] ;then
+	if [ -f "$DMENU/$msg" ] ;then
 		case $msg in
 			econvert|\
 			media   |\
@@ -69,7 +68,7 @@ if [ $(basename $0) = dmenu ] ;then
 			*       ) pstat + "dmenu $msg" && { notify 3 critical "> dmenu $msg" 'Already running..'; exit 1; } ;;
 		esac
 		shift
-		. $CONFIG/$msg $@
+		. $DMENU/$msg $@
 	else
 		usage: $0
 	fi

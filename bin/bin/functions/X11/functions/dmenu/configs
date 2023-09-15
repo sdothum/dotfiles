@@ -15,7 +15,7 @@ EDITOR=${EDITOR:-helix}
 INCLUDE='.*(cfg|conf(ig)*|ini|[^.][^s]rc)$'
 
 # search these project library folders..
-sources=$(cat $CONFIG/.configsrc | sed "s|\$HOME|$HOME|g; s/\$INCLUDE/$INCLUDE/")  # manual eval of $HOME
+sources=$(cat $DMENU/.configsrc | sed "s|\$HOME|$HOME|g; s/\$INCLUDE/$INCLUDE/")  # manual eval of $HOME
 
 files()   { ffcache $refresh configs $sources | sed -r "s,^$HOME,~,; s,(.*)/([^/]*)$,\2^$SEP \1,"; unset refresh; }
 configs() { column -s^ -t | sed "2i$(X $REFRESH)"; }
