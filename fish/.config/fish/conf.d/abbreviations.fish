@@ -104,8 +104,8 @@ abbr l 'ls -A'
 abbr l1 'ls -1 | print'
 abbr ldot "ls -lAd$HUMAN .* | print"
 abbr ll "ls -lA$HUMAN"
-abbr llr "ls -lAR$HUMAN | print"
-abbr lr "ls -LAR | print"
+abbr llr "ls -lAR$HUMAN"
+abbr lr "ls -LAR"
 abbr ls "ll -S$HUMAN"
 abbr lt "ll -t$HUMAN"
 abbr path 'echo $PATH'
