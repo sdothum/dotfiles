@@ -16,7 +16,7 @@ case $browser in
 		py-chrome-bookmarks.py $bookmarks $bookmarks.html
 		uri=$(grep http:// $bookmarks.html                                         \
 			| sed -r "s/.*<a href=\"([^\"]*)\">([^<]*)<.*/\2${LSPACE}${RSPACE}\1/g" \
-			| cat - $DMENU/bookmarks                                               \
+			| cat - $DMENU/bookmarks                                                \
 			| sed -e 's/\&\#x2[01][0-9][0-9a-f];//g'                                \
 				-e 's/\&\#3[0-9];//g'                                                \
 				-e 's/\&\#x[ab][0-f];/e/g'                                           \

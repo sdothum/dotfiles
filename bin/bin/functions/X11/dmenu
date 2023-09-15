@@ -12,6 +12,7 @@
 #        source dmenu
 #        POSIX standard for use with dash shell
 
+DMENU=${DMENU:-$HOME/bin/functions/X11/functions/dmenu}
 HISTORY=${HISTORY:-$DMENU/.history}
 # currently playing, see music, radia
 MUSIC=/tmp/audio:music

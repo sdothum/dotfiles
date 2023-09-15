@@ -16,7 +16,7 @@ ifno "destroy and init repo for $REPO" || {
 }
 
 cd $REPO
-notify critical hg "add username"
+notify critical hg "add username\ndisable pager"
 hg config --edit
 
 # list of paths relative to $REPO, may include * expansion

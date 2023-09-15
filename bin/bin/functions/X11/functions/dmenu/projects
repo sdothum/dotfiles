@@ -23,7 +23,7 @@ projects() { sed "s/  *::  */^$SEP /" $PROJECTS | mhistory projects | column -s^
 
 while files=$(projects | rmenu 'Edit Project' -no-custom) || exit ;do
 	case ${files#$(X)} in
-		"$EDIT") term helix WAIT hx $PROJECTS $history ;;
+		"$EDIT") $EDITOR WAIT $PROJECTS $history ;;
 	
 		*      )
 			mhistory projects "$(echo $files | sed "s/ *$SEP/^$SEP/")"
