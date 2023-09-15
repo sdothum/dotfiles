@@ -150,6 +150,7 @@ abbr de 'dmenu - edit'
 abbr dp 'dmenu - projects'
 abbr dr 'dmenu - run'
 abbr ds 'dmenu - scripts'
+abbr hsh "helix $HOME/.local/share/fish/fish_history"
 abbr nv 'nvpy'
 abbr vd 'vi -d --role=gvimdiff'
 abbr vdn 'vi -d --role=gvimdiff (nnn -p -)'  # file picker mode
