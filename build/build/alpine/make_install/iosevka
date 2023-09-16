@@ -9,7 +9,7 @@
 usage() { 
 	echo "$(basename $0) . iosevka ebook | kindle | kobo
 >> cyrillic | fluent | latin+greek
->> classic | coding | mu | test | web
+>> classic | coding | mu | test | trio | web
 >> altmono | book+regular | open 
 
 >> D-serifless
@@ -99,6 +99,7 @@ cmdopts() {
 			coding      ) coding=true ;;
 			mu          ) mu=true ;;
 			test        ) test=true ;;
+			trio        ) trio=true ;;
 			web         ) web=true ;;
 
 			# styles
@@ -201,16 +202,14 @@ wfont() { iosevka english a-double j-serifed G-hookless+ Q-straight $(options $@
 efont() { iosevka $language $(options $@); }
 
 if [ "$classic" ] ;then
-	cmdopts quasi-ext ${space:-space M}
+	cmdopts quasi-ext ${space:-space M} altmono
 	[ $ereader = kobo ] && emdash=$emkobo || emdash=$emkindle  # == M + space width
-	e_ink articulate  ${cap:-cap extended} a-double                         G-toothed               J-serifless Q-crossing
-	e_ink typograffic ${cap:-cap extended} a-double    f-extended           G-rounded   I-serifless J-flat      Q-straight
+	e_ink articulate  ${cap:-cap extended} a-double                        G-toothed                 J-serifless Q-crossing
+	e_ink typograffic ${cap:-cap extended} a-double    f-extended          G-rounded     I-serifless J-flat      Q-straight
 
 elif [ "$mu" ] ;then
 	cmdopts quasi-ext ${space:-space M}
 	[ $ereader = kobo ] && emdash=$emkobo || emdash=$emkindle  # == M + space width
-	e_ink groot       ${cap:-cap extended}             j-serifed           G-hookless+  I-descending J-flat     Q-straight open 4-open+
-	e_ink graal       ${cap:-cap extended} a-single    j-serifed           G-hookless+  I-descending J-flat     Q-straight open 4-open+
 	e_ink mu          ${cap:-cap extended}             f-extended j-serifed G-hookless+ I-descending            Q-straight open 4-open+
 	e_ink mudra       ${cap:-cap extended}             f-extended j-serifed G-hookless+ Y-descending            Q-straight open 4-open+
 	e_ink tundra      ${cap:-cap extended} a-single    f-extended j-serifed G-hookless+ Y-descending            Q-straight open 4-open+
@@ -218,7 +217,13 @@ elif [ "$mu" ] ;then
 elif [ "$test" ] ;then
 	unset ecopy; cmdopts quasi-ext space 1.15 m-rounded altmono
 	[ $ereader = kobo ] && emdash=$emkobo || emdash=$emkindle  # == M + space width
-	e_ink mu          ${cap:-cap extended}             f-extended j-serifed G-hookless+ I-descending            Q-straight open 4-open+
+	e_ink typograffic ${cap:-cap extended} $altmono    j-serifed           G-hookless+  I-serifless J-flat     Q-straight open 4-open+
+
+elif [ "$trio" ] ;then
+	cmdopts quasi-ext space 1.15 m-rounded altmono
+	# e_ink groot ${cap:-cap extended} $altmono j-serifed  I-descending Q-straight open 4-open+
+	# e_ink graal ${cap:-cap extended} $altmono j-serifed  I-descending Q-straight open 4-open+ a-single
+	e_ink monad ${cap:-cap extended} $altmono j-serifed  I-serifless  Q-straight open 4-open+
 
 elif [ $family ] ;then                    # custom e-ink font (non-published)
 	e_ink $family
