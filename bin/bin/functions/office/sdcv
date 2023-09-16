@@ -14,6 +14,8 @@ TH="$SDCV -n -u 'Moby Thesaurus II'"
 OXFORD="$SDCV -c -n -u 'Concise Oxford English Dictionary (En-En)' -u 'Concise Oxford Thesaurus 2nd Ed. (Eng-Eng)'"
 DICT="$SDCV -c -n -u 'dictd_www.dict.org_gcide'"
 
+cols() { sed 's/^/ /' | columns; }  # min double space between columns
+
 th() {
 	if [ "$1" = '-' ] ;then
 		SPACES=true
@@ -37,13 +39,13 @@ th() {
 	done
 
 	if [ "$MAXLEN" ] ;then
-		echo "$output" | grep -v "$MAXLEN" | columns  # word length cutoff
+		echo "$output" | grep -v "$MAXLEN" | cols  # word length cutoff
 	elif [ "$LENGTH" ] ;then
-		echo "$output" | grep "$LENGTH" | columns     # exact word length match
+		echo "$output" | grep "$LENGTH" | cols     # exact word length match
 	elif [ "$SPACES" ] ;then
-		echo "$output" | columns
+		echo "$output" | cols
 	else
-		echo "$output" | grep -v " " | columns        # words only (no phrases)
+		echo "$output" | grep -v " " | cols        # words only (no phrases)
 	fi
 }
 
