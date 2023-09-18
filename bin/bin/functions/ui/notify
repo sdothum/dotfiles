@@ -24,8 +24,8 @@ while : ;do
 		time=* ) expire="--expire-time=$(( ${1#time=} * 1000 ))" ;;
 		cons*  ) console=true ;;
 		X      ) X=true ;;
-		low   |\
-		norm* |\
+		low    |\
+		norm*  |\
 		crit*  ) urgency="-u $1" ;;
 		blac*  ) urgency="-h string:bgcolor:#000000" ;;
 		[0-9]* ) echo "$1" | grep -q '[^0-9]' && break || expire="--expire-time=$(( $1 * 1000 ))" ;;

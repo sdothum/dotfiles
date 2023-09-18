@@ -11,7 +11,7 @@
 
 while : ;do
 	case $1 in
-		--onlyvisible|\
+		--onlyvisible |\
 		--sync        ) options="$options $1" ;;
 		*             ) break ;;
 	esac

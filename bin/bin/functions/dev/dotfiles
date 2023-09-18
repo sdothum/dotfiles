@@ -119,7 +119,7 @@ case $1 in
 		shift; [ "$1" = '-f' ] && { force=-f; shift; }
 		while [ "$1" ] ;do add "$1"; shift ;done ;;  # handle filename spaces
 	
-	amend  |\
+	amend   |\
 	comment )
 		shift; DESC=$@
 		[ "$DESC" ] && git commit --amend --no-edit --message="$DESC" || git commit --amend ;;
@@ -134,7 +134,7 @@ case $1 in
 	list    ) git log --pretty=format:"%h - %an, %ar : %s" ;;
 	log     ) git log | less ;;
 	
-	redo   |\
+	redo    |\
 	undo    )
 		git reset --soft HEAD~
 		dotfiles ;;

@@ -34,9 +34,9 @@ if ! [ -e $CATLG ] && [ -d "$1" ] ;then
 			unset options
 		else
 			case $1 in
-				-maxdepth |\
-				-perm     |\
-				-regex    |\
+				-maxdepth  |\
+				-perm      |\
+				-regex     |\
 				-regextype ) options="$options $1 $2"; shift ;;
 				*          ) options="$options $1" ;;
 			esac

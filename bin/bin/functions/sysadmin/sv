@@ -54,13 +54,13 @@ runit() {
 	# configure runit daemon
 	case $1 in
 		disable ) sudo rm -fv /var/service/$service ;;
-		stop   |\
+		stop    |\
 		down    ) enabled && sudo sv down $service; status ;;
 		enable  ) sudo ln -sfv /etc/sv/$service /var/service/; sudo rm -f /etc/sv/$service/down; status ;;
 		mask    ) enabled && sudo touch /etc/sv/$service/down; status ;;  # down at boot
 		restart ) enabled && sudo sv restart $service || service enable $service; status ;;
 		status  ) status ;;
-		start  |\
+		start   |\
 		up      ) enabled && sudo sv up $service; status ;;
 		*       ) enabled && status || usage ;;
 	esac
@@ -79,10 +79,10 @@ s6() {
 		enable  ) sv enable -S $2 ;;
 		info    ) ;;
 		restart ) sv stop $2; sv start $2 ;;
-		up     |\
+		up      |\
 		start   ) sv start $2 ;;
 		status  ) ;;
-		down   |\
+		down    |\
 		stop    ) sv stop $2 ;;
 		toggle  ) sv info -S $2 | grep -v 'Enabled, up' && sv stop $2 || sv start $2 ;;
 		*       ) [ $# -eq 1 ] || usage ;;
@@ -107,10 +107,10 @@ systemd() {
 		mask    ) [ $force ] || { ifno "mask $2" && exit || true; } && sv mask $2; exit ;;
 		reload  ) sv daemon-reload; exit ;;
 		restart ) sv restart $2 ;;
-		up     |\
+		up      |\
 		start   ) sv start $2 ;;
 		status  ) ;;
-		down   |\
+		down    |\
 		stop    ) sv stop $2 ;;
 		toggle  ) sv status $2 >/dev/null 2>&1 && sv stop $2 || sv start $2 2>/dev/null ;;
 		unmask  ) sv unmask $2; exit ;;

@@ -20,8 +20,8 @@ case $1 in
 	''       ) usage ;;
 
 	# install package version
-	edge    |\
-	testing |\
+	edge     |\
+	testing  |\
 	v[3-9]*  )
 		[ $2 ] || usage
 		case $1 in
