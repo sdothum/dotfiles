@@ -15,14 +15,14 @@ HIDDEN='□'
 
 action() {
 	case $1 in
-		raise)
+		raise )
 			mode='Raise '
 			tag=$(herbstclient attr monitors.focus.tag)
 			title=" to $(query tname $tag)" ;;
 	
-		focus) mode='Focus ' ;;
-		close) mode='Close ' ;;
-		*    ) return 1 ;;
+		focus ) mode='Focus ' ;;
+		close ) mode='Close ' ;;
+		*     ) return 1 ;;
 	esac
 }
 
@@ -61,16 +61,16 @@ if window=$(echo $windows | sort | cut -d$DLM -f2 | column -s\^ -t \
 	CLIENT=$(echo $window | cut -d$DLM -f3 | cut -d. -f2)
 
 	case $mode in
-		Close*)
+		Close* )
 			herbstclient close "$CLIENT"
 			# desktop cleanup loop
 			exec focus hlwm close ;;
 	
-		Raise*)
+		Raise* )
 			focus frame
 			herbstclient bring "$CLIENT" ;;
 	
-		*     )
+		*      )
 			swap_monitors=$(herbstclient get swap_monitors_to_get_tag)
 			lock set swap_monitors_to_get_tag 0
 			if echo $window | grep -q " \^$VISIBLE [0-9]" ;then

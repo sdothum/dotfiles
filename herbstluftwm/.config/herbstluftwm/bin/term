@@ -23,13 +23,13 @@ unset name  # for inadvertant env var conflict usage in calling scripts
 
 [ -e /usr/bin/alacritty ] && TERM=alacritty || TERM=urxvt
 case $TERM in
-	alacritty)
+	alacritty )
 		TITLE=--title
 		NAME=--class
 		blackboard=blackboard
 		XY='window.dimensions.columns=120 window.dimensions.rows=30' ;;
 	
-	urxvt    )
+	urxvt     )
 		TITLE=-title
 		NAME=-name
 		blackboard="-bg '$blackboard' -fg '$blackboard' -cr '$blackboard'"
@@ -49,25 +49,25 @@ border() { echo $(( $(query display height) * 2 / 15 )); }
 
 while [ "$1" ] ;do
 	case $1 in
-		BLACKBOARD) theme=blackboard ;;
-		FLOAT     ) name="$NAME float"; geometry=$XY ;;
-		FORTUNE   ) touch $FORTUNE:term ;;
-		GRID      ) name="$NAME grid" ;;
-		HORIZONTAL) name="$NAME horizontal" ;;
-		MAX       ) name="$NAME max" ;;
-		PAPER     ) theme=paper ;;
-		STACK     ) stack=true ;;
-		VERTICAL  ) name="$NAME vertical" ;;
-		VISIBLE   ) visible=true ;;
-		WAIT      ) wait=true ;;
+		BLACKBOARD ) theme=blackboard ;;
+		FLOAT      ) name="$NAME float"; geometry=$XY ;;
+		FORTUNE    ) touch $FORTUNE:term ;;
+		GRID       ) name="$NAME grid" ;;
+		HORIZONTAL ) name="$NAME horizontal" ;;
+		MAX        ) name="$NAME max" ;;
+		PAPER      ) theme=paper ;;
+		STACK      ) stack=true ;;
+		VERTICAL   ) name="$NAME vertical" ;;
+		VISIBLE    ) visible=true ;;
+		WAIT       ) wait=true ;;
 	
-		SHELL     )
+		SHELL      )
 			shift
 			process=$@
 			[ "$1" ] && cmd="-e $SHELL -c '$@'"
 			break ;;
 
-		*         )
+		*          )
 			process="$@"
 			cmd="-e $@"
 			break ;;

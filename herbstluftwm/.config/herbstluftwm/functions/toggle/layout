@@ -10,11 +10,11 @@
 usage() { usage: "$(basename $0) . layout horizontal | vertical | grid | max"; exit 1; }
 
 case $1 in
-	horizontal) ;;
-	vertical  ) ;;
-	grid      ) ;;
-	max       ) ;;
-	*         ) usage ;;
+	horizontal ) ;;
+	vertical   ) ;;
+	grid       ) ;;
+	max        ) ;;
+	*          ) usage ;;
 esac
 
 # flat ui panel refresh (border width 0 suppresses pulsing borders)

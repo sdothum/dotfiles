@@ -41,9 +41,9 @@ cardinal=0  # directions
 OCCUPIED='■'
 FREE='□'
 case $(query display width) in
-	3440) TAG_PAD='      '; STATPAD='   ' ;;  # tag bar separator (visual spacing)
-	1920) TAG_PAD='     ' ; STATPAD='  '  ;;
-	*   ) TAG_PAD='    '  ; STATPAD='  '  ;;
+	3440 ) TAG_PAD='      '; STATPAD='   ' ;;  # tag bar separator (visual spacing)
+	1920 ) TAG_PAD='     ' ; STATPAD='  '  ;;
+	*    ) TAG_PAD='    '  ; STATPAD='  '  ;;
 esac
 [ $(query display width) -lt 1920 ] && scaledown=true
 [ $scaledown ] && { LSEP=${LSEP# }; LSEP=${LSEP% }; RSEP=${RSEP# }; RSEP=${RSEP% }; }
@@ -223,31 +223,31 @@ bar() {
 	tic=${line#*|}
 	tic=${tic%|*}
 	case $tic in
-		00      ) tic=' ' ;;
-		0[2468] ) tic="%{F$DEFAULT_FG}▁%{F-}" ;;
-		0[13579]) tic="%{F$DEFAULT_FG}▂%{F-}" ;;
-		10      ) tic="%{F$DEFAULT_FG}▁%{F-}" ;;
-		1[2468] ) tic="%{F$DEFAULT_FG}▂%{F-}" ;;
-		1[13579]) tic="%{F$DEFAULT_FG}▃%{F-}" ;;
-		20      ) tic="%{F$DEFAULT_FG}▂%{F-}" ;;
-		2[2468] ) tic="%{F$DEFAULT_FG}▃%{F-}" ;;
-		2[13579]) tic="%{F$DEFAULT_FG}▄%{F-}" ;;
-		30      ) tic="%{F$DEFAULT_FG}▃%{F-}" ;;
-		3[2468] ) tic="%{F$DEFAULT_FG}▄%{F-}" ;;
-		3[13579]) tic="%{F$DEFAULT_FG}▅%{F-}" ;;
-		40      ) tic="%{F$DEFAULT_FG}▄%{F-}" ;;
-		4[2468] ) tic="%{F$DEFAULT_FG}▅%{F-}" ;;
-		4[13579]) tic="%{F$DEFAULT_FG}▆%{F-}" ;;
-		50      ) tic="%{F$DEFAULT_FG}│%{F-}" ;;
-		51      ) tic="%{F$DEFAULT_FG}┃%{F-}" ;;
-		52      ) tic="%{F$DEFAULT_FG}█%{F-}" ;;
-		53      ) tic="%{F$DEFAULT_FG}▇%{F-}" ;;
-		54      ) tic="%{F$DEFAULT_FG}▆%{F-}" ;;
-		55      ) tic="%{F$DEFAULT_FG}▅%{F-}" ;;
-		56      ) tic="%{F$DEFAULT_FG}▄%{F-}" ;;
-		57      ) tic="%{F$DEFAULT_FG}▃%{F-}" ;;
-		58      ) tic="%{F$DEFAULT_FG}▂%{F-}" ;;
-		59      ) tic="%{F$DEFAULT_FG}▁%{F-}" ;;
+		00       ) tic=' ' ;;
+		0[2468]  ) tic="%{F$DEFAULT_FG}▁%{F-}" ;;
+		0[13579] ) tic="%{F$DEFAULT_FG}▂%{F-}" ;;
+		10       ) tic="%{F$DEFAULT_FG}▁%{F-}" ;;
+		1[2468]  ) tic="%{F$DEFAULT_FG}▂%{F-}" ;;
+		1[13579] ) tic="%{F$DEFAULT_FG}▃%{F-}" ;;
+		20       ) tic="%{F$DEFAULT_FG}▂%{F-}" ;;
+		2[2468]  ) tic="%{F$DEFAULT_FG}▃%{F-}" ;;
+		2[13579] ) tic="%{F$DEFAULT_FG}▄%{F-}" ;;
+		30       ) tic="%{F$DEFAULT_FG}▃%{F-}" ;;
+		3[2468]  ) tic="%{F$DEFAULT_FG}▄%{F-}" ;;
+		3[13579] ) tic="%{F$DEFAULT_FG}▅%{F-}" ;;
+		40       ) tic="%{F$DEFAULT_FG}▄%{F-}" ;;
+		4[2468]  ) tic="%{F$DEFAULT_FG}▅%{F-}" ;;
+		4[13579] ) tic="%{F$DEFAULT_FG}▆%{F-}" ;;
+		50       ) tic="%{F$DEFAULT_FG}│%{F-}" ;;
+		51       ) tic="%{F$DEFAULT_FG}┃%{F-}" ;;
+		52       ) tic="%{F$DEFAULT_FG}█%{F-}" ;;
+		53       ) tic="%{F$DEFAULT_FG}▇%{F-}" ;;
+		54       ) tic="%{F$DEFAULT_FG}▆%{F-}" ;;
+		55       ) tic="%{F$DEFAULT_FG}▅%{F-}" ;;
+		56       ) tic="%{F$DEFAULT_FG}▄%{F-}" ;;
+		57       ) tic="%{F$DEFAULT_FG}▃%{F-}" ;;
+		58       ) tic="%{F$DEFAULT_FG}▂%{F-}" ;;
+		59       ) tic="%{F$DEFAULT_FG}▁%{F-}" ;;
 	esac
 }
 
@@ -308,18 +308,18 @@ currently() {
 	unset clock
 	if [ $TIC ] ;then
 		case $TIC in
-			b* ) bar ;;
-			c* ) circle ;;
-			d* ) dot ;;
-			sq*) square ;;
-			s* ) seconds ;;
-			t* ) tape ;;
+			b*  ) bar ;;
+			c*  ) circle ;;
+			d*  ) dot ;;
+			sq* ) square ;;
+			s*  ) seconds ;;
+			t*  ) tape ;;
 		esac
 		ticker="%{F$DEFAULT_FG}$tic%{F-}"
 		case $TIC in
-			se*) clock="$ticker" ;;
-			t* ) clock="$ticker" ;;
-			*  ) clock="  $ticker" ;;
+			se* ) clock="$ticker" ;;
+			t*  ) clock="$ticker" ;;
+			*   ) clock="  $ticker" ;;
 		esac
 	fi
 
@@ -327,8 +327,8 @@ currently() {
 	if [ -e $WEATHER ] ;then
 		minute=${line#*:?}    # hh:mm:ss.* -> m:ss.*
 		case ${minute%:*} in  #            -> m
-			0) [ $update_weather ] && weather ;;
-			*) update_weather=true ;;
+			0 ) [ $update_weather ] && weather ;;
+			* ) update_weather=true ;;
 		esac
 	fi
 	[ -s /tmp/${WEATHER##*/} ] && [ "$(cat /tmp/${WEATHER##*/})" != '' ] && current_weather=$(cat /tmp/${WEATHER##*/})  # prevent blanking during update, see weather()
@@ -348,13 +348,13 @@ panel() {
 	desktops  # initialize
 	while read -r line ;do
 		case $line in
-			S*        ) currently                     ;;  # clock based info
-			X*        ) active_window; desktops       ;;
-			C*        ) [ "${line#?}" = '  0%' ] || cpu_usage=${line#?}; cpu_stat ;;  # ignore 0%
-			T*        ) cpu_temp=${line#?};  cpu_stat ;;
-			M*        ) mem_usage=${line#?}; cpu_stat ;;
-			!*        ) echo "$cpu_usage" >/tmp/${STAT##*/}:cpu; echo "$cpu_temp" >/tmp/${STAT##*/}:temp; echo "$mem_usage" >/tmp/${STAT##*/}:mem ;;  # save stats for draw root redraw
-			*_changed*) active_window; desktops ;;
+			S*         ) currently                     ;;  # clock based info
+			X*         ) active_window; desktops       ;;
+			C*         ) [ "${line#?}" = '  0%' ] || cpu_usage=${line#?}; cpu_stat ;;  # ignore 0%
+			T*         ) cpu_temp=${line#?};  cpu_stat ;;
+			M*         ) mem_usage=${line#?}; cpu_stat ;;
+			!*         ) echo "$cpu_usage" >/tmp/${STAT##*/}:cpu; echo "$cpu_temp" >/tmp/${STAT##*/}:temp; echo "$mem_usage" >/tmp/${STAT##*/}:mem ;;  # save stats for draw root redraw
+			*_changed* ) active_window; desktops ;;
 		esac
 		
 		[ $MUSL ] && { line=$(xtitle -f 'X%s'); active_window; desktops; }  # see below
@@ -380,9 +380,9 @@ echo $PANEL_FIFO:$fifo >$PANEL_FIFO
 # note physical linebreaks for each format specification (to accomodate slow processors, notably arm)
 # NOTE: lemonbar %{F..} changed to #{F..} for alpine "clock" (fails on % char, see function currently)
 case $TIC in
-	se*) clock -i 1 -sf "S^${RSEP}#{F$ACTIVE_FG}| %-I:%M %S%p|#{F-}${RSEP}%a %-d %b '%y" >$PANEL_FIFO:$fifo & ;;
-	t* ) clock -i 1 -sf "S^${RSEP}#{F$ACTIVE_FG}| %-I:%M:%S%p|#{F-}${RSEP}%a %-d %b '%y" >$PANEL_FIFO:$fifo & ;;
-	*  ) clock -i 1 -sf "S^${RSEP}#{F$ACTIVE_FG}%-I:%M#{F-} %p|%S|${RSEP}%a %-d %b '%y"  >$PANEL_FIFO:$fifo & ;;
+	se* ) clock -i 1 -sf "S^${RSEP}#{F$ACTIVE_FG}| %-I:%M %S%p|#{F-}${RSEP}%a %-d %b '%y" >$PANEL_FIFO:$fifo & ;;
+	t*  ) clock -i 1 -sf "S^${RSEP}#{F$ACTIVE_FG}| %-I:%M:%S%p|#{F-}${RSEP}%a %-d %b '%y" >$PANEL_FIFO:$fifo & ;;
+	*   ) clock -i 1 -sf "S^${RSEP}#{F$ACTIVE_FG}%-I:%M#{F-} %p|%S|${RSEP}%a %-d %b '%y"  >$PANEL_FIFO:$fifo & ;;
 esac
 
 # event driven panel update
