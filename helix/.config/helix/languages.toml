@@ -27,3 +27,12 @@ indent                       = { tab-width = 3, unit = "   " }
 scope                        = "source.md"
 text-width                   = 80
 roots                        = []
+
+[[language]]
+name                         = "ruby"
+file-types                   = ["rb" ]
+comment-token                = "#"
+indent                       = { tab-width = 3, unit = "\t" }
+scope                        = "source.rb"
+text-width                   = 80
+roots                        = []
