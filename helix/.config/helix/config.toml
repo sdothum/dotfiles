@@ -12,7 +12,7 @@ completion-replace          = false
 completion-trigger-len      = 1
 cursorcolumn                = false
 cursorline                  = false
-gutters                     = ["spacer", "spacer", "spacer", "spacer", "spacer", "spacer", "spacer", "diagnostics", "spacer", "spacer", "line-numbers", "spacer", "spacer", "diff", "spacer", "spacer", "spacer", "spacer", "spacer", "spacer"]
+gutters                     = ["spacer", "spacer", "spacer", "spacer", "spacer", "diagnostics", "spacer", "spacer", "line-numbers", "spacer", "spacer", "diff", "spacer", "spacer", "spacer"]
 idle-timeout                = 400
 line-number                 = "relative"
 middle-click-paste          = true
@@ -70,10 +70,10 @@ tab                         = "none"
 newline                     = "none"
 
 [editor.whitespace.characters]
-space                       = "·"
+space                       = " "
 nbsp                        = "⍽"
 tab                         = "→"
-newline                     = "⏎"
+newline                     = "↩"
 tabpad                      = "·"
 
 [editor.indent-guides]
