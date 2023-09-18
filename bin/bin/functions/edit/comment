@@ -6,8 +6,8 @@
 
 # ............................................................ helix pipe ations
 
-usage() { echo "<line> | $(basename $0) l'eader | t'railer | u'nderline <char>
->   where, first word of line is treated as comment marker" | usage:pipe 
+usage() { echo "<selection> | $(basename $0) l'eader | t'railer | u'nderline <char>
+>   where, first word of line is treated as comment symbol" | usage:pipe 
 	exit 1
 }
 
@@ -24,7 +24,7 @@ fill() { for i in $(seq $1) ;do echo -n "$2" ;done }
 tab="$(fill $tabwidth " ")"
 
 parse() {
-	[ $(echo -n "$line" | wc -w) -gt 1 ] || return 1  # empty or comment marker only corner case
+	[ $(echo -n "$line" | wc -w) -gt 1 ] || return 1  # empty or comment symbol only corner case
 	leader=$(echo "$line" | sed -r "s/^([ \t]*).*/\1/")
 	spaces=$(echo "$leader" | sed "s/\t/$tab/g")
 	comment=$(echo "$line" | sed -r "s/^[ \t]*([^ ]*).*/\1/")
