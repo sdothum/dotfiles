@@ -65,8 +65,8 @@ if [ $(basename $0) = dmenu ] ;then
 			econvert|\
 			media   |\
 			scripts |\
-			projects) ;;
-			*       ) pstat + "dmenu $msg" && { notify 3 critical "> dmenu $msg" 'Already running..'; exit 1; } ;;
+			projects ) ;;
+			*        ) pstat + "dmenu $msg" && { notify 3 critical "> dmenu $msg" 'Already running..'; exit 1; } ;;
 		esac
 		shift
 		. $DMENU/$msg $@

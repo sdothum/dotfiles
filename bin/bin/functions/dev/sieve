@@ -21,12 +21,12 @@ lines=4  # nuxber of lines to print after match
 
 while [ "$1" ] ;do
 	case $1 in
-		help) usage ;;
-		case) type=$1; begin='case .* in' ;;
-		do  ) type=$1; begin='(for|while) .*; *do' ;;
-		if  ) type=$1; begin='if .*; *then' ;;
+		help ) usage ;;
+		case ) type=$1; begin='case .* in' ;;
+		do   ) type=$1; begin='(for|while) .*; *do' ;;
+		if   ) type=$1; begin='if .*; *then' ;;
 
-		*   )
+		*    )
 			[ -e $1 ] && { file=$1; break; }
 			[ "$begin" ] && { type=blk; end="$1"; } || { type=stmt; begin="$1"; } ;;
 	esac
@@ -35,11 +35,11 @@ done
 
 filter() {
 	case $type in
-		case) sed -nr '/\bcase\b .* in/,/\besac\b/p' ;;
-		do  ) sed -nr '/(\bfor\b|\bwhile\b) .*; *do/,/\bdone\b/p' ;;
-		if  ) sed -nr '/\bif\b .*; *then/,/\bfi\b/p' ;;
-		blk ) sed -nr "/$begin/,/$end/p" ;;
-		stmt) grep -A$lines -E "$begin" ;;
+		case ) sed -nr '/\bcase\b .* in/,/\besac\b/p' ;;
+		do   ) sed -nr '/(\bfor\b|\bwhile\b) .*; *do/,/\bdone\b/p' ;;
+		if   ) sed -nr '/\bif\b .*; *then/,/\bfi\b/p' ;;
+		blk  ) sed -nr "/$begin/,/$end/p" ;;
+		stmt ) grep -A$lines -E "$begin" ;;
 	esac
 }
 

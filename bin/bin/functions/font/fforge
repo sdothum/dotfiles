@@ -380,8 +380,8 @@ $(reglarweight 0u0077)
 		for i in *${regular}*\#1.ttf ;do
 			ditto tweak_MWw $i
 			case $i in
-				*italic*) file=*-italic.ttf ;;
-				*       ) file=*regular.ttf ;;
+				*italic* ) file=*-italic.ttf ;;
+				*        ) file=*regular.ttf ;;
 			esac
 			fontforge --script /tmp/fontforge:weight.script $i $file
 		done
@@ -461,23 +461,23 @@ Generate(\$1);
 # main, see iosevka
 fforge=$1
 case $1 in
-	baseline     ) shape=$2; shift ;;
-	I_descending ) shape=$2; shift ;;
-	T_descending ) shape=$2; shift ;;
-	t_descending ) shape=$2; shift ;;
-	Y_descending ) shape=$2; shift ;;
-	FP_descending) shape=$2; shift; ;;
-	q_hook       ) ;;
-	Q_hook       ) ;;
-	Q_horizontal ) shape=$2; shift ;;
-	Q_custom     ) shape=$2; shift ;;
-	ligature     ) [ $4 ] && { width=$2; shift 2; } || { shape=$2; shift; } ;;               # see iosevka for tricky bits
-	punctuation  ) emdash=$2; shape=$3; shift 2 ;;
-	space        ) [ $2 ] && { space=$2; shift; } || space=2 ;;
-	*weight      ) regular=${1%weight}; fforge=weight; [ "$2" = 'book+regular' ] && { adjust=true; shift; } ;;
-	copy         ) [ $3 ] && { family=$2; alias=$3; shift 2; copy; exit; }      || usage ;;  # pwd commandline only!
-	map          ) [ $4 ] && { family=$2; from=$3; to=$4; shift 3; map; exit; } || usage ;;  # pwd commandline only!
-	*            ) usage ;;
+	baseline      ) shape=$2; shift ;;
+	I_descending  ) shape=$2; shift ;;
+	T_descending  ) shape=$2; shift ;;
+	t_descending  ) shape=$2; shift ;;
+	Y_descending  ) shape=$2; shift ;;
+	FP_descending ) shape=$2; shift; ;;
+	q_hook        ) ;;
+	Q_hook        ) ;;
+	Q_horizontal  ) shape=$2; shift ;;
+	Q_custom      ) shape=$2; shift ;;
+	ligature      ) [ $4 ] && { width=$2; shift 2; } || { shape=$2; shift; } ;;               # see iosevka for tricky bits
+	punctuation   ) emdash=$2; shape=$3; shift 2 ;;
+	space         ) [ $2 ] && { space=$2; shift; } || space=2 ;;
+	*weight       ) regular=${1%weight}; fforge=weight; [ "$2" = 'book+regular' ] && { adjust=true; shift; } ;;
+	copy          ) [ $3 ] && { family=$2; alias=$3; shift 2; copy; exit; }      || usage ;;  # pwd commandline only!
+	map           ) [ $4 ] && { family=$2; from=$3; to=$4; shift 3; map; exit; } || usage ;;  # pwd commandline only!
+	*             ) usage ;;
 esac
 shift
 [ $2 ] && usage

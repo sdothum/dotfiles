@@ -93,20 +93,20 @@ while : ;do
 	# only purges server files (arm redirected usb files remain untouched)
 	action=$(echo "${next}quit\nskip\nreplay\ndelete\nsonarr" | rmenu "$title" -no-custom)
 	case $action in
-		delete)
+		delete )
 			[ "$(echo 'no\nyes' | rmenu "Delete $title" -no-custom)" = yes ] || break
 			mhistory play:delete "$title $1"
 			rm -rf "$1"
 			break ;;
 	
-		next  )
+		next   )
 			(sleep $delay; xdotool key Down; xdotool key Return;) &  # key presses for episodes menu
 			break ;;
 
-		quit  ) pkill -f 'dmenu'; blackboard; videomode off; exit ;;  # restore dynamic windows
-		replay) pulse; continue ;;
-		sonarr) sonarr $STREAM; break ;;
-		*     ) break ;;
+		quit   ) pkill -f 'dmenu'; blackboard; videomode off; exit ;;  # restore dynamic windows
+		replay ) pulse; continue ;;
+		sonarr ) sonarr $STREAM; break ;;
+		*      ) break ;;
 	esac
 done
 

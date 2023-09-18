@@ -28,13 +28,13 @@ while name=$(echo | mhistory folders | rmenu 'Find Folder') || exit ;do
 	mhistory folders "$dir"
 	while action=$(echo "term\n$(apps \"$filemanagers\")" | rmenu "$dir" -no-custom) || exit ;do
 		case $action in
-			term     ) cd $dir; term "$dir" ;;
+			term      ) cd $dir; term "$dir" ;;
 			nnn      |\
 			ncdu     |\
-			ranger   ) term "$dir" $action "$dir" ;;
+			ranger    ) term "$dir" $action "$dir" ;;
 			rox      |\
 			thunar   |\
-			filelight) focus $action "$dir" ;;
+			filelight ) focus $action "$dir" ;;
 		esac
 		exit
 	done

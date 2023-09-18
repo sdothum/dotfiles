@@ -52,8 +52,8 @@ mtp mount && NDIR=$(mtp)
 [ "$1" != TMUX ] && trap 'mtp umount' EXIT  # must manually eject if mounted during toggle tmux session, see herbstluftwm appbinds
 
 case $1 in
-	TMUX) tmux_session 'nnn' $NNN $PREVIEW $TDIR 2>/tmp/nnn.log ;;
-	*   ) $NNN "${NDIR:-$@}" $PREVIEW            2>/tmp/nnn.log ;;
+	TMUX ) tmux_session 'nnn' $NNN $PREVIEW $TDIR 2>/tmp/nnn.log ;;
+	*    ) $NNN "${NDIR:-$@}" $PREVIEW            2>/tmp/nnn.log ;;
 esac
 
 # vim: set ft=sh: #

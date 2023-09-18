@@ -111,38 +111,38 @@ status()   { underline; dotfiles dry-run; }
 # $@ substitution within complex expressions is more predictably handled by var substitution
 unset pending
 case $1 in
-	help   ) usage ;;
-	''     ) dotfiles dry-run; grep -q "$UPTODATE" $MESSAGES || { ifyes "update repo" && repo; status; } ;;
-	bulk   ) NOPROMPT=true; DESC="${2:-bulk commit}"; repo; [ $COMMIT ] && status; ;;
+	help    ) usage ;;
+	''      ) dotfiles dry-run; grep -q "$UPTODATE" $MESSAGES || { ifyes "update repo" && repo; status; } ;;
+	bulk    ) NOPROMPT=true; DESC="${2:-bulk commit}"; repo; [ $COMMIT ] && status; ;;
 
-	add    )
+	add     )
 		shift; [ "$1" = '-f' ] && { force=-f; shift; }
 		while [ "$1" ] ;do add "$1"; shift ;done ;;  # handle filename spaces
 	
 	amend  |\
-	comment)
+	comment )
 		shift; DESC=$@
 		[ "$DESC" ] && git commit --amend --no-edit --message="$DESC" || git commit --amend ;;
 	
-	dry*   )
+	dry*    )
 		git commit --dry-run >$MESSAGES
 		cat $MESSAGES | print ;;
 
-	folder*) vim -g $DOTFILES .gitignore $(messages) ;;
-	ignore ) vim -g .gitignore $DOTFILES $(messages) ;;
-	init   ) DESC="${2:-fresh commit}"; init ;;
-	list   ) git log --pretty=format:"%h - %an, %ar : %s" ;;
-	log    ) git log | less ;;
+	folder* ) vim -g $DOTFILES .gitignore $(messages) ;;
+	ignore  ) vim -g .gitignore $DOTFILES $(messages) ;;
+	init    ) DESC="${2:-fresh commit}"; init ;;
+	list    ) git log --pretty=format:"%h - %an, %ar : %s" ;;
+	log     ) git log | less ;;
 	
 	redo   |\
-	undo   )
+	undo    )
 		git reset --soft HEAD~
 		dotfiles ;;
 	
-	reset  ) git reset ;;
-	rm     ) shift; rm $@ ;;
-	sync   ) sync ;;
-	*      ) add $@ ;;
+	reset   ) git reset ;;
+	rm      ) shift; rm $@ ;;
+	sync    ) sync ;;
+	*       ) add $@ ;;
 esac
 
 # vim: set ft=sh: #

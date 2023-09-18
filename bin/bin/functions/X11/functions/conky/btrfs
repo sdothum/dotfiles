@@ -17,9 +17,9 @@ percent() { echo "$1 .5 + 0 k 1 / p" | dc; }
 
 used=$(stat $1 'Used:')
 case $2 in
-	''     ) decimal $used ;;
+	''      ) decimal $used ;;
 	
-	percent)
+	percent )
 		free=$(stat $1 'Free (estimated):')
 		capacity=$(echo "$used $free + p" | dc)
 		percent $(echo "$used 100 * $capacity / p" | dc) ;;

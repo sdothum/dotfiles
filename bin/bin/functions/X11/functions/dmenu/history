@@ -12,7 +12,7 @@ filter='/accounts|acronym|color(codehex|combos|hexa)|dictionary|duckduckgo|ERROR
 # select source
 browser=$(dmenu urlsrc)
 case $browser in
-	chromium   ) 
+	chromium    ) 
 		history=$HOME/.config/chromium/Default/History
 		cp $history $history.copy
 		py-chrome-history.py $history.copy $history.html
@@ -28,23 +28,23 @@ case $browser in
 				-e 's/^[Rr][Ee]: //'               \
 			| rmenu 'History' -no-custom | sed -r 's/.*(http.*)/\1/') ;;
 	
-	luakit     )
+	luakit      )
 		sqldb=$HOME/.local/share/luakit/history.db
 		query="select datetime(last_visit,'unixepoch'), title, uri from history order by last_visit DESC;"
 		uri=$(echo "$query" | sqlite3 $sqldb | grep -E -v "$filter" | sed 's/[|]/  ::  /g' \
 			| rmenu 'History' -no-custom | sed -r 's/.*(http.*)/\1/') ;;
 	
-	qutebrowser)
+	qutebrowser )
 		history=$HOME/.local/share/qutebrowser/history
 		uri=$(tac $history | grep -E -v "$filter" | sed -r "s/[^ ]* ([^ ]*) (.*)/\2${LSPACE}${RSPACE}\1/g" \
 			| grep "$SEP" | rmenu 'History' -no-custom | sed -r 's/.*(http.*)/\1/') ;;
 	
-	vimb       )
+	vimb        )
 		history=$HOME/.config/vimb/history
 		uri=$(tac $history $history.vimb | grep -E -v "$filter" | sed -r "s/(.*)\t(.*)/\2${LSPACE}${RSPACE}\1/g" \
 			| grep "$SEP" | rmenu 'History' -no-custom | sed -r 's/.*(http.*)/\1/') ;;
 	
-	*          ) exit ;;
+	*           ) exit ;;
 esac
 
 [ "$uri" ] && exec dmenu browser "$uri"

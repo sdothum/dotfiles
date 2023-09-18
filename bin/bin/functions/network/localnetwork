@@ -9,7 +9,7 @@
 usage() { usage: "$(basename $0) on | off"; exit 1; }
 
 case $1 in
-	off)  # use wicd-menu to connect to public wifi
+	off )  # use wicd-menu to connect to public wifi
 		sudo systemctl disable connman
 		sudo systemctl enable dhcpcd
 		sudo systemctl enable dovecot
@@ -20,7 +20,7 @@ case $1 in
 		sudo systemctl enable tt-rss
 		sudo systemctl enable znc ;;
 	
-	on )  # use local network server services
+	on  )  # use local network server services
 		sudo systemctl enable connman
 		sudo systemctl disable dhcpcd
 		sudo systemctl disable dovecot
@@ -31,7 +31,7 @@ case $1 in
 		sudo systemctl disable tt-rss
 		sudo systemctl disable znc ;;
 	
-	*  ) usage ;;
+	*   ) usage ;;
 esac
 
 # vim: set ft=sh: #

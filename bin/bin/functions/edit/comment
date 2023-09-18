@@ -1,0 +1,67 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Edit
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................ helix pipe ations
+
+usage() { echo "<line> | $(basename $0) l'eader | t'railer | u'nderline <char>
+>   where, first word of line is treated as comment marker" | usage:pipe 
+	exit 1
+}
+
+# simplified commenting extensions using helix pipe
+
+width=${width:-80}
+tabwidth=${tabwidth:-3}
+
+[ $2 ] && fill="$2" || usage
+[ -t 0 ] && usage  # stdin input?
+
+fill() { for i in $(seq $1) ;do echo -n "$2" ;done }
+
+tab="$(fill $tabwidth " ")"
+
+parse() {
+	[ $(echo -n "$line" | wc -w) -gt 1 ] || return 1  # empty or comment marker only corner case
+	leader=$(echo "$line" | sed -r "s/^([ \t]*).*/\1/")
+	spaces=$(echo "$leader" | sed "s/\t/$tab/g")
+	comment=$(echo "$line" | sed -r "s/^[ \t]*([^ ]*).*/\1/")
+	if [ $1 != "u" ] ;then  # strip existing fill decoration
+		[ "$fill" = '.' ] && content=$(echo "$line" | sed -r "s/^[ \t]*[^ ]* (.*)/\1/; s/ *\.\.* *//g") \
+			|| content=$(echo "$line" | sed -r "s/^[ \t]*[^ ]* (.*)/\1/; s/ *$fill${fill}* *//g")
+	fi
+	x_spaces=$(echo -n "$spaces" | wc -c)
+	x_comment=$(echo -n "$comment" | wc -c)
+	[ $x_comment -gt 0 ] || return 1
+	x_content=$(echo -n "$content" | wc -c)
+	x_decoration=$(( $width - $x_spaces - $x_comment - $x_content - 2 ))
+	[ $x_decoration -gt 0 ] && decoration=$(fill $x_decoration "$fill") || return 1
+}
+
+leader() {
+	echo "$leader$comment $decoration $content"
+}
+
+trailer() {
+	echo "$leader$comment $content $decoration"
+}
+
+underline() {
+	echo "$line"
+	echo "$leader$comment $decoration$fill"  # extra fill for lack of parse content
+}
+
+while IFS= read -r line ;do
+	parse $1 || { echo "$line"; continue; }
+	case $1 in
+		l* ) leader    ;;
+		t* ) trailer   ;;
+		u* ) underline ;;
+		u* ) underline ;;
+		*  ) usage     ;;
+	esac
+done
+
+# vim: set ft=sh: #

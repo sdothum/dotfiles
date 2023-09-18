@@ -67,9 +67,9 @@ off() {
 }
 
 case $1 in
-	off) off ;;
-	on ) on ;;
-	*  ) usage ;;
+	off ) off ;;
+	on  ) on ;;
+	*   ) usage ;;
 esac
 
 sv show

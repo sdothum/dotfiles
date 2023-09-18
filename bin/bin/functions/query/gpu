@@ -16,7 +16,7 @@ vga() {
 }
 
 case $1 in
-	''      )
+	''       )
 		vga Intel
 		vga NVIDIA
 		vga ATI
@@ -25,13 +25,13 @@ case $1 in
 		# lspci fails on raspberry pi
 		[ $card ] || echo arm ;;
 	
-	display ) xrandr 2>/dev/null | grep '*' | awk '{ print $1 }' ;;
+	display  ) xrandr 2>/dev/null | grep '*' | awk '{ print $1 }' ;;
 	ati     |\
 	intel   |\
-	nvidia  ) vga $1 >/dev/null ;;
-	macbook ) vga 'GeForce 8600M GT' >/dev/null ;;
-	inspiron) vga 'GeForce GT 650M'  >/dev/null ;;
-	*       ) usage ;;
+	nvidia   ) vga $1 >/dev/null ;;
+	macbook  ) vga 'GeForce 8600M GT' >/dev/null ;;
+	inspiron ) vga 'GeForce GT 650M'  >/dev/null ;;
+	*        ) usage ;;
 esac
 
 # vim: set ft=sh: #

@@ -8,7 +8,7 @@
 
 # NOTE: new git versions may introduce new glyph style names !!
 #
-#       This script is compatible with Iosevka v26.x
+#       This script is compatible with Iosevka v27.x
 
 # eg. source code and desktop fonts..
 #     iosevka expanded I-serifless at-tall 
@@ -178,71 +178,71 @@ glyph() { eval $1; variant="$variant $1"; }
 variant() {
 	for o in $@ ;do  # "o"nly non-variant character ($i in use for variant :) ..since rectified with long variant names
 		case $o in
-			0-split      ) glyph zero=reverse-slashed-split ;;
-			4-open+      ) glyph four=semi-open-non-crossing ;;
-			4-open       ) glyph four=semi-open ;;
-			ampersand    ) glyph ampersand=closed ;;
-			asterisk-high) glyph asterisk=penta-high ;;  # webfont restoration
-			asterisk-low ) glyph asterisk=penta-low ;;   # paragraph separator (ebook) glyph
-			at           ) glyph at=fourfold ;;
-			at-tall      ) glyph at=fourfold-solid-inner-tall ;;
-			dollar       ) glyph dollar=open ;;
-			number_sign  ) glyph number_sign=slanted ;;
-			paren-flat   ) glyph paren=flat-arc ;;
-			percent      ) glyph percent=rings-continuous-slash ;;
-			question     ) glyph question=corner ;;
+			0-split       ) glyph zero=reverse-slashed-split ;;
+			4-open+       ) glyph four=semi-open-non-crossing ;;
+			4-open        ) glyph four=semi-open ;;
+			ampersand     ) glyph ampersand=closed ;;
+			asterisk-high ) glyph asterisk=penta-high ;;  # webfont restoration
+			asterisk-low  ) glyph asterisk=penta-low ;;   # paragraph separator (ebook) glyph
+			at            ) glyph at=fourfold ;;
+			at-tall       ) glyph at=fourfold-solid-inner-tall ;;
+			dollar        ) glyph dollar=open ;;
+			number_sign   ) glyph number_sign=slanted ;;
+			paren-flat    ) glyph paren=flat-arc ;;
+			percent       ) glyph percent=rings-continuous-slash ;;
+			question      ) glyph question=corner ;;
 
-			B-open       ) glyph capital_b=standard-interrupted-serifless ;;
-			D-serifless  ) glyph capital_d=standard-serifless ;;
-			G-corner     ) glyph capital_g=toothless-corner-serifless-hooked ;;
-			G-hookless   ) glyph capital_g=toothless-corner-serifless-hookless ;;
-			G-hookless+  ) glyph capital_g=toothed-serifless-hookless ;;
-			G-rounded    ) glyph capital_g=toothless-rounded-serifless-hooked ;;
-			G-toothed    ) glyph capital_g=toothed-serifless-hooked ;;
-			G-toothless  ) glyph capital_g=toothless-corner-serifless-hooked ;;
-			I-serifed    ) glyph capital_i=short-serifed ;;
-			I-serifless  ) glyph capital_i=serifless ;;
-			J-descending ) glyph capital_j=descending-serifless ;;
-			J-flat       ) glyph capital_j=flat-hook-serifless ;;
-			J-serifless  ) glyph capital_j=serifless ;;
-			P-open       ) glyph capital_p=open-serifless ;;
-			Q-bar        ) glyph capital_q=vertical-crossing ;;
-			Q-bend       ) glyph capital_q=detached-bend-tailed ;;
-			Q-crossing   ) glyph capital_q=crossing ;;
-			Q-detached   ) glyph capital_q=detached-tailed ;;
-			Q-horizontal ) glyph capital_q=horizontal-tailed ;;
-			Q-open       ) glyph capital_q=open-swash ;;
-			Q-straight   ) glyph capital_q=straight ;;
-			R-open       ) glyph capital_r=straight-open-serifless ;;
+			B-open        ) glyph capital_b=standard-interrupted-serifless ;;
+			D-serifless   ) glyph capital_d=standard-serifless ;;
+			G-corner      ) glyph capital_g=toothless-corner-serifless-hooked ;;
+			G-hookless    ) glyph capital_g=toothless-corner-serifless-hookless ;;
+			G-hookless+   ) glyph capital_g=toothed-serifless-hookless ;;
+			G-rounded     ) glyph capital_g=toothless-rounded-serifless-hooked ;;
+			G-toothed     ) glyph capital_g=toothed-serifless-hooked ;;
+			G-toothless   ) glyph capital_g=toothless-corner-serifless-hooked ;;
+			I-serifed     ) glyph capital_i=short-serifed ;;
+			I-serifless   ) glyph capital_i=serifless ;;
+			J-descending  ) glyph capital_j=descending-serifless ;;
+			J-flat        ) glyph capital_j=flat-hook-serifless ;;
+			J-serifless   ) glyph capital_j=serifless ;;
+			P-open        ) glyph capital_p=open-serifless ;;
+			Q-bar         ) glyph capital_q=vertical-crossing ;;
+			Q-bend        ) glyph capital_q=detached-bend-tailed ;;
+			Q-crossing    ) glyph capital_q=crossing ;;
+			Q-detached    ) glyph capital_q=detached-tailed ;;
+			Q-horizontal  ) glyph capital_q=horizontal-tailed ;;
+			Q-open        ) glyph capital_q=open-swash ;;
+			Q-straight    ) glyph capital_q=straight ;;
+			R-open        ) glyph capital_r=straight-open-serifless ;;
 
-			a-double     ) glyph a=double-storey-serifless ;;
-			a-single     ) glyph a=single-storey-serifless ;;
-			a-earless    ) glyph a=single-storey-earless-corner-serifless ;;
-			a-rounded    ) glyph a=single-storey-earless-rounded-serifless ;;
-			a-toothless  ) glyph a=double-storey-toothless-corner ;;
-			b-corner     ) glyph b=toothless-corner-serifless ;;
-			b-toothed    ) glyph b=toothed-serifless ;;
-			d-tailed     ) glyph d=tailed-serifless ;;
-			d-toothless  ) glyph d=toothless-corner-serifless ;;
-			f-extended   ) glyph f=flat-hook-extended-crossbar-at-x-height ;;
-			f-serifless  ) glyph f=flat-hook-serifless-crossbar-at-x-height ;;
-			g-double     ) glyph g=double-storey ;;
-			i-serifed    ) glyph i=serifed ;;
-			j-serifed    ) glyph j=flat-hook-serifed ;;
-			j-serifless  ) glyph j=serifless ;;
-			l-hooky      ) glyph l=hooky ;;
-			l-serifless  ) glyph l=serifless ;;
-			m-rounded    ) glyph m=earless-rounded-double-arch-serifless ;;
-			m-serifless  ) glyph m=serifless ;;
-			p-eared      ) glyph p=eared-serifless ;;
-			p-serifed    ) glyph p=motion-serifed ;;
-			q-tailed     ) glyph q=tailed-serifless ;;
-			t-asymmetric ) glyph t=flat-hook-asymmetric-short-neck2 ;;
-			t-cross      ) glyph t=cross-short-neck2 ;;
-			u-toothed    ) glyph u=toothed ;;
-			y-straight   ) glyph y=straight-serifless ;;
+			a-double      ) glyph a=double-storey-serifless ;;
+			a-single      ) glyph a=single-storey-serifless ;;
+			a-earless     ) glyph a=single-storey-earless-corner-serifless ;;
+			a-rounded     ) glyph a=single-storey-earless-rounded-serifless ;;
+			a-toothless   ) glyph a=double-storey-toothless-corner ;;
+			b-corner      ) glyph b=toothless-corner-serifless ;;
+			b-toothed     ) glyph b=toothed-serifless ;;
+			d-tailed      ) glyph d=tailed-serifless ;;
+			d-toothless   ) glyph d=toothless-corner-serifless ;;
+			f-extended    ) glyph f=flat-hook-extended-crossbar-at-x-height ;;
+			f-serifless   ) glyph f=flat-hook-serifless-crossbar-at-x-height ;;
+			g-double      ) glyph g=double-storey ;;
+			i-serifed     ) glyph i=serifed ;;
+			j-serifed     ) glyph j=flat-hook-serifed ;;
+			j-serifless   ) glyph j=serifless ;;
+			l-hooky       ) glyph l=hooky ;;
+			l-serifless   ) glyph l=serifless ;;
+			m-rounded     ) glyph m=earless-rounded-double-arch-serifless ;;
+			m-serifless   ) glyph m=serifless ;;
+			p-eared       ) glyph p=eared-serifless ;;
+			p-serifed     ) glyph p=motion-serifed ;;
+			q-tailed      ) glyph q=tailed-serifless ;;
+			t-asymmetric  ) glyph t=flat-hook-asymmetric-short-neck2 ;;
+			t-cross       ) glyph t=cross-short-neck2 ;;
+			u-toothed     ) glyph u=toothed ;;
+			y-straight    ) glyph y=straight-serifless ;;
 
-			*            ) variant="$variant $o" ;;
+			*             ) variant="$variant $o" ;;
 		esac
 	done
 }
@@ -302,119 +302,119 @@ ascender 0  # set default ascender (to 10.x)
 while [ $1 ] ;do
 	case "$1" in
 		# shapes
-		dyslexic     ) shape $expanded; sb 0.7150; leading 1.5000; space 2; emdash 2; width=135; ebook monolexic ;;
-		ebook        ) shape $extended; sb 0.7000; leading 1.4185; space 2; emdash 2; width=140; ebook monolegible ;;
-		expanded     ) shape $expanded; sb 0.8500 ;;                                                 # expanded width (for source code and proof)
-		extended     ) shape $extended; sb 0.7000 ;;                                                 # extended width (tighter than expanded)
-		heading      ) shape 650; sb 0.8000; leading 1.2500; weight 300 light; ebook monolegible ;;  # web heading
-		kindle       ) leading 1.5; shape $extended; sb 0.6150 ;;
-		kobo         ) leading 1; shape $extended; sb 0.6850 ;;
-		menu         ) leading 1.5000; sb 0.9000; build=-menu ;;                                     # rofi menu
-		normal       ) shape 500; sb 0.7000 ;;                                                       # normal width
-		proof        ) leading 2.0000; sb 0.8000; build=${build}-proof ;;                            # for pure writing :)
+		dyslexic      ) shape $expanded; sb 0.7150; leading 1.5000; space 2; emdash 2; width=135; ebook monolexic ;;
+		ebook         ) shape $extended; sb 0.7000; leading 1.4185; space 2; emdash 2; width=140; ebook monolegible ;;
+		expanded      ) shape $expanded; sb 0.8500 ;;                                                 # expanded width (for source code and proof)
+		extended      ) shape $extended; sb 0.7000 ;;                                                 # extended width (tighter than expanded)
+		heading       ) shape 650; sb 0.8000; leading 1.2500; weight 300 light; ebook monolegible ;;  # web heading
+		kindle        ) leading 1.5; shape $extended; sb 0.6150 ;;
+		kobo          ) leading 1; shape $extended; sb 0.6850 ;;
+		menu          ) leading 1.5000; sb 0.9000; build=-menu ;;                                     # rofi menu
+		normal        ) shape 500; sb 0.7000 ;;                                                       # normal width
+		proof         ) leading 2.0000; sb 0.8000; build=${build}-proof ;;                            # for pure writing :)
 
 		# language
-		cyrillic     ) cyrillic;     ditto char_set "$1" ;;
-		english      ) english_only; ditto char_set "$1" ;;
-		fluent       ) fluent; ditto char_set "$1" ;;
-		latin+greek  ) latin_greek;  ditto char_set "$1" ;;
-		ligature     ) ligature $2  || usage; shift ;;
+		cyrillic      ) cyrillic;     ditto char_set "$1" ;;
+		english       ) english_only; ditto char_set "$1" ;;
+		fluent        ) fluent; ditto char_set "$1" ;;
+		latin+greek   ) latin_greek;  ditto char_set "$1" ;;
+		ligature      ) ligature $2  || usage; shift ;;
 
 		# typefaces
-		*Monolexic   ) initial ${1%Monolexic} ;;
-		atkinson     ) grotesque; ebook hyperlegible; variant a-double b-toothed G-toothed J-serifless p-eared Q-crossing q-tailed u-toothed ampersand at number_sign percent ;;
-		elementary   ) variant I-serifless a-single ;;
-		geometric    ) geometric; cap extended; build=-jost ;;
-		grotesk      ) variant I-serifless f-extended ;;
-		grotesque    ) grotesque ;;
-		jost         ) geometric; cap extended; build=-jost; variant a-single J-serifless Q-crossing u-toothed ampersand at dollar number_sign percent question ;;
+		*Monolexic    ) initial ${1%Monolexic} ;;
+		atkinson      ) grotesque; ebook hyperlegible; variant a-double b-toothed G-toothed J-serifless p-eared Q-crossing q-tailed u-toothed ampersand at number_sign percent ;;
+		elementary    ) variant I-serifless a-single ;;
+		geometric     ) geometric; cap extended; build=-jost ;;
+		grotesk       ) variant I-serifless f-extended ;;
+		grotesque     ) grotesque ;;
+		jost          ) geometric; cap extended; build=-jost; variant a-single J-serifless Q-crossing u-toothed ampersand at dollar number_sign percent question ;;
 		# webfont    ) weight 500 medium; initial w; regular=medium ;;                 # heavier font for web usage
-		webfont      ) leading 1; initial w ;;
+		webfont       ) leading 1; initial w ;;
 
 		# styles
-		book+regular ) adjust="book+regular" ;;                                        # see fforge bookweight
-		descenders   ) variant 'FP=DESCENDING'; FP_descending=true; baseline=true ;;
-		double       ) unset mono ;;
-		emdash       ) emdash $2    || usage; shift ;;                                 # emdash width
-		family       ) family $2    || usage; shift ;;
-		open         ) variant B-open P-open R-open ;;
-		space        ) space $2     || usage; shift; [ $space = 1 ] && unset space ;;  # space width
+		book+regular  ) adjust="book+regular" ;;                                        # see fforge bookweight
+		descenders    ) variant 'FP=DESCENDING'; FP_descending=true; baseline=true ;;
+		double        ) unset mono ;;
+		emdash        ) emdash $2    || usage; shift ;;                                 # emdash width
+		family        ) family $2    || usage; shift ;;
+		open          ) variant B-open P-open R-open ;;
+		space         ) space $2     || usage; shift; [ $space = 1 ] && unset space ;;  # space width
 
 		# glyphs
-		D-serifless  ) variant $1 ;;
-		G-corner     ) variant $1 ;;
-		G-hookless   ) variant $1 ;;
-		G-hookless+  ) variant $1 ;;
-		G-rounded    ) variant $1 ;;
-		G-toothed    ) variant $1 ;;
-		G-toothless  ) variant $1 ;;
-		I-descending ) variant I-serifless 'DESCENDING'; I_descending=true; baseline=true ;;
-		I-serifed    ) variant $1 ;;
-		I-serifless  ) variant $1; initial ;;          # combined minimal stroke glyphs
-		J-descending ) variant $1 ;;
-		J-flat       ) variant $1 ;;
-		J-serifless  ) variant $1 ;;
-		Q-bar        ) variant $1 ;;
-		Q-bend       ) variant $1 ;;
-		Q-crossing   ) variant $1 ;;
-		Q-custom     ) variant 'Q=CUSTOM';      Q_custom=true ;;
-		Q-detached   ) variant $1 ;;
-		Q-hook       ) variant 'Q=HOOK-TAILED'; Q_hook=true ;;
-		Q-horizontal ) variant $1;              Q_horizontal=true ;;
-		Q-open       ) variant $1 ;;
-		Q-straight   ) variant $1 ;;
-		T-descending ) variant 'T=DESCENDING I=DESCENDING'; T_descending=true; I_descending=true; baseline=true ;;
-		Y-descending ) variant I-serifless 'DESCENDING T=DESCENDING Y=DESCENDING'; I_descending=true; T_descending=true; Y_descending=true; baseline=true ;;
+		D-serifless   ) variant $1 ;;
+		G-corner      ) variant $1 ;;
+		G-hookless    ) variant $1 ;;
+		G-hookless+   ) variant $1 ;;
+		G-rounded     ) variant $1 ;;
+		G-toothed     ) variant $1 ;;
+		G-toothless   ) variant $1 ;;
+		I-descending  ) variant I-serifless 'DESCENDING'; I_descending=true; baseline=true ;;
+		I-serifed     ) variant $1 ;;
+		I-serifless   ) variant $1; initial ;;          # combined minimal stroke glyphs
+		J-descending  ) variant $1 ;;
+		J-flat        ) variant $1 ;;
+		J-serifless   ) variant $1 ;;
+		Q-bar         ) variant $1 ;;
+		Q-bend        ) variant $1 ;;
+		Q-crossing    ) variant $1 ;;
+		Q-custom      ) variant 'Q=CUSTOM';      Q_custom=true ;;
+		Q-detached    ) variant $1 ;;
+		Q-hook        ) variant 'Q=HOOK-TAILED'; Q_hook=true ;;
+		Q-horizontal  ) variant $1;              Q_horizontal=true ;;
+		Q-open        ) variant $1 ;;
+		Q-straight    ) variant $1 ;;
+		T-descending  ) variant 'T=DESCENDING I=DESCENDING'; T_descending=true; I_descending=true; baseline=true ;;
+		Y-descending  ) variant I-serifless 'DESCENDING T=DESCENDING Y=DESCENDING'; I_descending=true; T_descending=true; Y_descending=true; baseline=true ;;
 
-		a-double     ) variant $1 ;;
-		a-earless    ) variant $1 ;;
-		a-rounded    ) variant $1 ;;
-		a-single     ) variant $1 ;;
-		a-toothless  ) variant $1 ;;
-		b-corner     ) variant $1 p-serifed ;;         # alternate b p dyslexic glyphs
-		d-tailed     ) variant $1 b-corner p-eared ;;  # alternate b d p dyslexic glyphs
-		d-toothless  ) variant $1 p-eared ;;
-		f-extended   ) variant $1 ;;                   # unolexic (homage to universal grotesk)
-		f-serifless  ) variant $1 ;;
-		g-double     ) variant $1 ;;
-		i-serifed    ) variant $1 ;;
-		j-serifed    ) variant $1 ;;
-		j-serifless  ) variant $1 ;;
-		l-hooky      ) variant $1 ;;
-		l-serifless  ) variant $1 ;;
-		m-rounded    ) variant $1 ;;
-		m-serifless  ) variant $1 ;;
-		p-eared      ) variant $1 d-toothless ;;
-		p-serifed    ) variant $1 sb 0.7650 ;;         # add air for serif corner
-		q-hook       ) variant 'q=HOOK-TAILED'; q_hook=true; baseline=true ;;
-		q-tailed     ) variant $1; unset q_hook ;;
-		t-asymmetric ) variant $1 ;;
-		t-cross      ) variant $1 ;;
-		t-descending ) variant t-cross 'DESCENDING'; t_descending=true; baseline=true ;;
-		u-toothed    ) variant $1 ;;
-		y-straight   ) variant $1 ;;
+		a-double      ) variant $1 ;;
+		a-earless     ) variant $1 ;;
+		a-rounded     ) variant $1 ;;
+		a-single      ) variant $1 ;;
+		a-toothless   ) variant $1 ;;
+		b-corner      ) variant $1 p-serifed ;;         # alternate b p dyslexic glyphs
+		d-tailed      ) variant $1 b-corner p-eared ;;  # alternate b d p dyslexic glyphs
+		d-toothless   ) variant $1 p-eared ;;
+		f-extended    ) variant $1 ;;                   # unolexic (homage to universal grotesk)
+		f-serifless   ) variant $1 ;;
+		g-double      ) variant $1 ;;
+		i-serifed     ) variant $1 ;;
+		j-serifed     ) variant $1 ;;
+		j-serifless   ) variant $1 ;;
+		l-hooky       ) variant $1 ;;
+		l-serifless   ) variant $1 ;;
+		m-rounded     ) variant $1 ;;
+		m-serifless   ) variant $1 ;;
+		p-eared       ) variant $1 d-toothless ;;
+		p-serifed     ) variant $1 sb 0.7650 ;;         # add air for serif corner
+		q-hook        ) variant 'q=HOOK-TAILED'; q_hook=true; baseline=true ;;
+		q-tailed      ) variant $1; unset q_hook ;;
+		t-asymmetric  ) variant $1 ;;
+		t-cross       ) variant $1 ;;
+		t-descending  ) variant t-cross 'DESCENDING'; t_descending=true; baseline=true ;;
+		u-toothed     ) variant $1 ;;
+		y-straight    ) variant $1 ;;
 
-		0-split      ) variant $1 ;;
-		4-open       ) variant $1 ;;
-		4-open+      ) variant $1 ;;
-		paren-flat   ) variant $1 ;;
-		asterisk-high) variant $1 ;;
-		at-tall      ) variant $1 ;;
+		0-split       ) variant $1 ;;
+		4-open        ) variant $1 ;;
+		4-open+       ) variant $1 ;;
+		paren-flat    ) variant $1 ;;
+		asterisk-high ) variant $1 ;;
+		at-tall       ) variant $1 ;;
 		
 		# geometry
-		ascender     ) ascender $2  || usage; shift ;;                                 # affects descender as well
-		cap          ) cap $2       || usage; shift ;;                                 # H height
-		leading      ) leading $2   || usage; shift ;;                                 # line spacing > 1.0
-		noround      ) unset sb ;;
-		quasi-ext*   ) spacing quasi-proportional-extension-only; unset width ;;
-		quasi-pro*   ) spacing quasi-proportional; sb 0.7500; leading 1.2500; space 2; ebook quasi$(echo $family | sed -r 's/.*(Hyper|Mono|Quasi)//'); variant I-serifed ;;
-		sb           ) sb $2        || usage; shift ;;                                 # side bearing (spacing)
-		shape        ) shape $2     || usage; shift ;;                                 # cell width
-		weight       ) weight $2 $3 || usage; shift 2 ;;                               # custom font weight
-		xheight      ) xheight $2   || usage; shift ;;                                 # height of x (experimental for larger fontsizes)
+		ascender      ) ascender $2  || usage; shift ;;                                 # affects descender as well
+		cap           ) cap $2       || usage; shift ;;                                 # H height
+		leading       ) leading $2   || usage; shift ;;                                 # line spacing > 1.0
+		noround       ) unset sb ;;
+		quasi-ext*    ) spacing quasi-proportional-extension-only; unset width ;;
+		quasi-pro*    ) spacing quasi-proportional; sb 0.7500; leading 1.2500; space 2; ebook quasi$(echo $family | sed -r 's/.*(Hyper|Mono|Quasi)//'); variant I-serifed ;;
+		sb            ) sb $2        || usage; shift ;;                                 # side bearing (spacing)
+		shape         ) shape $2     || usage; shift ;;                                 # cell width
+		weight        ) weight $2 $3 || usage; shift 2 ;;                               # custom font weight
+		xheight       ) xheight $2   || usage; shift ;;                                 # height of x (experimental for larger fontsizes)
 
-		help         ) usage ;;
-		*            ) usage ;;
+		help          ) usage ;;
+		*             ) usage ;;
 	esac
 	shift
 done

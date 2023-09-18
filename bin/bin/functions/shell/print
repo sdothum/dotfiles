@@ -9,11 +9,12 @@
 # Usgae: .. | [env tab=soft] print [<file>], (hard) tab -> soft tab
 
 OUTPUT=/tmp/print:output
+dictionary=${ORANGE}  # sdcv word highlight color
 
 softtab() { [ $tab ] && sed "s/\t/   /g" $OUTPUT || cat $OUTPUT; }  # convert scripts
 
 # [ $1 ] && OUTPUT=$1 || cat >$OUTPUT
-[ $1 ] && OUTPUT=$1 || sed -r "/^-->.\[0;34mWordNet/d; s/^(-->).\[1m(.*.\[0m)$/\1${ORANGE}\2/" >$OUTPUT  # hilight sdcv words
+[ $1 ] && OUTPUT=$1 || sed -r "/^-->.\[0;34m/s/.*//; s/^-->.\[1m(.*.\[0m)$/${dictionary}(?) \1/" >$OUTPUT  # hilight sdcv words
 [ $(tput lines) -gt $(wc -l $OUTPUT | cut -d' ' -f1) ] && softtab || softtab | less
 
 # vim: set ft=sh: #

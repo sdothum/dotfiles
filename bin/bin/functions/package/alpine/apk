@@ -17,37 +17,37 @@ REPOS=/etc/apk/repositories
 
 # apk wrapper
 case $1 in
-	''      ) usage ;;
+	''       ) usage ;;
 
 	# install package version
 	edge    |\
 	testing |\
-	v[3-9]* )
+	v[3-9]*  )
 		[ $2 ] || usage
 		case $1 in
-			edge   ) ;;
-			testing) repo=$1 ;;
-			v*     ) branch=${1#-} ;;
+			edge    ) ;;
+			testing ) repo=$1 ;;
+			v*      ) branch=${1#-} ;;
 		esac
 		shift
 		doas /sbin/apk add -U --upgrade --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/${branch:-edge}/${repo:-community} $@ ;;
 
 	# set default repo
-	repo    )
+	repo     )
 		[ $2 ] || usage
 		case $2 in
-			''     ) ;;
-			lts    ) doas sed -i 's/^http:/#http:/; /main/s/^#//; /community/s/^#//; /\/edge\//s/^http:/#http:/' $REPOS ;;
-			edge   ) doas sed -i 's/^http:/#http:/; /\/edge\//s/^#//; /testing/s/^/#/'                           $REPOS ;;
-			testing) doas sed -i 's/^http:/#http:/; /\/edge\//s/^#//'                                            $REPOS ;;
-			latest*) doas sed -i "s/v[0-9][^/]*/lastest-stable/;"                             $REPOS; exec apk repo lts ;; 
-			v[3-9]*) doas sed -i "s/v[0-9][^/]*/$1/; s/lastest-stable/$1/"                    $REPOS; exec apk repo lts ;; 
-			*      ) usage ;;
+			''      ) ;;
+			lts     ) doas sed -i 's/^http:/#http:/; /main/s/^#//; /community/s/^#//; /\/edge\//s/^http:/#http:/' $REPOS ;;
+			edge    ) doas sed -i 's/^http:/#http:/; /\/edge\//s/^#//; /testing/s/^/#/'                           $REPOS ;;
+			testing ) doas sed -i 's/^http:/#http:/; /\/edge\//s/^#//'                                            $REPOS ;;
+			latest* ) doas sed -i "s/v[0-9][^/]*/lastest-stable/;"                             $REPOS; exec apk repo lts ;; 
+			v[3-9]* ) doas sed -i "s/v[0-9][^/]*/$1/; s/lastest-stable/$1/"                    $REPOS; exec apk repo lts ;; 
+			*       ) usage ;;
 		esac
 		cat $REPOS ;;
 
 	# do command
-	*       ) doas /sbin/apk $@ ;;
+	*        ) doas /sbin/apk $@ ;;
 esac
 
 # vim: set ft=sh: #

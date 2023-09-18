@@ -9,16 +9,16 @@
 usage() { usage: "$(basename $0) mobi | epub | <ebook>, from current directory"; exit 1; }
 
 case "$@" in
-	mobi ) find -maxdepth 1 -name '*.mobi' -exec addbooks {} \; ;;
-	epub ) find -maxdepth 1 -name '*.epub' -exec addbooks {} \; ;;
+	mobi  ) find -maxdepth 1 -name '*.mobi' -exec addbooks {} \; ;;
+	epub  ) find -maxdepth 1 -name '*.epub' -exec addbooks {} \; ;;
 	
 	*mobi|\
-	*epub)
+	*epub )
 		author=$(echo "$@" | sed -r 's/.* - (.*)\.(mobi|epub)/\1/')
 		mkdir -pv "$author" || exit 1
 		mv -v "$@" "$author" ;;
 	
-	*    ) usage ;;
+	*     ) usage ;;
 esac
 
 # vim: set ft=sh: #
