@@ -112,14 +112,14 @@ hc keybind Super-Shift-o           spawn switch orientation +2
 
 # resize frames
 resizestep=0.025
-hc keybind Super-Alt-$LEFT         resize left  +$resizestep
-hc keybind Super-Alt-$DOWN         resize down  +$resizestep
-hc keybind Super-Alt-$UP           resize up    +$resizestep
-hc keybind Super-Alt-$RIGHT        resize right +$resizestep
-hc keybind Super-Alt-Left          resize left  +$resizestep
-hc keybind Super-Alt-Down          resize down  +$resizestep
-hc keybind Super-Alt-Up            resize up    +$resizestep
-hc keybind Super-Alt-Right         resize right +$resizestep
+hc keybind Super-Control-$LEFT     resize left  +$resizestep
+hc keybind Super-Control-$DOWN     resize down  +$resizestep
+hc keybind Super-Control-$UP       resize up    +$resizestep
+hc keybind Super-Control-$RIGHT    resize right +$resizestep
+hc keybind Super-Control-Left      resize left  +$resizestep
+hc keybind Super-Control-Down      resize down  +$resizestep
+hc keybind Super-Control-Up        resize up    +$resizestep
+hc keybind Super-Control-Right     resize right +$resizestep
 
 # cycle through tags
 hc keybind Super-j                 use_index +1 --skip-visible
