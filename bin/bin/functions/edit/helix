@@ -8,13 +8,23 @@
 
 # Usage: [name=<title>] helix [WAIT] <file>*
 
+CONF=$XDG_CONFIG_HOME/helix
+CONFIG=$CONF/config.toml
+LANGUAGES=$CONF/languages.toml
+
 [ "$1" = WAIT ] && { WAIT=$1; shift; }  # foreground process?
 [ -e "$1" ] || { notify critical 'Helix' "$1\nnot found"; exit 1; }
 
 # snapshot sources (in lieu of persistent undo avalability)
 hgadd $@ &  # don' wait :)
 
-cd $(dirname $1)
-term ${name:-helix} PAPER $WAIT hx $@
+# update this file manually in lieu of ltex dictionary update
+if [ -e $LANGUAGES:spelling ] ;then
+	spelling="$(sort -df $LANGUAGES:spelling | sed -r 's/^ *(.*) *$/\\"\1\\":/' | tr '\n' ':')"  # comma's cause unterminated address regex error
+	sed "/ltex.dictionary/a${spelling%::}" $LANGUAGES:template | sed "/ltex.dictionary/{n;s/::/,\n/g}" >$LANGUAGES
+fi
+
+cd $(dirname $1)                                         # enable :open in file directory
+term ${name:-helix} PAPER $WAIT ${HX:-hx} -c $CONFIG $@  # term call doesn't handle "space" names
 
 # vim: set ft=sh: #
