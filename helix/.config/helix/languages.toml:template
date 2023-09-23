@@ -47,18 +47,4 @@ command                      = "/opt/ltex-ls/bin/ltex-ls"
 ltex.language                = "en-GB"
 ltex.disabledRules           = { "en-GB" = [ "PROFANITY" ] }
 ltex.dictionary              = { "en-GB" = [
-"ebook",
-"eink",
-"ereader",
-"ereaders",
-"ereading",
-"frontlight",
-"graal",
-"groot",
-"Kindle",
-"Kobo",
-"kobopatch",
-"kobopatches",
-"koreader",
-"warmlight"
 ] }

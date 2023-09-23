@@ -105,7 +105,7 @@
 "diff.delta"                       = "comment"
 #"diff.delta.moved"                =
 
-# ........................................................... InterfaceInterface
+# .................................................................... Interface
 
 #"markup"                          =
 #"markup.normal"                   =
@@ -170,9 +170,9 @@
 #"ui.cursorcolumn.secondary"       =
 #"warning"                         =
 #"error"                           =
-#"info"                            =
+"info"                             = "attn"
 #"hint"                            =
-#"diagnostic"                      =
+"diagnostic"                       = { bg = "pick", fg = "info" }
 #"diagnostic.hint"                 =
 #"diagnostic.info"                 =
 #"diagnostic.warning"              =
@@ -180,15 +180,16 @@
 
 [palette]
 
-background                         = "#f7f3ee" # light grayish orange
-foreground                         = "#263238" # very dark grayish blue
-pick                               = "#ffe5b4" # peach
+background                         = "#f7f3ee"  # light grayish orange
+foreground                         = "#263238"  # very dark grayish blue
+pick                               = "#ffe5b4"  # peach
+attn                               = "#fa8c69"  # salmon
 
-selection                          = "#0087af" # dark cyan
-cursor                             = "#20fccf" # vivid cyan (iawriter)
+selection                          = "#0087af"  # dark cyan
+cursor                             = "#20fccf"  # vivid cyan (iawriter)
 
-command                            = "#bf360c" # strong red
-comment                            = "#d5b875" # slightly desaturated orange
-info                               = "#546e7a" # mostly desaturated dark blue
-line                               = "#cfd8dc" # light grayish blue
+command                            = "#bf360c"  # strong red
+comment                            = "#d5b875"  # slightly desaturated orange
+info                               = "#78a0a2"  # mostly desaturated dark cyan
+line                               = "#cfd8dc"  # light grayish blue
 
