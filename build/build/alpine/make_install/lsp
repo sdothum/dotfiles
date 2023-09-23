@@ -8,6 +8,7 @@
 
 BINARY_HOME="${HOME}/.local/bin"
 DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+LTEXVSN=16.0.0
 
 doas npm install -g bash-language-server                   # shell
 doas npm install -g typescript typescript-language-server  # javascript
@@ -16,8 +17,16 @@ doas npm install -g yaml-language-server@next              # yaml
 cargo install taplo-cli --locked --features lsp            # toml
 
 # markdown
-wget -P /tmp https://github.com/artempyanykh/marksman/releases/download/2023-07-25/marksman-linux-x64
-mv /tmp/marksman-linux-x64 $HOME/.local/bin/marksman
-chmod +x $HOME/.local/bin/marksman
+# wget -P /tmp https://github.com/artempyanykh/marksman/releases/download/2023-07-25/marksman-linux-x64
+# mv /tmp/marksman-linux-x64 $HOME/.local/bin/marksman
+# chmod +x $HOME/c.local/bin/marksman
+
+# better markdown with full latex/grammar/spellcheck
+doas apk add java-common
+
+wget -P /tmp https://github.com/valentjn/ltex-ls/releases/download/$LTEXVSN/ltex-ls-$LTEXVSN.tar.gz
+cd /tmp
+tar -xvf ltex-ls-$LTEXVSN.tar.gz
+doas mv ltex-ls-$LTEXVSN /opt/ltex-ls
 
 # vim: set ft=sh: #

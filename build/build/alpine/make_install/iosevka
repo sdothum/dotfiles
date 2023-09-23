@@ -222,9 +222,9 @@ elif [ "$test" ] ;then
 elif [ "$trio" ] ;then
 	cmdopts quasi-ext space 1.15 m-rounded altmono
 	[ $ereader = kobo ] && emdash=$emkobo || emdash=$emkindle  # == M + space width
-	e_ink stria ${cap:-cap extended} $altmono j-serifed  I-serifless  Q-straight open 4-open+
-	e_ink groot ${cap:-cap extended} $altmono j-serifed  I-descending Q-straight open 4-open+
-	e_ink graal ${cap:-cap extended} $altmono j-serifed  I-descending Q-straight open 4-open+ a-single
+	e_ink stria ${cap:-cap extended} $altmono j-serifed  I-serifed    Q-straight open 4-open+
+	# e_ink groot ${cap:-cap extended} $altmono j-serifed  I-descending Q-straight open 4-open+
+	# e_ink graal ${cap:-cap extended} $altmono j-serifed  I-descending Q-straight open 4-open+ a-single
 
 elif [ $family ] ;then                    # custom e-ink font (non-published)
 	e_ink $family
