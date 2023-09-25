@@ -1,0 +1,13 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Hardware
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ....................................................................... Device
+
+ditto udev "reload udev rules"
+doas udevadm control --reload-rules
+doas udevadm trigger
+
+# vim: set ft=sh: #

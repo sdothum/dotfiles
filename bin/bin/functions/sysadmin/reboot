@@ -6,7 +6,7 @@
 
 # ....................................................................... reboot
 
-delay=3  # reboot delay window
+delay=5  # reboot delay window
 
 ifno 'reboot kernel' && exit
 ditto reboot "in $delay seconds.."

@@ -7,6 +7,7 @@
 # .............................................................. Google hangouts
 
 HANGOUTS=$SESSION/hangouts
+BROWSER=surf
 
 case $BROWSER in
 	luakit ) luakit $(cat $HANGOUTS) & ;;
