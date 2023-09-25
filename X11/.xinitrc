@@ -39,6 +39,8 @@ pulse &
 # pipewire &
 # pipewire-pulse &
 
+udev  # reload udev rules
+
 # ........................................................................ D-Bus
 
 # d-bus for file management, authentication, and other essential system processes
