@@ -172,6 +172,7 @@
 **/kobo/KoboStuff
 **/kobo/**/out
 **/kobopatch
+**/kobo/koreader
 **/kobo/screensaver
 **/kobo/sideloadmode
 **/.local/bin
