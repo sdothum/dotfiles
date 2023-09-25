@@ -10,7 +10,7 @@
 
 #"constructor"                     =
 
-#"constant"                        =
+"constant"                         = "foreground"
 #"constant.builtin"                =
 #"constant.builtin.boolean"        =
 #"constant.character"              =
@@ -19,7 +19,7 @@
 #"constant.numeric.integer"        =
 #"constant.numeric.float"          =
 
-"string"                           = "foreground"
+"string"                           = "string"
 #"string.regexp"                   =
 #"string.special"                  =
 #"string.special.path"             =
@@ -31,7 +31,7 @@
 #"comment.block"                   =
 #"comment.block.documentation"     =
 
-"variable"                         = "selection"
+"variable"                         = "variable"
 #"variable.builtin"                =
 #"variable.parameter"              =
 #"variable.other"                  =
@@ -44,7 +44,7 @@
 #"punctuation.bracket"             =
 #"punctuation.special"             =
 
-"keyword"                          = { fg = "foreground", modifiers = ["bold"] }
+"keyword"                          = { fg = "keyword", modifiers = ["bold"] }
 #"keyword.control"                 =
 #"keyword.control.conditional"     =
 #"keyword.control.repeat"          =
@@ -60,7 +60,7 @@
 
 "operator"                         = { fg = "selection", modifiers = ["bold"] }
 
-"function"                         = "command"
+"function"                         = { fg = "foreground", modifiers = ["bold"] }
 #"function.builtin"                =
 #"function.method"                 =
 #"function.macro"                  =
@@ -74,7 +74,7 @@
 #"special"                         =
 
 #"markup"                          =
-"markup.heading"                   = { fg = "command", modifiers = ["bold"] }
+"markup.heading"                   = { fg = "string", modifiers = ["bold"] }
 "markup.heading.marker"            = { fg = "selection", modifiers = ["bold"] }
 #"markup.heading.1"                =
 #"markup.heading.2"                =
@@ -90,7 +90,7 @@
 "markup.bold"                      = { modifiers = ["bold"] }
 "markup.italic"                    = { modifiers = ["italic"] }
 "markup.strikethrough"             = { modifiers = ["crossed_out"] }
-"markup.link"                      = "command"
+"markup.link"                      = "string"
 "markup.link.url"                  = { fg = "selection", modifiers = ["underlined"] }
 #"markup.link.label"               =
 #"markup.link.text"                =
@@ -101,8 +101,8 @@
 
 #"diff"                            =
 "diff.plus"                        = "cursor"
-"diff.minus"                       = "command"
-"diff.delta"                       = "comment"
+"diff.minus"                       = "foreground"
+"diff.delta"                       = "attention"
 #"diff.delta.moved"                =
 
 # .................................................................... Interface
@@ -121,7 +121,7 @@
 
 "ui.background"                    = { bg = "background" }
 #"ui.background.separator"         =
-"ui.cursor"                        = {bg = "cursor", fg = "foreground" }
+"ui.cursor"                        = { bg = "cursor", fg = "foreground" }
 #"ui.cursor.normal"                =
 #"ui.cursor.insert"                =
 #"ui.cursor.select"                =
@@ -135,20 +135,20 @@
 #"ui.gutter"                       =
 #"ui.gutter.selected"              =
 #"ui.highlight.frameline"          =
-"ui.linenr"                        = "line"
-"ui.linenr.selected"               = "command"
+"ui.linenr"                        = "linenr"
+"ui.linenr.selected"               = "string"
 "ui.statusline"                    = { bg = "background", fg = "info" }
 #"ui.statusline.inactive"          =
 #"ui.statusline.normal"            =
 #"ui.statusline.insert"            =
 #"ui.statusline.select"            =
 #"ui.statusline.separator"         =
-"ui.popup"                         = { bg = "pick", fg = "info" }
+"ui.popup"                         = { bg = "list", fg = "info" }
 #"ui.popup.info"                   =
 #"ui.window"                       =
 "ui.help"                          = { bg = "background", fg = "info", modifiers = ["bold"] }
 "ui.text"                          = "foreground"
-"ui.text.focus"                    = {bg = "cursor", fg = "foreground" }
+"ui.text.focus"                    = { bg = "cursor", fg = "foreground" }
 #"ui.text.inactive"                =
 #"ui.text.info"                    =
 #"ui.virtual.ruler"                =
@@ -158,7 +158,7 @@
 #"ui.virtual.inlay-hint.parameter" =
 #"ui.virtual.inlay-hint.type"      =
 #"ui.virtual.wrap"                 =
-"ui.menu"                          = { bg = "pick", fg = "info" }
+"ui.menu"                          = { bg = "list", fg = "info" }
 "ui.menu.selected"                 = { bg = "cursor", fg = "foreground"  }
 #"ui.menu.scroll"                  =
 "ui.selection"                     = { bg = "selection", fg = "background" }
@@ -170,9 +170,9 @@
 #"ui.cursorcolumn.secondary"       =
 #"warning"                         =
 #"error"                           =
-"info"                             = "attn"
+"info"                             = "attention"
 #"hint"                            =
-"diagnostic"                       = { bg = "pick", fg = "info" }
+"diagnostic"                       = { bg = "list", fg = "info" }
 #"diagnostic.hint"                 =
 #"diagnostic.info"                 =
 #"diagnostic.warning"              =
@@ -182,14 +182,16 @@
 
 background                         = "#f7f3ee"  # light grayish orange
 foreground                         = "#263238"  # very dark grayish blue
-pick                               = "#ffe5b4"  # peach
-attn                               = "#fa8c69"  # salmon
 
-selection                          = "#0087af"  # dark cyan
+linenr                             = "#cfd8dc"  # light grayish blue
+list                               = "#ffe5b4"  # peach
+attention                          = "#fa8c69"  # salmon
+info                               = "#78a0a2"  # mostly desaturated dark cyan
+
+selection                          = "#0087af"  # dark cyan (blue)
 cursor                             = "#20fccf"  # vivid cyan (iawriter)
 
-command                            = "#bf360c"  # strong red
+string                             = "#bf360c"  # strong red
 comment                            = "#d5b875"  # slightly desaturated orange
-info                               = "#78a0a2"  # mostly desaturated dark cyan
-line                               = "#cfd8dc"  # light grayish blue
-
+variable                           = "#78a0a2"  # mostly desaturated dark cyan
+keyword                            = "#008b8b"  # dark cyan (teal)

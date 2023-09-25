@@ -2,7 +2,7 @@ theme                       = "duochrome"
 
 [editor]
 auto-completion             = true
-auto-format                 = true
+auto-format                 = false
 auto-info                   = true
 auto-pairs                  = false
 auto-save                   = true
@@ -106,6 +106,10 @@ A-ret                       = "goto_next_buffer"
 D                           = "delete_char_backward"
 # C-r                       = ["match_brackets", "select_textobject_inner", ":reflow"]
 g                           = { a = "code_action", o = "goto_last_accessed_file" }  # Maps `ga` to show possible code actions
+A-h                         = "move_char_left"
+A-l                         = "move_char_right"
 C-n                         = ["move_line_down", "scroll_down"]
 C-p                         = ["move_line_up", "scroll_up"]
+V                           = ["goto_line_start", "select_mode", "goto_line_end_newline"]
 X                           = "extend_line_above"
+Z                           = { Z = ":wqa" }

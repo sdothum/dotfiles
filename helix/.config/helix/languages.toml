@@ -4,7 +4,7 @@ name                         = "bash"
 file-types                   = ["sh", { suffix = "functions" }]
 comment-token                = "#"
 indent                       = { tab-width = 3, unit = "\t" }
-shebangs                     = [ "sh", "bash", "dash" ]
+shebangs                     = [ "sh", "ash", "bash", "dash" ]
 scope                        = "source.sh"
 text-width                   = 80
 roots                        = []
@@ -44,9 +44,9 @@ roots                        = []
 command                      = "/opt/ltex-ls/bin/ltex-ls"
 
 [language-server.ltex-ls.config]
-ltex.language                = "en-GB"
-ltex.disabledRules           = { "en-GB" = [ "PROFANITY" ] }
-ltex.dictionary              = { "en-GB" = [
+ltex.language                = "en-US"
+ltex.disabledRules           = { "en-US" = [ "PROFANITY" ] }
+ltex.dictionary              = { "en-US" = [
 "ebook",
 "eink",
 "ereader",
