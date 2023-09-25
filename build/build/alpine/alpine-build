@@ -549,7 +549,7 @@ stage_33() {
 	# doas sed -i 's/monospace/mu/g' /etc/xdg/luakit/theme.lua  # statusbar
 	doas apk add qutebrowser
 	stow qutebrowser
-	# apk testing surf
+	apk testing surf
 	doas apk add youtube-dl
 	make_install google-chrome
 
