@@ -90,24 +90,22 @@ wrap-at-text-width          = false
 
 [keys.insert]
 C-space                     = "completion"
-A-h                         = "move_char_left"
-j                           = { k = "normal_mode" }  # Maps `jk` to exit insert mode
-A-j                         = "move_line_down"
-A-k                         = "move_line_up"
-A-l                         = "move_char_right"
+# A-h                       = "move_char_left"
+# j                         = { k = "normal_mode" }                                 # Maps qwerty `jk` to exit insert mode
+# A-j                       = "move_line_down"
+# A-k                       = "move_line_up"
+# A-l                       = "move_char_right"
 A-O                         = "open_above"
 A-o                         = "open_below"
 
 [keys.normal]
 A-backspace                 = "goto_last_accessed_file"
+A-ret                       = "goto_next_buffer"
 esc                         = ["collapse_selection", "keep_primary_selection"]
 ret                         = ["move_line_down", "goto_first_nonwhitespace"]        # Maps the enter key to move to start of next line
-A-ret                       = "goto_next_buffer"
 D                           = "delete_char_backward"
 # C-r                       = ["match_brackets", "select_textobject_inner", ":reflow"]
 g                           = { a = "code_action", o = "goto_last_accessed_file" }  # Maps `ga` to show possible code actions
-A-h                         = "move_char_left"
-A-l                         = "move_char_right"
 C-n                         = ["move_line_down", "scroll_down"]
 C-p                         = ["move_line_up", "scroll_up"]
 V                           = ["goto_line_start", "select_mode", "goto_line_end_newline"]

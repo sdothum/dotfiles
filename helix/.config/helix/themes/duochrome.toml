@@ -137,17 +137,17 @@
 #"ui.highlight.frameline"          =
 "ui.linenr"                        = "linenr"
 "ui.linenr.selected"               = "string"
-"ui.statusline"                    = { bg = "background", fg = "info" }
+"ui.statusline"                    = { bg = "background", fg = "statusline" }
 #"ui.statusline.inactive"          =
 #"ui.statusline.normal"            =
 #"ui.statusline.insert"            =
 #"ui.statusline.select"            =
 #"ui.statusline.separator"         =
-"ui.popup"                         = { bg = "list", fg = "info" }
+"ui.popup"                         = { bg = "popup", fg = "text" }
 #"ui.popup.info"                   =
 #"ui.window"                       =
-"ui.help"                          = { bg = "background", fg = "info", modifiers = ["bold"] }
-"ui.text"                          = "foreground"
+"ui.help"                          = { bg = "background", fg = "text", modifiers = ["bold"] }
+"ui.text"                          = "text"
 "ui.text.focus"                    = { bg = "cursor", fg = "foreground" }
 #"ui.text.inactive"                =
 #"ui.text.info"                    =
@@ -158,7 +158,7 @@
 #"ui.virtual.inlay-hint.parameter" =
 #"ui.virtual.inlay-hint.type"      =
 #"ui.virtual.wrap"                 =
-"ui.menu"                          = { bg = "list", fg = "info" }
+"ui.menu"                          = { bg = "popup", fg = "text" }
 "ui.menu.selected"                 = { bg = "cursor", fg = "foreground"  }
 #"ui.menu.scroll"                  =
 "ui.selection"                     = { bg = "selection", fg = "background" }
@@ -172,7 +172,7 @@
 #"error"                           =
 "info"                             = "attention"
 #"hint"                            =
-"diagnostic"                       = { bg = "list", fg = "info" }
+"diagnostic"                       = { bg = "popup", fg = "text" }
 #"diagnostic.hint"                 =
 #"diagnostic.info"                 =
 #"diagnostic.warning"              =
@@ -183,15 +183,16 @@
 background                         = "#f7f3ee"  # light grayish orange
 foreground                         = "#263238"  # very dark grayish blue
 
+attention                          = "#fa8c69"  # salmon (pink)
 linenr                             = "#cfd8dc"  # light grayish blue
-list                               = "#ffe5b4"  # peach
-attention                          = "#fa8c69"  # salmon
-info                               = "#78a0a2"  # mostly desaturated dark cyan
+popup                              = "#ffe5b4"  # peach (orange)
+text                               = "#56717e"  # mostly desaturated dark blue (gray)
+statusline                         = "#708f9e"  # mostly desaturated dark blue
 
 selection                          = "#0087af"  # dark cyan (blue)
 cursor                             = "#20fccf"  # vivid cyan (iawriter)
 
-string                             = "#bf360c"  # strong red
 comment                            = "#d5b875"  # slightly desaturated orange
-variable                           = "#78a0a2"  # mostly desaturated dark cyan
 keyword                            = "#008b8b"  # dark cyan (teal)
+string                             = "#bf360c"  # strong red
+variable                           = "#78a0a2"  # mostly desaturated dark cyan
