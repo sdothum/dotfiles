@@ -187,7 +187,8 @@ attention                          = "#fa8c69"  # salmon (pink)
 linenr                             = "#cfd8dc"  # light grayish blue
 popup                              = "#ffe5b4"  # peach (orange)
 text                               = "#56717e"  # mostly desaturated dark blue (gray)
-statusline                         = "#708f9e"  # mostly desaturated dark blue
+# statusline                       = "#708f9e"  # mostly desaturated dark blue
+statusline                         = "#78a0a2"  # mostly desaturated dark cyan
 
 selection                          = "#0087af"  # dark cyan (blue)
 cursor                             = "#20fccf"  # vivid cyan (iawriter)
@@ -195,4 +196,5 @@ cursor                             = "#20fccf"  # vivid cyan (iawriter)
 comment                            = "#d5b875"  # slightly desaturated orange
 keyword                            = "#008b8b"  # dark cyan (teal)
 string                             = "#bf360c"  # strong red
-variable                           = "#78a0a2"  # mostly desaturated dark cyan
+# variable                         = "#78a0a2"  # mostly desaturated dark cyan
+variable                           = "#708f9e"  # mostly desaturated dark blue
