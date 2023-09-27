@@ -23,6 +23,7 @@ usage() {
 >> d-[tailed|toothless]
 >> f-extended
 >> j-serifed
+>> l-hooky
 >> m-rounded
 >> p-[eared|serifed]
 >> q-hook
@@ -131,6 +132,7 @@ cmdopts() {
 			d-toothless ) glyph d $1 ;;  # with p-eared
 			f-extended  ) f=$1 ;;        # unolexic (homage to universal grotesk)
 			j-serifed   ) j=$1 ;;
+			l-hooky     ) l=$1 ;;
 			m-rounded   ) m=$1 ;;
 			p-eared     ) glyph p $1 ;;
 			p-serifed   ) glyph p $1 ;;
@@ -186,7 +188,7 @@ update() {
 	done
 }
 
-options() { echo $adjust $ascender $cap $quasi $leading $sb $style $D $G $I $J $Q $a $b $d $f $j $m $p $q $t $zero $at $paren $@; }  # list
+options() { echo $adjust $ascender $cap $quasi $leading $sb $style $D $G $I $J $Q $a $b $d $f $j $l $m $p $q $t $zero $at $paren $@; }  # list
 
 # family [options]*
 e_ink() {
@@ -215,16 +217,17 @@ elif [ "$mu" ] ;then
 	e_ink tundra      ${cap:-cap extended} a-single    f-extended j-serifed G-hookless+ Y-descending            Q-straight open 4-open+
 
 elif [ "$test" ] ;then
-	unset ecopy; cmdopts quasi-ext space 1.15 m-rounded altmono
+	# unset ecopy
+	cmdopts quasi-ext space 1.15 m-rounded altmono
 	[ $ereader = kobo ] && emdash=$emkobo || emdash=$emkindle  # == M + space width
-	e_ink typograffic ${cap:-cap extended} $altmono    j-serifed           G-hookless+  I-serifless J-flat     Q-straight open 4-open+
+	e_ink kloof ${cap:-cap extended} $altmono j-serifed l-hooky I-descending Q-straight open 4-open+
 
 elif [ "$trio" ] ;then
 	cmdopts quasi-ext space 1.15 m-rounded altmono
 	[ $ereader = kobo ] && emdash=$emkobo || emdash=$emkindle  # == M + space width
 	e_ink stria ${cap:-cap extended} $altmono j-serifed  I-serifed    Q-straight open 4-open+
-	# e_ink groot ${cap:-cap extended} $altmono j-serifed  I-descending Q-straight open 4-open+
-	# e_ink graal ${cap:-cap extended} $altmono j-serifed  I-descending Q-straight open 4-open+ a-single
+	e_ink groot ${cap:-cap extended} $altmono j-serifed  I-descending Q-straight open 4-open+
+	e_ink graal ${cap:-cap extended} $altmono j-serifed  I-descending Q-straight open 4-open+ a-single
 
 elif [ $family ] ;then                    # custom e-ink font (non-published)
 	e_ink $family
