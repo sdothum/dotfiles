@@ -1,4 +1,4 @@
-#!/usr/bin/dash
+#!/usr/bin/bash
 # sdothum - 2016 (c) wtfpl
 
 # Log
@@ -11,6 +11,8 @@
 # use -n option to suppress line break
 [ $logfile ] || export logfile=/tmp/session.log
 
-echo "$@" | tee -a $logfile 2>/dev/null  # suppress sudo log "permission denied" error 
+# check for var ne (see reboot, ditto)
+[ $ne ] && echo -ne "$@\r" | tee -a $logfile 2>/dev/null \
+	|| echo "$@" | tee -a $logfile 2>/dev/null  # suppress sudo log "permission denied" error 
 
 # vim: set ft=sh: #

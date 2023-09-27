@@ -9,7 +9,7 @@
 # ..................................................................... Annotate
 
 usage() {
-	echo "$(basename $0) [ ERROR | WARNING | INFO ] @ *<desc> | [-t | <desc> | -- | ..]* <message>
+	echo "$(basename $0) [ ERROR | WARNING | INFO ] @ *<desc> | [-ne | -t | <desc> | -- | ..]* <message>
 > where, default <desc> -> "note"
 >                    -- -> line separator
 >                    .. -> justify leader" | usage:
@@ -24,12 +24,13 @@ MSGCOLOR=${TURQUOISE}
 
 while [ "$1" ] ;do
 	case $1 in
-		ERR* ) ATTCOLOR=${RED}; MSGCOLOR=${MAGENTA}   ;;
+		ERR* ) ATTCOLOR=${RED}; MSGCOLOR=${MAGENTA}  ;;
 		WAR* ) ATTCOLOR=${YELLOW} MSGCOLOR=${ORANGE} ;;
-		INF* ) ATTCOLOR=${WHITE} MSGCOLOR=${GREY} ;;
+		INF* ) ATTCOLOR=${WHITE} MSGCOLOR=${GREY}    ;;
 		@    ) [ "$2" ] || usage; desc=$2; message=' ';     shift ;;
-		@*   ) [ "$2" ] && usage; desc=${1#@}; message=' '        ;;
-		-t   ) timestamp="${WHITE}$(date "+%-H %M'%S\" ")"                ;;
+		@*   ) [ "$2" ] && usage; desc=${1#@}; message=' ' ;;
+		-ne  ) export ne=$1 ;;  # see reboot :)
+ 		-t   ) timestamp="${WHITE}$(date "+%-H %M'%S\" ")" ;;
 		..   ) [ "$2" ] || usage; justify=true; message=$2; shift ;;
 		--   ) separator=true ;;
 		*    ) [ "$message" ] && desc=$message; message=$1 ;;

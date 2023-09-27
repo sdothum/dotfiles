@@ -8,7 +8,9 @@
 
 usage() { usage: "$(basename $0) <maxdepth> | <name>"; exit 1; }
 
-v0() { exclude | sort | tr '\n' '\0x00' | xargs -r0 v; }
+EDITOR=${EDITOR:-hx}
+
+v0() { exclude | sort | tr '\n' '\0x00' | xargs -t -r0 $EDITOR; }
 
 walk() {
 	[ -e $DYNAMIC ] && toggle focus
