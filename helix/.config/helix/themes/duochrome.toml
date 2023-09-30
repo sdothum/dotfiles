@@ -10,7 +10,7 @@
 
 #"constructor"                     =
 
-"constant"                         = "foreground"
+"constant"                         = "constant"
 #"constant.builtin"                =
 #"constant.builtin.boolean"        =
 #"constant.character"              =
@@ -58,9 +58,9 @@
 #"keyword.storage.type"            =
 #"keyword.storage.modifier"        =
 
-"operator"                         = { fg = "selection", modifiers = ["bold"] }
+"operator"                         = { fg = "operator", modifiers = ["bold"] }
 
-"function"                         = { fg = "foreground", modifiers = ["bold"] }
+"function"                         = { fg = "function", modifiers = ["bold"] }
 #"function.builtin"                =
 #"function.method"                 =
 #"function.macro"                  =
@@ -100,9 +100,9 @@
 #"markup.raw.block"                =
 
 #"diff"                            =
-"diff.plus"                        = "cursor"
+"diff.plus"                        = "plus"
 "diff.minus"                       = "foreground"
-"diff.delta"                       = "attention"
+"diff.delta"                       = "delta"
 #"diff.delta.moved"                =
 
 # .................................................................... Interface
@@ -170,7 +170,7 @@
 #"ui.cursorcolumn.secondary"       =
 #"warning"                         =
 #"error"                           =
-"info"                             = "attention"
+"info"                             = "ltex"
 #"hint"                            =
 "diagnostic"                       = { bg = "popup", fg = "text" }
 #"diagnostic.hint"                 =
@@ -181,20 +181,25 @@
 [palette]
 
 background                         = "#f7f3ee"  # light grayish orange
-foreground                         = "#263238"  # very dark grayish blue
-
-attention                          = "#fa8c69"  # salmon (pink)
-linenr                             = "#cfd8dc"  # light grayish blue
-popup                              = "#ffe5b4"  # peach (orange)
-text                               = "#56717e"  # mostly desaturated dark blue (gray)
-# statusline                       = "#708f9e"  # mostly desaturated dark blue
-statusline                         = "#78a0a2"  # mostly desaturated dark cyan
-
+foreground                         = "#263238"  # very dark grayish blue (black)
 selection                          = "#0087af"  # dark cyan (blue)
 cursor                             = "#20fccf"  # vivid cyan (iawriter)
 
+ltex                               = "#fa8c69"  # salmon (pink)
+plus                               = "#a3d5e4"  # soft cyan
+delta                              = "#fdd3c6"  # salmon (pink)
+linenr                             = "#cfd8dc"  # light grayish blue
+
+popup                              = "#ffe5b4"  # peach (orange)
+text                               = "#3e525b"  # very dark grayish blue
+statusline                         = "#78a0a2"  # mostly desaturated dark cyan
+
 comment                            = "#d5b875"  # slightly desaturated orange
-keyword                            = "#008b8b"  # dark cyan (teal)
+constant                           = "#008b8b"  # dark cyan (teal)
+function                           = "#3e515b"  # vdark grayish blue
+# keyword                          = "#bf450c"  # strong orange
+# operator                         = "#008b8b"  # dark cyan (teal)
+keyword                            = "#0096c3"  # strong cyan (blue)
+operator                           = "#bf450c"  # strong orange
 string                             = "#bf360c"  # strong red
-# variable                         = "#78a0a2"  # mostly desaturated dark cyan
 variable                           = "#708f9e"  # mostly desaturated dark blue
