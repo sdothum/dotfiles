@@ -11,13 +11,14 @@ delay=5  # reboot delay window
 ifno 'reboot kernel' && exit
 
 # (sleep $delay; sudo rm -f /tmp/login:console; sudo /sbin/reboot) &  # will not reboot in ssh subshell in alpine
-trap "tput cnorm" EXIT  # restore cursor
-tput civis              # hide cursor
+trap "tput cnorm; exit" INT  # restore cursor
+tput civis                   # hide cursor
 for i in $(seq $delay | tac) ;do
 	ditto -ne reboot "in $i seconds.."
 	sleep 1
 done
 
+tput cnorm  # recover before closing sshd session
 sudo rm -f /tmp/login:console
 (sleep 0.1; pkill -f "sshd: $USER" 2>/dev/null) &  # close remote ssh session connect
 exec sudo /sbin/reboot

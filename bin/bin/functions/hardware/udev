@@ -6,8 +6,11 @@
 
 # ....................................................................... Device
 
-ditto udev "reload udev rules"
-doas udevadm control --reload-rules
-doas udevadm trigger
+if doas udevadm control --reload-rules ;then
+	ditto udev "reload udev rules"
+	doas udevadm trigger
+else
+	notify critical udev "reload udev rules failed"
+fi
 
 # vim: set ft=sh: #

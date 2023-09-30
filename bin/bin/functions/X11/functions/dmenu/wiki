@@ -27,18 +27,19 @@ expand() {
 	return 0
 }
 
-filename() {  echo "$file" | tr ' ' '_'; }
+linkname() {  echo "$file" | tr ' ' '_'; }
 
 # apostrophes in filename cannot be handled by duochrome statusline..
 filename_check() {
 	# so substitute a linked file with carets
 	[ "${file%\'*}" = "$file" ] || { link=/tmp/$(echo "${file##*/}" | tr \' ^); ln -sf "$file" "$link"; file=$link; }
 	# simplify file name handling of spaces by adding '_' symbolic link (to spare escape horror)
-	[ "${file%\ *}" = "$file" ] || { filename=$(filename); ln -sf "$file" $filename; file=$filename; }
+	[ "${file%\ *}" = "$file" ] || { linkname=$(linkname); ln -sf "$file" $linkname; file=$linkname; }
 }
 
 add() {
-	wiki=$(dirs | rmenu "$prompt" -no-custom) || exit
+	wiki=$(echo | mhistory wiki$1 | head -1 | sed "s/.*^$SEP *//")  # last folder
+	wiki=$(dirs | rmenu "$prompt" $wiki -no-custom) || exit
 	[ $1 ] || { [ $prompt = Diary ] && title=$(date '+%Y-%m-%d'); } || title=$(echo | rmenu 'Title') || exit
 	mhistory wiki$1 "$title^$SEP $wiki"
 	file=$WIKIS/$wiki/$title.wiki
@@ -46,7 +47,7 @@ add() {
 	echo "# $title\n\n" >$file
 	filename_check
 	$EDITOR "$file"
-	[ $filename ] && rm -f $filename
+	[ $linkname ] && rm -f $linkname
 }
 
 wiki() {
@@ -56,7 +57,7 @@ wiki() {
 		file="$(expand "$file")"
 		filename_check
 		$EDITOR "$file"
-		[ $filename ] && rm -f $filename
+		[ $linkname ] && rm -f $linkname
 		# history file cleanup usually precedes impending edit
 		# expand "$file" | grep -q dmenu/.history && { pwait "vim.*"$(expand "$file")""; dmenu edit; }
 	else

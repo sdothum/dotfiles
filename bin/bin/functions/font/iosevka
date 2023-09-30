@@ -55,7 +55,7 @@ usage() {
 > m-[rounded|serifless]
 > p-[eared|serifed]
 > q-[hook|tailed]
-> t-[asymmetric|cross|descending]
+> t-[asymmetric[+]|cross|descending]
 > u-toothed
 > y-straight
 
@@ -238,6 +238,7 @@ variant() {
 			p-serifed     ) glyph p=motion-serifed ;;
 			q-tailed      ) glyph q=tailed-serifless ;;
 			t-asymmetric  ) glyph t=flat-hook-asymmetric-short-neck2 ;;
+			t-asymmetric+ ) glyph t=hookless-asymmetric-short-neck2 ;;
 			t-cross       ) glyph t=cross-short-neck2 ;;
 			u-toothed     ) glyph u=toothed ;;
 			y-straight    ) glyph y=straight-serifless ;;
@@ -311,7 +312,8 @@ while [ $1 ] ;do
 		kobo          ) leading 1; shape $extended; sb 0.6850 ;;
 		menu          ) leading 1.5000; sb 0.9000; build=-menu ;;                                     # rofi menu
 		normal        ) shape 500; sb 0.7000 ;;                                                       # normal width
-		proof         ) leading 2.0000; sb 0.8000; build=${build}-proof ;;                            # for pure writing :)
+		# proof       ) leading 2.0000; sb 0.8000; build=${build}-proof ;;                            # for pure writing :)
+		proof         ) leading 2.0000; build=${build}-proof ;;
 
 		# language
 		cyrillic      ) cyrillic;     ditto char_set "$1" ;;
@@ -389,6 +391,7 @@ while [ $1 ] ;do
 		q-hook        ) variant 'q=HOOK-TAILED'; q_hook=true; baseline=true ;;
 		q-tailed      ) variant $1; unset q_hook ;;
 		t-asymmetric  ) variant $1 ;;
+		t-asymmetric+ ) variant $1 ;;
 		t-cross       ) variant $1 ;;
 		t-descending  ) variant t-cross 'DESCENDING'; t_descending=true; baseline=true ;;
 		u-toothed     ) variant $1 ;;

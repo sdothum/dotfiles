@@ -23,7 +23,7 @@ exclude=${exclude:-$(cat $IGNORE | tr '\n' '|' | sed 's/[|]*$//')}
 
 exclude()   { grep -E -v "$exclude"; }  # exclude projects not in $STOW
 changed()   { hg files --cwd $REPO "$file" >/dev/null || return 0; hg diff --stat --cwd $REPO "$file" | grep -q "changed"; }
-hgadd()     { [ -L "$file" ] || ! changed && return; hg add --$output --cwd $REPO "$file" 2>/dev/null; files="$files  ${file#$REPO/}"; }
+hgadd()     { ! changed && return; hg add --$output --cwd $REPO "$file" 2>/dev/null; files="$files  ${file#$REPO/}"; }
 addfile()   { for file in $(find $REPO -regex ".*${i#$HOME/}" | exclude) ;do hgadd ;done }  # handle multifile name match
 addfolder() { for file in $(find $i -maxdepth 1 -type f | exclude) ;do hgadd ;done }
 
