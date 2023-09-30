@@ -150,6 +150,7 @@ abbr de 'dmenu - edit'
 abbr dp 'dmenu - projects'
 abbr dr 'dmenu - run'
 abbr ds 'dmenu - scripts'
+abbr h 'helix'
 abbr hsh "helix $HOME/.local/share/fish/fish_history"
 abbr nv 'nvpy'
 abbr vd 'vi -d --role=gvimdiff'
@@ -204,6 +205,7 @@ abbr dot 'rlwrap -n dotfiles'
 abbr gif 'nsxiv -a'
 abbr handbrake 'ghb'
 abbr hdel 'history delete'
+abbr hi 'hist'
 abbr hv "vi $HOME/.local/share/fish/fish_history"
 abbr hex 'hexdump -C'
 abbr kc "kconvert '*epub'"
