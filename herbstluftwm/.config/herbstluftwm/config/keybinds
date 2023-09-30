@@ -26,20 +26,20 @@ fi
 # window manager
 hc keybind Super-Shift-q           chain . spawn kill -KILL $BROWSER . spawn quit  # qutebrowser (re)startx issue (qt5 ??)
 # hc keybind Super-Alt-Shift-q     chain . spawn kill -KILL $BROWSER . spawn pkill -KILL -f startx
-hc keybind Super-Alt-Shift-r       reload
+hc keybind Super-Control-Shift-r   reload
 hc keybind Super-w                 chain . close_or_remove . emit_hook focus_window
 hc keybind Super-Return            spawn toggle scratchpad scratchy
-hc keybind Super-Alt-Return        spawn toggle scratchpad itchy
-hc keybind Super-Shift-Return      spawn term 'term'
+hc keybind Super-Control-Return    spawn term 'term'
+hc keybind Super-Shift-Return      spawn toggle scratchpad itchy
 hc keybind Super-Escape            spawn toggle focus
 hc keybind Super-Shift-Escape      spawn toggle focus fsplit
 # number layer thumb swap
-hc keybind Super-Alt-0             spawn toggle focus
+hc keybind Super-Control-0         spawn toggle focus
 
 # UI appearance
 hc keybind Super-Control-b         spawn focus border $(cat $SPINE)
 hc keybind Super-Shift-b           spawn toggle border
-hc keybind Super-Alt-Shift-b       spawn toggle border overlap
+hc keybind Super-Control-Shift-b   spawn toggle border overlap
 # hc keybind Super-h               chain . spawn term 'gaps' rlwrap gaps . spawn draw panel  # disappears on closing gaps
 hc keybind Super-i                 spawn toggle unclutter
 hc keybind Super-Shift-i           spawn toggle picom
@@ -47,12 +47,12 @@ hc keybind Super-Shift-i           spawn toggle picom
 # wallpaper background (toggle) blur
 hc keybind Super-r                 spawn draw root select
 hc keybind Super-Shift-r           spawn draw root blur
-hc keybind Super-Alt-r             spawn draw root shuffle
+hc keybind Super-Control-r         spawn draw root shuffle
 hc keybind Super-d                 spawn dmenu root
 hc keybind Super-Shift-d           spawn dmenu root save
-hc keybind Super-Alt-d             spawn draw root color   # random background color
-hc keybind Super-Alt-Shift-d       spawn draw root invert  # toggle panel theme
-hc keybind Super-Alt-Shift-r       spawn draw root invert  # toggle panel theme
+hc keybind Super-Control-d         spawn draw root color   # random background color
+hc keybind Super-Control-Shift-d   spawn draw root invert  # toggle panel theme
+hc keybind Super-Control-Shift-r   spawn draw root invert  # toggle panel theme
 
 # focus monitor
 # hc keybind                       Super-apostrophe    cycle_monitor
@@ -97,16 +97,16 @@ hc keybind Super-Shift-1           jumpto urgent
 hc keybind Super-q                 chain . remove . set_layout max . spawn draw border
 hc keybind Super-k                 spawn draw fsplit y 0.5
 hc keybind Super-Shift-k           spawn draw fsplit y 0.666666
-hc keybind Super-Alt-k             spawn draw fsplit y 0.333333
+hc keybind Super-Control-k         spawn draw fsplit y 0.333333
 hc keybind Super-h                 spawn draw fsplit x 0.5
 hc keybind Super-Shift-h           spawn draw fsplit x 0.666666
-hc keybind Super-Alt-h             spawn draw fsplit x 0.333333
+hc keybind Super-Control-h         spawn draw fsplit x 0.333333
 # let the current frame explode into subframes
-hc keybind Super-Alt-space         spawn restore frames
+hc keybind Super-Control-space     spawn restore frames
 
 # rotate frames
-hc keybind Super-Alt-Shift-o       spawn switch orientation -2
-hc keybind Super-Alt-o             spawn switch orientation -1
+hc keybind Super-Control-Shift-o   spawn switch orientation -2
+hc keybind Super-Control-o         spawn switch orientation -1
 hc keybind Super-o                 spawn switch orientation +1
 hc keybind Super-Shift-o           spawn switch orientation +2
 
@@ -144,12 +144,12 @@ hc keybind Super-Control-space     spawn switch layout
 hc keybind Super-space             spawn toggle layout max
 hc keybind Super-Shift-z           chain . floating toggle . emit_hook focus_changed
 hc keybind Super-z                 spawn toggle fullscreen
-hc keybind Super-Alt-z             chain . pseudotile toggle . emit_hook focus_changed
+hc keybind Super-Control-z         chain . pseudotile toggle . emit_hook focus_changed
 
 # hide (pseudo minimize) and restore windows
 hc keybind Super-m                 spawn pin ttag
-hc keybind Super-Alt-m             spawn restore window
-hc keybind Super-Alt-Shift-m       spawn restore windows
+hc keybind Super-Control-m         spawn restore window
+hc keybind Super-Control-Shift-m   spawn restore windows
 hc keybind Super-Shift-m           spawn restore hidden
 hc keybind Super-Shift-BackSpace   spawn focus hlwm
 hc keybind Super-Control-BackSpace spawn focus hlwm raise
