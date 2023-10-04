@@ -201,5 +201,5 @@ function                           = "#485f6a"  # very dark grayish blue
 # operator                         = "#008b8b"  # dark cyan (teal)
 keyword                            = "#0069af"  # dark blue
 operator                           = "#bf450c"  # strong orange
-string                             = "#bf360c"  # strong red
+string                             = "#a1462a"  # desaturated strong red
 variable                           = "#59837c"  # mostly desaturated dark cyan - lime green
