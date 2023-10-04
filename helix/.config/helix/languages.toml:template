@@ -1,44 +1,44 @@
 
 [[language]]
 name                         = "bash"
-file-types                   = ["sh", { suffix = "functions" }]
 comment-token                = "#"
+file-types                   = ["sh", { suffix = "functions" }]
 indent                       = { tab-width = 3, unit = "\t" }
-shebangs                     = [ "sh", "ash", "bash", "dash" ]
-scope                        = "source.sh"
-text-width                   = 80
 roots                        = []
+scope                        = "source.sh"
+shebangs                     = [ "sh", "ash", "bash", "dash" ]
+text-width                   = 80
 
 [[language]]
 name                         = "mail"
-file-types                   = ["eml"]
-language-servers             = [{ name = "ltex-ls" }]
 comment-token                = "#"
+file-types                   = ["eml"]
 indent                       = { tab-width = 3, unit = "   " }
-text-width                   = 80
-scope                        = "source.eml"
+language-servers             = [{ name = "ltex-ls" }]
 roots                        = []
+scope                        = "source.eml"
 soft-wrap.wrap-at-text-width = true
+text-width                   = 80
 
 [[language]]
 name                         = "markdown"
 file-types                   = ["md", "mkd", "txt", "wiki"]
+indent                       = { tab-width = 3, unit = "   " }
 # language-server            = { command = "marksman" }  # supplanted by ltex-ls!
 language-servers             = [{ name = "ltex-ls" }]
-indent                       = { tab-width = 3, unit = "   " }
-scope                        = "source.md"
-text-width                   = 80
 roots                        = []
+scope                        = "source.md"
 soft-wrap.wrap-at-text-width = true
+text-width                   = 80
 
 [[language]]
 name                         = "ruby"
-file-types                   = ["rb" ]
 comment-token                = "#"
+file-types                   = ["rb" ]
 indent                       = { tab-width = 3, unit = "\t" }
+roots                        = []
 scope                        = "source.rb"
 text-width                   = 80
-roots                        = []
 
 [language-server.ltex-ls]
 command                      = "/opt/ltex-ls/bin/ltex-ls"

@@ -196,10 +196,10 @@ statusline                         = "#78a0a2"  # mostly desaturated dark cyan
 
 comment                            = "#d5b875"  # slightly desaturated orange
 constant                           = "#008b8b"  # dark cyan (teal)
-function                           = "#3e515b"  # vdark grayish blue
+function                           = "#485f6a"  # very dark grayish blue
 # keyword                          = "#bf450c"  # strong orange
 # operator                         = "#008b8b"  # dark cyan (teal)
-keyword                            = "#0096c3"  # strong cyan (blue)
+keyword                            = "#0069af"  # dark blue
 operator                           = "#bf450c"  # strong orange
 string                             = "#bf360c"  # strong red
-variable                           = "#708f9e"  # mostly desaturated dark blue
+variable                           = "#59837c"  # mostly desaturated dark cyan - lime green
