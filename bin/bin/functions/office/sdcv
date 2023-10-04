@@ -6,13 +6,14 @@
 
 # ................................................................... Dictionary
 
-usage() { usage: "$(basename $0) -dict | -th [[-=]<maxlen> | -] <word>, '-' (include phrases)"; exit 1; }
+usage() { usage: "$(basename $0) -dict | -et | -th [[-=]<maxlen> | -] <word>, '-' (include phrases)"; exit 1; }
 
 SDCV=/usr/bin/sdcv
 WORDNET="$SDCV -c -n -u 'WordNet® 3.0 (En-En)'"
 TH="$SDCV -n -u 'Moby Thesaurus II'"
 OXFORD="$SDCV -c -n -u 'Concise Oxford English Dictionary (En-En)' -u 'Concise Oxford Thesaurus 2nd Ed. (Eng-Eng)'"
 DICT="$SDCV -c -n -u 'dictd_www.dict.org_gcide'"
+ETYM="$SDCV -c -n -u 'Online Etymology Dictionary'"
 
 cols() { sed 's/^/ /' | columns; }  # min double space between columns
 
@@ -54,6 +55,7 @@ case $1 in
 	-th  ) shift; th $@ ;;
 	-uk  ) shift; eval $OXFORD  $@ | sed '1d' ;;
 	-di* ) shift; eval $DICT    $@ | sed '1d' ;;
+	-et* ) shift; eval $ETYM    $@ | sed "1,3d; s/<dd>/<br><br><dd>/" | elinks -dump ;;
 	*    ) $SDCV -c $@ ;;
 esac | sed -z 's/\n\n\n/\n/g' | print  # null (-z) line terminator to remove '\n\n\n'
 

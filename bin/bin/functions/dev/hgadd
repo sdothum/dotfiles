@@ -13,6 +13,8 @@ usage() { echo "$(basename $0) <file>* <path>*
 	exit 1
 }
 
+# IMPORTANT: exclude must include .gitignore (will cause race condition otherwise ??)
+
 REPO=${REPO:-$STOW}
 IGNORE=$REPO/.hgadd:ignore
 output=quiet  # verbose
@@ -20,7 +22,7 @@ delay=20      # notificaton duration
 
 [ "$1" ] || usage
 
-exclude=${exclude:-$(cat $IGNORE | tr '\n' '|' | sed 's/[|]*$//')}
+exclude=${exclude:-$(cat $IGNORE | tr '\n' '|' | sed 's/[|]*$//; 1i.git*\n.hg*')}  # see note above!
 
 exclude()   { grep -E -v "$exclude"; }  # exclude projects not in $STOW
 changed()   { hg files --cwd $REPO "$file" >/dev/null || return 0; hg diff --stat --cwd $REPO "$file" | grep -q "changed"; }
