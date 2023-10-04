@@ -24,7 +24,7 @@ if [ -e $LANGUAGES:spelling ] ;then
 	sed "/ltex.dictionary/a${spelling%::}" $LANGUAGES:template | sed "/ltex.dictionary/{n;s/::/,\n/g}" >$LANGUAGES
 fi
 
-cd $(dirname $1)                                         # enable :open in file directory
-term ${name:-helix} PAPER $WAIT ${HX:-hx} -c $CONFIG $@  # term call doesn't handle "space" names
+[ $# -eq 1 ] && { cd $(dirname $1); file=$(basename $1); shift; set -- $file; }  # enable :open in file directory
+term ${name:-helix} PAPER $WAIT ${HX:-hx} -c $CONFIG $@                          # term call doesn't handle "space" names
 
 # vim: set ft=sh: #

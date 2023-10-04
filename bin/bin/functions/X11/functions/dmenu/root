@@ -85,6 +85,6 @@ while color=$(colors | column -s^ -t | rmenu 'Setroot') || exit ;do
 	esac
 done
 
-notify 5 'Panel Contrast' '&lt;Mod-Control-Shift-D&gt; to invert contrast'
+notify 15 'Panel Contrast' '&lt;Super-Control-Shift-D&gt; to invert contrast'
 
 # vim: set ft=sh: #

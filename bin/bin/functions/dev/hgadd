@@ -16,9 +16,10 @@ usage() { echo "$(basename $0) <file>* <path>*
 REPO=${REPO:-$STOW}
 IGNORE=$REPO/.hgadd:ignore
 output=quiet  # verbose
+delay=20      # notificaton duration
 
 [ "$1" ] || usage
-cd $REPO
+
 exclude=${exclude:-$(cat $IGNORE | tr '\n' '|' | sed 's/[|]*$//')}
 
 exclude()   { grep -E -v "$exclude"; }  # exclude projects not in $STOW
@@ -30,7 +31,7 @@ addfolder() { for file in $(find $i -maxdepth 1 -type f | exclude) ;do hgadd ;do
 for i in $@ ;do
 	[ -d $i ] && { addfolder ; continue; }
 	[ -e $i ] && { addfile   ; continue; }
-	notify critical hgadd "$i\nnot found"
+	notify $delay warning hgadd "$i\nnot in ${REPO##*/} repository"
 done
 
 [ "$files" ] || exit 1  # non-interested source changes

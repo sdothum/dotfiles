@@ -60,7 +60,7 @@ generate() {
 	for i in $HOME/.local/* ;do candidates $i ;done
 
 	sed -i "s,$HOME/,,; \,$HOME,d" $rules
-	notify "$rules" 'Backup $HOME and review before proceeding!!'
+	notify 10 critical "$rules" 'Backup $HOME and review before proceeding!!'
 }
 
 while [ $1 ] ;do

@@ -1,4 +1,4 @@
-											#!/usr/bin/dash
+#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
 # Shell
@@ -35,7 +35,7 @@ if [ $USER != root ] ;then
 						sdd )  echo deadline | sudo tee /sys/block/sdd/queue/scheduler >/dev/null ;;
 						sde )  echo deadline | sudo tee /sys/block/sde/queue/scheduler >/dev/null ;;
 					esac
-					notify "Assigned [deadline] scheduler to SSD" "/dev/$ssd"
+					notify low "Assigned [deadline] scheduler to SSD" "/dev/$ssd"
 					echo "/dev/$ssd [deadline]" >/tmp/ssd:scheduler
 				fi
 			fi

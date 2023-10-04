@@ -35,6 +35,6 @@ fi
 jpg=$(date '+%y%m%d%H%M%S').jpg
 /usr/bin/maim $opts | convert - -size 1600 -quality $quality $target/$jpg
 ditto jpg "$jpg"
-notify 0 'Screenshot' "$target/$jpg"
+notify 0 low 'Screenshot' "$target/$jpg"
 
 # vim: set ft=sh: #

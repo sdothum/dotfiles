@@ -8,7 +8,7 @@
 
 # ..................................................................... Notifier
 
-usage() { usage: "$(basename $0) [time=<seconds> | <seconds> | console | X | low | normal | critical | blackboard]* [<color>] \"<summary>\" [[<color>] \"<body>\"]"; exit 1; }
+usage() { usage: "$(basename $0) [time=<seconds> | <seconds> | console | X | low|warning | normal | critical | blackboard]* [<color>] \"<summary>\" [[<color>] \"<body>\"]"; exit 1; }
 
 SESSION=${SESSION:-$HOME/.session}
 LOG=/tmp/notify.log
@@ -26,7 +26,8 @@ while : ;do
 		X      ) X=true ;;
 		low    |\
 		norm*  |\
-		crit*  ) urgency="-u $1" ;;
+		crit*  ) urgency="-u $1"  ;;
+		warn*  ) urgency="-u low" ;;
 		blac*  ) urgency="-h string:bgcolor:#000000" ;;
 		[0-9]* ) echo "$1" | grep -q '[^0-9]' && break || expire="--expire-time=$(( $1 * 1000 ))" ;;
 		*      ) break ;;

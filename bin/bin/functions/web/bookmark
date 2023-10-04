@@ -12,7 +12,7 @@ url() {
 	URL=$(xsel -b)
 	echo "$URL" | grep -q http || exit
 	echo "$URL" >$SESSION/bookmark
-	notify bookmark "$URL"
+	notify low bookmark "$URL"
 }
 
 (sleep 1 && url) &

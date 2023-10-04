@@ -64,7 +64,7 @@ if server ;then
 	fi
 elif pong $SERVER ;then
 	# close (unlock) any remote instances
-	pstat "ssh $SERVER -t weechat" && notify "Weechat" 'Instance already runnig' || { unlock; ssh $SERVER -t weechat; }
+	pstat "ssh $SERVER -t weechat" && notify low "Weechat" 'Instance already runnig' || { unlock; ssh $SERVER -t weechat; }
 else
 	/usr/bin/weechat
 fi

@@ -38,7 +38,7 @@ while : ;do
 		kodi           ) videomode on; kodi; videomode off ;;
 		movies         ) dmenu movies ;;
 		netflix        ) vstream netflix ;;
-		nzb            ) exists nzbget && { toggle term 'nzb' nzbget --connect; unset root; } || notify "$media" 'not installed'; break ;;
+		nzb            ) exists nzbget && { toggle term 'nzb' nzbget --connect; unset root; } || notify critical "$media" 'not installed'; break ;;
 		nzbgeek        ) nzbgeek; unset root ;;
 		nzbget         ) $BROWSER $NZBGET; pwait "$BROWSER.*$NZBGET"; unset root ;;
 		patricia       ) play -q /net/media/patricia/Patricia/Patricia.mp4 ;;

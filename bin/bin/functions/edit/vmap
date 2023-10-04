@@ -16,7 +16,7 @@ leader='<Space>'
 ignore_plug='ale_detail|AutoPairs|YRMapsExpression'
 
 maps() {
-	notify 'Vim' 'Generating maps'
+	notify low 'Vim' 'Generating maps'
 	# note ! to force overwrite and suppress prompts
 	vim -c "redir! >$vmap | silent! map | redir END | quit"
 	cat $vmap | grep -v '^. *<Plug>' | sed -r "s/^ /_/; s/^(.)  *([^ ]*)  *([ *] .*)/\1 $SEP\2 $SEP\3/; s/^_//" \
