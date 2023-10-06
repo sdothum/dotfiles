@@ -32,9 +32,10 @@ hc keybind Super-Shift-apostrophe   spawn toggle panel
 # hc keybind Super-Alt-apostrophe   spawn toggle conky
 # hc keybind Super-F1               spawn keymap toggle
 hc keybind Super-F1                 spawn dmenu menu
+# hc keybind Super-Control-a        spawn dmenu notes draft
 hc keybind Super-a                  spawn toggle scratchpad mail aerc
 hc keybind Super-Shift-a            spawn dmenu abook
-# hc keybind Super-Control-a        spawn dmenu notes draft
+hc keybind Super-Control-a          spawn toggle scratchpad matrix iamb
 hc keybind Super-b                  spawn focus $BROWSER
 # hc keybind Super-Control-b        spawn bookmark
 # hc keybind Super-Alt-Control-b    spawn dmenu history
@@ -69,7 +70,7 @@ hc keybind Super-Control-u          spawn dmenu notes poem
 hc keybind Super-v                  spawn dmenu media
 hc keybind Super-Shift-v            spawn dmenu audio
 hc keybind Super-Alt-v              chain . spawn pkill '(mpv|omxplayer)' . emit_hook focus_window
-hc keybind Super-Shift-w            spawn weather time
+# hc keybind Super-Shift-w          spawn weather time
 hc keybind Super-x                  spawn toggle nnn TMUX
 hc keybind Super-Shift-x            spawn toggle pcmanfm
 hc keybind Super-y                  spawn dmenu wiki

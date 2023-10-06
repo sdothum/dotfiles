@@ -55,6 +55,7 @@ hc rule title=Calendar                     tag=3 index=2 focus=on switchtag=on
 hc rule title=IMAP                         tag=3
 hc rule title=Usenet                       tag=3
 hc rule title=mail                         tag=3 index=1 focus=on switchtag=on
+hc rule title=matrix                       tag=3 index=2 focus=on switchtag=on
 hc rule class=Darktable                    tag=4 index=1 monitor=4 focus=on switchtag=on fullscreen=on hook=fullscreen
 hc rule class=Gimp                         tag=4 index=1 monitor=4 focus=on switchtag=on
 hc rule class=Rawtherapee                  tag=4 index=1 monitor=4 focus=on switchtag=on
