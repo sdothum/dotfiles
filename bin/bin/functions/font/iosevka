@@ -316,7 +316,7 @@ while [ $1 ] ;do
 		expanded      ) shape $expanded; sb 0.8500 ;;                                                 # expanded width (for source code and proof)
 		extended      ) shape $extended; sb 0.7000 ;;                                                 # extended width (tighter than expanded)
 		heading       ) shape 650; sb 0.8000; leading 1.2500; weight 300 light; ebook monolegible ;;  # web heading
-		kindle        ) leading 1.5; shape $extended; sb 0.6150 ;;
+		kindle        ) leading 1.75; shape $extended; sb 0.6150 ;;
 		kobo          ) leading 1; shape $extended; sb 0.6850 ;;
 		menu          ) leading 1.5000; sb 0.9000; build=-menu ;;                                     # rofi menu
 		normal        ) shape 500; sb 0.7000 ;;                                                       # normal width

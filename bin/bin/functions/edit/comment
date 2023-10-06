@@ -4,9 +4,9 @@
 # Edit
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ............................................................ helix pipe ations
+# ........................................................... helix pipe actions
 
-usage() { echo "<selection> | $(basename $0) l'eader | t'railer | u'nderline <char>
+usage() { echo "<selection> | $(basename $0) l'eader | t'railer | u'nderline | r'uler [<char>]
 >   where, first word of line is treated as comment symbol" | usage:pipe 
 	exit 1
 }
@@ -16,7 +16,7 @@ usage() { echo "<selection> | $(basename $0) l'eader | t'railer | u'nderline <ch
 width=${width:-80}
 tabwidth=${tabwidth:-3}
 
-[ $2 ] && fill="$2" || usage
+[ $2 ] && char="$2"
 [ -t 0 ] && usage  # stdin input?
 
 fill() { for i in $(seq $1) ;do echo -n "$2" ;done }
@@ -28,10 +28,13 @@ parse() {
 	leader=$(echo "$line" | sed -r "s/^([ \t]*).*/\1/")
 	spaces=$(echo "$leader" | sed "s/\t/$tab/g")
 	comment=$(echo "$line" | sed -r "s/^[ \t]*([^ ]*).*/\1/")
-	if [ $1 != "u" ] ;then  # strip existing fill decoration
-		[ "$fill" = '.' ] && content=$(echo "$line" | sed -r "s/^[ \t]*[^ ]* (.*)/\1/; s/ *\.\.* *//g") \
-			|| content=$(echo "$line" | sed -r "s/^[ \t]*[^ ]* (.*)/\1/; s/ *$fill${fill}* *//g")
-	fi
+	case $1 in
+		r* ) ;;                              # underline page width
+		u* ) width=$(echo $line | wc -c) ;;  # underline content
+		*  ) # strip existing fill decoration
+			[ "$fill" = '.' ] && content=$(echo "$line" | sed -r "s/^[ \t]*[^ ]* (.*)/\1/; s/ *\.\.* *//g") \
+				|| content=$(echo "$line" | sed -r "s/^[ \t]*[^ ]* (.*)/\1/; s/ *$fill${fill}* *//g") ;;
+	esac
 	x_spaces=$(echo -n "$spaces" | wc -c)
 	x_comment=$(echo -n "$comment" | wc -c)
 	[ $x_comment -gt 0 ] || return 1
@@ -50,8 +53,21 @@ trailer() {
 
 underline() {
 	echo "$line"
+	echo "$leader$comment $decoration"
+}
+
+ruler() {
+	echo "$line"
 	echo "$leader$comment $decoration$fill"  # extra fill for lack of parse content
 }
+
+case $1 in
+	l* ) fill=${char:-.} ;;
+	t* ) fill=${char:-.} ;;
+	u* ) fill=${char:-═} ;;
+	r* ) fill=${char:-═} ;;
+	*  ) usage     ;;
+esac
 
 while IFS= read -r line ;do
 	parse $1 || { echo "$line"; continue; }
@@ -59,8 +75,7 @@ while IFS= read -r line ;do
 		l* ) leader    ;;
 		t* ) trailer   ;;
 		u* ) underline ;;
-		u* ) underline ;;
-		*  ) usage     ;;
+		r* ) ruler ;;
 	esac
 done
 
