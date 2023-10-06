@@ -50,7 +50,7 @@ migrate() {
 }
 
 stage_0() {
-	info ........................................................ first user login
+	info ....................................................... first user login
 	# not really a script step on the new host.. (script not present!)
 	info "logging into alpine host as $USER.."
 	info "run> cd"
@@ -61,7 +61,7 @@ stage_0() {
 }
 
 stage_1() {
-	info ........................................................ from remote user
+	info ....................................................... from remote user
 	cd $HOME/.ssh
 	# sed -i "/$ALPINE/d" known_hosts
 	ssh-keygen -R $ALPINE
@@ -73,7 +73,7 @@ stage_1() {
 	scp $(basename $0) $USER@$ALPINE:$HOME/
 	[ $SERVER ] && scp /etc/hosts $USER@$ALPINE:$HOME/
 
-	info ................................................ migrate base environment
+	info ............................................... migrate base environment
 	migrate push ag bash bin build colordiff fish logrotate mime nnn ssh
 
 	info "from alpine host.."
@@ -82,7 +82,7 @@ stage_1() {
 }
 
 stage_2() {
-	info ............................................................... set repos
+	info .............................................................. set repos
 	# superuser things first..
 	doas sed -i '/wheel/s/persist/nopass/' /etc/doas.d/doas.conf
 	# glibc script compatibilities
@@ -97,7 +97,7 @@ stage_2() {
 	doas apk upgrade
 	apk list -I >apk-base-install.list
 
-	info ............................................................... autologin
+	info .............................................................. autologin
 	if [ $SERVER ] ;then
 		doas mv -v $HOME/hosts /etc/hosts
 
@@ -115,21 +115,21 @@ stage_2() {
 	echo 'Truth or die!' | doas tee /etc/motd
 	doas addgroup $USER tty
 
-	info ............................................................ system tools
+	info ........................................................... system tools
 	# doas apk add haveged  # merged into kernal >= v5.4
 	# doas apk add intel-ucode
 	# doas apk add iucode-tool
 	doas apk add procps
 	doas apk add util-linux-misc
 
-	info ............................................................... man pages
+	info .............................................................. man pages
 	$MANPAGES && doas apk add docs || {  # "doas apk del docs" to remove all man pages
 	doas apk add man-pages
 	doas apk add mandoc mandoc-apropos
 	doas apk add less
 	}
 
-	info .................................................................. shells
+	info ................................................................. shells
 	$BUSYBOX || doas apk add util-linux pciutils usbutils coreutils binutils findutils grep iproute2  # to replace busybox
 	doas apk add bash dash fish
 	doas ln -sv /bin/bash /usr/bin/bash
@@ -137,7 +137,7 @@ stage_2() {
 	doas apk add pcre-tools                # for mgrep
 	doas apk add rlwrap
 
-	info ................................................ configure user path tree
+	info ............................................... configure user path tree
 	doas addgroup $USER users
 
 	doas apk add stow
@@ -162,7 +162,7 @@ stage_3() {
 	doas apk update
 	doas apk upgrade
 
-	info ................................................................. daemons
+	info ................................................................ daemons
 	doas apk add cronie cronie-doc
 	doas rc-service crond stop
 	doas rc-update del crond
@@ -171,7 +171,7 @@ stage_3() {
 	stow logrotate
 	doas apk add openntpd
 
-	info ........................................................ system utilities
+	info ....................................................... system utilities
 	doas apk add btop
 	# doas apk add glances
 	# doas apk add smartmontools
@@ -179,7 +179,7 @@ stage_3() {
 	# doas apk add iotop
 	# doas apk add socklog
 
-	info ................................................................. network
+	info ................................................................ network
 	# doas apk add dnsmasq
 	doas apk add inetutils-telnet
 	doas apk add speedtest-cli
@@ -191,13 +191,13 @@ stage_3() {
 	doas apk add nethogs
 	doas apk add traceroute
 
-	info .................................................... remote file transfer
+	info ................................................... remote file transfer
 	doas apk add curl
 	doas apk add git
 	# doas apk add patchutils
 	doas apk add wget
 
-	info .......................................................... file utilities
+	info ......................................................... file utilities
 	doas apk add ack
 	doas apk add dos2unix
 	doas apk add fzf
@@ -222,7 +222,7 @@ stage_3() {
 	# doas apk add par2cmdline
 	make_install unrar      # for nzbget
 
-	info ....................................................... c/c++ development
+	info ...................................................... c/c++ development
 	doas apk add autoconf automake cmake make
 	doas apk add bison flex libtool ragel
 	doas apk add diffutils              # for diff extensions (vs busybox)
@@ -232,7 +232,7 @@ stage_3() {
 	doas apk add linux-headers
 	doas apk add strace
 
-	info .................................................................... rust
+	info ................................................................... rust
 	doas apk add rust
 	doas apk add cargo                  # rust installer
 	mkdir -p $HOME/.cargo/bin
@@ -241,7 +241,7 @@ stage_3() {
 	# grep -q 'path=.*/\.cargo/bin' $home/.profile || sed -i "1i[ -e \$HOME/.cargo/bin ] && export PATH=\"\$HOME/.cargo/bin:\$PATH\"" $HOME/.profile
 	addpath $HOME/.cargo/bin
 
-	info .................................................... ruby version control
+	info ................................................... ruby version control
 	# doas apk add ruby ruby-dev        # 3.x breaks xapian, frum install 2.x
 	mkdir $HOME/tmp
 	export TMPDIR=$HOME/tmp             # avoid insufficient vps tmpfs space
@@ -249,7 +249,7 @@ stage_3() {
 	cargo install frum
 	echo "which frum >/dev/null 2>&1 && frum init | source" >$HOME/.config/fish/conf.d/frum.fish
 
-	info ............................................... install sinatra framework
+	info .............................................. install sinatra framework
 	info "exit ssh session to update .cargo and frum paths"
 	info "run> ssh $ALPINE"
 	info "run> make_install ruby"
@@ -261,10 +261,10 @@ stage_33() {
 	doas apk update
 	doas apk upgrade
 
-	info .................................................... migrate connectivity
+	info ................................................... migrate connectivity
 	migrate pull adblock btrfs dnsmasq lsyncd
 
-	info ............................................................ file systems
+	info ........................................................... file systems
 	doas apk add dosfstools
 	# doas apk add exfatprogs
 	# doas apk add fuse
@@ -280,7 +280,7 @@ stage_33() {
 	doas touch /etc/lsyncd.exclude /var/log/lsyncd/log /var/log/lsyncd/status
 	[ $ALPINE = luna ] && stow lsyncd
 
-	info ..................................................................... dns
+	info .................................................................... dns
 	if [ $SERVER = luna ] ;then
 		echo "nameserver 10.1.0.10" | doas tee /etc/resolv.conf
 	else
@@ -291,7 +291,7 @@ stage_33() {
 		rc-service dnsmasq start
 	fi  
 
-	info ...................................................... package management
+	info ..................................................... package management
 	doas apk add flatpak
 	# xdg-user-dirs-update
 
@@ -301,7 +301,7 @@ stage_33() {
 	doas apk add py3-setuptools
 	# doas apk add py3-wheel
 
-	info ............................................................. programming
+	info ............................................................ programming
 	doas apk add colordiff
 	doas apk add perl
 	# doas apk add perl-app-cpanminus
@@ -314,15 +314,15 @@ stage_33() {
 	make_install julia
 	make_install premake
 
-	info ................................................................ printing
+	info ............................................................... printing
 	make_install cups
 
-	info ................................................ migrate xorg environment
+	info ............................................... migrate xorg environment
 	migrate pull fonts tmux udiskie X11 Xmodmap xorg
 	# detect hardware
 	doas apk add pciutils
 
-	info ......................................................... shell utilities
+	info ........................................................ shell utilities
 	doas apk add date       # for formatting extensions (vs busybox)
 	doas apk add expect
 	doas apk add figlet
@@ -333,7 +333,7 @@ stage_33() {
 	doas apk add tmux
 	stow tmux
 
-	info .................................................................... xorg
+	info ................................................................... xorg
 	doas apk add xf86-input-evdev
 	doas apk add xf86-input-libinput
 	doas apk add xf86-input-synaptics
@@ -370,7 +370,7 @@ stage_33() {
 	doas rc-update add dbus
 	# doas rc-service dbus start  # only needed for immediate testing of xorg
 
-	info .......................................................... xorg utilities
+	info ......................................................... xorg utilities
 	# doas apk add arandr
 	# doas apk add libva-utils
 	# doas apk add setxkbmap
@@ -392,10 +392,10 @@ stage_33() {
 	doas apk add xwallpaper
 	apk testing setroot  # for color bg
 
-	info ............................................. migrate desktop environment
+	info ............................................ migrate desktop environment
 	migrate pull conky dunst herbstluftwm images picom rofi session
 
-	info ................................................................. desktop
+	info ................................................................ desktop
 	doas apk add herbstluftwm
 	stow herbstluftwm images session/$ALPINE
 	echo herbstluftwm >$HOME/.windowmanager
@@ -406,7 +406,7 @@ stage_33() {
 	stow conky/$ALPINE
 	doas apk add xterm
 
-	info ........................................................... desktop theme
+	info .......................................................... desktop theme
 	# make_install flatseal
 	doas apk add gtk-murrine-engine
 	apk testing arc-dark
@@ -414,7 +414,7 @@ stage_33() {
 	doas apk add paper-icon-theme
 	make_install phinger-cursors
 
-	info .............................................................. desktop ui
+	info ............................................................. desktop ui
 	doas apk add autocutsel
 	doas apk add dmenu
 	doas apk add gpaste
@@ -429,7 +429,7 @@ stage_33() {
 	stow dunst/$ALPINE
 	# doas apk add screenkey
 
-	info ....................................................... desktop utilities
+	info ...................................................... desktop utilities
 	cargo install pastel
 	# doas apk add tumbler
 	doas apk add xautolock
@@ -446,7 +446,7 @@ stage_33() {
 	# make_install xtitle
 	apk testing xtitle
 
-	info ................................................................... audio
+	info .................................................................. audio
 	# doas apk add alsa-plugins
 	doas apk add alsa-lib alsa-ucm-conf alsa-utils alsaconf
 	doas addgroup root audio
@@ -459,7 +459,7 @@ stage_33() {
 	doas apk add pavucontrol pavucontrol-qt
 	# doas apk add pulseaudio-equalizer
 
-	info .......................................................... plugin devices
+	info ......................................................... plugin devices
 	doas apk add polkit
 	# doas apk add udevil
 	doas apk add udiskie
@@ -469,10 +469,10 @@ stage_33() {
 	doas rc-update add polkit
 	doas rc-service polkit start
 
-	info ............................................. migrate user environment
+	info ............................................ migrate user environment
 	migrate pull aerc imap isync mail mime notmuch remind qutebrowser sandbox stardict vim
 
-	info .................................................................. editor
+	info ................................................................. editor
 	doas apk add gvim
 	stow vim
 	doas apk add helix
@@ -486,7 +486,7 @@ stage_33() {
 	doas apk add ctags
 	# doas apk add texlive
 
-	info .................................................................... mail
+	info ................................................................... mail
 	doas apk add isync isync-doc  # mbsync
 
 	MAILDIR=$HOME/Mail
@@ -498,7 +498,7 @@ stage_33() {
 	make_install imapfilter
 	stow imap
 
-	info ............................................................. mail client
+	info ............................................................ mail client
 	doas apk add aerc aerc-doc
 	stow aerc
 	# doas apk add dante dante-doc
@@ -517,7 +517,7 @@ stage_33() {
 	info "initialize mail folders post install with.."
 	info "run> mailsync 1"
 
-	info ............................................................ productivity
+	info ........................................................... productivity
 	# doas apk add abiword
 	doas apk add gnumeric
 	doas apk add tk
@@ -531,7 +531,7 @@ stage_33() {
 	make_install dict   # not gnu dict
 	make_install quikey
 
-	info .................................................................... data
+	info ................................................................... data
 	doas apk add onedrive
 	doas apk add rclone rclone-doc
 
@@ -540,7 +540,7 @@ stage_33() {
 
 	# make_install syncthing  # causes 502 bad gateway
 
-	info ................................................................ browsers
+	info ............................................................... browsers
 	doas apk add chromium
 	doas ln -s /usr/bin/chromium-browser /usr/bin/chromium
 	doas apk add firefox
@@ -560,7 +560,7 @@ stage_33() {
 	# doas apk add gst-vaapi
 	# doas apk add libmediainfo
 
-	info ................................................................. viewers
+	info ................................................................ viewers
 	doas apk add bat
 	doas apk add catimg
 	doas apk add nsxiv nxxiv-doc
@@ -572,7 +572,7 @@ stage_33() {
 	doas apk add foliate
 	doas apk add zathura zathura-ps zathura-pdf-mupdf
 
-	info ................................................................. chatgpt
+	info ................................................................ chatgpt
 	cargo install aichat  # conversation and roles
 	make_install chatgpt  # conversation oriented
 
@@ -583,7 +583,7 @@ stage_33() {
 stage_4() {
 	doas apk update
 	doas apk upgrade
-	info ................................................................ security
+	info ............................................................... security
 	doas apk add gnome-keyring
 	doas apk add pass pinentry
 	info "console input for key phrase.."
@@ -593,7 +593,7 @@ stage_4() {
 	doas apk add py3-keyring
 	doas apk add xclip  # pass --clip option
 
-	info ...................................................... login to x session
+	info ..................................................... login to x session
 	info "rebooting.."
 	info "from alpine host, start x session.."
 	info "run> x"
@@ -605,7 +605,7 @@ stage_5() {
 	doas apk update
 	doas apk upgrade
 
-	info ................................................................... tools
+	info .................................................................. tools
 	# android
 	doas apk add android-tools
 	# doas apk add file-roller
@@ -614,7 +614,10 @@ stage_5() {
 	# mpu programmer
 	make_install qmk
 
-	info ................................................................... fonts
+	info ............................................................. matrix irc
+	cargo install --locked iamb
+
+	info .................................................................. fonts
 	doas apk add fontforge fontforge-gui py3-fontforge
 	make_install fontmatrix
 	doas apk add nodejs npm
@@ -622,10 +625,10 @@ stage_5() {
 	make_install otfcc
 	make_install ttfautohint
 
-	info .................................................................. images
+	info ................................................................. images
 	make_install gimp
 
-	info ................................................................... media
+	info .................................................................. media
 	doas apk add imagemagick
 	doas apk add kodi
 	doas apk add maim
@@ -633,7 +636,7 @@ stage_5() {
 	doas apk add qbittorrent
 	make_install sonarr
 
-	info ................................................................... async
+	info .................................................................. async
 	info "run> async on  # to speed up boot to login"
 }
 
