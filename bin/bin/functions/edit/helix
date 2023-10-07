@@ -11,6 +11,7 @@
 CONF=$XDG_CONFIG_HOME/helix
 CONFIG=$CONF/config.toml
 LANGUAGES=$CONF/languages.toml
+TABSTOP=3  # default for (pipe) align
 
 [ "$1" = WAIT ] && { WAIT=$1; shift; }  # foreground process?
 [ -e "$1" ] || { notify critical 'Helix' "$1\nnot found"; exit 1; }

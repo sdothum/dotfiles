@@ -9,12 +9,17 @@
 usage() { echo "<selection> | $(basename $0) l'eader | t'railer | u'nderline | r'uler [<char>]
 >   where, first word of line is treated as comment symbol
 >          '.' -> default leader/trailer 
->          '═' -> default (double horizontal) underline/ruler, use '-' (dash) for '─' (light horizontal), '=' (equals) for '━' (heavy horizontal)" | usage:pipe 
+>          '━' -> default (heavy horizontal) underline
+>          '═' -> default (double horizontal) ruler
+>          use '-'  (dash)   for '─' (light horizontal)
+>              '--' (dashes) for '━' (heavy horizontal)
+>              '='  (equal)  for '═' (double horizontal)" | usage:pipe 
 	exit 1
 }
 
 # simplified commenting extensions using helix pipe
 
+# env abbreviations
 width=${width:-80}
 tabwidth=${tabwidth:-3}
 
@@ -48,17 +53,18 @@ parse() {
 # default fillchars
 fillchar() {
 	case $char in
-		- ) fill='─' ;;
-		= ) fill='━' ;;
-		* ) fill=${char:-═} ;;
+		-  ) fill='─' ;;
+		-- ) fill='━' ;;
+		=  ) fill='═' ;;
+		*  ) fill=${char:-$1} ;;
 	esac
 }
 
 case $1 in
-	l* ) fill=${char:-.} ;;
-	t* ) fill=${char:-.} ;;
-	u* ) fillchar ;;
-	r* ) fillchar ;;
+	l* ) fillchar . ;;
+	t* ) fillchar . ;;
+	u* ) fillchar ━ ;;
+	r* ) fillchar ═ ;;
 	*  ) usage ;;
 esac
 
