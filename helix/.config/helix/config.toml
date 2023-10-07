@@ -1,4 +1,4 @@
-theme                       = "duochrome"
+theme                       = "chroma"
 
 [editor]
 auto-completion             = true

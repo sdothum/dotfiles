@@ -191,15 +191,15 @@ delta                              = "#fdd3c6"  # salmon (pink)
 linenr                             = "#cfd8dc"  # light grayish blue
 
 popup                              = "#ffe5b4"  # peach (orange)
-text                               = "#304647"  # very dark grayish cyan
+text                               = "#263238"  # very dark grayish blue
 statusline                         = "#78a0a2"  # mostly desaturated dark cyan
 
-comment                            = "#ca6702"  # slightly desaturated orange
+comment                            = "#d5b875"  # slightly desaturated orange
 constant                           = "#008b8b"  # dark cyan (teal)
-function                           = "#001219"  # very dark grayish blue
+function                           = "#304047"  # very dark grayish blue
 # keyword                          = "#bf450c"  # strong orange
 # operator                         = "#008b8b"  # dark cyan (teal)
-keyword                            = "#005f73"  # dark blue
+keyword                            = "#0069af"  # dark blue
 operator                           = "#bf450c"  # strong orange
-string                             = "#e76f51"  # desaturated strong red
-variable                           = "#0a9396"  # dark moderate cyan
+string                             = "#a1462a"  # desaturated strong red
+variable                           = "#398b76"  # dark moderate cyan - lime green
