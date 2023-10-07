@@ -43,24 +43,6 @@ parse() {
 	[ $x_decoration -gt 0 ] && decoration=$(fill $x_decoration "$fill") || return 1
 }
 
-leader() {
-	echo "$leader$comment $decoration $content"
-}
-
-trailer() {
-	echo "$leader$comment $content $decoration"
-}
-
-underline() {
-	echo "$line"
-	echo "$leader$comment $decoration"
-}
-
-ruler() {
-	echo "$line"
-	echo "$leader$comment $decoration$fill"  # extra fill for lack of parse content
-}
-
 case $1 in
 	l* ) fill=${char:-.} ;;
 	t* ) fill=${char:-.} ;;
@@ -72,10 +54,10 @@ esac
 while IFS= read -r line ;do
 	parse $1 || { echo "$line"; continue; }
 	case $1 in
-		l* ) leader    ;;
-		t* ) trailer   ;;
-		u* ) underline ;;
-		r* ) ruler ;;
+		l* ) echo "$leader$comment $decoration $content" ;;
+		t* ) echo "$leader$comment $content $decoration" ;;
+		u* ) echo "$line"; echo "$leader$comment $decoration" ;;
+		r* ) echo "$line"; echo "$leader$comment $decoration$fill" ;;  # extra fill for lack of parse content
 	esac
 done
 
