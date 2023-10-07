@@ -7,7 +7,9 @@
 # ........................................................... helix pipe actions
 
 usage() { echo "<selection> | $(basename $0) l'eader | t'railer | u'nderline | r'uler [<char>]
->   where, first word of line is treated as comment symbol" | usage:pipe 
+>   where, first word of line is treated as comment symbol
+>          '.' -> default leader/trailer 
+>          '═' -> default (double horizontal) underline/ruler, use '-' (dash) for '─' (light horizontal), '=' (equals) for '━' (heavy horizontal)" | usage:pipe 
 	exit 1
 }
 
@@ -43,12 +45,21 @@ parse() {
 	[ $x_decoration -gt 0 ] && decoration=$(fill $x_decoration "$fill") || return 1
 }
 
+# default fillchars
+fillchar() {
+	case $char in
+		- ) fill='─' ;;
+		= ) fill='━' ;;
+		* ) fill=${char:-═} ;;
+	esac
+}
+
 case $1 in
 	l* ) fill=${char:-.} ;;
 	t* ) fill=${char:-.} ;;
-	u* ) fill=${char:-═} ;;
-	r* ) fill=${char:-═} ;;
-	*  ) usage     ;;
+	u* ) fillchar ;;
+	r* ) fillchar ;;
+	*  ) usage ;;
 esac
 
 while IFS= read -r line ;do
