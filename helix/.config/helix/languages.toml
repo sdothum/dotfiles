@@ -32,6 +32,15 @@ soft-wrap.wrap-at-text-width = true
 text-width                   = 80
 
 [[language]]
+name                         = "perl"
+comment-token                = "#"
+file-types                   = ["rb" ]
+indent                       = { tab-width = 3, unit = "\t" }
+roots                        = []
+scope                        = "source.rb"
+text-width                   = 80
+
+[[language]]
 name                         = "ruby"
 comment-token                = "#"
 file-types                   = ["rb" ]
