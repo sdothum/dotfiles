@@ -1,0 +1,57 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Edit
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................... helix pipe actions
+
+usage() { usage: "<selection> | $(basename $0) [<nth>] ')' | '{' | '|' | '&' | '=' | '||' | '&&' | ';;' | <string>"; exit 1; }
+
+LINES=/tmp/align:stdin
+delim='⁋'   # split char
+dollar='¢'  # hard char to avoid "echo" loss
+tab='‣'     # hard char to avoid "echo" loss
+nth=1       # pattern position
+
+# simplified source code alignment extension using helix pipe
+[ $1 ] || usage
+[[ $1 =~ '^[0-9]+$' ]] && { nth=$1; shift; }
+
+# insert split char and mark special chars
+case "$1" in
+	')'  ) sed "/^[^()]*[)]/s/ *[)] */${delim} ) /" ;;  # case )
+	'{'  ) sed "/^[^{}]*[{]/s/ *[{] */${delim} { /" ;;  # f() {
+	'||' ) sed "s/ *[|][|] */${delim} || /$nth" ;;
+	'&&' ) sed "s/ *[&][&] */${delim} && /$nth" ;;
+	';;' ) sed "s/ *[;][;]/${delim} ;;/" ;;
+	'|'  ) sed "s/ *[|] */${delim} | /$nth" ;;
+	'&'  ) sed "s/ *[&] */${delim} & /$nth" ;;
+	'='  ) sed "s/ *[=] */${delim} = /$nth" ;;
+	''   ) sed "s/  */${delim} /$nth" ;;
+	*    ) sed "s/$1/${delim} $1/$nth" ;;
+esac | sed "s/\t/$tab/g; s/[$]/$dollar/g" >$LINES
+
+# max left part width
+max=0
+while read line <&3 ;do
+	if echo "$line" | grep -q "$delim" ;then
+		len=$(echo "$line" | sed "s/${delim}.*//" | wc -m)  # wc by chars NOT bytes
+		[ $len -gt $max ] && max=$len
+	fi
+done 3< $LINES
+
+# pad align left/right parts and restore special chars
+while read line <&3 ;do
+	if echo "$line" | grep -q "$delim" ;then
+		left=$(echo "$line" | sed "s/${delim}.*//")
+		pad=$(( $max - $(echo "$left" | wc -m) ))
+		pad=$(for i in $(seq $pad) ;do echo -n " " ;done )
+		right=$(echo "$line" | sed "s/.*${delim}//")
+		echo "$left$pad$right"
+	else
+		echo "$line"
+	fi | sed "s/$tab/\t/g; s/$dollar/$/g"
+done 3< $LINES
+
+# vim: set ft=sh: #

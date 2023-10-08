@@ -37,15 +37,15 @@ parse() {
 	comment=$(echo "$line" | sed -r "s/^[ \t]*([^ ]*).*/\1/")
 	case $1 in
 		r* ) ;;                              # underline page width
-		u* ) width=$(echo $line | wc -c) ;;  # underline content
+		u* ) width=$(echo $line | wc -m) ;;  # underline content
 		*  ) # strip existing fill decoration
 			[ "$fill" = '.' ] && content=$(echo "$line" | sed -r "s/^[ \t]*[^ ]* (.*)/\1/; s/ *\.\.* *//g") \
 				|| content=$(echo "$line" | sed -r "s/^[ \t]*[^ ]* (.*)/\1/; s/ *$fill${fill}* *//g") ;;
 	esac
-	x_spaces=$(echo -n "$spaces" | wc -c)
-	x_comment=$(echo -n "$comment" | wc -c)
+	x_spaces=$(echo -n "$spaces" | wc -m)
+	x_comment=$(echo -n "$comment" | wc -m)
 	[ $x_comment -gt 0 ] || return 1
-	x_content=$(echo -n "$content" | wc -c)
+	x_content=$(echo -n "$content" | wc -m)
 	x_decoration=$(( $width - $x_spaces - $x_comment - $x_content - 2 ))
 	[ $x_decoration -gt 0 ] && decoration=$(fill $x_decoration "$fill") || return 1
 }
