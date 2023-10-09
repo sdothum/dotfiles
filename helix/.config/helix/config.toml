@@ -89,9 +89,10 @@ wrap-indicator              = "  ↪ "
 wrap-at-text-width          = false
 
 [keys.insert]
+ret                         = ["insert_newline", "commit_undo_checkpoint"]          # a more granular history
 C-space                     = "completion"
 # A-h                       = "move_char_left"
-# j                         = { k = "normal_mode" }                                 # Maps qwerty `jk` to exit insert mode
+# j                         = { k = "normal_mode" }                                 # maps qwerty `jk` to exit insert mode
 # A-j                       = "move_line_down"
 # A-k                       = "move_line_up"
 # A-l                       = "move_char_right"
@@ -102,11 +103,11 @@ A-o                         = "open_below"
 A-backspace                 = "goto_last_accessed_file"
 A-ret                       = "goto_next_buffer"
 esc                         = ["collapse_selection", "keep_primary_selection"]
-ret                         = ["move_line_down", "goto_first_nonwhitespace"]        # Maps the enter key to move to start of next line
+ret                         = ["move_line_down", "goto_first_nonwhitespace"]        # maps the enter key to move to start of next line
 # A-d                       = "delete_char_backward"
 D                           = "delete_char_backward"
 # C-r                       = ["match_brackets", "select_textobject_inner", ":reflow"]
-g                           = { a = "code_action", o = "goto_last_accessed_file" }  # Maps `ga` to show possible code actions
+g                           = { a = "code_action", o = "goto_last_accessed_file" }  # maps `ga` to show possible code actions
 C-n                         = ["move_line_down", "scroll_down"]
 C-p                         = ["move_line_up", "scroll_up"]
 V                           = ["goto_line_start", "select_mode", "goto_line_end_newline"]
