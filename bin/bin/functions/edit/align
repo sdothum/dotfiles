@@ -6,30 +6,48 @@
 
 # ........................................................... helix pipe actions
 
-usage() { usage: "<selection> | $(basename $0) [<nth>] ')' | '{' | '|' | '&' | '=' | '||' | '&&' | ';;' | <string>"; exit 1; }
+usage() { echo "<selection> | $(basename $0) [<nth>] ')' | '{' | '|' | '&' | '=' | '#' | '||' | '&&' | ';;' | <string>
+>   where, 'pattern' -> ' pattern '
+>          '#'       -> '  # ' (appended comment)
+>          ''        -> ' '    (nth <space>* column)
+>          <string>  -> ' <string>'
+>          tabstop   -> ${TABSTOP:-3}" | usage:pipe
+	exit 1
+}
 
 LINES=/tmp/align:stdin
-delim='⁋'   # split char
-dollar='¢'  # hard char to avoid "echo" loss
-tab='‣'     # hard char to avoid "echo" loss
-nth=1       # pattern position
+tabstop=${TABSTOP:-3}
+
+delim='⁋'    # split char
+dollar='¢'   # hard char to avoid "echo" loss
+tab=$(for i in $(seq $tabstop) ;do echo -n "‣" ;done )  # hard char to avoid "echo" loss
+nth=1        # pattern position
+gutter=' '   # pattern gutter
+ignore='❌'  # nth space column match avoidance
 
 # simplified source code alignment extension using helix pipe
 [ $1 ] || usage
 [[ $1 =~ '^[0-9]+$' ]] && { nth=$1; shift; }
 
+case "$1" in
+	')'  ) match=$1; ignore="()" ;;  # align case pattern ')'
+	'{'  ) match=$1; ignore="{}" ;;  # align single line f() '{'
+	'||' ) match=$1 ;;
+	'&&' ) match=$1 ;;
+	';;' ) match=$1 ;;
+	'|'  ) match=$1 ;;
+	'&'  ) match=$1 ;;
+	'='  ) match=$1 ;;
+	'#'  ) match=$1; gutter='  ' ;;
+	*    ) match=" " ;;  # force drop through (below)
+esac
+
 # insert split char and mark special chars
 case "$1" in
-	')'  ) sed "/^[^()]*[)]/s/ *[)] */${delim} ) /" ;;  # case )
-	'{'  ) sed "/^[^{}]*[{]/s/ *[{] */${delim} { /" ;;  # f() {
-	'||' ) sed "s/ *[|][|] */${delim} || /$nth" ;;
-	'&&' ) sed "s/ *[&][&] */${delim} && /$nth" ;;
-	';;' ) sed "s/ *[;][;]/${delim} ;;/" ;;
-	'|'  ) sed "s/ *[|] */${delim} | /$nth" ;;
-	'&'  ) sed "s/ *[&] */${delim} & /$nth" ;;
-	'='  ) sed "s/ *[=] */${delim} = /$nth" ;;
-	''   ) sed "s/  */${delim} /$nth" ;;
-	*    ) sed "s/$1/${delim} $1/$nth" ;;
+	"$ignore" ) sed "/^[^${ignore}]*)/s/ *$match */$delim$gutter$match /" ;;
+	"$match"  ) sed "s/ *$match */$delim$gutter$match /$nth" ;;
+	''        ) sed "s/  */$delim /$nth" ;;    # align by spaces
+	*         ) sed "s/$1/$delim $1/$nth" ;;   # align by string
 esac | sed "s/\t/$tab/g; s/[$]/$dollar/g" >$LINES
 
 # max left part width
@@ -47,11 +65,11 @@ while read line <&3 ;do
 		left=$(echo "$line" | sed "s/${delim}.*//")
 		pad=$(( $max - $(echo "$left" | wc -m) ))
 		pad=$(for i in $(seq $pad) ;do echo -n " " ;done )
-		right=$(echo "$line" | sed "s/.*${delim}//")
+		right=$(echo "$line" | sed "s/.*$delim//")
 		echo "$left$pad$right"
 	else
 		echo "$line"
-	fi | sed "s/$tab/\t/g; s/$dollar/$/g"
-done 3< $LINES
+	fi
+done 3< $LINES | sed "s/$tab/\t/g; s/$dollar/$/g"
 
 # vim: set ft=sh: #
