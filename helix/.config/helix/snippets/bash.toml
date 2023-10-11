@@ -1,0 +1,8 @@
+
+[[snippets]]
+prefix = "usage:"
+body   = "usage() { usage: \"$(basename $0) ${1:options}\"; exit 1; }"
+
+[[snippets]]
+prefix = "usage:pipe"
+body   = "usage() { echo \"$(basename $0) ${1:options}\" | usage:pipe\n\texit 1\n}"

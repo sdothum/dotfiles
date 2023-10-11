@@ -121,12 +121,12 @@
 
 "ui.background"                    = { bg = "background" }
 #"ui.background.separator"         =
-"ui.cursor"                        = { bg = "cursor", fg = "foreground" }
+"ui.cursor"                        = { bg = "multi", fg = "background" }
 #"ui.cursor.normal"                =
 #"ui.cursor.insert"                =
 #"ui.cursor.select"                =
 #"ui.cursor.match"                 =
-#"ui.cursor.primary"               =
+"ui.cursor.primary"                = { bg = "cursor", fg = "foreground" }
 #"ui.cursor.primary.normal"        =
 #"ui.cursor.primary.insert"        =
 #"ui.cursor.primary.select"        =
@@ -182,8 +182,9 @@
 
 background                         = "#f7f3ee"  # light grayish orange
 foreground                         = "#263238"  # very dark grayish blue (black)
-selection                          = "#0087af"  # dark cyan (blue)
+selection                          = "#0087af"  # dark cyan
 cursor                             = "#20fccf"  # vivid cyan (iawriter)
+multi                              = "#00607c"  # dark cyan (blue)
 
 ltex                               = "#fa8c69"  # salmon (pink)
 plus                               = "#a3d5e4"  # soft cyan
@@ -197,8 +198,6 @@ statusline                         = "#78a0a2"  # mostly desaturated dark cyan
 comment                            = "#d5b875"  # slightly desaturated orange
 constant                           = "#008b8b"  # dark cyan (teal)
 function                           = "#304047"  # very dark grayish blue
-# keyword                          = "#bf450c"  # strong orange
-# operator                         = "#008b8b"  # dark cyan (teal)
 keyword                            = "#0069af"  # dark blue
 operator                           = "#bf450c"  # strong orange
 string                             = "#a1462a"  # desaturated strong red

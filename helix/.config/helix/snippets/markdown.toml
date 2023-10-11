@@ -1,0 +1,4 @@
+
+[[snippets]]
+prefix = "img"
+body = "![${1:title}](/images/${2:file}.jpg)"

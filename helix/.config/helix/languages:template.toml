@@ -27,26 +27,6 @@ ltex.language                = "en-US"
 ltex.disabledRules           = { "en-US" = [ "PROFANITY" ] }
 # user spelling dictionary languages:spelling.toml inserted here ...............
 ltex.dictionary              = { "en-US" = [
-"Calibre",
-"ebook",
-"econtent",
-"eink",
-"epub",
-"ereader",
-"ereaders",
-"ereading",
-"frontlight",
-"graal",
-"groot",
-"kepub",
-"Kindle",
-"Kobo",
-"kobopatch",
-"kobopatches",
-"koreader",
-"mobi",
-"pdf",
-"warmlight"
 ] }
 
 # [language-server.scls]

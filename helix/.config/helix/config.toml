@@ -1,3 +1,5 @@
+# ───────────────────────── = (align template)
+
 theme                       = "chroma"
 
 [editor]
@@ -13,7 +15,7 @@ completion-trigger-len      = 1
 cursorcolumn                = false
 cursorline                  = false
 gutters                     = ["spacer", "spacer", "spacer", "spacer", "spacer", "diagnostics", "spacer", "spacer", "line-numbers", "spacer", "spacer", "diff", "spacer", "spacer", "spacer"]
-idle-timeout                = 400
+idle-timeout                = 250
 line-number                 = "relative"
 middle-click-paste          = true
 mouse                       = true
@@ -122,3 +124,16 @@ Z                           = { Z = ":wqa" }
 # R                         = "replace_selections_with_clipboard"
 # d                         = ["yank_to_clipboard", "delete_selection_noyank"]
 # D                         = ["yank_joined_to_clipboard", "delete_selection_noyank"]
+
+[keys.normal."+"]
+# text insertion
+d = ":insert-output date '+## %A, %d %B %Y' | tr '[:upper:]' '[:lower:]'"
+t = ":insert-output timestamp | nocolor"
+
+# post snippet action ";;di" to insert text
+i = [":insert-output echo '![;](/images/;.jpg)'", "goto_line_start", "find_next_char"]
+# bash usage snippets
+u = [":insert-output echo 'usage() { usage: \"$(basename $0) ;\"; exit 1; }'", "goto_line_start", "find_next_char"]
+p = [":insert-output echo 'usage() { echo \"$(basename $0) ;\" | usage:pipe<>exit 1<}' | tr '>' '\t' | tr '<' '\n'", "move_visual_line_up", "move_visual_line_up", "goto_line_start", "find_next_char"]
+
+# ───────────────────────── = (align template)
