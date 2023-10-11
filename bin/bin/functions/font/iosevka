@@ -50,8 +50,8 @@ usage() {
 > d-[tailed|toothless]
 > f-[extended|serifless]
 > g-double
-> i-serifed
-> j-[serifed|serifless]
+> i-[serifed|serifless]
+> j-[flat|serifed|serifless]
 > l-[hooky|serifless]
 > m-[rounded|serifless]
 > p-[eared|serifed]
@@ -235,6 +235,8 @@ variant() {
 			f-serifless   ) glyph f=flat-hook-serifless-crossbar-at-x-height ;;
 			g-double      ) glyph g=double-storey ;;
 			i-serifed     ) glyph i=serifed ;;
+			i-serifless   ) glyph i=serifless ;;
+			j-flat        ) glyph j=flat-hook-serifless ;;
 			j-serifed     ) glyph j=flat-hook-serifed ;;
 			j-serifless   ) glyph j=serifless ;;
 			l-hooky       ) glyph l=hooky ;;
@@ -389,6 +391,8 @@ while [ $1 ] ;do
 		f-serifless   ) variant $1 ;;
 		g-double      ) variant $1 ;;
 		i-serifed     ) variant $1 ;;
+		i-serifless   ) variant $1 ;;
+		j-flat        ) variant $1 ;;
 		j-serifed     ) variant $1 ;;
 		j-serifless   ) variant $1 ;;
 		l-hooky       ) variant $1 ;;
@@ -737,5 +741,7 @@ fi
 [ $baseline ] && fforge baseline ${shape##* }    $family  # force baseline adjustment for descending caps and q-hook
 [ $space ]    && fforge space $space             $family  # lengthen space character cell width
 [ $ebook ]    && fforge ${regular}weight $adjust $family  # rename weight for e-reader (as regular)
+
+udev  # reinitialize udev
 
 # vim: set ft=sh: #

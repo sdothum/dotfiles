@@ -39,7 +39,7 @@ parse() {
 		r* ) ;;                              # underline page width
 		u* ) width=$(echo $line | wc -m) ;;  # underline content
 		*  ) # strip existing fill decoration
-			[ "$fill" = '.' ] && content=$(echo "$line" | sed -r "s/^[ \t]*[^ ]* (.*)/\1/; s/ *\.\.* *//g") \
+			[ "$fill" = '.' ] && content=$(echo "$line" | sed -r "s/^[ \t]*[^ ]* (.*)/\1/; s/ *\.\.\.* *//g") \
 				|| content=$(echo "$line" | sed -r "s/^[ \t]*[^ ]* (.*)/\1/; s/ *$fill${fill}* *//g") ;;
 	esac
 	x_spaces=$(echo -n "$spaces" | wc -m)

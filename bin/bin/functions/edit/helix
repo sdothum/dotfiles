@@ -11,7 +11,7 @@
 CONF=$XDG_CONFIG_HOME/helix
 CONFIG=$CONF/config.toml
 LANGUAGES=$CONF/languages.toml
-TABSTOP=3  # default for (pipe) align
+export TABSTOP=3  # default for (pipe), see align
 
 [ "$1" = WAIT ] && { WAIT=$1; shift; }  # foreground process?
 [ -e "$1" ] || { notify critical 'Helix' "$1\nnot found"; exit 1; }
@@ -19,10 +19,12 @@ TABSTOP=3  # default for (pipe) align
 # snapshot sources (in lieu of persistent undo avalability)
 hgadd $@ &  # don' wait :)
 
-# update this file manually in lieu of ltex dictionary update
-if [ -e $LANGUAGES:spelling ] ;then
-	spelling="$(sort -df $LANGUAGES:spelling | sed -r 's/^ *(.*) *$/\\"\1\\":/' | tr '\n' ':')"  # comma's cause unterminated address regex error
-	sed "/ltex.dictionary/a${spelling%::}" $LANGUAGES:template | sed "/ltex.dictionary/{n;s/::/,\n/g}" >$LANGUAGES
+languages() { echo ${LANGUAGES%.toml}:$1.toml; }
+
+# inject spelling dictionary manually into ltex configuration in lieu of unavailable (helix) ltex-ls dictionary update
+if [ -e $(languages spelling) ] ;then
+	spelling="$(sort -df $(languages spelling) | sed -r 's/^ *(.*) *$/\\"\1\\":/' | tr '\n' ':')"  # comma's cause unterminated address regex error
+	sed "/ltex.dictionary/a${spelling%::}" $(languages template) | sed "/ltex.dictionary/{n;s/::/,\n/g}" >$LANGUAGES
 fi
 
 [ $# -eq 1 ] && { cd $(dirname $1); file=$(basename $1); shift; set -- $file; }  # enable :open in file directory

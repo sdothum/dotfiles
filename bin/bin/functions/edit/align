@@ -22,8 +22,8 @@ delim='⁋'    # split char
 dollar='¢'   # hard char to avoid "echo" loss
 tab=$(for i in $(seq $tabstop) ;do echo -n "‣" ;done )  # hard char to avoid "echo" loss
 nth=1        # pattern position
-gutter=' '   # pattern gutter
-ignore='❌'  # nth space column match avoidance
+gutter=' '   # pattern gutter prefix
+ignore='❌'  # nth space column split case avoidance (see below)
 
 # simplified source code alignment extension using helix pipe
 [ $1 ] || usage
@@ -42,7 +42,7 @@ case "$1" in
 	*    ) match=" " ;;  # force drop through (below)
 esac
 
-# insert split char and mark special chars
+# insert split char and mark special chars ins
 case "$1" in
 	"$ignore" ) sed "/^[^${ignore}]*)/s/ *$match */$delim$gutter$match /" ;;
 	"$match"  ) sed "s/ *$match */$delim$gutter$match /$nth" ;;
