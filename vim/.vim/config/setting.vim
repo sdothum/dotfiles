@@ -338,7 +338,10 @@ let g:nrrw_rgn_rel_min       = 50  " relative window size
 
 " NrrwRgn buffer actions are not trapped by SplitColors autocmd (..?)
 function! s:closeNR()
-	if expand('%t') =~ 'NrrwRgn' | execute ':wq' | SplitColors | endif
+	if expand('%t') =~ 'NrrwRgn' 
+		execute ':wq' 
+		SplitColors 
+	endif
 endfunction
 
 vmap <leader>n :NR<CR>:SplitColors<CR>
