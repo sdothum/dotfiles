@@ -470,14 +470,16 @@ stage_33() {
 	doas rc-service polkit start
 
 	info ............................................ migrate user environment
-	migrate pull aerc imap isync mail mime notmuch remind qutebrowser sandbox stardict vim
+	migrate pull aerc helix imap isync mail mime notmuch remind qutebrowser sandbox stardict vim
 
 	info ................................................................. editor
 	doas apk add gvim
 	stow vim
 	doas apk add helix
+	stow helix
 	hx --grammar fetch
 	hx --grammar build
+	make_install tree-sitter
 	doas apk add kakoune
 	make_install lsp
 

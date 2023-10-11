@@ -15,6 +15,8 @@ doas npm install -g typescript typescript-language-server  # javascript
 doas npm install -g vscode-langservers-extracted           # css / html / json
 doas npm install -g yaml-language-server@next              # yaml
 cargo install taplo-cli --locked --features lsp            # toml
+cargo install buffer-language-server
+doas gem install solargraph
 
 # markdown
 # wget -P /tmp https://github.com/artempyanykh/marksman/releases/download/2023-07-25/marksman-linux-x64
@@ -28,5 +30,13 @@ wget -P /tmp https://github.com/valentjn/ltex-ls/releases/download/$LTEXVSN/ltex
 cd /tmp
 tar -xvf ltex-ls-$LTEXVSN.tar.gz
 doas mv ltex-ls-$LTEXVSN /opt/ltex-ls
+
+# lexical language server (for document tokens)
+doas npm install -g vim-language-server
+# # scls lexical completion and snippets incomplete
+# cd /net/depot
+# git clone https://github.com/estin/simple-completion-language-server.git
+# cd simple-completion-language-server
+# cargo install --path .
 
 # vim: set ft=sh: #

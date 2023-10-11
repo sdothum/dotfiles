@@ -1,0 +1,18 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................... helix grammars
+
+# see helix languages.toml
+cd /net/depot
+
+# add vim syntax highlighting grammar to helix
+git clore --depth 1  https://github.com/neovim/tree-sitter-vim.git
+cd tree-sitter-vim
+make
+cp -rv queries $HOME/.config/helix/runtime/queries/vim
+
+# vim: set ft=sh: #

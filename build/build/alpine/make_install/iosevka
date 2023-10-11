@@ -136,6 +136,8 @@ cmdopts() {
 			d-tailed     ) glyph d $1 ;;  # ebook variant
 			d-toothless  ) glyph d $1 ;;  # with p-eared
 			f-extended   ) f=$1 ;;        # unolexic (homage to universal grotesk)
+			i-serifless  ) i=$1 ;;
+			j-flat       ) j=$1 ;;
 			j-serifed    ) j=$1 ;;
 			l-hooky      ) l=$1 ;;
 			l-serifless  ) l=$1 ;;
@@ -197,7 +199,7 @@ update() {
 	done
 }
 
-options() { echo $adjust $ascender $cap $quasi $leading $sb $style $D $G $I $J $L $Q $a $b $d $f $j $l $m $p $q $t $y $zero $at $paren $open $four $@; }  # list
+options() { echo $adjust $ascender $cap $quasi $leading $sb $style $D $G $I $J $L $Q $a $b $d $f $i $j $l $m $p $q $t $y $zero $at $paren $open $four $@; }  # list
 
 # family [options]*
 e_ink() {
@@ -226,7 +228,7 @@ elif [ "$mu" ] ;then
 	e_ink tundra      ${cap:-cap extended} a-single Y-descending
 
 elif [ -z $ecopy ] ;then
-	cmdopts quasi-ext space 1.105 m-rounded j-serifed Q-straight open+ altmono
+	cmdopts quasi-ext space 1.125 m-rounded j-serifed Q-straight open+ altmono
 	[ $ereader = kobo ] && emdash=$emkobo || emdash=$emkindle  # == M + space width
 	cmdopts grote
 	e_ink grote ${cap:-cap extended} I-descending l-serifless t-asymmetric+
