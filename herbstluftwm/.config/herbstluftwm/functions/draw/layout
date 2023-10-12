@@ -245,7 +245,7 @@ case $1 in
 	horizontal )
 		[ -e $LOCK ] || herbstclient lock  # may already be in lock state, see toggle monocle
 		$(layout $1) $TAG
-		notify "Layout $TAG" "$1"
+		notify low "Layout $TAG" "$1"
 		herbstclient unlock ;;             # unlock to enable focus borders
 	
 	default    )

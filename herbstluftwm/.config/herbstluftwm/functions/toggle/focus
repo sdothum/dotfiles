@@ -16,7 +16,7 @@ case $1 in
 esac
 
 if [ -e $DYNAMIC ] ;then
-	[ -s $DYNAMIC ] && notify "Dynamic Frames" On || notify "Dynamic Focus" On
+	[ -s $DYNAMIC ] && notify low "Dynamic Frames" On || notify low "Dynamic Focus" On
 else
 	notify low "Dynamic Focus" Off
 fi
