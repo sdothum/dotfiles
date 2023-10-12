@@ -56,17 +56,18 @@ if window=$(echo $windows | sort | cut -d$DLM -f2 | column -s\^ -t \
 		title=$(echo $window | cut -d^ -f2)
 		action=$(previous hlwm)
 		action=$(echo "focus\nraise\nclose" | rmenu "$app ${title% }" $action -no-custom) || exit
-		mhistory hlwm $action 
+		mhistory hlwm $action
+		mode=$action  # note upper case modes :)
 	fi
 	CLIENT=$(echo $window | cut -d$DLM -f3 | cut -d. -f2)
 
-	case $mode in
-		Close* )
+	case $mode in    # $mode may be from $action above
+		*lose* )
 			herbstclient close "$CLIENT"
 			# desktop cleanup loop
 			exec focus hlwm close ;;
 	
-		Raise* )
+		*aise* )
 			focus frame
 			herbstclient bring "$CLIENT" ;;
 	
