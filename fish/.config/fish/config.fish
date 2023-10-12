@@ -155,7 +155,8 @@ set -x OPENAI_API_KEY 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
 set -x AICHAT_API_KEY $OPENAI_API_KEY
 
 # source nnn environment (and LS_COLORS)
-SOURCE $HOME/bin/functions/shell/nnn
+# SOURCE $HOME/bin/functions/shell/nnn
+set -x LS_COLORS "di=01;38;5;221:ex=00;38;5;40:ln=00;38;5;51"
 
 # .................................................................. Directories
 
