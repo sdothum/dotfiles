@@ -88,6 +88,35 @@ shebangs                     = [ "sh", "ash", "bash", "dash" ]
 text-width                   = 80
 
 [[language]]
+name                         = "conf"
+comment-token                = "#"
+file-types                   = ["conf"]
+indent                       = { tab-width = 3, unit = "\t" }
+language-servers             = ["buffer-language-server"]
+roots                        = []
+scope                        = "source.conf"
+text-width                   = 80
+
+[[language]]
+name                         = "c"
+comment-token                = "//"
+file-types                   = ["c", "h", "cpp"]
+indent                       = { tab-width = 3, unit = "\t" }
+language-servers             = ["clangd", "buffer-language-server"]
+roots                        = []
+scope                        = "source.c"
+text-width                   = 80
+
+[[language]]
+name                         = "json"
+file-types                   = ["json"]
+indent                       = { tab-width = 3, unit = "\t" }
+language-servers             = ["vscode-json-language-server", "buffer-language-server"]
+roots                        = []
+scope                        = "source.json"
+text-width                   = 80
+
+[[language]]
 name                         = "mail"
 comment-token                = "#"
 file-types                   = ["eml"]
