@@ -6,7 +6,7 @@
 
 # ........................................................... helix pipe actions
 
-usage() { echo "<selection> | $(basename $0) [<nth>] ')' | '{' | '|' | '&' | '=' | '#' | '||' | '&&' | ';;' | <string>
+usage() { echo "<selection> | $(basename $0) [<nth>] ')' | '{' | '|' | '&' | '=' | '#' | '//' | '||' | '&&' | ';;' | <string>
 >   where, 'pattern' -> ' pattern '
 >          '#'       -> '  # ' (appended comment)
 >          ''        -> ' '    (nth <space>* column)
@@ -39,12 +39,15 @@ case "$1" in
 	'&'  ) match=$1 ;;
 	'='  ) match=$1 ;;
 	'#'  ) match=$1; gutter='  ' ;;
+	'//' ) match=$1; gutter='  ' ;;
 	*    ) match=" " ;;  # force drop through (below)
 esac
 
 # insert split char and mark special chars ins
 case "$1" in
 	"$ignore" ) sed "/^[^${ignore}]*)/s/ *$match */$delim$gutter$match /" ;;
+	"#"       ) sed -r "s/^(..*[^ ]) *$match */\1$delim$gutter$match /$nth" ;;  # ignore # in column 1
+	"//"      ) sed -r "s/^(...*[^ ]) *$match */\1$delim$gutter$match /$nth" ;;  # ignore // in column 1:2
 	"$match"  ) sed "s/ *$match */$delim$gutter$match /$nth" ;;
 	''        ) sed "s/  */$delim /$nth" ;;    # align by spaces
 	*         ) sed "s/$1/$delim $1/$nth" ;;   # align by string

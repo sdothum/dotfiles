@@ -259,14 +259,15 @@ variant() {
 }
 
 integer() {
-	[ $1 ]                    || return 1
-	[ $1 -eq $1 2>/dev/null ] || return 1
+	[ $1 ]                 || return 1
+	[[ $1 =~ '^[0-9]+$' ]] || return 1
 	echo $1
 }
 
 real() {
-	integer ${1#*.} >/dev/null || return 1
-	integer ${1%.*} >/dev/null || return 1
+	[ $1 ]                        || return 1
+	[[ $1 =~ '^[0-9.]+$' ]]       || return 1
+	[[ $1 =~ '^[^.]*[.][^.]*$' ]] || return 1
 	echo $1
 }
 

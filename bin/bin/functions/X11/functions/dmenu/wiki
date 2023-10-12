@@ -47,7 +47,7 @@ add() {
 	# prepend h1 title
 	echo "# $title\n\n" >$file
 	filename_check
-	$EDITOR "$file" "$SPELLING"
+	name=wiki $EDITOR "$file" "$SPELLING"
 	[ $linkname ] && rm -f $linkname
 }
 
@@ -57,7 +57,7 @@ wiki() {
 	if expand "$file" >/dev/null ;then
 		file="$(expand "$file")"
 		filename_check
-		$EDITOR "$file" "$SPELLING"
+		name=wiki $EDITOR "$file" "$SPELLING"
 		[ $linkname ] && rm -f $linkname
 		# history file cleanup usually precedes impending edit
 		# expand "$file" | grep -q dmenu/.history && { pwait "vim.*"$(expand "$file")""; dmenu edit; }

@@ -54,7 +54,6 @@ file="$file $(escape $1)"
 	shift
 	[ $# -gt 0 ] || break 
 done
-
 [ $count -gt 1 ] && notify low 'Gvim' "$count files to edit"
 
 console || { gui=-g; [ -e $DYNAMIC ] && focus frame; }

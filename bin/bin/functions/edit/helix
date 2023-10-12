@@ -27,7 +27,18 @@ if [ -e $(languages spelling) ] ;then
 	sed "/ltex.dictionary/a${spelling%::}" $(languages template) | sed "/ltex.dictionary/{n;s/::/,\n/g}" >$LANGUAGES
 fi
 
-[ $# -eq 1 ] && { cd $(dirname $1); file=$(basename $1); shift; set -- $file; }  # enable :open in file directory
-term ${name:-helix} PAPER $WAIT ${HX:-hx} -c $CONFIG $@                          # term call doesn't handle "space" names
+[ $# -eq 1 ] && { cd $(dirname $1); file=$(basename $1); shift; }  # enable :open in file directory
+
+# escape filenames containing spaces
+count=0
+[ "$file" ] || while : ;do
+	file="$file $(escape $1)"
+	count=$(( $count + 1 ))
+	shift
+	[ $# -gt 0 ] || break
+done
+[ $count -gt 1 ] && notify low 'Helix' "$count files to edit"
+
+term ${name:-helix} PAPER $WAIT ${HX:-hx} -c $CONFIG $file         # term call doesn't handle "space" names
 
 # vim: set ft=sh: #
