@@ -480,6 +480,7 @@ stage_33() {
 	hx --grammar fetch
 	hx --grammar build
 	make_install tree-sitter
+	# cargo install fastmod
 	doas apk add kakoune
 	make_install lsp
 
