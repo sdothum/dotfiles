@@ -132,7 +132,7 @@ t = ":insert-output timestamp | nocolor"
 
 # post snippet action ";;di" to insert text
 i = [":insert-output echo '![;](/images/;.jpg)'", "goto_line_start", "find_next_char"]
-# bash usage snippets
+# bash usage: snippets
 u = [":insert-output echo 'usage() { usage: \"$(basename $0) ;\"; exit 1; }'", "goto_line_start", "find_next_char"]
 U = [":insert-output echo 'usage() { echo \"$(basename $0) ;\" | usage:<>exit 1<}' | tr '>' '\t' | tr '<' '\n'", "move_visual_line_up", "move_visual_line_up", "goto_line_start", "find_next_char"]
 

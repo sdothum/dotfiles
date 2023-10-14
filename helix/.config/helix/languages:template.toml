@@ -88,6 +88,16 @@ scope                        = "source.c"
 text-width                   = 80
 
 [[language]]
+name                         = "css"
+file-types                   = ["css"]
+indent                       = { tab-width = 3, unit = "\t" }
+language-servers             = ["vscode-css-language-server", "buffer-language-server"]
+roots                        = []
+scope                        = "source.css"
+text-width                   = 80
+
+
+[[language]]
 name                         = "json"
 file-types                   = ["json"]
 indent                       = { tab-width = 3, unit = "\t" }
