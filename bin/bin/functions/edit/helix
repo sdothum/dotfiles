@@ -11,10 +11,12 @@
 CONF=$XDG_CONFIG_HOME/helix
 CONFIG=$CONF/config.toml
 LANGUAGES=$CONF/languages.toml
+SCRATCH=/tmp/helix:scratch
 export TABSTOP=3  # default for (pipe), see align
 
 [ "$1" = WAIT ] && { WAIT=$1; shift; }  # foreground process?
-[ -e "$1" ] || { notify critical 'Helix' "$1\nnot found"; exit 1; }
+[ "$1" ] || { touch $SCRATCH; set -- $SCRATCH; }
+[ -e "$1" ] || { notify critical 'Helix' "<b>$1</b> not found"; exit 1; }
 
 # snapshot sources (in lieu of persistent undo avalability)
 hgadd $@ &  # don' wait :)
