@@ -317,7 +317,7 @@ cmdopts () {
 	while [ $1 ] ;do
 		case "$1" in
 			# shapes
-			dyslexic      ) shape $expanded; sb 0.7150; leading 1.5000; space 2; emdash 2; width=135; ebook monolexic ;;
+			dyslexic      ) shape $EXPAnded; sb 0.7150; leading 1.5000; space 2; emdash 2; width=135; ebook monolexic ;;
 			ebook         ) shape $extended; sb 0.7000; leading 1.4185; space 2; emdash 2; width=140; ebook monolegible ;;
 			expanded      ) shape $expanded; sb 0.8500 ;;                                                 # expanded width (for source code and proof)
 			extended      ) shape $extended; sb 0.7000 ;;                                                 # extended width (tighter than expanded)
@@ -340,7 +340,7 @@ cmdopts () {
 
 			# typefaces
 			altmono       ) cmdopts t-asymmetric G-hookless+ ;;
-			atkinson      ) grotesque; ebook hyperlegible; variant G-toothed J-serifless Q-crossing a-double b-toothed j-serifless m-serifless p-eared q-hooked u-toothed ampersand at number_sign percent ;;
+			atkinson      ) grotesque; ebook hyperlegible; variant G-toothed J-serifless Q-crossing a-double b-toothed j-serifless m-serifless p-eared u-toothed ampersand at number_sign percent ;;
 			elementary    ) variant I-serifless a-single ;;
 			geometric     ) geometric; cap extended; build=-jost ;;
 			grote         ) cmdopts altmono l-serifless t-asymmetric+ y-straight open+ ;;
@@ -430,8 +430,8 @@ cmdopts () {
 			cap=*         ) cap ${1#*=}      || usage ;;                               # H height
 			leading=*     ) leading ${1#*=}  || usage ;;                               # line spacing > 1.0
 			noround       ) unset sb ;;
-			quasi-ext*    ) spacing quasi-proportional-extension-only; unset width ;;
-			quasi-pro*    ) spacing quasi-proportional; sb 0.7500; leading 1.2500; space 2; ebook quasi$(echo $family | sed -r 's/.*(Hyper|Mono|Quasi)//'); variant I-serifed ;;
+			quasi-ext*    ) spacing quasi-proportional-extension-only; unset width; cmdopts cap=extended ;;
+			quasi-pro*    ) spacing quasi-proportional; ccmdopts cap=extextended leading=1.2500 space=2; ebook quasi$(echo $family | sed -r 's/.*(Hyper|Mono|Quasi)//'); variant I-serifed; unset baseline ;;
 			sb=*          ) sb ${1#*=}       || usage ;;                               # side bearing (spacing)
 			shape=*       ) shape ${1#*=}    || usage ;;                               # cell width
 			weight=*      ) tuple=${1#*=}; weight ${tuple%:*} ${tuple#*:} || usage ;;  # custom font weight
