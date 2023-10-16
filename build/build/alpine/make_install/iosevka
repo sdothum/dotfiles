@@ -232,13 +232,14 @@ elif [ "$mu" ] ;then
 elif [ -z $ecopy ] ;then
 	cmdopts quasi-ext space=1.125 Q-straight open+
  	emdash
-	e_ink sheer I-descending grote a-single
+	e_ink grace I-descending grote a-single
 
 elif [ "$duet" ] ;then
 	cmdopts quasi-ext space=1.125 Q-straight open+
  	emdash
 	e_ink stria altmono
 	e_ink grote I-descending grote
+	e_ink grace I-descending grote a-single
 
 elif [ "$trio" ] ;then
 	cmdopts quasi-ext space=1.15 G-hookless+ Q-straight open+
@@ -263,7 +264,7 @@ elif [ $coding ] ;then                    # classic coding font
 	dfont $leading G-toothed a-double family=monodyslexic
 
 else                                      # desktop fonts
-	dfont $leading
+	dfont $leading $I-serifless
 	dfont proof    I-descending Q-straight
 	dfont menu     I-descending Q-straight
 	# # dfont dyslexic            Q-straight      space=2   family=qclocktwo leading=1.40
