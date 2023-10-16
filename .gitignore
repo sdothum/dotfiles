@@ -55,66 +55,7 @@
 **/focuswriter
 **/font-manager
 **/fonts/b-rounded
-**/fonts/.fonts/AdventPro
-**/fonts/.fonts/Alegreya Sans SC
-**/fonts/.fonts/Aleo
-**/fonts/.fonts/Arsenal
-**/fonts/.fonts/articulate
-**/fonts/.fonts/Atkinson Hyperlegible
-**/fonts/.fonts/Bitter
-**/fonts/.fonts/Calibre
-**/fonts/.fonts/figlet
-**/fonts/.fonts/fluid
-**/fonts/.fonts/fonts.dir
-**/fonts/.fonts/fonts.scale
-**/fonts/.fonts/Futura
-**/fonts/.fonts/Georgia
-**/fonts/.fonts/Georgia Pro
-**/fonts/.fonts/Gotham Pro
-**/fonts/.fonts/graal
-**/fonts/.fonts/groot
-**/fonts/.fonts/grote
-**/fonts/.fonts/InputMono
-**/fonts/.fonts/InputSerif
-**/fonts/.fonts/JetBrainsMono
-**/fonts/.fonts/Jost
-**/fonts/.fonts/Kelly Slab
-**/fonts/.fonts/Libre Barcode
-**/fonts/.fonts/Lora
-**/fonts/.fonts/Major Mono Display
-**/fonts/.fonts/Metric
-**/fonts/.fonts/monodyslexic
-**/fonts/.fonts/monograffic
-**/fonts/.fonts/MostlyWaves
-**/fonts/.fonts/mu
-**/fonts/.fonts/mudra
-**/fonts/.fonts/Museo Slab
-**/fonts/.fonts/Newslab
-**/fonts/.fonts/Noto Sans Mono
-**/fonts/.fonts/Optima
-**/fonts/.fonts/PragmataPro
-**/fonts/.fonts/qclocktwo
-**/fonts/.fonts/Raleway
-**/fonts/.fonts/Roboto Slab
-**/fonts/.fonts/Rockwell
-**/fonts/.fonts/Rockwell Nova
-**/fonts/.fonts/Rubik
-**/fonts/.fonts/Sanchez
-**/fonts/.fonts/Sanchez Slab
-**/fonts/.fonts/Sans Forgetica
-**/fonts/.fonts/stria
-**/fonts/.fonts/Tiempos Headline
-**/fonts/.fonts/Tiempos Text
-**/fonts/.fonts/tundra
-**/fonts/.fonts/typograffic
-**/fonts/.fonts/umami
-**/fonts/.fonts/Unica One
-**/fonts/.fonts/wCaps
-**/fonts/.fonts/wIosevka
-**/fonts/.fonts/wMonolegible
-**/fonts/.fonts/wMonolexic
-**/fonts/.fonts/wQuasilexic
-**/fonts/.fonts/Zilla Slab
+**/fonts/.fonts/*
 **/fstab
 **/geany
 **/georgi/qmk_firmware/users/dennytom*
