@@ -317,12 +317,12 @@ cmdopts () {
 	while [ $1 ] ;do
 		case "$1" in
 			# shapes
-			dyslexic      ) shape $EXPAnded; sb 0.7150; leading 1.5000; space 2; emdash 2; width=135; ebook monolexic ;;
+			dyslexic      ) shape $expanded; sb 0.7150; leading 1.5000; space 2; emdash 2; width=135; ebook monolexic ;;
 			ebook         ) shape $extended; sb 0.7000; leading 1.4185; space 2; emdash 2; width=140; ebook monolegible ;;
 			expanded      ) shape $expanded; sb 0.8500 ;;                                                 # expanded width (for source code and proof)
 			extended      ) shape $extended; sb 0.7000 ;;                                                 # extended width (tighter than expanded)
 			heading       ) shape 650; sb 0.8000; leading 1.2500; weight 300 light; ebook monolegible ;;  # web heading
-			kindle        ) leading 1.8; shape $extended; sb 0.6150 ;;
+			kindle        ) leading 1.9; shape $extended; sb 0.6150 ;;
 			kobo          ) leading 1; shape $extended; sb 0.6850 ;;
 			menu          ) leading 1.5000; sb 0.9000; build=-menu ;;                                     # rofi menu
 			normal        ) shape 500; sb 0.7000 ;;                                                       # normal width
