@@ -23,7 +23,7 @@ delay=20      # notificaton duration
 [ "$1" ] || usage
 
 exclude=${exclude:-$(cat $IGNORE | sed '1i\\.git*\n\\.hg*' | tr '\n' '|' | sed 's/[|]*$//')}  # see note above!
-echo $exclude
+# echo $exclude
 
 exclude()   { grep -E -v "$exclude"; }  # exclude projects not in $STOW
 changed()   { hg files --cwd $REPO "$file" >/dev/null || return 0; hg diff --stat --cwd $REPO "$file" | grep -q "changed"; }

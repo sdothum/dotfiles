@@ -65,7 +65,7 @@ if [ ! -e $MONOCLE ] ;then
 		read input
 	fi
 
-	if echo $WEATHER | grep -Pq 'Wind:.*[0-9]+ km/h' ;then
+	if echo $WEATHER | sed -r 's|.*(Wind:</b>[^/]*/h).*|\1/|' | grep -Pq 'Wind:.*[0-9]+ km/h' ;then
 		WIND=$(echo $WEATHER | awk '/Wind:/ { gsub(/.*Wind:[^0-9]* /, "", $0); gsub(/ km.*$/, "", $0); print }')
 		if [ $debug ] ;then
 			echo Wind .. \"$WIND\"

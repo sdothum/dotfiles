@@ -173,7 +173,7 @@ geometric() {
 	m=serifless
 	p=eared-serifless
 	q=straight-serifless
-	t=cross-short-neck2
+	t=hookless-short-neck2
 	u=toothed-serifless
 	w=straight-flat-top-serifless
 	y=straight-serifless
@@ -255,7 +255,7 @@ variant() {
 			q-tailed      ) glyph q=tailed-serifless ;;
 			t-asymmetric  ) glyph t=flat-hook-asymmetric-short-neck2 ;;
 			t-asymmetric+ ) glyph t=hookless-asymmetric-short-neck2 ;;
-			t-cross       ) glyph t=cross-short-neck2 ;;
+			t-cross       ) glyph t=hookless-short-neck2 ;;
 			t-flat        ) glyph t=flat-hook-short-neck2 ;;
 			u-toothed     ) glyph u=toothed ;;
 			w-asymmetric  ) glyph w=straight-asymmetric-serifless ;;

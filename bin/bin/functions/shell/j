@@ -8,6 +8,8 @@
 
 usage() { usage: "$(basename $0) -- | [-] [dir] [<pattern>]"; exit 1; }
 
+exists zoxide && CD=z
+
 # refresh directory cache, see fcache
 case $1 in
 	help ) usage ;;
@@ -22,6 +24,6 @@ case $# in
 	2 ) [ -d $1 ] && dir=$(fcache $refresh $1 | fZf -q $2) || dir=$(fcache $refresh $HOME | grep -E "$1" | fZf -q $2) ;;
 esac
 
-[ $dir ] && cd $dir
+[ $dir ] && ${CD:-cd} $dir
 
 # vim: set ft=sh: #

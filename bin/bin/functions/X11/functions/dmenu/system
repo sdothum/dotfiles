@@ -6,9 +6,11 @@
 
 # ............................................................... System monitor
 
+alpine || JOURNAL="journal ^$SEP inspect\njournal ^$SEP watch\n"
+
 # meta dmenu menu!
 system=$(previous system)
-system=$(echo "journal ^$SEP inspect\njournal ^$SEP watch\nlog ^$SEP inspect\nlog ^$SEP watch\nsystem ^$SEP diagnostic" \
+system=$(echo "${JOURNAL}log ^$SEP inspect\nlog ^$SEP watch\nsystem ^$SEP diagnostic" \
 	| column -s^ -t | rmenu 'System' "$system" -no-custom) || exit
 
 mhistory system "$system"

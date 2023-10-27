@@ -29,7 +29,7 @@ if [ -e $(languages spelling) ] ;then
 	sed "/ltex.dictionary/a${spelling%::}" $(languages template) | sed "/ltex.dictionary/{n;s/::/,\n/g}" >$LANGUAGES
 fi
 
-[ $# -eq 1 ] && { cd $(dirname $1); file=$(basename $1); shift; }  # enable :open in file directory
+[ $# -eq 1 ] && { cd $(dirname $1) >/dev/null; file=$(basename $1); shift; }  # enable :open in file directory
 
 # escape filenames containing spaces
 count=0

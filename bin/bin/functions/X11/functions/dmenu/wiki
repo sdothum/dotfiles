@@ -12,7 +12,7 @@ EDIT='new'
 DIARY='diary'
 
 EDITOR=${EDITOR:-helix WAIT}
-SPELLING=$HOME/.config/helix/languages.toml:spelling
+SPELLING=$HOME/.config/helix/languages:spelling.toml
 export MONOFONT="Iosevka-proof"
 
 WIKIS="$HOME/vimwiki"

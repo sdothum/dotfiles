@@ -6,7 +6,7 @@
 
 # ........................................................... helix pipe actions
 
-usage() { echo "<selection> | $(basename $0) l'eader | t'railer | u'nderline | r'uler [<char>]
+usage() { echo "<selection> | $(basename $0) [l'eader | t'railer | u'nderline | r'uler [<char>]]
 >   where, first word of line is treated as comment symbol
 >          '.' -> default leader/trailer 
 >          '━' -> default (heavy horizontal) underline
@@ -24,7 +24,8 @@ width=${width:-80}
 tabwidth=${tabwidth:-3}
 
 [ $2 ] && char="$2"
-[ -t 0 ] && usage  # stdin input?
+[ -t 0 ] && usage    # stdin input?
+action=${1:-leader}  # default leader .
 
 fill() { for i in $(seq $1) ;do echo -n "$2" ;done }
 
@@ -60,7 +61,7 @@ fillchar() {
 	esac
 }
 
-case $1 in
+case $action in
 	l* ) fillchar . ;;
 	t* ) fillchar . ;;
 	u* ) fillchar ━ ;;
@@ -69,8 +70,8 @@ case $1 in
 esac
 
 while IFS= read -r line ;do
-	parse $1 || { echo "$line"; continue; }
-	case $1 in
+	parse $action || { echo "$line"; continue; }
+	case $action in
 		l* ) echo "$leader$comment $decoration $content" ;;
 		t* ) echo "$leader$comment $content $decoration" ;;
 		u* ) echo "$line"; echo "$leader$comment $decoration" ;;

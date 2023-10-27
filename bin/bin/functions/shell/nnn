@@ -11,7 +11,7 @@
 NNN="/usr/local/bin/nnn -E"  # nnn compiled with icons, see make_install nnn
 TDIR=/net/downloads/http     # default tmux directory
 
-[ -e $NNN ] || NNN=/usr/bin/nnn
+[ -e "$NNN" ] || NNN=/usr/bin/nnn
 # PREVIEW=-Pp                # un/comment to toggle preview-tui on launch
 export EDITOR=${EDITOR:-hx}  # -E option
 
