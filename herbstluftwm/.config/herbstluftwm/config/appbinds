@@ -61,6 +61,7 @@ hc keybind Super-Control-q          spawn dmenu halt
 # hc keybind Super-s                spawn dmenu systemd
 hc keybind Super-s                  spawn dmenu system
 hc keybind Super-t                  spawn conky clock
+hc keybind Super-Alt-t              spawn conky clock toggle
 hc keybind Super-Control-t          spawn qclocktwo
 hc keybind Super-Shift-t            spawn dmenu reminder
 # hc keybind Super-Alt-t            spawn dmenu alarm
