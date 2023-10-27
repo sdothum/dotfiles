@@ -179,3 +179,6 @@ pidof tmux >/dev/null
 		console 
 			or tmux rename-window '' 
 	end
+
+exists zoxide
+	and zoxide init fish | source

@@ -77,7 +77,8 @@ abbr friendlybear 'smbclient -R bcast //friendlybear/patricia motu om'
 
 # ......................................................................... File
 
-abbr c 'doas cat'
+abbr c 'bat'
+abbr C 'doas cat'
 abbr cp 'cp -i'
 abbr cpf 'cp -rf'
 abbr cpl 'cp -iLRfv'
@@ -144,6 +145,7 @@ abbr X x
 
 # ......................................................................... Edit
 
+abbr d 'diff'
 abbr ddf 'dirdiff'
 abbr ddfn 'dirdiff (nnn -p -)'              # file picker mode
 abbr de 'dmenu - edit'
@@ -192,14 +194,13 @@ abbr bc 'bcd'
 abbr calc 'speedcrunch'
 abbr color 'pastel format hex'
 if exists /usr/bin/sdcv
-	abbr D  'dict'
-	abbr d  'sdcv -wn'
-	abbr de 'sdcv -uk'
-	abbr di 'sdcv -di'
+	abbr di 'sdcv -wn'
+	abbr dox 'sdcv -uk'
+	abbr dic 'sdcv -di'
 	abbr th 'sdcv -th'
 else
-	abbr d 'dict'
-	abbr di 'dict -t'
+	abbr di 'dict'
+	abbr ti 'dict -t'
 end
 abbr dot 'rlwrap -n dotfiles'
 abbr gif 'nsxiv -a'
