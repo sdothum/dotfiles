@@ -1,4 +1,8 @@
 
 [[snippets]]
 prefix = "img"
-body = "![${1:title}](/images/${2:file}.jpg)"
+body = "![${1:img}](/images/${1:img}.jpg)"
+
+[[snippets]]
+prefix = "search"
+body = "[${1:search}](http://thedarnedestthing.com/search?query=${1:search})"

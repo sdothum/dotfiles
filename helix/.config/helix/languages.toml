@@ -28,6 +28,7 @@ ltex.disabledRules           = { "en-US" = [ "PROFANITY" ] }
 # user spelling dictionary languages:spelling.toml inserted here ...............
 ltex.dictionary              = { "en-US" = [
 "Calibre",
+"double-storey",
 "ebook",
 "econtent",
 "eink",
@@ -44,18 +45,22 @@ ltex.dictionary              = { "en-US" = [
 "kobopatch",
 "kobopatches",
 "koreader",
+"lua",
 "mobi",
 "pdf",
+"serifed",
+"single-storey",
 "warmlight"
 ] }
 
-# [language-server.scls]
-# command                    = "simple-completion-language-server"
-# config                     = { max_completion_items = 20, snippets_first = true }
+[language-server.scls]
+command                      = "simple-completion-language-server"
+# only using scls for snippets
+config                       = { max_completion_items = 1, snippets_first = true }
 
-# [language-server.scls.environment]
-# RUST_LOG                   = "debug,simple-completion-langauge-server=debug"
-# LOG_FILE                   = "/tmp/completion.log"
+[language-server.scls.environment]
+RUST_LOG                     = "debug,simple-completion-langauge-server=debug"
+LOG_FILE                     = "/tmp/completion.log"
 
 [language-server.solargraph]
 command                      = "solargraph"
@@ -81,7 +86,7 @@ name                         = "bash"
 comment-token                = "#"
 file-types                   = ["sh", { suffix = "functions" }]
 indent                       = { tab-width = 3, unit = "\t" }
-language-servers             = ["bash-language-server", "buffer-language-server"]
+language-servers             = ["bash-language-server", "buffer-language-server", "scls"]
 roots                        = []
 scope                        = "source.sh"
 shebangs                     = [ "sh", "ash", "bash", "dash" ]
@@ -116,6 +121,16 @@ roots                        = []
 scope                        = "source.css"
 text-width                   = 80
 
+[[language]]
+name                         = "fish"
+comment-token                = "#"
+file-types                   = ["fish"]
+indent                       = { tab-width = 3, unit = "\t" }
+language-servers             = ["buffer-language-server"]
+roots                        = []
+scope                        = "source.fish"
+text-width                   = 80
+
 
 [[language]]
 name                         = "json"
@@ -142,7 +157,7 @@ name                         = "markdown"
 file-types                   = ["md", "mkd", "txt", "wiki"]
 indent                       = { tab-width = 3, unit = "   " }
 # language-servers           = [{ name = "marksman" }]  # supplanted by ltex-ls!
-language-servers             = ["ltex-ls", "buffer-language-server"]
+language-servers             = ["ltex-ls", "buffer-language-server", "scls"]
 roots                        = []
 scope                        = "source.md"
 soft-wrap.wrap-at-text-width = true
