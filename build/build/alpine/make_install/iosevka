@@ -232,14 +232,14 @@ elif [ "$mu" ] ;then
 elif [ -z $ecopy ] ;then
 	cmdopts quasi-ext space=1.125 Q-straight open+
  	emdash
-	e_ink grace I-descending grote a-single
+	e_ink patio grote   a-single t-cross
 
 elif [ "$duet" ] ;then
 	cmdopts quasi-ext space=1.125 Q-straight open+
  	emdash
-	e_ink stria altmono
-	e_ink grote I-descending grote
-	e_ink grace I-descending grote a-single
+	e_ink stria altmono I-serifless
+	e_ink grote grote   I-descending
+	e_ink patio grote   a-single t-cross
 
 elif [ "$trio" ] ;then
 	cmdopts quasi-ext space=1.15 G-hookless+ Q-straight open+

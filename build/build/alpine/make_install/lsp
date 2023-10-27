@@ -33,10 +33,10 @@ doas mv ltex-ls-$LTEXVSN /opt/ltex-ls
 
 # lexical language server (for document tokens)
 doas npm install -g vim-language-server
-# # scls lexical completion and snippets incomplete
-# cd /net/depot
-# git clone https://github.com/estin/simple-completion-language-server.git
-# cd simple-completion-language-server
-# cargo install --path .
+# scls snippets only (see languages.toml)
+cd /net/depot
+git clone https://github.com/estin/simple-completion-language-server.git
+cd simple-completion-language-server
+cargo install --path .
 
 # vim: set ft=sh: #

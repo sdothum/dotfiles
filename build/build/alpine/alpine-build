@@ -200,7 +200,6 @@ stage_3() {
 	info ......................................................... file utilities
 	doas apk add ack
 	doas apk add dos2unix
-	doas apk add fzf
 	doas apk add gawk       # full featured awk required by aerc
 	doas apk add mlocate
 	doas apk add ncdu
@@ -327,11 +326,13 @@ stage_33() {
 	doas apk add expect
 	doas apk add figlet
 	doas apk add fortune
+	doas apk add fzf
 	doas apk add ncurses
 	doas apk add neofetch
 	make_install shell-functools
 	doas apk add tmux
 	stow tmux
+	doas apk add zoxide
 
 	info ................................................................... xorg
 	doas apk add xf86-input-evdev
