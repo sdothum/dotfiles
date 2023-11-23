@@ -114,7 +114,7 @@ C-n                         = ["move_line_down", "scroll_down"]
 C-p                         = ["move_line_up", "scroll_up"]
 V                           = ["goto_line_start", "select_mode", "goto_line_end_newline"]
 X                           = "extend_line_above"
-Z                           = { Z = ":wqa" }
+Z                           = { Z = ":wqa!" }
 
 # to circumvent multi-cursor single line register yanks
 # p                         = "paste_clipboard_after"
