@@ -1,0 +1,114 @@
+#!/usr/bin/bash
+# sdothum - 2016 (c) wtfpl
+
+# Mail
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ...................................................................... Receive
+
+usage() { usage: "$(basename $0) 'daemon | I'nit | i'ndex | l'og | t'ags | 1'pass"; exit 1; }
+
+# crontab: * * * * * <path>/mailsync >>/tmp/mailsync.log 2>&1
+
+. $HOME/bin/functions/shell/exec_lock
+
+MAILDIR=$HOME/Mail
+ME=sdothum
+MAILBOX=$MAILDIR/$ME
+
+# import user path
+. $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
+
+# mail poller (see offlineimap and imapfilter)
+# lifted from http://cpbl.wordpress.com/2009/11/07/alpine-offlineimap-and-gmail-under-ubuntu/
+interval=${interval:-15}
+[ -e /tmp/mailsync:new ] || touch /tmp/mailsync:new
+	
+logmsg() {
+	trace "$1"  # for mailsync cron log
+	trace "$1" >>$2
+}
+
+# ................................................................... Initialize
+
+halt_mail() {
+	killall aerc 2>/dev/null
+	killall mbsync 2>/dev/null
+	killall notmuch 2>/dev/null
+}
+
+# tag new messages
+tag_messages() {
+	logmsg 'Starting notmuch..' /tmp/notmuch.log
+	notmuch new >>/tmp/notmuch.log 2>&1
+	tail -1 /tmp/notmuch.log | grep -q 'No new mail.' || notify low Gmail 'New messages received'
+}
+
+one_pass() {
+	logmsg 'Starting mbsync..' /tmp/mbsync.log
+	rm -f $MAILDIR/.notmuch/xapian/flintlock
+	mkdir -p $MAILDIR/$(grep 'Inbox' $HOME/.mbsyncrc | cut -d/ -f3)  # mbsync requires existence of mail account folder!
+	find $MAILBOX -type f -size 0 -exec rm -fv {} \;                 # purge empty messages
+	# mbsync -a --verbose >>/tmp/mbsync.log 2>&1
+	mbsync -Dmn $1 $ME >>/tmp/mbsync.log 2>&1
+
+	# folder management of gmail labels (deprecated)
+	# logmsg 'Starting imapfilter..' /tmp/imapfilter.log
+	# imapfilter -v -c $HOME/.imapfilter/dovecot.lua >>/tmp/imapfilter.log 2>&1
+
+	tag_messages
+}
+
+# initialize notmuch database
+index() {
+	halt_mail
+	rm -rf $MAILDIR/.notmuch/dump-*
+	rm -rf $MAILDIR/.notmuch/xapian
+	notmuch setup
+	notmuch new
+	tag_messages
+}
+
+# initialize Mail
+initialize() {
+	ifno "initialize $ME" && return
+	halt_mail
+	rm -rf $MAILBOX
+	mkdir $MAILBOX
+	index
+	one_pass --pull
+ }
+
+# ........................................................... mail server daemon
+
+# mail daemon (cron task)
+mail_daemon() {
+	# trace 'Starting mailsync..'
+	while : ;do
+		# updating old message after offlineimap fails cmp everytime (..puzzler!) ??
+		mv /tmp/mailsync:new /tmp/mailsync:old
+		# curl -u ${ME}:$(imap_keyring ${ME}@gmail.com) --silent 'https://mail.google.com/mail/feed/atom' | perl -ne 'print '\t' if /<name>/; print "$2\n" if /<(title|name)>(.*)<\/\1>/ ;' >/tmp/mailsync:new
+		curl -u ${ME}:$(cat $MAILDIR/.mailsync) --silent 'https://mail.google.com/mail/feed/atom' \
+		| perl -ne 'print '\t' if /<name>/; print "$2\n" if /<(title|name)>(.*)<\/\1>/ ;' >/tmp/mailsync:new
+		cmp -s /tmp/mailsync:old /tmp/mailsync:new
+		if [ $? -eq 0 ] ;then
+			trace 'No new email'
+			break
+		else one_pass
+			trace 'Cycling..'
+			sleep $interval
+		fi
+	done
+}
+
+case $@ in
+	'' ) mail_daemon ;;
+	i* ) index ;;
+	I* ) initialize ;;
+	l* ) ditto 'tail -f /tmp/mailsync.log'; tail -f /tmp/mailsync.log ;;
+	t* ) tag_messages ;;
+	1* ) one_pass ;;
+	*  ) usage ;;
+esac
+
+# vim: set ft=sh: #
