@@ -37,6 +37,7 @@ BATCH_SIZE=25
 CLEANUP_FREQUENCY_HOURS=1
 CLEANUP_ARCHIVE_UNREAD_DAYS=7
 CLEANUP_ARCHIVE_READ_DAYS=7
+CLEANUP_REMOVE_SESSIONS_DAYS=9999
 " | doas tee /etc/miniflux.conf
 
 doas miniflux -c /etc/miniflux.conf -migrate

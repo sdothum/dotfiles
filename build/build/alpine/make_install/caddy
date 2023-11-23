@@ -1,0 +1,21 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................... web server
+
+doas apk add caddy
+
+grep -q 'http.d' /etc/caddy/Caddyfile || echo "\nimport http.d/*.caddy" | doas tee -a /etc/caddy/Caddyfile
+[ -e /etc/init.d/miniflux ] && stow caddy/miniflux
+[ -e /etc/init.d/puma     ] && stow caddy/puma
+
+# switch with nginx
+doas rc-service nginx stop
+doas rc-update delete nginx
+doas rc-update add caddy
+doas rc-service caddy start
+
+# vim: set ft=conf: #

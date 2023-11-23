@@ -232,7 +232,7 @@ elif [ "$mu" ] ;then
 elif [ -z $ecopy ] ;then
 	cmdopts quasi-ext space=1.125 Q-straight open+
  	emdash
-	e_ink patio grote   a-single t-cross
+	e_ink tesqu grote   I-descending
 
 elif [ "$duet" ] ;then
 	cmdopts quasi-ext space=1.125 Q-straight open+

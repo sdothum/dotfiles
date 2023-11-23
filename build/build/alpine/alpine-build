@@ -618,9 +618,6 @@ stage_5() {
 	# mpu programmer
 	make_install qmk
 
-	info ............................................................. matrix irc
-	cargo install --locked iamb
-
 	info .................................................................. fonts
 	doas apk add fontforge fontforge-gui py3-fontforge
 	make_install fontmatrix
@@ -639,6 +636,13 @@ stage_5() {
 	doas apk add mpv
 	doas apk add qbittorrent
 	make_install sonarr
+
+	info ............................................................. matrix irc
+	cargo install --locked iamb
+
+	info .............................................................. self-host
+	make_install miniflux
+	make_install caddy
 
 	info .................................................................. async
 	info "run> async on  # to speed up boot to login"
