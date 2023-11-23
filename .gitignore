@@ -127,6 +127,12 @@
 **/luakit/*.db
 **/luakit/quickmarks
 **/mail
+!**/mail/compose
+!**/mail/mail
+!**/mail/mailcot
+!**/mail/mailqueue
+!**/mail/mailsync
+!**/mail/notmail
 **/makepkg
 **/.mcabber
 **/mpd
