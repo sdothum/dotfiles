@@ -26,7 +26,12 @@ kobo/kobopatch_*/src/*yaml
 kobo/kobopatch_*/*yaml
 kobo/Nickel*
 kustom
-mail
+bin/bin/functions/mail/compose
+bin/bin/functions/mail/mail
+bin/bin/functions/mail/mailcot
+bin/bin/functions/mail/mailqueue
+bin/bin/functions/mail/mailsync
+bin/bin/functions/mail/notmail
 mime
 miniflux
 nnn/.config/nnn/plugins/._*
