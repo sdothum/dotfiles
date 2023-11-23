@@ -77,8 +77,8 @@ abbr friendlybear 'smbclient -R bcast //friendlybear/patricia motu om'
 
 # ......................................................................... File
 
-abbr c 'bat'
-abbr C 'doas cat'
+abbr b 'doas bat'
+abbr c 'doas cat'
 abbr cp 'cp -i'
 abbr cpf 'cp -rf'
 abbr cpl 'cp -iLRfv'
@@ -95,6 +95,7 @@ abbr rmr 'rm -rf'
 abbr rmv 'rm -iv'
 abbr s 'sort -n'
 abbr t 'tail -f'
+abbr tar 'tar -xvf'
 
 # .................................................................... Directory
 
@@ -109,6 +110,7 @@ abbr llr "ls -lAR$HUMAN"
 abbr lr "ls -LAR"
 abbr ls "ll -S$HUMAN"
 abbr lt "ll -t$HUMAN"
+abbr mk "mkdir -p"
 abbr path 'echo $PATH'
 abbr pp 'pwd'
 abbr tree 'sudo tree -aCF'
