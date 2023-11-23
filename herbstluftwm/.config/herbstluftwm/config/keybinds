@@ -40,7 +40,6 @@ hc keybind Super-Control-0         spawn toggle focus
 hc keybind Super-Control-b         spawn focus border $(cat $SPINE)
 hc keybind Super-Shift-b           spawn toggle border
 hc keybind Super-Control-Shift-b   spawn toggle border overlap
-# hc keybind Super-h               chain . spawn term 'gaps' rlwrap gaps . spawn draw panel  # disappears on closing gaps
 hc keybind Super-i                 spawn toggle unclutter
 hc keybind Super-Shift-i           spawn toggle picom
 
@@ -129,8 +128,9 @@ hc keybind Super-BackSpace         spawn switch tag
 # set layout
 # hc keybind Super-Control-space   spawn toggle monocle
 hc keybind Super-Control-0         spawn toggle monocle
-hc keybind Super-g                 spawn toggle layout grid
+hc keybind Super-G                 spawn toggle layout grid
 hc keybind Super-Shift-g           spawn draw layout
+hc keybind Super-Control-g         chain . spawn term 'gaps' rlwrap gaps . spawn draw panel  # disappears on closing gaps
 hc keybind Super-Control-minus     spawn draw layout default
 hc keybind Super-Control-1         spawn draw layout max
 hc keybind Super-Control-2         spawn draw layout halves

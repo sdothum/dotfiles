@@ -113,11 +113,6 @@ else
 	herbstclient use 1
 fi
 
-# .................................................................... Emit hook
-
-# add window management extensions
-emithook &
-
 # ................................................................ Final touches
 
 # emit hook stalled otherwise until a new window action.. in pre 0.9.4 releases (old patch)
@@ -131,5 +126,10 @@ conky clock auto
 
 sleep 4  # what dynamic window handling?
 [ -e $DYNAMIC ] && toggle focus status || toggle focus
+
+# .................................................................... Emit hook
+
+# add window management extensions
+emithook &
 
 # vim: set ft=sh: #

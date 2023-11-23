@@ -33,7 +33,7 @@ hc keybind Super-Shift-apostrophe   spawn toggle panel
 # hc keybind Super-F1               spawn keymap toggle
 hc keybind Super-F1                 spawn dmenu menu
 # hc keybind Super-Control-a        spawn dmenu notes draft
-hc keybind Super-a                  spawn toggle scratchpad mail aerc
+hc keybind Super-a                  spawn toggle mail
 hc keybind Super-Shift-a            spawn dmenu abook
 hc keybind Super-Control-a          spawn toggle scratchpad matrix iamb
 hc keybind Super-b                  spawn focus $BROWSER
@@ -60,6 +60,7 @@ hc keybind Super-Control-q          spawn dmenu halt
 # hc keybind Super-r                spawn dmenu clipboard
 # hc keybind Super-s                spawn dmenu systemd
 hc keybind Super-s                  spawn dmenu system
+hc keybind Super-Shift-s            spawn toggle term btop BLACKBOARD btop
 hc keybind Super-t                  spawn conky clock
 hc keybind Super-Alt-t              spawn conky clock toggle
 hc keybind Super-Control-t          spawn qclocktwo

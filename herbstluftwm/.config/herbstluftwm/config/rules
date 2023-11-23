@@ -92,6 +92,7 @@ hc rule instance=grid                      focus=on switchtag=on hook=grid
 # hc rule class=Amphetype                  pseudotile=on
 hc rule title=blackscreen                  monitor=1 fullscreen=on hook=fullscreen
 hc rule class=Colorgrab                    pseudotile=on
+hc rule title=compose                      hook=max
 hc rule class=feh                          focus=on switchtag=on
 hc rule class=File-roller                  pseudotile=off
 hc rule class=float                        pseudotile=on focus=on

@@ -7,12 +7,19 @@
 
 # ......................................................... Toggle dynamic focus
 
-# Usage: toggle focus [fsplit | status]
+# Usage: toggle focus [fsplit | defer [<delay>] | status]
 
 case $1 in
 	''     ) [ -e $DYNAMIC ] && rm $DYNAMIC || touch $DYNAMIC; [ -e $DYNAMIC ] && focus window ;;  # see emit_hook and focus functions
 	fsplit ) [ -s $DYNAMIC ] && { rm $DYNAMIC; touch $DYNAMIC; } || echo frames >$DYNAMIC ;;       # see focus frame
 	status ) ;;
+
+	# suspend dynamic focus for next window action, see compose
+	defer  ) 
+		[ -e $DYNAMIC ] && cp $DYNAMIC $DYNAMIC:defer
+		rm -f $DYNAMIC
+		(sleep ${2:-2}; [ -e $DYNAMIC:defer ] && cp $DYNAMIC:defer $DYNAMIC; rm -f $DYNAMIC:defer) &
+		return ;;
 esac
 
 if [ -e $DYNAMIC ] ;then
