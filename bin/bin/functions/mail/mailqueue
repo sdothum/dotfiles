@@ -1,0 +1,47 @@
+#!/usr/bin/bash
+# sdothum - 2016 (c) wtfpl
+
+# Mail
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................................... Send
+
+# Usage: mailqueue [purge]
+
+# crontab: * * * * * <path>/mailqueue >>/tmp/mailqueue.log 2>&1
+
+. $HOME/bin/functions/shell/exec_lock
+
+[ $STOW ] || STOW=$HOME/stow
+
+# send mail poller with error notifier
+queue=$HOME/.msmtpqueue
+if [ "$1" = purge ] ;then
+	rm -rfv $queue/*
+	exit
+fi
+
+# import user path
+. $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
+
+# mailqueue daemon (cron task)
+# trace 'Starting mailqueue..'
+
+if [ $(ls -l $queue | wc -l) -gt 1 ] ;then
+	trace 'Sending mail..'
+	# count=$(echo $(ls -l $queue | wc -l) / 2 | bc)
+	count=$(( $(ls -l $queue | wc -l) / 2 ))
+	# reset any mangled mail permissions
+	[ $(stat --format '%a' $STOW/msmtp/.msmtprc) -ne 600 ] && chmod -c 600 $HOME/.msmtprc
+	errmsg=$(/usr/local/bin/msmtp-runqueue.sh 2>&1)  # trap msmtp: error message
+	echo "$errmsg"
+	if echo "$errmsg" | grep -q FAILURE ;then
+		notify X critical 'Send mail failure..' "$(echo "$errmsg" | grep 'msmtp:' | head -1)"
+	else
+		[ $count -eq 1 ] && notify low X 'Mail Queue' '1 message sent' || notify X 'Mail Queue' "$count messages sent"
+	fi
+else
+	trace 'No mail'
+fi
+
+# vim: set ft=sh: #
