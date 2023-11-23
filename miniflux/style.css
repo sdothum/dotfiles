@@ -1,3 +1,30 @@
+
+@font-face {
+	font-family: "asymmetric";
+	font-weight: 400;
+	src: url("/fonts/grote-book.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "asymmetric";
+	font-weight: 400;
+	font-style: italic;
+	src: url("/fonts/grote-bookitalic.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "asymmetric";
+	font-weight: 600;
+	src: url("/fonts/grote-bold.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "asymmetric";
+	font-weight: 600;
+	font-style: italic;
+	src: url("/fonts/grote-bolditalic.ttf") format("truetype");
+}
+
 :root {
 	--color-background: #f7f3ee;
 	--color-bismark: #546e7a;
@@ -94,7 +121,7 @@
 	--title-color: var(--color-default);
 	--title-focus-color: var(--color-red);
 
-	--font-family: "grote", system-ui, -apple-system, "Segoe UI", roboto,
+	--font-family: "asymmetric", system-ui, -apple-system, "Segoe UI", roboto,
 		"Helvetica Neue", arial, "Noto Sans", sans-serif, "Apple Color Emoji",
 		"Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
@@ -132,7 +159,7 @@
 
 .logo {
 	color: var(--color-default);
-	/* font-family: "grote", sans-serif; */
+	/* font-family: "asymmetric", sans-serif; */
 	font-weight: 900;
 	margin-left: 0;
 	position: relative;
@@ -144,7 +171,7 @@
 .logo a,
 .logo a span {
 	color: var(--color-default);
-	/* font-family: "grote", sans-serif; */
+	/* font-family: "asymmetric", sans-serif; */
 	font-weight: 900;
 	letter-spacing: 0;
 	transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1),
@@ -309,7 +336,7 @@ body .item {
 
 .item-meta .item-meta-info {
 	font-size: .95em;
-	margin-top: 5px;
+	margin-top: 0.65em;
 	padding-left: 21px;
 }
 
@@ -338,7 +365,7 @@ body .item {
 }
 
 .entry-content {
-	font-family: "grote", sans-serif;
+	font-family: "asymmetric", sans-serif;
 	line-height: var(--entry-content-line-height);
 }
 
@@ -800,18 +827,18 @@ div.parsing-error {
 
 	.item-meta .item-meta-icons {
 		float: left;
-		font-size: .95em;
-		margin-top: -0.45em !important;
+		font-size: 1em;
+		margin-top: -0.20em !important;
 		opacity: unset;
 		padding-left: 21px;
 		transition: none;
 	}
 
 	.item-meta .item-meta-info {
-		font-size: 1em;
+		font-size: .95em;
 		clear: both;
 		float: right;
-		margin-top: -1.55em;
+		margin-top: -1.65em;
 		opacity: 0.7;
 		transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1),
 			background-color 0.2s cubic-bezier(0.19, 1, 0.22, 1);
