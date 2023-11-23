@@ -427,7 +427,7 @@ cmdopts () {
 		
 			# geometry
 			ascender=*    ) ascender ${1#*=} || usage ;;                               # affects descender as well
-			cap=*         ) cap ${1#*=}      || usage ;;                               # H height
+			cap=*         ) cap ${1#*=}      || usage ;;                               # H height (capitals)
 			leading=*     ) leading ${1#*=}  || usage ;;                               # line spacing > 1.0
 			noround       ) unset sb ;;
 			quasi-ext*    ) spacing quasi-proportional-extension-only; unset width; cmdopts cap=extended ;;
@@ -435,7 +435,7 @@ cmdopts () {
 			sb=*          ) sb ${1#*=}       || usage ;;                               # side bearing (spacing)
 			shape=*       ) shape ${1#*=}    || usage ;;                               # cell width
 			weight=*      ) tuple=${1#*=}; weight ${tuple%:*} ${tuple#*:} || usage ;;  # custom font weight
-			xheight=*     ) xheight ${1#*=}  || usage ;;                               # hex|ight of x (experimental for larger fontsizes)
+			xheight=*     ) xheight ${1#*=}  || usage ;;                               # height of x (experimental for larger fontsizes)
 
 			help          ) usage ;;
 			*             ) usage ;;

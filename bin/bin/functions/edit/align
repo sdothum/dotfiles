@@ -27,7 +27,7 @@ gutter=' '   # pattern gutter prefix
 ignore='❌'  # nth space column split case avoidance (see below)
 
 # simplified source code alignment extension using helix pipe
-[[ "$1" =~ '^[0-9]+$' ]] && { nth=$1; shift; } || [ $1 ] || set -- '#'  # NOTE: fence=${1:-#} case $fence fails !! 
+[[ "$1" =~ '^[0-9]+$' ]] && { nth=$1; shift; } || [ $1 ] || set -- '#'  # NOTE: fence=${1:-#} case $fence does not work as expected for '#'
 
 case "$1" in
 	')'  ) match=$1; ignore="()" ;;  # align case pattern ')'

@@ -8,6 +8,8 @@
 
 usage() { usage: "$(basename $0) [quiet] [service]"; exit 1; }
 
+. $HOME/bin/functions/shell/exec_lock
+
 # for really poor wifi connections
 SERVICE=$HOME/.session/service
 dns=8.8.8.8
@@ -16,7 +18,6 @@ delay=5
 # import user path
 . $HOME/bin/functions/shell/user_path
 
-slock $(basename $0) $$ || exit 1
 while [ $1 ] ;do
 	case $1 in
 		force        ) rm -f $flock; shift ;;

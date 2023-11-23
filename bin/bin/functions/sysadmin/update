@@ -134,7 +134,7 @@ usb() {
 }
 
 EXCLUDE_HTTP_LOCAL='--exclude=logs --exclude=tmp --exclude=thedarnedestthing.db --exclude=log'
-STOW_VPS='ag bash bin build colordiff fish fonts logrotate mime nginx nnn openrc ssh thedarnedestthing tmux vimwiki'
+STOW_VPS='ag bash bin build caddy colordiff fish fonts logrotate mime nginx nnn openrc ssh thedarnedestthing tmux vimwiki'
 
 stow_vps() { for i in $STOW_VPS ;do echo $HOME/stow/$i ;done }
 

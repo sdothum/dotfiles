@@ -8,7 +8,7 @@
 
 # Usage: pwait "<pattern>"
 # Note:  includes special handling for "term WAIT <command>", see term
-#        (editting this script does not trigger v'im mercurial update)
+#        (editting this script does not trigger vim mercurial update)
 
 cycle=0.05  # loop window
 [ $(pgrep -af "pwait.*$@" | wc -l) -gt 2 ] && exit  # don't instantiate duplicate applications

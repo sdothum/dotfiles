@@ -16,7 +16,7 @@ for i in $@ ;do
 	[ "$i" ] && jpeg=$i
 	[ "${i##*.}" = jpg ] && name=$jpeg || name="${i%.*}.jpg"
 	ditto add "$(basename $GALLERY)/$name"
-	convert $jpeg -resize 1600 -quality $quality $GALLERY/$name
+	convert $jpeg -resize ${size:-1600} -quality $quality $GALLERY/$name
 done
 
 # vim: set ft=sh: #

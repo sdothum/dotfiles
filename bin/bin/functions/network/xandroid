@@ -10,6 +10,6 @@
 # doas adb start-server
 
 doas adb devices | grep -q 'device$' || { notify 5 critical 'Connect phone to USB-C'; exit; }
-term 'android' scrcpy
+term 'android' scrcpy -K -M
 
 # vim: set ft=sh: #

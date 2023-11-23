@@ -6,7 +6,7 @@
 
 # ................................................................... Screenshot
 
-usage() { usage: "$(basename $0) DVI-'0 | DVI-'1 | l'eft | r'ght | a'll | d'esktop | s'elect | <XxY+'X+'Y>"; exit 1; }
+usage() { usage: "$(basename $0) A'ndroid | DVI-'0 | DVI-'1 | l'eft | r'ght | a'll | d'esktop | s'elect | <XxY+'X+'Y> [<name>]"; exit 1; }
 
 target=/net/photos/batchqueue
 target=$HOME/thedarnedestthing.com/application/public/images
@@ -14,7 +14,8 @@ quality=92
 refresh=3  # allow desktup refresh (from dmenu)
 
 if server ;then
-	case $@ in
+	case $1 in
+		A*      ) ;;
 		[0-9]*  ) opts="--geometry=$@" ;;
 		l* | *0 ) opts='--geometry=3440x1440+0+0' ;;
 		r* | *1 ) opts='--geometry=1680x1050+3440+0' ;;
@@ -24,7 +25,8 @@ if server ;then
 		*       ) usage ;;
 	esac
 else
-	case $@ in
+	case $1 in
+		A*      ) ;;
 		[0-9]*  ) opts="--geometry=$@" ;;
 		d*      ) sleep $refresh; set -- $(query display); opts="--geometry=$1x$2+0+0" ;;
 		s*      ) opts=-s ;;
@@ -32,8 +34,12 @@ else
 	esac
 fi
 
-jpg=$(date '+%y%m%d%H%M%S').jpg
-/usr/bin/maim $opts | convert - -size 1600 -quality $quality $target/$jpg
+jpg=${2:-$(date '+%y%m%d%H%M%S')}.jpg
+if [ "${1%${1#?}}" = 'A' ] ;then
+	adb exec-out screencap -p
+else
+	/usr/bin/maim $opts
+fi | convert - -size 1600 -quality $quality $target/$jpg
 ditto jpg "$jpg"
 notify 0 low 'Screenshot' "$target/$jpg"
 
