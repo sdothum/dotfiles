@@ -1,6 +1,7 @@
 
 # .......................................................... Syntax highlighting
 
+# ──────────────────────────────── = (align template)
 #"attribute"                       =
 
 #"type"                            =
@@ -99,13 +100,14 @@
 #"markup.raw.inline"               =
 #"markup.raw.block"                =
 
+# .................................................................... Interface
+
+# ──────────────────────────────── = (align template)
 #"diff"                            =
 "diff.plus"                        = "plus"
 "diff.minus"                       = "foreground"
 "diff.delta"                       = "delta"
 #"diff.delta.moved"                =
-
-# .................................................................... Interface
 
 #"markup"                          =
 #"markup.normal"                   =
@@ -178,7 +180,10 @@
 #"diagnostic.warning"              =
 #"diagnostic.error"                =
 
+# ............................................................... Element colors
+
 [palette]
+# ──────────────────────────────── = (align template)
 
 background                         = "#f7f3ee"  # light grayish orange
 foreground                         = "#263238"  # very dark grayish blue (black)
