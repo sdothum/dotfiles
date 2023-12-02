@@ -63,7 +63,7 @@ usage() {
 > m-[rounded|serifless]
 > p-[eared|serifed]
 > q-[hook|tailed]
-> t-[asymmetric[+]|cross|descending|flat]
+> t-[asymmetric[+|-]|cross|descending|flat]
 > u-toothed
 > w-asymmetric
 > y-straight
@@ -255,6 +255,7 @@ variant() {
 			q-tailed      ) glyph q=tailed-serifless ;;
 			t-asymmetric  ) glyph t=flat-hook-asymmetric-short-neck2 ;;
 			t-asymmetric+ ) glyph t=hookless-asymmetric-short-neck2 ;;
+			t-asymmetric- ) glyph t=hookless-asymmetric-short-neck ;;
 			t-cross       ) glyph t=hookless-short-neck2 ;;
 			t-flat        ) glyph t=flat-hook-short-neck2 ;;
 			u-toothed     ) glyph u=toothed ;;
@@ -411,6 +412,7 @@ cmdopts () {
 			q-tailed      ) variant $1; unset q_hook ;;
 			t-asymmetric  ) variant $1 ;;
 			t-asymmetric+ ) variant $1 ;;
+			t-asymmetric- ) variant $1 'FLIPPED'; t_flipped=true; cmdopts i-serifless j-flat l-serifless ;;
 			t-cross       ) variant $1 ;;
 			t-descending  ) variant t-cross 'DESCENDING'; t_descending=true; baseline=true ;;
 			t-flat        ) variant $1 ;;
@@ -755,6 +757,7 @@ fi
 [ $I_descending  ] && fforge I_descending  ${shape##* } $family  # font mod for descending serifless capital I
 [ $T_descending  ] && fforge T_descending  ${shape##* } $family  # font mod for descending capital T
 [ $t_descending  ] && fforge t_descending  ${shape##* } $family  # font mod for descending t
+[ $t_flipped     ] && fforge t_flipped     ${shape##* } $family  # font mod for flipped asymmetric t
 [ $Y_descending  ] && fforge Y_descending  ${shape##* } $family  # font mod for descending capital Y
 [ $FP_descending ] && fforge FP_descending ${shape##* } $family  # decending caps (experimental)
 

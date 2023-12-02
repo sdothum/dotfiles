@@ -6,7 +6,7 @@
 
 # ...................................................................... Receive
 
-usage() { usage: "$(basename $0) 'daemon | I'nit | i'ndex | l'og | t'ags | 1'pass"; exit 1; }
+usage() { usage: "$(basename $0) 'daemon | I'nit | i'ndex | l'og | t'ags | 1'pass | <channel> | <group>"; exit 1; }
 
 # crontab: * * * * * <path>/mailsync >>/tmp/mailsync.log 2>&1
 
@@ -45,12 +45,13 @@ tag_messages() {
 }
 
 one_pass() {
-	logmsg 'Starting mbsync..' /tmp/mbsync.log
+	logmsg "Starting mbsync $1.." /tmp/mbsync.log
 	rm -f $MAILDIR/.notmuch/xapian/flintlock
 	mkdir -p $MAILDIR/$(grep 'Inbox' $HOME/.mbsyncrc | cut -d/ -f3)  # mbsync requires existence of mail account folder!
 	find $MAILBOX -type f -size 0 -exec rm -fv {} \;                 # purge empty messages
 	# mbsync -a --verbose >>/tmp/mbsync.log 2>&1
-	mbsync -Dmn $1 $ME >>/tmp/mbsync.log 2>&1
+	mbsync -Dmn $pull ${1:-$ME} >>/tmp/mbsync.log 2>&1
+	logmsg "Finished mbsync $1" /tmp/mbsync.log
 
 	# folder management of gmail labels (deprecated)
 	# logmsg 'Starting imapfilter..' /tmp/imapfilter.log
@@ -62,8 +63,8 @@ one_pass() {
 # initialize notmuch database
 index() {
 	halt_mail
-	rm -rf $MAILDIR/.notmuch/dump-*
-	rm -rf $MAILDIR/.notmuch/xapian
+	rm -rf $MAILBOX/.notmuch/dump-*
+	rm -rf $MAILBOX/.notmuch/xapian
 	notmuch setup
 	notmuch new
 	tag_messages
@@ -76,12 +77,13 @@ initialize() {
 	rm -rf $MAILBOX
 	mkdir $MAILBOX
 	index
-	one_pass --pull
+	pull="--pull"
+	one_pass
  }
 
 # ........................................................... mail server daemon
 
-# mail daemon (cron task)
+# pseudo daemon (cron task)
 mail_daemon() {
 	# trace 'Starting mailsync..'
 	while : ;do
@@ -94,21 +96,23 @@ mail_daemon() {
 		if [ $? -eq 0 ] ;then
 			trace 'No new email'
 			break
-		else one_pass
+		else
+			one_pass $ME
 			trace 'Cycling..'
 			sleep $interval
 		fi
 	done
 }
 
-case $@ in
-	'' ) mail_daemon ;;
-	i* ) index ;;
-	I* ) initialize ;;
-	l* ) ditto 'tail -f /tmp/mailsync.log'; tail -f /tmp/mailsync.log ;;
-	t* ) tag_messages ;;
-	1* ) one_pass ;;
-	*  ) usage ;;
+case $1 in
+	''     ) mail_daemon ;;
+	i*     ) index ;;
+	I*     ) initialize ;;
+	l*     ) ditto 'tail -f /tmp/mailsync.log'; tail -f /tmp/mailsync.log ;;
+	t*     ) tag_messages ;;
+	1*     ) one_pass ;;
+	${ME}* ) one_pass $1 ;;
+	*      ) usage ;;
 esac
 
 # vim: set ft=sh: #

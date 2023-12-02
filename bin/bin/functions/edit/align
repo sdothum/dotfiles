@@ -18,13 +18,14 @@ usage() { echo "<selection> | $(basename $0) [<nth>] [')' | '{' | '|' | '&' | '=
 LINES=/tmp/align:stdin
 tabstop=${TABSTOP:-3}
 
-delim='⁋'    # split char
-dollar='¢'   # hard char to avoid "echo" loss
-space='•'    # hard char
-tab=$(for i in $(seq $tabstop) ;do echo -n "‣" ;done )  # hard char to avoid "echo" loss
-nth=1        # pattern position
-gutter=' '   # pattern gutter prefix
-ignore='❌'  # nth space column split case avoidance (see below)
+delim='⁋'      # split char
+dollar='¢'     # hard char to avoid "echo" loss
+space='•'      # hard char
+tab=$(for i in $(seq $tabstop) ;do echo -n "‣" ;done )    # hard char to avoid "echo" loss
+nth=1          # pattern position
+gutter=' '     # pattern gutter prefix
+ignore='❌'    # nth space column split case avoidance (see below)
+backslash='◌'  # preserve backslash
 
 # simplified source code alignment extension using helix pipe
 [[ "$1" =~ '^[0-9]+$' ]] && { nth=$1; shift; } || [ $1 ] || set -- '#'  # NOTE: fence=${1:-#} case $fence does not work as expected for '#'
@@ -45,7 +46,7 @@ case "$1" in
 	*    ) match=" " ;;  # force drop through (below)
 esac
 
-# insert split char and mark special chars ins
+# insert split char and mark special chars
 case "$1" in
 	"$ignore" ) sed "/^[^${ignore}]*)/s/ *$match */$delim$gutter$match /" ;;
 	"#"       ) sed -r "s/^( *$match*.*[^ ]) *$match */\1$delim$gutter$match /$nth" ;;    # ignore leading #  comment
@@ -54,7 +55,7 @@ case "$1" in
 	"$match"  ) sed "s/ *$match */$delim$gutter$match /$nth" ;;
 	''        ) sed "s/  */$delim /$nth" ;;    # align by spaces
 	*         ) sed "s/$1/$delim $1/$nth" ;;   # align by string
-esac | sed -r ":a; s/^( *) /\1$space/; ta; s/\t/$tab/g; s/[$]/$dollar/g" >$LINES         # leading hard char
+esac | sed -r ":a; s/^( *) /\1$space/; ta; s/\t/$tab/g; s/[$]/$dollar/g; s/\\\/$backslash/g" >$LINES         # leading hard char
 
 # max left part width
 max=0
@@ -76,6 +77,6 @@ while read line <&3 ;do
 	else
 		echo "$line"
 	fi
-done 3< $LINES | sed -r ":a; s/^(${space}*)$space/\1 /; ta; s/$tab/\t/g; s/$dollar/$/g"  # leading :space:
+done 3< $LINES | sed -r ":a; s/^(${space}*)$space/\1 /; ta; s/$tab/\t/g; s/$dollar/$/g; s/$backslash/\\\/g"  # leading :space:
 
 # vim: set ft=sh: #

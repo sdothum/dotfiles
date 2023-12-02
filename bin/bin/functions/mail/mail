@@ -6,10 +6,12 @@
 
 # .................................................................. Mail client
 
+group=sdothum
+
 # in lieu of :vsplit crash from command line (known problem)
-(sleep 1; xdotool search --sync --onlyvisible --classname mail type ":vsplit"; xdotool key Return) &
+(sleep 1; xdotool search --sync --onlyvisible --classname "mail" type ":vsplit"; xdotool key Return) &
 
 offsetY=4 term mail WAIT PAPER aerc
-mailsync 1  # push any flag and trash changes
+mailsync $group  # push any flag and trash changes
 
 # vim: set ft=sh: #

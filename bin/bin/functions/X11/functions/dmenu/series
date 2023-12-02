@@ -22,6 +22,7 @@ CATALOGUE='catalogue new episodes'
 
 # preload cache option
 [ "$1" = cache ] && { shift; cache=true; }
+[ $1 ] && SERIES='series' || SERIES='anime'
 
 # video library
 category=${1:-series}
@@ -90,9 +91,10 @@ while : ;do
 	[ $(episodes | wc -l) -gt 0 ] && CATLG="\\n$(X $CATALOGUE)" || unset CATLG
 	[ $show ] || show=3
 
-	show=$(cat "$catlg" | sed "1i$(X $SONARR)\n$(X $FILE)$CATLG" | sed "1i$(X $(sortlist $T))" | rmenu 'Series' "$show" -no-custom) || break
+	show=$(cat "$catlg" | sed "1i$(X $SERIES)\n$(X $SONARR)\n$(X $FILE)$CATLG" | sed "1i$(X $(sortlist $T))" | rmenu 'Series' "$show" -no-custom) || break
 	# force dmenu focus (continue within do loop doesn't guarantee focus)
 	case "${show#$(X)}" in
+		"$SERIES"    ) [ $SERIES = 'series' ] && exec dmenu series || exec dmenu series $SERIES ;;
 		"$NAME"      ) unset T; cache; continue ;;
 		"$DATE"      ) T=t; cache; continue ;;
 		"$SONARR"    ) sonarr; unset show; continue ;;

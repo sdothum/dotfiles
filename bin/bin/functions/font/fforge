@@ -50,6 +50,43 @@ Paste();
 "
 }
 
+# flip asymmetric t
+t_flipped() {
+	echo "
+Open(\$1);
+Select(0u0074);
+HFlip();
+Move($Xshift,0);  # tweak side bearing towards left
+SetWidth($shape);
+Generate(\$1);
+" >/tmp/fontforge:flipped.script
+
+	for i in $(regular) ;do
+		ditto t_flipped $i
+		fontforge --script /tmp/fontforge:flipped.script $i
+	done
+
+	# italicize flipped from regular glyph and shift to left of cell
+	echo "
+Open(\$2);
+Select(0u0074);
+Italic($ANGLE);
+Copy();
+Open(\$1);
+Select(0u0074);
+Paste();
+Move($Xshift,0);  # adjust for italic side bearing shift towards left 
+SetWidth($shape);
+Generate(\$1);
+" >/tmp/fontforge:flipped:italic.script
+
+	for i in $(italic) ;do
+		ditto t_flipped:italic $i
+		echo $i | grep -q '[-]italic.ttf' && regular=${i%italic*}regular.ttf || regular=${i%italic*}.ttf
+		fontforge --script /tmp/fontforge:flipped:italic.script $i $regular
+	done
+}
+
 # substitute curly tail q
 q_hook() {
 	# copy char 0u024b and paste to char 0u0071
@@ -465,6 +502,7 @@ case $1 in
 	I_descending  |\
 	T_descending  |\
 	t_descending  |\
+	t_flipped     |\
 	Y_descending  |\
 	FP_descending |\
 	Q_horizontal  |\

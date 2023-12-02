@@ -23,6 +23,7 @@ CATALOGUE='catalogue new movies'
 
 # preload cache option
 [ "$1" = cache ] && { shift; cache=true; }
+[ $1 ] && MOVIES='movies' || MOVIES='animation'
 
 category=${1:-movies}
 PASSPORT="/run/media/$USER/My Passport/$category"
@@ -76,7 +77,7 @@ fi
 
 options() {
 	uncatlgd && edit="\\\\\\n$(X $CATALOGUE)" || unset edit
-	grep -q '[^ ]' "$playlist" && echo "$(X $LAST)\\\n$(X $USENET)\\\n$(X $FILE)\\\n$(X $(sortlist $T))$(toggle)$edit" || echo "$(X $(sortlist $T))$(toggle)$edit"
+	grep -q '[^ ]' "$playlist" && echo "$(X $MOVIES)\\\n$(X $LAST)\\\n$(X $USENET)\\\n$(X $FILE)\\\n$(X $(sortlist $T))$(toggle)$edit" || echo "$(X $(sortlist $T))$(toggle)$edit"
 }
 
 playback() {
@@ -118,6 +119,7 @@ while : ;do
 
 	[ "$movie" = "$(X $LAST)" ] && movie=$(grep '^[a-zA-Z0-9]' $playlist | head -1)
 	case ${movie#$(X)} in
+		"$MOVIES"    ) [ $MOVIES = 'movies' ] && exec dmenu movies || exec dmenu movies $MOVIES ;;
 		"$NAME"      ) unset T; cache ;;
 		"$DATE"      ) T=t; cache ;;
 		"$TOGGLE"    ) [ $R ] && unset R || R=r; cache ;;
