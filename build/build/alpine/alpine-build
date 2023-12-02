@@ -458,6 +458,7 @@ stage_33() {
 
 	doas apk add pipewire wireplumber
 	doas apk add pavucontrol pavucontrol-qt
+	doas apk add pulseaudio
 	# doas apk add pulseaudio-equalizer
 
 	info ......................................................... plugin devices
@@ -471,7 +472,7 @@ stage_33() {
 	doas rc-service polkit start
 
 	info ............................................ migrate user environment
-	migrate pull aerc helix imap isync mail mime notmuch remind qutebrowser sandbox stardict vim
+	migrate pull aerc helix imap isync mail mime msmtp notmuch remind qutebrowser sandbox stardict vim
 
 	info ................................................................. editor
 	doas apk add gvim
@@ -492,11 +493,12 @@ stage_33() {
 
 	info ................................................................... mail
 	doas apk add isync isync-doc  # mbsync
+	doas apk add msmtp
 
 	MAILDIR=$HOME/Mail
 	# create account folder to force stow "file" links (vs dir link which would place emails in stow repo)
 	mkdir -p $MAILDIR/sdothum/SENT/cur $MAILDIR/sdothum/SENT/new $MAILDIR/sdothum/SENT/tmp  # create aerc SENT folder
-	stow isync mail
+	stow isync mail msmtp
 	
 	make_install imap
 	make_install imapfilter

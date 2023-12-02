@@ -6,6 +6,9 @@
 
 # ................................................................ web framework
 
+# HTTP=nginx
+HTTP=caddy
+
 export TMPDIR=$HOME/tmp                        # avoid insufficient vps tmpfs space
 [ $(hostname) = $SERVER ] && { ditto env "SERVER=... $(basename $0) sinatra"; exit 1; }
 
@@ -42,7 +45,7 @@ if [ $(gem list rack | grep -q '^rack ' | wc -l) -gt 1 ] ;then
 fi
 
 # web site
-migrate nginx openrc thedarnedestthing vimwiki
+migrate caddy nginx openrc thedarnedestthing vimwiki
 stow thedarnedestthing vimwiki
 
 doas mkdir -p /srv/http
@@ -59,18 +62,19 @@ ln -sv $HOME/vimwiki $APPDIR/public/
 
 # web server
 doas apk add nginx nginx-openrc
+doas apk add caddy
 
-doas rm /etc/nginx/http.d/puma.*
+doas rm /etc/$HTTP/http.d/puma.*
 doas rm /etc/init.d/puma
 # [ -e /etc/conf.d/syncthing ] && syncthing="syncthing."  # syncthing doesn't play well with reverse proxy setup
-# doas ln -sv $APPDIR/http.d/puma.${syncthing}conf /etc/nginx/http.d/
+# doas ln -sv $APPDIR/http.d/puma.${syncthing}conf /etc/$HTTP/http.d/
 # doas ln -sv $APPDIR/init.d/puma /etc/init.d/
-stow nginx/puma
+stow $HTTP/puma
 stow openrc/puma
 
-doas rc-update add nginx
+doas rc-update add $HTTP
 doas rc-update add puma
 doas rc-service puma start
-doas rc-service nginx start
+doas rc-service $HTTP start
 
 # vim: set ft=conf: #

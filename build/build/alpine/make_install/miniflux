@@ -6,6 +6,9 @@
 
 # ..................................................................... miniflux
 
+# HTTP=nginx
+HTTP=caddy
+
 doas apk add miniflux miniflux-doc
 doas apk add postgresql15 postgresql15-client postgresql15-contrib
 
@@ -43,9 +46,9 @@ CLEANUP_REMOVE_SESSIONS_DAYS=9999
 doas miniflux -c /etc/miniflux.conf -migrate
 doas miniflux -c /etc/miniflux.conf -create-admin
 
-doas rm /etc/nginx/http.d/miniflux.*
-stow nginx/miniflux
-doas rc-service nginx restart
+doas rm /etc/$HTTP/http.d/miniflux.*
+stow $HTTP/miniflux
+doas rc-service $HTTP restart
 doas rc-update add miniflux
 doas rc-service miniflux start
 
