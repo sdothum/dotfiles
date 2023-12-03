@@ -20,7 +20,7 @@ double='ss ee tt ff ll mm oo rr nn pp'
 
 [ "$1" ] || usage
 
-while [ $1 ] ;do
+while : ;do
 	case $1 in
 		list ) list=true ;;
 		ls   ) list=true ;;

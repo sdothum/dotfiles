@@ -10,16 +10,13 @@ usage() { usage: "$(basename $0) [[-=]<maxlen> | -] <word>, '-' (include phrases
 
 alpine && exec sdcv -th $@
 
-if [ "$1" = '-' ] ;then
-	SPACES=true
-	shift
-elif [ "${1%${1#?}}" = '-' ] && echo ${1#?} | grep -q '^[0-9][0-9]*$' ;then
-	MAXLEN="$(seq -s. 0 ${1#?} | tr -d '[:digit:]')[^ ]"
-	shift
-elif [ "${1%${1#?}}" = '=' ] && echo ${1#?} | grep -q '^[0-9][0-9]*$' ;then
-	LENGTH="^$(seq -s. 0 ${1#?} | tr -d '[:digit:]' | sed 's/[.]/[^ ]/g')$"
-	shift
-fi
+digits() { echo ${1#?} | grep -q '^[0-9][0-9]*$' || usage; }
+
+case $1 in
+	'-' ) SPACES=true; shift ;;
+	-*  ) digits $1; MAXLEN="$(seq -s. 0 ${1#?} | tr -d '[:digit:]')[^ ]"; shift ;;
+	=*  ) digits $1; LENGTH="^$(seq -s. 0 ${1#?} | tr -d '[:digit:]' | sed 's/[.]/[^ ]/g')$"; shift ;;
+esac
 [ $1 ] || usage
 [ $2 ] && usage
 
