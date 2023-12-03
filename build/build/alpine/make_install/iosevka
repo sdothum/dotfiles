@@ -272,9 +272,9 @@ else                                      # desktop fonts
 	dfont $leading
 	dfont proof    I-descending Q-straight
 	dfont menu     I-descending Q-straight
-	# # dfont dyslexic            Q-straight      space=2   family=qclocktwo leading=1.40
-	dfont dyslexic I-serifed    Q-straight      space=2.2 family=qclocktwo    # conky qclocktwo font
-	dfont dyslexic I-descending quasi-extension space=M   family=monograffic  # panel/dunst/browser font
+	# dfont dyslexic            Q-straight      space=2     family=qclocktwo leading=1.40
+	dfont dyslexic I-serifed    Q-straight      space=2.2   family=qclocktwo    # conky qclocktwo font
+	dfont dyslexic I-descending quasi-extension space=1.125 family=monograffic  # panel/dunst/browser font
 fi
 
 # vim: set ft=sh: #
