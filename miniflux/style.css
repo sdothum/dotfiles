@@ -2,27 +2,27 @@
 @font-face {
 	font-family: "asymmetric";
 	font-weight: 400;
-	src: url("/fonts/orbit-book.ttf") format("truetype");
+	src: url("/fonts/lythe-book.ttf") format("truetype");
 }
 
 @font-face {
 	font-family: "asymmetric";
 	font-weight: 400;
 	font-style: italic;
-	src: url("/fonts/orbit-bookitalic.ttf") format("truetype");
+	src: url("/fonts/lythe-bookitalic.ttf") format("truetype");
 }
 
 @font-face {
 	font-family: "asymmetric";
 	font-weight: 600;
-	src: url("/fonts/orbit-bold.ttf") format("truetype");
+	src: url("/fonts/lythe-bold.ttf") format("truetype");
 }
 
 @font-face {
 	font-family: "asymmetric";
 	font-weight: 600;
 	font-style: italic;
-	src: url("/fonts/orbit-bolditalic.ttf") format("truetype");
+	src: url("/fonts/lythe-bolditalic.ttf") format("truetype");
 }
 
 :root {
