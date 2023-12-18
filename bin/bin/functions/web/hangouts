@@ -8,11 +8,13 @@
 
 HANGOUTS=$SESSION/hangouts
 # BROWSER=surf
+# export NO_PROXY="$SERVER"
+URL=$(cat $HANGOUTS)
 
 case $BROWSER in
-	luakit ) luakit $(cat $HANGOUTS) & ;;
-	surf   ) surf -z1.15 -C $(dirname $0)/.hangouts:stylesheet.css $(cat $HANGOUTS) & ;;
-	*      ) WIDTH=700 DELAY=1.5 qutebrowser $(cat $HANGOUTS) & ;;
+	luakit ) luakit $URL & ;;
+	surf   ) surf -z1.15 -C $(dirname $0)/.hangouts:stylesheet.css $URL & ;;
+	*      ) WIDTH=700 DELAY=1.5 qutebrowser $URL & ;;
 esac
 
 xsync 'Gmail'
