@@ -1,0 +1,11 @@
+
+# the darnedest thing
+# ══════════════════════════════════════════════════════════════════════════════
+
+http://:80 {
+	root * /srv/http/thedarnedestthing.com/application
+	file_server
+	handle {
+		reverse_proxy unix//srv/http/thedarnedestthing.com/application/tmp/puma.sock
+ 	}
+}

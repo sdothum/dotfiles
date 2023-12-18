@@ -1,0 +1,13 @@
+
+# miniflux
+# ══════════════════════════════════════════════════════════════════════════════
+
+http://:8000 {
+	handle_path /fonts/* {
+		root * /var/www/localhost/fonts
+		file_server
+	}
+	handle {
+		reverse_proxy localhost:8080
+	}
+}
