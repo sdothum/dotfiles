@@ -1,0 +1,20 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................................... 2bwm
+
+doas apk add nim nimble
+
+cd /net/depot
+[ -d worm ] && { cd worm; mv config.h $HOME/tmp/worm:config.h; git pull; } || { git clone --depth 1 https://github.com/codic12/worm.git; cd worm; }
+
+nimble build -d:release
+doas cp -v worm* /usr/local/bin  
+
+stow worm
+
+# vim: set ft=sh: #
+

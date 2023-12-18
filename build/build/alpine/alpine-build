@@ -1,7 +1,7 @@
 #!/bin/ash
 # sdothum - 2016 (c) wtfpl
 
-usage() { echo "Usage: [ALPINE=<hostname> [SERVER=<hostname>]] $(basename $0) 0 | 1 [vps] | 2 [edge] | 3 [vps | vpstest] | 33 | 4 | 5"; exit 1; }
+usage() { echo "Usage: [TARGET=<hostname> [SOURCE=<x.x.x.x>]] $(basename $0) 0 | 1 [vps] | 2 [edge] | 3 [vps | vpstest] | 33 | 4 | 5"; exit 1; }
 
 # after setup-alpine
 # ══════════════════════════════════════════════════════════════════════════════
@@ -24,10 +24,10 @@ BUSYBOX=false                   # (false) gnu library (true) busybox symlinks
 MANPAGES=false                  # (false) no manpages (true) install all manpages
 
 if [ $VPS ] ;then
-	ALPINE=thedarnedestthing.com  # building alpine host
+	TARGET=thedarnedestthing.com  # building alpine host
 else
-	ALPINE=${ALPINE:-motu}        # building alpine host
-	SERVER=${SERVER:-luna}
+	TARGET=${TARGET:-motu}        # building alpine host
+	SOURCE=${SOURCE:-luna}
 fi
 
 HILIGHT=$(/usr/bin/printf "\e[1m\e[38;5;226m")
@@ -37,10 +37,10 @@ info() { echo "${HILIGHT}$@${NOCOLOR}"; }
 vga()  { lspci | grep VGA | grep -q "$1"; }
 
 migrate() {
-	EXCLUDE="--exclude='lost+found' --exclude='sync-conflict' --exclude='.deprecated' --exclude='.git' --exclude='.hg' --exclude='arch' --exclude='debian' --exclude='nixos' --exclude='obarun' --exclude='void'"
+	EXCLUDE="--exclude='lost+found' --exclude='sync-conflict' --exclude='.git' --exclude='.hg' --exclude='arch' --exclude='debian' --exclude='nixos' --exclude='obarun' --exclude='void'"
 	case $1 in
-		pull) source="${SERVER}:"; mkdir -p $HOME/stow/ ;;
-		push) target="${ALPINE}:" ;;
+		pull) source="${SOURCE}:"; mkdir -p $HOME/stow/ ;;
+		push) target="${TARGET}:" ;;
 		*   ) info "migrate push | pull <package>*"; exit 1 ;;
 	esac
 	shift
@@ -56,29 +56,29 @@ stage_0() {
 	info "run> cd"
 	info "run> mkdir .ssh stow"
 	info "run> doas apk add rsync"
-	info "from remote host.."
-	info "run> [ALPINE=<hostname>] ./$(basename $0) 1 [vps]"
+	info "from source host.."
+	info "run> [TARGET=<hostname>] ./$(basename $0) 1 [vps]"
 }
 
 stage_1() {
 	info ....................................................... from remote user
 	cd $HOME/.ssh
-	# sed -i "/$ALPINE/d" known_hosts
-	ssh-keygen -R $ALPINE
+	sed -i "/$TARGET/d" known_hosts
+	ssh-keygen -R $TARGET
 	info "after ssh session login check.."
 	info "run> exit (alpine host)"
-	sshid $ALPINE  # my ssh-copy-id script
+	sshid $TARGET  # my ssh-copy-id script
 
 	cd - >/dev/null
-	scp $(basename $0) $USER@$ALPINE:$HOME/
-	[ $SERVER ] && scp /etc/hosts $USER@$ALPINE:$HOME/
+	scp $(basename $0) $USER@$TARGET:$HOME/
+	[ $SOURCE ] && scp /etc/hosts $USER@$TARGET:$HOME/
 
 	info ............................................... migrate base environment
 	migrate push ag bash bin build colordiff fish logrotate mime nnn ssh
 
 	info "from alpine host.."
-	info "run> [ALPINE=<hostname>] ./$(basename $0) 2 [edge]"
-	exec ssh $ALPINE    # to complete alpine install below
+	info "run> [TARGET=<hostname>] [SOURCE=<x.x.x.x>] ./$(basename $0) 2 [edge]"
+	exec ssh $TARGET    # to complete alpine install below
 }
 
 stage_2() {
@@ -86,32 +86,38 @@ stage_2() {
 	# superuser things first..
 	doas sed -i '/wheel/s/persist/nopass/' /etc/doas.d/doas.conf
 	# glibc script compatibilities
+	doas apk add gcompat
 	doas ln -sv /usr/bin/doas /usr/bin/sudo  # dotfile compatibility
 	doas ln -sv /bin/su       /usr/bin/su    # enable doas su (to avoid su wrapper path)
 	doas ln -sv /sbin/reboot  /bin/reboot    # dotfile compatibility
 
 	# add community repo
-	[ $EDGE ] && doas sed -i 's/^http:/#http:/; /\/edge\//s/^#//; /testing/s/^/#/'                           /etc/apk/repositories ||
-							 doas sed -i 's/^http:/#http:/; /main/s/^#//; /community/s/^#//; /\/edge\//s/^http:/#http:/' /etc/apk/repositories
+	# doas sed -i 's/v3.[0-9][0-9]/latest-stable/' /etc/apk/repositories
+	if [ $EDGE ] ;then
+		doas sed -i 's/^http:/#http:/; /\/edge\//s/^#//; /testing/s/^/#/' /etc/apk/repositories
+	else
+		 doas sed -i 's/^http:/#http:/; /main/s/^#//; /community/s/^#//; /\/edge\//s/^http:/#http:/' /etc/apk/repositories
+	fi
 	doas apk update
 	doas apk upgrade
 	apk list -I >apk-base-install.list
 
 	info .............................................................. autologin
-	if [ $SERVER ] ;then
+	if [ $SOURCE ] ;then
 		doas mv -v $HOME/hosts /etc/hosts
 
 		ssh-keygen -t rsa -b 2048
 		info "enter password for remote server"
-		ssh-copy-id $USER@$SERVER
+		ssh-copy-id $USER@$SOURCE
 
 		# bypass first time rsync connection prompt
-		ssh-keygen -R $SERVER
-		ssh-keyscan -H $SERVER >>$HOME/.ssh/known_hosts
+		ssh-keygen -R $SOURCE
+		ssh-keyscan -H $SOURCE >>$HOME/.ssh/known_hosts
 	fi
 
 	doas apk add mingetty
 	doas sed -i "/tty1/s,/getty.*,/mingetty --autologin $USER --noclear tty1," /etc/inittab
+	doas sed -i "/tty2/s,/getty.*,/mingetty --autologin $USER --noclear tty2," /etc/inittab
 	echo 'Truth or die!' | doas tee /etc/motd
 	doas addgroup $USER tty
 
@@ -152,9 +158,9 @@ stage_2() {
 	doas cp -v $HOME/bin/path.sh /etc/profile.d
 
 	info "rebooting.."
-	info "from remote host.."
-	info "run> ssh $ALPINE"
-	info "run> [ALPINE=<hostname>] ./$(basename $0) 3 [vps | vpstest] >>alpine-build.log &; tail -f alpine-build.log"
+	info "from source host.."
+	info "run> ssh $TARGET"
+	info "run> [TARGET=<hostname>] [SOURCE=<x.x.x.x>] ./$(basename $0) 3 [vps | vpstest] >>alpine-build.log &; tail -f alpine-build.log"
 	exec doas reboot
 }
 
@@ -203,7 +209,7 @@ stage_3() {
 	doas apk add gawk       # full featured awk required by aerc
 	doas apk add mlocate
 	doas apk add ncdu
-	# make_install nnn      # missing posix functions
+	# make_install nnn      # missing posix functions :(
 	doas apk add nnn
 	make_install advcpmv    # nnn graphical cp/mv
 	stow nnn
@@ -220,6 +226,7 @@ stage_3() {
 	doas apk add zip
 	# doas apk add par2cmdline
 	make_install unrar      # for nzbget
+	make_install nzbget
 
 	info ...................................................... c/c++ development
 	doas apk add autoconf automake cmake make
@@ -250,53 +257,24 @@ stage_3() {
 
 	info .............................................. install sinatra framework
 	info "exit ssh session to update .cargo and frum paths"
-	info "run> ssh $ALPINE"
+	info "run> ssh $TARGET"
 	info "run> make_install ruby"
 	info "run> make_install sinatra"
-	info "test> http://$ALPINE"
+	info "test> http://$TARGET"
 }
 
 stage_33() {
 	doas apk update
 	doas apk upgrade
 
-	info ................................................... migrate connectivity
-	migrate pull adblock btrfs dnsmasq lsyncd
-
-	info ........................................................... file systems
-	doas apk add dosfstools
-	# doas apk add exfatprogs
-	# doas apk add fuse
-	doas apk add fuse3           # for rclone
-	# doas apk add fuse-exfat
-	# doas apk add simple-mtpfs  # (connot copy to device)
-	make_install jmtpfs          # for supernote
-
-	make_install nfs
-
-	doas apk add lsyncd
-	doas mkdir -p /var/log/lsyncd
-	doas touch /etc/lsyncd.exclude /var/log/lsyncd/log /var/log/lsyncd/status
-	[ $ALPINE = luna ] && stow lsyncd
-
-	info .................................................................... dns
-	if [ $SERVER = luna ] ;then
-		echo "nameserver 10.1.0.10" | doas tee /etc/resolv.conf
-	else
-		doas apk add dnsmasq
-		stow adblock dnsmasq
-		echo "nameserver 127.0.0.1" | doas tee /etc/resolv.conf
-		doas rc-update add dnsmasq
-		rc-service dnsmasq start
-	fi  
-
 	info ..................................................... package management
 	doas apk add flatpak
+	# make_install flatseal
 	# xdg-user-dirs-update
 
 	# python tools
 	doas apk add python3 python3-dev
-	doas apk add py3-pip py3-pip-doc
+	doas apk add pipx
 	doas apk add py3-setuptools
 	# doas apk add py3-wheel
 
@@ -310,8 +288,7 @@ stage_33() {
 	doas apk add go
 	addpath $HOME/go/bin
 	doas apk add lua lua-dev
-	make_install julia
-	make_install premake
+	# make_install julia
 
 	info ............................................................... printing
 	make_install cups
@@ -322,9 +299,10 @@ stage_33() {
 	doas apk add pciutils
 
 	info ........................................................ shell utilities
-	doas apk add date       # for formatting extensions (vs busybox)
+	doas apk add date  # for formatting extensions (vs busybox)
 	doas apk add expect
 	doas apk add figlet
+	make_install toilet
 	doas apk add fortune
 	doas apk add fzf
 	doas apk add ncurses
@@ -339,15 +317,14 @@ stage_33() {
 	doas apk add xf86-input-libinput
 	doas apk add xf86-input-synaptics
 	# doas apk add xf86-input-wacom
-	vga NVIDIA && doas apk add mesa-dri-gallium mesa-va-gallium xf86-video-nouveau ||
-								doas apk add libva-intel-driver mesa-dri-gallium xf86-video-intel
+	vga NVIDIA && doas apk add mesa-dri-gallium mesa-va-gallium xf86-video-nouveau || doas apk add libva-intel-driver mesa-dri-gallium xf86-video-intel
 	doas adduser $USER input
 	doas adduser $USER video
 
 	doas setup-xorg-base
 	doas apk add xinit
-	stow X11/$ALPINE
-	[ $(hostname) = $SERVER ] && stow xorg/desktop || stow xorg/laptop
+	stow X11/$TARGET
+	[ $(hostname) = $SOURCE ] && stow xorg/desktop || stow xorg/laptop
 
 	# fonts
 	doas apk add cairo
@@ -394,26 +371,31 @@ stage_33() {
 	apk testing setroot  # for color bg
 
 	info ............................................ migrate desktop environment
-	migrate pull conky dunst herbstluftwm images picom rofi session
+	migrate pull 2bwm conky dunst herbstluftwm images picom rofi session
 
 	info ................................................................ desktop
 	doas apk add herbstluftwm
-	stow herbstluftwm images session/$ALPINE
+	stow herbstluftwm images session/$TARGET
 	echo herbstluftwm >$HOME/.windowmanager
+
+	# doas apk add 2bwm  # herbstluftwm xorg display issue with alpine 3.19
+	make_install 2bwm
+	# make_install berry
+	# make_install worm
 
 	# very basic apps
 	doas apk add alacritty
 	doas apk add conky
-	stow conky/$ALPINE
+	stow conky/$TARGET
 	doas apk add xterm
 
 	info .......................................................... desktop theme
-	# make_install flatseal
 	doas apk add gtk-murrine-engine
 	apk testing arc-dark
 	apk testing lxappearance
 	doas apk add paper-icon-theme
 	make_install phinger-cursors
+	# make_install kvantum  # Qt styler
 
 	info ............................................................. desktop ui
 	doas apk add autocutsel
@@ -427,10 +409,11 @@ stage_33() {
 	# notifications
 	doas apk add libnotify
 	doas apk add dunst
-	stow dunst/$ALPINE
+	stow dunst/$TARGET
 	# doas apk add screenkey
 
 	info ...................................................... desktop utilities
+	# make_install pastel  # replaced with cargo install
 	cargo install pastel
 	# doas apk add tumbler
 	doas apk add xautolock
@@ -456,9 +439,9 @@ stage_33() {
 	doas rc-update add alsa
 	# doas rc-service alsa start
 
-	doas apk add pipewire wireplumber
+	doas apk add pipewire pipewire-pulse
 	doas apk add pavucontrol pavucontrol-qt
-	doas apk add pulseaudio
+	ditto pavucontrol 'make hdmi "output device" default (click "check" icon)'
 	# doas apk add pulseaudio-equalizer
 
 	info ......................................................... plugin devices
@@ -482,14 +465,15 @@ stage_33() {
 	hx --grammar fetch
 	hx --grammar build
 	make_install tree-sitter
+	make_install lsp
 	# cargo install fastmod
 	doas apk add kakoune
-	make_install lsp
 
 	doas apk add lowdown
 	doas apk add mercurial
 	doas apk add ctags
 	# doas apk add texlive
+	# make_install align  # perl statement align
 
 	info ................................................................... mail
 	doas apk add isync isync-doc  # mbsync
@@ -500,8 +484,10 @@ stage_33() {
 	mkdir -p $MAILDIR/sdothum/SENT/cur $MAILDIR/sdothum/SENT/new $MAILDIR/sdothum/SENT/tmp  # create aerc SENT folder
 	stow isync mail msmtp
 	
-	make_install imap
-	make_install imapfilter
+	# make_install dovecot
+	# make_install imap
+	# make_install imapfilter
+	# make_install mox
 	stow imap
 
 	info ............................................................ mail client
@@ -534,7 +520,8 @@ stage_33() {
 	# dictionary
 	doas apk add sdcv sdcv-doc
 	stow stardict
-	make_install dict   # not gnu dict
+	[ -e $HOME/.local/share/stardict/dic/urban-dictionary-p1 ] || make_install urban-dictionary
+	# make_install dict  # not gnu dict
 	make_install quikey
 
 	info ................................................................... data
@@ -569,26 +556,27 @@ stage_33() {
 	info ................................................................ viewers
 	doas apk add bat
 	doas apk add catimg
-	doas apk add nsxiv nxxiv-doc
+	doas apk add nsxiv nsxiv-doc
 	doas apk add feh
 
 	make_install calibre
-	make_install epubcheck
-	make_install kobopatch
+	# make_install epubcheck
+	# make_install kobopatch
 	doas apk add foliate
 	doas apk add zathura zathura-ps zathura-pdf-mupdf
 
 	info ................................................................ chatgpt
-	cargo install aichat  # conversation and roles
-	make_install chatgpt  # conversation oriented
+	# cargo install aichat  # conversation and roles
+	# make_install chatgpt  # conversation oriented
 
 	info "from alpine host.."
-	info "run> [ALPINE=<hostname>] ./$(basename $0) 4  # do not redirect stdout"
+	info "run> [TARGET=<hostname>] [SOURCE=<x.x.x.x>] ./$(basename $0) 4  # do not redirect stdout"
 }
 
 stage_4() {
 	doas apk update
 	doas apk upgrade
+
 	info ............................................................... security
 	doas apk add gnome-keyring
 	doas apk add pass pinentry
@@ -599,11 +587,47 @@ stage_4() {
 	doas apk add py3-keyring
 	doas apk add xclip  # pass --clip option
 
+	info ................................................... migrate connectivity
+	migrate pull adblock btrfs dnsmasq lsyncd
+
+	info ........................................................... file systems
+	doas apk add dosfstools
+	# doas apk add exfatprogs
+	# doas apk add fuse
+	doas apk add fuse3           # for rclone
+	# doas apk add fuse-exfat
+	# doas apk add simple-mtpfs  # (connot copy to device)
+	make_install jmtpfs          # for supernote
+
+	make_install nfs
+
+	info .................................................................... dns
+	if [ $SOURCE = luna ] ;then
+		ditto dns 'echo "nameserver 10.1.0.10" | doas tee /etc/resolv.conf'
+	else
+		doas apk add dnsmasq
+		stow adblock dnsmasq
+		echo "nameserver 127.0.0.1" | doas tee /etc/resolv.conf
+		doas rc-update add dnsmasq
+		doas rc-service dnsmasq start
+	fi  
+
+	info ................................................................... sync
+	doas apk add lsyncd
+	doas mkdir -p /var/log/lsyncd
+	doas touch /etc/lsyncd.exclude /var/log/lsyncd/log /var/log/lsyncd/status
+	if [ $TARGET = luna ] ;then
+		doas rm /etc/lsyncd.exclude
+		stow lsyncd
+		doas rc-update add lsyncd
+		doas rc-service lsyncd start
+	fi
+
 	info ..................................................... login to x session
 	info "rebooting.."
 	info "from alpine host, start x session.."
 	info "run> x"
-	info "run> [ALPINE=<hostname>] ./$(basename $0) 5  # do not redirect stdout"
+	info "run> [TARGET=<hostname>] [SOURCE=<x.x.x.x>] ./$(basename $0) 5  # do not redirect stdout"
 	exec doas reboot
 }
 
@@ -625,6 +649,7 @@ stage_5() {
 	make_install fontmatrix
 	doas apk add nodejs npm
 	doas apk add py3-fonttools
+	make_install premake
 	make_install otfcc
 	make_install ttfautohint
 
@@ -646,6 +671,13 @@ stage_5() {
 	make_install miniflux
 	make_install caddy
 
+	info .............................................................. sync stow
+	[ $(hostname) = 'luna' ] && doas rc-service lsyncd stop
+	ditto stow "syncing stow from $SOURCE.. (be patient)"
+	migrate pull '*'
+	[ $(hostname) = 'luna' ] && doas rc-service lsyncd start
+
+
 	info .................................................................. async
 	info "run> async on  # to speed up boot to login"
 }
@@ -658,7 +690,7 @@ if [ $stage = 3 ] ;then
 	[ $VPS ] && exit
 	if [ $VPSTEST ] ;then
 		info "to resume full desktop build after framework build and testing.."
-		info "run> [ALPINE=<hostname>] ./$(basename $0) $stage$stage >>alpine-build.log &; tail -f alpine-build.log"
+		info "run> [TARGET=<hostname>] [SOURCE=<x.x.x.x>] ./$(basename $0) $stage$stage >>alpine-build.log &; tail -f alpine-build.log"
 	else
 		stage_$stage$stage
 	fi

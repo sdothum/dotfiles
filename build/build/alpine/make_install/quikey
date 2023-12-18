@@ -6,7 +6,7 @@
 
 # ....................................................................... quikey
 
-pip3 install --user quikey
+python3 -m pipx install quikey
 
 if [ ! -L $HOME/.local/share/quikey ] ;then
 	cd stow >/dev/null

@@ -1,0 +1,23 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................................... 2bwm
+
+doas apk add libxcb-dev
+doas apk add xcb-util-keysyms-dev xcb-util-wm-dev xcb-util-xrm-dev
+
+cd /net/depot
+[ -d 2bwm ] && { cd 2bwm; mv config.h $HOME/tmp/2bwm:config.h; git pull; } || { git clone --depth 1 https://github.com/venam/2bwm.git; cd 2bwm; }
+
+stow 2bwm
+ln -sf $HOME/.config/2bwm/src/config.h config.h
+
+make clean
+make
+doas make install
+
+# vim: set ft=sh: #
+

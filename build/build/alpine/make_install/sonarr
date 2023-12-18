@@ -19,4 +19,7 @@ exec doas ./install-sonarr.sh
 doas chown -R sonarr:video /net/media/videos/series
 doas chmod -R 775 /net/media/videos/series
 
+ditto sonarr "sonarr cannot write to nfs shared folders for catalogue import"
+ditto sonarr "make sure the settings / download clients / remote path mappings (remote/local) point to the nzbget completed folder"
+
 # vim: set ft=sh: #

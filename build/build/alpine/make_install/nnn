@@ -6,12 +6,27 @@
 
 # .......................................................................... nnn
 
+# NOTE: waiting on musl implementing POSIX fts_{open,read,close}
+
 cd /net/depot
 [ -d nnn ] && { cd nnn; git pull; cd ..; } || git clone --depth 1 https://github.com/jarun/nnn.git
 
 doas apk add musl-fts-dev readline-dev
 
 cd nnn
+grep "^int strcasecmp" src/icons.h || echo "
+#include <ctype.h>
+int strcasecmp (const char *s1, const char *s2)
+{
+	const unsigned char *p1 = (const unsigned char *) s1;
+	const unsigned char *p2 = (const unsigned char *) s2;
+	int result;
+	if (p1 == p2) return 0;
+	while ((result = tolower (*p1) - tolower (*p2++)) == 0) if (*p1++ == '0') break;
+	return result;
+}
+" >>src/icons.h
+
 make clean
 make O_NERD=1      # enable nerdfont icons
 sudo make install  # into local/bin

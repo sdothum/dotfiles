@@ -14,7 +14,7 @@ cd /tmp
 chmod +x install.sh
 
 ./install.sh
-doas mv advcp /usr/local/bin/cpg
-doas mv advmv /usr/local/bin/mvg
+doas mv -v advcp /usr/local/bin/cpg
+doas mv -v advmv /usr/local/bin/mvg
 
 # vim: set ft=sh: #

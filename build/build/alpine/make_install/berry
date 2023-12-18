@@ -4,8 +4,18 @@
 # Make_install
 # ══════════════════════════════════════════════════════════════════════════════
 
-# .............................................................. shell-functools
+# ........................................................................ berry
 
-python3 -m pipx install shell-functools
+doas apk add libxinerama-dev
+doas apk add sxhkd
+
+cd /net/depot
+[ -d berry ] && { cd berry; git pull; } || { git clone --depth 1 https://github.com/JLErvin/berry.git; cd berry; }
+
+make clean
+make
+doas make install
+
+stow berry
 
 # vim: set ft=sh: #

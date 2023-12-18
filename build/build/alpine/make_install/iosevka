@@ -15,7 +15,7 @@ pkill -f ".*http.*"
 usage() {
 	echo "$(basename $0) . iosevka ebook | kindle | kobo
 >> cyrillic | fluent | latin+greek
->> classic | coding | quad | mu | trio | web
+>> classic | coding | quad | mu | serifless | trio | web
 >> altmono | book+regular | grote | open[+]
 
 >> D-serifless
@@ -104,8 +104,9 @@ cmdopts() {
 			# typefaces
 			classic      ) classic=true ;;
 			coding       ) coding=true ;;
-			duet         ) duet=true ;;
+			quad         ) quad=true ;;
 			mu           ) mu=true ;;
+			serifless    ) serifless=true ;;
 			trio         ) trio=true ;;
 			web          ) web=true ;;
 
@@ -236,15 +237,23 @@ elif [ "$mu" ] ;then
 elif [ -z $ecopy ] ;then
 	cmdopts quasi-ext space=1.125 Q-straight open+
  	emdash
-	e_ink orbit grote   I-descending t-asymmetric-
+	e_ink lythe grote   I-descending t-asymmetric- serifless
 
-elif [ "$duet" ] ;then
+elif [ "$quad" ] ;then
 	cmdopts quasi-ext space=1.125 Q-straight open+
  	emdash
 	e_ink stria altmono I-serifless
 	e_ink grote grote   I-descending
 	e_ink patio grote   a-single t-cross
 	e_ink lythe grote   I-descending t-asymmetric-
+
+elif [ "$serifless" ] ;then
+	cmdopts quasi-ext space=1.125 Q-straight open+
+ 	emdash
+	e_ink stria altmono I-serifless                serifless="I"
+	e_ink grote grote   I-descending               serifless="Il"
+	e_ink patio grote   a-single t-cross           serifless="l"
+	e_ink lythe grote   I-descending t-asymmetric- serifless="Iil"
 
 elif [ "$trio" ] ;then
 	cmdopts quasi-ext space=1.15 G-hookless+ Q-straight open+
@@ -257,9 +266,9 @@ elif [ $family ] ;then                    # custom e-ink font (non-published)
 	e_ink ${family#*=}
 
 elif [ $web ] ;then                       # www fonts
-	unset cap; emdash
-	wfont heading  quasi-ext              space=1.100 webfont family=wMonolegible
-	wfont dyslexic quasi-ext I-descending space=1.125 webfont family=wMonolexic
+	unset cap; emdash; cmdopts t-asymmetric-
+	wfont heading  quasi-ext              space=1.100 webfont family=wMonolegible serifless="il"
+	wfont dyslexic quasi-ext I-descending space=1.125 webfont family=wMonolexic serifless="Iil"
 	wfont dyslexic quasi-ext I-serifed    space=1.125 webfont family=wCaps
 	wfont expanded quasi-pro I-serifed    space=1     webfont family=wQuasilexic sb=1
 	dfont family=wIosevka
@@ -273,8 +282,8 @@ else                                      # desktop fonts
 	dfont proof    I-descending Q-straight
 	dfont menu     I-descending Q-straight
 	# dfont dyslexic            Q-straight      space=2     family=qclocktwo leading=1.40
-	dfont dyslexic I-serifed    Q-straight      space=2.2   family=qclocktwo    # conky qclocktwo font
-	dfont dyslexic I-descending quasi-extension space=1.125 family=monograffic  # panel/dunst/browser font
+	dfont dyslexic I-serifed    Q-straight      space=2.2   family=qclocktwo  # conky qclocktwo font
+	dfont dyslexic I-descending quasi-extension space=1.125 family=monograffic serifless="Iil"  # panel/dunst/browser font
 fi
 
 # vim: set ft=sh: #

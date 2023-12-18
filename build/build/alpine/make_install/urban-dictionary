@@ -41,4 +41,6 @@ cd /net/depot/pyglossary
 python3 main.py ud1.index urban-dictionary-p1 --read-format=DictOrg --write-format=Stardict --indirect --name='Urban Dictionary'
 python3 main.py ud2.index urban-dictionary-p2 --read-format=DictOrg --write-format=Stardict --indirect --name='Urban Dictionary'
 
+ditto dictionary "copy to stardict and koreader dictionary folders/devices"
+
 # vim: set ft=sh: #

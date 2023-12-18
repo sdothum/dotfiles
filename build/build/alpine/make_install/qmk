@@ -27,14 +27,14 @@ cd $HOME
 git clone https://github.com/qmk/qmk_firmware.git
 cd qmk_firmware
 
-python3 -m pip install --user qmk
+python3 -m pipx install qmk
 doas cp -v $HOME/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
 qmk setup
 
 # udev permissions required for $USER flashing
 doas addgroup shum dialout
 doas setup-devd udev
-echo 'TAG=="uaccess", ENV{MAJOR}!="", MODE="0660", GROUP="plugdev" | doas tee /etc/udev/rules.d/73-uaccess-group.rules
+echo 'TAG=="uaccess", ENV{MAJOR}!="", MODE="0660", GROUP="plugdev"' | doas tee /etc/udev/rules.d/73-uaccess-group.rules
 doas addgroup shum plugdev
 ditto /dev/ttyACM "reboot required for $USER group pemission to access device"
 

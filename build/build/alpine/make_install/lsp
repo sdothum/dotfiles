@@ -10,12 +10,16 @@ BINARY_HOME="${HOME}/.local/bin"
 DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 LTEXVSN=16.0.0
 
+doas apk add cargo git npm
+
 doas npm install -g bash-language-server                   # shell
 doas npm install -g typescript typescript-language-server  # javascript
 doas npm install -g vscode-langservers-extracted           # css / html / json
 doas npm install -g yaml-language-server@next              # yaml
-cargo install taplo-cli --locked --features lsp            # toml
-cargo install buffer-language-server
+cargo install --force taplo-cli --features lsp                     # toml (--locked option fails compile)
+cargo install --force buffer-language-server
+ditto lsp "gem install.. (be patient)"
+# gem installed via make_instlal ruby
 doas gem install solargraph
 
 # markdown
@@ -24,7 +28,7 @@ doas gem install solargraph
 # chmod +x $HOME/c.local/bin/marksman
 
 # better markdown with full latex/grammar/spellcheck
-doas apk add java-common
+doas apk add openjdk21
 
 wget -P /tmp https://github.com/valentjn/ltex-ls/releases/download/$LTEXVSN/ltex-ls-$LTEXVSN.tar.gz
 cd /tmp
@@ -35,8 +39,7 @@ doas mv ltex-ls-$LTEXVSN /opt/ltex-ls
 doas npm install -g vim-language-server
 # scls snippets only (see languages.toml)
 cd /net/depot
-git clone https://github.com/estin/simple-completion-language-server.git
-cd simple-completion-language-server
+[ -d simple-completion-language-server ] && { cd simple-completion-language-server; git pull; } || {  git clone https://github.com/estin/simple-completion-language-server.git;  cd simple-completion-language-server; }
 cargo install --path .
 
 # vim: set ft=sh: #

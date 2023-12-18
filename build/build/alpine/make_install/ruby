@@ -12,10 +12,11 @@ export TMPDIR=$HOME/tmp     # avoid insufficient vps tmpfs space
 # mandatory openssl 1.1
 doas apk update
 doas apk upgrade
+doas apk del qt5-qtbase-dev  # required to del openssl-dev
 doas apk del openssl-dev curl-dev
-# libcrypto1.1 and libssl1.1 are dependencies of openssl1.1-compat-dev but need
-# to remain when openssl1.1-compat-dev is replaced with openssl-dev
-doas apk add libcrypto1.1 libssl1.1 openssl1.1-compat-dev
+# libcrypto1.1 and libssl1.1 are dependencies of openssl1.1-compat-dev but need to remain
+# when openssl1.1-compat-dev is replaced with openssl-dev (all this for sinatra)
+apk v3.18 libcrypto1.1 libssl1.1 openssl1.1-compat-dev
 doas apk add zlib zlib-dev  # gem install dependency
 doas apk add libffi-dev     # headers needed on dell nvidia install(?)
 

@@ -6,6 +6,8 @@
 
 # .......................................................................... mox
 
+# mail server
+
 if [ ! -d /home/mox ] ;then
 	doas delgroup mox 2>/dev/null
 	doas deluser mox 2>/dev/null
