@@ -41,6 +41,7 @@ count=0
 done
 [ $count -gt 1 ] && notify low 'Helix' "$count files to edit"
 
-term ${name:-helix} PAPER $WAIT ${HX:-hx} -c $CONFIG $file  # term call doesn't handle "space" names
+# term call doesn't handle "space" names
+term ${name:-helix} PAPER 132x53 $WAIT ${HX:-hx} -c $CONFIG $file >>/tmp/helix.log 2>&1  # 50 line page
 
 # vim: set ft=sh: #

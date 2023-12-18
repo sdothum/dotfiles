@@ -7,12 +7,12 @@
 # .............................................................. Google hangouts
 
 HANGOUTS=$SESSION/hangouts
-BROWSER=surf
+# BROWSER=surf
 
 case $BROWSER in
 	luakit ) luakit $(cat $HANGOUTS) & ;;
 	surf   ) surf -z1.15 -C $(dirname $0)/.hangouts:stylesheet.css $(cat $HANGOUTS) & ;;
-	*      ) /usr/bin/qutebrowser --target tab --override-restore  $(cat $HANGOUTS) & ;;
+	*      ) WIDTH=700 DELAY=1.5 qutebrowser $(cat $HANGOUTS) & ;;
 esac
 
 xsync 'Gmail'

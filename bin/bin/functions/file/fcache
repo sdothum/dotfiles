@@ -28,7 +28,6 @@ BOOKMARKS="$(dirname $0)/.fcache:bookmarks"
 find $CACHEDIR -name 'fcache:*' -size 0c -exec rm {} \; 2>/dev/null
 
 # speed up fuzzy searches (especially arm), see shell/j j.fish
-
 while [ $1 ] ;do
 	case $1 in
 		I*         ) rm -fv $FCACHE*; exit ;;

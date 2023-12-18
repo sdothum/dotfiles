@@ -40,6 +40,7 @@ usage() {
 > book+regular | descenders | double | open[+]
 > emdash=<decimal> 
 > family=<name>
+> serifless="[I|i|l]*"
 > space=[M|<decimal>]
 
 > D-serifless
@@ -255,7 +256,7 @@ variant() {
 			q-tailed      ) glyph q=tailed-serifless ;;
 			t-asymmetric  ) glyph t=flat-hook-asymmetric-short-neck2 ;;
 			t-asymmetric+ ) glyph t=hookless-asymmetric-short-neck2 ;;
-			t-asymmetric- ) glyph t=hookless-asymmetric-short-neck ;;
+			t-asymmetric- ) glyph t=hookless-asymmetric-short-neck2 ;;
 			t-cross       ) glyph t=hookless-short-neck2 ;;
 			t-flat        ) glyph t=flat-hook-short-neck2 ;;
 			u-toothed     ) glyph u=toothed ;;
@@ -357,6 +358,7 @@ cmdopts () {
 			family=*      ) family ${1#*=} || usage ;;
 			open          ) variant B-open P-open R-open ;;
 			open+         ) cmdopts open 4-open+ ;;
+			serifless=*   ) variant "SERIFLESS '${1#*=}'"; serifless=${1#*=} ;;
 			space=*       ) space ${1#*=}  || usage; [ ${space#*=} = 1 ] && unset space ;;  # space width
 
 			# glyphs
@@ -383,7 +385,7 @@ cmdopts () {
 			Q-open        ) variant $1 ;;
 			Q-straight    ) variant $1 ;;
 			T-descending  ) variant 'T=DESCENDING I=DESCENDING'; T_descending=true; I_descending=true; baseline=true ;;
-			W-asymmetric  ) variant $1 w-assymetric ;;
+			W-asymmetric  ) variant $1 w-asymmetric ;;
 			Y-descending  ) variant I-serifless 'DESCENDING T=DESCENDING Y=DESCENDING'; I_descending=true; T_descending=true; Y_descending=true; baseline=true ;;
 
 			a-double      ) variant $1 ;;
@@ -765,9 +767,10 @@ fi
 
 [ $ebook ] && [ $spacing != 'quasi-proportional' ] && fforge ligature $width ${shape##* } $family  # ae width character adjustment
 
-[ $baseline ] && fforge baseline ${shape##* }    $family  # force baseline adjustment for descending caps and q-hook
-[ $space ]    && fforge space $space             $family  # lengthen space character cell width
-[ $ebook ]    && fforge ${regular}weight $adjust $family  # rename weight for e-reader (as regular)
+[ $baseline    ] && fforge baseline ${shape##* }               $family  # force baseline adjustment for descending caps and q-hook
+[ "$serifless" ] && fforge serifless "$serifless" ${shape##* } $family  # adjust serifless "I i l" cell width
+[ $space ]       && fforge space $space                        $family  # lengthen space character cell width
+[ $ebook ]       && fforge ${regular}weight $adjust            $family  # rename weight for e-reader (as regular)
 
 udev  # reinitialize udev
 

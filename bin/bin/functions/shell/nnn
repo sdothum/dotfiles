@@ -12,8 +12,9 @@ NNN="/usr/local/bin/nnn -E"  # nnn compiled with icons, see make_install nnn
 TDIR=/net/downloads/http     # default tmux directory
 
 [ -e "$NNN" ] || NNN=/usr/bin/nnn
-# PREVIEW=-Pp                # un/comment to toggle preview-tui on launch
-export EDITOR=${EDITOR:-hx}  # -E option
+PREVIEW=-Pp                    # un/comment to toggle preview-tui on launch
+# export EDITOR=${EDITOR:-hx}  # -E option
+export VISUAL=helix            # detached window editing
 
 # key:value pairs
 bookmarks="$(eval echo $(cat $(dirname $0)/.nnn:bookmarks))"  # hide server structure
@@ -37,7 +38,7 @@ bookmarks="$(list $bookmarks)"
 plugs="$(list $plugs)"
 
 # nnn config
-# export NNN_FIFO=/tmp/nnn:fifo  # NNN_OPTS 'a' option
+export NNN_FIFO=/tmp/nnn:fifo  # NNN_OPTS 'a' option
 exists trash-cli && export NNN_TRASH=1 || export NNN_TRASH=0
 export NNN_OPENER=$HOME/.config/nnn/plugins/nuke  # use of $XDG_CONFIG_HOME causes env dump console login(?)
 # export NNN_OPENER=xdg-open

@@ -50,6 +50,42 @@ Paste();
 "
 }
 
+tighten() {
+	case $1 in
+		I) utf='0u0049' ;;
+		i) utf='0u0069' ;;
+		l) utf='0u006c' ;;
+	esac
+
+	echo "
+Select($utf);
+Move($Xshift,0);  # tweak side bearing towards left
+SetWidth($width);
+"
+}
+
+# scale serifless "i l" cell width 
+serifless() {
+	echo "
+Open(\$1);
+" >/tmp/fontforge:serifless.script
+
+	set -- $(echo $letters | sed -r "s/(.)/\1 /g")
+	while [ $1 ] ;do
+		tighten $1 >>/tmp/fontforge:serifless.script
+		shift
+	done
+
+	echo "
+Generate(\$1);
+" >>/tmp/fontforge:serifless.script
+
+	for i in *.ttf ;do
+		ditto serifless $i
+		fontforge --script /tmp/fontforge:serifless.script $i
+	done
+}
+
 # flip asymmetric t
 t_flipped() {
 	echo "
@@ -511,7 +547,8 @@ case $1 in
 	Q_hook        ) ;;
 	ligature      ) [ $4 ] && { width=$2; shift 2; } || { shape=$2; shift; } ;;               # see iosevka for tricky bits
 	punctuation   ) emdash=$2; shape=$3; shift 2 ;;
-	space         ) [ $2 ] && { space=$2; shift; } || space=2 ;;
+	serifless     ) letters=$2; width=$(( $3 * 85 / 100 )); shift 2 ;;                        # percent of "I i l" (serifless)
+	space         ) space=$2; shift ;;
 	*weight       ) regular=${1%weight}; fforge=weight; [ "$2" = 'book+regular' ] && { adjust=true; shift; } ;;
 	copy          ) [ $3 ] && { family=$2; alias=$3; shift 2; copy; exit; }      || usage ;;  # pwd commandline only!
 	map           ) [ $4 ] && { family=$2; from=$3; to=$4; shift 3; map; exit; } || usage ;;  # pwd commandline only!

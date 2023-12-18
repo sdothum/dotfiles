@@ -8,11 +8,11 @@
 
 # Usage: sonarr [video], of 'anime' or 'series'
 
-BROWSER=/usr/bin/surf
+BROWSER=firefox
 SONARR=http://$SERVER:8989
 
 [ $1 ] && page=$(dirname $1 | tr '[:upper:]' '[:lower:]' | sed -r 's/.*(anime|series)/series/; s/[.]/-/g') || page=calendar
 $BROWSER $SONARR/$page &
-pwait "$BROWSER.*$SONARR"  # see dmenu media [series]
+pwait "$BROWSER.*$SONARR"  # see menu media [series]
 
 # vim: set ft=sh: #

@@ -8,7 +8,7 @@ some.
 
 The bin directory is organized into a tree of subdirectories. The 
 creation of the pseudo DSL functions for herbstluftwm was applied to the 
-user bin scripts so actions such as "conky weather" or "dmenu music" 
+user bin scripts so actions such as "conky weather" or "menu music" 
 could be incorporated into keybinds and calling scripts for better 
 readability and code consolidation.
 

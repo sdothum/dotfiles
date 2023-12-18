@@ -1,4 +1,0 @@
-$HOME -regextype posix-extended -regex $INCLUDE
-/etc ! -perm -a+x
-/opt -regextype posix-extended -regex $INCLUDE
-/usr -regextype posix-extended -regex $INCLUDE ! -regex .*/kernel.*

@@ -31,12 +31,20 @@ case $1 in
 	
 	on     )
 		clock && exit
+		xdotool search --onlyvisible --limit 1 --maxdepth 1 --name "lemonbar" windowunmap >/dev/null  # disable panel
+		# switch desktops with conkyrc window_type (override) change to prevent 2bwm race condition
+		xdotool get_desktop >$DESKTOP
+		xdotool set_desktop 9
 		/usr/bin/conky -c $CONKYRC 2>/dev/null &
 		rm -rf /tmp/qclocktwo ;;  # clear qclock buffers
 	
 	off    )
 		clock || exit
-		pkill -f "conky -c $CONKYRC"
+		xdotool search --limit 1 --maxdepth 1 --name "lemonbar" windowmap >/dev/null  # restore panel
+		[ -e $DESKTOP ] && xdotool set_desktop $(cat $DESKTOP)
+		pkill -KILL -f "conky -c $CONKYRC"
+		# restart 2bwm to kill race condition avoided with above window_type change and desktop switching
+		# xdotool key Super+Control+r
 		[ -e $SPANEL ] || weather ;;
 	
 	''     ) clock && conky clock off || conky clock on ;;

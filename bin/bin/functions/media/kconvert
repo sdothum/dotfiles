@@ -8,7 +8,7 @@
 
 # Usage: [dropcap=<class>] kconvert <epub>*
 
-dmenu econvert azw3 "$@"  # kindle
-dmenu econvert epub "$@"  # kobo
+menu econvert azw3 "$@"  # kindle
+menu econvert epub "$@"  # kobo
 
 # vim: set ft=sh: #

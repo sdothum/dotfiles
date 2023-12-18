@@ -32,7 +32,7 @@ case $1 in
 	*     ) process=$@ ;;
 esac
 
-# launched from dmenu run or within terminal session?
+# launched from menu run or within terminal session?
 if [ "$(. parent)" = "[$(hostname).local]" ] ;then
 	echo $process >$REGEX
 	term "k" SHELL k REGEX

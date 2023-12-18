@@ -11,7 +11,7 @@ usage() { usage: "$(basename $0) A'ndroid | DVI-'0 | DVI-'1 | l'eft | r'ght | a'
 target=/net/photos/batchqueue
 target=$HOME/thedarnedestthing.com/application/public/images
 quality=92
-refresh=3  # allow desktup refresh (from dmenu)
+refresh=3  # allow desktup refresh (from menu)
 
 if server ;then
 	case $1 in

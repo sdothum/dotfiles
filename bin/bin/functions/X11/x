@@ -8,7 +8,7 @@
 
 # ............................................................... Window manager
 
-usage() { usage: "$(basename $0) 'start [-<delay>] | 2bwm | awesome | bspwm | budgie | cinnamon | dwm | gnome | goomwwm | guile | herbstluftwm | i3 | kde | lxde | lxqt | notion | openbox | ratpoison | razor-qt | spectrwm | stumpwm | subtle | shell | windowchef | wmii | wmutils | wtftw | xfce4 | xmonad"; rm -f $BOOTWM; exit 1; }
+usage() { usage: "$(basename $0) 'start [-<delay>] | 2bwm | awesome | berry | bspwm | budgie | cinnamon | dwm | gnome | goomwwm | guile | herbstluftwm | i3 | kde | lxde | lxqt | notion | openbox | ratpoison | razor-qt | spectrwm | stumpwm | subtle | shell | windowchef | wmii | wmutils | worm | wtftw | xfce4 | xmonad"; rm -f $BOOTWM; exit 1; }
 
 BOOTWM=$SESSION/boot:wm  # see console_login, user_login
 WM=$HOME/.windowmanager
@@ -26,6 +26,7 @@ case $1 in
 	abort | halt | stop ) [ -e $BOOTWM ] && ditto user_login 'canceling startx'; rm -f $BOOTWM; exit ;;  # boot intercept shortcut
 	''   ) ;;
 	2b*  ) echo 2bwm >$WM ;;
+	be*  ) echo berry >$WM ;;
 	aw*  ) echo awesome >$WM ;;
 	bs*  ) echo bspwm >$WM ;;
 	bu*  ) echo budgie >$WM ;;
@@ -52,6 +53,7 @@ case $1 in
 	wi*  ) echo windowchef >$WM ;;
 	wmi* ) echo wmii >$WM ;;
 	wmu* ) echo wmutils >$WM ;;
+	wo*  ) echo worm >$WM ;;
 	wt*  ) echo wtftw >$WM ;;
 	xf*  ) echo xfce4 >$WM ;;
 	xm*  ) echo xmonad >$WM ;;
@@ -62,26 +64,22 @@ esac
 
 # for xorg session restricted nfs: $SESSION/nfs
 nfs() {
+	server && return
 	case $1 in
 		mount  )
 			if [ ! -d /net/depot/dotfiles ] ;then
 				ditto nfs 'mount..' 
-				grep -q "^$HOME/Maildir" /etc/fstab && sudo mount -v $HOME/Maildir 
-				sudo mount -v /net 
+				sudo mount.nfs -v $SERVER:/net /net 
+				trap "sudo umount.nfs -v $SERVER:/net" EXIT
 			fi ;;
 
 		umount )
 			ditto nfs 'umount..' 
-			sudo umount -v /net 
-			grep -q "^$HOME/Maildir" /etc/fstab && sudo umount -v $HOME/Maildir ;;
+			sudo umount -v $SERVER:/net 
 	esac
 }
 
-NFSLOG=/tmp/.xinit:nfs.log
-
-nfs mount
-# suppress nfs messages to console when server is offline
-[ -e $SESSION/nfs ] && trap "nfs umount" EXIT
+# nfs mount  # current alpine install mounts nfs on boot
 
 # ........................................................................ Xinit
 
@@ -104,6 +102,7 @@ if console ;then
 	pkill -KILL $wm
 	case $wm in
 		2b*  ) ;;
+		be*  ) ;;
 		aw*  ) ;;
 		bs*  ) ;;
 		bu*  ) ;;
@@ -130,6 +129,7 @@ if console ;then
 		wi*  ) ;;
 		wmi* ) ;;
 		wmu* ) ;;
+		wo*  ) ;;
 		wt*  ) ;;
 		xf*  ) ;;
 		xm*  ) ;;
