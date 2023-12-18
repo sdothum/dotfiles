@@ -64,7 +64,7 @@ while color=$(colors | column -s^ -t | rmenu 'Setroot') || exit ;do
 		"$PICK"*   ) color=$(grabc 2>/dev/null | cut -d'#' -f2); setroot ;;
 		"$VIEWER"* ) exec draw root restore ;;
 		"$RANDOM"* ) draw root color; KEEP="$(X $SAVE)\n"; sleep $delay ;;
-		"$COLORS"* ) term "colors" trap pastel list; pwait 'trap pastel list' ;;
+		"$COLORS"* ) term "colors" WAIT trap pastel list ;;
 		"$UPDATE"* ) root ;;
 		"$SAVE"*   ) save; break ;;
 		"$INVERT"* ) draw root invert; sleep $delay; menu ;;
