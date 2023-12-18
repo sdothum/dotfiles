@@ -272,7 +272,7 @@ tape() {
 
 # ................................................................ Weather watch
 
-weather() { unset update_weather; conky weather panel >/tmp/${WEATHER##*/} & }
+weather() { unset update_weather; conky weather panel | sed "s/\^/$RSEP/g" >/tmp/${WEATHER##*/} & }
 
 # .................................................................. System info
 
