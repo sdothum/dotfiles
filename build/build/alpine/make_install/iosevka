@@ -278,6 +278,7 @@ elif [ $coding ] ;then                    # classic coding font
 	dfont $leading G-toothed a-double family=monodyslexic
 
 else                                      # desktop fonts
+	cmdopts t-asymmetric-
 	dfont $leading
 	dfont proof    I-descending Q-straight
 	dfont menu     I-descending Q-straight
