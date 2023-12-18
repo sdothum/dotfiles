@@ -1,0 +1,15 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="invert $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................................... Root
+
+pkill -KILL -f "draw panel"
+draw root invert
+toggle picom on
+draw panel
+
+# vim: set ft=sh: #

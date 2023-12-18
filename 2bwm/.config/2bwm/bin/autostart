@@ -1,0 +1,19 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................... Autostart
+
+# see .xinitrc for 2bwm autostart hack :)
+
+restore root
+conky clock auto
+draw panel
+qk stop
+qk start
+pulse
+udev
+
+# vim: set ft=sh: #

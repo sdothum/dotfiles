@@ -1,0 +1,20 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="toggle $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................ Toggle operations
+
+msg=$1
+[ $msg ] && shift || usage: $0
+if [ -e ${0%/toggle}/functions/toggle/$msg ] ;then
+	. ${0%/toggle}/functions/toggle/$msg $@
+elif winid=$(xdotool search --classname "$1" | head -1) ;then
+	xwininfo -id $winid | grep -q "IsViewable" && xdotool windowunmap $winid || xdotool windowmap $winid
+else
+	$@
+fi
+
+# vim: set ft=sh: #

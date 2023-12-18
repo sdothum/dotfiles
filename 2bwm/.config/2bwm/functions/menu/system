@@ -1,0 +1,25 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................... System monitor
+
+alpine || JOURNAL="journal ^$SEP inspect\njournal ^$SEP watch\n"
+
+# meta menu menu!
+system=$(previous system)
+system=$(echo "${JOURNAL}log ^$SEP inspect\nlog ^$SEP watch\nsystem ^$SEP diagnostic" \
+	| column -s^ -t | rmenu 'System' "$system" -no-custom) || exit
+
+mhistory system "$system"
+case $system in
+	journal*inspect   ) exec menu journals ;;
+	journal*watch     ) exec menu journals watch ;;
+	log*inspect       ) exec menu logs ;;
+	log*watch         ) exec menu logs watch ;;
+	system*diagnostic ) exec menu diagnostic ;;
+esac
+
+# vim: set ft=sh: #

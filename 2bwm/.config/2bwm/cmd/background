@@ -1,0 +1,15 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="background $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................................... Root
+
+pkill -KILL -f "draw panel"
+menu root
+toggle picom on
+draw panel
+
+# vim: set ft=sh: #

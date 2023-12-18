@@ -1,0 +1,20 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="scratchpad $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Hide action
+
+# hide active window and focusnext
+keyboard off
+xdotool key Super+Control+Shift+i
+xdotool key Super+Tab
+keyboard on
+
+# clear xtitle.. see draw panel
+[ -e $(cat $PANEL_FIFO) ] || exit
+[ $(xdotool search --onlyvisible --desktop $(xdotool get_desktop) --class '.*' | wc -l) -eq 0 ] && echo "X" >$(cat $PANEL_FIFO)
+
+# vim: set ft=sh: #

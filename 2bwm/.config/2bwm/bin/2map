@@ -1,0 +1,15 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ....................................................................... Keymap
+
+config=$(dirname $(dirname $0))/src/config.h
+for i in space tab return backspace up down left right home end comma period a b c d e f g h i j k l m n o p q r s t u v w x y z ;do
+	ditto key $i
+	a "xk_$i," $config | ugrep --ignore-case -v '//' | cut -d'{' -f2- | sed 's/^/{/'
+done
+
+# vim: set ft=sh: #

@@ -1,0 +1,24 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................ Unhide hidden windows
+
+
+finished() { [ $(hidden -c | wc -l) -eq 0 ]; }
+
+windows() {
+	hidden -c | while read window ;do
+		echo $window | sed "s/'//g; s/:/^$SEP /"
+	done 
+}
+
+finished && exit
+while window=$(windows | column -s^ -t  | rmenu 'raise' -no-custom) || exit ;do
+	exec ${window#*$SEP}
+	finished && break
+done
+
+# vim: set ft=sh: #

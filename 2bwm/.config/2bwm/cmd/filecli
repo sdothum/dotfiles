@@ -1,0 +1,12 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="filecli $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Filemanager
+
+xdotool search --onlyvisible --classname nnn windowclose || nnn TMUX
+
+# vim: set ft=sh: #

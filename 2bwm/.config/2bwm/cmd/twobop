@@ -1,0 +1,12 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="twobop $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .......................................................................... Top
+
+xdotool search --onlyvisible --classname btop windowclose || term btop BLACKBOARD btop
+
+# vim: set ft=sh: #

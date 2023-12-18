@@ -1,0 +1,17 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="kill2bwm $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Compile 2bwm
+
+SRC=/net/depot/2bwm
+
+cd $SRC
+ditto 2bwm "Building 2bwm.."
+make && doas make install
+press_enter
+
+# vim: set ft=sh: #

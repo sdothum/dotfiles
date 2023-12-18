@@ -1,0 +1,28 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="draw/windowsize $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .............................................................. Set window size
+
+# Usage: draw windowsize [delay] <height>x<width>
+
+X=800
+Y=600
+T=2
+
+while [ $1 ] ;do
+	case $1 in
+		*x*) height=${1%x*}; width=${1#*x} ;;
+		*  ) delay=$1 ;;
+	esac
+	shift
+done
+
+sleep ${delay:-$T}  # wait long enough to get focus
+xdotool getactivewindow windowsize ${height:-$X} ${width:-$Y}
+
+# vim: set ft=sh: #
+

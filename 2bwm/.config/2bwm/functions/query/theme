@@ -1,0 +1,14 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="query/theme $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................... Wallpaper
+
+[ $WALLPAPER ] || . $XDG_CONFIG_HOME/2bwm/ENV
+
+ls -l $WALLPAPER | awk '{ gsub(".(png|jpg)", ".theme", $NF); print $NF }'
+
+# vim: set ft=sh: #
