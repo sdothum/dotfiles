@@ -34,12 +34,10 @@ killall bash
 # autocutsel -selection PRIMARY -fork &
 # Enable automounting removable devices
 exists udiskie && udiskie --automount --notify --no-tray &
-exists qk && { qk stop >/dev/null; qk start >/dev/null; }  # reattach cli autokey to xorg instance
-pulse &
+alpine && /usr/libexec/pipewire-launcher
+# pulse &
 # pipewire &
 # pipewire-pulse &
-
-udev  # reload udev rules
 
 # ........................................................................ D-Bus
 
@@ -48,8 +46,6 @@ if exists dbus-launch && test -z "$DBUS_SESSION_BUS_ADDRESS"; then
     eval "$(dbus-launch --sh-syntax --exit-with-session)"
     echo "D-Bus per-session daemon address is: $DBUS_SESSION_BUS_ADDRESS"
 fi
-alpine && /usr/libexec/pipewire-launcher
-arch && . /etc/X11/xinit/xinitrc.d/50-systemd-user.sh
 # export dbus for cron notifications, see notify
 [ -e $HOME/.dbus ] || mkdir $HOME/.dbus
 echo "export $(env | grep DBUS_SESSION_BUS_ADDRESS)" >$HOME/.dbus/Xdbus
@@ -83,7 +79,7 @@ xsetroot -cursor_name left_ptr
 xrdb -load $HOME/.Xresources
 
 # login manager default
-DEFAULTSESSION=herbstluftwm
+DEFAULTSESSION=2bwm
 #echo $wm >$HOME/.xsession.trace
 
 # ...................................................................... Display
@@ -91,86 +87,83 @@ DEFAULTSESSION=herbstluftwm
 tv_over() { xrandr --output $1 --off --output HDMI1 --primary --mode $2 --rate 60 --dpi 96; }
 
 case $(hostname) in
-  # luna ) xrandr --output DVI-D-1 --mode 1680x1050 --output HDMI-1 --primary --mode 1920x1080 --rate 60 --left-of DVI-D-1 --dpi 96 ;;
-  luna ) xrandr --output HDMI-1 --mode 3440x1440  --rate 60 --dpi 96 ;;
-  lumen) hdmi && tv_over LVDS1 1920x1080 ;;
-  motu ) hdmi && tv_over eDP1 1920x1080 ;;
+	# luna ) xrandr --output DVI-D-1 --mode 1680x1050 --output HDMI-1 --primary --mode 1920x1080 --rate 60 --left-of DVI-D-1 --dpi 96 ;;
+	luna ) xrandr --output HDMI-1 --mode 3440x1440  --rate 60 --dpi 96 ;;
+	lumen) hdmi && tv_over LVDS1 1920x1080 ;;
+	motu ) hdmi && tv_over eDP1 1920x1080 ;;
 esac
 # pulseeffects --gapplication-service &
 
-# .......................................................................... NFS
-
-# for xorg session restricted nfs: $SESSION/nfs
-nfs() {
-  case $1 in
-  mount ) if [ ! -d /net/depot/dotfiles ] ;then
-            ditto nfs 'mount..' 
-            grep -q "^$HOME/Maildir" /etc/fstab && sudo mount -v $HOME/Maildir 
-            sudo mount -v /net 
-          fi ;;
-  umount) ditto nfs 'umount..' 
-          sudo umount -v /net 
-          grep -q "^$HOME/Maildir" /etc/fstab && sudo umount -v $HOME/Maildir ;;
-  esac
-}
-
-NFSLOG=/tmp/.xinit:nfs.log
-
-nfs mount >$NFSLOG
-# suppress nfs messages to console when server is offline
-[ -e $SESSION/nfs ] && trap "nfs umount >>$NFSLOG" EXIT
-
-
 # ............................................................... Window manager
 
+export XDG_CONFIG_HOME=$HOME/.config
+
 xexec() {
-  export ROOT=${ROOT:-/tmp}
-  rm -f $ROOT/$1:*
-  # enable debug trace by referencing log file
-  export TRACE=$ROOT/$1.log
-  # exec ck-launch-session dbus-launch --sh-syntax --exit-with-x11 $1 >$ROOT/$1.log 2>&1
-  exec $1 >$ROOT/$1.log 2>&1
+	export ROOT=${ROOT:-/tmp}
+	mv -f $ROOT/$1.log $ROOT/$1.last.log 2>/dev/null
+	rm -f $ROOT/$1:*
+	# enable debug trace by referencing log file
+	export TRACE=$ROOT/$1.log
+	# exec ck-launch-session dbus-launch --sh-syntax --exit-with-x11 $1 >$ROOT/$1.log 2>&1
+	exec $1 >$ROOT/$1.log 2>&1
 }
 
 setpath() {
-  path=$1
-  [ -d $1/bin ] && path=$path:$1/bin
-  export PATH=$(echo $path:$(echo $PATH | sed "s|$path:||g"))
+	root=$1; shift
+	path=$root
+	for i in bin $@ ;do
+		[ -d $root/$i ] && path=$path:$root/$i
+	done
+	export PATH=$(echo $path:$(echo $PATH | sed "s|$path:||g"))
 }
 
 case $wm in
-2b* ) xsetroot -solid grey20
-      xrdb -load $HOME/.Xresources
-      $TERM &
-      xexec 2bwm ;;
+2b* )
+	pkill -KILL -f '2bwm'
+	xrdb -load $HOME/.Xresources
+	setpath $HOME/.config/2bwm cmd
+	. $HOME/.config/2bwm/ENV
+	$TERM &
+	(sleep 0.35; xdotool type "autostart >/tmp/2bwm.log 2>&1"; xdotool key return) &  # autostart the panel in the terminal window (delay for celeron cpu)
+	xexec 2bwm ;;
 
 aw* ) xexec awesome ;;
 
-bs* ) killall panel 2>/dev/null
-      rm -f /tmp/bspwm-socket 2>/dev/null
-      rm -f /tmp/bspwm.lock
-      setpath $HOME/.config/bspwm
-      sxhkd -c $HOME/.config/bspwm/sxhkdrc &
-      xexec bspwm ;;
+be* )
+	xwallpaper --zoom $HOME/images/default
+	xrdb -load $HOME/.Xresources
+	setpath $HOME/.config/berry
+	$TERM &
+	sxhkd -c $HOME/.config/berry/sxhkdrc &
+	conky clock auto
+	xexec berry ;;
 
-bu* ) $HOME/.screenlayout/budgie.sh
-      autostart
-      xexec budgie-session ;;
+bs* ) 
+	killall panel 2>/dev/null
+	rm -f /tmp/bspwm-socket 2>/dev/null
+	rm -f /tmp/bspwm.lock
+	setpath $HOME/.config/bspwm
+	sxhkd -c $HOME/.config/bspwm/sxhkdrc &
+	xexec bspwm ;;
+
+bu* )
+	$HOME/.screenlayout/budgie.sh
+	autostart
+	xexec budgie-session ;;
 
 ci* ) xexec gnome-session-cinnamon ;;
 go* ) xexec goomwwm ;;
 dw* ) xexec dwm ;;
 
-he* ) pkill -KILL -f 'herbst'
-      # export ROOT=$HOME/tmp
-      cp /tmp/herbstluftwm.log /tmp/herbstluftwm.last.log
-      rm -f /tmp/herbstluftwm:* 2>/dev/null
-      export PANEL_BOTTOM=true
-      export SETROOT=$(cat $HOME/.setroot 2>/dev/null)  # setroot last wallpaper or wall, otherwise random wall
-      setpath $HOME/.config/herbstluftwm
-      . $HOME/.config/herbstluftwm/config/ENV
-      which xdotool >/dev/null || $TERM &  # initial build install?
-      xexec herbstluftwm ;;
+he* )
+	pkill -KILL -f 'herbst'
+	# export ROOT=$HOME/tmp
+	export PANEL_BOTTOM=true
+	export SETROOT=$(cat $HOME/.setroot 2>/dev/null)  # setroot last wallpaper or wall, otherwise random wall
+	setpath $HOME/.config/herbstluftwm
+	. $HOME/.config/herbstluftwm/config/ENV
+	which xdotool >/dev/null || $TERM &  # initial build install?
+	xexec herbstluftwm ;;
 
 gn* ) xexec gnome-session ;;
 i3  ) xexec i3 ;;
@@ -188,25 +181,37 @@ st* ) xexec stumpwm ;;
 su* ) xexec subtle ;;
 wmi*) xexec wmii ;;
 
-wi* ) setpath $HOME/.config/windowchef
-      export SXHKD_SHELL=/usr/bin/dash
-      xsetroot -solid grey20
-      xrdb -load $HOME/.Xresources
-      sxhkd -c $HOME/.config/windowchef/sxhkdrc &
-      $TERM &
-      xexec windowchef ;;
+wi* )
+	setpath $HOME/.config/windowchef
+	export SXHKD_SHELL=/usr/bin/dash
+	xsetroot -solid grey20
+	xrdb -load $HOME/.Xresources
+	sxhkd -c $HOME/.config/windowchef/sxhkdrc &
+	$TERM &
+	xexec windowchef ;;
 
-wm* ) setpath $HOME/.config/wmutils
-      export SXHKD_SHELL=/usr/bin/dash
-      xsetroot -solid grey20
-      xrdb -load $HOME/.Xresources
-      sxhkd -c $HOME/.config/wmutils/sxhkdrc &
-      wew | yawee &
-      $TERM &
-      pwait wew ;;
+wm* )
+	setpath $HOME/.config/wmutils
+	export SXHKD_SHELL=/usr/bin/dash
+	xsetroot -solid grey20
+	xrdb -load $HOME/.Xresources
+	sxhkd -c $HOME/.config/wmutils/sxhkdrc &
+	wew | yawee &
+	$TERM &
+	pwait wew ;;
 
-wt* ) $TERM &
-      xexec wtftw ;;
+wo* )
+	export BLACKBOARD=/tmp/worm:blackboard
+	xwallpaper --zoom $HOME/images/default
+	xrdb -load $HOME/.Xresources
+	setpath $HOME/.config/worm
+	$TERM &
+	conky clock auto
+	xexec worm ;;
+
+wt* )
+	$TERM &
+	xexec wtftw ;;
 
 xf* ) xexec xfce4-session ;;
 xm* ) xexec xmonad ;;
