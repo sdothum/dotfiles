@@ -50,7 +50,7 @@
 **/firefox
 **/fish/fishd*
 **/fish/functions/twitter.fish
-**/fish/.local/share/fish
+**/fish/.local
 **/fish_variables
 **/focuswriter
 **/font-manager
