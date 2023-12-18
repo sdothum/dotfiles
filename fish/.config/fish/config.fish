@@ -89,6 +89,8 @@ set -x PAGER less
 
 # ..................................................... Development environments
 
+# java
+set -x JAVA_HOME "/usr/lib/jvm/default-jvm"
 # lua
 set -x LUA_INIT "@$HOME/.luarc"
 # python
