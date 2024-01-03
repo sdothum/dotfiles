@@ -29,18 +29,22 @@ doas -u postgres psql </tmp/miniflux:postgres
 # doas sed -i '/^local *all *all *trust/s/trust/md5/' /var/lib/postgresql/15/data/pg_hba.conf
 doas rc-service postgresql restart
 
+# high polling low batch for reddit throttle
 echo "
 LOG_DATE_TIME=yes
 LISTEN_ADDR=127.0.0.1:8080
 DATABASE_URL=user=postgres password=secret dbname=miniflux sslmode=disable
-WORKER_POOL_SIZE=10
+WORKER_POOL_SIZE=5
 POLLING_FREQUENCY=5
 POLLING_PARSING_ERROR_LIMIT=0
-BATCH_SIZE=25
+POLLING_SCHEDULER=round_robin
+BATCH_SIZE=10
 CLEANUP_FREQUENCY_HOURS=1
 CLEANUP_ARCHIVE_UNREAD_DAYS=7
 CLEANUP_ARCHIVE_READ_DAYS=7
 CLEANUP_REMOVE_SESSIONS_DAYS=9999
+HTTP_CLIENT_USER_AGENT=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/6.6.1 Chrome/112.0.5615.213 Safari/537.36
+$(cat $HOME/build/alpine/make_install/.miniflux:oauth2.conf)
 " | doas tee /etc/miniflux.conf
 
 doas miniflux -c /etc/miniflux.conf -migrate

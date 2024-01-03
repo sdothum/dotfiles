@@ -33,7 +33,7 @@ usage() {
 >> m-rounded
 >> p-[eared|serifed]
 >> q-hook
->> t-asymmetric[+|-]
+>> t-asymmetric[+|-[-]]
 >> y-straight
 
 >> 0-split
@@ -92,87 +92,87 @@ cmdopts() {
 	while [ $1 ] ;do
 		case $1 in
 			# shapes
-			ebook        ) ebook=true ;;
-			kindle       ) ereader=$1 ;;
-			kobo         ) ereader=$1 ;;
+			ebook          ) ebook=true ;;
+			kindle         ) ereader=$1 ;;
+			kobo           ) ereader=$1 ;;
 
 			# language
-			cyrillic     ) language=$1 ;;
-			fluent       ) language=$1 ;;
-			latin+greek  ) language=$1 ;;
+			cyrillic       ) language=$1 ;;
+			fluent         ) language=$1 ;;
+			latin+greek    ) language=$1 ;;
 
 			# typefaces
-			classic      ) classic=true ;;
-			coding       ) coding=true ;;
-			quad         ) quad=true ;;
-			mu           ) mu=true ;;
-			serifless    ) serifless=true ;;
-			trio         ) trio=true ;;
-			web          ) web=true ;;
+			classic        ) classic=true ;;
+			coding         ) coding=true ;;
+			quad           ) quad=true ;;
+			mu             ) mu=true ;;
+			serifless      ) serifless=true ;;
+			trio           ) trio=true ;;
+			web            ) web=true ;;
 
 			# styles
-			altmono      ) altmono=$1 ;;  # alternate "monospace" coding font
-			book+regular ) adjust=$1 ;;
-			grote        ) grote=$1 ;;
-			open*        ) open=$1 ;;
+			altmono        ) altmono=$1 ;;  # alternate "monospace" coding font
+			book+regular   ) adjust=$1 ;;
+			grote          ) grote=$1 ;;
+			open*          ) open=$1 ;;
 
 			# glyphs
-			D-serifless  ) D=$1 ;;
-			G-hookless   ) G=$1 ;;
-			G-hookless+  ) G=$1 ;;
-			G-toothless  ) G=$1 ;;
-			I-descending ) I=$1 ;;
-			I-serifless  ) I=$1 ;;        # source code variant
-			J-descending ) J=$1 ;;
-			J-flat       ) J=$1 ;;
-			Q-bar        ) Q=$1 ;;
-			Q-crossing   ) Q=$1 ;;
-			Q-detached   ) Q=$1 ;;
-			Q-hook       ) Q=$1 ;;
-			Q-horizontal ) Q=$1 ;;
-			Q-open       ) Q=$1 ;;
-			Q-straight   ) Q=$1 ;;
+			D-serifless    ) D=$1 ;;
+			G-hookless     ) G=$1 ;;
+			G-hookless+    ) G=$1 ;;
+			G-toothless    ) G=$1 ;;
+			I-descending   ) I=$1 ;;
+			I-serifless    ) I=$1 ;;        # source code variant
+			J-descending   ) J=$1 ;;
+			J-flat         ) J=$1 ;;
+			Q-bar          ) Q=$1 ;;
+			Q-crossing     ) Q=$1 ;;
+			Q-detached     ) Q=$1 ;;
+			Q-hook         ) Q=$1 ;;
+			Q-horizontal   ) Q=$1 ;;
+			Q-open         ) Q=$1 ;;
+			Q-straight     ) Q=$1 ;;
 
-			a-earless    ) a=$1 ;;
-			a-rounded    ) a=$1 ;;
-			a-single     ) a=$1 ;;
-			b-rounded    ) glyph b $1 ;;  # unolexic
-			d-tailed     ) glyph d $1 ;;  # ebook variant
-			d-toothless  ) glyph d $1 ;;  # with p-eared
-			f-extended   ) f=$1 ;;        # unolexic (homage to universal grotesk)
-			i-serifless  ) i=$1 ;;
-			j-flat       ) j=$1 ;;
-			j-serifed    ) j=$1 ;;
-			l-hooky      ) l=$1 ;;
-			l-serifless  ) l=$1 ;;
-			m-rounded    ) m=$1 ;;
-			p-eared      ) glyph p $1 ;;
-			p-serifed    ) glyph p $1 ;;
-			q-hook       ) q=$1 ;;        # ebook variant
-			t-asymmetric ) t=$1 ;;
-			t-asymmetric+) t=$1 ;;
-			t-asymmetric-) t=$1 ;;
-			y-straight   ) y=$1 ;;
+			a-earless      ) a=$1 ;;
+			a-rounded      ) a=$1 ;;
+			a-single       ) a=$1 ;;
+			b-rounded      ) glyph b $1 ;;  # unolexic
+			d-tailed       ) glyph d $1 ;;  # ebook variant
+			d-toothless    ) glyph d $1 ;;  # with p-eared
+			f-extended     ) f=$1 ;;        # unolexic (homage to universal grotesk)
+			i-serifless    ) i=$1 ;;
+			j-flat         ) j=$1 ;;
+			j-serifed      ) j=$1 ;;
+			l-hooky        ) l=$1 ;;
+			l-serifless    ) l=$1 ;;
+			m-rounded      ) m=$1 ;;
+			p-eared        ) glyph p $1 ;;
+			p-serifed      ) glyph p $1 ;;
+			q-hook         ) q=$1 ;;        # ebook variant
+			t-asymmetric   ) t=$1 ;;
+			t-asymmetric+  ) t=$1 ;;
+			t-asymmetric-* ) t=$1 ;;
+			y-straight     ) y=$1 ;;
 
-			0-split      ) zero=$1 ;;
-			4-open+      ) four=$1 ;;
-			at-tall      ) at=$1 ;;       # source code variant
-			paren-flat   ) paren=$1 ;;    # source code variant
+			0-split        ) zero=$1 ;;
+			4-open+        ) four=$1 ;;
+			at-tall        ) at=$1 ;;       # source code variant
+			paren-flat     ) paren=$1 ;;    # source code variant
 			
 			# geometry
-			ascender=*   ) ascender="$1" ;;
-			cap=*        ) [ ${1#*=} = 'off' ] && unset cap || cap="$1" ;;
-			leading=*    ) leading="$1" ;;
-			quasi-ext*   ) quasi=$1 ;;
-			quasi-pro*   ) quasi=$1 ;;
-			sb=*         ) sb="$1" ;;
-			space=*      ) space="$1" ;;
+			ascender=*     ) ascender="$1" ;;
+			cap=*          ) [ ${1#*=} = 'off' ] && unset cap || cap="$1" ;;
+			leading=*      ) leading="$1" ;;
+			quasi-ext*     ) quasi=$1 ;;
+			quasi-pro*     ) quasi=$1 ;;
+			sb=*           ) sb="$1" ;;
+			space=*        ) space="$1" ;;
 
-			family=*     ) [ $ereader ] && family="$1" ;;
-			nocopy       ) unset ecopy ;;
-			--           ) shift; . $HOME/bin/functions/font/iosevka $@; exit ;;
-			help         ) usage ;;
-			*            ) usage ;;
+			family=*       ) [ $ereader ] && family="$1" ;;
+			nocopy         ) unset ecopy ;;
+			--             ) shift; . $HOME/bin/functions/font/iosevka $@; exit ;;
+			help           ) usage ;;
+			*              ) usage ;;
 		esac
 		shift
 	done
@@ -237,6 +237,7 @@ elif [ "$mu" ] ;then
 elif [ -z $ecopy ] ;then
 	cmdopts quasi-ext space=1.125 Q-straight open+
  	emdash
+	# e_ink lathe grote   I-descending t-asymmetric- serifless a-single
 	e_ink lythe grote   I-descending t-asymmetric- serifless
 
 elif [ "$quad" ] ;then
@@ -250,10 +251,11 @@ elif [ "$quad" ] ;then
 elif [ "$serifless" ] ;then
 	cmdopts quasi-ext space=1.125 Q-straight open+
  	emdash
-	e_ink stria altmono I-serifless                serifless="I"
-	e_ink grote grote   I-descending               serifless="Il"
-	e_ink patio grote   a-single t-cross           serifless="l"
-	e_ink lythe grote   I-descending t-asymmetric- serifless="Iil"
+	e_ink stria altmono I-serifless                serifless
+	e_ink grote grote   I-descending               serifless
+	e_ink patio grote   a-single t-cross           serifless
+	e_ink lythe grote   I-descending t-asymmetric- serifless
+	e_ink lathe grote   I-descending t-asymmetric- serifless a-single
 
 elif [ "$trio" ] ;then
 	cmdopts quasi-ext space=1.15 G-hookless+ Q-straight open+
@@ -267,24 +269,23 @@ elif [ $family ] ;then                    # custom e-ink font (non-published)
 
 elif [ $web ] ;then                       # www fonts
 	unset cap; emdash; cmdopts t-asymmetric-
-	wfont heading  quasi-ext              space=1.100 webfont family=wMonolegible serifless="il"
-	wfont dyslexic quasi-ext I-descending space=1.125 webfont family=wMonolexic serifless="Iil"
+	wfont heading  quasi-ext              space=1.100 webfont family=wMonolegible serifless
+	wfont dyslexic quasi-ext I-descending space=1.125 webfont family=wMonolexic   serifless
 	wfont dyslexic quasi-ext I-serifed    space=1.125 webfont family=wCaps
 	wfont expanded quasi-pro I-serifed    space=1     webfont family=wQuasilexic sb=1
-	dfont family=wIosevka
 
 elif [ $coding ] ;then                    # classic coding font
 	cmdopts cap=extended
 	dfont $leading G-toothed a-double family=monodyslexic
 
 else                                      # desktop fonts
-	cmdopts t-asymmetric-
+	cmdopts t-asymmetric--
 	dfont $leading
 	dfont proof    I-descending Q-straight
 	dfont menu     I-descending Q-straight
 	# dfont dyslexic            Q-straight      space=2     family=qclocktwo leading=1.40
-	dfont dyslexic I-serifed    Q-straight      space=2.2   family=qclocktwo  # conky qclocktwo font
-	dfont dyslexic I-descending quasi-extension space=1.125 family=monograffic serifless="Iil"  # panel/dunst/browser font
+	dfont dyslexic I-serifed    Q-straight      space=2.2   family=qclocktwo              # conky qclocktwo font
+	dfont dyslexic I-descending quasi-extension space=1.125 family=monograffic serifless  # panel/dunst/browser font
 fi
 
 # vim: set ft=sh: #

@@ -7,7 +7,8 @@
 # ......................................................................... cups
 
 doas apk add cups cups-filters cups-libs ghostscript
-doas apk add -U --upgrade --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing gutenprint gutenprint-cups gutenprint-lang gutenprint-libs
+# doas apk add -U --upgrade --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing gutenprint gutenprint-cups gutenprint-lang gutenprint-libs
+apk testing gutenprint gutenprint-cups gutenprint-lang gutenprint-libs
 
 doas addgroup $USER lp
 doas addgroup $USER lpadmin

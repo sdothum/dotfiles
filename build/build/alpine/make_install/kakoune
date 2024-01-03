@@ -1,0 +1,59 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................... Kakoune editor
+
+AUTOLOAD=$XDG_CONFIG_HOME/kak/autoload
+mkdir -p $AUTOLOAD
+KAKLSP=$XDG_CONFIG_HOME/kak-lsp
+mkdir -p $KAKLSP
+
+# doas apk add kakoune
+cd /net/depot
+[ -d kakoune ] && { cd kakoune; git pull; cd ..; } || git clone --depth 1 https://github.com/mawww/kakoune.git
+cd kakoune
+make
+make man
+doas make install
+
+# plugins
+plugins="
+https://github.com/alexherbo2/auto-pairs.kak.git
+https://github.com/andreyorst/smarttab.kak.git
+https://github.com/Delapouite/kakoune-cd.git
+https://github.com/jbomanson/search-doc.kak.git
+https://github.com/lePerdu/kakboard.git
+https://github.com/occivink/kakoune-find.git
+https://github.com/occivink/kakoune-phantom-selection.git
+https://github.com/occivink/kakoune-snippets.git
+https://github.com/occivink/kakoune-sudo-write.git
+https://gitlab.com/fsub/kakoune-mark.git
+"
+
+for i in $plugins ;do
+	cd /net/depot
+	repo=${i##*/}
+	[ -d $repo ] && { cd $repo; git pull; cd ..; } || git clone --depth 1 $i
+	cd $repo
+	find . -name '*.kak' -exec cp -v {} $AUTOLOAD \;
+done
+
+# tree-sitter
+cargo install kak-tree-sitter
+cargo install ktsctl
+
+# kak-lsp
+cd /net/depot
+git clone https://github.com/kak-lsp/kak-lsp
+
+cd kak-lsp
+cargo install --locked --force --path .
+
+ditto kak-lsp "check kak-lsp.toml configuration files"
+cp kak-lsp.toml $KAKLSP/kak-lsp.toml.original
+ditto kak-lsp "see make_install lsp"
+
+# vim: set ft=sh: #
