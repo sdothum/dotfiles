@@ -70,6 +70,7 @@ and set -x http_proxy $HTTP_PROXY
 
 set -x XDG_DOWNLOAD_DIR /net/downloads/http
 set -x NNTPSERVER news.sunnyusenet.com
+set -x HTTP_CLIENT_USER_AGENT "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/6.6.1 Chrome/112.0.5615.213 Safari/537.36"
 
 # ..................................................................... Defaults
 
