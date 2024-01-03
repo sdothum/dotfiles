@@ -6,15 +6,14 @@
 
 # .................................................................. nnn wrapper
 
-# Usage: nnn TMUX | [path]
+# Usage: nnn [TMUX | ROOT] | [path]
 
 NNN="/usr/local/bin/nnn -E"  # nnn compiled with icons, see make_install nnn
 TDIR=/net/downloads/http     # default tmux directory
 
 [ -e "$NNN" ] || NNN=/usr/bin/nnn
-PREVIEW=-Pp                    # un/comment to toggle preview-tui on launch
 # export EDITOR=${EDITOR:-hx}  # -E option
-export VISUAL=helix            # detached window editing
+export VISUAL=kak              # detached window editing
 
 # key:value pairs
 bookmarks="$(eval echo $(cat $(dirname $0)/.nnn:bookmarks))"  # hide server structure
@@ -54,9 +53,11 @@ mtp mount && NDIR=$(mtp)
 [ "$1" != TMUX ] && trap 'mtp umount' EXIT  # must manually eject if mounted during toggle tmux session, see herbstluftwm appbinds
 udev                                        # reload udev rules
 
+# sude for sonarr catalogue management
 case $1 in
-	TMUX ) tmux_session 'nnn' $NNN $PREVIEW $TDIR 2>/tmp/nnn.log ;;
-	*    ) $NNN "${NDIR:-$@}" $PREVIEW            2>/tmp/nnn.log ;;
+	ROOT ) tmux_session 'root' sudo -E $NNN $TDIR 2>/tmp/nnn.log ;;
+	TMUX ) tmux_session 'nnn'          $NNN $TDIR 2>/tmp/nnn.log ;;
+	*    ) $NNN "${NDIR:-$@}"                     2>/tmp/nnn.log ;;
 esac
 
 # vim: set ft=sh: #

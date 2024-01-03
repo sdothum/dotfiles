@@ -1,0 +1,40 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Edit
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ....................................................................... Editor
+
+# Usage: [name=<title>] kak [WAIT] <file>*
+
+export SHELL=/usr/bin/bash              # for kak-lsp and processes (just in case)
+KAK=/usr/bin/kak
+CONF=$XDG_CONFIG_HOME/kak
+DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary
+TOML=$HOME/.config/kak-lsp/kak-lsp.toml
+export TABSTOP=3                        # default for (pipe), see align
+
+[ "$1" = WAIT ] && { WAIT=$1; shift; }  # foreground process?
+
+# snapshot sources (in lieu of persistent undo avalability)
+hgadd $@ &  # don' wait :)
+
+# inject spelling dictionary manually into ltex configuration in lieu of unavailable (helix) ltex-ls dictionary update
+if [ -e $DICTIONARY ] ;then
+	spelling="$(sort -df $DICTIONARY | sed -r '/^ *$/d; s/^ *(.*) *$/\\"\1\\":/' | tr '\n' ':')"  # comma's cause unterminated address regex error
+	sed "/^dictionary/a${spelling%::}" $TOML:template | sed "/^dictionary/{n;s/::/,\n/g}" >$TOML
+fi
+
+# escape filenames containing spaces
+count=0
+for i in $@ ;do
+	file="$file $(escape $i)"
+	count=$(( $count + 1 ))
+done
+[ $count -gt 1 ] && notify low 'Kakoune' "$count files to edit"
+
+# term call doesn't handle "space" names
+term ${name:-kak} PAPER 132x52 $WAIT $KAK $command $file  # 50 line page
+
+# vim: set ft=sh: #

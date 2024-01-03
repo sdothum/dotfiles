@@ -4,7 +4,7 @@
 # Edit
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ........................................................... helix pipe actions
+# ........................................................... modal pipe actions
 
 usage() { echo "<selection> | $(basename $0) [<nth>] [')' | '{' | '|' | '&' | '=' | '#' | '//' | '--' | '||' | '&&' | ';;' | <string>]
 >   where, 'pattern' -> ' pattern '
@@ -27,7 +27,7 @@ gutter=' '     # pattern gutter prefix
 ignore='❌'    # nth space column split case avoidance (see below)
 backslash='◌'  # preserve backslash
 
-# simplified source code alignment extension using helix pipe
+# simplified source code alignment extension using modal pipe
 [[ "$1" =~ '^[0-9]+$' ]] && { nth=$1; shift; } || [ $1 ] || set -- '#'  # NOTE: fence=${1:-#} case $fence does not work as expected for '#'
 
 case "$1" in

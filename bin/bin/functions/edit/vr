@@ -8,7 +8,7 @@
 
 usage() { usage: "$(basename $0) <search>"; exit 1; }
 
-EDITOR=${EDITOR:-hx}
+EDITOR=${EDITOR:-kak}
 
 [ "$1" ] || usage
 

@@ -20,7 +20,8 @@ case $1 in
 	off )
 		conky clock auto
 		pstat 'menu (media|movies|series)' || restore root
-		xdotool key Ctrl+space ;;         # clear potential pulse message
+		# xdotool key Ctrl+space          # clear potential pulse message
+		;;
 	
 	*   ) usage ;;
 esac

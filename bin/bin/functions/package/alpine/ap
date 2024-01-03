@@ -14,8 +14,9 @@ $(basename $0) f'ix | t'esing | u'update | [U]U'pgrade | -h'elp" | usage:
 	exit 1
 }
 
-vsn ()     { apk list -I | grep -E -i "^$1-([0-9]+\.*)+-r[0-9]" | cut -d' ' -f1; }
-testing () { [ $(hostname) != 'thedarnedestthing.com' ] && { apk_edge -t $(ag 'apk_edge -t' $HOME/build/alpine | sed 's/.* -t //; s/ #.*//'); flatpak update; } }
+vsn ()       { apk list -I | grep -E -i "^$1-([0-9]+\.*)+-r[0-9]" | cut -d' ' -f1; }
+# testing () { [ $(hostname) != 'thedarnedestthing.com' ] && { apk_edge -t $(ag 'apk_edge -t' $HOME/build/alpine | sed 's/.* -t //; s/ #.*//'); flatpak update -user; } }
+testing ()   { [ $(hostname) != 'thedarnedestthing.com' ] && { apk testing $(ag 'apk testing' $HOME/build/alpine | sed 's/.*apk testing //; s/ #.*//'); flatpak update -user; } }
 
 LINUX=$(vsn linux-lts)
 

@@ -8,10 +8,11 @@
 
 # focus management between aerc and compose windows
 trap "xdotool search --onlyvisible --classname mail windowactivate" EXIT
-# (sleep 0.5; xdotool search --onlyvisible --classname mail windowfocus) &  # return focus to aerc to complete rfc.. note WAIT below :)
 
 # provide aerc an compose mode with custom linespacing 
 # toggle focus defer   # share aerc frame
-offsetY=13 name=compose helix WAIT $@
+export MONOFONT="Iosevka-proof"
+(sleep 0.25; xdotool search --onlyvisible --classname mail windowraise) &  # must enter to: and subject: FIRST
+name=compose offsetY=1 kak WAIT $@
 
 # vim: set ft=sh: #

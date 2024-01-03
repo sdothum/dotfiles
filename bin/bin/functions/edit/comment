@@ -4,7 +4,7 @@
 # Edit
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ........................................................... helix pipe actions
+# ........................................................... modal pipe actions
 
 usage() { echo "<selection> | $(basename $0) [l'eader | t'railer | u'nderline | r'uler [<char>]]
 >   where, first word of line is treated as comment symbol
@@ -17,7 +17,7 @@ usage() { echo "<selection> | $(basename $0) [l'eader | t'railer | u'nderline | 
 	exit 1
 }
 
-# simplified commenting extensions using helix pipe
+# simplified commenting extensions using modal pipe
 
 # env abbreviations
 width=${width:-80}

@@ -8,7 +8,7 @@
 
 usage() { usage: "$(basename $0) <maxdepth> | <name>"; exit 1; }
 
-EDITOR=${EDITOR:-hx}
+EDITOR=${EDITOR:-kak}
 
 v0() { exclude | sort | tr '\n' '\0x00' | xargs -t -r0 $EDITOR; }
 

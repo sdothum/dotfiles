@@ -14,7 +14,7 @@ URL=$(cat $HANGOUTS)
 case $BROWSER in
 	luakit ) luakit $URL & ;;
 	surf   ) surf -z1.15 -C $(dirname $0)/.hangouts:stylesheet.css $URL & ;;
-	*      ) WIDTH=700 DELAY=1.5 qutebrowser $URL & ;;
+	*      ) WIDTH=800 DELAY=1.5 qutebrowser $URL & ;;
 esac
 
 xsync 'Gmail'
@@ -22,7 +22,7 @@ xsync 'Gmail'
 if [ $BROWSER = qutebrowser ] ;then
 	if [ -e $HLWM:hangouts ] ;then
 		keyboard off  # disable keyboard to prevent disrupting following :command
-		sleep 2       # pause long enough for window focus
+		sleep 2       # pause long enough for window focus (cannot use xdotool --sync since other instances may already exist)
 		xdotool key 'Y'
 		keyboard on   # enable keyboard
 	else

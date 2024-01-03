@@ -31,6 +31,7 @@ case $1 in
 	
 	on     )
 		clock && exit
+		toggle unclutter on
 		xdotool search --onlyvisible --limit 1 --maxdepth 1 --name "lemonbar" windowunmap >/dev/null  # disable panel
 		# switch desktops with conkyrc window_type (override) change to prevent 2bwm race condition
 		xdotool get_desktop >$DESKTOP
@@ -40,6 +41,7 @@ case $1 in
 	
 	off    )
 		clock || exit
+		restore unclutter
 		xdotool search --limit 1 --maxdepth 1 --name "lemonbar" windowmap >/dev/null  # restore panel
 		[ -e $DESKTOP ] && xdotool set_desktop $(cat $DESKTOP)
 		pkill -KILL -f "conky -c $CONKYRC"

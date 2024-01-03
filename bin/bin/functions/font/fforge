@@ -25,21 +25,24 @@ $(basename $0) map  <family> <glyph> <glyph>, map U+<glyph> via commandline only
 	exit 1
 }
 
+# export FONTFORGE_VERBOSE=1
+
 MAKE_INSTALL=/tmp/iosevka:make_install
 REPO=/net/depot/Iosevka
-ANGLE=-9       # iosevka italic angle (verify with fontforge)
-Xshift=-40     # italic descending capital left side bearing shift
-# Yshrink=50   # elongation bar percent (original large overlap spec)
-# Yshift=-174  # descending capital elongation
-# yshift=-140  # lower case t elongation
-Yshrink=25.5   # elongation bar percent
-Yshift=-210    # descending capital elongation
-yshift=-176    # lower case t elongation
+ANGLE=${ANGLE:--9}  # iosevka italic angle (verify with fontforge).. see font/iosevka
+Xshift=-40          # italic descending capital left side bearing shift
+# Yshrink=50        # elongation bar percent (original large overlap spec)
+# Yshift=-174       # descending capital elongation
+# yshift=-140       # lower case t elongation
+Yshrink=25.5        # elongation bar percent
+Yshift=-210         # descending capital elongation
+yshift=-176         # lower case t elongation
 
-confirm() { [ -e $MAKE_INSTALL ] && ditto "$(basename $0)" "$1" || { ifyes "$1" || exit; }; }
-percent() { echo "$1 * 100" | bc | cut -d. -f1; }
-regular() { ls -1 | grep -Ev 'italic|oblique|extended'; }
-italic()  { ls -1 | grep -E  'italic'; }
+confirm()  { [ -e $MAKE_INSTALL ] && ditto "$(basename $0)" "$1" || { ifyes "$1" || exit; }; }
+percent()  { echo "$1 * 100" | bc | cut -d. -f1; }
+regular()  { ls -1 | grep -Ev 'italic|oblique|extended'; }
+italic()   { ls -1 | grep -E  'italic'; }
+basefont() { echo $1 | grep -q '[-]italic.ttf' && echo "${1%italic*}regular.ttf" || echo "${1%italic*}.ttf"; }
 
 replace() {
 	echo "
@@ -86,6 +89,43 @@ Generate(\$1);
 	done
 }
 
+# flip serifed i ** cannot override italic **
+i_flipped() {
+	Xright=$(( ${Xshift#-} * 2 ))
+	echo "
+Open(\$1);
+Select(0u0069);
+HFlip();
+Move($Xright,0);  # tweak side bearing towards right
+SetWidth($shape);
+Generate(\$1);
+" >/tmp/fontforge:flipped:i.script
+
+	for i in $(regular) ;do
+		ditto i_flipped $i
+		fontforge --script /tmp/fontforge:flipped:i.script $i
+	done
+
+	# italicize flipped from regular glyph and shift to left of cell
+	echo "
+Open(\$2);
+Select(0u0069);
+Italic($ANGLE);
+Copy();
+Open(\$1);
+Select(0u0069);
+Paste();
+Move($Xright,0);  # adjust for italic side bearing shift towards right 
+SetWidth($shape);
+Generate(\$1);
+" >/tmp/fontforge:flipped:i:italic.script
+
+	for i in $(italic) ;do
+		ditto i_flipped:italic $i
+		fontforge --script /tmp/fontforge:flipped:i:italic.script $i $(basefont $i)
+	done
+}
+
 # flip asymmetric t
 t_flipped() {
 	echo "
@@ -95,11 +135,11 @@ HFlip();
 Move($Xshift,0);  # tweak side bearing towards left
 SetWidth($shape);
 Generate(\$1);
-" >/tmp/fontforge:flipped.script
+" >/tmp/fontforge:flipped:t.script
 
 	for i in $(regular) ;do
 		ditto t_flipped $i
-		fontforge --script /tmp/fontforge:flipped.script $i
+		fontforge --script /tmp/fontforge:flipped:t.script $i
 	done
 
 	# italicize flipped from regular glyph and shift to left of cell
@@ -114,12 +154,11 @@ Paste();
 Move($Xshift,0);  # adjust for italic side bearing shift towards left 
 SetWidth($shape);
 Generate(\$1);
-" >/tmp/fontforge:flipped:italic.script
+" >/tmp/fontforge:flipped:t:italic.script
 
 	for i in $(italic) ;do
 		ditto t_flipped:italic $i
-		echo $i | grep -q '[-]italic.ttf' && regular=${i%italic*}regular.ttf || regular=${i%italic*}.ttf
-		fontforge --script /tmp/fontforge:flipped:italic.script $i $regular
+		fontforge --script /tmp/fontforge:flipped:t:italic.script $i $(basefont $i)
 	done
 }
 
@@ -353,8 +392,7 @@ Generate(\$1);
 
 	for i in $(italic) ;do
 		ditto $1:italic $i
-		echo $i | grep -q '[-]italic.ttf' && regular=${i%italic*}regular.ttf || regular=${i%italic*}.ttf
-		fontforge --script /tmp/fontforge:descender:italic.script $i $regular
+		fontforge --script /tmp/fontforge:descender:italic.script $i $(basefont $i)
 	done
 }
 
@@ -536,6 +574,7 @@ fforge=$1
 case $1 in
 	baseline      |\
 	I_descending  |\
+	i_flipped     |\
 	T_descending  |\
 	t_descending  |\
 	t_flipped     |\
