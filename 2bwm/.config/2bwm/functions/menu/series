@@ -36,11 +36,11 @@ cd $library
 # exclude directory kludge of .anime links in main series folder
 permissions() {
 	if server || $usb ;then
-		find "$library" -maxdepth 2 -type d -user sonarr -exec sudo chmod -R 755 {} \; 2>/dev/null
-		find "$library" -maxdepth 2 -type d -user sonarr -exec sudo chown -R shum:users {} \; 2>/dev/null
+		find "$library" -maxdepth 2 -type d ! -user sonarr -exec sudo chown -R sonarr:users {} \; 2>/dev/null
+		find "$library" -maxdepth 2 -type d -user sonarr -exec sudo chmod -R 775 {} \; 2>/dev/null
 	else
-		ssh $SERVER "find '$library' -maxdepth 2 -type d -user sonarr -exec sudo chmod -R 755 {} \\;"
-		ssh $SERVER "find '$library' -maxdepth 2 -type d -user sonarr -exec sudo chown -R shum:users {} \\;"
+		ssh $SERVER "find '$library' -maxdepth 2 -type d ! -user sonarr -exec sudo chown -R sonarr:users {} \\;"
+		ssh $SERVER "find '$library' -maxdepth 2 -type d -user sonarr -exec sudo chmod -R 775 {} \\;"
 	fi
 	find "$library" -name '*sample*' -exec rm {} \;
 }

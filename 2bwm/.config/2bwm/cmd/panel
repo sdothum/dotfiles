@@ -1,20 +1,11 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="panel $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# .................................................................... Autostart
+# ................................................................. Toggle panel
 
-# see .xinitrc for 2bwm autostart hack :)
-
-restore root
-conky clock auto
-draw panel
-restore unclutter
-qk stop
-qk start
-pulse
-udev
-
+xdotool search --onlyvisible --limit 1 --maxdepth 1 --name "lemonbar" windowunmap >/dev/null || xdotool search --limit 1 --maxdepth 1 --name "lemonbar" windowmap >/dev/null
 # vim: set ft=sh: #

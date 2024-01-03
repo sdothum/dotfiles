@@ -1,20 +1,13 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="termbg $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# .................................................................... Autostart
+# .......................................................... Terminal background
 
-# see .xinitrc for 2bwm autostart hack :)
-
-restore root
-conky clock auto
-draw panel
-restore unclutter
-qk stop
-qk start
-pulse
-udev
+# for alacritty
+printf "\033]11;#${1}\007"
 
 # vim: set ft=sh: #

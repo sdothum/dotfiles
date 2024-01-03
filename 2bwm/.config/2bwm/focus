@@ -1,18 +1,18 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-# [ $TRACE ] && CHILD="draw $@" . $PARENT
+# [ $TRACE ] && CHILD="focus $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# .............................................................. Draw operations
+# ............................................................. Focus operations
 
-# Usage: draw <msg>, see functions/draw
+# Usage: focus <msg>, see functions/focus
 
 msg=$1
 [ $msg ] && shift || usage: $0
-if [ -e ${0%/draw}/functions/draw/$msg ] ;then
-	. ${0%/draw}/functions/draw/$msg $@
+if [ -e ${0%/focus}/functions/focus/$msg ] ;then
+	. ${0%/focus}/functions/focus/$msg $@
 else
 	usage: $0
 fi

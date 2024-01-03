@@ -15,7 +15,7 @@ static const float    resize_keep_aspect_ratio = 1.03;
 /*0)offsetx          1)offsety
  *2)maxwidth         3)maxheight */
 // static const uint8_t offsets[] = {0,0,0,0};
-static const uint8_t offsets[] = {40,30,80,60};
+static const uint8_t offsets[] = {25,30,50,60};
 ///---Colors---///
 /*0)focuscol         1)unfocuscol
  *2)fixedcol         3)unkilcol
@@ -48,7 +48,6 @@ static const char *menucmd[]      = {"menu"        , NULL};  // NOTE: cannot pas
 static const char *terminal[]     = {"term"        , NULL};
 static const char *scratchy[]     = {"scratchy"    , NULL};
 static const char *itchy[]        = {"itchy"       , NULL};
-static const char *address[]      = {"address"     , NULL};  // book
 static const char *background[]   = {"background"  , NULL};  // root background
 static const char *build2bwm[]    = {"build2bwm"   , NULL};
 static const char *browser[]      = {"qutebrowser" , NULL};
@@ -60,7 +59,6 @@ static const char *mail[]         = {"mail"        , NULL};
 static const char *media[]        = {"media"       , NULL};  // menu media
 static const char *filecli[]      = {"filecli"     , NULL};
 static const char *filegui[]      = {"filegui"     , NULL};
-static const char *fileroot[]     = {"fileroot"    , NULL};
 static const char *kill2bwm[]     = {"kill2bwm"    , NULL};
 static const char *notes[]        = {"notes"       , NULL};  // menu notes
 static const char *notifypush[]   = {"notifypush"  , NULL};  // dunstctl clear
@@ -291,7 +289,7 @@ static key keys[] = {
 	{  MOD ,                  XK_i,          start,               {.com = hidecmd}},
 	{  MOD |SHIFT,            XK_i,          start,               {.com = unhide}},
 	{  MOD ,                  XK_m,          start,               {.com = mail}},
-	{  MOD |SHIFT,            XK_m,          start,               {.com = address}},
+	{  MOD |SHIFT,            XK_m,          start,               {.com = media}},
 	{  MOD |SHIFT,            XK_q,          start,               {.com = quit}},
 	{  MOD |SHIFT|CONTROL,    XK_q,          start,               {.com = kill2bwm}},
 	{  MOD |SHIFT,            XK_r,          start,               {.com = build2bwm}},
@@ -299,13 +297,11 @@ static key keys[] = {
 	{  MOD |SHIFT,            XK_s,          start,               {.com = inspector}},
 	{  MOD |SHIFT,            XK_u,          start,               {.com = passwords}},
 	{  MOD ,                  XK_v,          start,               {.com = panel}},
-	{  MOD |SHIFT,            XK_v,          start,               {.com = media}},
 	{  MOD |CONTROL,          XK_v,          start,               {.com = invert}},
 	{  MOD |SHIFT,            XK_w,          start,               {.com = wikis}},
 	{  MOD |CONTROL,          XK_w,          start,               {.com = notes}},
 	{  MOD ,                  XK_x,          start,               {.com = filecli}},
 	{  MOD |SHIFT,            XK_x,          start,               {.com = filegui}},
-	{  MOD |SHIFT|CONTROL,    XK_x,          start,               {.com = fileroot}},
 	// Exit or restart 2bwm
 	{  MOD |CONTROL,          XK_q,          twobwm_exit,         {.i=0}},
 	{  MOD |CONTROL,          XK_r,          twobwm_restart,      {.i=0}},

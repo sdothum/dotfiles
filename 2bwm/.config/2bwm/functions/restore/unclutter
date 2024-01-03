@@ -1,20 +1,12 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="restore/unclutter $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# .................................................................... Autostart
+# ............................................................ Restore unclutter
 
-# see .xinitrc for 2bwm autostart hack :)
-
-restore root
-conky clock auto
-draw panel
-restore unclutter
-qk stop
-qk start
-pulse
-udev
+[ -e $SESSION ] && toggle unclutter on
 
 # vim: set ft=sh: #

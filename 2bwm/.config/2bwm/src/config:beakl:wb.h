@@ -15,7 +15,7 @@ static const float    resize_keep_aspect_ratio = 1.03;
 /*0)offsetx          1)offsety
  *2)maxwidth         3)maxheight */
 // static const uint8_t offsets[] = {0,0,0,0};
-static const uint8_t offsets[] = {40,30,80,60};
+static const uint8_t offsets[] = {25,30,50,60};
 ///---Colors---///
 /*0)focuscol         1)unfocuscol
  *2)fixedcol         3)unkilcol
@@ -48,7 +48,6 @@ static const char *menucmd[]      = {"menu"        , NULL};  // NOTE: cannot pas
 static const char *terminal[]     = {"term"        , NULL};
 static const char *scratchy[]     = {"scratchy"    , NULL};
 static const char *itchy[]        = {"itchy"       , NULL};
-static const char *address[]      = {"address"     , NULL};  // book
 static const char *background[]   = {"background"  , NULL};  // root background
 static const char *build2bwm[]    = {"build2bwm"   , NULL};
 static const char *browser[]      = {"qutebrowser" , NULL};
@@ -60,7 +59,6 @@ static const char *mail[]         = {"mail"        , NULL};
 static const char *media[]        = {"media"       , NULL};  // menu media
 static const char *filecli[]      = {"filecli"     , NULL};
 static const char *filegui[]      = {"filegui"     , NULL};
-static const char *fileroot[]     = {"fileroot"    , NULL};
 static const char *kill2bwm[]     = {"kill2bwm"    , NULL};
 static const char *notes[]        = {"notes"       , NULL};  // menu notes
 static const char *notifypush[]   = {"notifypush"  , NULL};  // dunstctl clear
@@ -136,8 +134,7 @@ static key keys[] = {
 	{  MOD ,                  XK_Tab,        focusnext,           {.i=TWOBWM_FOCUS_NEXT}},
 	{  MOD |SHIFT,            XK_Tab,        focusnext,           {.i=TWOBWM_FOCUS_PREVIOUS}},
 	// Kill a window
-	// {  MOD ,               XK_q,          deletewin,           {}},
-	{  MOD ,                  XK_w,          deletewin,           {}},
+	{  MOD ,                  XK_q,          deletewin,           {}},
 	// Resize a window
 	// {  MOD |SHIFT,         XK_k,          resizestep,          {.i=TWOBWM_RESIZE_UP}},
 	// {  MOD |SHIFT,         XK_j,          resizestep,          {.i=TWOBWM_RESIZE_DOWN}},
@@ -178,15 +175,13 @@ static key keys[] = {
 	{  MOD ,                  XK_d,          teleport,            {.i=TWOBWM_TELEPORT_TOP_LEFT}},
 	// Top right:
 	// {  MOD ,               XK_u,          teleport,            {.i=TWOBWM_TELEPORT_TOP_RIGHT}},
-	// {  MOD ,               XK_m,          teleport,            {.i=TWOBWM_TELEPORT_TOP_RIGHT}},
-	{  MOD ,                  XK_n,          teleport,            {.i=TWOBWM_TELEPORT_TOP_RIGHT}},
+	{  MOD ,                  XK_m,          teleport,            {.i=TWOBWM_TELEPORT_TOP_RIGHT}},
 	// Bottom left:
 	// {  MOD ,               XK_b,          teleport,            {.i=TWOBWM_TELEPORT_BOTTOM_LEFT}},
 	{  MOD ,                  XK_p,          teleport,            {.i=TWOBWM_TELEPORT_BOTTOM_LEFT}},
 	// Bottom right:
 	// {  MOD ,               XK_n,          teleport,            {.i=TWOBWM_TELEPORT_BOTTOM_RIGHT}},
-	// {  MOD ,               XK_f,          teleport,            {.i=TWOBWM_TELEPORT_BOTTOM_RIGHT}},
-	{  MOD ,                  XK_l,          teleport,            {.i=TWOBWM_TELEPORT_BOTTOM_RIGHT}},
+	{  MOD ,                  XK_f,          teleport,            {.i=TWOBWM_TELEPORT_BOTTOM_RIGHT}},
 	// Resize while keeping the window aspect
 	// {  MOD ,               XK_Home,       resizestep_aspect,   {.i=TWOBWM_RESIZE_KEEP_ASPECT_GROW}},
 	// {  MOD ,               XK_End,        resizestep_aspect,   {.i=TWOBWM_RESIZE_KEEP_ASPECT_SHRINK}},
@@ -257,7 +252,8 @@ static key keys[] = {
 	// {  MOD ,               XK_a,          unkillable,          {}},
 	{  MOD ,                  XK_k,          unkillable,          {}},
 	// Make the window appear always on top
-	{  MOD,                   XK_t,          always_on_top,       {}},
+	// {  MOD,                XK_t,          always_on_top,       {}},  // avoid toggling over conky clock (and endless focus cycling)
+	{  MOD |CONTROL,          XK_t,          always_on_top,       {}},
 	// Make the window stay on all workspaces
 	// {  MOD ,               XK_f,          fix,                 {}},
 	{  MOD ,                  XK_a,          fix,                 {}},  // attach
@@ -280,32 +276,30 @@ static key keys[] = {
 	{  CONTROL ,              XK_space,      start,               {.com = notifypush}},
 	{  CONTROL |SHIFT,        XK_space,      start,               {.com = notifyclr}},
 	{  CONTROL ,              XK_BackSpace,  start,               {.com = notifypop}},
-	{  MOD ,                  XK_b,          start,               {.com = browser}},
-	{  MOD |CONTROL,          XK_b,          start,               {.com = browserclr}},
-	{  MOD ,                  XK_c,          start,               {.com = wallclock}},
-	{  MOD |CONTROL,          XK_c,          start,               {.com = unclock}},
-	{  MOD |SHIFT,            XK_d,          start,               {.com = wallpaper}},
-	{  MOD |CONTROL,          XK_d,          start,               {.com = background}},
+	{  MOD ,                  XK_b,          start,               {.com = wallpaper}},
+	{  MOD |SHIFT,            XK_b,          start,               {.com = background}},
+	{  MOD |SHIFT|CONTROL,    XK_b,          start,               {.com = invert}},
 	{  MOD ,                  XK_e,          start,               {.com = scripts}},
 	{  MOD |SHIFT,            XK_e,          start,               {.com = projects}},
 	{  MOD ,                  XK_i,          start,               {.com = hidecmd}},
 	{  MOD |SHIFT,            XK_i,          start,               {.com = unhide}},
-	{  MOD ,                  XK_m,          start,               {.com = mail}},
-	{  MOD |SHIFT,            XK_m,          start,               {.com = address}},
+	{  MOD ,                  XK_o,          start,               {.com = mail}},
+	{  MOD |SHIFT,            XK_o,          start,               {.com = media}},
 	{  MOD |SHIFT,            XK_q,          start,               {.com = quit}},
-	{  MOD |SHIFT|CONTROL,    XK_q,          start,               {.com = kill2bwm}},
-	{  MOD |SHIFT,            XK_r,          start,               {.com = build2bwm}},
+	{  MOD |SHIFT|CONTROL,    XK_r,          start,               {.com = build2bwm}},
 	{  MOD ,                  XK_s,          start,               {.com = twobop}},
 	{  MOD |SHIFT,            XK_s,          start,               {.com = inspector}},
+	{  MOD ,                  XK_t,          start,               {.com = wallclock}},
+	{  MOD |SHIFT,            XK_t,          start,               {.com = unclock}},
 	{  MOD |SHIFT,            XK_u,          start,               {.com = passwords}},
 	{  MOD ,                  XK_v,          start,               {.com = panel}},
-	{  MOD |SHIFT,            XK_v,          start,               {.com = media}},
-	{  MOD |CONTROL,          XK_v,          start,               {.com = invert}},
+	{  MOD ,                  XK_w,          start,               {.com = browser}},
 	{  MOD |SHIFT,            XK_w,          start,               {.com = wikis}},
 	{  MOD |CONTROL,          XK_w,          start,               {.com = notes}},
+	{  MOD |SHIFT|CONTROL,    XK_w,          start,               {.com = browserclr}},
 	{  MOD ,                  XK_x,          start,               {.com = filecli}},
 	{  MOD |SHIFT,            XK_x,          start,               {.com = filegui}},
-	{  MOD |SHIFT|CONTROL,    XK_x,          start,               {.com = fileroot}},
+	{  MOD |SHIFT|CONTROL,    XK_q,          start,               {.com = kill2bwm}},
 	// Exit or restart 2bwm
 	{  MOD |CONTROL,          XK_q,          twobwm_exit,         {.i=0}},
 	{  MOD |CONTROL,          XK_r,          twobwm_restart,      {.i=0}},

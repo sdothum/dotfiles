@@ -1,20 +1,12 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="quit $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# .................................................................... Autostart
+# ............................................................... Edit passwords
 
-# see .xinitrc for 2bwm autostart hack :)
-
-restore root
-conky clock auto
-draw panel
-restore unclutter
-qk stop
-qk start
-pulse
-udev
+menu halt
 
 # vim: set ft=sh: #

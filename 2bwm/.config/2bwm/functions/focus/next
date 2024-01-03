@@ -1,20 +1,13 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="focus/next $@" . $PARENT
 
-# 2bwm
+# Mail
 # ══════════════════════════════════════════════════════════════════════════════
 
-# .................................................................... Autostart
+# ................................................................. Focus window
 
-# see .xinitrc for 2bwm autostart hack :)
-
-restore root
-conky clock auto
-draw panel
-restore unclutter
-qk stop
-qk start
-pulse
-udev
+# see 2bwm config.h
+xdotool key Super+Tab
 
 # vim: set ft=sh: #

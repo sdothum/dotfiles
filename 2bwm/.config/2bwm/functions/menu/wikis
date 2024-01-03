@@ -11,8 +11,10 @@
 EDIT='new'
 DIARY='diary'
 
-EDITOR=${EDITOR:-helix WAIT}
-SPELLING=$HOME/.config/helix/languages:spelling.toml
+EDITOR=${EDITOR:-kak}  # comment out for helix
+EDITOR=${EDITOR:-helix}
+DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary
+[ -e $DICTIONARY ] || unset DICTIONARY
 export MONOFONT="Iosevka-proof"
 
 WIKIS="$HOME/vimwiki"
@@ -45,9 +47,9 @@ add() {
 	mhistory wiki$1 "$title^$SEP $wiki"
 	file=$WIKIS/$wiki/$title.wiki
 	# prepend h1 title
-	echo "# $title\n\n" >$file
+	echo "# $title\n\n[ kak: filetype=markdown ]: #" >$file
 	filename_check
-	name=wiki $EDITOR "$file" "$SPELLING"
+	name=wiki $EDITOR "$file" $DICTIONARY
 	[ $linkname ] && rm -f $linkname
 }
 
@@ -57,7 +59,8 @@ wiki() {
 	if expand "$file" >/dev/null ;then
 		file="$(expand "$file")"
 		filename_check
-		name=wiki $EDITOR "$file" "$SPELLING"
+		# name=wiki $EDITOR "$file" "$DICTIONARY"
+		name=wiki $EDITOR WAIT "$file" $DICTIONARY
 		[ $linkname ] && rm -f $linkname
 		# history file cleanup usually precedes impending edit
 		# expand "$file" | grep -q menu/.history && { pwait "vim.*"$(expand "$file")""; menu edit; }
@@ -75,7 +78,7 @@ while : ;do
 		| rmenu "Edit $prompt$error" -no-custom) || exit
 
 	case ${file#$(X)} in
-		"$DIARY" ) exec menu wiki diary ;;
+		"$DIARY" ) exec menu wikis diary ;;
 		"$EDIT"  ) add ;;
 		*        ) wiki || continue ;;
 	esac

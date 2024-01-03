@@ -122,7 +122,7 @@ while : ;do
 		"$DATE"      ) T=t; cache ;;
 		"$TOGGLE"    ) [ $R ] && unset R || R=r; cache ;;
 		"$USENET"    ) nzbgeek; unset movie ;;
-		"$FILE"      ) killall 'nnn' 2>/dev/null; term 'movies' WAIT nnn -s movies; cache; continue ;;
+		"$FILE"      ) killall 'nnn' 2>/dev/null; preview=' ' term 'movies' WAIT nnn -s movies; cache; continue ;;
 		"$CATALOGUE" ) catalogue; cache; movie=4; continue ;;  # highlight added movie
 		*            ) movie=$(echo "$movie" | sed "s/^$SEP //"); playback ;;
 	esac

@@ -1,16 +1,16 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="scratchpad $@" . $PARENT
+[ $TRACE ] && CHILD="hidecmd $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
 # .................................................................. Hide action
 
-# hide active window and focusnext
+# hide active window and focus next, see 2bwm config.h
 keyboard off
 xdotool key Super+Control+Shift+i
-xdotool key Super+Tab
+focus next
 keyboard on
 
 # clear xtitle.. see draw panel

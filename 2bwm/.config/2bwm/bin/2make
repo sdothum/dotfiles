@@ -1,6 +1,6 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="kill2bwm $@" . $PARENT
+[ $TRACE ] && CHILD="2make $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
@@ -11,7 +11,10 @@ SRC=/net/depot/2bwm
 
 cd $SRC
 ditto 2bwm "Building 2bwm.."
-make && doas make install
-press_enter
+make && doas make install || { press_enter; exit; }
+ifno "reload 2bwm" && exit
+# delay required for reload trigger
+sleep 0.01
+xdotool key Super+Control+r
 
 # vim: set ft=sh: #

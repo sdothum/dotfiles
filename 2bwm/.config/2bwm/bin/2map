@@ -6,10 +6,10 @@
 
 # ....................................................................... Keymap
 
-config=$(dirname $(dirname $0))/src/config.h
+config=$(dirname $(dirname $0))/src/${1:-config.h}
 for i in space tab return backspace up down left right home end comma period a b c d e f g h i j k l m n o p q r s t u v w x y z ;do
 	ditto key $i
-	a "xk_$i," $config | ugrep --ignore-case -v '//' | cut -d'{' -f2- | sed 's/^/{/'
+	ugrep --ignore-case -v "^[ \t]*//" $config | a "xk_$i," | cut -d'{' -f2- | sed 's/^/{/'
 done
 
 # vim: set ft=sh: #

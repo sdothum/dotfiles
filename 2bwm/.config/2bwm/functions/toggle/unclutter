@@ -1,4 +1,4 @@
-#!/usr/bin/dash
+d!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="toggle/unclutter $@" . $PARENT
 

@@ -1,20 +1,12 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="filecli $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# .................................................................... Autostart
+# .................................................................. Filemanager
 
-# see .xinitrc for 2bwm autostart hack :)
-
-restore root
-conky clock auto
-draw panel
-restore unclutter
-qk stop
-qk start
-pulse
-udev
+xdotool search --onlyvisible --classname root windowclose || nnn ROOT
 
 # vim: set ft=sh: #

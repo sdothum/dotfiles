@@ -10,7 +10,7 @@
 
 REFRESH='refresh cache'  # catalogue, see ffcache
 
-EDITOR=${EDITOR:-helix}
+EDITOR=${EDITOR:-kak}
 # system conf files
 INCLUDE='.*(cfg|conf(ig)*|ini|[^.][^s]rc)$'
 

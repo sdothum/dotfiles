@@ -16,7 +16,14 @@ export LEADER='○∘⋯  '
 
 X() { echo "$LEADER$@"; }  # pick list action
 
-# .............................................................. List operations
+# .................................................................. List macros
+
+# return list of existing applications
+appslist() {
+	unset apps
+	for i in $@ ;do apps="$apps$(which $i >/dev/null 2>&1 && echo "$i ")" ;done
+	echo $apps | sed 's/ /\n/g'
+}
 
 # usage: playlist library played, see menu series/movies
 playlist() {

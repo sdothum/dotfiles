@@ -13,7 +13,7 @@
 
 EDIT='edit tags'
 
-EDITOR=${EDITOR:-helix}
+EDITOR=${EDITOR:-kak}
 
 # tag file containing project specs
 PROJECTS=$MENU/.projectsrc
