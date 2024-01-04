@@ -25,7 +25,7 @@ doas gem install solargraph
 # markdown
 # wget -P /tmp https://github.com/artempyanykh/marksman/releases/download/2023-07-25/marksman-linux-x64
 # mv /tmp/marksman-linux-x64 $HOME/.local/bin/marksman
-# chmod +x $HOME/c.local/bin/marksman
+# chmod +x $HOME/.local/bin/marksman
 
 # better markdown with full latex/grammar/spellcheck
 doas apk add openjdk21
