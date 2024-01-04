@@ -19,7 +19,7 @@ FCACHE=$CACHEDIR/fcache
 BOOKMARKS="$(dirname $0)/.fcache:bookmarks"
 [ $1 ] || usage
 
-# Note: non-directory caches automatically update their associated directory caches via stest
+# NOTE: non-directory caches automatically update their associated directory caches via stest
 #       but directory caches (used in fuzzy jumping) require manual updating, as required,
 #       to avoid triggering unnecessary file scans (directory trees being restructured far
 #       less frequently than regular file creation/deletion)
@@ -49,7 +49,7 @@ cache=$FCACHE:$type$(cname $node)
 dcache=$FCACHE:d$(cname $node)
 
 # if unchanged files in non-directory search, return cache
-# Note: always returns directory cache
+# NOTE: always returns directory cache
 if [ -e $cache ] && [ -e $dcache ] && [ -z $refresh ] ;then
 	[ $type != d ] && stest -dqr -n $dcache $(cat $dcache) || exec cat $cache $BOOKMARKS  # append bookmarks
 fi

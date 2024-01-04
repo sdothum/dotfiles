@@ -34,7 +34,7 @@ alarms() {
 
 reminders() {
 	cp $REMINDERS $HOME/tmp
-	# Note: cannot substitute $@ in date --date
+	# NOTE: cannot substitute $@ in date --date
 	day=$@
 	date --date "$day" >/dev/null 2>&1 || day=tomorrow
 	echo $day | grep -E -q ':|[ap]m' && M=%M || M=00

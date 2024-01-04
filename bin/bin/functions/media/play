@@ -8,11 +8,11 @@
 
 # Usage: play <url> | [-q] <path> [<title>]
 #
-# Note: <path> may be a media file or folder containing such
+# NOTE: <path> may be a media file or folder containing such
 
 fontsize=36
 ext='avi|Avi|divx|Divx|m4v|M4v|mkv|Mkv|mp4|Mp4|wmv|Wmv'
-delay=1.35  # for "next" xdotool key sequence
+delay=1.5  # for "next" xdotool key sequence
 
 pgrep -f 'menu series' && next='next\n'
 

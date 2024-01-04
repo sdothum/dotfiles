@@ -6,7 +6,7 @@
 
 # ............................................................. update stow repo
 #
-# Note: this is additive only, permitting multiple <repo> paths with successive calls
+# NOTE: this is additive only, permitting multiple <repo> paths with successive calls
 #       restored wita a single stow call!
 
 usage() { usage: "$(basename $0) <repo> <path[/file]> [<hostname>]"; exit 1; }

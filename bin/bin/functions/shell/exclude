@@ -11,7 +11,7 @@
 IGNORE=$HOME/.agignore
 
 # exclude home directory chaff from glob lists (note possible leading ansi escape sequences)
-# Note: escape code \x1B for grep is inserted with "Ctrl-V" "Ctrl-[" which prints as "^["
+# NOTE: escape code \x1B for grep is inserted with "Ctrl-V" "Ctrl-[" which prints as "^["
 ansi='\[\([0-9]{1,2}\(;[0-9]{1,2}\)?\)?[m|K]'
 
 # directory exclusions

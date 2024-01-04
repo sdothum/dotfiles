@@ -6,7 +6,7 @@
 
 # ........................................................... Package management
 
-# Note: ignorepkg any packages that abort upgrade
+# NOTE: ignorepkg any packages that abort upgrade
 
 # update aur kludge to prevent pacupg --aur from re-installing aur package updates
 # $wrappaur=true

@@ -8,7 +8,7 @@
 
 # Usage: . ancestor
 #
-# Note: must be sourced in order to obtain correct parent id or called within a
+# NOTE: must be sourced in order to obtain correct parent id or called within a
 #       script that is itself sourced, see log/parent as called from herbstluftwm
 #       scripts
 
