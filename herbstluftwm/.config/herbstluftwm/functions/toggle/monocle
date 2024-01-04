@@ -9,7 +9,7 @@
 
 # Usage: toggle monocle [fullscreen]
 #        toggle monocle fullscreen, to suppress laptop conky view
-# Note:  monocle view mode and fullscreen switching have been tightly integrated
+# NOTE:  monocle view mode and fullscreen switching have been tightly integrated
 #        to provide an IMO more seamless use of this distraction free mode
 #        see draw monitor, switch frames, toggle fullscreen
 #        windows opened over a fullscreen view exhibit the same characteristics

@@ -6,7 +6,7 @@
 
 # ..................................................................... Man help
 
-# Note: hilighting a word in the manpage display (terminal) will automatically
+# NOTE: hilighting a word in the manpage display (terminal) will automatically
 #       lookup that manpage when the terminal window is closed
 #       adding an apostrophe (') to the input word allows lookup of word tokens already
 #       in the manpage history with the apostrophe being removed (useful when

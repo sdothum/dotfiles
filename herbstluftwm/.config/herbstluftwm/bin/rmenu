@@ -11,7 +11,7 @@
 #                     row    - rofi row highlight
 #                     option - rofi options e.g. -filter <filter> -no-custom
 #
-# Note:
+# NOTE:
 #   - Temporary ncurses mode set with variable TERMINAL, see X11/dmenu
 #   - rofi matching method can be set with env variable "matching"
 

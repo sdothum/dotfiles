@@ -15,7 +15,7 @@
 #        VISIBLE, wait for window visibility
 #        WAIT, for process to complete before returning
 #        SHELL <command>, for simpler unquoted command passing
-# Note:  title may not contain spaces, use hyphen or underscore in place
+# NOTE:  title may not contain spaces, use hyphen or underscore in place
 
 SHELL=/usr/bin/dash
 options='FLOAT|STACK|MAX|VERTICAL|HORIZONTAL|GRID|BLACKBOARD|PAPER|VISIBLE|WAIT|FORTUNE|SHELL'

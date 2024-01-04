@@ -8,7 +8,7 @@
 # .................................................................. Draw layout
 
 # Usage: draw layout [--]** tags | grid | horizontal | max | vertical | 1:1 | 2:3 | 1:2 | 1:1:1 | spread | default
-# Note:  **suppress layout dump on restore *from* monocle, see toggle monocle
+# NOTE:  **suppress layout dump on restore *from* monocle, see toggle monocle
 
 # default master pane left or right
 MASTER=${MASTER:-left}

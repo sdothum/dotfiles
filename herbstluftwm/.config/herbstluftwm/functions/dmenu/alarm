@@ -10,7 +10,7 @@
 #        dmenu alarm <duration> <description>
 #        dmenu alarm <duration> <description> <repetitions>
 #
-# Note:  duration defaults to minutes (not seconds)
+# NOTE:  duration defaults to minutes (not seconds)
 
 EDIT='edit'
 

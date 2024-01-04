@@ -8,7 +8,7 @@
 
 # Usage: dmenu [-] <function>
 #              where, '-' disables in terminal command line mode
-# Note:  non-dmenu messages within $0/functions/dmenu
+# NOTE:  non-dmenu messages within $0/functions/dmenu
 #        source dmenu
 #        POSIX standard for use with dash shell
 

@@ -12,7 +12,7 @@
 instance=$(herbstclient attr clients.$1.instance)
 # convert utf-8 to ascii, otherwise focus hlwm may not list all winids
 title=$(asciititle $(herbstclient attr clients.$1.title))
-# note: ^$SEP for use with dmenu column alignment, see focus hlwm, restore hidden
+# NOTE: ^$SEP for use with dmenu column alignment, see focus hlwm, restore hidden
 echo "$instance^$SEP $title"
 
 # vim: set ft=sh: #

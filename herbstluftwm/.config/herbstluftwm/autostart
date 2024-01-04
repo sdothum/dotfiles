@@ -9,7 +9,7 @@ HLWMTRACE=$SESSION/trace
 CONKY=$SESSION/conky
 hook=1  # emit_hook initialization window
 
-# chain herbstclient commands (note: keybind chains use ".")
+# chain herbstclient commands (NOTE: keybind chains use ".")
 hc() {
 	# cannot chain parameters "'containing spaces'"
 	chain=true
