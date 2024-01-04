@@ -7,7 +7,9 @@
 
 # .......................................................... Terminal background
 
-# for alacritty
-printf "\033]11;#${1}\007"
+# Usage: termbg [rgb:]<hex>, kak prefixes hex code with "rgb:"
+
+# from kak to alacritty
+printf "\033]11;#${1#*:}\007"
 
 # vim: set ft=sh: #
