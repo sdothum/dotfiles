@@ -1,9 +1,14 @@
+# sdothum - 2016 (c) wtfpl
 
-# chroma theme for Kakoune
+# Kakoune
+# ══════════════════════════════════════════════════════════════════════════════
+
+# duochrome theme for Kakoune
 
 # ................................................................ Color palette
 
-# background and statusbar must be set by kakrc
+# dynamic theme mode contrast
+# background/comment and statusbar must be set by kakrc
 
 # dark to lighter shades
 # blacks
@@ -11,37 +16,31 @@ declare-option str black                  'rgb:263238'
 declare-option str light_black            'rgb:304047'
 declare-option str dark_grey              'rgb:445c65'
 declare-option str pale_grey              'rgb:cfd8dc'
-declare-option str white                  'rgb:f7f3ee'
 # reds
 declare-option str dark_red               'rgb:a1462a'
 declare-option str soft_red               'rgb:fa8c69'
 # oranges
 declare-option str strong_orange          'rgb:bf450c'
-declare-option str desaturated_orange     'rgb:d5b875'
+# declare-option str desaturated_orange   'rgb:d5b875'  # see kakrc (as master color assignment)
 declare-option str light_orange           'rgb:ffe5b4'
-declare-option str pale_orange            'rgb:fff4e6'
-# yellows
-declare-option str pale_yellow            'rgb:f7f3ee'
+# declare-option str pale_orange          'rgb:f7f3ee'  # see kakrc
+# greens
+# declare-option str desaturated_green    'rgb:78ab78'  # see kakrc
+# declare-option str pale_green           'rgb:e1f1ea'  # see kakrc
 # blues
-declare-option str dark_cyan              'rgb:00607c'
-declare-option str blue_cyan              'rgb:0087af'
+declare-option str dark_cyan              'rgb:0087af'
 declare-option str dark_blue              'rgb:0069af'
 declare-option str desaturated_cyan       'rgb:78a0a2'
 declare-option str soft_cyan              'rgb:a3d5e4'
-declare-option str pale_blue              'rgb:e1e8f1'
 declare-option str vivid_cyan             'rgb:20fccf'
-# teals
-declare-option str dark_teal              'rgb:008b8b'
-declare-option str lime_teal              'rgb:398b76'
-declare-option str pale_teal              'rgb:eef7f3'
 
 # ................................................................ Color objects
 
-# declare-option str background           "%opt{white}"  # see kakrc
+# declare-option str background           "%opt{white}"               # see kakrc
 declare-option str foreground             "%opt{black}"
 declare-option str linenr                 "%opt{pale_grey}"
 declare-option str margin                 "%opt{background}"
-# declare-option str menu                 "%opt{pale_blue}"      # see kakr
+# declare-option str menu                 "%opt{pale_green}"          # see kakr
 declare-option str pick                   "%opt{desaturated_cyan}"
 declare-option str statusbar              "%opt{background}"
 declare-option str statusline             "%opt{desaturated_cyan}"
@@ -50,11 +49,11 @@ declare-option str cursor                 "%opt{vivid_cyan}"
 declare-option str eol                    "%opt{soft_red}"
 declare-option str multi                  "%opt{soft_red}"
 declare-option str secondary              "%opt{light_orange}"
-declare-option str selection              "%opt{blue_cyan}"
+declare-option str selection              "%opt{dark_cyan}"
 declare-option str wrap                   "%opt{soft_red}"
 
 declare-option str attribute              "%opt{dark_blue}"
-declare-option str comment                "%opt{desaturated_orange}"
+# declare-option str comment              "%opt{desaturated_orange}"  # see kakrc
 declare-option str constant               "%opt{dark_blue}"
 declare-option str function               "%opt{light_black}"
 declare-option str operator               "%opt{strong_orange}"
@@ -116,18 +115,26 @@ set-face global MenuBackground            "%opt{pick},%opt{menu}"
 set-face global MenuInfo                  "%opt{string},%opt{menu}"
 
 set-face global Information               "%opt{statusline},%opt{statusbar}"
+set-face global InlineInformation         "%opt{statusline},%opt{statusbar}"
 set-face global Error                     "%opt{string},%opt{statusbar}"
+set-face global DiagnosticError           "%opt{string},%opt{statusbar}"
+set-face global DiagnosticWarning         "%opt{string},%opt{statusbar}"
+
 set-face global StatusLine                "%opt{statusline},%opt{statusbar}"
 set-face global StatusLineMode            "%opt{statusline},%opt{statusbar}"
 set-face global StatusLineInfo            "%opt{statusline},%opt{statusbar}"
 set-face global StatusLineValue           "%opt{statusline},%opt{statusbar}"
 set-face global StatusCursor              "%opt{foreground},%opt{cursor}"
-
 set-face global Prompt                    "%opt{statusline},%opt{statusbar}"
+
 set-face global MatchingChar              "%opt{match},%opt{background}"
 set-face global Whitespace                "%opt{space},%opt{background}+f"
-set-face global WrapMarker                "%opt{wrap}+b"
-set-face global BufferPadding             "%opt{background},%opt{background}"
+set-face global WrapMarker                "%opt{wrap}+bf"
+set-face global BufferPadding             "%opt{background},%opt{background}"  # hide tilde
+
+# .................................................................. Admonitions
+
+set-face global Admonitions               "+bf@Error"
 
 # ...................................................................... kak-lsp
 
@@ -171,3 +178,4 @@ set-face global InfoDiagnosticError       InlayDiagnosticError
 set-face global InfoDiagnosticHint        InlayDiagnosticHint
 set-face global InfoDiagnosticInformation InlayDiagnosticInfo
 set-face global InfoDiagnosticWarning     InlayDiagnosticWarning
+

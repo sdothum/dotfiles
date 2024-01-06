@@ -1,0 +1,31 @@
+# sdothum - 2016 (c) wtfpl
+
+# Kakoune
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................ kak-lsp.toml addition
+
+# NOTE: append to ltex-lsp.toml:un-marksman (commented out for lsp initialization performance)
+# see kak script wrapper
+# NOTE: test with "kak-lsp -s main" for toml configuration (syntax) errors
+
+[language_server.ltex-ls]
+filetypes = ["markdown"]
+roots = [".git"]
+command = "/opt/ltex-ls/bin/ltex-ls"
+settings_section = "ltex"
+
+[language_server.ltex-ls.settings.ltex]
+# ltex.completionEnabled = true
+language = "en-US"
+disabledRules = { "en-US" = ["PROFANITY"] }
+dictionary = { "en-US" = [
+] }
+
+[language_server.taplo]
+filetypes = ["toml"]
+roots = [".git"]
+command = "taplo"
+
+# kak: filetype=toml
+

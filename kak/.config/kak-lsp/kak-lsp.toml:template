@@ -451,12 +451,20 @@ faces = [
     {face="default+d", token="variable", modifiers=["constant"]},
     {face="variable", token="variable"},
 ]
+# sdothum - 2016 (c) wtfpl
 
-# .................................................... my additional lsp servers
+# Kakoune
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................ kak-lsp.toml addition
+
+# NOTE: append to ltex-lsp.toml:un-marksman (commented out for lsp initialization performance)
+# see kak script wrapper
+# NOTE: test with "kak-lsp -s main" for toml configuration (syntax) errors
 
 [language_server.ltex-ls]
 filetypes = ["markdown"]
-roots = [".git", ".hg"]
+roots = [".git"]
 command = "/opt/ltex-ls/bin/ltex-ls"
 settings_section = "ltex"
 
@@ -467,5 +475,10 @@ disabledRules = { "en-US" = ["PROFANITY"] }
 dictionary = { "en-US" = [
 ] }
 
-# kak: filetype=toml #
+[language_server.taplo]
+filetypes = ["toml"]
+roots = [".git"]
+command = "taplo"
+
+# kak: filetype=toml
 
