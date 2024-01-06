@@ -285,6 +285,7 @@
 **/timestamp
 **/tint2
 **/tixati
+**/*tmp
 **/tmux.lock
 **/tmux/.tmux/plugins/tpm/.gitignore
 **/todo
