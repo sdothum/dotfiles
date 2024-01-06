@@ -6,7 +6,7 @@
 
 # ....................................................................... Editor
 
-# Usage: [name=<title>] kak [WAIT] <file>*
+# Usage: [name=<title>] kak [WAIT] [<row>x<col>] <file>*
 
 export SHELL=/usr/bin/bash              # for kak-lsp and processes (just in case)
 [ -e /usr/local/bin/kak ] && KAK=/usr/local/bin/kak || KAK=/usr/bin/kak
@@ -15,7 +15,14 @@ DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary
 TOML=$HOME/.config/kak-lsp/kak-lsp.toml
 export TABSTOP=3                        # default for (pipe), see align
 
-[ "$1" = WAIT ] && { WAIT=$1; shift; }  # foreground process?
+while : ;do
+	case $1 in
+		WAIT          ) WAIT=$1 ;;
+		*[0-9]x[0-9]* ) XY=$1 ;;
+		*             ) break ;;
+	esac
+	shift
+done
 
 # snapshot sources (in lieu of persistent undo avalability)
 hgadd $@ &  # don' wait :)
@@ -36,6 +43,6 @@ done
 [ $count -gt 1 ] && notify low 'Kakoune' "$count files to edit"
 
 # term call doesn't handle "space" names
-term ${name:-kak} PAPER 132x52 $WAIT $KAK $command $file  # 50 line page
+term ${name:-kak} PAPER ${XY:-132x52} $WAIT $KAK $file  # 50 line page
 
 # vim: set ft=sh: #

@@ -12,7 +12,7 @@
 
 fontsize=36
 ext='avi|Avi|divx|Divx|m4v|M4v|mkv|Mkv|mp4|Mp4|wmv|Wmv'
-delay=1.5  # for "next" xdotool key sequence
+delay=1.55  # for "next" xdotool key sequence
 
 pgrep -f 'menu series' && next='next\n'
 
