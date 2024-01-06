@@ -1,0 +1,15 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................................ kitty
+
+doas apk add kitty
+
+wget -P /tmp https://github.com/kovidgoyal/kitty/releases/latest/download/kitten-linux-amd64
+doas cp /tmp/kitten-linux-amd64 /usr/bin/kitten
+doas chmod 755 /usr/bin/kitten
+
+# vim: set ft=sh: #
