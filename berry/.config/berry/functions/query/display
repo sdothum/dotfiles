@@ -1,0 +1,20 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="query/display $@" . $PARENT
+
+# berry
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................... Display resolution
+
+# Usage: query display [height | width]
+
+display() { xrandr | grep -w connected  | awk -F'[ +x]' '{ print $3,$4 }'; }
+
+case $1 in
+	height ) display | cut -d' ' -f2 ;;
+	width  ) display | cut -d' ' -f1 ;;
+	*      ) display ;;  # typically, set -- $(query display) to reference X Y as $1 $2
+esac
+
+# vim: set ft=sh: #
