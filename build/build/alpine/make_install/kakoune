@@ -24,8 +24,10 @@ plugins="
 https://github.com/Delapouite/kakoune-cd.git
 https://github.com/alexherbo2/auto-pairs.kak.git
 https://github.com/andreyorst/smarttab.kak.git
+https://github.com/insipx/kak-crosshairs.git
 https://github.com/jbomanson/search-doc.kak.git
 https://github.com/lePerdu/kakboard.git
+https://github.com/listentolist/kakoune-fandt.git
 https://github.com/occivink/kakoune-buffer-switcher.git
 https://github.com/occivink/kakoune-find.git
 https://github.com/occivink/kakoune-phantom-selection.git
