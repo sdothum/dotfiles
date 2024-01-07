@@ -12,7 +12,7 @@ usage() {
 	echo "$(basename $0) [<stowdir>] add [-f] <package>[/<filespec>]* | rm <filespec>
 $(basename $0) amend|comment [<comment>] | redo|undo
 $(basename $0) init [<comment>] | bulk <comment> | sync
-$(basename $0) dry-run | folders|ignore | list | log
+$(basename $0) dry-run | folders|ignore | list | log | hints | nohints
 
 see $DOTFILES" | usage:
 	exit 1
@@ -129,6 +129,8 @@ case $1 in
 		cat $MESSAGES | print ;;
 
 	folder* ) vim -g $DOTFILES .gitignore $(messages) ;;
+	hints   ) git config advice.addIgnoredFile true; ditto git "hints on" ;;
+	nohints ) git config advice.addIgnoredFile false; ditto git "hints off" ;;
 	ignore  ) vim -g .gitignore $DOTFILES $(messages) ;;
 	init    ) DESC="${2:-fresh commit}"; init ;;
 	list    ) git log --pretty=format:"%h - %an, %ar : %s" ;;
