@@ -19,6 +19,7 @@ settings_section = "ltex"
 # ltex.completionEnabled = true
 language = "en-US"
 disabledRules = { "en-US" = ["PROFANITY"] }
+# NOTE: manually maintained word list inserted  here by edit/kak wrapper (script)
 dictionary = { "en-US" = [
 ] }
 

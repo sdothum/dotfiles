@@ -7,7 +7,7 @@
 
 # ........................................................................ Theme
 
-# see plug crosshairs
+# see UX (crosshairs)
 declare-option str faint_lime             'rgb:d0e9de'  # pale green contrast
 declare-option str faint_orange           'rgb:efe7dd'  # pale orange contrast
 
@@ -43,15 +43,25 @@ map global user <space> ': normal-mode-colorscheme<ret>' -docstring "%opt{theme}
 normal-mode-colorscheme
 
 # ....................................................................... Layout
- 
+
+# set-option global ui_options terminal_status_on_top=true terminal_assistant=cat
+# set-option global ui_options terminal_status_on_top=true
+
 # lines and columns displayed around the cursor
 set-option global scrolloff 4,4
 
 # modal line numbers
-declare-option str separator '│ '
-hook global WinCreate .* %{ add-highlighter window/linenr number-lines -hlcursor -separator %opt{separator} -relative }
-hook global ModeChange (push|pop):.*:insert %{ add-highlighter -override window/linenr number-lines -hlcursor -separator %opt{separator} }
-hook global ModeChange (push|pop):insert:.* %{ add-highlighter -override window/linenr number-lines -hlcursor -separator %opt{separator} -relative }
+declare-option str ruler '│ '
+hook global WinCreate .* %{ add-highlighter window/linenr number-lines -hlcursor -separator %opt{ruler} -relative }
+hook global ModeChange (push|pop):.*:insert %{ add-highlighter -override window/linenr number-lines -hlcursor -separator %opt{ruler} }
+hook global ModeChange (push|pop):insert:.* %{ add-highlighter -override window/linenr number-lines -hlcursor -separator %opt{ruler} -relative }
+
+# ................................................................... Statusline
+
+# a minimalist statusline :)
+declare-option str separator '✦'
+# display utf-8 value for characters > tilde
+set-option global modelinefmt '{{mode_info}} %opt{separator} %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{separator} %val{bufname} {{context_info}}'
 
 # ........................................................................... UX
 
@@ -64,7 +74,7 @@ alias global sd search-doc
 # plug 'Delapouite/kakoune-cd'
 hook global WinDisplay .* change-directory-current-buffer
 
-# plug insipx/kak-crosshairs
+# plug 'insipx/kak-crosshairs'
 set-face global crosshairs_line           "default,default+u"
 set-face global crosshairs_column         "default,%opt{faint_lime}"
 hook global ModeChange (push|pop):.*:insert %{ set-face global crosshairs_column "default,%opt{faint_orange}" }
@@ -123,7 +133,7 @@ map global normal '#' ': enter-user-mode format<ret>'
 
 # ....................................................................... Motion
 
-# plug listentolist/kakoune-fandt
+# plug 'listentolist/kakoune-fandt'
 require-module fandt
 
 map global normal G 'ge' -docstring 'goto buffer end'
@@ -155,7 +165,7 @@ map global normal <a-down> 'xdp'                -docstring 'shift down'
 
 # ..................................................................... Snippets
 
-# plug occivink/kakoune-snippets
+# plug 'occivink/kakoune-snippets'
 set-option global snippets_auto_expand true
 
 define-command user-snippets %{
@@ -180,7 +190,7 @@ hook -once global BufSetOption filetype=markdown %{
 
 # .................................................................... Clipboard
 
-# plug "lePerdu/kakboard" (optimized)
+# plug 'lePerdu/kakboard' (optimized)
 set global kakboard_copy_cmd 'xclip -in -selection clipboard'
 set global kakboard_paste_cmd 'xclip -out -selection clipboard'
 hook global WinCreate .* %{ kakboard-enable }
@@ -206,7 +216,7 @@ map global normal <a-ret> ': buffer-next<ret>'            -docstring 'next buffe
 map global normal <a-backspace> ': buffer-previous<ret>'  -docstring 'previous buffer'
 map global normal <a-space> 'ga'                          -docstring 'last buffer'
 
-# plug occivink/kakoune-buffer-switcher
+# plug 'occivink/kakoune-buffer-switcher'
 map global user   b ': buffer-switcher<ret>'              -docstring 'buffer switcher'
 
 map global user   d ': buffer *debug*<ret>'               -docstring '*debug*'
