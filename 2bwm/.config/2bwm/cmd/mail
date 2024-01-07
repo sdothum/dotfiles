@@ -1,0 +1,12 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="mail $@" . $PARENT
+
+# Mail
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Mail client
+
+xdotool search --onlyvisible --classname mail windowclose || aerc
+
+# vim: set ft=sh: #
