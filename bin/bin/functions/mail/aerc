@@ -1,0 +1,23 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Mail
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Mail Client
+
+# compose directory for temporary eml files
+export TMPDIR=~/drafts  # override /tmp (because dir is not persistent in alpine)
+AERC=/usr/bin/aerc
+group=sdothum
+delay=1.05  # long enough to not trigger 2bwm actions while launching via modkey (down) bindings
+
+# push out any flag and trash changes when finished
+trap "mailsync $group" EXIT
+
+# in lieu of :vsplit crash from command line (known problem)
+(sleep $delay; keyboard off; xdotool search --sync --onlyvisible --classname "mail" type ":vsplit"; xdotool key Return; keyboard on) &
+
+offsetY=4 term mail WAIT 250x45 PAPER $AERC
+
+# vim: set ft=sh: #
