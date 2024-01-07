@@ -1,0 +1,21 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Mail
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Mail client
+
+maildir=$HOME/Maildir/thedarnedestthing
+
+# if ! server ;then
+#   grep -q "^$SERVER:/Maildir" /etc/fstab && mount -t nfs4 | grep -vq Maildir && {
+#     ssh $SERVER sudo systemctl restart nfs-server
+#     sudo mount $HOME/Maildir
+#   }
+# fi
+
+# /usr/bin/alot -l /tmp/alot.log -d debug
+/usr/bin/alot -l /tmp/alot.log
+
+# vim: set ft=sh: #
