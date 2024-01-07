@@ -1,6 +1,7 @@
 2bwm
 amphetype
 bash
+berry
 bin
 bspwm
 build
@@ -26,6 +27,7 @@ kobo/calibre:config
 kobo/fonts:*
 kobo/kobopatch_*/src/*yaml
 kobo/kobopatch_*/*yaml
+kobo/koreader.*
 kobo/Nickel*
 kustom
 bin/bin/functions/mail/compose
