@@ -121,7 +121,7 @@ map global normal <c-l> ': comment-line<ret>' -docstring '(un)comment'  # beakl 
 declare-user-mode format
 map global format l 'x|comment l .<ret>'      -docstring 'leader ... comment'
 map global format r 'x|comment r =<ret>'      -docstring 'ruler ═══'
-map global format u 'x|comment u --<ret>'     -docstring 'underline ━━━'
+map global format u 'x|comment u --<ret>'     -docstring 'underline ━━━ comment'
 map global format '#' 'x|align \#<ret>'       -docstring 'align #  comment'
 map global format / 'x|align //<ret>'         -docstring 'align // comment'
 map global format <minus> 'x|align --<ret>'   -docstring 'align -- comment'
@@ -253,5 +253,7 @@ hook global WinSetOption filetype=(bash|c|cpp|go|javascript|latex|markdown|perl|
 	lsp-auto-hover-enable
 	lsp-inlay-diagnostics-enable global
 	colorscheme %opt{theme}  # NOTE: restore Diagnostic faces (overwritten by kak-lsp)
+
+	map global user l ': enter-user-mode lsp<ret>' -docstring "LSP mode"
 }
 
