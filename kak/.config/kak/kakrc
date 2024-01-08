@@ -59,9 +59,9 @@ hook global ModeChange (push|pop):insert:.* %{ add-highlighter -override window/
 # ................................................................... Statusline
 
 # a minimalist statusline :)
-declare-option str separator '✦'
+declare-option str spacer '✦'
 # display utf-8 value for characters > tilde
-set-option global modelinefmt '{{mode_info}} %opt{separator} %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{separator} %val{bufname} {{context_info}}'
+set-option global modelinefmt '{{mode_info}} %opt{spacer} %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname} {{context_info}}'
 
 # ........................................................................... UX
 
@@ -119,16 +119,16 @@ enable-auto-pairs
 map global normal <c-l> ': comment-line<ret>' -docstring '(un)comment'  # beakl key position for "#" NOTE: <c-c> unmappable
 
 declare-user-mode format
-map global format l 'x|kc l .<ret>'           -docstring 'leader ... comment'
-map global format r 'x|kc r =<ret>'           -docstring 'ruler ═══'
-map global format u 'x|kc u --<ret>'          -docstring 'underline ━━━'
-map global format '#' 'x|ka \#<ret>'          -docstring 'align #  comment'
-map global format / 'x|ka //<ret>'            -docstring 'align // comment'
-map global format <minus> 'x|ka --<ret>'      -docstring 'align -- comment'
-map global format = 'x|ka =<ret>'             -docstring 'align  = statement'
-map global format { 'x|ka \{<ret>'            -docstring 'align  { block'
-map global format ) 'x|ka \)<ret>'            -docstring 'align  ) case'
-map global format ';' 'x|ka \;<ret>'          -docstring 'align ;; endcase'
+map global format l 'x|comment l .<ret>'      -docstring 'leader ... comment'
+map global format r 'x|comment r =<ret>'      -docstring 'ruler ═══'
+map global format u 'x|comment u --<ret>'     -docstring 'underline ━━━'
+map global format '#' 'x|align \#<ret>'       -docstring 'align #  comment'
+map global format / 'x|align //<ret>'         -docstring 'align // comment'
+map global format <minus> 'x|align --<ret>'   -docstring 'align -- comment'
+map global format = 'x|align =<ret>'          -docstring 'align  = statement'
+map global format { 'x|align \{<ret>'         -docstring 'align  { block'
+map global format ) 'x|align \)<ret>'         -docstring 'align  ) case'
+map global format ';' 'x|align \;<ret>'       -docstring 'align ;; endcase'
 map global normal '#' ': enter-user-mode format<ret>'
 
 # ....................................................................... Motion
@@ -155,13 +155,13 @@ map global normal { '[p'                -docstring 'previous paragraph'
 # ...................................................................... Editing
 
 # plug 'occivink/kakoune-find'
-map global user   f ': find '                   -docstring "find and replace"
+map global user   f ': find '                 -docstring "find and replace"
 
-map global normal D '<a-l>d'                    -docstring 'delete to end of line'
-map global normal Y '<a-l>'                     -docstring 'yank to end of line'
+map global normal D '<a-l>d'                  -docstring 'delete to end of line'
+map global normal Y '<a-l>'                   -docstring 'yank to end of line'
 # move lines up/down -- works with single selection.
-map global normal <a-up> 'x"aZy<a-;>kPZ"azdz'   -docstring 'shift up'
-map global normal <a-down> 'xdp'                -docstring 'shift down'
+map global normal <a-up> 'x"aZy<a-;>kPZ"azdz' -docstring 'shift up'
+map global normal <a-down> 'xdp'              -docstring 'shift down'
 
 # ..................................................................... Snippets
 
@@ -207,24 +207,24 @@ map global user R ': kakboard-with-pull-clipboard R<ret>' -docstring 'replace wi
 set-option global autoreload yes
 
 # modeline inline context: "# kak: filetype=.." (comment delimiter by filetype)
-# NOTE: markdown #[ kak: ... ] issues *debug* "Unsupported kakoune variable:" message for trailing ']'
+# NOTE: markdown statement '#[ kak: ... ]: #' issues *debug* "Unsupported kakoune variable:" message for trailing ']'
 hook global BufOpenFile .* %{ modeline-parse }
 hook global BufOpenFile .*.eml %{ set buffer filetype markdown }
 hook global FocusOut .* write
 
-map global normal <a-ret> ': buffer-next<ret>'            -docstring 'next buffer'
-map global normal <a-backspace> ': buffer-previous<ret>'  -docstring 'previous buffer'
-map global normal <a-space> 'ga'                          -docstring 'last buffer'
+map global normal <a-ret> ': buffer-next<ret>'           -docstring 'next buffer'
+map global normal <a-backspace> ': buffer-previous<ret>' -docstring 'previous buffer'
+map global normal <a-space> 'ga'                         -docstring 'last buffer'
 
 # plug 'occivink/kakoune-buffer-switcher'
-map global user   b ': buffer-switcher<ret>'              -docstring 'buffer switcher'
+map global user   b ': buffer-switcher<ret>'             -docstring 'buffer switcher'
 
-map global user   d ': buffer *debug*<ret>'               -docstring '*debug*'
-map global user   D ': delete-buffer<ret>'                -docstring 'delete buffer'
-map global user   q ': quit<ret>'                         -docstring 'quit'
-map global user   x ': write-all-quit<ret>'               -docstring 'save all and quit'
+map global user   d ': buffer *debug*<ret>'              -docstring '*debug*'
+map global user   D ': delete-buffer<ret>'               -docstring 'delete buffer'
+map global user   q ': quit<ret>'                        -docstring 'quit'
+map global user   x ': write-all-quit<ret>'              -docstring 'save all and quit'
 # plug 'occivink/kakoune-sudo-write'
-map global user   Z ': sudo-write<ret>'                   -docstring 'sudo save'
+map global user   Z ': sudo-write<ret>'                  -docstring 'sudo save'
 
 # .................................................................. Tree-sitter
 
@@ -234,47 +234,24 @@ eval %sh{ kak-tree-sitter -dks --session $kak_session }
 # ...................................................................... kak-lsp
 
 # plug 'kak-lsp/kak-lsp'
-eval %sh{ kak-lsp --kakoune -s $kak_session }  # Not needed if you load it with plug.kak.
+eval %sh{ kak-lsp --kakoune -s $kak_session }  # Not needed if you load it with plug.kak
 
+# set-option global lsp_cmd "kak-lsp -vvv -c $HOME/.config/kak-lsp/kak-lsp.toml -s %val{session} --log /tmp/kak-lsp.log"
 set-option global lsp_cmd "kak-lsp -v -c $HOME/.config/kak-lsp/kak-lsp.toml -s %val{session} --log /tmp/kak-lsp.log"
-define-command lsp-restart -docstring 'restart lsp server' %{ lsp-stop; lsp-start }
+define-command lsp-restart %{ lsp-stop; lsp-start } -docstring 'restart lsp server'
 hook global KakEnd .* lsp-exit
 
-set-option global lsp_completion_trigger "execute-keys 'h<a-h><a-k>\S[^\s,=;*(){}\[\]]\z<ret>'"
-set-option global lsp_diagnostic_line_error_sign "•"
-set-option global lsp_diagnostic_line_hint_sign "•"
-set-option global lsp_diagnostic_line_info_sign "•"
-set-option global lsp_diagnostic_line_warning_sign "•"
+declare-option str lsp_inlay_diagnostic_sign ''  # inlay diagnostic count (replaces '■')
+declare-option str tickmark '►'                   # diagnostic line marker
+set-option global lsp_diagnostic_line_error_sign "%opt{tickmark}"
+set-option global lsp_diagnostic_line_hint_sign "%opt{tickmark}"
+set-option global lsp_diagnostic_line_info_sign "%opt{tickmark}"
+set-option global lsp_diagnostic_line_warning_sign "%opt{tickmark}"
+
 hook global WinSetOption filetype=(bash|c|cpp|go|javascript|latex|markdown|perl|python|ruby|rust|toml|typescript) %{
-
 	lsp-enable-window
-
-	lsp-auto-signature-help-enable
 	lsp-auto-hover-enable
-	lsp-auto-hover-insert-mode-disable
-	set-option global lsp_auto_highlight_references true
-	set-option global lsp_hover_anchor true
-
-	hook window -group semantic-tokens BufReload .* lsp-semantic-tokens
-	hook window -group semantic-tokens NormalIdle .* lsp-semantic-tokens
-	hook window -group semantic-tokens InsertIdle .* lsp-semantic-tokens
-	hook -once -always window WinSetOption filetype=.* %{ remove-hooks window semantic-tokens }
-
 	lsp-inlay-diagnostics-enable global
-	# see above hard fix.. use null string to suppress diagnostic level
-	# lsp-diagnostic-lines-disable global
-
-	hook window BufWritePost .* lsp-diagnostics
-	hook global WinSetOption filetype=rust %{ set-option window lsp_server_configuration rust.clippy_preference="on" }
+	colorscheme %opt{theme}  # NOTE: restore Diagnostic faces (overwritten by kak-lsp)
 }
-
-map global user l ': enter-user-mode lsp<ret>' -docstring "LSP mode"
-
-map global insert <tab> '<a-;>:try lsp-snippets-select-next-placeholders catch %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
-map global object a '<a-semicolon>lsp-object<ret>'                               -docstring 'LSP any symbol'
-map global object <a-a> '<a-semicolon>lsp-object<ret>'                           -docstring 'LSP any symbol'
-map global object e '<a-semicolon>lsp-object Function Method<ret>'               -docstring 'LSP function or method'
-map global object k '<a-semicolon>lsp-object Class Interface Struct<ret>'        -docstring 'LSP class interface or struct'
-map global object d '<a-semicolon>lsp-diagnostic-object --include-warnings<ret>' -docstring 'LSP errors and warnings'
-map global object D '<a-semicolon>lsp-diagnostic-object<ret>'                    -docstring 'LSP errors'
 
