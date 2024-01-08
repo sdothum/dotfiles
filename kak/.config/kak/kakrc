@@ -58,7 +58,7 @@ hook global ModeChange (push|pop):insert:.* %{ add-highlighter -override window/
 
 # ................................................................... Statusline
 
-# a minimalist statusline :)
+# a minimalist statusline of "selections - column [utf-8] - filename [context]"
 declare-option str spacer '✦'
 # display utf-8 value for characters > tilde
 set-option global modelinefmt '{{mode_info}} %opt{spacer} %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname} {{context_info}}'
@@ -73,6 +73,7 @@ alias global sd search-doc
 
 # plug 'Delapouite/kakoune-cd'
 hook global WinDisplay .* change-directory-current-buffer
+hook global FocusIn .* change-directory-current-buffer
 
 # plug 'insipx/kak-crosshairs'
 set-face global crosshairs_line           "default,default+u"
@@ -82,6 +83,51 @@ hook global ModeChange (push|pop):insert:.* %{ set-face global crosshairs_column
 
 map global user | ': cursorcolumn<ret>' -docstring "toggle column"
 map global user + ': crosshairs<ret>'   -docstring "toggle crosshairs"  # BUG: occasional hidden underline
+
+# ............................................................ Buffer management
+
+set-option global autoreload yes
+
+# modeline inline context: "# kak: filetype=.." (comment delimiter by filetype)
+# NOTE: markdown statement '#[ kak: ... ]: #' issues *debug* "Unsupported kakoune variable:" message for trailing ']'
+hook global BufOpenFile .* %{ modeline-parse }
+hook global BufOpenFile .*.eml %{ set buffer filetype markdown }
+hook global FocusOut .* write
+
+map global normal <a-ret> ': buffer-next<ret>'           -docstring 'next buffer'
+map global normal <a-backspace> ': buffer-previous<ret>' -docstring 'previous buffer'
+map global normal <a-space> 'ga'                         -docstring 'last buffer'
+
+# plug 'gustavo-hms/luar'
+# plug 'gustavo-hms/peneira'
+require-module peneira
+set-option global luar_interpreter luajit
+set-option global peneira_files_command "rg --files"
+
+define-command buffers %{
+	peneira 'buffers: ' %{ printf '%s\n' $kak_quoted_buflist } %{
+		buffer %arg{1}
+	}
+}
+
+# WHY: switch buffers to force peneira to sync to the current client buffer directory (for multi-client session) 
+define-command files %{
+	buffer *debug*
+	execute-keys ga
+	# change-directory-current-buffer  # handled by hook FocusIn above, otherwise required
+	peneira-files -hide-opened
+}
+
+# peneira fuzzy search
+map global user   b ': buffers<ret>'                     -docstring 'buffers'
+map global user   e ': files<ret>'                       -docstring 'edit'
+
+map global user   d ': buffer *debug*<ret>'              -docstring '*debug*'
+map global user   D ': delete-buffer<ret>'               -docstring 'delete buffer'
+map global user   q ': quit<ret>'                        -docstring 'quit'
+map global user   x ': write-all-quit<ret>'              -docstring 'save all and quit'
+# plug 'occivink/kakoune-sudo-write'
+map global user   Z ': sudo-write<ret>'                  -docstring 'sudo save'
 
 # ................................................................. Highlighting
 
@@ -99,7 +145,7 @@ add-highlighter global/ dynregex '%reg{/}' 0:+u
 add-highlighter global/ regex \h+$ 0:Error
 
 # inline admonitions
-declare-option str admonition "\s(?i)(attention|bug|example|fixme|note|tip|todo|usage|warning):\s"
+declare-option str admonition "\s(?i)(attention|bug|example|fixme|note|tip|todo|usage|warning|why):\s"
 hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt{admonition} 1:WrapMarker }  # select field 1: (vs 0:) to not hilight the colon :)
 
 # ................................................................... Formatting
@@ -119,6 +165,7 @@ enable-auto-pairs
 map global normal <c-l> ': comment-line<ret>' -docstring '(un)comment'  # beakl key position for "#" NOTE: <c-c> unmappable
 
 declare-user-mode format
+map global format c ': comment-line<ret>'     -docstring '(un)comment'
 map global format l 'x|comment l .<ret>'      -docstring 'leader ... comment'
 map global format r 'x|comment r =<ret>'      -docstring 'ruler ═══'
 map global format u 'x|comment u --<ret>'     -docstring 'underline ━━━ comment'
@@ -202,30 +249,6 @@ map global user p ': kakboard-with-pull-clipboard p<ret>' -docstring 'put from c
 map global user P ': kakboard-with-pull-clipboard P<ret>' -docstring 'put from clipboard'
 map global user R ': kakboard-with-pull-clipboard R<ret>' -docstring 'replace with clipboard'
 
-# ............................................................ Buffer management
-
-set-option global autoreload yes
-
-# modeline inline context: "# kak: filetype=.." (comment delimiter by filetype)
-# NOTE: markdown statement '#[ kak: ... ]: #' issues *debug* "Unsupported kakoune variable:" message for trailing ']'
-hook global BufOpenFile .* %{ modeline-parse }
-hook global BufOpenFile .*.eml %{ set buffer filetype markdown }
-hook global FocusOut .* write
-
-map global normal <a-ret> ': buffer-next<ret>'           -docstring 'next buffer'
-map global normal <a-backspace> ': buffer-previous<ret>' -docstring 'previous buffer'
-map global normal <a-space> 'ga'                         -docstring 'last buffer'
-
-# plug 'occivink/kakoune-buffer-switcher'
-map global user   b ': buffer-switcher<ret>'             -docstring 'buffer switcher'
-
-map global user   d ': buffer *debug*<ret>'              -docstring '*debug*'
-map global user   D ': delete-buffer<ret>'               -docstring 'delete buffer'
-map global user   q ': quit<ret>'                        -docstring 'quit'
-map global user   x ': write-all-quit<ret>'              -docstring 'save all and quit'
-# plug 'occivink/kakoune-sudo-write'
-map global user   Z ': sudo-write<ret>'                  -docstring 'sudo save'
-
 # .................................................................. Tree-sitter
 
 # plug 'phaazon/kak-tree-sitter'
@@ -241,18 +264,19 @@ set-option global lsp_cmd "kak-lsp -v -c $HOME/.config/kak-lsp/kak-lsp.toml -s %
 define-command lsp-restart %{ lsp-stop; lsp-start } -docstring 'restart lsp server'
 hook global KakEnd .* lsp-exit
 
-declare-option str lsp_inlay_diagnostic_sign ''  # inlay diagnostic count (replaces '■')
-declare-option str tickmark '►'                   # diagnostic line marker
-set-option global lsp_diagnostic_line_error_sign "%opt{tickmark}"
-set-option global lsp_diagnostic_line_hint_sign "%opt{tickmark}"
-set-option global lsp_diagnostic_line_info_sign "%opt{tickmark}"
-set-option global lsp_diagnostic_line_warning_sign "%opt{tickmark}"
+# lsp glyph overrides
+declare-option str linemark '►'                   # diagnostic line marker
+set-option global lsp_diagnostic_line_error_sign "%opt{linemark}"
+set-option global lsp_diagnostic_line_hint_sign "%opt{linemark}"
+set-option global lsp_diagnostic_line_info_sign "%opt{linemark}"
+set-option global lsp_diagnostic_line_warning_sign "%opt{linemark}"
+set-option global lsp_inlay_diagnostic_sign ''   # diagnostic fence meter (visual ticks replace ■'s)
 
 hook global WinSetOption filetype=(bash|c|cpp|go|javascript|latex|markdown|perl|python|ruby|rust|toml|typescript) %{
 	lsp-enable-window
 	lsp-auto-hover-enable
 	lsp-inlay-diagnostics-enable global
-	colorscheme %opt{theme}  # NOTE: restore Diagnostic faces (overwritten by kak-lsp)
+	colorscheme %opt{theme}  # WHY: restore Diagnostic faces (overwritten by kak-lsp injection above)
 
 	map global user l ': enter-user-mode lsp<ret>' -docstring "LSP mode"
 }

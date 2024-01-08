@@ -154,16 +154,16 @@ declare-option str cyan                   "rgb:0184bc"
 
 set-face global InlayDiagnosticError      "%opt{lightred}"
 set-face global InlayDiagnosticWarning    "%opt{lightorange}"
-set-face global InlayDiagnosticInfo       "%opt{blue}"
-set-face global InlayDiagnosticHint       "%opt{green}"
+set-face global InlayDiagnosticInfo       "%opt{dark_blue}"
+set-face global InlayDiagnosticHint       "%opt{desaturated_green}"
 set-face global LineFlagError             "%opt{lightred}"
 set-face global LineFlagWarning           "%opt{lightorange}"
-set-face global LineFlagInfo              "%opt{blue}"
-set-face global LineFlagHint              "%opt{green}"
+set-face global LineFlagInfo              "%opt{dark_blue}"
+set-face global LineFlagHint              "%opt{desaturated_green}"
 set-face global DiagnosticError           ",,%opt{lightred}+c"
 set-face global DiagnosticWarning         ",,%opt{lightorange}+c"
-set-face global DiagnosticInfo            ",,%opt{blue}+c"
-set-face global DiagnosticHint            ",,%opt{green}+c"
+set-face global DiagnosticInfo            ",,%opt{dark_blue}+c"
+set-face global DiagnosticHint            ",,%opt{desaturated_green}+c"
 # infobox faces
 set-face global InfoDefault               Information
 set-face global InfoBlock                 block
