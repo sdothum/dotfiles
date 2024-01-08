@@ -8,8 +8,11 @@
 
 # Usage: [name=<title>] kak [WAIT] [<row>x<col>] <file>*
 
-export SHELL=/usr/bin/bash              # for kak-lsp and processes (just in case)
+# share all instances (clients) with a single kak server session
 [ -e /usr/local/bin/kak ] && KAK=/usr/local/bin/kak || KAK=/usr/bin/kak
+unset SESSION  # unset SESSION reference to HOME subfolder
+[ -z "$($KAK -l)" ] || SESSION="-c $($KAK -l | tail -1)"
+
 CONF=$XDG_CONFIG_HOME/kak
 DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary
 TOML=$HOME/.config/kak-lsp/kak-lsp.toml
@@ -43,6 +46,6 @@ done
 [ $count -gt 1 ] && notify low 'Kakoune' "$count files to edit"
 
 # term call doesn't handle "space" names
-term ${name:-kak} PAPER ${XY:-132x52} $WAIT $KAK $file  # 50 line page
+term ${name:-kak} PAPER ${XY:-132x52} $WAIT $KAK $SESSION $file  # 50 line page
 
 # vim: set ft=sh: #
