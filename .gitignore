@@ -144,6 +144,7 @@
 **/nnn/.config/nnn/sessions
 **/nohup.out
 **/notes
+!**/menu/notes
 **/notion
 **/.notion/default-session*
 **/notmuch
