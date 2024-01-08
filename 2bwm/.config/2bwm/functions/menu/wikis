@@ -11,7 +11,7 @@
 EDIT='new'
 DIARY='diary'
 
-EDITOR=${EDITOR:-kak}  # comment out for helix
+EDITOR=${EDITOR:-kak NEW}  # comment out for helix
 EDITOR=${EDITOR:-helix}
 DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary
 [ -e $DICTIONARY ] || unset DICTIONARY
