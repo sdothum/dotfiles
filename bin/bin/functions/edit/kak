@@ -6,12 +6,11 @@
 
 # ....................................................................... Editor
 
-# Usage: [name=<title>] kak [NEW] [WAIT] [<row>x<col>] <file>*
+# Usage: [name=<title>] kak [-l] [ID=<id>] [WAIT] [<row>x<col>] <file>*
 
 # share all instances (clients) with a single kak server session
+ID=$USER  # default session id
 [ -e /usr/local/bin/kak ] && KAK=/usr/local/bin/kak || KAK=/usr/bin/kak
-unset SESSION  # unset SESSION reference to HOME subfolder
-[ -z "$($KAK -l)" ] || SESSION="-c $($KAK -l | tail -1)"
 
 CONF=$XDG_CONFIG_HOME/kak
 DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary
@@ -20,13 +19,17 @@ export TABSTOP=3  # default for (pipe), see align
 
 while : ;do
 	case $1 in
-		NEW           ) unset SESSION ;;  # WHY: avoid filetype (soft) wrap -width changes
+		-l            ) $KAK -l; exit ;;  # list session ids
+		ID=*          ) ID="${1#*=}" ;;
 		WAIT          ) WAIT=$1 ;;
 		*[0-9]x[0-9]* ) XY=$1 ;;
 		*             ) break ;;
 	esac
 	shift
 done
+
+# attach client or create new session id
+$KAK -l | grep -v deleted | grep $ID && ID="-c $ID" || ID="-s $ID"
 
 # snapshot sources (in lieu of persistent undo avalability)
 hgadd $@ &  # don' wait :)
@@ -47,6 +50,6 @@ done
 [ $count -gt 1 ] && notify low 'Kakoune' "$count files to edit"
 
 # term call doesn't handle "space" names
-term ${name:-kak} PAPER ${XY:-132x52} $WAIT $KAK $SESSION $file  # 50 line page
+term ${name:-kak} PAPER ${XY:-132x52} $WAIT $KAK $ID $file  # 50 line page
 
 # vim: set ft=sh: #

@@ -13,6 +13,6 @@ trap "xdotool search --onlyvisible --classname mail windowactivate" EXIT
 # toggle focus defer   # share aerc frame
 export MONOFONT="Iosevka-proof"
 (sleep 0.25; xdotool search --onlyvisible --classname mail windowraise) &  # must enter to: and subject: FIRST
-name=compose offsetY=1 kak NEW WAIT $@
+name=compose offsetY=1 kak ID=draft WAIT $@
 
 # vim: set ft=sh: #

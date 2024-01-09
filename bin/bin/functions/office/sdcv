@@ -6,7 +6,7 @@
 
 # ................................................................... Dictionary
 
-usage() { usage: "$(basename $0) -dict | -et | ud | uk | wn | -th [[-=]<maxlen> | -] <word>, '-' (include phrases)"; exit 1; }
+usage() { usage: "$(basename $0) -dict | -et | ud | uk | wn | -th [[-_=]<maxlen> | -] <word>, '-' (include phrases)"; exit 1; }
 
 SDCV=/usr/bin/sdcv
 WORDNET="$SDCV -c -n -u 'WordNet® 3.0 (En-En)'"
@@ -19,16 +19,24 @@ URBAN="$SDCV -c -n -u 'Urban Dictionary'"
 cols() { sed 's/^/ /' | columns; }  # min double space between columns
 
 th() {
-	if [ "$1" = '-' ] ;then
-		SPACES=true
-		shift
-	elif [ "${1%${1#?}}" = '-' ] && echo ${1#?} | grep -q '^[0-9][0-9]*$' ;then
-		MAXLEN="$(seq -s. 0 ${1#?} | tr -d '[:digit:]')[^ ]"
-		shift
-	elif [ "${1%${1#?}}" = '=' ] && echo ${1#?} | grep -q '^[0-9][0-9]*$' ;then
-		LENGTH="^$(seq -s. 0 ${1#?} | tr -d '[:digit:]' | sed 's/[.]/[^ ]/g')$"
-		shift
-	fi
+	case $1 in
+		-  ) SPACES=true; shift ;;
+
+		-* )  # hyphen
+			MAXLEN="$(seq -s. 0 ${1#?} | tr -d '[:digit:]')[^ ]"  # mixed length list
+			shift ;;
+
+		_* )  # underscore
+			for i in $(seq 2 ${1#?} | tac) ;do  # iterative length list
+	 			ditto $2 "${i} char"
+				sdcv -th =$i $2
+			done
+			exit ;;
+
+		=*  )
+			LENGTH="^$(seq -s. 0 ${1#?} | tr -d '[:digit:]' | sed 's/[.]/[^ ]/g')$"  # exact length list
+			shift ;;
+	esac
 	[ $1 ] || usage
 	[ $2 ] && usage
 
