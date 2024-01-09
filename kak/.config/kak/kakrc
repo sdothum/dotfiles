@@ -58,7 +58,7 @@ hook global ModeChange (push|pop):insert:.* %{ add-highlighter -override window/
 
 # ................................................................... Statusline
 
-# a minimalist statusline of "selections - column [utf-8] - filename [context]"
+# a minimalist statusline of "mode - column [utf-8] - filename [context]"
 declare-option str spacer '✦'
 # display utf-8 value for characters > tilde
 set-option global modelinefmt '{{mode_info}} %opt{spacer} %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname} {{context_info}}'
@@ -105,9 +105,7 @@ set-option global luar_interpreter luajit
 set-option global peneira_files_command "rg --files"
 
 define-command buffers %{
-	peneira 'buffers: ' %{ printf '%s\n' $kak_quoted_buflist } %{
-		buffer %arg{1}
-	}
+	peneira 'buffers: ' %{ printf '%s\n' $kak_quoted_buflist } %{ buffer %arg{1} }
 }
 
 # WHY: switch buffers to force peneira to sync to the current client buffer directory (for multi-client session) 
@@ -199,6 +197,20 @@ map global user   <a-?> '<a-?>(?i)'     -docstring 'case insensitive extend sear
 map global normal } ']p'                -docstring 'next paragraph'
 map global normal { '[p'                -docstring 'previous paragraph'
 
+# .................................................................... Clipboard
+
+# plug 'lePerdu/kakboard' (optimized)
+set global kakboard_copy_cmd 'xclip -in -selection clipboard'
+set global kakboard_paste_cmd 'xclip -out -selection clipboard'
+hook global WinCreate .* %{ kakboard-enable }
+
+map global user y ': kakboard-with-push-clipboard y<ret>' -docstring 'yank to clipboard'
+# map global user c ': kakboard-with-push-clipboard c<ret>'
+# map global user d ': kakboard-with-push-clipboard d<ret>'
+map global user p ': kakboard-with-pull-clipboard p<ret>' -docstring 'put from clipboard'
+map global user P ': kakboard-with-pull-clipboard P<ret>' -docstring 'put from clipboard'
+map global user R ': kakboard-with-pull-clipboard R<ret>' -docstring 'replace with clipboard'
+
 # ...................................................................... Editing
 
 # plug 'occivink/kakoune-find'
@@ -234,20 +246,6 @@ hook -once global BufSetOption filetype=markdown %{
 	set -add buffer snippets 'img' 'im:'        %{ snippets-insert %{![${1:img}](/images/${1:img}.jpg) }}
 	set -add buffer snippets 'search' 'se:'     %{ snippets-insert %{[${1:search}](http://thedarnedestthing.com/search?query=${1:search}) }}
 }
-
-# .................................................................... Clipboard
-
-# plug 'lePerdu/kakboard' (optimized)
-set global kakboard_copy_cmd 'xclip -in -selection clipboard'
-set global kakboard_paste_cmd 'xclip -out -selection clipboard'
-hook global WinCreate .* %{ kakboard-enable }
-
-map global user y ': kakboard-with-push-clipboard y<ret>' -docstring 'yank to clipboard'
-# map global user c ': kakboard-with-push-clipboard c<ret>'
-# map global user d ': kakboard-with-push-clipboard d<ret>'
-map global user p ': kakboard-with-pull-clipboard p<ret>' -docstring 'put from clipboard'
-map global user P ': kakboard-with-pull-clipboard P<ret>' -docstring 'put from clipboard'
-map global user R ': kakboard-with-pull-clipboard R<ret>' -docstring 'replace with clipboard'
 
 # .................................................................. Tree-sitter
 
