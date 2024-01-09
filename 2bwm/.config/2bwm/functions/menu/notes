@@ -8,7 +8,7 @@
 
 # Usage: menu notes [<extension>] [<path>]
 
-EDITOR='kak NEW WAIT'
+EDITOR='kak ID=note WAIT'  # default
 
 NEW='new'
 EDIT='file manager'
@@ -29,12 +29,13 @@ done
 # housekeeping
 [ $ext ] || ext=note
 if [ -z $FOLDER ] ;then
+	EDITOR="kak ID=$ext WAIT"
 	case $ext in
 		note      ) FOLDER=$HOME/notes  ;;
 		draft     ) FOLDER=$HOME/drafts ;;
 		poem      ) FOLDER=$HOME/poems; TOPMENU='edit\nview' ;;
 		supernote ) FOLDER=$HOME/Dropbox/Supernote/EXPORT; ext=txt; unset DELETE PRINT; TOPMENU="$TOPMENU\nwiki"; supernote=true ;;
-		*         ) FOLDER=$HOME/tmp    ;;
+		*         ) FOLDER=$HOME/tmp; EDITOR='kak ID=misc WAIT' ;;
 	esac
 fi
 
