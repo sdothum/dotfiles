@@ -41,6 +41,7 @@ https://gitlab.com/fsub/kakoune-mark.git
 for i in $plugins ;do
 	cd /net/depot
 	repo=${i##*/}
+	repo=${repo%.git}
 	[ -d $repo ] && { cd $repo; git pull; cd ..; } || git clone --depth 1 $i
 	cd $repo
 	find . -regex '.*\.(kak|lua)' -exec cp -v {} $AUTOLOAD \;
