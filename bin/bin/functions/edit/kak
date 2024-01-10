@@ -15,6 +15,7 @@ ID=$USER  # default session id
 CONF=$XDG_CONFIG_HOME/kak
 DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary
 TOML=$HOME/.config/kak-lsp/kak-lsp.toml
+LOG=/tmp/kak.log
 export TABSTOP=3  # default for (pipe), see align
 
 while : ;do
@@ -50,6 +51,6 @@ done
 [ $count -gt 1 ] && notify low 'Kakoune' "$count files to edit"
 
 # term call doesn't handle "space" names
-term ${name:-kak} PAPER ${XY:-132x52} $WAIT $KAK $ID $file  # 50 line page
+console && $KAK $ID $file >>$LOG 2>&1 || term ${name:-kak} PAPER ${XY:-132x52} $WAIT $KAK $ID $file >>$LOG 2>&1  # 50 line page
 
 # vim: set ft=sh: #
