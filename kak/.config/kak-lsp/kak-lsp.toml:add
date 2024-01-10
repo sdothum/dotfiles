@@ -27,6 +27,7 @@ dictionary = { "en-US" = [
 filetypes = ["toml"]
 roots = [".git"]
 command = "taplo"
+args = ["lsp"]
 
 # kak: filetype=toml
 

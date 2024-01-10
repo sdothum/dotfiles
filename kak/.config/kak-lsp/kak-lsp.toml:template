@@ -451,6 +451,8 @@ faces = [
     {face="default+d", token="variable", modifiers=["constant"]},
     {face="variable", token="variable"},
 ]
+
+# kak: filetype=toml
 # sdothum - 2016 (c) wtfpl
 
 # Kakoune
@@ -480,6 +482,7 @@ dictionary = { "en-US" = [
 filetypes = ["toml"]
 roots = [".git"]
 command = "taplo"
+args = ["lsp"]
 
 # kak: filetype=toml
 

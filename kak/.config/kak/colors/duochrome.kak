@@ -127,7 +127,7 @@ set-face global StatusLineValue           "%opt{statusline},%opt{statusbar}"
 set-face global StatusCursor              "%opt{foreground},%opt{cursor}"
 set-face global Prompt                    "%opt{statusline},%opt{statusbar}"
 
-set-face global MatchingChar              "%opt{match},%opt{background}"
+set-face global MatchingChar              "%opt{match},%opt{background}+br"
 set-face global Whitespace                "%opt{space},%opt{background}+f"
 set-face global WrapMarker                "%opt{wrap}+bf"
 set-face global BufferPadding             "%opt{background},%opt{background}"  # hide tilde

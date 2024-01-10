@@ -60,8 +60,8 @@ hook global ModeChange (push|pop):insert:.* %{ add-highlighter -override window/
 
 # a minimalist statusline of "mode - column [utf-8] - filename [context]"
 declare-option str spacer '✦'
-# display utf-8 value for characters > tilde
-set-option global modelinefmt '{{mode_info}} %opt{spacer} %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname} {{context_info}}'
+# display utf-8 value for non-latin characters
+set-option global modelinefmt '{{mode_info}} %opt{spacer} %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname} {{context_info}} [%opt{filetype}]'
 
 # ........................................................................... UX
 
@@ -102,17 +102,22 @@ map global normal <a-space> 'ga'                         -docstring 'last buffer
 # plug 'gustavo-hms/peneira'
 require-module peneira
 set-option global luar_interpreter luajit
-set-option global peneira_files_command "rg --files"
+set-option global peneira_files_command "rg --files --sort=path"  # single threaded --sort is fast enough for my folder organization
+
+# HACK: multi-client focus switching causes peneira to lose active client buffer directory
+define-command peneira-resync %{
+	# change-directory-current-buffer  # handled by hook FocusIn above, otherwise required
+	buffer *debug*
+	execute-keys ga
+}
 
 define-command buffers %{
+	peneira-resync
 	peneira 'buffers: ' %{ printf '%s\n' $kak_quoted_buflist } %{ buffer %arg{1} }
 }
 
-# WHY: switch buffers to force peneira to sync to the current client buffer directory (for multi-client session) 
 define-command files %{
-	buffer *debug*
-	execute-keys ga
-	# change-directory-current-buffer  # handled by hook FocusIn above, otherwise required
+	peneira-resync
 	peneira-files -hide-opened
 }
 
@@ -143,7 +148,7 @@ add-highlighter global/ dynregex '%reg{/}' 0:+u
 add-highlighter global/ regex \h+$ 0:Error
 
 # inline admonitions
-declare-option str admonition "\s(?i)(attention|bug|example|fixme|note|tip|todo|usage|warning|why):\s"
+declare-option str admonition "\s(?i)(bug|example|hack|note|tip|todo|usage|warning|why):\s"
 hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt{admonition} 1:WrapMarker }  # select field 1: (vs 0:) to not hilight the colon :)
 
 # ................................................................... Formatting
