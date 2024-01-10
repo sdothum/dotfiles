@@ -9,7 +9,7 @@
 
 # hide active window and focus next, see 2bwm config.h
 keyboard off
-xdotool key Super+Control+Shift+i
+xdotool key Super+Control+Shift+i  # remapped keybinding
 focus next
 keyboard on
 

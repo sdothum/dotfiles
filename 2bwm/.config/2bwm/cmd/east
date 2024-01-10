@@ -1,12 +1,12 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="focus/next $@" . $PARENT
+[ $TRACE ] && CHILD="east $@" . $PARENT
 
-# Mail
+# 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ................................................................. Focus window
+# ................................................................ wmutils focus
 
-xdotool key Super+Tab  # find a window after a window close or hide
+closest.sh east
 
 # vim: set ft=sh: #

@@ -9,12 +9,13 @@
 
 # Usage: query display [height | width]
 
-display() { xrandr | grep -w connected | sed -r 's/.* ([0-9]*x[0-9]*\+[0-9]\+*[0-9]*) .*/\1/' | awk -F'[ +x]' '{ print $1,$2 }'; }
+# replaced by wmutils
+# display() { xrandr | grep -w connected | sed -r 's/.* ([0-9]*x[0-9]*\+[0-9]\+*[0-9]*) .*/\1/' | awk -F'[ +x]' '{ print $1,$2 }'; }
 
 case $1 in
-	height ) display | cut -d' ' -f2 ;;
-	width  ) display | cut -d' ' -f1 ;;
-	*      ) display ;;  # typically, set -- $(query display) to reference X Y as $1 $2
+	height ) wattr h $(lsw -r) ;;  # display | cut -d' ' -f2 ;;
+	width  ) wattr w $(lsw -r) ;;  # display | cut -d' ' -f1 ;;
+	*      ) echo "$(wattr w $(lsw -r)) $(wattr h $(lsw -r))" ;;  # typically, set -- $(query display) to reference X Y as $1 $2
 esac
 
 # vim: set ft=sh: #

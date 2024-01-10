@@ -17,4 +17,6 @@ else
 	usage: $0
 fi
 
-# vim: set ft=sh: #
+# vim: set ft=sh:   #
+# kak: filetype=sh  # BUG: kak modeline not triggering on either inline set
+

@@ -1,12 +1,12 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="focus/next $@" . $PARENT
+[ $TRACE ] && CHILD="windowsize4 $@" . $PARENT
 
-# Mail
+# 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ................................................................. Focus window
+# ................................................................... Windowsize
 
-xdotool key Super+Tab  # find a window after a window close or hide
+menu windowsize 4
 
 # vim: set ft=sh: #

@@ -1,12 +1,14 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="focus/next $@" . $PARENT
+[ $TRACE ] && CHILD="snapright $@" . $PARENT
 
-# Mail
+# 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ................................................................. Focus window
+# ................................................................... Snap right
 
-xdotool key Super+Tab  # find a window after a window close or hide
+xdotool getwindowfocus -f >/dev/null
+xdotool key --delay 25 Super+l        # snap corner
+xdotool key --delay 25 Super+Shift+g  # vertical center
 
 # vim: set ft=sh: #

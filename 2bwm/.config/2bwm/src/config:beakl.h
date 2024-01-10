@@ -44,39 +44,59 @@ static const uint8_t borders[] = {2,7,7,6};
 #define LOOK_INTO "WM_NAME"
 static const char *ignore_names[] = {"bar", "xclock"};
 ///--Menus and Programs---///
-static const char *menucmd[]      = {"menu"        , NULL};  // NOTE: cannot pass parameters to commands
-static const char *terminal[]     = {"term"        , NULL};
-static const char *scratchy[]     = {"scratchy"    , NULL};
-static const char *itchy[]        = {"itchy"       , NULL};
-static const char *address[]      = {"address"     , NULL};  // book
-static const char *background[]   = {"background"  , NULL};  // root background
 static const char *build2bwm[]    = {"build2bwm"   , NULL};
-static const char *browser[]      = {"qutebrowser" , NULL};
-static const char *browserclr[]   = {"browserclr"  , NULL};
-static const char *inspector[]    = {"inspector"   , NULL};  // menu system
-static const char *invert[]       = {"invert"      , NULL};  // panel contrast
-static const char *hidecmd[]      = {"hidecmd"     , NULL};  // adds focusnext
-static const char *mail[]         = {"mail"        , NULL};
-static const char *media[]        = {"media"       , NULL};  // menu media
-static const char *filecli[]      = {"filecli"     , NULL};
-static const char *filegui[]      = {"filegui"     , NULL};
-static const char *fileroot[]     = {"fileroot"    , NULL};
 static const char *kill2bwm[]     = {"kill2bwm"    , NULL};
-static const char *notes[]        = {"notes"       , NULL};  // menu notes
+// desktop
+static const char *background[]   = {"background"  , NULL};  // root background
+static const char *wallpaper[]    = {"wallpaper"   , NULL};  // root wallpaper
+static const char *panel[]        = {"panel"       , NULL};  // panel toggle
+static const char *invert[]       = {"invert"      , NULL};  // panel contrast
 static const char *notifypush[]   = {"notifypush"  , NULL};  // dunstctl clear
 static const char *notifyclr[]    = {"notifyclr"   , NULL};  // dunstctl clear all
 static const char *notifypop[]    = {"notifypop"   , NULL};  // dunstctl history
-static const char *panel[]        = {"panel"       , NULL};  // panel toggle
+static const char *wallclock[]    = {"wallclock"   , NULL};  // conky clock
+static const char *unclock[]      = {"unclock"     , NULL};  // conky clock toggle
+// window
+static const char *hidewindow[]   = {"hidewindow"  , NULL};  // adds focusnext
+static const char *unhide[]       = {"unhide"      , NULL};  // menu unhide
+static const char *east[]         = {"east"        , NULL};  // wmutils focus direction
+static const char *west[]         = {"west"        , NULL};
+static const char *north[]        = {"north"       , NULL};
+static const char *south[]        = {"south"       , NULL};
+static const char *snaplevel[]    = {"snaplevel"   , NULL};
+static const char *snapleft[]     = {"snapleft"    , NULL};
+static const char *snapright[]    = {"snapright"   , NULL};
+static const char *windowsize[]   = {"windowsize"  , NULL};  // menu windowsize
+static const char *windowsize1[]  = {"windowsize1" , NULL};  // keybind shortcut
+static const char *windowsize2[]  = {"windowsize2" , NULL};
+static const char *windowsize3[]  = {"windowsize3" , NULL};
+static const char *windowsize4[]  = {"windowsize4" , NULL};
+static const char *windowsize5[]  = {"windowsize5" , NULL};
+static const char *windowsize6[]  = {"windowsize6" , NULL};
+static const char *windowsize7[]  = {"windowsize7" , NULL};
+// term
+static const char *terminal[]     = {"term"        , NULL};
+static const char *scratchy[]     = {"scratchy"    , NULL};
+static const char *itchy[]        = {"itchy"       , NULL};
+// menu
+static const char *menucmd[]      = {"menu"        , NULL};  // NOTE: cannot pass parameters to commands
+static const char *address[]      = {"address"     , NULL};  // book
+static const char *inspector[]    = {"inspector"   , NULL};  // menu system
+static const char *media[]        = {"media"       , NULL};  // menu media
+static const char *notes[]        = {"notes"       , NULL};  // menu notes
 static const char *passwords[]    = {"passwords"   , NULL};  // menu pass
 static const char *projects[]     = {"projects"    , NULL};  // menu projects
-static const char *quit[]         = {"quit"        , NULL};
 static const char *scripts[]      = {"scripts"     , NULL};  // menu scripts
-static const char *twobop[]       = {"twobop"      , NULL};  // btop
-static const char *unclock[]      = {"unclock"     , NULL};  // conky clock toggle
-static const char *unhide[]       = {"unhide"      , NULL};  // menu unhide
-static const char *wallclock[]    = {"wallclock"   , NULL};  // conky clock
-static const char *wallpaper[]    = {"wallpaper"   , NULL};  // root wallpaper
 static const char *wikis[]        = {"wikis"       , NULL};  // menu wikis
+static const char *quit[]         = {"quit"        , NULL};  // menu halt
+// app
+static const char *browser[]      = {"qutebrowser" , NULL};
+static const char *browserclr[]   = {"browserclr"  , NULL};
+static const char *mail[]         = {"mail"        , NULL};
+static const char *filecli[]      = {"filecli"     , NULL};
+static const char *filegui[]      = {"filegui"     , NULL};
+static const char *fileroot[]     = {"fileroot"    , NULL};
+static const char *twobop[]       = {"twobop"      , NULL};  // btop
 ///--Custom foo---///
 static void halfandcentered(const Arg *arg)
 {
@@ -128,8 +148,8 @@ static void toggle_sloppy(const Arg *arg)
  *      DESKTOPCHANGE(     XK_agrave,                        9)*
  */
 #define DESKTOPCHANGE(K,N) \
-{  MOD ,              K,              changeworkspace,   {.i=N}}, \
-{  MOD |SHIFT,        K,              sendtoworkspace,   {.i=N}},
+	{  MOD |SHIFT,            K,          changeworkspace,     {.i=N}}, \
+	{  MOD |CONTROL,          K,          sendtoworkspace,     {.i=N}},
 static key keys[] = {
 	/* modifier               key            function             argument */
 	// Focus to next/previous window
@@ -239,7 +259,8 @@ static key keys[] = {
 	// {  MOD ,               XK_comma,      changescreen,        {.i=TWOBWM_NEXT_SCREEN}},
 	// {  MOD ,               XK_period,     changescreen,        {.i=TWOBWM_PREVIOUS_SCREEN}},
 	// Raise or lower a window
-	{  MOD ,                  XK_r,          raiseorlower,        {}},
+	// {  MOD ,               XK_r,          raiseorlower,        {}},
+	{  MOD ,                  XK_s,          raiseorlower,        {}},  // "show" :)
 	// Next/Previous workspace
 	// {  MOD ,               XK_v,          nextworkspace,       {}},
 	// {  MOD ,               XK_c,          prevworkspace,       {}},
@@ -252,15 +273,16 @@ static key keys[] = {
 	{  MOD |SHIFT ,           XK_comma,      sendtoprevworkspace, {}},
 	// Iconify the window
 	// {  MOD ,               XK_i,          hide,                {}},
-	{  MOD |SHIFT|CONTROL,    XK_i,          hide,                {}},  // see hidecmd
+	{  MOD |SHIFT|CONTROL,    XK_i,          hide,                {}},  // see hidewindow
 	// Make the window unkillable
 	// {  MOD ,               XK_a,          unkillable,          {}},
-	{  MOD ,                  XK_k,          unkillable,          {}},
+	{  MOD |SHIFT ,           XK_k,          unkillable,          {}},
 	// Make the window appear always on top
-	{  MOD,                   XK_t,          always_on_top,       {}},
+	// {  MOD,                XK_t,          always_on_top,       {}},
+	{  MOD |SHIFT,            XK_t,          always_on_top,       {}},
 	// Make the window stay on all workspaces
 	// {  MOD ,               XK_f,          fix,                 {}},
-	{  MOD ,                  XK_a,          fix,                 {}},  // attach
+	{  MOD |SHIFT ,           XK_a,          fix,                 {}},  // attach
 	// Move the cursor
 	// {  MOD ,               XK_Up,         cursor_move,         {.i=TWOBWM_CURSOR_UP_SLOW}},
 	// {  MOD ,               XK_Down,       cursor_move,         {.i=TWOBWM_CURSOR_DOWN_SLOW}},
@@ -286,17 +308,20 @@ static key keys[] = {
 	{  MOD |CONTROL,          XK_c,          start,               {.com = unclock}},
 	{  MOD |SHIFT,            XK_d,          start,               {.com = wallpaper}},
 	{  MOD |CONTROL,          XK_d,          start,               {.com = background}},
-	{  MOD ,                  XK_e,          start,               {.com = scripts}},
-	{  MOD |SHIFT,            XK_e,          start,               {.com = projects}},
-	{  MOD ,                  XK_i,          start,               {.com = hidecmd}},
+	{  MOD |SHIFT,            XK_h,          start,               {.com = snaplevel}},
+	{  MOD ,                  XK_i,          start,               {.com = hidewindow}},
 	{  MOD |SHIFT,            XK_i,          start,               {.com = unhide}},
 	{  MOD ,                  XK_m,          start,               {.com = mail}},
 	{  MOD |SHIFT,            XK_m,          start,               {.com = address}},
+	{  MOD ,                  XK_o,          start,               {.com = scripts}},
+	{  MOD |SHIFT,            XK_o,          start,               {.com = projects}},
 	{  MOD |SHIFT,            XK_q,          start,               {.com = quit}},
 	{  MOD |SHIFT|CONTROL,    XK_q,          start,               {.com = kill2bwm}},
+	{  MOD ,                  XK_r,          start,               {.com = snapright}},
 	{  MOD |SHIFT,            XK_r,          start,               {.com = build2bwm}},
-	{  MOD ,                  XK_s,          start,               {.com = twobop}},
 	{  MOD |SHIFT,            XK_s,          start,               {.com = inspector}},
+	{  MOD ,                  XK_t,          start,               {.com = snapleft}},
+	{  MOD ,                  XK_u,          start,               {.com = twobop}},
 	{  MOD |SHIFT,            XK_u,          start,               {.com = passwords}},
 	{  MOD ,                  XK_v,          start,               {.com = panel}},
 	{  MOD |SHIFT,            XK_v,          start,               {.com = media}},
@@ -306,11 +331,23 @@ static key keys[] = {
 	{  MOD ,                  XK_x,          start,               {.com = filecli}},
 	{  MOD |SHIFT,            XK_x,          start,               {.com = filegui}},
 	{  MOD |SHIFT|CONTROL,    XK_x,          start,               {.com = fileroot}},
+	{  MOD ,                  XK_0,          start,               {.com = windowsize}},
+	{  MOD ,                  XK_k,          start,               {.com = north}},
+	{  MOD ,                  XK_j,          start,               {.com = south}},
+	{  MOD ,                  XK_e,          start,               {.com = east}},  // beakl left hand placement
+	{  MOD ,                  XK_h,          start,               {.com = west}},
+	{  MOD ,                  XK_1,          start,               {.com = windowsize1}},
+	{  MOD ,                  XK_2,          start,               {.com = windowsize2}},
+	{  MOD ,                  XK_3,          start,               {.com = windowsize3}},
+	{  MOD ,                  XK_4,          start,               {.com = windowsize4}},
+	{  MOD ,                  XK_5,          start,               {.com = windowsize5}},
+	{  MOD ,                  XK_6,          start,               {.com = windowsize6}},
+	{  MOD ,                  XK_7,          start,               {.com = windowsize7}},
 	// Exit or restart 2bwm
 	{  MOD |CONTROL,          XK_q,          twobwm_exit,         {.i=0}},
 	{  MOD |CONTROL,          XK_r,          twobwm_restart,      {.i=0}},
 	// {  MOD ,               XK_space,      halfandcentered,     {.i=0}},
-	{  MOD ,                  XK_0,          halfandcentered,     {.i=0}},  // monocle
+	{  MOD ,                  XK_9,          halfandcentered,     {.i=0}},         // monocle
 	// {  MOD ,               XK_s,          toggle_sloppy,       {.com = sloppy_switch_cmd}},
 	{  MOD |CONTROL,          XK_s,          toggle_sloppy,       {.com = sloppy_switch_cmd}},
 	// Change current workspace

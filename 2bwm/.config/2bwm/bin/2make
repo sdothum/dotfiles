@@ -14,7 +14,7 @@ ditto 2bwm "Building 2bwm.."
 make && doas make install || { press_enter; exit; }
 ifno "reload 2bwm" && exit
 # delay required for reload trigger
-sleep 0.01
-xdotool key Super+Control+r
+sleep 0.1
+xdotool key -delay 100 Super+Control+r
 
 # vim: set ft=sh: #
