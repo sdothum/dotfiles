@@ -67,13 +67,15 @@ static const char *snaplevel[]    = {"snaplevel"   , NULL};
 static const char *snapleft[]     = {"snapleft"    , NULL};
 static const char *snapright[]    = {"snapright"   , NULL};
 static const char *windowsize[]   = {"windowsize"  , NULL};  // menu windowsize
-static const char *windowsize1[]  = {"windowsize1" , NULL};  // keybind shortcut
+static const char *windowsize0[]  = {"windowsize0" , NULL};  // keybind shortcut
+static const char *windowsize1[]  = {"windowsize1" , NULL};
 static const char *windowsize2[]  = {"windowsize2" , NULL};
 static const char *windowsize3[]  = {"windowsize3" , NULL};
 static const char *windowsize4[]  = {"windowsize4" , NULL};
 static const char *windowsize5[]  = {"windowsize5" , NULL};
 static const char *windowsize6[]  = {"windowsize6" , NULL};
 static const char *windowsize7[]  = {"windowsize7" , NULL};
+static const char *windowsize8[]  = {"windowsize8" , NULL};
 // term
 static const char *terminal[]     = {"term"        , NULL};
 static const char *scratchy[]     = {"scratchy"    , NULL};
@@ -331,11 +333,11 @@ static key keys[] = {
 	{  MOD ,                  XK_x,          start,               {.com = filecli}},
 	{  MOD |SHIFT,            XK_x,          start,               {.com = filegui}},
 	{  MOD |SHIFT|CONTROL,    XK_x,          start,               {.com = fileroot}},
-	{  MOD ,                  XK_0,          start,               {.com = windowsize}},
 	{  MOD ,                  XK_k,          start,               {.com = north}},
 	{  MOD ,                  XK_j,          start,               {.com = south}},
 	{  MOD ,                  XK_e,          start,               {.com = east}},  // beakl left hand placement
 	{  MOD ,                  XK_h,          start,               {.com = west}},
+	{  MOD ,                  XK_0,          start,               {.com = windowsize0}},
 	{  MOD ,                  XK_1,          start,               {.com = windowsize1}},
 	{  MOD ,                  XK_2,          start,               {.com = windowsize2}},
 	{  MOD ,                  XK_3,          start,               {.com = windowsize3}},
@@ -343,11 +345,12 @@ static key keys[] = {
 	{  MOD ,                  XK_5,          start,               {.com = windowsize5}},
 	{  MOD ,                  XK_6,          start,               {.com = windowsize6}},
 	{  MOD ,                  XK_7,          start,               {.com = windowsize7}},
+	{  MOD ,                  XK_8,          start,               {.com = windowsize8}},
 	// Exit or restart 2bwm
 	{  MOD |CONTROL,          XK_q,          twobwm_exit,         {.i=0}},
 	{  MOD |CONTROL,          XK_r,          twobwm_restart,      {.i=0}},
 	// {  MOD ,               XK_space,      halfandcentered,     {.i=0}},
-	{  MOD ,                  XK_9,          halfandcentered,     {.i=0}},         // monocle
+	{  MOD ,                  XK_9,          halfandcentered,     {.i=0}},  // monocle
 	// {  MOD ,               XK_s,          toggle_sloppy,       {.com = sloppy_switch_cmd}},
 	{  MOD |CONTROL,          XK_s,          toggle_sloppy,       {.com = sloppy_switch_cmd}},
 	// Change current workspace
@@ -357,7 +360,7 @@ static key keys[] = {
 		DESKTOPCHANGE(         XK_4,                               3)
 		DESKTOPCHANGE(         XK_5,                               4)
 		DESKTOPCHANGE(         XK_6,                               5)
-		// DESKTOPCHANGE(      XK_7,                               6)  // don't need all 10 desktops :)
+		// DESKTOPCHANGE(      XK_7,                               6)        // don't need all 10 desktops :)
 		// DESKTOPCHANGE(      XK_8,                               7)
 		// DESKTOPCHANGE(      XK_9,                               8)
 		// DESKTOPCHANGE(      XK_0,                               9)
@@ -366,7 +369,8 @@ static key keys[] = {
 static Button buttons[] = {  
 	{  MOD ,        XCB_BUTTON_INDEX_1,      mousemotion,         {.i=TWOBWM_MOVE}, false},
 	{  MOD ,        XCB_BUTTON_INDEX_3,      mousemotion,         {.i=TWOBWM_RESIZE}, false},
-	{  0   ,        XCB_BUTTON_INDEX_3,      start,               {.com = menucmd}, true},
+	// {  0   ,     XCB_BUTTON_INDEX_3,      start,               {.com = menucmd}, true},
+	{  0   ,        XCB_BUTTON_INDEX_3,      start,               {.com = windowsize}, true},
 	{  MOD|SHIFT,   XCB_BUTTON_INDEX_1,      changeworkspace,     {.i=0}, false},
 	{  MOD|SHIFT,   XCB_BUTTON_INDEX_3,      changeworkspace,     {.i=1}, false},
 	{  MOD|ALT,     XCB_BUTTON_INDEX_1,      changescreen,        {.i=1}, false},

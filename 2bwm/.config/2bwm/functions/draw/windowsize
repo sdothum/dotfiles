@@ -7,22 +7,64 @@
 
 # .............................................................. Set window size
 
-# Usage: draw windowsize [delay] <height>x<width>
+# Usage: draw windowsize [delay] <height>x<width> | monocle | rotate | <numerator>/<denominator> (fraction :)
 
-X=800
-Y=600
+X=1024
+Y=800
 T=2
+
+TWOBWM_CONFIG=$HOME/.config/2bwm/src/config.h
+SPANEL=$SESSION/panel   # toggle state
+
+draw() {
+	xdotool windowunmap $1      # defer visual refresh
+	xdotool windowsize --sync $1 $2 $3
+	xdotool windowmap --sync $1
+	xdotool key Super+Shift+g   # 2bwm vertical center
+}
+
+calc_window() {
+	numerator=$1
+	denominator=$2
+	indent=$(cat $SPANEL)  # see draw panel
+	# 2bwm panel geometry
+	set -- $(grep '^static const uint8_t offsets' $TWOBWM_CONFIG | sed 's/.*[{]//; s/[}].*//; s/,/ /g')
+	PANEL_HEIGHT=$(( $4 - $2 ))
+	PANEL_INDENT=$(( $1 * ${indent:-3 / 2} ))  # assumes equal left/right screen margins
+	shift 4
+	width=$(query display width)
+	height=$(query display height)
+
+	X=$(echo "scale=2\n($width - ($PANEL_INDENT * 2 + $PANEL_HEIGHT * (($denominator / $numerator) - 1))) / ($denominator / $numerator)" | bc | cut -d. -f1)
+	Y=$(echo "scale=2\n$height - $PANEL_HEIGHT * ($denominator / $numerator) * ($denominator / $numerator)" | bc | cut -d. -f1)
+	# wrs -a $X $Y $(pfw)       # BUG: inconsistent behaviour
+	winid=$(xdotool getwindowfocus -f)
+	draw $winid $X $Y
+}
+
+rotate() {
+	winid=$(xdotool getwindowfocus -f)
+	XY=$(xdotool getwindowgeometry $winid | grep -i 'geometry' | cut -d: -f2)
+	draw $winid ${XY#*x} ${XY%x*}
+}
+
+set_window() {
+	sleep ${delay:-$T}  # wait long enough to get focus
+	xdotool getactivewindow windowsize $1 $2
+}
 
 while [ $1 ] ;do
 	case $1 in
-		*x*) height=${1%x*}; width=${1#*x} ;;
-		*  ) delay=$1 ;;
+		r*  ) rotate; exit ;;
+		m*  ) sleep 0.1; xdotool key --delay 100 Super+9; exit ;;  # allow user keyboard release
+		*/* ) calc_window ${1%/*} ${1#*/}; exit ;;
+		*x* ) set_window  ${1%x*} ${1#*x}; exit ;;
+		*   ) delay=$1 ;;
 	esac
 	shift
 done
 
-sleep ${delay:-$T}  # wait long enough to get focus
-xdotool getactivewindow windowsize ${height:-$X} ${width:-$Y}
+set_window ${height:-$X} ${width:-$Y}
 
 # vim: set ft=sh: #
 
