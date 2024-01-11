@@ -384,6 +384,7 @@ stage_33() {
 
 	# doas apk add 2bwm  # herbstluftwm xorg display issue with alpine 3.19
 	make_install 2bwm
+	apk testing wmctrl
 	# make_install berry
 	# make_install worm
 
