@@ -183,7 +183,7 @@
 **/runtime
 **/sakura
 **/sandbox
-**/.save
+**/*.save
 **/scratchpad*
 **/screen
 **/.session*
