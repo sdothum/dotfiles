@@ -84,54 +84,6 @@ hook global ModeChange (push|pop):insert:.* %{ set-face global crosshairs_column
 map global user | ': cursorcolumn<ret>' -docstring "toggle column"
 map global user + ': crosshairs<ret>'   -docstring "toggle crosshairs"  # BUG: occasional hidden underline
 
-# ............................................................ Buffer management
-
-set-option global autoreload yes
-
-# modeline inline context: "# kak: filetype=.." (comment delimiter by filetype)
-# NOTE: markdown statement '#[ kak: ... ]: #' issues *debug* "Unsupported kakoune variable:" message for trailing ']'
-hook global BufOpenFile .* %{ modeline-parse }
-hook global BufOpenFile .*.eml %{ set buffer filetype markdown }
-hook global FocusOut .* write
-
-map global normal <a-ret> ': buffer-next<ret>'           -docstring 'next buffer'
-map global normal <a-backspace> ': buffer-previous<ret>' -docstring 'previous buffer'
-map global normal <a-space> 'ga'                         -docstring 'last buffer'
-
-# plug 'gustavo-hms/luar'
-# plug 'gustavo-hms/peneira'
-require-module peneira
-set-option global luar_interpreter luajit
-set-option global peneira_files_command "rg --files --sort=path"  # single threaded --sort is fast enough for my folder organization
-
-# HACK: multi-client focus switching causes peneira to lose active client buffer directory
-define-command peneira-resync %{
-	# change-directory-current-buffer  # handled by hook FocusIn above, otherwise required
-	buffer *debug*
-	execute-keys ga
-}
-
-define-command buffers %{
-	peneira-resync
-	peneira 'buffers: ' %{ printf '%s\n' $kak_quoted_buflist } %{ buffer %arg{1} }
-}
-
-define-command files %{
-	peneira-resync
-	peneira-files -hide-opened
-}
-
-# peneira fuzzy search
-map global user   b ': buffers<ret>'                     -docstring 'buffers'
-map global user   e ': files<ret>'                       -docstring 'edit'
-
-map global user   d ': buffer *debug*<ret>'              -docstring '*debug*'
-map global user   D ': delete-buffer<ret>'               -docstring 'delete buffer'
-map global user   q ': quit<ret>'                        -docstring 'quit'
-map global user   x ': write-all-quit<ret>'              -docstring 'save all and quit'
-# plug 'occivink/kakoune-sudo-write'
-map global user   Z ': sudo-write<ret>'                  -docstring 'sudo save'
-
 # ................................................................. Highlighting
 
 define-command softwrap %{ add-highlighter -override global/ wrap -word -indent -marker "  ↪ " }
@@ -202,20 +154,6 @@ map global user   <a-?> '<a-?>(?i)'     -docstring 'case insensitive extend sear
 map global normal } ']p'                -docstring 'next paragraph'
 map global normal { '[p'                -docstring 'previous paragraph'
 
-# .................................................................... Clipboard
-
-# plug 'lePerdu/kakboard' (optimized)
-set global kakboard_copy_cmd 'xclip -in -selection clipboard'
-set global kakboard_paste_cmd 'xclip -out -selection clipboard'
-hook global WinCreate .* %{ kakboard-enable }
-
-map global user y ': kakboard-with-push-clipboard y<ret>' -docstring 'yank to clipboard'
-# map global user c ': kakboard-with-push-clipboard c<ret>'
-# map global user d ': kakboard-with-push-clipboard d<ret>'
-map global user p ': kakboard-with-pull-clipboard p<ret>' -docstring 'put from clipboard'
-map global user P ': kakboard-with-pull-clipboard P<ret>' -docstring 'put from clipboard'
-map global user R ': kakboard-with-pull-clipboard R<ret>' -docstring 'replace with clipboard'
-
 # ...................................................................... Editing
 
 # plug 'occivink/kakoune-find'
@@ -251,6 +189,68 @@ hook -once global BufSetOption filetype=markdown %{
 	set -add buffer snippets 'img' 'im:'        %{ snippets-insert %{![${1:img}](/images/${1:img}.jpg) }}
 	set -add buffer snippets 'search' 'se:'     %{ snippets-insert %{[${1:search}](http://thedarnedestthing.com/search?query=${1:search}) }}
 }
+
+# .................................................................... Clipboard
+
+# plug 'lePerdu/kakboard' (optimized)
+set global kakboard_copy_cmd 'xclip -in -selection clipboard'
+set global kakboard_paste_cmd 'xclip -out -selection clipboard'
+hook global WinCreate .* %{ kakboard-enable }
+
+map global user y ': kakboard-with-push-clipboard y<ret>' -docstring 'yank to clipboard'
+# map global user c ': kakboard-with-push-clipboard c<ret>'
+# map global user d ': kakboard-with-push-clipboard d<ret>'
+map global user p ': kakboard-with-pull-clipboard p<ret>' -docstring 'put from clipboard'
+map global user P ': kakboard-with-pull-clipboard P<ret>' -docstring 'put from clipboard'
+map global user R ': kakboard-with-pull-clipboard R<ret>' -docstring 'replace with clipboard'
+
+# ............................................................ Buffer management
+
+set-option global autoreload yes
+
+# modeline inline context: "# kak: filetype=.." (comment delimiter by filetype)
+# NOTE: markdown statement '#[ kak: ... ]: #' issues *debug* "Unsupported kakoune variable:" message for trailing ']'
+hook global BufOpenFile .* %{ modeline-parse }
+hook global BufOpenFile .*.eml %{ set buffer filetype markdown }
+hook global FocusOut .* write
+
+map global normal <a-ret> ': buffer-next<ret>'           -docstring 'next buffer'
+map global normal <a-backspace> ': buffer-previous<ret>' -docstring 'previous buffer'
+map global normal <a-space> 'ga'                         -docstring 'last buffer'
+
+# plug 'gustavo-hms/luar'
+# plug 'gustavo-hms/peneira'
+require-module peneira
+set-option global luar_interpreter luajit
+set-option global peneira_files_command "rg --files --sort=path"  # single threaded --sort is fast enough for my folder organization
+
+# HACK: multi-client focus switching causes peneira to lose active client buffer directory
+define-command peneira-resync %{
+	# change-directory-current-buffer  # handled by hook FocusIn above, otherwise required
+	buffer *debug*
+	execute-keys ga
+}
+
+define-command buffers %{
+	peneira-resync
+	peneira 'buffers: ' %{ printf '%s\n' $kak_quoted_buflist } %{ buffer %arg{1} }
+}
+
+define-command files %{
+	peneira-resync
+	peneira-files -hide-opened
+}
+
+# peneira fuzzy search
+map global user   b ': buffers<ret>'                     -docstring 'buffers'
+map global user   e ': files<ret>'                       -docstring 'edit'
+
+map global user   d ': buffer *debug*<ret>'              -docstring '*debug*'
+map global user   D ': delete-buffer<ret>'               -docstring 'delete buffer'
+map global user   q ': quit<ret>'                        -docstring 'quit'
+map global user   x ': write-all-quit<ret>'              -docstring 'save all and quit'
+# plug 'occivink/kakoune-sudo-write'
+map global user   Z ': sudo-write<ret>'                  -docstring 'sudo save'
 
 # .................................................................. Tree-sitter
 
