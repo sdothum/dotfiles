@@ -90,7 +90,7 @@ define-command softwrap %{ add-highlighter -override global/ wrap -word -indent 
 
 # softwrap long lines
 hook global WinSetOption filetype=markdown %{ add-highlighter -override global/ wrap -word -indent -marker "  ↪ " -width 80 }
-hook global WinSetOption filetype=(bash|c|cpp|go|javascript|latex|perl|python|ruby|rust|toml|typescript) softwrap
+hook global WinSetOption filetype=(sh|c|cpp|go|javascript|latex|perl|python|ruby|rust|toml|typescript) softwrap
 hook global BufOpenFile  .*(conf|config|log|rc|text|txt) softwrap
 
 add-highlighter global/ show-matching
