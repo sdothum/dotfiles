@@ -143,6 +143,7 @@ abbr gaps 'rlwrap -n gaps'
 abbr h: 'ls -l /tmp/herbstluftwm:*'
 abbr hc 'herbstclient'
 abbr herbstluftwm ". $HOME/.config/herbstluftwm/config/ENV"
+abbr qkss 'qk stop; qk start'
 abbr X x
 
 # ......................................................................... Edit
@@ -181,6 +182,13 @@ abbr git1 'git clone --depth 1'
 abbr mysql 'mysql -h localhost -u root -p'
 abbr perli 'perl -de 1'
 
+# ........................................................................ Shell
+
+abbr hdel 'history delete'
+abbr hi 'hist'
+abbr hv "vi $HOME/.local/share/fish/fish_history"
+abbr su "sudo -i su"
+
 # .................................................................. Application
 
 abbr \? 'chatgpt'
@@ -208,9 +216,6 @@ end
 abbr dot 'rlwrap -n dotfiles'
 abbr gif 'nsxiv -a'
 abbr handbrake 'ghb'
-abbr hdel 'history delete'
-abbr hi 'hist'
-abbr hv "vi $HOME/.local/share/fish/fish_history"
 abbr hex 'hexdump -C'
 abbr kc "kconvert '*epub'"
 abbr kindle 'dmenu econvert azw3'
@@ -220,9 +225,7 @@ abbr md 'lowdown -tterm'
 abbr mdtxt 'lowdown -tterm --term-no-colour'
 abbr miniflux-migrate 'doas miniflux -c /etc/miniflux.conf -migrate'
 abbr music '!p ncmpcpp ;and ncmpcpp'
-abbr reqk 'qk stop; qk start'
 abbr scrot 'scrot -e "mv \$f /net/photos/batchqueue/"'
-abbr ss 'sc-im'
 abbr td 'td -i'
 # abbr todo 'rlwrap -n todo-screen'
 abbr uterm 'urxvt -sh 1'
