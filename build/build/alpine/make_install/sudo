@@ -15,4 +15,10 @@ doas chmod 640 /etc/sudoers
 doas sed -i '/^#.*wheel.*NOPASSWD/s/^# *//' /etc/sudoers
 doas chmod 440 /etc/sudoers
 
+# link user configs
+doas ln -sf $HOME/.Xresources/root
+doas ln -sf $HOME/.config /root
+doas ln -sf $HOME/.fonts /root
+doas ln -sf $HOME/.profile /root
+
 # vim: set ft=sh: #
