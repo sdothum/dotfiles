@@ -16,6 +16,6 @@ for i in $winids ;do
 	xdotool key Super+Shift+g  # 2bwm vertical center
 done
 
-xdotool windowfocus --sync $winid
+xdotool windowactivate --sync $winid
 
 # vim: set ft=sh: #

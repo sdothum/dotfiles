@@ -19,5 +19,6 @@ eval $(xdotool getwindowgeometry --shell $winid)  # WIDTH
 # snap to closest edge!
 right=$(( $width - ($X + $WIDTH - 1) ))
 [ $X -le $right ] && xdotool windowmove $winid $(( $margin + $border - 1 )) y || xdotool windowmove $winid $(( $width - $WIDTH - border * 2 - margin )) y
+xdotool windowactivate --sync $winid
 
 # vim: set ft=sh: #

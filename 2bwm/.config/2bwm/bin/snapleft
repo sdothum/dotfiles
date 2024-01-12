@@ -22,5 +22,6 @@ eval $(xdotool getwindowgeometry --shell $winid)  # HEIGHT (doesn't include bord
 
 # no bounce :)
 xdotool windowmove $winid $(( $margin + $border - 1 )) $(( ($height - $HEIGHT) / 2 - $border ))
+xdotool windowactivate --sync $winid
 
 # vim: set ft=sh: #

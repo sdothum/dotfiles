@@ -21,5 +21,6 @@ winid=$(xdotool getwindowfocus -f)
 eval $(xdotool getwindowgeometry --shell $winid)  # HEIGHT WIDTH (doesn't include borders))
 
 xdotool windowmove $winid $(( $width - $WIDTH - border * 2 - margin )) $(( ($height - $HEIGHT) / 2 - $border ))
+xdotool windowactivate --sync $winid
 
 # vim: set ft=sh: #
