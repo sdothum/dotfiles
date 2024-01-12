@@ -122,7 +122,7 @@ case $wm in
 	pkill -KILL -f '2bwm'
 	xrdb -load $HOME/.Xresources
 	setpath $HOME/.config/2bwm cmd
-	. $HOME/.config/2bwm/ENV
+	. $(which ENV)
 	$TERM &
 	(sleep 0.1; xdotool --sync --onlyvisible --class "Alacritty" windowactivate --sync; sleep 0.5; xdotool type "autostart >/tmp/2bwm.log 2>&1"; xdotool key return) &  # autostart the panel in the terminal window (delay for celeron cpu)
 	xexec 2bwm ;;
