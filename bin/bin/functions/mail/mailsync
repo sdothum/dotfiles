@@ -10,14 +10,14 @@ usage() { usage: "$(basename $0) 'daemon | I'nit | i'ndex | l'og | t'ags | 1'pas
 
 # crontab: * * * * * <path>/mailsync >>/tmp/mailsync.log 2>&1
 
-. $HOME/bin/functions/shell/exec_lock
+. $(which exec_lock)
 
 MAILDIR=$HOME/Mail
 ME=sdothum
 MAILBOX=$MAILDIR/$ME
 
 # import user path
-. $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
+. $(which user_path)  # bash shell required for cron colors
 
 # mail poller (see offlineimap and imapfilter)
 # lifted from http://cpbl.wordpress.com/2009/11/07/alpine-offlineimap-and-gmail-under-ubuntu/

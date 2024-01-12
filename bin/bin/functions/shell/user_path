@@ -13,6 +13,6 @@ export SHELL=dash
 . /etc/profile
 
 # export colors for log messages
-[ $NOCOLOR ] || . $HOME/bin/functions/shell/colors
+[ $NOCOLOR ] || . $(which colors)
 
 # vim: set ft=sh: #

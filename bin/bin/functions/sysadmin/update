@@ -13,7 +13,7 @@ PLEX=/opt/plexmediaserver/Library/Application\ Support
 ALPINE=motu  # test alpine host
 
 # import user path
-. $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
+. $(which user_path)  # bash shell required for cron colors
 
 laptop=lumen
 netbook=monad

@@ -7,7 +7,7 @@
 # ...................................................................... Connect
 
 # import user path
-. $HOME/bin/functions/shell/user_path
+. $(which user_path)
 
 connect && exit
 

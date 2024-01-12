@@ -22,7 +22,7 @@ interval=${interval:-300}              # default 5 minute interval reporting
 CRON=/tmp/scrub                        # see crontab -l
 
 # import user path
-. $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
+. $(which user_path)  # bash shell required for cron colors
 
 # butterfs maintenance
 volume() {

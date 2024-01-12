@@ -13,7 +13,7 @@
 REMINDERS=${REMINDERS:-$HOME/.reminders}  # required by cron (root invocaion)
 
 # import user path
-. $HOME/bin/functions/shell/user_path
+. $(which user_path)
 
 list() {
 	# ignore daily reminders
