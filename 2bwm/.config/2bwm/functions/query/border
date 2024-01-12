@@ -1,0 +1,15 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="query/display $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Border width
+
+TWOBWM_CONFIG=$HOME/.config/2bwm/src/config.h
+
+# 2bwm window geometry
+echo $(grep '^static const uint8_t borders' $TWOBWM_CONFIG | sed 's/.*[{]//; s/[}].*//; s/,/ /g' | cut -d' ' -f2)
+
+# vim: set ft=sh: #

@@ -12,7 +12,6 @@
 
 SPANEL=$SESSION/panel   # toggle state
 [ -e $SPANEL ] || exit  # no panel
-indent=$(cat $SPANEL)   # panel indent ratio expressed as fraction, default "3 / 2"
 PANELTOP=$SPANEL:top
 STARTREK=$SPANEL:startrek
 STAT=$SPANEL:stat
@@ -61,10 +60,8 @@ esac
 TWOBWM_CONFIG=$HOME/.config/2bwm/src/config.h
 
 # 2bwm panel geometry
-set -- $(grep '^static const uint8_t offsets' $TWOBWM_CONFIG | sed 's/.*[{]//; s/[}].*//; s/,/ /g')
-PANEL_HEIGHT=$(( $4 - $2 ))
-PANEL_INDENT=$(( $1 * ${indent:-3 / 2} ))  # assumes equal left/right screen margins
-shift 4
+PANEL_HEIGHT=$(query screen panel)
+PANEL_INDENT=$(query screen indent)  # assumes equal left/right screen margins
 
 fontsize=$(fontsize)
 [ $scaledown ] && fontsize=$(( fontsize - 1 ))

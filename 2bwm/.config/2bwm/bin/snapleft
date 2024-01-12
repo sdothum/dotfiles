@@ -1,0 +1,26 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="snapleft $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................... Snap left
+
+# xdotool getwindowfocus -f >/dev/null
+# xdotool key --delay 25 Super+p        # snap corner
+# xdotool key --delay 25 Super+Shift+g  # vertical center
+
+# 2bwm window geometry
+width=$(query display width)
+height=$(query display height)
+margin=$(query screen margin)
+border=$(query border)
+
+winid=$(xdotool getwindowfocus -f)
+eval $(xdotool getwindowgeometry --shell $winid)  # HEIGHT (doesn't include borders)
+
+# no bounce :)
+xdotool windowmove $winid $(( $margin + $border - 1 )) $(( ($height - $HEIGHT) / 2 - $border ))
+
+# vim: set ft=sh: #
