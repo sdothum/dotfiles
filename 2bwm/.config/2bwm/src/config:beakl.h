@@ -37,7 +37,6 @@ static const bool inverted_colors = true;
  *3) Resize border size  */
 // static const uint8_t borders[] = {3,5,5,4};
 // static const uint8_t borders[] = {2,7,7,6};
-// static const uint8_t borders[] = {2,8,8,7};
 static const uint8_t borders[] = {1,8,8,7};
 // static const uint8_t borders[] = {0,0,0,0};
 /* Windows that won't have a border.
@@ -66,10 +65,10 @@ static const char *east[]         = {"east"        , NULL};  // wmutils focus di
 static const char *west[]         = {"west"        , NULL};
 static const char *north[]        = {"north"       , NULL};
 static const char *south[]        = {"south"       , NULL};
-static const char *snapsmart[]    = {"snapsmart"   , NULL};
-static const char *snaplevel[]    = {"snaplevel"   , NULL};
+static const char *snapedge[]     = {"snapedge"    , NULL};
 static const char *snapleft[]     = {"snapleft"    , NULL};
 static const char *snapright[]    = {"snapright"   , NULL};
+static const char *snaplevel[]    = {"snaplevel"   , NULL};
 static const char *windowsize[]   = {"windowsize"  , NULL};  // menu windowsize
 static const char *windowsize0[]  = {"windowsize0" , NULL};  // keybind shortcut
 static const char *windowsize1[]  = {"windowsize1" , NULL};
@@ -302,7 +301,7 @@ static key keys[] = {
 	// Start programs
 	// {  MOD ,               XK_w,          start,               {.com = menucmd}},
 	{  MOD |SHIFT,            XK_space,      start,               {.com = menucmd}},
-	{  MOD |CONTROL,          XK_space,      start,               {.com = snapsmart}},
+	{  MOD |CONTROL,          XK_space,      start,               {.com = snapedge}},
 	{  MOD ,                  XK_Return,     start,               {.com = scratchy}},
 	{  MOD |SHIFT,            XK_Return,     start,               {.com = itchy}},
 	{  MOD |CONTROL,          XK_Return,     start,               {.com = terminal}},

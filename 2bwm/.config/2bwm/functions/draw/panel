@@ -19,9 +19,8 @@ TICKER=$SPANEL:ticker
 WEATHER=$SPANEL:weather
 
 which lemonbar >/dev/null 2>&1         || exit
-fifo=${DISPLAY#:}  # was monitor number in herbstluftwm
+fifo=${DISPLAY#:}       # for multi-monitor setup
 pstat "lemonbar -d -n lemonbar:$fifo " && exit
-# ditto panel "lemonbar:$fifo"
 toggle picom on
 
 # .................................................................. Panel theme
@@ -44,7 +43,7 @@ fi
 # PANEL_FONT='Iosevka\-mono'  # lemonbar requires the dash be escaped
 # PANEL_FONT=$MONOFONT
 PANEL_FONT=monograffic
-PANEL_UNDERLINE=2
+PANEL_UNDERLINE=2             # thickness
 
 # panel symbols (tag numbers option dropped to simplify colour assignments)
 case $(query display width) in

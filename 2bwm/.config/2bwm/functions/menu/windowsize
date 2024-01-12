@@ -11,6 +11,6 @@ actions() { echo "Mod+0  rotate\nMod+1  monocle\nMod+2  1/2\nMod+3  2/5\nMod+4  
 
 [ $1 ] && cmd=$(actions | grep "$1 ") || cmd=$(actions | rmenu 'Window size' $cmd -no-custom) || exit
 
-draw windowsize $(echo "$cmd" | sed "s/.* //")
+draw window $(echo "$cmd" | sed "s/.* //")
 
 # vim: set ft=sh: #

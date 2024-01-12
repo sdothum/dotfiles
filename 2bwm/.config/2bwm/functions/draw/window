@@ -1,13 +1,13 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="draw/windowsize $@" . $PARENT
+[ $TRACE ] && CHILD="draw/window $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
 # .............................................................. Set window size
 
-# Usage: draw windowsize [delay] <height>x<width> | monocle | rotate | <numerator>/<denominator> (fraction :)
+# Usage: draw window [delay] <height>x<width> | monocle | rotate | <numerator>/<denominator> (fraction :)
 
 X=1024
 Y=800

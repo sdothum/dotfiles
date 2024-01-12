@@ -2,21 +2,24 @@
 # sdothum - 2016 (c) wtfpl
 # to enable tracing, export TRACE=/tmp/2bwm.log in .xinitrc
 export PARENT=$(which parent)
-[ $TRACE ] && CHILD="config/ENV $@" . $PARENT
+[ $TRACE ] && CHILD="ENV $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# don't set shell else dmenu history functions may be non-functional
+# Usage: . $(which ENV)
+
+# .................................................................... Root vars
+
 export SHELL=/usr/bin/dash
 export XDG_CONFIG_HOME=$HOME/.config
 export ROOT=${ROOT:-/tmp}
 export TWOBWM=$ROOT/2bwm
 export SESSION=$HOME/.session
-export DESKTOP=$SESSION:desktop
 export UI=$SESSION/2bwm
 
 echo $DISPLAY >$SESSION/display  # for cron notifications, see notify
+
 # .................................................................... WM states
 
 export PICOM=$TWOBWM:picom
@@ -25,12 +28,12 @@ export FORTUNE=$TWOBWM:fortune
 export PANEL=$TWOBWM:panel
 export PANEL_FIFO=${PANEL_FIFO:-${PANEL}-fifo}
 # 2bwm is not fully started yet, so assume monitor 0 focus
-# echo $PANEL_FIFO:$(herbstclient attr monitors.focus.index) >$PANEL_FIFO  # set by draw panel but needed beforehand
 echo $PANEL_FIFO:0 >$PANEL_FIFO  # set by draw panel but needed beforehand
 
 # ............................................................... Session states
 
 # wm states, see gaps
+export DESKTOP=$SESSION:desktop
 export SETROOT=$DESKTOP:setroot
 
 # application states

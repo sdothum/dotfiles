@@ -1,0 +1,74 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="snap $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Snap windows
+
+# Usage: draw snap left | right | edge | level**
+#        **For all windows on desktop
+
+# 2bwm window geometry
+width=$(query display width)
+height=$(query display height)
+margin=$(query screen margin)
+border=$(query border)
+
+winid=$(xdotool getwindowfocus -f)
+eval $(xdotool getwindowgeometry --shell $winid)  # HEIGHT WIDTH (doesn't include borders)
+
+# .................................................................... Snap left
+
+# xdotool getwindowfocus -f >/dev/null
+# xdotool key --delay 25 Super+p        # snap corner
+# xdotool key --delay 25 Super+Shift+g  # vertical center
+
+snapleft() {
+	xdotool windowmove $winid $(( $margin + $border - 1 )) $(( ($height - $HEIGHT) / 2 - $border ))
+	xdotool windowactivate --sync $winid
+}
+
+# ................................................................... Snap right
+
+# xdotool getwindowfocus -f >/dev/null
+# xdotool key --delay 25 Super+l        # snap corner
+# xdotool key --delay 25 Super+Shift+g  # vertical center
+
+snapright() {
+	xdotool windowmove $winid $(( $width - $WIDTH - border * 2 - margin )) $(( ($height - $HEIGHT) / 2 - $border ))
+	xdotool windowactivate --sync $winid
+}
+
+# .................................................................... Snap edge
+
+snapedge() {
+	# snap to closest edge!
+	right=$(( $width - ($X + $WIDTH - 1) ))
+	[ $X -le $right ] && xdotool windowmove $winid $(( $margin + $border - 1 )) y || xdotool windowmove $winid $(( $width - $WIDTH - border * 2 - margin )) y
+	xdotool windowactivate --sync $winid
+}
+
+# ........................................................ Snap windows to level
+
+snaplevel() {
+	desktop=$(xdotool get_desktop)
+	winids=$(wmctrl -l | grep "^[^ ]*  *$desktop " | cut -d' ' -f1)  # of current desktop
+
+	for i in $winids ;do
+		xdotool windowactivate $i
+		xdotool key Super+Shift+g  # 2bwm vertical center
+	done
+
+	xdotool windowactivate --sync $winid
+}
+
+case $1 in
+	right ) snapright ;;
+	left  ) snapleft ;;
+	edge  ) snapedge ;;
+	level ) snaplevel ;;
+esac
+
+# vim: set ft=sh: #

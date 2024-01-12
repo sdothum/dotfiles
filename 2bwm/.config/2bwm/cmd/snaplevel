@@ -7,15 +7,6 @@
 
 # ........................................................ Snap windows to level
 
-desktop=$(xdotool get_desktop)
-winid=$(xdotool getwindowfocus -f)
-winids=$(wmctrl -l | grep "^[^ ]*  *$desktop " | cut -d' ' -f1)  # of current desktop
-
-for i in $winids ;do
-	xdotool windowactivate $i
-	xdotool key Super+Shift+g  # 2bwm vertical center
-done
-
-xdotool windowactivate --sync $winid
+draw snap level
 
 # vim: set ft=sh: #
