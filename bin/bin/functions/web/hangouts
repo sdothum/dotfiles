@@ -19,17 +19,17 @@ esac
 
 xsync 'Gmail'
 
-if [ $BROWSER = qutebrowser ] ;then
-	if [ -e $HLWM:hangouts ] ;then
-		keyboard off  # disable keyboard to prevent disrupting following :command
-		sleep 2       # pause long enough for window focus (cannot use xdotool --sync since other instances may already exist)
-		xdotool key 'Y'
-		keyboard on   # enable keyboard
-	else
-		# xdotool ineffective on initial qutebrowser launch
-		notify critical 'MESSAGE \ hangouts' '"Permission request" response required'
-		touch $HLWM:hangouts
-	fi
-fi
+# if [ $BROWSER = qutebrowser ] ;then
+# 	if [ -e $HLWM:hangouts ] ;then
+# 		keyboard off  # disable keyboard to prevent disrupting following :command
+# 		sleep 2       # pause long enough for window focus (cannot use xdotool --sync since other instances may already exist)
+# 		xdotool key 'Y'
+# 		keyboard on   # enable keyboard
+# 	else
+# 		# xdotool ineffective on initial qutebrowser launch
+# 		notify 180 critical 'MESSAGE \ hangouts' '"Permission request" response required'
+# 		touch $HLWM:hangouts
+# 	fi
+# fi
 
 # vim: set ft=sh: #
