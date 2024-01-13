@@ -7,27 +7,30 @@
 
 # .............................................................. Set window size
 
-# Usage: window size [delay] <height>x<width> | monocle | rotate | <numerator>/<denominator> (fraction :)
+# Usage: window size <height>x<width> | monocle | rotate | <numerator>/<denominator> (fraction :)
 
 X=1024
 Y=800
 T=2
 
 TWOBWM_CONFIG=$HOME/.config/2bwm/src/config.h
-SPANEL=$SESSION/panel   # toggle state
 WINFO=$TWOBWM:window
 
 winid=$(xdotool getwindowfocus -f)
 
 save_geometry() { xdotool getwindowgeometry --shell $winid >$WINFO:$winid; }  # for revert
 
+# ..................................................................... X Y size
+
 draw() {
 	save_geometry
-	xdotool windowunmap $1                                   # defer visual refresh
+	xdotool windowunmap $1               # defer visual refresh
 	xdotool windowsize --sync $1 $2 $3
 	xdotool windowmap --sync $1
-	[ $4 ] || xdotool key Super+Shift+g                      # 2bwm vertical center
+	[ $4 ] || xdotool key Super+Shift+g  # 2bwm vertical center
 }
+
+# ................................................................ Revert layout
 
 revert() {
 	[ -e $WINFO:$winid ] && eval $(cat $WINFO:$winid) || exit
@@ -35,24 +38,27 @@ revert() {
 	xdotool windowmove $winid $X $Y
 }
 
+# .......................................................... Proportional layout
+
 calc_window() {
 	numerator=$1
 	denominator=$2
-	indent=$(cat $SPANEL)  # see draw panel
-	# 2bwm panel geometry
+	# 2bwm screen geometry
 	set -- $(grep '^static const uint8_t offsets' $TWOBWM_CONFIG | sed 's/.*[{]//; s/[}].*//; s/,/ /g')
-	PANEL_HEIGHT=$(( $4 - $2 ))
-	PANEL_INDENT=$(( $1 * ${indent:-3 / 2} ))  # assumes equal left/right screen margins
+	PANEL_HEIGHT=$2        # assumes equal top/bottom screen margins
+	MARGIN=$1              # assumes equal left/right screen margins
 	shift 4
-	width=$(query display width)
-	height=$(query display height)
+	width=$(( $(query display width) - $MARGIN * 2 ))
+	height=$(( $(query display height) - $PANEL_HEIGHT * 2 ))
 
-	X=$(echo "scale=2\n($width - ($PANEL_INDENT * 2 + $PANEL_HEIGHT * (($denominator / $numerator) - 1))) / ($denominator / $numerator)" | bc | cut -d. -f1)
+	X=$(echo "scale=2\n$width * $numerator / $denominator - $MARGIN" | bc | cut -d. -f1)
 	Y=$(echo "scale=2\n$height - $PANEL_HEIGHT * ($denominator / $numerator) * ($denominator / $numerator)" | bc | cut -d. -f1)
-	# wrs -a $X $Y $(pfw)       # BUG: inconsistent behaviour
+	# wrs -a $X $Y $(pfw)  # BUG: inconsistent behaviour
 	winid=$(xdotool getwindowfocus -f)
 	draw $winid $X $Y
 }
+
+# ................................................................ Rotate window
 
 rotate() {
 	winid=$(xdotool getwindowfocus -f)
@@ -60,25 +66,23 @@ rotate() {
 	draw $winid ${XY#*x} ${XY%x*}
 }
 
+# ...................................................................... Monocle
+
 monocle() {
 	save_geometry
 	sleep 0.1                                   # allow user keyboard release
 	xdotool key --delay 100 Super+Shift+Ctrl+1  # see 2bwm config.h
 }
 
-while [ $1 ] ;do
-	case $1 in
-		rev* ) revert; exit ;;
-		rot* ) rotate; exit ;;
-		mon* ) monocle; exit ;;
-		*/*  ) calc_window ${1%/*} ${1#*/}; exit ;;
-		*x*  ) draw $winid ${1%x*} ${1#*x}; exit ;;
-		*    ) delay=$1 ;;
-	esac
-	shift
-done
+case $1 in
+	rev* ) revert ;;
+	rot* ) rotate ;;
+	mon* ) monocle ;;
+	*/*  ) calc_window ${1%/*} ${1#*/} ;;
+	*x*  ) draw $winid ${1%x*} ${1#*x} ;;
+	*    ) draw $winid ${height:-$X} ${width:-$Y} ;;
+esac
 
-set_window ${height:-$X} ${width:-$Y}
 
 # vim: set ft=sh: #
 

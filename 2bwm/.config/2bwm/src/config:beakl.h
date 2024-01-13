@@ -341,6 +341,7 @@ static key keys[] = {
 	{  MOD ,                  XK_j,          start,               {.com = south}},
 	{  MOD ,                  XK_e,          start,               {.com = east}},  // beakl left hand placement
 	{  MOD ,                  XK_h,          start,               {.com = west}},
+	{  MOD |SHIFT,            XK_0,          start,               {.com = windowsize}},
 	{  MOD ,                  XK_0,          start,               {.com = windowsize0}},
 	{  MOD ,                  XK_1,          start,               {.com = windowsize1}},
 	{  MOD ,                  XK_2,          start,               {.com = windowsize2}},
