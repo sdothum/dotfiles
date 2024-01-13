@@ -1,0 +1,20 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/hide $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Hide action
+
+# hide active window and focus next, see 2bwm config.h
+keyboard off
+xdotool key Super+Control+Shift+i  # remapped keybinding
+window next
+keyboard on
+
+# clear xtitle.. see draw panel
+[ -e $(cat $PANEL_FIFO) ] || exit
+[ $(xdotool search --onlyvisible --desktop $(xdotool get_desktop) --class '.*' | wc -l) -eq 0 ] && echo "X" >$(cat $PANEL_FIFO)
+
+# vim: set ft=sh: #

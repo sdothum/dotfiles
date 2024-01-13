@@ -1,12 +1,15 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="snaplevel $@" . $PARENT
+[ $TRACE ] && CHILD="toggle/background $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ........................................................ Snap windows to level
+# ......................................................................... Root
 
-window snap level
+pkill -KILL -f "draw panel"
+menu root
+toggle picom on
+draw panel
 
 # vim: set ft=sh: #

@@ -140,7 +140,7 @@ active_window() {
 		fi
 	fi
 	if has_visible $active ;then
-		[ "$(xtitle)" = '' ] && { focus next; return; }  # will trigger X record
+		[ "$(xtitle)" = '' ] && { window next; return; }  # will trigger X record
 		name=$(xtitle | sed -r 's/^(.)/\u\1/')  # trap unfocused error messages
 		# title="${title}${LSEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}$name%{F-}%{B-}%{F$DEFAULT_FG}"
 		[ "$name" ] && name="${LSEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}$name%{F-}%{B-}%{F$DEFAULT_FG}"

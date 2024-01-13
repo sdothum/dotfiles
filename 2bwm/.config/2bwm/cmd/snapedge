@@ -7,6 +7,6 @@
 
 # .................................................................... Snap edge
 
-draw snap edge
+window snap edge
 
 # vim: set ft=sh: #

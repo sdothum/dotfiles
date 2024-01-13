@@ -1,20 +1,21 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-# [ $TRACE ] && CHILD="focus $@" . $PARENT
+# [ $TRACE ] && CHILD="window $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ............................................................. Focus operations
+# ............................................................ Window operations
 
-# Usage: focus <msg>, see functions/focus
+# Usage: window <msg>, see functions/window
 
 msg=$1
 [ $msg ] && shift || usage: $0
-if [ -e ${0%/focus}/functions/focus/$msg ] ;then
-	. ${0%/focus}/functions/focus/$msg $@
+if [ -e ${0%/window}/functions/window/$msg ] ;then
+	. ${0%/window}/functions/window/$msg $@
 else
 	usage: $0
 fi
 
 # vim: set ft=sh: #
+

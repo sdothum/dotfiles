@@ -7,6 +7,6 @@
 
 # .................................................................... Snap left
 
-draw snap left
+window snap left
 
 # vim: set ft=sh: #

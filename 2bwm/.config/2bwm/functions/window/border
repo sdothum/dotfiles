@@ -1,6 +1,6 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="query/border $@" . $PARENT
+[ $TRACE ] && CHILD="window/border $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════

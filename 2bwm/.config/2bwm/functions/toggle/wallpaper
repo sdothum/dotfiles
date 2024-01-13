@@ -1,6 +1,6 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="background $@" . $PARENT
+[ $TRACE ] && CHILD="toggle/wallpaper $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
@@ -8,7 +8,7 @@
 # ......................................................................... Root
 
 pkill -KILL -f "draw panel"
-menu root
+draw root select
 toggle picom on
 draw panel
 

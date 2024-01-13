@@ -7,10 +7,10 @@
 
 # .................................................................. Window size
 
-actions() { echo "Mod+0  rotate\nMod+1  monocle\nMod+2  1/2\nMod+3  2/5\nMod+4  1/3\nMod+5  2/7\nMod+6  1/4\nMod+7  2/9\nMod+8  1/5"; }
+actions() { echo "Mod+0  revert\nMod+1  monocle\nMod+2  1/2\nMod+3  2/5\nMod+4  1/3\nMod+5  2/7\nMod+6  1/4\nMod+7  2/9\nMod+8  1/5\nMod+9  rotate"; }
 
 [ $1 ] && cmd=$(actions | grep "$1 ") || cmd=$(actions | rmenu 'Window size' $cmd -no-custom) || exit
 
-draw window $(echo "$cmd" | sed "s/.* //")
+window size $(echo "$cmd" | sed "s/.* //")
 
 # vim: set ft=sh: #

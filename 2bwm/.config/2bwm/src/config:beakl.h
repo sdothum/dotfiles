@@ -36,9 +36,7 @@ static const bool inverted_colors = true;
  *1) Full borderwidth    2) Magnet border size
  *3) Resize border size  */
 // static const uint8_t borders[] = {3,5,5,4};
-// static const uint8_t borders[] = {2,7,7,6};
-// static const uint8_t borders[] = {1,8,8,7};
-static const uint8_t borders[] = {2,9,9,8};
+static const uint8_t borders[] = {1,9,9,8};
 // static const uint8_t borders[] = {0,0,0,0};
 /* Windows that won't have a border.
  * It uses substring comparison with what is found in the WM_NAME
@@ -80,6 +78,7 @@ static const char *windowsize5[]  = {"windowsize5" , NULL};
 static const char *windowsize6[]  = {"windowsize6" , NULL};
 static const char *windowsize7[]  = {"windowsize7" , NULL};
 static const char *windowsize8[]  = {"windowsize8" , NULL};
+static const char *windowsize9[]  = {"windowsize9" , NULL};
 // term
 static const char *terminal[]     = {"term"        , NULL};
 static const char *scratchy[]     = {"scratchy"    , NULL};
@@ -351,11 +350,12 @@ static key keys[] = {
 	{  MOD ,                  XK_6,          start,               {.com = windowsize6}},
 	{  MOD ,                  XK_7,          start,               {.com = windowsize7}},
 	{  MOD ,                  XK_8,          start,               {.com = windowsize8}},
+	{  MOD ,                  XK_9,          start,               {.com = windowsize9}},
 	// Exit or restart 2bwm
 	{  MOD |CONTROL,          XK_q,          twobwm_exit,         {.i=0}},
 	{  MOD |CONTROL,          XK_r,          twobwm_restart,      {.i=0}},
 	// {  MOD ,               XK_space,      halfandcentered,     {.i=0}},
-	{  MOD ,                  XK_9,          halfandcentered,     {.i=0}},  // monocle
+	{  MOD |SHIFT|CONTROL,    XK_1,          halfandcentered,     {.i=0}},  // monocle
 	// {  MOD ,               XK_s,          toggle_sloppy,       {.com = sloppy_switch_cmd}},
 	{  MOD |CONTROL,          XK_s,          toggle_sloppy,       {.com = sloppy_switch_cmd}},
 	// Change current workspace

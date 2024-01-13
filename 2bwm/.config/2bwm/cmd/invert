@@ -1,15 +1,12 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="wallpaper $@" . $PARENT
+[ $TRACE ] && CHILD="invert $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ......................................................................... Root
+# ........................................................ Toggle panel contrast
 
-pkill -KILL -f "draw panel"
-draw root select
-toggle picom on
-draw panel
+toggle contrast
 
 # vim: set ft=sh: #

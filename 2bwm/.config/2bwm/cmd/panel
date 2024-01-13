@@ -1,12 +1,12 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="snaplevel $@" . $PARENT
+[ $TRACE ] && CHILD="panel $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ........................................................ Snap windows to level
+# ................................................................. Toggle panel
 
-window snap level
+toggle panel
 
 # vim: set ft=sh: #

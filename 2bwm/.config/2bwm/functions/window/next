@@ -1,12 +1,12 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="snaplevel $@" . $PARENT
+[ $TRACE ] && CHILD="window/next $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ........................................................ Snap windows to level
+# ................................................................. Focus window
 
-window snap level
+xdotool key Super+Tab  # find a window after a window close or hide
 
 # vim: set ft=sh: #

@@ -1,6 +1,6 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="snap $@" . $PARENT
+[ $TRACE ] && CHILD="window/snap $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
@@ -14,7 +14,7 @@
 width=$(query display width)
 height=$(query display height)
 margin=$(query screen margin)
-border=$(query border)
+border=$(window border)
 
 winid=$(xdotool getwindowfocus -f)
 eval $(xdotool getwindowgeometry --shell $winid)  # HEIGHT WIDTH (doesn't include borders)

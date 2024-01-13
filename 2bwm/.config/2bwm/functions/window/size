@@ -1,13 +1,13 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="draw/window $@" . $PARENT
+[ $TRACE ] && CHILD="window/size $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
 # .............................................................. Set window size
 
-# Usage: draw window [delay] <height>x<width> | monocle | rotate | <numerator>/<denominator> (fraction :)
+# Usage: window size [delay] <height>x<width> | monocle | rotate | <numerator>/<denominator> (fraction :)
 
 X=1024
 Y=800
@@ -15,12 +15,24 @@ T=2
 
 TWOBWM_CONFIG=$HOME/.config/2bwm/src/config.h
 SPANEL=$SESSION/panel   # toggle state
+WINFO=$TWOBWM:window
+
+winid=$(xdotool getwindowfocus -f)
+
+save_geometry() { xdotool getwindowgeometry --shell $winid >$WINFO:$winid; }  # for revert
 
 draw() {
-	xdotool windowunmap $1      # defer visual refresh
+	save_geometry
+	xdotool windowunmap $1                                   # defer visual refresh
 	xdotool windowsize --sync $1 $2 $3
 	xdotool windowmap --sync $1
-	xdotool key Super+Shift+g   # 2bwm vertical center
+	[ $4 ] || xdotool key Super+Shift+g                      # 2bwm vertical center
+}
+
+revert() {
+	[ -e $WINFO:$winid ] && eval $(cat $WINFO:$winid) || exit
+	draw $winid $WIDTH $HEIGHT revert
+	xdotool windowmove $winid $X $Y
 }
 
 calc_window() {
@@ -48,18 +60,20 @@ rotate() {
 	draw $winid ${XY#*x} ${XY%x*}
 }
 
-set_window() {
-	sleep ${delay:-$T}  # wait long enough to get focus
-	xdotool getactivewindow windowsize $1 $2
+monocle() {
+	save_geometry
+	sleep 0.1                                   # allow user keyboard release
+	xdotool key --delay 100 Super+Shift+Ctrl+1  # see 2bwm config.h
 }
 
 while [ $1 ] ;do
 	case $1 in
-		r*  ) rotate; exit ;;
-		m*  ) sleep 0.1; xdotool key --delay 100 Super+9; exit ;;  # allow user keyboard release
-		*/* ) calc_window ${1%/*} ${1#*/}; exit ;;
-		*x* ) set_window  ${1%x*} ${1#*x}; exit ;;
-		*   ) delay=$1 ;;
+		rev* ) revert; exit ;;
+		rot* ) rotate; exit ;;
+		mon* ) monocle; exit ;;
+		*/*  ) calc_window ${1%/*} ${1#*/}; exit ;;
+		*x*  ) draw $winid ${1%x*} ${1#*x}; exit ;;
+		*    ) delay=$1 ;;
 	esac
 	shift
 done

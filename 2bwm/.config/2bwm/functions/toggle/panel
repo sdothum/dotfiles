@@ -1,6 +1,6 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="panel $@" . $PARENT
+[ $TRACE ] && CHILD="toggle/panel $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════

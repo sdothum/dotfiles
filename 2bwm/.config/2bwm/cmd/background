@@ -1,12 +1,12 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="snaplevel $@" . $PARENT
+[ $TRACE ] && CHILD="background $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ........................................................ Snap windows to level
+# ......................................................................... Root
 
-window snap level
+toggle background
 
 # vim: set ft=sh: #
