@@ -14,14 +14,19 @@ declare-option str faint_orange           'rgb:efe7dd'  # pale orange contrast
 declare-option str theme 'duochrome'
 
 # see colors/duochrome for highlight str's
-declare-option str desaturated_green      'rgb:78ab78'
-declare-option str pale_green             'rgb:e1f1ea'
+# declare-option str desaturated_green    'rgb:78ab78'
+# declare-option str pale_green           'rgb:e1f1ea'
+declare-option str desaturated_blue       'rgb:6b9494'
+declare-option str pale_blue              'rgb:caeaef'
 declare-option str desaturated_orange     'rgb:d5b875'
 declare-option str pale_orange            'rgb:f7f3ee'
+declare-option str light_grey             'rgb:b8c6cb'
+declare-option str pale_grey              'rgb:cfd8dc'
 
 define-command normal-mode-colorscheme %{
-	declare-option str background          "%opt{pale_green}"
-	declare-option str comment             "%opt{desaturated_green}"
+	declare-option str background          "%opt{pale_blue}"
+	declare-option str comment             "%opt{desaturated_blue}"
+	declare-option str linenr              "%opt{light_grey}"
 	declare-option str menu                "%opt{pale_orange}"
 	colorscheme %opt{theme}
 }
@@ -29,7 +34,8 @@ define-command normal-mode-colorscheme %{
 define-command insert-mode-colorscheme %{
 	declare-option str background          "%opt{pale_orange}"
 	declare-option str comment             "%opt{desaturated_orange}"
-   declare-option str menu                "%opt{pale_green}"
+	declare-option str linenr              "%opt{pale_grey}"
+   declare-option str menu                "%opt{pale_blue}"
 	colorscheme %opt{theme}
 }
 
@@ -76,8 +82,8 @@ hook global WinDisplay .* change-directory-current-buffer
 hook global FocusIn .* change-directory-current-buffer
 
 # plug 'insipx/kak-crosshairs'
-set-face global crosshairs_line           "default,default+u"
-set-face global crosshairs_column         "default,%opt{faint_lime}"
+set-face global crosshairs_line   "default,default+u"
+set-face global crosshairs_column "default,%opt{faint_lime}"
 hook global ModeChange (push|pop):.*:insert %{ set-face global crosshairs_column "default,%opt{faint_orange}" }
 hook global ModeChange (push|pop):insert:.* %{ set-face global crosshairs_column "default,%opt{faint_lime}" }
 

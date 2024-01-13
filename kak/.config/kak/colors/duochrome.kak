@@ -15,7 +15,8 @@
 declare-option str black                  'rgb:263238'
 declare-option str light_black            'rgb:304047'
 declare-option str dark_grey              'rgb:445c65'
-declare-option str pale_grey              'rgb:cfd8dc'
+# declare-option str light_grey           'rgb:b8c6cb'
+# declare-option str pale_grey            'rgb:cfd8dc'
 # reds
 declare-option str dark_red               'rgb:a1462a'
 declare-option str soft_red               'rgb:fa8c69'
@@ -25,20 +26,22 @@ declare-option str strong_orange          'rgb:bf450c'
 declare-option str light_orange           'rgb:ffe5b4'
 # declare-option str pale_orange          'rgb:f7f3ee'  # see kakrc
 # greens
-# declare-option str desaturated_green    'rgb:78ab78'  # see kakrc
+declare-option str desaturated_green      'rgb:78ab78'  # see kakrc
 # declare-option str pale_green           'rgb:e1f1ea'  # see kakrc
 # blues
-declare-option str dark_cyan              'rgb:0087af'
 declare-option str dark_blue              'rgb:0069af'
+declare-option str dark_cyan              'rgb:0087af'
+# declare-option str desaturated_blue     'rgb:6b9494'  # see kakrc
 declare-option str desaturated_cyan       'rgb:78a0a2'
 declare-option str soft_cyan              'rgb:a3d5e4'
+# declare-option str pale_blue            'rgb:caeaef'  # see kakrc
 declare-option str vivid_cyan             'rgb:20fccf'
 
 # ................................................................ Color objects
 
 # declare-option str background           "%opt{white}"               # see kakrc
 declare-option str foreground             "%opt{black}"
-declare-option str linenr                 "%opt{pale_grey}"
+# declare-option str linenr               "%opt{pale_grey}"
 declare-option str margin                 "%opt{background}"
 # declare-option str menu                 "%opt{pale_green}"          # see kakr
 declare-option str pick                   "%opt{desaturated_cyan}"
