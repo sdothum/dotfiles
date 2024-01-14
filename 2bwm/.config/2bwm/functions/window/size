@@ -38,9 +38,9 @@ revert() {
 	xdotool windowmove $winid $X $Y
 }
 
-# .......................................................... Proportional layout
+# ........................................................... Proportional width
 
-calc_window() {
+ratio() {
 	numerator=$1
 	denominator=$2
 	# 2bwm screen geometry
@@ -50,9 +50,11 @@ calc_window() {
 	shift 4
 	width=$(( $(query display width) - $MARGIN * 2 ))
 	height=$(( $(query display height) - $PANEL_HEIGHT * 2 ))
-
+	# just a random window size calculation
 	X=$(echo "scale=2\n$width * $numerator / $denominator - $MARGIN" | bc | cut -d. -f1)
-	Y=$(echo "scale=2\n$height - $PANEL_HEIGHT * ($denominator / $numerator) * ($denominator / $numerator)" | bc | cut -d. -f1)
+	Z=$(echo "scale=2\n$PANEL_HEIGHT * ($denominator / $numerator)" | bc | cut -d. -f1)
+	Y=$(echo "scale=2\n$X * 4 / 3 - $Z" | bc | cut -d. -f1)
+	[ $(( $height - $Z )) -le $Y ] && Y=$(echo "scale=2\n$height - $Z * ($denominator / $numerator)" | bc | cut -d. -f1)
 	# wrs -a $X $Y $(pfw)  # BUG: inconsistent behaviour
 	winid=$(xdotool getwindowfocus -f)
 	draw $winid $X $Y
@@ -78,7 +80,7 @@ case $1 in
 	rev* ) revert ;;
 	rot* ) rotate ;;
 	mon* ) monocle ;;
-	*/*  ) calc_window ${1%/*} ${1#*/} ;;
+	*/*  ) ratio ${1%/*} ${1#*/} ;;
 	*x*  ) draw $winid ${1%x*} ${1#*x} ;;
 	*    ) draw $winid ${height:-$X} ${width:-$Y} ;;
 esac
