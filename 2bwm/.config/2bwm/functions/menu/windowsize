@@ -8,7 +8,7 @@
 # .................................................................. Window size
 
 # actions() { echo "Mod+0  revert\nMod+1  monocle\nMod+2  1/2\nMod+3  2/5\nMod+4  1/3\nMod+5  2/7\nMod+6  1/4\nMod+7  2/9\nMod+8  1/5\nMod+9  rotate"; }
-actions() { echo "Mod+0  revert\nMod+1  monocle\nMod+2  2/5\nMod+3  1/3\nMod+4  A4\nMod+5  B5\nMod+6  A5\nMod+7  B6R\nMod+8  A6R\nMod+9  rotate"; }
+actions() { echo "Mod+0  revert\nMod+1  rotate\nMod+2  monocle\nMod+3  2/5\nMod+4  1/3\nMod+5  A4\nMod+6  B5\nMod+7  A5R\nMod+8  B6R\nMod+9  A6R"; }
 
 [ $1 ] && cmd=$(actions | grep "$1 ") || cmd=$(actions | rmenu 'Window size' $cmd -no-custom) || exit
 
