@@ -35,7 +35,6 @@ case "$1" in
 	'{'  ) match=$1; ignore="{}" ;;  # align single line f() '{'
 	'||' ) match=$1 ;;
 	'&&' ) match=$1 ;;
-	';;' ) match=$1 ;;
 	'|'  ) match=$1 ;;
 	'&'  ) match=$1 ;;
 	'='  ) match=$1 ;;
@@ -45,16 +44,18 @@ case "$1" in
 	help ) usage ;;
 	*    ) match=" " ;;  # force drop through (below)
 esac
+[ "$1" = ';;' ] && match=semicolons  # case cannot match on statement terminator
 
 # insert split char and mark special chars
-case "$1" in
-	"$ignore" ) sed "/^[^${ignore}]*)/s/ *$match */$delim$gutter$match /" ;;
-	"#"       ) sed -r "s/^( *$match*.*[^ ]) *$match */\1$delim$gutter$match /$nth" ;;    # ignore leading #  comment
-	"//"      ) sed -r "s|^( *($match)*.*[^ ]) *$match *|\1$delim$gutter$match |$nth" ;;  # ignore leading // c
-	"--"      ) sed -r "s/^( *($match)*.*[^ ]) *$match */\1$delim$gutter$match /$nth" ;;  # ignore leading -- lua
-	"$match"  ) sed "s/ *$match */$delim$gutter$match /$nth" ;;
-	''        ) sed "s/  */$delim /$nth" ;;    # align by spaces
-	*         ) sed "s/$1/$delim $1/$nth" ;;   # align by string
+case "$match" in
+	[\)\{]     ) sed "/^[^${ignore}]*)/s/ *$match */$delim$gutter$match /" ;;
+	"#"        ) sed -r "s/^( *$match*.*[^ ]) *$match */\1$delim$gutter$match /$nth" ;;    # ignore leading #  comment
+	"//"       ) sed -r "s|^( *($match)*.*[^ ]) *$match *|\1$delim$gutter$match |$nth" ;;  # ignore leading // c
+	"--"       ) sed -r "s/^( *($match)*.*[^ ]) *$match */\1$delim$gutter$match /$nth" ;;  # ignore leading -- lua
+	semicolons ) sed "s/ *;; */$delim$gutter;; /$nth" ;;
+	"$match"   ) sed "s/ *$match */$delim$gutter$match /$nth" ;;
+	''         ) sed "s/  */$delim /$nth" ;;    # align by spaces
+	*          ) sed "s/$1/$delim $1/$nth" ;;   # align by string
 esac | sed -r ":a; s/^( *) /\1$space/; ta; s/\t/$tab/g; s/[$]/$dollar/g; s/\\\/$backslash/g" >$LINES         # leading hard char
 
 # max left part width
