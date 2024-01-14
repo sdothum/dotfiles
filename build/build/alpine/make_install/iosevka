@@ -215,7 +215,7 @@ e_ink() {
 	update $GLYPH $name
 }
 
-dfont()   { iosevka extended cap=extended G-hookless+ y-straight t-asymmetric+ 4-open+ q-hook Q-bar $(options $@) at-tall $cap; }
+dfont()   { iosevka extended cap=extended G-hookless+ y-straight t-asymmetric+ 1-base 4-open+ q-hook Q-bar $(options $@) at-tall $cap; }
 # wfont() { iosevka english  j-serifed G-hookless+ Q-bar $(options $@) asterisk-high; }  # override dyslexic "asterisk-low"
 wfont()   { iosevka english G-hookless+ l-serifless y-straight t-asymmetric+ 4-open+ Q-bar $(options $@) asterisk-high $emdash 4-open+; }
 efont()   { iosevka $language $(options $@); }
