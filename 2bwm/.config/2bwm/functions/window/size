@@ -24,10 +24,11 @@ save_geometry() { xdotool getwindowgeometry --shell $winid >$WINFO:$winid; }  # 
 
 draw() {
 	save_geometry
+	[ $4 ] && { X=$3; Y=$2; } || { X=$2; Y=$3; }
 	xdotool windowunmap $1               # defer visual refresh
-	xdotool windowsize --sync $1 $2 $3
+	xdotool windowsize --sync $1 $X $Y
 	xdotool windowmap --sync $1
-	[ $4 ] || xdotool key Super+Shift+g  # 2bwm vertical center
+	xdotool key Super+Shift+g  # 2bwm vertical center
 }
 
 # ................................................................ Revert layout
@@ -76,13 +77,30 @@ monocle() {
 	xdotool key --delay 100 Super+Shift+Ctrl+1  # see 2bwm config.h
 }
 
+# ................................................................... Paper size
+
+paper() {
+	[ ${1%R} = $1 ] || R=true
+	case $1 in
+		A3* ) draw $winid 1334 1890 $R ;;
+		B4* ) draw $winid 1123 1587 $R ;;
+		A4* ) draw $winid  945 1334 $R ;;
+		B5* ) draw $winid  794 1123 $R ;;
+		A5* ) draw $winid  665  945 $R ;;
+		B6* ) draw $winid  559  794 $R ;;
+		A6* ) draw $winid  472  665 $R ;;
+		B7* ) draw $winid  397  559 $R ;;
+	esac
+}
+
 case $1 in
-	rev* ) revert ;;
-	rot* ) rotate ;;
-	mon* ) monocle ;;
-	*/*  ) ratio ${1%/*} ${1#*/} ;;
-	*x*  ) draw $winid ${1%x*} ${1#*x} ;;
-	*    ) draw $winid ${height:-$X} ${width:-$Y} ;;
+	rev*  ) revert   ;;
+	rot*  ) rotate   ;;
+	mon*  ) monocle  ;;
+	[AB]* ) paper $1 ;;
+	*/*   ) ratio ${1%/*} ${1#*/} ;;
+	*x*   ) draw $winid ${1%x*} ${1#*x} ;;
+	*     ) draw $winid ${height:-$X} ${width:-$Y} ;;
 esac
 
 
