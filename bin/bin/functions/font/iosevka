@@ -70,6 +70,7 @@ usage() {
 > y-straight
 
 > 0-split
+> 1-base
 > 4-open[+]
 > asterisk-high
 > at-tall
@@ -193,6 +194,7 @@ variant() {
 	for o in $@ ;do  # "o"nly non-variant character ($i in use for variant :) ..since rectified with long variant names
 		case $o in
 			0-split        ) glyph zero=reverse-slashed-split ;;
+			1-base         ) glyph one=base ;;
 			4-open+        ) glyph four=semi-open-non-crossing ;;
 			4-open         ) glyph four=semi-open ;;
 			ampersand      ) glyph ampersand=closed ;;
@@ -428,6 +430,7 @@ cmdopts () {
 			y-straight     ) variant $1 ;;
 
 			0-split        ) variant $1 ;;
+			1-base         ) variant $1 ;;
 			4-open         ) variant $1 ;;
 			4-open+        ) variant $1 ;;
 			paren-flat     ) variant $1 ;;
