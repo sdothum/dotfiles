@@ -6,7 +6,7 @@
 
 # ....................................................................... Editor
 
-# Usage: [name=<title>] kak [-l] [ID=<id>] [WAIT] [<row>x<col>] <file>*
+# Usage: [name=<title>] kak [-l] [-- | ID=<id>] [WAIT] [<row>x<col>] <file>*
 
 # share all instances (clients) with a single kak server session
 ID=$USER  # default session id
@@ -21,6 +21,7 @@ export TABSTOP=3  # default for (pipe), see align
 while : ;do
 	case $1 in
 		-l            ) $KAK -l; exit ;;  # list session ids
+		--            ) ID=$(rand) ;;
 		ID=*          ) ID="${1#*=}" ;;
 		WAIT          ) WAIT=$1 ;;
 		*[0-9]x[0-9]* ) XY=$1 ;;
