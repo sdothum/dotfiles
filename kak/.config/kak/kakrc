@@ -65,9 +65,9 @@ hook global ModeChange (push|pop):insert:.* %{ add-highlighter -override window/
 # ................................................................... Statusline
 
 # a minimalist statusline of "mode - column [utf-8] - filename [context]"
-declare-option str spacer '✦'
+declare-option str spacer ''
 # display utf-8 value for non-latin characters
-set-option global modelinefmt '{{mode_info}} %opt{spacer} %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname} {{context_info}} [%opt{filetype}]'
+set-option global modelinefmt '{{mode_info}} %opt{spacer} %val{cursor_line} %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname} [%val{buf_line_count}] {{context_info}} [%opt{filetype}]'
 
 # ........................................................................... UX
 
@@ -96,7 +96,7 @@ define-command softwrap %{ add-highlighter -override global/ wrap -word -indent 
 
 # softwrap long lines
 hook global WinSetOption filetype=markdown %{ add-highlighter -override global/ wrap -word -indent -marker "  ↪ " -width 80 }
-hook global WinSetOption filetype=(sh|c|cpp|go|javascript|latex|perl|python|ruby|rust|toml|typescript) softwrap
+hook global WinSetOption filetype=(sh|c|cpp|go|javascript|latex|lua|perl|python|ruby|rust|toml|typescript) softwrap
 hook global BufOpenFile  .*(conf|config|log|rc|text|txt) softwrap
 
 add-highlighter global/ show-matching
@@ -145,6 +145,8 @@ map global normal '#' ': enter-user-mode format<ret>'
 require-module fandt
 
 map global normal G 'ge' -docstring 'goto buffer end'
+map global normal ^ 'gh' -docstring 'goto line begin'
+map global normal $ 'gl' -docstring 'goto line end'
 
 # .................................................................... Selection
 
@@ -281,7 +283,7 @@ set-option global lsp_diagnostic_line_info_sign "%opt{linemark}"
 set-option global lsp_diagnostic_line_warning_sign "%opt{linemark}"
 set-option global lsp_inlay_diagnostic_sign ''   # diagnostic fence meter (visual ticks replace ■'s)
 
-hook global WinSetOption filetype=(bash|c|cpp|go|javascript|latex|markdown|perl|python|ruby|rust|toml|typescript) %{
+hook global WinSetOption filetype=(sh|c|cpp|go|javascript|latex|lua|markdown|perl|python|ruby|rust|toml|typescript) %{
 	lsp-enable-window
 	lsp-auto-hover-enable
 	lsp-inlay-diagnostics-enable global
