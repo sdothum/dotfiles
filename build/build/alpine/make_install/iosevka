@@ -237,8 +237,7 @@ elif [ "$mu" ] ;then
 elif [ -z $ecopy ] ;then
 	cmdopts quasi-ext space=1.125 Q-straight open+
  	emdash
-	# e_ink lathe grote   I-descending t-asymmetric- serifless a-single
-	e_ink lythe grote   I-descending t-asymmetric- serifless
+	e_ink licht grote  I-serifless t-asymmetric-- j-flat serifless
 
 elif [ "$quad" ] ;then
 	cmdopts quasi-ext space=1.125 Q-straight open+
@@ -249,13 +248,14 @@ elif [ "$quad" ] ;then
 	e_ink lythe grote   I-descending t-asymmetric-
 
 elif [ "$serifless" ] ;then
-	cmdopts quasi-ext space=1.125 Q-straight open+
+	cmdopts quasi-ext space=1.125 Q-straight open+ j-flat
  	emdash
-	e_ink stria altmono I-serifless                serifless
-	e_ink grote grote   I-descending               serifless
-	e_ink patio grote   a-single t-cross           serifless
-	e_ink lythe grote   I-descending t-asymmetric- serifless
-	e_ink lathe grote   I-descending t-asymmetric- serifless a-single
+	e_ink stria altmono I-serifless                 serifless
+	e_ink grote grote   I-descending                serifless
+	e_ink patio grote   a-single t-cross            serifless
+	e_ink lythe grote   I-descending t-asymmetric-  serifless
+	e_ink lathe grote   I-descending t-asymmetric-  serifless a-single
+	e_ink licht grote   I-serifless  t-asymmetric-- serifless
 
 elif [ "$trio" ] ;then
 	cmdopts quasi-ext space=1.15 G-hookless+ Q-straight open+
@@ -279,7 +279,7 @@ elif [ $coding ] ;then                    # classic coding font
 	dfont $leading G-toothed a-double family=monodyslexic
 
 else                                      # desktop fonts
-	cmdopts t-asymmetric--
+	cmdopts t-asymmetric-- j-flat
 	dfont $leading
 	dfont proof    I-descending Q-straight
 	dfont menu     I-descending Q-straight
