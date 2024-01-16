@@ -187,7 +187,7 @@ abbr perli 'perl -de 1'
 abbr hdel 'history delete'
 abbr hi 'hist'
 abbr hv "vi $HOME/.local/share/fish/fish_history"
-abbr su "sudo -i su"
+abbr su "sudo su -c fish"  # su otherwise just invokes sh
 
 # .................................................................. Application
 

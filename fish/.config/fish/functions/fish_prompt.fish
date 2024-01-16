@@ -50,7 +50,7 @@ function fish_prompt --description 'Write out the prompt'
 			set_color $_warning
 			# ⚡ takes up 2 byte positions ??
 			# echo -n $BLINK(glyph '⚡' 'z')$NOBLINK
-			echo -n $BLINK(glyph '❱' 'z')$NOBLINK
+			echo -n $BLINK(glyph '' 'z')$NOBLINK
 		else
 			space
 		end
