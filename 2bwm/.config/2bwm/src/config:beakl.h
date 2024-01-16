@@ -35,7 +35,9 @@ static const bool inverted_colors = true;
  *1) Full borderwidth    2) Magnet border size
  *3) Resize border size  */
 // static const uint8_t borders[] = {3,5,5,4};
-static const uint8_t borders[] = {1,9,9,8};
+// static const uint8_t borders[] = {1,9,9,8};
+// static const uint8_t borders[] = {1,10,10,9};
+static const uint8_t borders[] = {1,11,11,10};
 // static const uint8_t borders[] = {0,0,0,0};
 /* Windows that won't have a border.
  * It uses substring comparison with what is found in the WM_NAME

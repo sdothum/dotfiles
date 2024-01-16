@@ -24,9 +24,9 @@ save_geometry() { xdotool getwindowgeometry --shell $winid >$WINFO:$winid; }  # 
 
 draw() {
 	save_geometry
-	[ $4 ] && { X=$3; Y=$2; } || { X=$2; Y=$3; }
-	xdotool windowunmap $1               # defer visual refresh
-	xdotool windowsize --sync $1 $X $Y
+	[ $4 ] && { W=$3; H=$2; } || { W=$2; H=$3; }
+	xdotool windowunmap $1     # defer visual refresh
+	xdotool windowsize --sync $1 $W $H
 	xdotool windowmap --sync $1
 	xdotool key Super+Shift+g  # 2bwm vertical center
 }
@@ -35,7 +35,7 @@ draw() {
 
 revert() {
 	[ -e $WINFO:$winid ] && eval $(cat $WINFO:$winid) || exit
-	draw $winid $WIDTH $HEIGHT revert
+	draw $winid $WIDTH $HEIGHT
 	xdotool windowmove $winid $X $Y
 }
 
@@ -65,8 +65,8 @@ ratio() {
 
 rotate() {
 	winid=$(xdotool getwindowfocus -f)
-	XY=$(xdotool getwindowgeometry $winid | grep -i 'geometry' | cut -d: -f2)
-	draw $winid ${XY#*x} ${XY%x*}
+	eval $(xdotool getwindowgeometry --shell $winid)
+	draw $winid $HEIGHT $WIDTH
 }
 
 # ...................................................................... Monocle
@@ -80,16 +80,15 @@ monocle() {
 # ................................................................... Paper size
 
 paper() {
-	[ ${1%R} = $1 ] || R=true
 	case $1 in
-		A3* ) draw $winid 1334 1890 $R ;;
-		B4* ) draw $winid 1123 1587 $R ;;
-		A4* ) draw $winid  945 1334 $R ;;
-		B5* ) draw $winid  794 1123 $R ;;
-		A5* ) draw $winid  665  945 $R ;;
-		B6* ) draw $winid  559  794 $R ;;
-		A6* ) draw $winid  472  665 $R ;;
-		B7* ) draw $winid  397  559 $R ;;
+		A3* ) draw $winid 1334 1890 $2 ;;
+		B4* ) draw $winid 1123 1587 $2 ;;
+		A4* ) draw $winid  945 1334 $2 ;;
+		B5* ) draw $winid  794 1123 $2 ;;
+		A5* ) draw $winid  665  945 $2 ;;
+		B6* ) draw $winid  559  794 $2 ;;
+		A6* ) draw $winid  472  665 $2 ;;
+		B7* ) draw $winid  397  559 $2 ;;
 	esac
 }
 
@@ -97,10 +96,10 @@ case $1 in
 	rev*  ) revert   ;;
 	rot*  ) rotate   ;;
 	mon*  ) monocle  ;;
-	[AB]* ) paper $1 ;;
+	[AB]* ) paper $1 $2 ;;
 	*/*   ) ratio ${1%/*} ${1#*/} ;;
 	*x*   ) draw $winid ${1%x*} ${1#*x} ;;
-	*     ) draw $winid ${height:-$X} ${width:-$Y} ;;
+	*     ) draw $winid ${width:-$X} ${height:-$Y} ;;
 esac
 
 
