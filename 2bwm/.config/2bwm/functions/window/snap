@@ -7,7 +7,7 @@
 
 # ................................................................. Snap windows
 
-# Usage: draw snap left | right | edge | level**
+# Usage: draw snap left | center | right | edge | level**
 #        **For all windows on desktop
 
 # 2bwm window geometry
@@ -16,12 +16,11 @@ height=$(query display height)
 margin=$(query screen margin)
 border=$(window border)
 
-winid=$(xdotool getwindowfocus -f)
+winid=$(xdotool getactivewindow)
 eval $(xdotool getwindowgeometry --shell $winid)  # HEIGHT WIDTH (doesn't include borders)
 
 # .................................................................... Snap left
 
-# xdotool getwindowfocus -f >/dev/null
 # xdotool key --delay 25 Super+p        # snap corner
 # xdotool key --delay 25 Super+Shift+g  # vertical center
 
@@ -32,7 +31,6 @@ snapleft() {
 
 # ................................................................... Snap right
 
-# xdotool getwindowfocus -f >/dev/null
 # xdotool key --delay 25 Super+l        # snap corner
 # xdotool key --delay 25 Super+Shift+g  # vertical center
 
@@ -65,10 +63,11 @@ snaplevel() {
 }
 
 case $1 in
-	right ) snapright ;;
-	left  ) snapleft ;;
-	edge  ) snapedge ;;
-	level ) snaplevel ;;
+	right  ) snapright ;;
+	center ) xdotool key Super+g ;;
+	left   ) snapleft ;;
+	edge   ) snapedge ;;
+	level  ) snaplevel ;;
 esac
 
 # vim: set ft=sh: #

@@ -7,18 +7,20 @@
 
 # .............................................................. Set window size
 
-# Usage: window size <height>x<width> | monocle | rotate | <numerator>/<denominator> (fraction :)
+# Usage: window size [-<delay>] <height>x<width> | monocle | rotate | <numerator>/<denominator> (of screen width)
 
 X=1024
 Y=800
 T=2
+ASPECT=4:3  # ratio
 
 TWOBWM_CONFIG=$HOME/.config/2bwm/src/config.h
 WINFO=$TWOBWM:window
 
-winid=$(xdotool getwindowfocus -f)
-
 save_geometry() { xdotool getwindowgeometry --shell $winid >$WINFO:$winid; }  # for revert
+winid()         { xdotool getactivewindow; }
+
+winid=$(winid)
 
 # ..................................................................... X Y size
 
@@ -39,9 +41,9 @@ revert() {
 	xdotool windowmove $winid $X $Y
 }
 
-# ........................................................... Proportional width
+# ................................................................. Aspect ratio
 
-ratio() {
+aspect() {
 	numerator=$1
 	denominator=$2
 	# 2bwm screen geometry
@@ -53,18 +55,18 @@ ratio() {
 	height=$(( $(query display height) - $PANEL_HEIGHT * 2 ))
 	# just a random window size calculation
 	X=$(echo "scale=2\n$width * $numerator / $denominator - $MARGIN" | bc | cut -d. -f1)
-	Z=$(echo "scale=2\n$PANEL_HEIGHT * ($denominator / $numerator)" | bc | cut -d. -f1)
-	Y=$(echo "scale=2\n$X * 4 / 3 - $Z" | bc | cut -d. -f1)
-	[ $(( $height - $Z )) -le $Y ] && Y=$(echo "scale=2\n$height - $Z * ($denominator / $numerator)" | bc | cut -d. -f1)
-	# wrs -a $X $Y $(pfw)  # BUG: inconsistent behaviour
-	winid=$(xdotool getwindowfocus -f)
+	# Z=$(echo "scale=2\n$PANEL_HEIGHT * ($denominator / $numerator)" | bc | cut -d. -f1)
+	# Y=$(echo "scale=2\n$X * 4 / 3 - $Z" | bc | cut -d. -f1)
+	# [ $(( $height - $Z )) -le $Y ] && Y=$(echo "scale=2\n$height - $Z * ($denominator / $numerator)" | bc | cut -d. -f1)
+	Y=$(echo "scale=2\n$X * ${ASPECT#*:} / ${ASPECT%:*}" | bc | cut -d. -f1)
+	winid=$(winid)
 	draw $winid $X $Y
 }
 
 # ................................................................ Rotate window
 
 rotate() {
-	winid=$(xdotool getwindowfocus -f)
+	winid=$(winid)
 	eval $(xdotool getwindowgeometry --shell $winid)
 	draw $winid $HEIGHT $WIDTH
 }
@@ -90,14 +92,18 @@ paper() {
 		A6* ) draw $winid  472  665 $2 ;;
 		B7* ) draw $winid  397  559 $2 ;;
 	esac
+	[ $2 ] && window snap center
 }
+
+# do we need to gain correct focus?
+[ "${1%%-*}" ] || { sleep ${1#-}; winid=$(winid); shift; }
 
 case $1 in
 	rev*  ) revert   ;;
 	rot*  ) rotate   ;;
 	mon*  ) monocle  ;;
 	[AB]* ) paper $1 $2 ;;
-	*/*   ) ratio ${1%/*} ${1#*/} ;;
+	*/*   ) aspect ${1%/*} ${1#*/} ;;
 	*x*   ) draw $winid ${1%x*} ${1#*x} ;;
 	*     ) draw $winid ${width:-$X} ${height:-$Y} ;;
 esac
