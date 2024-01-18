@@ -21,7 +21,7 @@ static const uint8_t offsets[] = {40,30,80,60};
  *4)fixedunkilcol    5)outerbordercol
  *6)emptycol         */
 // static const char *colors[] = {"#35586c","#333333","#7a8c5c","#ff6666","#cc9933","#0d131a","#000000"};
-static const char *colors[] = {"#ff0000","#546e7a","#008b8b","#fa8c69","#a1462a","#000000","#000000"};
+static const char *colors[] = {"#ff0000","#546e7a","#008b8b","#fa8c69","#a1462a","#505050","#000000"};
 /* if this is set to true the inner border and outer borders colors will be swapped */
 static const bool inverted_colors = true;
 ///---Cursor---///
@@ -38,6 +38,7 @@ static const bool inverted_colors = true;
 // static const uint8_t borders[] = {1,9,9,8};
 // static const uint8_t borders[] = {1,10,10,9};
 static const uint8_t borders[] = {1,11,11,10};
+// static const uint8_t borders[] = {2,12,12,11};
 // static const uint8_t borders[] = {0,0,0,0};
 /* Windows that won't have a border.
  * It uses substring comparison with what is found in the WM_NAME
@@ -68,6 +69,8 @@ static const char *south[]        = {"south"       , NULL};
 static const char *snapedge[]     = {"snapedge"    , NULL};
 static const char *snapleft[]     = {"snapleft"    , NULL};
 static const char *snapright[]    = {"snapright"   , NULL};
+static const char *snaptop[]      = {"snaptop"     , NULL};
+static const char *snapbottom[]   = {"snapbottom"  , NULL};
 static const char *snaplevel[]    = {"snaplevel"   , NULL};
 static const char *windowsize[]   = {"windowsize"  , NULL};  // menu windowsize
 static const char *windowsize0[]  = {"windowsize0" , NULL};  // keybind shortcut
@@ -317,10 +320,12 @@ static key keys[] = {
 	{  CONTROL ,              XK_space,      start,               {.com = notifypush}},
 	{  CONTROL |SHIFT,        XK_space,      start,               {.com = notifyclr}},
 	{  CONTROL ,              XK_BackSpace,  start,               {.com = notifypop}},
+	{  MOD ,                  XK_a,          start,               {.com = wallclock}},
+	{  MOD |CONTROL,          XK_a,          start,               {.com = unclock}},
 	{  MOD ,                  XK_b,          start,               {.com = browser}},
 	{  MOD |CONTROL,          XK_b,          start,               {.com = browserclr}},
-	{  MOD ,                  XK_c,          start,               {.com = wallclock}},
-	{  MOD |CONTROL,          XK_c,          start,               {.com = unclock}},
+	{  MOD ,                  XK_c,          start,               {.com = snaptop}},
+	{  MOD |SHIFT,            XK_c,          start,               {.com = snapbottom}},
 	{  MOD |SHIFT,            XK_d,          start,               {.com = wallpaper}},
 	{  MOD |CONTROL,          XK_d,          start,               {.com = background}},
 	{  MOD |SHIFT,            XK_h,          start,               {.com = snaplevel}},

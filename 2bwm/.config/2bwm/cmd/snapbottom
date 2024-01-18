@@ -1,0 +1,12 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="snapbottom $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Snap bottom
+
+window snap bottom
+
+# vim: set ft=sh: #
