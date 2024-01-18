@@ -8,7 +8,7 @@
 
 # ............................................................... Window manager
 
-usage() { usage: "$(basename $0) 'start [-<delay>] | 2bwm | awesome | berry | bspwm | budgie | cinnamon | dwm | gnome | goomwwm | guile | herbstluftwm | i3 | kde | lxde | lxqt | notion | openbox | ratpoison | razor-qt | spectrwm | stumpwm | subtle | shell | windowchef | wmii | wmutils | worm | wtftw | xfce4 | xmonad"; rm -f $BOOTWM; exit 1; }
+usage() { usage: "$(basename $0) 'start [@<delay>] | 2bwm | awesome | berry | bspwm | budgie | cinnamon | dwm | gnome | goomwwm | guile | herbstluftwm | i3 | kde | lxde | lxqt | notion | openbox | ratpoison | razor-qt | spectrwm | stumpwm | subtle | shell | windowchef | wmii | wmutils | worm | wtftw | xfce4 | xmonad"; rm -f $BOOTWM; exit 1; }
 
 BOOTWM=$SESSION/boot:wm  # see console_login, user_login
 WM=$HOME/.windowmanager
@@ -19,7 +19,7 @@ font=pagga
 font=future
 font=emboss
 
-[ "${1#-}" != "${1}" ] && { sleep ${1#-}; shift; }  # see user_login for delayed launch
+[ "${1%%@*}" ] || { sleep ${1#@}; shift; }  # see user_login for delayed launch
 
 # see .xinitrc
 case $1 in

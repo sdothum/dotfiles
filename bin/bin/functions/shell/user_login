@@ -19,7 +19,7 @@ if console ;then
 	echo
 	# delayed startup of default wm for remote computers
 	if [ -s $BOOTWM ] ;then   # see console_login
-		exec x -$(cat $BOOTWM)  # will not spawn otherwise (alpine requires delay in x)
+		exec x @$(cat $BOOTWM)  # will not spawn otherwise (alpine requires delay in x)
 	fi
 elif [ -e $FORTUNE:term ] ;then
 	if [ ! -e $FORTUNE ] ;then
