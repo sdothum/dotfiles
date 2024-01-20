@@ -86,7 +86,7 @@ case $1 in
 		rm -f $SHUFFLE
 		select_wallpaper
 		echo wallpaper >$SETROOT
-		notify 15 'Panel Contrast' '<b>Mod-Ctrl-Shift-D</b> to invert contrast';;
+		invert notify ;;  # keybind message
 	
 	shuffle   )
 		touch $SHUFFLE

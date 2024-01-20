@@ -7,6 +7,8 @@
 
 # ........................................................ Toggle panel contrast
 
-toggle contrast
+# Usage: invert [notify]
+
+[ $1 ] && notify 15 'Invert Panel Contrast' 'Press <b>Mod-Ctrl-V</b>' || toggle contrast
 
 # vim: set ft=sh: #

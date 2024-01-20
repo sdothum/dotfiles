@@ -13,6 +13,7 @@ export MENU=${MENU:-$(dirname $0)/functions/menu}
 export HISTORY=$MENU/.history
 export SEP='∙'             # list separator
 export LEADER='○∘⋯  '
+DELAY=0.25                 # tuned time to center quick app launches (notably kak sessions)
 
 X() { echo "$LEADER$@"; }  # pick list action
 
@@ -41,7 +42,10 @@ previous() { echo | mhistory $1 | head -1; }  # most recent (app) history
 msg=${1:-run}
 [ $1 ] && shift
 if [ -e ${0%/menu}/functions/menu/$msg ] ;then
+	WINID=$(xdotool getactivewindow)
 	. ${0%/menu}/functions/menu/$msg $@
+	sleep 0.25  # wait for instances like kak
+	[ $WINID != $(xdotool getactivewindow) ] && window snap center
 else
 	usage: $0
 fi
