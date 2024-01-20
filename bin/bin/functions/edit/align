@@ -6,7 +6,7 @@
 
 # ........................................................... modal pipe actions
 
-usage() { echo "<selection> | $(basename $0) [<nth>] [')' | '{' | '|' | '&' | '=' | '#' | '//' | '--' | '||' | '&&' | ';;' | <string>]
+usage() { echo "<selection> | $(basename $0) [<nth>] [')' | '{' | '|' | '&' | '=' | '#' | '\' | '//' | '--' | '||' | '&&' | ';;' | <string>]
 >   where, 'pattern' -> ' pattern '
 >          '#'       -> '  # ' (appended comment)
 >          ''        -> ' '    (nth <space>* column)
@@ -38,6 +38,7 @@ case "$1" in
 	'|'  ) match=$1 ;;
 	'&'  ) match=$1 ;;
 	'='  ) match=$1 ;;
+	'\'  ) match='\\' ;;
 	'#'  ) match=$1; gutter='  ' ;;
 	'//' ) match=$1; gutter='  ' ;;
 	'--' ) match=$1; gutter='  ' ;;
@@ -49,9 +50,10 @@ esac
 # insert split char and mark special chars
 case "$match" in
 	[\)\{]     ) sed "/^[^${ignore}]*)/s/ *$match */$delim$gutter$match /" ;;
-	"#"        ) sed -r "s/^( *$match*.*[^ ]) *$match */\1$delim$gutter$match /$nth" ;;    # ignore leading #  comment
-	"//"       ) sed -r "s|^( *($match)*.*[^ ]) *$match *|\1$delim$gutter$match |$nth" ;;  # ignore leading // c
-	"--"       ) sed -r "s/^( *($match)*.*[^ ]) *$match */\1$delim$gutter$match /$nth" ;;  # ignore leading -- lua
+	'#'        ) sed -r "s/^( *$match*.*[^ ]) *$match */\1$delim$gutter$match /$nth" ;;    # ignore leading #  comment
+	'\\'       ) sed -r "s/^(.*[^ ]) *$match */\1$delim$gutter$match /$nth" ;;             # ignore any preceding backslashes
+	'//'       ) sed -r "s|^( *($match)*.*[^ ]) *$match *|\1$delim$gutter$match |$nth" ;;  # ignore leading // c
+	'--'       ) sed -r "s/^( *($match)*.*[^ ]) *$match */\1$delim$gutter$match /$nth" ;;  # ignore leading -- lua
 	semicolons ) sed "s/ *;; */$delim$gutter;; /$nth" ;;
 	"$match"   ) sed "s/ *$match */$delim$gutter$match /$nth" ;;
 	''         ) sed "s/  */$delim /$nth" ;;    # align by spaces

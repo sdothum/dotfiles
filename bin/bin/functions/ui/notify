@@ -8,7 +8,7 @@
 
 # ..................................................................... Notifier
 
-usage() { usage: "$(basename $0) [time=<seconds> | <seconds> | console | X | low|warning | normal | critical | blackboard]* [<color>] \"<summary>\" [[<color>] \"<body>\"]"; exit 1; }
+usage() { usage: "$(basename $0) [time=<seconds> | [:]<seconds> | console | X | low|warning | normal | critical | blackboard]* [<color>] \"<summary>\" [[<color>] \"<body>\"]"; exit 1; }
 
 SESSION=${SESSION:-$HOME/.session}
 LOG=/tmp/notify.log
@@ -22,6 +22,7 @@ while : ;do
 	case $1 in
 		# long form required for handling numeric summary field
 		time=* ) expire="--expire-time=$(( ${1#time=} * 1000 ))" ;;
+		:*     ) expire="--expire-time=$(( ${1#:} * 1000 ))" ;;
 		cons*  ) console=true ;;
 		X      ) X=true ;;
 		low    |\
@@ -29,7 +30,7 @@ while : ;do
 		crit*  ) urgency="-u $1"  ;;
 		warn*  ) urgency="-u low" ;;
 		blac*  ) urgency="-h string:bgcolor:#000000" ;;
-		[0-9]* ) echo "$1" | grep -q '[^0-9]' && break || expire="--expire-time=$(( $1 * 1000 ))" ;;
+		[0-9]* ) [ $expire ] || echo "$1" | grep -q '[^0-9]' && break || expire="--expire-time=$(( $1 * 1000 ))" ;;
 		*      ) break ;;
 	esac
 	shift

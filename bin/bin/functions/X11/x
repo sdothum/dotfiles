@@ -19,7 +19,7 @@ font=pagga
 font=future
 font=emboss
 
-[ "${1%%@*}" ] || { sleep ${1#@}; shift; }  # see user_login for delayed launch
+[ "${1#@}" != "$1" ] && { sleep ${1#@}; shift; }  # see user_login for delayed launch
 
 # see .xinitrc
 case $1 in
