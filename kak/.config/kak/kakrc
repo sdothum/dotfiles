@@ -137,6 +137,7 @@ map global format = 'x|align =<ret>'          -docstring 'align  = statement'
 map global format { 'x|align \{<ret>'         -docstring 'align  { block'
 map global format ) 'x|align \)<ret>'         -docstring 'align  ) case'
 map global format ';' 'x|align \;\;<ret>'     -docstring 'align ;; endcase'
+map global format '\' 'x|align \\<ret>'       -docstring 'align  \ continuation'
 map global normal '#' ': enter-user-mode format<ret>'
 
 # ....................................................................... Motion
