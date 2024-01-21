@@ -65,9 +65,9 @@ hook global ModeChange (push|pop):insert:.* %{ add-highlighter -override window/
 # ................................................................... Statusline
 
 # a minimalist statusline of "mode - column [utf-8] - filename [context]"
-declare-option str spacer ''
+declare-option str spacer ' '
 # display utf-8 value for non-latin characters
-set-option global modelinefmt '{{mode_info}} %opt{spacer} %val{cursor_line} %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname} [%val{buf_line_count}] {{context_info}} [%opt{filetype}]'
+set-option global modelinefmt '{{mode_info}} %opt{spacer} \{%val{buf_line_count}} %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname}{{context_info}} [%sh{[ -z "$kak_opt_filetype" ] && echo "undef" || echo "$kak_opt_filetype"}] %opt{spacer} %val{session}(%sh{echo "$kak_client" | sed -r "s/[^0-9]*(.*)/\1/"})'
 
 # ........................................................................... UX
 
