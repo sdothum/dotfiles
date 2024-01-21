@@ -7,7 +7,7 @@
 # ...................................................................... Connect
 
 # import user path
-. $(which user_path)
+. $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
 
 connect && exit
 

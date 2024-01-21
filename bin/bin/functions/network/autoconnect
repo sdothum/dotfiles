@@ -8,7 +8,7 @@
 
 usage() { usage: "$(basename $0) [quiet] [service]"; exit 1; }
 
-. $(which exec_lock)
+. $HOME/bin/functions/shell/exec_lock
 
 # for really poor wifi connections
 SERVICE=$HOME/.session/service
@@ -16,7 +16,7 @@ dns=8.8.8.8
 delay=5
 
 # import user path
-. $(which user_path)
+. $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
 
 while [ $1 ] ;do
 	case $1 in

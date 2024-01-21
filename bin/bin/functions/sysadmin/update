@@ -10,10 +10,10 @@ usage() { usage: "$(basename $0) [--list-only] [<option>] alpine | arm | backup 
 
 EXCLUDE=$(dirname $0)/.rsync_exclude
 PLEX=/opt/plexmediaserver/Library/Application\ Support
-ALPINE=motu  # test alpine host
+ALPINE=motu                            # test alpine host
 
 # import user path
-. $(which user_path)  # bash shell required for cron colors
+. $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
 
 laptop=lumen
 netbook=monad
