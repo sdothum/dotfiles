@@ -10,7 +10,7 @@
 export TMPDIR=~/drafts  # override /tmp (because dir is not persistent in alpine)
 AERC=/usr/bin/aerc
 group=sdothum
-delay=1.05  # long enough to not trigger 2bwm actions while launching via modkey (down) bindings
+delay=1.15  # long enough to not trigger 2bwm actions while launching via modkey (down) bindings
 
 # push out any flag and trash changes when finished
 trap "mailsync $group" EXIT

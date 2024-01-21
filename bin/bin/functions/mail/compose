@@ -6,13 +6,17 @@
 
 # ................................................................. Compose mail
 
+delay=0.25
+
 # focus management between aerc and compose windows
-trap "xdotool search --onlyvisible --classname mail windowactivate" EXIT
+trap "xdotool search --onlyvisible --classname mail windowactivate; window size monocle" EXIT
 
 # provide aerc an compose mode with custom linespacing 
 # toggle focus defer   # share aerc frame
 export MONOFONT="Iosevka-proof"
-(sleep 0.25; xdotool search --onlyvisible --classname mail windowraise) &  # must enter to: and subject: FIRST
+(keyboard off; window size @$ A4; window snap left; xdotool search --onlyvisible --classname mail windowraise; keyboard on) &
+
+notify 60 Compose "Must enter <b>To:</b> and <b>Subject:</b> *FIRST*"
 name=compose offsetY=1 kak ID=draft WAIT $@
 
 # vim: set ft=sh: #
