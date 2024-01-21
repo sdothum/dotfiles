@@ -25,7 +25,7 @@ fi
 
 if [ -e $PICOM ] ;then
 	if ! pstat picom ;then
-		picom --daemon >/tmp/picom.log 2>&1 &
+		picom --daemon --config $HOME/.config/picom/picom.conf >/tmp/picom.log 2>&1 &
 		# xscreensaver -no-splash &
 	fi
 elif pstat picom ;then
