@@ -45,65 +45,65 @@ static const uint8_t borders[] = {1,11,11,10};
 #define LOOK_INTO "WM_NAME"
 static const char *ignore_names[] = {"bar", "xclock"};
 ///--Menus and Programs---///
-static const char *build2bwm[]    = {"build2bwm"   , NULL};
-static const char *kill2bwm[]     = {"kill2bwm"    , NULL};
-// desktop
-static const char *background[]   = {"background"  , NULL};  // root background
-static const char *wallpaper[]    = {"wallpaper"   , NULL};  // root wallpaper
-static const char *panel[]        = {"panel"       , NULL};  // panel toggle
-static const char *invert[]       = {"invert"      , NULL};  // panel contrast
-static const char *notifypush[]   = {"notifypush"  , NULL};  // dunstctl clear
-static const char *notifyclr[]    = {"notifyclr"   , NULL};  // dunstctl clear all
-static const char *notifypop[]    = {"notifypop"   , NULL};  // dunstctl history
-static const char *wallclock[]    = {"wallclock"   , NULL};  // conky clock
-static const char *unclock[]      = {"unclock"     , NULL};  // conky clock toggle
-// window
-static const char *hidewindow[]   = {"hidewindow"  , NULL};  // adds focusnext
-static const char *unhide[]       = {"unhide"      , NULL};  // menu unhide
-static const char *east[]         = {"east"        , NULL};  // wmutils focus direction
-static const char *west[]         = {"west"        , NULL};
-static const char *north[]        = {"north"       , NULL};
-static const char *south[]        = {"south"       , NULL};
-static const char *snapedge[]     = {"snapedge"    , NULL};
-static const char *snapleft[]     = {"snapleft"    , NULL};
-static const char *snapright[]    = {"snapright"   , NULL};
-static const char *snaptop[]      = {"snaptop"     , NULL};
-static const char *snapbottom[]   = {"snapbottom"  , NULL};
-static const char *snaplevel[]    = {"snaplevel"   , NULL};
-static const char *windowsize[]   = {"windowsize"  , NULL};  // menu windowsize
-static const char *windowsize0[]  = {"windowsize0" , NULL};  // keybind shortcut
-static const char *windowsize1[]  = {"windowsize1" , NULL};
-static const char *windowsize2[]  = {"windowsize2" , NULL};
-static const char *windowsize3[]  = {"windowsize3" , NULL};
-static const char *windowsize4[]  = {"windowsize4" , NULL};
-static const char *windowsize5[]  = {"windowsize5" , NULL};
-static const char *windowsize6[]  = {"windowsize6" , NULL};
-static const char *windowsize7[]  = {"windowsize7" , NULL};
-static const char *windowsize8[]  = {"windowsize8" , NULL};
-static const char *windowsize9[]  = {"windowsize9" , NULL};
-// term
-static const char *terminal[]     = {"term"        , NULL};
-static const char *scratchy[]     = {"scratchy"    , NULL};
-static const char *itchy[]        = {"itchy"       , NULL};
-// menu
-static const char *menucmd[]      = {"menu"        , NULL};  // NOTE: cannot pass parameters to commands
-static const char *address[]      = {"address"     , NULL};  // book
-static const char *inspector[]    = {"inspector"   , NULL};  // menu system
-static const char *media[]        = {"media"       , NULL};  // menu media
-static const char *notes[]        = {"notes"       , NULL};  // menu notes
-static const char *passwords[]    = {"passwords"   , NULL};  // menu pass
-static const char *projects[]     = {"projects"    , NULL};  // menu projects
-static const char *scripts[]      = {"scripts"     , NULL};  // menu scripts
-static const char *wikis[]        = {"wikis"       , NULL};  // menu wikis
-static const char *quit[]         = {"quit"        , NULL};  // menu halt
-// app
-static const char *browser[]      = {"qutebrowser" , NULL};
-static const char *browserclr[]   = {"browserclr"  , NULL};
-static const char *mail[]         = {"mail"        , NULL};
-static const char *filecli[]      = {"filecli"     , NULL};
-static const char *filegui[]      = {"filegui"     , NULL};
-static const char *fileroot[]     = {"fileroot"    , NULL};
-static const char *twobop[]       = {"twobop"      , NULL};  // btop
+static const char *build2bwm[]    = {"term", "2bwm", "2make"     , NULL};
+static const char *kill2bwm[]     = {"pkill", "-KILL", "2bwm"    , NULL};
+// desktop control
+static const char *background[]   = {"toggle", "background"      , NULL};  // root background color
+static const char *wallpaper[]    = {"toggle", "wallpaper"       , NULL};  // root wallpaper
+static const char *panel[]        = {"toggle", "panel"           , NULL};
+static const char *invert[]       = {"invert"                    , NULL};  // panel contrast
+static const char *notifypush[]   = {"dunstctl", "close"         , NULL};  // dunstctl clear
+static const char *notifyclr[]    = {"dunstctl", "close-all"     , NULL};  // dunstctl clear all
+static const char *notifypop[]    = {"dunstctl", "history-pop"   , NULL};  // dunstctl history
+static const char *wallclock[]    = {"conky", "clock"            , NULL};  // toggle (current) display
+static const char *unclock[]      = {"conky", "clock", "toggle"  , NULL};  // toggle mode
+// window actions
+static const char *hidewindow[]   = {"window", "hide"            , NULL};  // adds focusnext
+static const char *unhide[]       = {"menu", "unhide"            , NULL};
+static const char *east[]         = {"closest.sh", "east"        , NULL};  // wmutils focus direction
+static const char *west[]         = {"closest.sh", "west"        , NULL};
+static const char *north[]        = {"closest.sh", "north"       , NULL};
+static const char *south[]        = {"closest.sh", "south"       , NULL};
+static const char *snapedge[]     = {"window", "snap", "edge"    , NULL};
+static const char *snapleft[]     = {"window", "snap", "left"    , NULL};
+static const char *snapright[]    = {"window", "snap", "right"   , NULL};
+static const char *snaptop[]      = {"window", "snap", "top"     , NULL};
+static const char *snapbottom[]   = {"window", "snap", "bottom"  , NULL};
+static const char *snaplevel[]    = {"window", "snap", "level"   , NULL};  // all windows
+static const char *windowsize[]   = {"menu", "windowsize"        , NULL};  // menu windowsize
+static const char *windowsize0[]  = {"menu", "windowsize", "0"   , NULL};  // keybind shortcut
+static const char *windowsize1[]  = {"menu", "windowsize", "1"   , NULL};
+static const char *windowsize2[]  = {"menu", "windowsize", "2"   , NULL};
+static const char *windowsize3[]  = {"menu", "windowsize", "3"   , NULL};
+static const char *windowsize4[]  = {"menu", "windowsize", "4"   , NULL};
+static const char *windowsize5[]  = {"menu", "windowsize", "5"   , NULL};
+static const char *windowsize6[]  = {"menu", "windowsize", "6"   , NULL};
+static const char *windowsize7[]  = {"menu", "windowsize", "7"   , NULL};
+static const char *windowsize8[]  = {"menu", "windowsize", "8"   , NULL};
+static const char *windowsize9[]  = {"menu", "windowsize", "9"   , NULL};
+// terminals
+static const char *terminal[]     = {"term"                      , NULL};
+static const char *scratchy[]     = {"scratchpad", "scratchy"    , NULL};
+static const char *itchy[]        = {"scratchpad", "itchy"       , NULL};
+// menus
+static const char *menucmd[]      = {"menu"                      , NULL};
+static const char *address[]      = {"menu", "abook"             , NULL};
+static const char *inspector[]    = {"menu", "system"            , NULL};
+static const char *media[]        = {"menu", "media"             , NULL};
+static const char *notes[]        = {"menu", "notes"             , NULL};
+static const char *passwords[]    = {"menu", "passwords"         , NULL};
+static const char *projects[]     = {"menu", "projects"          , NULL};
+static const char *scripts[]      = {"menu", "scripts"           , NULL};
+static const char *wikis[]        = {"menu", "wikis"             , NULL};
+static const char *quit[]         = {"menu", "halt"              , NULL};
+// apps
+static const char *browser[]      = {"qutebrowser"               , NULL};
+static const char *browserclr[]   = {"qutebrowser", "closeall"   , NULL};
+static const char *mail[]         = {"mail"                      , NULL};
+static const char *filecli[]      = {"filecli"                   , NULL};
+static const char *filegui[]      = {"filegui"                   , NULL};
+static const char *fileroot[]     = {"fileroot"                  , NULL};  // superuser
+static const char *twobop[]       = {"twobop"                    , NULL};  // btop
 ///--Custom foo---///
 static void halfandcentered(const Arg *arg)
 {
