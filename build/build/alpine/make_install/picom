@@ -1,0 +1,21 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................................ picom
+
+# for rounded corners BUT.. you lose TWO borders!
+
+doas apk add meson samurai
+doas apk add libconfig-dev libev-dev uthash-dev
+
+cd /net/depot
+[ -d picom] && { cd picom; git pull; } || { git clone --depth 1 https://github.com/ibhagwan/picom.git; cd picom; }
+
+meson setup --buildtype=release build
+ninja -C build
+doas ninja -C build install
+
+# vim: set ft=sh: #
