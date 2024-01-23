@@ -9,6 +9,37 @@
 
 # Usage: window <msg>, see functions/window
 
+TWOBWM_CONFIG=$HOME/.config/2bwm/src/config.h
+WINFO=$TWOBWM:window
+
+save_geometry() { xdotool getwindowgeometry --shell $winid >$WINFO:$winid; }  # for revert
+right()         { echo $(( $width - ($X + $WIDTH - 1) + $margin * 2 )); }     # for nearest edge SEE: window snap / stretch
+winid()         { xdotool getactivewindow; }
+
+# usable desktop
+margin=$(query screen margin)
+panel=$(query screen panel)
+width=$(( $(query display width) - $margin * 2 ))
+height=$(( $(query display height) - $panel * 2 ))
+
+# 2bwm window geometry
+border=$(echo $(grep '^static const uint8_t borders' $TWOBWM_CONFIG | sed 's/.*[{]//; s/[}].*//; s/,/ /g' | cut -d' ' -f2))
+winid=$(winid)
+
+# ..................................................................... X Y size
+
+# draw <winid> <width> <height> [rotate]
+
+draw() {
+	save_geometry
+	[ $4 ] && { W=$3; H=$2; } || { W=$2; H=$3; }
+	[ $H -gt $height ] && { swap=$W; W=$H; H=$swap; }
+	xdotool windowunmap $1     # defer visual refresh
+	xdotool windowsize --sync $1 $W $H
+	xdotool windowmap --sync $1
+	xdotool key Super+Shift+g  # 2bwm vertical center BUG: jitter offset occurs with A4 and B5
+}
+
 msg=$1
 [ $msg ] && shift || usage: $0
 if [ -e ${0%/window}/functions/window/$msg ] ;then

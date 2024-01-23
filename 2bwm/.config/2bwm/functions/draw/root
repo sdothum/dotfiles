@@ -86,7 +86,7 @@ case $1 in
 		rm -f $SHUFFLE
 		select_wallpaper
 		echo wallpaper >$SETROOT
-		invert notify ;;  # keybind message
+		invert_panel notify ;;  # keybind message
 	
 	shuffle   )
 		touch $SHUFFLE

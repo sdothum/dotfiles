@@ -7,72 +7,60 @@
 
 # ................................................................. Snap windows
 
-# Usage: draw snap left | center | right | edge | top | bottom | level**
-#        **For all windows on desktop
+# Usage: window snap [left | center | right | top | bottom | all (windows on desktop)]
 
-WINFO=$TWOBWM:window
-
-# 2bwm window geometry
-width=$(query display width)
-height=$(query display height)
-margin=$(query screen margin)
-border=$(window border)
-
-winid=$(xdotool getactivewindow)
 eval $(xdotool getwindowgeometry --shell $winid)         # HEIGHT WIDTH (doesn't include borders)
-xdotool getwindowgeometry --shell $winid >$WINFO:$winid  # see window size
+save_geometry
 
 # .................................................................... Snap left
 
-# xdotool key --delay 25 Super+p        # snap corner
-# xdotool key --delay 25 Super+Shift+g  # vertical center
-
 snapleft() {
-	xdotool windowmove $winid $(( $margin + $border - 1 )) $(( ($height - $HEIGHT) / 2 - $border ))
+	# xdotool windowmove --sync $winid $(( $margin + $border - 1 )) $(( ($height - $HEIGHT) / 2 - $border ))
+	xdotool windowmove --sync $winid $(( $margin + $border - 1 )) y
 	xdotool windowactivate --sync $winid
 }
 
 # ................................................................... Snap right
 
-# xdotool key --delay 25 Super+l        # snap corner
-# xdotool key --delay 25 Super+Shift+g  # vertical center
-
 snapright() {
-	xdotool windowmove $winid $(( $width - $WIDTH - border * 2 - margin )) $(( ($height - $HEIGHT) / 2 - $border ))
+	# xdotool windowmove --sync $winid $(( $width - $WIDTH - $border * 2 - $margin )) $(( ($height - $HEIGHT) / 2 - $border ))
+	# xdotool windowmove --sync $winid $(( $width - $WIDTH - $border * 2 - $margin )) y
+	xdotool windowmove --sync $winid $(( $width - $WIDTH + $border )) y
 	xdotool windowactivate --sync $winid
 }
 
 # .................................................................... Snap edge
 
-snapedge() {
+snapnear() {
 	# snap to closest edge!
-	right=$(( $width - ($X + $WIDTH - 1) ))
-	[ $X -le $right ] && xdotool windowmove $winid $(( $margin + $border - 1 )) y || xdotool windowmove $winid $(( $width - $WIDTH - border * 2 - margin )) y
+	[ $X -le $(right) ] && snapleft || snapright
 	xdotool windowactivate --sync $winid
 }
 
 # ..................................................................... Snap top
 
 snaptop() {
-	xdotool windowmove $winid x $margin
+	xdotool windowmove --sync $winid x $margin
 	xdotool windowactivate --sync $winid
 }
 
 # .................................................................. Snap bottom
 
 snapbottom() {
-	xdotool windowmove $winid x $(( $height - $HEIGHT - $margin - $border * 2 ))
+	# xdotool windowmove --sync $winid x $(( $height - $HEIGHT - $margin - $border * 2 ))
+	xdotool windowmove --sync $winid x $(( $height - $HEIGHT ))
 	xdotool windowactivate --sync $winid
 }
 
 # ........................................................ Snap windows to level
 
-snaplevel() {
+snaphorizon() {
 	desktop=$(xdotool get_desktop)
 	winids=$(wmctrl -l | grep "^[^ ]*  *$desktop " | cut -d' ' -f1)  # of current desktop
 
 	for i in $winids ;do
-		xdotool windowactivate $i
+		# xdotool windowactivate --sync $i
+		xdotool windowactivate $i  # faster
 		xdotool key Super+Shift+g  # 2bwm vertical center
 	done
 
@@ -80,13 +68,13 @@ snaplevel() {
 }
 
 case $1 in
-	right  ) snapright  ;;
+	''     ) snapnear    ;; # nearest left/right edge
+	left   ) snapleft    ;;
 	center ) xdotool key Super+g ;;
-	left   ) snapleft   ;;
-	edge   ) snapedge   ;;
-	top    ) snaptop    ;;
-	bottom ) snapbottom ;;
-	level  ) snaplevel  ;;
+	right  ) snapright   ;;
+	top    ) snaptop     ;;
+	bottom ) snapbottom  ;;
+	all    ) snaphorizon ;;
 esac
 
 # vim: set ft=sh: #

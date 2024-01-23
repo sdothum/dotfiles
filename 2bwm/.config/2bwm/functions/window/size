@@ -12,63 +12,19 @@
 X=1024
 Y=800
 T=2
-ASPECT=4:3  # ratio
-
-TWOBWM_CONFIG=$HOME/.config/2bwm/src/config.h
-WINFO=$TWOBWM:window
-
-save_geometry() { xdotool getwindowgeometry --shell $winid >$WINFO:$winid; }  # for revert
-winid()         { xdotool getactivewindow; }
-
-winid=$(winid)
-
-# ..................................................................... X Y size
-
-draw() {
-	save_geometry
-	[ $4 ] && { W=$3; H=$2; } || { W=$2; H=$3; }
-	xdotool windowunmap $1     # defer visual refresh
-	xdotool windowsize --sync $1 $W $H
-	xdotool windowmap --sync $1
-	xdotool key Super+Shift+g  # 2bwm vertical center
-}
-
-# ................................................................ Revert layout
-
-revert() {
-	[ -e $WINFO:$winid ] && eval $(cat $WINFO:$winid) || exit
-	draw $winid $WIDTH $HEIGHT
-	xdotool windowmove $winid $X $Y
-}
+ASPECT=4:3  # ratio (being a photographer..)
 
 # ................................................................. Aspect ratio
 
 aspect() {
 	numerator=$1
 	denominator=$2
-	# 2bwm screen geometry
-	set -- $(grep '^static const uint8_t offsets' $TWOBWM_CONFIG | sed 's/.*[{]//; s/[}].*//; s/,/ /g')
-	PANEL_HEIGHT=$2        # assumes equal top/bottom screen margins
-	MARGIN=$1              # assumes equal left/right screen margins
-	shift 4
-	width=$(( $(query display width) - $MARGIN * 2 ))
-	height=$(( $(query display height) - $PANEL_HEIGHT * 2 ))
-	# just a random window size calculation
-	X=$(echo "scale=2\n$width * $numerator / $denominator - $MARGIN" | bc | cut -d. -f1)
-	# Z=$(echo "scale=2\n$PANEL_HEIGHT * ($denominator / $numerator)" | bc | cut -d. -f1)
-	# Y=$(echo "scale=2\n$X * 4 / 3 - $Z" | bc | cut -d. -f1)
-	# [ $(( $height - $Z )) -le $Y ] && Y=$(echo "scale=2\n$height - $Z * ($denominator / $numerator)" | bc | cut -d. -f1)
-	Y=$(echo "scale=2\n$X * ${ASPECT#*:} / ${ASPECT%:*}" | bc | cut -d. -f1)
+	# an arbitrary aspect ratio calculation
+	X=$(echo "scale=2\n$width * $numerator / $denominator - $margin" | bc | cut -d. -f1)
+	Y=$(echo "scale=2\n$X * ${ASPECT%:*} / ${ASPECT#*:}" | bc | cut -d. -f1)
+	[ $Y -lt $height ] || Y=$(echo "scale=2\n$X * ${ASPECT#*:} / ${ASPECT%:*}" | bc | cut -d. -f1)  # fit window to screen
 	winid=$(winid)
 	draw $winid $X $Y
-}
-
-# ................................................................ Rotate window
-
-rotate() {
-	winid=$(winid)
-	eval $(xdotool getwindowgeometry --shell $winid)
-	draw $winid $HEIGHT $WIDTH
 }
 
 # ...................................................................... Monocle
@@ -92,15 +48,12 @@ paper() {
 		A6* ) draw $winid  472  665 $2 ;;
 		B7* ) draw $winid  397  559 $2 ;;
 	esac
-	[ $2 ] && window snap center
 }
 
 # do we need to gain correct focus?
 [ "${1%%@*}" ] || { sleep ${1#@}; winid=$(winid); shift; }
 
 case $1 in
-	rev*  ) revert   ;;
-	rot*  ) rotate   ;;
 	mon*  ) monocle  ;;
 	[AB]* ) paper $1 $2 ;;
 	*/*   ) aspect ${1%/*} ${1#*/} ;;

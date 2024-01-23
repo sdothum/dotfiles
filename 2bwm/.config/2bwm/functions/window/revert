@@ -1,0 +1,17 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/revert $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ....................................................... Revert window geometry
+
+# Usage: window revert SEE: window size and window stretch
+
+[ -e $WINFO:$winid ] && eval $(cat $WINFO:$winid) || exit
+draw $winid $WIDTH $HEIGHT
+xdotool windowmove --sync $winid $X $Y
+
+# vim: set ft=sh: #
+

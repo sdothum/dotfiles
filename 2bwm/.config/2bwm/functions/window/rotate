@@ -1,0 +1,16 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/rotate $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Rotate window
+
+# Usage: window rotate SEE: window size and window stretch
+
+eval $(xdotool getwindowgeometry --shell $winid)
+draw $winid $HEIGHT $WIDTH
+
+# vim: set ft=sh: #
+

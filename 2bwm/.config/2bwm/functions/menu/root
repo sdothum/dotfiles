@@ -88,6 +88,6 @@ while color=$(colors | column -s^ -t | rmenu 'Setroot') || exit ;do
 	esac
 done
 
-invert notify  # keybind message
+invert_panel notify  # keybind message
 
 # vim: set ft=sh: #

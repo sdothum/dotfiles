@@ -1,0 +1,54 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/stretch $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .............................................................. Stretch windows
+
+# Usage: window stretch [left | right | near | far]
+
+eval $(xdotool getwindowgeometry --shell $winid)         # HEIGHT WIDTH (doesn't include borders)
+
+# ................................................................. Stretch left
+
+stretchleft() {
+	width=$(( $X + $WIDTH - $margin ))
+	draw $winid $width $HEIGHT
+	xdotool windowmove --sync $winid $margin $Y
+	xdotool windowactivate --sync $winid
+}
+
+# ................................................................ Stretch right
+
+stretchright() {
+	width=$(( $width - $X + $border ))
+	draw $winid $width $HEIGHT
+	xdotool windowmove --sync $winid $X $Y
+	xdotool windowactivate --sync $winid
+}
+
+# ................................................................. Stretch near
+
+stretchnear() {
+	[ $X -le $(right) ] && stretchleft || stretchright
+	xdotool windowactivate --sync $winid
+}
+
+# .................................................................. Stretch far
+
+stretchfar() {
+	[ $X -le $(right) ] && stretchright || stretchleft
+	xdotool windowactivate --sync $winid
+}
+
+case $1 in
+	''     ) stretchnear  ;;
+	near   ) stretchnear  ;;
+	far    ) stretchfar   ;;
+	left   ) stretchleft  ;;
+	right  ) stretchright ;;
+esac
+
+# vim: set ft=sh: #
