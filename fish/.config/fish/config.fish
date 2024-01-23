@@ -79,8 +79,8 @@ set -x NO_PROXY '*'  # required by webkit browsers to access gmail
 # set -x EDITOR vim
 # set -x VISUAL 'gvim -f'
 # set -x VISUAL 'vim -g -f' # foreground required for crontab -e ..avoids gvim library errors (?)
-# let scripts set helix calls (whether term, foreground or not)
-set -x VISUAL 'hx'
+# let scripts set helix/kak calls (whether term, foreground or not)
+set -x VISUAL 'kak'
 
 set -x XIVIEWER feh
 set -x PLAYER mpv
