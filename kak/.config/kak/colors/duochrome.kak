@@ -26,7 +26,7 @@ declare-option str strong_orange          'rgb:bf450c'
 declare-option str light_orange           'rgb:ffe5b4'
 # declare-option str pale_orange          'rgb:f7f3ee'  # see kakrc
 # greens
-declare-option str desaturated_green      'rgb:78ab78'  # see kakrc
+# declare-option str desaturated_green    'rgb:78ab78'  # see kakrc
 # declare-option str pale_green           'rgb:e1f1ea'  # see kakrc
 # blues
 declare-option str dark_blue              'rgb:0069af'
@@ -34,6 +34,7 @@ declare-option str dark_cyan              'rgb:0087af'
 # declare-option str desaturated_blue     'rgb:6b9494'  # see kakrc
 declare-option str desaturated_cyan       'rgb:78a0a2'
 declare-option str soft_cyan              'rgb:a3d5e4'
+declare-option str faint_blue             'rgb:add8e6'
 # declare-option str pale_blue            'rgb:caeaef'  # see kakrc
 declare-option str vivid_cyan             'rgb:20fccf'
 
@@ -73,77 +74,86 @@ declare-option str match                  "%opt{soft_red}"
 
 # ......................................................................... Code
 
-set-face global attribute                 "%opt{attribute}"
-set-face global comment                   "%opt{comment}"
-set-face global documentation             "%opt{comment}"
-set-face global constant                  "%opt{constant}"
-set-face global function                  "%opt{function}+b"
-set-face global keyword                   "%opt{function}+b"
-set-face global builtin                   "%opt{function}"
-set-face global meta                      "%opt{function}"
-set-face global module                    "%opt{function}"
-set-face global operator                  "%opt{operator}+b"
-set-face global string                    "%opt{string}"
-set-face global type                      "%opt{attribute}"
-set-face global value                     "%opt{constant}"
-set-face global variable                  "%opt{variable}"
+# NOTE: window scope (vs global SEE: kakrc)
+
+set-face window attribute                 "%opt{attribute}"
+set-face window comment                   "%opt{comment}"
+set-face window documentation             "%opt{comment}"
+set-face window constant                  "%opt{constant}"
+set-face window function                  "%opt{function}+b"
+set-face window keyword                   "%opt{function}+b"
+set-face window builtin                   "%opt{function}"
+set-face window meta                      "%opt{function}"
+set-face window module                    "%opt{function}"
+set-face window operator                  "%opt{operator}+b"
+set-face window string                    "%opt{string}"
+set-face window type                      "%opt{attribute}"
+set-face window value                     "%opt{constant}"
+set-face window variable                  "%opt{variable}"
 
 # ....................................................................... Markup
 
-set-face global block                     "%opt{mono}"
-# set-face global                         bold "%opt{heading}+b"
-set-face global bullet                    "%opt{list}+b"
-set-face global header                    "%opt{heading}+b"
-set-face global italic                    "%opt{heading}"
-set-face global link                      "%opt{link}"
-set-face global list                      "%opt{list}"
-set-face global mono                      "%opt{mono}+b"
-set-face global title                     "%opt{heading}"
+set-face window block                     "%opt{mono}"
+# set-face window                         bold "%opt{heading}+b"
+set-face window bullet                    "%opt{list}+b"
+set-face window header                    "%opt{heading}+b"
+set-face window italic                    "%opt{heading}"
+set-face window link                      "%opt{link}"
+set-face window list                      "%opt{list}"
+set-face window mono                      "%opt{mono}+b"
+set-face window title                     "%opt{heading}"
 
 # ................................................................ Builtin faces
 
-set-face global Default                   "%opt{foreground},%opt{background}"
-set-face global PrimarySelection          "%opt{background},%opt{selection}"
-set-face global SecondarySelection        "default,%opt{secondary}"
-set-face global PrimaryCursor             "%opt{foreground},%opt{cursor}"
-set-face global SecondaryCursor           "%opt{foreground},%opt{multi}"
-set-face global PrimaryCursorEol          "%opt{background},%opt{eol}"
-set-face global SecondaryCursorEol        "%opt{background},%opt{eol}"
+set-face window Default                   "%opt{foreground},%opt{background}"
+set-face window PrimarySelection          "%opt{background},%opt{selection}"
+set-face window SecondarySelection        "default,%opt{secondary}"
+set-face window PrimaryCursor             "%opt{foreground},%opt{cursor}"
+set-face window SecondaryCursor           "%opt{foreground},%opt{multi}"
+set-face window PrimaryCursorEol          "%opt{background},%opt{eol}"
+set-face window SecondaryCursorEol        "%opt{background},%opt{eol}"
 
-set-face global LineNumbers               "%opt{linenr},%opt{background}"
-set-face global LineNumberCursor          "%opt{string},%opt{background}+b"
-set-face global LineNumbersWrapped        "%opt{margin},%opt{margin}+i"
-set-face global MenuForeground            "%opt{menu},%opt{dark_grey}+b"
-set-face global MenuBackground            "%opt{pick},%opt{menu}"
-set-face global MenuInfo                  "%opt{string},%opt{menu}"
+set-face window LineNumbers               "%opt{linenr},%opt{background}"
+set-face window LineNumberCursor          "%opt{string},%opt{background}+b"
+set-face window LineNumbersWrapped        "%opt{margin},%opt{margin}+i"
+set-face window MenuForeground            "%opt{menu},%opt{dark_grey}+b"
+set-face window MenuBackground            "%opt{pick},%opt{menu}"
+set-face window MenuInfo                  "%opt{string},%opt{menu}"
 
-set-face global Information               "%opt{statusline},%opt{statusbar}"
-set-face global InlineInformation         "%opt{statusline},%opt{statusbar}"
-set-face global Error                     "%opt{string},%opt{statusbar}"
-set-face global DiagnosticError           "%opt{string},%opt{statusbar}"
-set-face global DiagnosticWarning         "%opt{string},%opt{statusbar}"
+set-face window Information               "%opt{statusline},%opt{statusbar}"
+set-face window InlineInformation         "%opt{statusline},%opt{statusbar}"
+set-face window Error                     "%opt{string},%opt{statusbar}"
+set-face window DiagnosticError           "%opt{string},%opt{statusbar}"
+set-face window DiagnosticWarning         "%opt{string},%opt{statusbar}"
 
-set-face global StatusLine                "%opt{statusline},%opt{statusbar}"
-set-face global StatusLineMode            "%opt{statusline},%opt{statusbar}"
-set-face global StatusLineInfo            "%opt{statusline},%opt{statusbar}"
-set-face global StatusLineValue           "%opt{statusline},%opt{statusbar}"
-set-face global StatusCursor              "%opt{foreground},%opt{cursor}"
-set-face global Prompt                    "%opt{statusline},%opt{statusbar}"
+set-face window StatusLine                "%opt{statusline},%opt{statusbar}"
+set-face window StatusLineMode            "%opt{statusline},%opt{statusbar}"
+set-face window StatusLineInfo            "%opt{statusline},%opt{statusbar}"
+set-face window StatusLineValue           "%opt{statusline},%opt{statusbar}"
+set-face window StatusCursor              "%opt{foreground},%opt{cursor}"
+set-face window Prompt                    "%opt{statusline},%opt{statusbar}"
 
-set-face global MatchingChar              "%opt{match},%opt{background}+br"
-set-face global Whitespace                "%opt{space},%opt{background}+f"
-set-face global WrapMarker                "%opt{wrap}+bf"
-set-face global BufferPadding             "%opt{background},%opt{background}"  # hide tilde
+set-face window MatchingChar              "%opt{match},%opt{background}+br"
+set-face window Whitespace                "%opt{space},%opt{background}+f"
+set-face window WrapMarker                "%opt{wrap}+bf"
+set-face window BufferPadding             "%opt{background},%opt{background}"  # hide tilde
 
 # .................................................................. Admonitions
 
-set-face global Admonitions               "+bf@Error"
+set-face window Admonitions               "+bf@Error"
+
+# ...................................................................... Peneira
+
+set-face window PeneiraSelected           "%opt{foreground},%opt{linenr}"
+set-face window PeneiraFlag               LineNumberCursor
+set-face window PeneiraMatches            "%opt{background},%opt{selection}+b"
+set-face window PeneiraFileName           attribute
 
 # ...................................................................... kak-lsp
 
-set-face global InlayHint                 "+d@type"
-set-face global parameter                 "+i@variable"
-set-face global enum                      "%opt{operator}"
+set-face window InlayHint                 "+d@type"
+set-face window parameter                 "+i@variable"
+set-face window enum                      "%opt{operator}"
 
 # one-light colors for testing.. ltex-ls highlighter overwritten(?)
 declare-option str lightred               "rgb:e45649"
@@ -155,30 +165,30 @@ declare-option str blue                   "rgb:4078f2"
 declare-option str magenta                "rgb:a626a4"
 declare-option str cyan                   "rgb:0184bc"
 
-set-face global InlayDiagnosticError      "%opt{lightred}"
-set-face global InlayDiagnosticWarning    "%opt{lightorange}"
-set-face global InlayDiagnosticInfo       "%opt{dark_blue}"
-set-face global InlayDiagnosticHint       "%opt{desaturated_green}"
-set-face global LineFlagError             "%opt{lightred}"
-set-face global LineFlagWarning           "%opt{lightorange}"
-set-face global LineFlagInfo              "%opt{dark_blue}"
-set-face global LineFlagHint              "%opt{desaturated_green}"
-set-face global DiagnosticError           ",,%opt{lightred}+c"
-set-face global DiagnosticWarning         ",,%opt{lightorange}+c"
-set-face global DiagnosticInfo            ",,%opt{dark_blue}+c"
-set-face global DiagnosticHint            ",,%opt{desaturated_green}+c"
+set-face window InlayDiagnosticError      "%opt{lightred}"
+set-face window InlayDiagnosticWarning    "%opt{lightorange}"
+set-face window InlayDiagnosticInfo       "%opt{dark_blue}"
+set-face window InlayDiagnosticHint       "%opt{desaturated_green}"
+set-face window LineFlagError             "%opt{lightred}"
+set-face window LineFlagWarning           "%opt{lightorange}"
+set-face window LineFlagInfo              "%opt{dark_blue}"
+set-face window LineFlagHint              "%opt{desaturated_green}"
+set-face window DiagnosticError           ",,%opt{lightred}+c"
+set-face window DiagnosticWarning         ",,%opt{lightorange}+c"
+set-face window DiagnosticInfo            ",,%opt{dark_blue}+c"
+set-face window DiagnosticHint            ",,%opt{desaturated_green}+c"
 # infobox faces
-set-face global InfoDefault               Information
-set-face global InfoBlock                 block
-set-face global InfoBlockQuote            block
-set-face global InfoBullet                bullet
-set-face global InfoHeader                header
-set-face global InfoLink                  link
-set-face global InfoLinkMono              header
-set-face global InfoMono                  mono
-set-face global InfoRule                  comment
-set-face global InfoDiagnosticError       InlayDiagnosticError
-set-face global InfoDiagnosticHint        InlayDiagnosticHint
-set-face global InfoDiagnosticInformation InlayDiagnosticInfo
-set-face global InfoDiagnosticWarning     InlayDiagnosticWarning
+set-face window InfoDefault               Information
+set-face window InfoBlock                 block
+set-face window InfoBlockQuote            block
+set-face window InfoBullet                bullet
+set-face window InfoHeader                header
+set-face window InfoLink                  link
+set-face window InfoLinkMono              header
+set-face window InfoMono                  mono
+set-face window InfoRule                  comment
+set-face window InfoDiagnosticError       InlayDiagnosticError
+set-face window InfoDiagnosticHint        InlayDiagnosticHint
+set-face window InfoDiagnosticInformation InlayDiagnosticInfo
+set-face window InfoDiagnosticWarning     InlayDiagnosticWarning
 
