@@ -39,7 +39,8 @@ if [ "${1%${1#?}}" = 'A' ] ;then
 	adb exec-out screencap -p
 else
 	/usr/bin/maim $opts
-fi | convert - -size 1600 -quality $quality $target/$jpg
+fi | convert - -size 1600 -quality $quality $target/$jpg 2>/dev/null
+[ $? -ne 0 ] && exit 1
 ditto jpg "$jpg"
 notify 0 low 'Screenshot' "$target/$jpg"
 

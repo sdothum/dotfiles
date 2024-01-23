@@ -10,7 +10,8 @@
 
 # share all instances (clients) with a single kak server session
 ID=$USER  # default session id
-[ -e /usr/local/bin/kak ] && KAK=/usr/local/bin/kak || KAK=/usr/bin/kak
+KAK=/usr/bin/kak
+# [ -e /usr/local/bin/kak ] && KAK=/usr/local/bin/kak
 
 CONF=$XDG_CONFIG_HOME/kak
 DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary
@@ -31,8 +32,13 @@ while : ;do
 	shift
 done
 
-# attach client or create new session id
-$KAK -l | grep -v deleted | grep $ID && ID="-c $ID" || ID="-s $ID"
+# avoid dead session IDs
+if $KAK -l | grep -q "$ID.*dead" ;then
+	ID=$($KAK -l | grep -v dead | head -1)  # attach to available ID
+	[ $ID ] || ID=$(rand)
+fi
+# attach client or create new (daemon) session id
+$KAK -l | grep -v dead | grep $ID && ID="-c $ID" || ID="-s $ID"
 
 # snapshot sources (in lieu of persistent undo avalability)
 hgadd $@ &  # don' wait :)
@@ -53,10 +59,9 @@ done
 [ $count -gt 1 ] && notify low 'Kakoune' "$count files to edit"
 
 # term call doesn't handle "space" names
-console && { $KAK $ID $file >>$LOG 2>&1; exit; }
+console && { $KAK $file >>$LOG 2>&1; exit; }
 
+(sleep $DELAY; window snap center) &  # potential WAIT
 term ${name:-kak} PAPER ${XY:-132x52} $WAIT $KAK $ID $file >>$LOG 2>&1  # 50 line page
-sleep 0.25
-window snap center
 
 # vim: set ft=sh: #
