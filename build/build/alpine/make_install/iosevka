@@ -250,12 +250,13 @@ elif [ "$quad" ] ;then
 elif [ "$serifless" ] ;then
 	cmdopts quasi-ext space=1.125 Q-straight open+ j-flat
  	emdash
-	e_ink stria altmono I-serifless                 serifless
-	e_ink grote grote   I-descending                serifless
-	e_ink patio grote   a-single t-cross            serifless
-	e_ink lythe grote   I-descending t-asymmetric-  serifless
-	e_ink lathe grote   I-descending t-asymmetric-  serifless a-single
-	e_ink licht grote   I-serifless  t-asymmetric-- serifless
+	# e_ink stria altmono I-serifless                 serifless
+	# e_ink grote grote   I-descending                serifless
+	# e_ink patio grote   a-single t-cross            serifless
+	# e_ink licht grote   I-descending t-asymmetric-  serifless
+	e_ink lucid grote   I-descending t-asymmetric-  serifless i-hooky
+	# e_ink lathe grote   I-descending t-asymmetric-  serifless a-single
+	# e_ink drift grote   I-serifless  t-asymmetric-- serifless
 
 elif [ "$trio" ] ;then
 	cmdopts quasi-ext space=1.15 G-hookless+ Q-straight open+
