@@ -59,7 +59,8 @@ done
 [ $count -gt 1 ] && notify low 'Kakoune' "$count files to edit"
 
 # term call doesn't handle "space" names
-console && { $KAK $file >>$LOG 2>&1; exit; }
+# console && { $KAK $file >>$LOG 2>&1; exit; }
+console && exec $KAK $file
 
 (sleep $DELAY; window snap center) &  # potential WAIT
 term ${name:-kak} PAPER ${XY:-132x52} $WAIT $KAK $ID $file >>$LOG 2>&1  # 50 line page
