@@ -46,7 +46,7 @@ add() {
 	mhistory wiki$1 "$title^$SEP $wiki"
 	file=$WIKIS/$wiki/$title.wiki
 	# prepend h1 title
-	echo "# $title\n\n[ kak: filetype=markdown ]: #" >$file
+	echo "# $title\n\n[ kak: filetype=markdown ]: #" >"$file"
 	filename_check
 	name=wiki $EDITOR "$file" $DICTIONARY
 	[ $linkname ] && rm -f $linkname

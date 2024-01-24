@@ -366,7 +366,8 @@ static key keys[] = {
 	{  MOD ,                  XK_8,          start,               {.com = windowsize8}},
 	{  MOD ,                  XK_9,          start,               {.com = windowsize9}},
 	// Exit or restart 2bwm
-	{  MOD |CONTROL,          XK_q,          twobwm_exit,         {.i=0}},
+	// {  MOD |CONTROL,       XK_q,          twobwm_exit,         {.i=0}},
+	{  MOD |CONTROL,          XK_q,          start,               {.com = quit2bwm}},  // avoid creating dead kak sessions
 	{  MOD |CONTROL,          XK_r,          twobwm_restart,      {.i=0}},
 	// {  MOD ,               XK_space,      halfandcentered,     {.i=0}},
 	{  MOD |SHIFT|CONTROL,    XK_1,          halfandcentered,     {.i=0}},  // monocle
