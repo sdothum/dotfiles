@@ -5,47 +5,60 @@
 
 # config for Kakoune
 
+# ...................................... lambda calculus if-else kakscript block
+
+# if %sh{ [ test.. ] && echo true || echo false } %{ then.. } %{ else.. }
+define-command true -params 2 %{ eval %arg{1} }
+define-command false -params 2 %{ eval %arg{2} }
+define-command if -params 3 %{ eval -verbatim %arg{1} %arg{2} %arg{3} }
+
 # ........................................................................ Theme
 
 # see UX (crosshairs)
-declare-option str faint_lime             'rgb:d0e9de'  # pale green contrast
-declare-option str faint_orange           'rgb:efe7dd'  # pale orange contrast
+declare-option str faint_blue                'rgb:add8e6'  # pale blue contrast
+declare-option str faint_orange              'rgb:efe7dd'  # pale orange contrast
 
-declare-option str theme 'duochrome'
+if %sh{ [ -n "$DISPLAY" ] && echo true || echo false } %{
 
-# see colors/duochrome for highlight str's
-declare-option str desaturated_green      'rgb:78ab78'
-declare-option str pale_green             'rgb:e1f1ea'
-declare-option str desaturated_blue       'rgb:6b9494'
-declare-option str pale_blue              'rgb:caeaef'
-declare-option str desaturated_orange     'rgb:d5b875'
-declare-option str pale_orange            'rgb:f7f3ee'
-declare-option str light_grey             'rgb:b8c6cb'
-declare-option str pale_grey              'rgb:cfd8dc'
+	declare-option str theme 'duochrome'
 
-define-command normal-mode-colorscheme %{
-	declare-option str background          "%opt{pale_blue}"
-	declare-option str comment             "%opt{desaturated_blue}"
-	declare-option str linenr              "%opt{light_grey}"
-	declare-option str menu                "%opt{pale_orange}"
+	# see colors/duochrome for highlight str's
+	declare-option str desaturated_green      'rgb:78ab78'
+	declare-option str pale_green             'rgb:e1f1ea'
+	declare-option str desaturated_blue       'rgb:6b9494'
+	declare-option str pale_blue              'rgb:caeaef'
+	declare-option str desaturated_orange     'rgb:d5b875'
+	declare-option str pale_orange            'rgb:f7f3ee'
+	declare-option str light_grey             'rgb:b8c6cb'
+	declare-option str pale_grey              'rgb:cfd8dc'
+
+	define-command normal-mode-colorscheme %{
+		declare-option str background          "%opt{pale_blue}"
+		declare-option str comment             "%opt{desaturated_blue}"
+		declare-option str linenr              "%opt{light_grey}"
+		declare-option str menu                "%opt{pale_orange}"
+		colorscheme %opt{theme}
+	}
+
+	define-command insert-mode-colorscheme %{
+		declare-option str background          "%opt{pale_orange}"
+		declare-option str comment             "%opt{desaturated_orange}"
+		declare-option str linenr              "%opt{pale_grey}"
+		declare-option str menu                "%opt{pale_blue}"
+		colorscheme %opt{theme}
+	}
+
+	# window modal "duo"chrome
+	hook global WinCreate '.*' %{
+		normal-mode-colorscheme
+		hook window ModeChange 'push:.*:insert' insert-mode-colorscheme
+		hook window ModeChange 'push:insert:.*' normal-mode-colorscheme
+		hook window ModeChange 'pop:insert:.*'  normal-mode-colorscheme
+		hook window ModeChange 'pop:.*:insert'  insert-mode-colorscheme
+	}
+} %{
+	declare-option str theme 'base16-icy'
 	colorscheme %opt{theme}
-}
-
-define-command insert-mode-colorscheme %{
-	declare-option str background          "%opt{pale_orange}"
-	declare-option str comment             "%opt{desaturated_orange}"
-	declare-option str linenr              "%opt{pale_grey}"
-	declare-option str menu                "%opt{pale_blue}"
-	colorscheme %opt{theme}
-}
-
-# window modal "duo"chrome
-hook global WinCreate '.*' %{
-	normal-mode-colorscheme
-	hook window ModeChange 'push:.*:insert' insert-mode-colorscheme
-	hook window ModeChange 'push:insert:.*' normal-mode-colorscheme
-	hook window ModeChange 'pop:insert:.*'  normal-mode-colorscheme
-	hook window ModeChange 'pop:.*:insert'  insert-mode-colorscheme
 }
 
 map global user <space> ': normal-mode-colorscheme<ret>' -docstring "%opt{theme}"
@@ -69,7 +82,7 @@ hook global ModeChange (push|pop):insert:.* %{ add-highlighter -override window/
 # a minimalist statusline of "mode - column [utf-8] - filename [context]"
 declare-option str spacer ' '
 # display utf-8 value for non-latin characters
-set-option global modelinefmt '{{mode_info}} %opt{spacer} —%val{buf_line_count}— %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname}{{context_info}} [%sh{[ -z "$kak_opt_filetype" ] && echo "undef" || echo "$kak_opt_filetype"}] %opt{spacer} %val{session}(%sh{echo "$kak_client" | sed -r "s/[^0-9]*(.*)/\1/"})'
+set-option global modelinefmt '{{mode_info}} %opt{spacer} %val{buf_line_count}%opt{ruler}%val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname}{{context_info}} [%sh{[ -z "$kak_opt_filetype" ] && echo "undef" || echo "$kak_opt_filetype"}] %opt{spacer} %val{session}(%sh{echo "$kak_client" | sed -r "s/[^0-9]*(.*)/\1/"})'
 
 # ........................................................................... UX
 

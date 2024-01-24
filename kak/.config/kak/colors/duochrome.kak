@@ -34,7 +34,6 @@ declare-option str dark_cyan              'rgb:0087af'
 # declare-option str desaturated_blue     'rgb:6b9494'  # see kakrc
 declare-option str desaturated_cyan       'rgb:78a0a2'
 declare-option str soft_cyan              'rgb:a3d5e4'
-declare-option str faint_blue             'rgb:add8e6'
 # declare-option str pale_blue            'rgb:caeaef'  # see kakrc
 declare-option str vivid_cyan             'rgb:20fccf'
 
