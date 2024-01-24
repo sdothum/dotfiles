@@ -35,6 +35,7 @@ https://github.com/occivink/kakoune-find.git
 https://github.com/occivink/kakoune-phantom-selection.git
 https://github.com/occivink/kakoune-snippets.git
 https://github.com/occivink/kakoune-sudo-write.git
+https://github.com/tinted-theming/base16-kakoune.git
 https://gitlab.com/fsub/kakoune-mark.git
 "
 
@@ -44,7 +45,11 @@ for i in $plugins ;do
 	repo=${repo%.git}
 	[ -d $repo ] && { cd $repo; git pull; cd ..; } || git clone --depth 1 $i
 	cd $repo
-	find . -regex '.*\.(kak|lua)' -exec cp -v {} $AUTOLOAD \;
+	if echo "$repo" | grep -q 'base16' ;then
+		cp -v colors/base16-icy.kak ${AUTOLOAD%/autoload}/colors
+	else
+		find . -regex '.*\.(kak|lua)' -exec cp -v {} $AUTOLOAD \;
+	fi
 done
 
 # tree-sitter
