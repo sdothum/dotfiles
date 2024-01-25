@@ -82,7 +82,7 @@ hook global ModeChange (push|pop):insert:.* %{ add-highlighter -override window/
 # a minimalist statusline of "mode - column [utf-8] - filename [context]"
 declare-option str spacer ' '
 # display utf-8 value for non-latin characters
-set-option global modelinefmt '{{mode_info}} %opt{spacer} %val{buf_line_count}%opt{ruler}%val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname}{{context_info}} [%sh{[ -z "$kak_opt_filetype" ] && echo "undef" || echo "$kak_opt_filetype"}] %opt{spacer} %val{session}(%sh{echo "$kak_client" | sed -r "s/[^0-9]*(.*)/\1/"})'
+set-option global modelinefmt '{{mode_info}} %opt{spacer} %val{buf_line_count}%opt{ruler}%val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname}{{context_info}} [%sh{[ -z "$kak_opt_filetype" ] && echo "--" || echo "$kak_opt_filetype"}] %opt{spacer} %val{session}(%sh{echo "$kak_client" | sed -r "s/[^0-9]*(.*)/\1/"})'
 
 # ........................................................................... UX
 
@@ -240,10 +240,13 @@ set-option global autoreload yes
 
 # modeline inline context: "# kak: filetype=.." (comment delimiter by filetype)
 # NOTE: markdown statement '#[ kak: ... ]: #' issues *debug* "Unsupported kakoune variable:" message for trailing ']'
+set-option global modelines 2  # BUG: avoid "otherwords:" error (not kak: or vim:) within modeline scan range (default 5)
 hook global BufOpenFile .* %{ modeline-parse }
+
 hook global BufOpenFile .*.eml %{ set buffer filetype markdown }
 hook global FocusOut .* write
 
+map global user   '#' ': set buffer filetype sh<ret>'    -docstring 'set filetype=sh'  # BUG: modeline-parse not working(?)
 map global normal <a-ret> ': buffer-next<ret>'           -docstring 'next buffer'
 map global normal <a-backspace> ': buffer-previous<ret>' -docstring 'previous buffer'
 map global normal <a-space> 'ga'                         -docstring 'last buffer'
@@ -278,6 +281,7 @@ map global user   e ': files<ret>'                       -docstring 'edit'
 map global user   d ': buffer *debug*<ret>'              -docstring '*debug*'
 map global user   D ': delete-buffer<ret>'               -docstring 'delete buffer'
 map global user   q ': quit<ret>'                        -docstring 'quit'
+map global user   w ': write<ret>'                       -docstring 'save'
 map global user   x ': write-all-quit<ret>'              -docstring 'save all and quit'
 # plug 'occivink/kakoune-sudo-write'
 map global user   Z ': sudo-write<ret>'                  -docstring 'sudo save'
@@ -285,7 +289,7 @@ map global user   Z ': sudo-write<ret>'                  -docstring 'sudo save'
 # .................................................................. Tree-sitter
 
 # plug 'phaazon/kak-tree-sitter'
-eval %sh{ kak-tree-sitter -dks --session $kak_session }
+# eval %sh{ kak-tree-sitter -dks --session $kak_session }
 
 # ...................................................................... kak-lsp
 
