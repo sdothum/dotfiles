@@ -52,9 +52,15 @@ padsize() {
 }
 
 width=$(query display width)
+indent='        '
 
 # tune padding to displaywidth / (font * factor) for current monitor resolutions in system
-if [ $width -gt 1920 ] ;then
+if [ $width -ge 3440 ] ;then
+	padsize $width 13 '4 / 5'
+	leader="$indent$indent$indent$indent$indent$leader"
+	indent="$indent$indent$indent$indent$indent$indent$indent"  # 4K real estate!
+	fontsize=12
+elif [ $width -gt 1920 ] ;then
 	padsize $width 13 '3 / 2'
 elif [ $width -gt 1680 ] ;then
 	padsize $width 12 '5 / 3'
@@ -106,22 +112,22 @@ parms=$@
 # ......................................................................... Read
 
 # menu UI
-indent='          '
-input=$(cat $stdin | sed "s/^/$indent/" |                \
-	eval PADDING=$padding                                 \
-	SPACING="${fontsize}px"                               \
-	FONT=\"$font $fontsize\"                              \
-	BG=$bg FG=$fg WBG=$wbg                                \
-	rofi -upgrade-config                                  \
-		-font \"$font $fontsize\"                          \
-		-matching ${matching:-fuzzy}                       \
-		-monitor -1                                        \
-		-eh 1                                              \
-		-theme $THEME                                      \
-		-theme-str "'inputbar { padding: 1.2em; }'"        \
-		-theme-str "'textbox-prompt-colon { str: \"\"; }'" \
-		-theme-str "'* { highlight: none; }'"              \
-		-dmenu -p "\"$prompt\"" -i $select                 \
+input=$(cat $stdin | sed "s/^/$indent/" |                      \
+	eval PADDING=$padding                                       \
+	SPACING="${fontsize}px"                                     \
+	FONT=\"$font $fontsize\"                                    \
+	BG=$bg FG=$fg WBG=$wbg                                      \
+	rofi -upgrade-config                                        \
+		-font \"$font $fontsize\"                                \
+		-matching ${matching:-fuzzy}                             \
+		-monitor -1                                              \
+		-eh 1                                                    \
+		-theme $THEME                                            \
+		-theme-str "'inputbar { padding: 1.2em; }'"              \
+		-theme-str "'textbox-prompt-colon { str: \"\"; }'"       \
+		-theme-str "'* { highlight: none; }'"                    \
+		-theme-str "'* { background: rgba ( 0, 0, 0, 80 % ); }'" \
+		-dmenu -p "\"$prompt\"" -i $select                       \
 		$@
 )
 

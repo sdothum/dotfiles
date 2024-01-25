@@ -7,6 +7,8 @@
 
 # .......................................................................... Top
 
-xdotool search --onlyvisible --classname btop windowclose || term btop BLACKBOARD btop
+BTOP=/usr/bin/btop
+
+xdotool search --onlyvisible --classname btop windowclose || term btop BLACKBOARD $BTOP
 
 # vim: set ft=sh: #

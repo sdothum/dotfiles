@@ -100,11 +100,11 @@ static const char *quit[]         = {"menu", "halt"              , NULL};
 // apps
 static const char *browser[]      = {"qutebrowser"               , NULL};
 static const char *browserclr[]   = {"qutebrowser", "closeall"   , NULL};
+static const char *btop[]         = {"btop"                      , NULL};
 static const char *mail[]         = {"mail"                      , NULL};
 static const char *filecli[]      = {"filecli"                   , NULL};
 static const char *filegui[]      = {"filegui"                   , NULL};
 static const char *fileroot[]     = {"fileroot"                  , NULL};  // superuser
-static const char *twobop[]       = {"twobop"                    , NULL};  // btop
 ///--Custom foo---///
 static void halfandcentered(const Arg *arg)
 {
@@ -340,7 +340,7 @@ static key keys[] = {
 	{  MOD |SHIFT,            XK_r,          start,               {.com = build2bwm}},
 	{  MOD |SHIFT,            XK_s,          start,               {.com = inspector}},
 	{  MOD ,                  XK_t,          start,               {.com = snapleft}},
-	{  MOD ,                  XK_u,          start,               {.com = twobop}},
+	{  MOD ,                  XK_u,          start,               {.com = btop}},
 	{  MOD |SHIFT,            XK_u,          start,               {.com = passwords}},
 	{  MOD ,                  XK_v,          start,               {.com = panel}},
 	{  MOD |SHIFT,            XK_v,          start,               {.com = media}},
@@ -366,8 +366,8 @@ static key keys[] = {
 	{  MOD ,                  XK_8,          start,               {.com = windowsize8}},
 	{  MOD ,                  XK_9,          start,               {.com = windowsize9}},
 	// Exit or restart 2bwm
-	// {  MOD |CONTROL,       XK_q,          twobwm_exit,         {.i=0}},
-	{  MOD |CONTROL,          XK_q,          start,               {.com = quit2bwm}},  // avoid creating dead kak sessions
+	{  MOD |CONTROL,          XK_q,          twobwm_exit,         {.i=0}},
+	// {  MOD |CONTROL,       XK_q,          start,               {.com = quit2bwm}},  // avoid creating dead kak sessions
 	{  MOD |CONTROL,          XK_r,          twobwm_restart,      {.i=0}},
 	// {  MOD ,               XK_space,      halfandcentered,     {.i=0}},
 	{  MOD |SHIFT|CONTROL,    XK_1,          halfandcentered,     {.i=0}},  // monocle

@@ -7,13 +7,31 @@
 
 # .............................................................. Stretch windows
 
-# Usage: window stretch [left | right | near | far]
+# Usage: window stretch [[top | bottom] [left | right] | near | far]
 
 eval $(xdotool getwindowgeometry --shell $winid)         # HEIGHT WIDTH (doesn't include borders)
 
+# .................................................................. Stretch top
+
+top() {
+	height=$(( $Y + $HEIGHT - $panel ))
+	draw $winid $WIDTH $height
+	xdotool windowmove --sync $winid $X $panel
+	xdotool windowactivate --sync $winid
+}
+
+# ............................................................... Stretch bottom
+
+bottom() {
+	height=$(( $height - $Y + $border ))
+	draw $winid $WIDTH $height
+	xdotool windowmove --sync $winid $X $Y
+	xdotool windowactivate --sync $winid
+}
+
 # ................................................................. Stretch left
 
-stretchleft() {
+left() {
 	width=$(( $X + $WIDTH - $margin ))
 	draw $winid $width $HEIGHT
 	xdotool windowmove --sync $winid $margin $Y
@@ -22,33 +40,79 @@ stretchleft() {
 
 # ................................................................ Stretch right
 
-stretchright() {
-	width=$(( $width - $X + $border ))
+right() {
+	width=$(( $width - $X + $margin ))
 	draw $winid $width $HEIGHT
+	xdotool windowmove --sync $winid $X $Y
+	xdotool windowactivate --sync $winid
+}
+
+# ............................................................. Stretch top left
+
+topleft() {
+	height=$(( $Y + $HEIGHT - $panel ))
+	width=$(( $X + $WIDTH - $margin ))
+	draw $winid $width $height
+	xdotool windowmove --sync $winid $margin $panel
+	xdotool windowactivate --sync $winid
+}
+
+# ............................................................ Stretch top right
+
+topright() {
+	height=$(( $Y + $HEIGHT - $panel ))
+	width=$(( $width - $X + $margin ))
+	draw $winid $width $height
+	xdotool windowmove --sync $winid $X $panel
+	xdotool windowactivate --sync $winid
+}
+
+# .......................................................... Stretch bottom left
+
+bottomleft() {
+	height=$(( $height - $Y + $border ))
+	width=$(( $X + $WIDTH - $margin ))
+	draw $winid $width $height
+	xdotool windowmove --sync $winid $margin $Y
+	xdotool windowactivate --sync $winid
+}
+
+# ......................................................... Stretch bottom right
+
+bottomright() {
+	height=$(( $height - $Y + $border ))
+	width=$(( $width - $X + $margin ))
+	draw $winid $width $height
 	xdotool windowmove --sync $winid $X $Y
 	xdotool windowactivate --sync $winid
 }
 
 # ................................................................. Stretch near
 
-stretchnear() {
-	[ $X -le $(right) ] && stretchleft || stretchright
+near() {
+	[ $X -le $(right) ] && left || right
 	xdotool windowactivate --sync $winid
 }
 
 # .................................................................. Stretch far
 
-stretchfar() {
-	[ $X -le $(right) ] && stretchright || stretchleft
+far() {
+	[ $X -le $(right) ] && right || left
 	xdotool windowactivate --sync $winid
 }
 
 case $1 in
-	''     ) stretchnear  ;;
-	near   ) stretchnear  ;;
-	far    ) stretchfar   ;;
-	left   ) stretchleft  ;;
-	right  ) stretchright ;;
+	''      ) near        ;;
+	top     ) top         ;;
+	bottom  ) bottom      ;;
+	left    ) left        ;;
+	right   ) right       ;;
+	t*left  ) topleft     ;;
+	t*right ) topright    ;;
+	b*left  ) bottomleft  ;;
+	b*right ) bottomright ;;
+	near    ) near        ;;  # horizontal axis
+	far     ) far         ;;
 esac
 
 # vim: set ft=sh: #
