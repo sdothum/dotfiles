@@ -31,4 +31,4 @@ tag=$(herbstclient attr monitors.focus.tag)
 is fullscreen && rm -f $MONOCLE:$tag || rm -f $MONOCLE:conky
 touch_panel
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -17,4 +17,4 @@ case $1 in
 	Y ) herbstclient chain . split top $2 . spawn focus frame ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

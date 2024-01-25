@@ -22,4 +22,4 @@ mhistory run "$cmd"
 focus $cmd
 
 
-# vim: set ft=sh: #
+# kak: filetype=sh

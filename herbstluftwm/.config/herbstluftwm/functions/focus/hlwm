@@ -87,4 +87,4 @@ if window=$(echo $windows | sort | cut -d$DLM -f2 | column -s\^ -t \
 	echo $window | grep " $HIDDEN [0-9]${DLM}0x" && query ttag $TAG
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

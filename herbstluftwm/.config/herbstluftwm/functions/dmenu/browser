@@ -68,4 +68,4 @@ while browser=$(apps "$browsers" | sed "$edit" | rmenu 'Browser' $browser -no-cu
 	exit
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

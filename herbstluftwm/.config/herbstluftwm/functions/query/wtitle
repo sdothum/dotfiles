@@ -15,4 +15,4 @@ title=$(asciititle $(herbstclient attr clients.$1.title))
 # NOTE: ^$SEP for use with dmenu column alignment, see focus hlwm, restore hidden
 echo "$instance^$SEP $title"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

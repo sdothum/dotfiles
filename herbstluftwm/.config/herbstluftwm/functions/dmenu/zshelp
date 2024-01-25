@@ -11,4 +11,4 @@ page=$(zsh -c 'run-help' | sed '1,2d; s/ /\n/g' | grep -v '^$' | sort -d | rmenu
 
 term "$page" SHELL "run-help $page | less"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

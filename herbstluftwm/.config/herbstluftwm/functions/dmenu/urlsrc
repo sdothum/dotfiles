@@ -12,4 +12,4 @@ browser=$(echo 'chromium\nluakit\nqutebrowser\nvimb' | rmenu 'Use URLs From' $br
 history urlsrc $browser
 echo $browser
 
-# vim: set ft=sh: #
+# kak: filetype=sh

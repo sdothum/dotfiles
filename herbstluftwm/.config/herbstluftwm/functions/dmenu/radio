@@ -43,4 +43,4 @@ while station=$(playlist | rmenu "$(station)" -no-custom) || exit ;do
 	esac
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

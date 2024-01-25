@@ -61,4 +61,4 @@ hc attr theme.urgent.color            $(cat $USPINE)
 hc set frame_active_opacity           0
 hc set frame_normal_opacity           0
 
-# vim: set ft=sh: #
+# kak: filetype=sh

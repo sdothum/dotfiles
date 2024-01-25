@@ -132,4 +132,4 @@ sleep 4  # what dynamic window handling?
 # add window management extensions
 emithook &
 
-# vim: set ft=sh: #
+# kak: filetype=sh

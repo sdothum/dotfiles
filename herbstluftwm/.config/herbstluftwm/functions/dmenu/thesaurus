@@ -40,4 +40,4 @@ mhistory dictionary "$word"
 lastword=$word
 term "$word" STACK SHELL "aiksaurus \"$word\" | less && dmenu thesaurus"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

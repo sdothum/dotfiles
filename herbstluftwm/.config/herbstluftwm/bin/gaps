@@ -115,4 +115,4 @@ done
 
 ifno 'save .session' || stow_cache session $SESSION $(hostname)
 
-# vim: set ft=sh: #
+# kak: filetype=sh

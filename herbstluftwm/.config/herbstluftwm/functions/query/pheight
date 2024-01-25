@@ -23,4 +23,4 @@ case $monitor in
 	*         ) is display =3440 && echo $primary || echo $secondary ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -71,4 +71,4 @@ done &
 # trap application closes that bypass herbstluftwm window close
 focus watch
 
-# vim: set ft=sh: #
+# kak: filetype=sh

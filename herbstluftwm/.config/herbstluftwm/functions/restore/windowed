@@ -10,4 +10,4 @@
 restore tiled
 is fullscreen && toggle fullscreen
 
-# vim: set ft=sh: #
+# kak: filetype=sh

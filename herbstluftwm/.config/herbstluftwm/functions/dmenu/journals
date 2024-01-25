@@ -39,4 +39,4 @@ journal() {
 
 void && socklog || journal
 
-# vim: set ft=sh: #
+# kak: filetype=sh

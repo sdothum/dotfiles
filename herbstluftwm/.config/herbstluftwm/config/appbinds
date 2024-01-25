@@ -80,4 +80,4 @@ hc keybind Super-Shift-y            spawn dmenu wiki diary
 # hc keybind Super-z                spawn toggle rox
 # hc keybind Super-Control-z        spawn dmenu screensaver
 
-# vim: set ft=sh: #
+# kak: filetype=sh

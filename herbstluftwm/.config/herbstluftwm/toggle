@@ -94,4 +94,4 @@ else
 fi
 herbstclient emit_hook focus_changed
 
-# vim: set ft=sh: #
+# kak: filetype=sh

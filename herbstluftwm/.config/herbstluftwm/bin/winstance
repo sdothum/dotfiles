@@ -22,4 +22,4 @@ while : ;do
 	[ $(( $(date '+%s') - $start )) -gt $cutoff ] && exit 1
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

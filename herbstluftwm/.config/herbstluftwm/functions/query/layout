@@ -10,4 +10,4 @@
 # return layout of focused frame
 herbstclient dump '' '@' | sed -r 's/[^ ]* ([^:]*).*/\1/'
 
-# vim: set ft=sh: #
+# kak: filetype=sh

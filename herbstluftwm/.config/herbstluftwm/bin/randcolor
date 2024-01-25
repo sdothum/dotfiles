@@ -12,4 +12,4 @@ usage() { usage: "$(basename $0) ['#'], '#' to prepend"; exit 1; }
 [ $1 ] && [ $1 != '#' ] && usage
 echo "$1$(od -An -N3 -x /dev/random | sed 's/ 00//; s/ //')"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

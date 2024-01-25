@@ -49,4 +49,4 @@ esac
 
 [ "$uri" ] && exec dmenu browser "$uri"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

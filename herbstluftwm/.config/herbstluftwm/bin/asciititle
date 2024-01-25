@@ -18,4 +18,4 @@ echo $@ | iconv -c -f utf-8 -t ascii                       \
 	-e 's,https*://.*/(.*)([?].[=].*)+,\1,'                 \
 	-e 's/ at .*//'
 
-# vim: set ft=sh: #
+# kak: filetype=sh

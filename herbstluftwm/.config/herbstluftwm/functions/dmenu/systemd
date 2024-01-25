@@ -55,4 +55,4 @@ while : ;do
 	esac
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -17,4 +17,4 @@ while book=$(ls -1 | grep -E '\.(epub|pdf)$' | sed -r 's/\.(epub|pdf)$//' | mhis
 	zathura "$book".* 2>/dev/null
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

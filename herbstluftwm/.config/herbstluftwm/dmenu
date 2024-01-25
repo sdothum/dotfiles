@@ -78,4 +78,4 @@ if [ $(basename $0) = dmenu ] ;then
 	# pstat gpaste-client || gpaste-client &
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -27,4 +27,4 @@ echo $PANEL_FIFO:$fifo >$PANEL_FIFO
 xdotool search --limit 1 --maxdepth 1 --name "lemonbar:$fifo\$" windowmap >/dev/null && exit
 exec draw panel $fifo
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -56,4 +56,4 @@ else
 	[ -e $PANEL:$(herbstclient attr monitors.focus.index) ] && restore panel || toggle panel
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

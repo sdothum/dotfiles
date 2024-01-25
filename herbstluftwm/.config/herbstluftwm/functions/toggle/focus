@@ -28,4 +28,4 @@ else
 	notify low "Dynamic Focus" Off
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

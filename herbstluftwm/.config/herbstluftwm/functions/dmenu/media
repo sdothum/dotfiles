@@ -60,4 +60,4 @@ done
 for i in $video ;do pstat "$i " && exit ;done
 [ $root ] && restore root
 
-# vim: set ft=sh: #
+# kak: filetype=sh

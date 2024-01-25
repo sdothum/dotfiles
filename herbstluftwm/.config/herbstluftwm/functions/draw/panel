@@ -405,4 +405,4 @@ cat $PANEL_FIFO:$fifo | panel                                    \
 	-u $PANEL_UNDERLINE                                           \
 	-f "$PANEL_FONT:size=$fontsize" -F "$DEFAULT_FG" -B "$DEFAULT_BG" &
 
-# vim: set ft=sh: #
+# kak: filetype=sh

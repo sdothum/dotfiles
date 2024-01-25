@@ -27,4 +27,4 @@ case $toggle in
 	lock    ) screensaver; xscreensaver-command -lock ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -32,4 +32,4 @@ while pgm=$(apps | sed  "1i$(X $EDIT)" | rmenu 'open' $pgm -no-custom) || exit ;
 	esac
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

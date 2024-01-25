@@ -22,4 +22,4 @@ nohup killall -KILL $apps 2>/dev/null &
 
 herbstclient quit
 
-# vim: set ft=sh: #
+# kak: filetype=sh

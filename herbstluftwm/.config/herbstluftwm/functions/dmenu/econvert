@@ -150,4 +150,4 @@ else
 	ditto epub "$(find /tmp -maxdepth 1 -name "*$format")"
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

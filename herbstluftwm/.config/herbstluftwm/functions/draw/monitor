@@ -153,4 +153,4 @@ if [ -e $FULLSCREEN:primary ] || [ -e $FULLSCREEN:secondary ] ;then touch $FULLS
 else                                                                rm -f $FULLSCREEN
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

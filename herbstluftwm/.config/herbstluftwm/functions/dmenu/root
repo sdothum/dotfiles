@@ -87,4 +87,4 @@ done
 
 notify 15 'Panel Contrast' '&lt;Super-Control-Shift-D&gt; to invert contrast'
 
-# vim: set ft=sh: #
+# kak: filetype=sh

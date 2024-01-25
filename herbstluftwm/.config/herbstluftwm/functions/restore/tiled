@@ -9,4 +9,4 @@
 
 herbstclient compare tags.focus.floating = true && herbstclient floating toggle
 
-# vim: set ft=sh: #
+# kak: filetype=sh

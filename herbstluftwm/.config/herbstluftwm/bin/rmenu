@@ -157,4 +157,4 @@ fi
 # strip indent from input!
 echo "$input" | sed "s/^ *//"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

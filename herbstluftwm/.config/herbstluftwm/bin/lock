@@ -13,4 +13,4 @@
 touch $LOCK
 [ $1 ] && herbstclient chain . lock . $@ || herbstclient lock
 
-# vim: set ft=sh: #
+# kak: filetype=sh

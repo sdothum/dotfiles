@@ -161,4 +161,4 @@ hc mousebind Super-Button1         move
 hc mousebind Super-Button2         zoom
 hc mousebind Super-Button3         resize
 
-# vim: set ft=sh: #
+# kak: filetype=sh

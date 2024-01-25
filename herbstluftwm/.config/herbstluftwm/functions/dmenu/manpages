@@ -81,4 +81,4 @@ while : ;do
 	done
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

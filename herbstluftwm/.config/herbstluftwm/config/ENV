@@ -141,4 +141,4 @@ export SEP='∙'
 export LSEP='    '  # even more distraction free!
 export RSEP='    '
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -29,4 +29,4 @@ herbstclient chain . lock . attr theme.normal.color $normal     \
 	. attr theme.padding_left $left . unlock
 draw border &
 
-# vim: set ft=sh: #
+# kak: filetype=sh

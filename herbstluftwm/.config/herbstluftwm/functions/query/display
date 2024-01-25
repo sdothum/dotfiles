@@ -31,4 +31,4 @@ case $1 in
 		xrandr 2>/dev/null | grep -E '[*+] |[*+]$' | sort $secondary | tail -1 | tr 'x' ' '   ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

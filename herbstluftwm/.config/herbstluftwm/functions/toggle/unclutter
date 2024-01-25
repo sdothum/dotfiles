@@ -34,4 +34,4 @@ case $1 in
 	*   ) pstat unclutter && off || on ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -33,4 +33,4 @@ elif pstat picom ;then
 	# killall -KILL xscreensaver
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

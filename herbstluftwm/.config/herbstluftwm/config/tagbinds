@@ -27,4 +27,4 @@ hc detect_monitors
 # hc list_monitors
 # hc set focus_follows_mouse      true
 
-# vim: set ft=sh: #
+# kak: filetype=sh

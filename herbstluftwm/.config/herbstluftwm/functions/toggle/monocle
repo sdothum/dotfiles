@@ -88,4 +88,4 @@ if is primary ;then
 	restore panel
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

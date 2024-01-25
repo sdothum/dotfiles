@@ -22,4 +22,4 @@ case $system in
 	system*diagnostic ) exec dmenu diagnostic ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -14,4 +14,4 @@ while : ;do
 	dmenu $script
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

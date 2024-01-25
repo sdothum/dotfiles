@@ -27,4 +27,4 @@ while : ;do
 	sleep 1
 done &
 
-# vim: set ft=sh: #
+# kak: filetype=sh

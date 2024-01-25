@@ -21,4 +21,4 @@ case $1 in
 	*      ) false ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

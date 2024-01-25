@@ -63,4 +63,4 @@ alarm() {
 
 alarm &  # if invoked from command line..
 
-# vim: set ft=sh: #
+# kak: filetype=sh

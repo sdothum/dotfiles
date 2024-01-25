@@ -156,4 +156,4 @@ draw panel overlay                      # draw over old theme
 sleep $delay                            # frame latency window
 [ "$panel" ] && kill $panel
 
-# vim: set ft=sh: #
+# kak: filetype=sh

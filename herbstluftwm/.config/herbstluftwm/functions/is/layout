@@ -11,4 +11,4 @@
 
 [ $(query layout) = $1 ]
 
-# vim: set ft=sh: #
+# kak: filetype=sh

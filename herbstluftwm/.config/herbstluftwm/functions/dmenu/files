@@ -21,4 +21,4 @@ while name=$(echo | mhistory files | rmenu 'Find File') || exit ;do
 	break
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

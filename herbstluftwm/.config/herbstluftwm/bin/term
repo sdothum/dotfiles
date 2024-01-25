@@ -84,4 +84,4 @@ fi
 [ $visible ] && [ "$title" ] && xdotool search --sync --onlyvisible --limit 1 --classname "${title#* }"
 [ $wait    ] && pwait "$process"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

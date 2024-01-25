@@ -40,4 +40,4 @@ while name=$(echo | mhistory folders | rmenu 'Find Folder') || exit ;do
 	done
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

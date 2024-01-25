@@ -41,4 +41,4 @@ if [ $focus -eq $direction ] ;then [ $focus -eq 0 ] && switch_to 0 || switch_to 
 else                               [ $focus -eq 0 ] && switch_to 1 || switch_to 0
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

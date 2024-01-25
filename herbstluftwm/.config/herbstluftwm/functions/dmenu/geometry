@@ -40,4 +40,4 @@ esac
 mhistory geometry $geometry
 exit
 
-# vim: set ft=sh: #
+# kak: filetype=sh

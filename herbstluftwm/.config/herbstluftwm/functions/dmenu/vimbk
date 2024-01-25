@@ -14,4 +14,4 @@ while [ "$(urls)" ] ;do
 	kill $(echo $url | cut -d' ' -f1)
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

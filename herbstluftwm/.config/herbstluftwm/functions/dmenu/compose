@@ -84,4 +84,4 @@ while editor=$(editors | rmenu 'Compose' $editor -no-custom) || exit ;do
 	exit
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

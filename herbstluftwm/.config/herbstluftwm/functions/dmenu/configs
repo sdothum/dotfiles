@@ -32,4 +32,4 @@ while : ;do
 	exec $EDITOR $file
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

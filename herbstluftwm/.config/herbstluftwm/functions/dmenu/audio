@@ -19,4 +19,4 @@ case $audio in
 	radio ) dmenu radio ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

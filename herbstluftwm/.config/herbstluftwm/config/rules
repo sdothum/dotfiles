@@ -113,4 +113,4 @@ hc rule class=Vimb                         focus=on hook=max
 hc rule class=Vlc                          focus=on switchtag=on fullscreen=on hook=fullscreen
 hc rule class=Zathura                      focus=on hook=max
 
-# vim: set ft=sh: #
+# kak: filetype=sh

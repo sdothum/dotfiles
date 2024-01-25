@@ -11,4 +11,4 @@
 
 [ $1 ] && herbstclient attr "tags.by-name.$1.frame_count" || herbstclient attr tags.focus.frame_count
 
-# vim: set ft=sh: #
+# kak: filetype=sh

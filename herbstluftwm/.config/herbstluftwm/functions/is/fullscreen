@@ -9,4 +9,4 @@
 
 herbstclient compare clients.focus.fullscreen = true 2>/dev/null
 
-# vim: set ft=sh: #
+# kak: filetype=sh

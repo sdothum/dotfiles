@@ -72,4 +72,4 @@ fi
 herbstclient attr theme.active.color $(cat $CSPINE)
 herbstclient compare theme.border_width = 0 && herbstclient attr theme.normal.color $(cat $NSPINE)
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -14,4 +14,4 @@ usage() { usage: "$(basename $0) . instance <instance>"; exit 1; }
 for i in $(query winids) ;do herbstclient compare clients.$i.instance = $1 && { echo $i; winid=true; } ;done
 [ $winid ] || echo ''
 
-# vim: set ft=sh: #
+# kak: filetype=sh

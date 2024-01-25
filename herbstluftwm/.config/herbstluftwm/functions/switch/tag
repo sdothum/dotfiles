@@ -37,4 +37,4 @@ unlock
 # popup tag name when no windows showing (trap minimized windows!)
 [ ! -e $SPANEL ] || ! is nonempty $tag && tag
 
-# vim: set ft=sh: #
+# kak: filetype=sh

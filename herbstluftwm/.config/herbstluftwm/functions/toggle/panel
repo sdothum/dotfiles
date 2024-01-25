@@ -25,4 +25,4 @@ if [ $PANEL_MARGIN ] ;then
 	fi
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

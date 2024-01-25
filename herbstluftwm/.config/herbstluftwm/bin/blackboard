@@ -22,4 +22,4 @@ herbstclient set frame_bg_normal_color '#000000'
 
 [ -e $SPICOM:toggle ] && toggle picom off
 
-# vim: set ft=sh: #
+# kak: filetype=sh

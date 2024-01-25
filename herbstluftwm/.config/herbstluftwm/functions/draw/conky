@@ -15,4 +15,4 @@ pkill -KILL -f '/usr/bin/conky' >/dev/null 2>&1
 sleep $delay
 [ -e $CONKY ] && herbstclient spawn conky
 
-# vim: set ft=sh: #
+# kak: filetype=sh

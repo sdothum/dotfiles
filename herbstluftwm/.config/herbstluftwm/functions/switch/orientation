@@ -22,4 +22,4 @@ case $1 in
 	-2 ) herbstclient chain . lock . rotate . rotate . focus_edge left . unlock ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

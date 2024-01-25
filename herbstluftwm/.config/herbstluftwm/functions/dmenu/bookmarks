@@ -47,4 +47,4 @@ esac
 
 [ "$uri" ] && exec dmenu browser "$uri" $bookmarks
 
-# vim: set ft=sh: #
+# kak: filetype=sh

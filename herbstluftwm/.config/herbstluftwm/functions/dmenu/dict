@@ -44,4 +44,4 @@ done
 mhistory dictionary "$word"
 term "$word" STACK SHELL "dict \"$word\" | less && dmenu dict"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

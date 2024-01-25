@@ -19,4 +19,4 @@ case $edit in
 	folders  ) dmenu folders ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

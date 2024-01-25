@@ -12,4 +12,4 @@ herbstclient lock
 for i in $(seq 1 $(query ttag $TAG)) ;do restore window ;done
 herbstclient unlock
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -263,4 +263,4 @@ if [ $windows -gt 1 ] && [ "$layout" != max ] ;then
 	focus border
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh
