@@ -22,4 +22,4 @@ sed -i '1i\#define _Bool signed char' lib/llrb.h
 doas make
 doas make install
 
-# vim: set ft=sh: #
+# kak: filetype=sh

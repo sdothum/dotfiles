@@ -67,4 +67,4 @@ ditto kak-lsp "check kak-lsp.toml configuration files"
 cp kak-lsp.toml $KAKLSP/kak-lsp.toml.original
 ditto kak-lsp "see make_install lsp"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

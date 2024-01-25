@@ -17,4 +17,4 @@ cd /net/depot/align-$vsn
 make
 doas make install
 
-# vim: set ft=sh: #
+# kak: filetype=sh

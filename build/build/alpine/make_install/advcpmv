@@ -17,4 +17,4 @@ chmod +x install.sh
 doas mv -v advcp /usr/local/bin/cpg
 doas mv -v advmv /usr/local/bin/mvg
 
-# vim: set ft=sh: #
+# kak: filetype=sh

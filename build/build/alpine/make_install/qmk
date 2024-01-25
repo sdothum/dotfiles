@@ -38,4 +38,4 @@ echo 'TAG=="uaccess", ENV{MAJOR}!="", MODE="0660", GROUP="plugdev"' | doas tee /
 doas addgroup shum plugdev
 ditto /dev/ttyACM "reboot required for $USER group pemission to access device"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

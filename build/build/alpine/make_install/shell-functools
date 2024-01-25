@@ -8,4 +8,4 @@
 
 python3 -m pipx install shell-functools
 
-# vim: set ft=sh: #
+# kak: filetype=sh

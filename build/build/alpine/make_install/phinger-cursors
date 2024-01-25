@@ -14,4 +14,4 @@ cd $HOME/.icons
 tar xfj /tmp/phinger-cursors-variants.tar.bz2
 
 
-# vim: set ft=sh: #
+# kak: filetype=sh

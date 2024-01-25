@@ -18,4 +18,4 @@ meson setup --buildtype=release build
 ninja -C build
 doas ninja -C build install
 
-# vim: set ft=sh: #
+# kak: filetype=sh

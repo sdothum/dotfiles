@@ -18,4 +18,4 @@ echo "#!/bin/sh
 flatpak run --user org.gimp.GIMP \$@" >$HOME/.local/bin/gimp
 chmod 755 $HOME/.local/bin/gimp
 
-# vim: set ft=sh: #
+# kak: filetype=sh

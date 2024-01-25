@@ -21,4 +21,4 @@ doas ln -sf $HOME/.config /root
 doas ln -sf $HOME/.fonts /root
 doas ln -sf $HOME/.profile /root
 
-# vim: set ft=sh: #
+# kak: filetype=sh

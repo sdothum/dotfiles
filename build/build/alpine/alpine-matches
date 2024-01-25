@@ -449,4 +449,4 @@ doas apk add zathura-pdf-mupdf
 
 doas apk add mpv
 
-# vim: set ft=sh: #
+# kak: filetype=sh

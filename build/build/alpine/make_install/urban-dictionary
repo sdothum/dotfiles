@@ -43,4 +43,4 @@ python3 main.py ud2.index urban-dictionary-p2 --read-format=DictOrg --write-form
 
 ditto dictionary "copy to stardict and koreader dictionary folders/devices"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

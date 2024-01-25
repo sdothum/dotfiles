@@ -26,4 +26,4 @@ echo "polkit.addRule(function(action, subject) {
 
 doas addgroup $USER plugdev
 
-# vim: set ft=sh: #
+# kak: filetype=sh

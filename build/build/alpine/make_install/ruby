@@ -29,4 +29,4 @@ frum global $VSN
 [ -e $HOME/.gemrc ] || echo 'gem: --no-document' >$HOME/.gemrc
 [ -e /root/.gemrc ] || echo 'gem: --no-document' | doas tee /root/.gemrc
 
-# vim: set ft=sh: #
+# kak: filetype=sh

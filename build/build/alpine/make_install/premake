@@ -14,4 +14,4 @@ make -f Bootstrap.mak linux
 doas cp -v bin/release/premake5 /usr/bin
 
 
-# vim: set ft=sh: #
+# kak: filetype=sh

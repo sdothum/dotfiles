@@ -12,4 +12,4 @@ mv -i $HOME/go/bin/cmd $HOME/go/bin/chatgpt
 ditto apikey "https://platform.openai.com/account/api-keys"
 ditto export "OPENAI_API_KEY=..."
 
-# vim: set ft=sh: #
+# kak: filetype=sh

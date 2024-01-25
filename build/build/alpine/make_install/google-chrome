@@ -16,4 +16,4 @@ echo "#!/bin/sh
 dbus-run-session flatpak run --user com.google.Chrome \$@" >$HOME/.local/bin/google-chrome
 chmod 755 $HOME/.local/bin/google-chrome
 
-# vim: set ft=sh: #
+# kak: filetype=sh

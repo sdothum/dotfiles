@@ -15,4 +15,4 @@ cd tree-sitter-vim
 make
 cp -rv queries $HOME/.config/helix/runtime/queries/vim
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -27,4 +27,4 @@ ditto http://localhost:631 'configure cups-pdf and network shared printers'
 # the usual documents directory
 mkdir -pv $HOME/documents
 
-# vim: set ft=sh: #
+# kak: filetype=sh

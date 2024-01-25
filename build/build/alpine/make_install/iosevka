@@ -289,4 +289,4 @@ else                                      # desktop fonts
 	dfont dyslexic I-descending quasi-extension space=1.125 family=monograffic serifless  # panel/dunst/browser font
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -15,4 +15,4 @@ fi
 
 qk start
 
-# vim: set ft=sh: #
+# kak: filetype=sh

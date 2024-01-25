@@ -26,4 +26,4 @@ chmod 755 $HOME/.local/bin/flatseal
 # doas flatpak override --env=ICON_THEME=Paper-Mono-Dark
 # doas flatpak override --env=GTK_THEME=Arc-Dark
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -17,4 +17,4 @@ unzip -d $HOME/.local/share /tmp/$VSN
 ln -s $HOME/.local/share/${VSN%.zip}/epubcheck.jar $HOME/.local/bin/
 
 
-# vim: set ft=sh: #
+# kak: filetype=sh

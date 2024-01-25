@@ -27,4 +27,4 @@ mailcot localhost  # better test after importing mail
 doas rc-update add dovecot
 # doas rc-service dovecot start
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -14,4 +14,4 @@ make clean
 make binary
 doas make install
 
-# vim: set ft=sh: #
+# kak: filetype=sh

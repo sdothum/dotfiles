@@ -17,4 +17,4 @@ cd -
 doas cp -v bin/release-x64/otfcc* /usr/local/bin
 doas cp -v bin/release-x64/libotfcc* /usr/local/lib
 
-# vim: set ft=sh: #
+# kak: filetype=sh

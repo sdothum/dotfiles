@@ -16,5 +16,4 @@ doas cp -v worm* /usr/local/bin
 
 stow worm
 
-# vim: set ft=sh: #
-
+# kak: filetype=sh

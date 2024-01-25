@@ -17,4 +17,4 @@ chmod 755 $HOME/.local/bin/kvantum
 # qt theme overrides
 # doas flatpak override --env=QT_STYLE_OVERRIDE=kvantum --filesystem=xdg-config/Kvantum:ro <name of flatpak app>
 
-# vim: set ft=sh: #
+# kak: filetype=sh

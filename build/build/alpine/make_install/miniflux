@@ -59,4 +59,4 @@ doas rc-service miniflux start
 doas mkdir -pv /var/www/localhost/fonts
 doas cp -v $HOME/.fonts/lythe/*.ttf /var/www/localhost/fonts
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -42,4 +42,4 @@ cd /net/depot
 [ -d simple-completion-language-server ] && { cd simple-completion-language-server; git pull; } || {  git clone https://github.com/estin/simple-completion-language-server.git;  cd simple-completion-language-server; }
 cargo install --path .
 
-# vim: set ft=sh: #
+# kak: filetype=sh

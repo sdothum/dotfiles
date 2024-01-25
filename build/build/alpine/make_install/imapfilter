@@ -29,4 +29,4 @@ make
 sed -i '/chmod.*(LUA)/s/\$(LUA)/*.lua/' src/Makefile  # fix statement expansion error
 doas make install
 
-# vim: set ft=sh: #
+# kak: filetype=sh

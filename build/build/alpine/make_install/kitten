@@ -12,4 +12,4 @@ wget -P /tmp https://github.com/kovidgoyal/kitty/releases/latest/download/kitten
 doas cp /tmp/kitten-linux-amd64 /usr/bin/kitten
 doas chmod 755 /usr/bin/kitten
 
-# vim: set ft=sh: #
+# kak: filetype=sh

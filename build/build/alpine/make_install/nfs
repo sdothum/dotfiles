@@ -47,4 +47,4 @@ LABEL=Backup /backup btrfs rw,nodev,noatime,autodefrag,space_cache 0 0
 
 [ $SERVER = luna ] && client || server
 
-# vim: set ft=sh: #
+# kak: filetype=sh

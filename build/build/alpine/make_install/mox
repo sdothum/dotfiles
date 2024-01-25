@@ -44,4 +44,4 @@ else
 	doas rc-service nginx restart
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

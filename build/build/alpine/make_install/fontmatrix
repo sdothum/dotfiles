@@ -20,4 +20,4 @@ flatpak run --user com.github.fontmatrix.Fontmatrix
 chmod 755 $HOME/.local/bin/fontmatrix
 ln -s $HOME/.var/app/com.github.fontmatrix.Fontmatrix/.Fontmatrix
 
-# vim: set ft=sh: #
+# kak: filetype=sh

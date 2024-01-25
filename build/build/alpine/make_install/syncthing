@@ -21,4 +21,4 @@ doas rc-update add syncthing
 doas rc-service syncthing start
 
 
-# vim: set ft=sh: #
+# kak: filetype=sh

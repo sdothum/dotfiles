@@ -18,4 +18,4 @@ doas make install
 
 stow berry
 
-# vim: set ft=sh: #
+# kak: filetype=sh

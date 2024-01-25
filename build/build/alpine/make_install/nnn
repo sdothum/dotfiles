@@ -33,4 +33,4 @@ sudo make install  # into local/bin
 mkdir -p $HOME/.config/nnn/plugins
 cp plugins/* plugins/.* $HOME/.config/nnn/plugins/
 
-# vim: set ft=sh: #
+# kak: filetype=sh
