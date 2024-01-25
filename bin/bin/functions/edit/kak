@@ -6,7 +6,7 @@
 
 # ....................................................................... Editor
 
-# Usage: [name=<title>] kak [-l] [-- | ID=<id>] [WAIT] [<row>x<col>] <file>*
+# Usage: [name=<title>] kak [-l | -h] [-- | ID=<id>] [WAIT] [<row>x<col>] <file>*
 
 # share all instances (clients) with a single kak server session
 ID=$USER  # default session id
@@ -22,23 +22,27 @@ export TABSTOP=3  # default for (pipe), see align
 
 while : ;do
 	case $1 in
-		-l            ) $KAK -l; exit ;;  # list session ids
-		--            ) ID=$(rand) ;;     # force new instance
+		-l            ) $KAK -l; exit    ;;  # list session ids
+		-h*           ) $KAK -help; exit ;;
+		--            ) ID=$(rand)   ;;      # force new instance
 		ID=*          ) ID="${1#*=}" ;;
 		WAIT          ) WAIT=$1 ;;
-		*[0-9]x[0-9]* ) XY=$1 ;;
-		*             ) break ;;
+		*[0-9]x[0-9]* ) XY=$1   ;;
+		*             ) break   ;;
 	esac
 	shift
 done
 
-# avoid dead session IDs
-if $KAK -l | grep -q "$ID.*dead" ;then
-	ID=$($KAK -l | grep -v dead | head -1)  # attach to available ID
-	[ $ID ] || ID=$(rand)
-fi
+# avoid dead session IDs (deprecated)
+# if $KAK -l | grep -q "$ID.*dead" ;then
+# 	id=$($KAK -l | grep -v dead | grep "$ID")  # attach to available ID
+# 	[ $id ] && ID=$id || ID="$ID-$(rand 3 an)"
+# fi
 # attach client or create new (daemon) session id
-$KAK -l | grep -v dead | grep $ID && ID="-c $ID" || ID="-s $ID"
+# $KAK -l | grep -v dead | grep $ID && ID="-c $ID" || ID="-s $ID"
+
+$KAK -l | grep -q dead | $KAK -clear  # dead sessions
+$KAK -l | grep $ID && ID="-c $ID" || ID="-s $ID"
 
 # snapshot sources (in lieu of persistent undo avalability)
 hgadd $@ &  # don' wait :)

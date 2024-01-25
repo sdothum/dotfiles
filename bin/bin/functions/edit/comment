@@ -6,7 +6,7 @@
 
 # ........................................................... modal pipe actions
 
-usage() { echo "<selection> | $(basename $0) [l'eader | t'railer | u'nderline | r'uler [<char>]]
+usage() { echo "<selection> | $(basename $0) [l'eader | t'railer | u'nderline | r'uler [<char>]] | [# | // | --]
 >   where, first word of line is treated as comment symbol
 >          '.' -> default leader/trailer 
 >          '━' -> default (heavy horizontal) underline
@@ -62,11 +62,14 @@ fillchar() {
 }
 
 case $action in
-	l* ) fillchar . ;;
-	t* ) fillchar . ;;
-	u* ) fillchar ━ ;;
-	r* ) fillchar ═ ;;
-	*  ) usage ;;
+	'#'  ) sed 's/^/# /'  ;; # special kakoune commenting action where comment-line failed
+	'//' ) sed 's|^|// |' ;;
+	'--' ) sed 's/^/-- /' ;;
+	l*   ) fillchar . ;;
+	t*   ) fillchar . ;;
+	u*   ) fillchar ━ ;;
+	r*   ) fillchar ═ ;;
+	*    ) usage ;;
 esac
 
 while IFS= read -r line ;do

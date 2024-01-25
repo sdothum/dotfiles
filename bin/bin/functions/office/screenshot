@@ -42,6 +42,6 @@ else
 fi | convert - -size 1600 -quality $quality $target/$jpg 2>/dev/null
 [ $? -ne 0 ] && exit 1
 ditto jpg "$jpg"
-notify 0 low 'Screenshot' "$target/$jpg"
+notify 60 low 'Screenshot' "$target/$jpg"
 
 # vim: set ft=sh: #
