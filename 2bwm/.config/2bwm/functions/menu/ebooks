@@ -97,4 +97,4 @@ while : ;do
 	export matching=normal  # rofi option
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

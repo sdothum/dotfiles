@@ -12,5 +12,4 @@
 eval $(xdotool getwindowgeometry --shell $winid)
 draw $winid $HEIGHT $WIDTH
 
-# vim: set ft=sh: #
-
+# kak: filetype=sh

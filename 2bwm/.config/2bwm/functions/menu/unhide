@@ -21,4 +21,4 @@ while window=$(windows | column -s^ -t  | rmenu 'raise' -no-custom) || exit ;do
 	finished && break
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -32,4 +32,4 @@ while files=$(projects | rmenu 'Edit Project' -no-custom) || exit ;do
 	esac
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

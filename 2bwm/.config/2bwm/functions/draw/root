@@ -107,5 +107,4 @@ root() {
 
 [ $blackboard ] || [ -e $COLOR ] || $XSETROOT $(root 0) &
 
-# vim: set ft=sh: #
-
+# kak: filetype=sh

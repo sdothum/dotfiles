@@ -17,4 +17,4 @@ console || ifno "reload 2bwm" && exit
 sleep 0.1
 xdotool key -delay 100 Super+Control+r
 
-# vim: set ft=sh: #
+# kak: filetype=sh

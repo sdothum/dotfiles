@@ -6,6 +6,7 @@ $HOME/build/obarun
 $HOME/build/void
 $HOME/.config/2bwm
 $HOME/.config/fish
+$HOME/.config/kak
 $HOME/.config/herbstluftwm
 $HOME/.config/nnn/plugins
 $HOME/.vim/after

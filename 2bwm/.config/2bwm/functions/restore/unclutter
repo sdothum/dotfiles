@@ -9,4 +9,4 @@
 
 [ -e $SESSION ] && toggle unclutter on
 
-# vim: set ft=sh: #
+# kak: filetype=sh

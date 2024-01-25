@@ -115,4 +115,4 @@ case $1 in
 	far     ) far         ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -9,4 +9,4 @@
 
 xdotool search --onlyvisible --classname mail windowclose || aerc
 
-# vim: set ft=sh: #
+# kak: filetype=sh

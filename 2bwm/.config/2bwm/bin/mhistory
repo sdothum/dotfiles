@@ -48,4 +48,4 @@ else
 	cat "$history" /tmp/history:nonmatch
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

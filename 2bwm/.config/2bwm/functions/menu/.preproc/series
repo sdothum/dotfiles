@@ -13,4 +13,4 @@ if [ -e "$library/The.Daily.Show" ] ;then
 	done
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

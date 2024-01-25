@@ -90,4 +90,4 @@ done
 
 invert_panel notify  # keybind message
 
-# vim: set ft=sh: #
+# kak: filetype=sh

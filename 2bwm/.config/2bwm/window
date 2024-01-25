@@ -48,5 +48,4 @@ else
 	usage: $0
 fi
 
-# vim: set ft=sh: #
-
+# kak: filetype=sh

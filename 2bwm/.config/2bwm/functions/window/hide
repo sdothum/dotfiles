@@ -17,4 +17,4 @@ keyboard on
 [ -e $(cat $PANEL_FIFO) ] || exit
 [ $(xdotool search --onlyvisible --desktop $(xdotool get_desktop) --class '.*' | wc -l) -eq 0 ] && echo "X" >$(cat $PANEL_FIFO)
 
-# vim: set ft=sh: #
+# kak: filetype=sh

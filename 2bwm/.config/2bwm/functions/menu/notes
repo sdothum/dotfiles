@@ -154,4 +154,4 @@ while note=$(notes | rmenu "$(echo $ext | sed -r 's/./\u&/') [/search]" $(highli
 	[ $update ] && { cache; unset update; }
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

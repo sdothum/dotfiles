@@ -12,4 +12,4 @@ for i in space tab return backspace up down left right home end comma period 0 1
 	ugrep --ignore-case -v "^[ \t]*//" $config | a "xk_$i," | cut -d'{' -f2- | sed 's/^/{/'
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

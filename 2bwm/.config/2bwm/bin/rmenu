@@ -57,8 +57,8 @@ indent='        '
 # tune padding to displaywidth / (font * factor) for current monitor resolutions in system
 if [ $width -ge 3440 ] ;then
 	padsize $width 13 '4 / 5'
-	leader="$indent$indent$indent$indent$indent$leader"
-	indent="$indent$indent$indent$indent$indent$indent$indent"  # 4K real estate!
+	leader="$indent$indent$indent$indent$indent$indent$indent$leader"
+	indent="$indent$indent$indent$indent$indent$indent$indent$indent$indent"  # 4K real estate!
 	fontsize=12
 elif [ $width -gt 1920 ] ;then
 	padsize $width 13 '3 / 2'
@@ -135,4 +135,4 @@ input=$(cat $stdin | sed "s/^/$indent/" |                      \
 # strip indent from input!
 echo "$input" | sed "s/^ *//"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

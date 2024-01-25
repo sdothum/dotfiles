@@ -9,4 +9,4 @@
 
 xdotool search --onlyvisible --classname pcmanfm windowclose || pcmanfm
 
-# vim: set ft=sh: #
+# kak: filetype=sh

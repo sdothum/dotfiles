@@ -33,4 +33,4 @@ while cmd=$(actions | rmenu 'Session' $cmd -no-custom) || exit ;do
 	break
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

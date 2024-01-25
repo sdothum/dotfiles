@@ -9,4 +9,4 @@
 
 xdotool search --onlyvisible --classname nnn windowclose || nnn TMUX
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -77,4 +77,4 @@ case $1 in
 	all    ) snaphorizon ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

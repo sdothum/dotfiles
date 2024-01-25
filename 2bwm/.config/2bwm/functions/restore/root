@@ -22,4 +22,4 @@ case $background in
 	*         )	draw root color ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

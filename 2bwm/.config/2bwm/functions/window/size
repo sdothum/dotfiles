@@ -62,5 +62,4 @@ case $1 in
 esac
 
 
-# vim: set ft=sh: #
-
+# KAK: FILETYPE=SH

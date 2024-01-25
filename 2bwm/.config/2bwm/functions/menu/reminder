@@ -27,4 +27,4 @@ while appmt=$(reminder 52 | sed  "1i$(X $ADD)\n$(X $EDIT)" | rmenu 'Appointment'
 	esac
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

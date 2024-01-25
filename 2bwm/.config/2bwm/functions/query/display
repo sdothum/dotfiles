@@ -18,4 +18,4 @@ case $1 in
 	*      ) echo "$(wattr w $(lsw -r)) $(wattr h $(lsw -r))" ;;  # typically, set -- $(query display) to reference X Y as $1 $2
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

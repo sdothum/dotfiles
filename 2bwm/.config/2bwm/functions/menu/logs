@@ -22,4 +22,4 @@ case $mode in
 	Watch ) [ $file ] && term "$file" tail -f $file.log ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

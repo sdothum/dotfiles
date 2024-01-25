@@ -9,4 +9,4 @@
 
 xdotool key Super+Tab  # find a window after a window close or hide
 
-# vim: set ft=sh: #
+# kak: filetype=sh

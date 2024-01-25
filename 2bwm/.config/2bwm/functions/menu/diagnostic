@@ -33,4 +33,4 @@ while diagnostic=$(appslist "$diagnostics" | rmenu 'Diagnostic' $diagnostic -no-
 	exit
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

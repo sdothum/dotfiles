@@ -12,9 +12,8 @@ restore root
 conky clock auto
 draw panel
 restore unclutter
-qk stop
-qk start
 pulse
 udev
+qk stop  # HACK: need to start in a term session
 
-# vim: set ft=sh: #
+# kak: filetype=sh

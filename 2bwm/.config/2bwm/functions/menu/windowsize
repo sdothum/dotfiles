@@ -7,30 +7,28 @@
 
 # .................................................................. Window size
 
-actions() { echo "
-Mod+0  revert
-Mod+1  rotate
-Mod+2  monocle
-Mod+3  B4
-Mod+4  A4
-Mod+5  B5
-Mod+6  A5
-Mod+7  right
-Mod+8  left
-Mod+9  B6
-"; }
+actions() {
+	echo "Mod+0        revert
+Mod+Ctrl+0   stretch
+Mod+1        rotate
+Mod+2        monocle
+Mod+3        B4
+Mod+4        A4
+Mod+5        B5
+Mod+6        A5
+Mod+7        B6
+Mod+8        A6
+Mod+9        B7"
+}
 
-[ $1 ] && cmd=$(actions | grep "+$1 ") || cmd=$(actions | rmenu 'Window size' $cmd -no-custom) || exit
+[ $1 ] && cmd=$(actions | grep "Mod[+]$1 ") || cmd=$(actions | rmenu 'Window size' $cmd -no-custom) || exit
 
-cmd=$(echo "$cmd" | sed "s/Mod.[0-9] *//")
+echo "$cmd" | grep -q "Mod" && cmd=$(echo "$cmd" | sed "s/Mod[^ ]* *//")
 case $cmd in
-	revert ) window revert        ;;
-	rotate ) window rotate        ;;
-	left   ) window stretch left  ;;
-	right  ) window stretch right ;;
-	near   ) window stretch near  ;;
-	far    ) window stretch far   ;;
-	*      ) window size $cmd     ;;
+	revert  ) window revert        ;;
+	rotate  ) window rotate        ;;
+	stretch ) menu windowstretch   ;;
+	*       ) window size $cmd     ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

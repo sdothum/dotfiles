@@ -1,0 +1,47 @@
+#!/usr/bin/dash
+#
+# sdothum - 2016 (c) wtfpl
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Window size
+
+actions() {
+	echo "Mod+0         revert
+Mod+Shift+0   size
+Mod+1         rotate
+Mod+2         monocle
+              top
+              bottom
+              left
+              right
+              top left
+              top right
+              bottom left
+              bottom right
+              near horizontal
+              far horizontal"
+}
+
+# keybinds to menu windowstretch not currently assigned in 2bwm SEE: menu windowsize
+[ $1 ] && cmd=$(actions | grep "Mod[+]$1 ") || cmd=$(actions | rmenu 'Stretch window to' $cmd -no-custom) || exit
+
+echo "$cmd" | grep -q "Mod" && cmd=$(echo "$cmd" | sed "s/Mod[^ ]* *//")
+case $cmd in
+	revert  ) window revert              ;;
+	rotate  ) window rotate              ;;
+	size    ) menu windowsize            ;;
+	top     ) window stretch top         ;;
+	bottom  ) window stretch bottom      ;;
+	left    ) window stretch left        ;;
+	right   ) window stretch right       ;;
+	t*left  ) window stretch topleft     ;;
+	t*right ) window stretch topright    ;;
+	b*left  ) window stretch bottomleft  ;;
+	b*right ) window stretch bottomright ;;
+	near    ) window stretch near        ;;  # horizontal axis
+	far     ) window stretch far         ;;
+esac
+
+# kak: filetype=sh

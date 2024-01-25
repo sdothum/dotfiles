@@ -51,4 +51,4 @@ export BACKGROUND=$HOME/images/default  # ln to WALLPAPER or WALLCOLOR, see draw
 export BLACKBOARD=$TWOBWM:blackboard
 export THEME=$TWOBWM:theme
 
-# vim: set ft=sh: #
+# kak: filetype=sh

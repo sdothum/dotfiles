@@ -9,4 +9,4 @@
 
 xdotool search --onlyvisible --classname root windowclose || nnn ROOT
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -13,5 +13,4 @@
 draw $winid $WIDTH $HEIGHT
 xdotool windowmove --sync $winid $X $Y
 
-# vim: set ft=sh: #
-
+# kak: filetype=sh

@@ -12,4 +12,4 @@ draw root invert
 toggle picom on
 draw panel
 
-# vim: set ft=sh: #
+# kak: filetype=sh

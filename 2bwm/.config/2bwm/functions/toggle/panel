@@ -8,4 +8,4 @@
 # ................................................................. Toggle panel
 
 xdotool search --onlyvisible --limit 1 --maxdepth 1 --name "lemonbar" windowunmap >/dev/null || xdotool search --limit 1 --maxdepth 1 --name "lemonbar" windowmap >/dev/null
-# vim: set ft=sh: #
+# kak: filetype=sh
