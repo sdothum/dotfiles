@@ -8,9 +8,9 @@
 # ...................................... lambda calculus if-else kakscript block
 
 # if %sh{ [ test.. ] && echo true || echo false } %{ then.. } %{ else.. }
-define-command true -params 2 %{ eval %arg{1} }
+define-command true  -params 2 %{ eval %arg{1} }
 define-command false -params 2 %{ eval %arg{2} }
-define-command if -params 3 %{ eval -verbatim %arg{1} %arg{2} %arg{3} }
+define-command if    -params 3 %{ eval -verbatim %arg{1} %arg{2} %arg{3} }
 
 # ........................................................................ Theme
 

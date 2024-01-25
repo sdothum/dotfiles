@@ -143,7 +143,7 @@ set-face window Admonitions               "+bf@Error"
 
 # ...................................................................... Peneira
 
-set-face window PeneiraSelected           "%opt{foreground},%opt{linenr}"
+set-face window PeneiraSelected           "%opt{foreground},%opt{faint_blue}"
 set-face window PeneiraFlag               LineNumberCursor
 set-face window PeneiraMatches            "%opt{background},%opt{selection}+b"
 set-face window PeneiraFileName           attribute
