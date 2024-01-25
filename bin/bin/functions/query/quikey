@@ -8,4 +8,4 @@
 
 qk ls | grep " $1 " | cut -d\| -f5 | sed 's/^ *//; s/ *$//'
 
-# vim: set ft=sh: #
+# kak: filetype=sh

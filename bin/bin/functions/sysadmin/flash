@@ -14,4 +14,4 @@ usage() { usage: "$(basename $0) <drive> <iso>, where <drive> is [a-z]"; exit 1;
 cmd="dd bs=4M if=$2 of=/dev/sd$1 status=progress oflag=sync"
 ifno "$cmd" || sudo $cmd
 
-# vim: set ft=sh: #
+# kak: filetype=sh

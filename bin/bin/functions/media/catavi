@@ -14,4 +14,4 @@ trap "rm -f $TEMPFILE" EXIT
 cat "$@" >$TEMPFILE
 mencoder -forceidx -oac copy -ovc copy $TEMPFILE -o joined.avi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

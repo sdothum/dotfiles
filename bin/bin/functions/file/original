@@ -32,4 +32,4 @@ if [ -e "$1" ] ;then
 fi
 exit 1
 
-# vim: set ft=sh: #
+# kak: filetype=sh

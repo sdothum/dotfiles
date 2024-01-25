@@ -32,4 +32,4 @@ for i in $files ;do
 done
 
 
-# vim: set ft=sh: #
+# kak: filetype=sh

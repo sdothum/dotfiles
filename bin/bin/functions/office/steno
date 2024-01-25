@@ -12,4 +12,4 @@ vim -g -f -c 'set filetype=steno' $file
 rm -f $file
 notify keyboard 'exit steno layer'
 
-# vim: set ft=sh: #
+# kak: filetype=sh

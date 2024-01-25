@@ -16,4 +16,4 @@ xinput set-prop 'Logitech USB Trackball'  'Evdev Wheel Emulation' 1
 xinput set-prop 'Logitech USB Trackball'  'Evdev Wheel Emulation Button' 8
 xinput set-prop 'Logitech USB Trackball'  'Evdev Middle Button Emulation' 1
 
-# vim: set ft=sh: #
+# kak: filetype=sh

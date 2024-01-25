@@ -26,4 +26,4 @@ sv restart dovecot
 # expect cmdfile host user password
 expect /tmp/mailcot ${1:-$(hostname)} ${2:-$USER} ${3:-dovecot}
 
-# vim: set ft=sh: #
+# kak: filetype=sh

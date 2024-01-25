@@ -8,4 +8,4 @@
 
 column -c $(tput cols)
 
-# vim: set ft=sh: #
+# kak: filetype=sh

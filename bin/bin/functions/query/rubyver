@@ -8,4 +8,4 @@
 
 exists ruby && ruby -v | sed -r 's/ruby ([0-9]*\.[0-9]*\.[0-9]*).*/\1/'
 
-# vim: set ft=sh: #
+# kak: filetype=sh

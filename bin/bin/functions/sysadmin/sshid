@@ -13,4 +13,4 @@ usage() { usage: "$(basename $0) <hostname>"; exit 1; }
 ditto verify "ssh login to $1"
 ssh $1
 
-# vim: set ft=sh: #
+# kak: filetype=sh

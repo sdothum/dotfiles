@@ -17,4 +17,4 @@ softtab() { [ $tab ] && sed "s/\t/   /g" $OUTPUT || cat $OUTPUT; }  # convert sc
 [ $1 ] && OUTPUT=$1 || sed -r "/^-->.\[0;34m/s/.*//; s/^-->.\[1m(.*.\[0m)$/${dictionary}(?) \1/" >$OUTPUT  # hilight sdcv words
 [ $(( $(tput lines) - 2 )) -gt $(wc -l $OUTPUT | cut -d' ' -f1) ] && softtab || softtab | less
 
-# vim: set ft=sh: #
+# kak: filetype=sh

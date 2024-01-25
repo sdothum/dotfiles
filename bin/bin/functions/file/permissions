@@ -10,4 +10,4 @@
 sudo chown -cR $USER:users $1
 sudo chmod -cR 775 $1
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -9,4 +9,4 @@
 # to precision
 echo "scale=4\n$argv\nquit" | bc
 
-# vim: set ft=sh: #
+# kak: filetype=sh

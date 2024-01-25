@@ -85,4 +85,4 @@ case $shell in
 	*         ) $shell -c history | grep "$@" ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

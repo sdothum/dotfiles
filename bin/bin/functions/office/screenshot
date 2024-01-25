@@ -44,4 +44,4 @@ fi | convert - -size 1600 -quality $quality $target/$jpg 2>/dev/null
 ditto jpg "$jpg"
 notify 60 low 'Screenshot' "$target/$jpg"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -18,4 +18,4 @@ if [ "$pids" ] ;then
 	defunct -v | grep -E --color "$pids"
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

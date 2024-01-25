@@ -40,4 +40,4 @@ fi
 ditto -- "check customization $1"
 return 0
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -12,4 +12,4 @@
 heading '━' $@
 echo
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -10,4 +10,4 @@
 xdotool key s c a l e equal ${1:-4} Return
 bc
 
-# vim: set ft=sh: #
+# kak: filetype=sh

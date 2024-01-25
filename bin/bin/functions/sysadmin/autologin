@@ -33,4 +33,4 @@ else
 	service enable agetty-autologin-$tty
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

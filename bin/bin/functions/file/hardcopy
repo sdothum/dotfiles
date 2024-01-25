@@ -244,4 +244,4 @@ while [ $1 ] ;do
 done
 hardcopy eject
 
-# vim: set ft=sh: #
+# kak: filetype=sh

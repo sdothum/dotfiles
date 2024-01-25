@@ -11,4 +11,4 @@
 
 iconv -c -f utf-8 -t ascii $@
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -9,4 +9,4 @@
 # escape space characters
 echo file://$(echo $@ | sed 's/ /%20/g')
 
-# vim: set ft=sh: #
+# kak: filetype=sh

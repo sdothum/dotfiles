@@ -141,4 +141,4 @@ head $typefile
 gpaste-client file $typefile
 notify low 'Amphetype import' "$typefile"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

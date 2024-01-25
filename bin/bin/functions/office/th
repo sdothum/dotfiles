@@ -38,4 +38,4 @@ else
 	echo "$output" | grep -v " " | column        # words only (no phrases)
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

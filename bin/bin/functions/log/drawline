@@ -19,4 +19,4 @@ line=$(echo $line | sed "s/X/$linechar/g" | sed "s/^\(.\{$width\}\).*/\1/")
 
 echo "$color$line${NOCOLOR}"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

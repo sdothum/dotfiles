@@ -82,4 +82,4 @@ while read line <&3 ;do
 	fi
 done 3< $LINES | sed -r ":a; s/^(${space}*)$space/\1 /; ta; s/$tab/\t/g; s/$dollar/$/g; s/$backslash/\\\/g"  # leading :space:
 
-# vim: set ft=sh: #
+# kak: filetype=sh

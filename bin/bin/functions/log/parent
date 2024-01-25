@@ -22,4 +22,4 @@ parent() {
 
 echo "$(date "+%M'%S\"")  $(parent) -> $CHILD" >>$TRACE
 
-# vim: set ft=sh: #
+# kak: filetype=sh

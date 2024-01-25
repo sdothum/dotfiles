@@ -135,4 +135,4 @@ while read action file package <&3 ;do
 	[ $package ] && vacuum
 done 3< $rules
 
-# vim: set ft=sh: #
+# kak: filetype=sh

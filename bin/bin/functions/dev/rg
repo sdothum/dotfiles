@@ -9,4 +9,4 @@
 # wrapper for notational-fzf-vim
 /usr/bin/rg --unrestricted --ignore-file $HOME/.agignore $@
 
-# vim: set ft=sh: #
+# kak: filetype=sh

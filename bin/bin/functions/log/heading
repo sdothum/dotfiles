@@ -32,4 +32,4 @@ leader=$(echo $leader | sed "s/[\^]/$delimeter/g")
 attention "$leader   $message   $leader$pad"
 [ $trace ] && { echo "$(timestamp)"; unset trace; }
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -9,4 +9,4 @@
 # stupid git!
 pstat turses || turses &
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -25,4 +25,4 @@ if [ $free -lt $threshold ] ;then
 fi
 ditto 'memory / swap usage OK'
 
-# vim: set ft=sh: #
+# kak: filetype=sh

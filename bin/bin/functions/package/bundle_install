@@ -162,4 +162,4 @@ elif [ $deferred ] && [ -e $deferred ] ;then
 	ifno "bundle_install $deferred" || exec bundle_install $deferred
 fi
 
-# vim: set ft=sh: 
+# kak: filetype=sh

@@ -11,4 +11,4 @@
 cpu arm && exit
 [ "$1" ] && gpaste-client file "$@" || gpaste-client | head -1 | cut -d' ' -f2
 
-# vim: set ft=sh: #
+# kak: filetype=sh

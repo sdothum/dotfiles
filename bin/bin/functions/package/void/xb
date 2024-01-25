@@ -156,4 +156,4 @@ case $action in
 	unhold     ) [ $pkgver ] && { sudo xbps-pkgdb -m unhold $options $package; ditto unhold "$pkgver"; } ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

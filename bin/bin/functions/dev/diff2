@@ -15,4 +15,4 @@ done
 # 2 column ouptut if any diff..
 [ $2 ] && cmp $1 $2 || /usr/bin/diff -y --color $opts $1 $2 | less -R
 
-# vim: set ft=sh: #
+# kak: filetype=sh

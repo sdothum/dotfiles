@@ -10,4 +10,4 @@ conky clock on
 alock -a pam -b none -i frame:width=2
 conky clock
 
-# vim: set ft=sh: #
+# kak: filetype=sh

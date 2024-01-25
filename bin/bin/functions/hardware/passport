@@ -22,4 +22,4 @@ else
 	notify 'My Passport' 'Reconnect drive to establish /dev/.. assignment\nthen rerun "passport" to mount drive'
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

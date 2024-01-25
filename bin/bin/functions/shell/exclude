@@ -20,4 +20,4 @@ ignore=$(grep -E -v '^#|^ *$' $IGNORE | sed -e 's/^\./\\./g; s/\*/.*/g' | tr '\n
 # <regex> restricts exclude to filename portion of input list, see a and al
 [ $1 ] && grep -E -v "\($ansi\)?.*\($ignore\)" | grep -E -v "$1" || grep -E -v "\($ansi\)?.*\($ignore\)"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

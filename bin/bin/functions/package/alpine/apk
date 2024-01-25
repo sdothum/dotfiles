@@ -50,4 +50,4 @@ case $1 in
 	*        ) doas /sbin/apk $@ ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -73,4 +73,4 @@ done
 
 videomode off
 
-# vim: set ft=sh: #
+# kak: filetype=sh

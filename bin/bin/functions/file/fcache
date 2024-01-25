@@ -65,4 +65,4 @@ wait
 grep -q "$node" $FCACHE || echo $type $node $maxdepth $perm $regextype $regex >>$FCACHE  # see fcached (tbd)
 [ $nocat ] || cat $cache $BOOKMARKS                                                      # append bookmarks
 
-# vim: set ft=sh: #
+# kak: filetype=sh

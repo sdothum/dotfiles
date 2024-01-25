@@ -13,4 +13,4 @@ query=$(pacman -Qs $@ | grep "local/$@ .*" | sed 's,local/,,')
 installed_heading $query
 exit 0
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -14,4 +14,4 @@ sudo chown $USER:users /dev/ttyACM*
 $HOME/.local/bin/plover.AppImage &
 xsync plover
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -49,4 +49,4 @@ case $1 in
 	*  ) watchq f $ROOT $NAME $@; [ $(pgrep -cf "watchq f $ROOT $NAME") -eq 1 ] && mail & ;;  # delay for imap processing latencies
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

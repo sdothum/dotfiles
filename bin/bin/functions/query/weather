@@ -24,4 +24,4 @@ else
 	eval notify $seconds $(conky weather | sed -r 's|(.*), (.*)|" \1" " \2"|')
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -60,4 +60,4 @@ case $1 in
 	*    ) $NNN "${NDIR:-$@}"                     2>/tmp/nnn.log ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

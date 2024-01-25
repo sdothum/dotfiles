@@ -66,4 +66,4 @@ while read file <&3 ;do
 	done
 done 3< $FILES
 
-# vim: set ft=sh: #
+# kak: filetype=sh

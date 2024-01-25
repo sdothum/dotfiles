@@ -8,4 +8,4 @@
 
 pstat startx
 
-# vim: set ft=sh: #
+# kak: filetype=sh

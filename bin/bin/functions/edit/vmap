@@ -50,4 +50,4 @@ vmap() {
 # vim <S-F1> call uses more
 [ $title ] && vmap | less -RX || vmap | less
 
-# vim: set ft=sh: #
+# kak: filetype=sh

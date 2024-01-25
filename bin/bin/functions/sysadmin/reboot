@@ -25,4 +25,4 @@ sudo rm -f /tmp/login:console
 (sleep 0.1; pkill $(cat $HOME/.windowmanager)) &
 exec sudo /sbin/reboot
 
-# vim: set ft=sh: #
+# kak: filetype=sh

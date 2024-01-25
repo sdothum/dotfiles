@@ -15,4 +15,4 @@ for i in $@ ;do xb Q $i >/dev/null || missing="$missing$i " ;done
 # install missing packages
 [ "$missing" ] && { ifno "install $missing" && exit 1; for i in $missing ;do xb S $i ;done }
 
-# vim: set ft=sh: #
+# kak: filetype=sh

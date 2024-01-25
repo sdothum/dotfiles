@@ -10,4 +10,4 @@
 
 sed -r "s/.*/'&'/"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

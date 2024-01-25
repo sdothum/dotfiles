@@ -12,4 +12,4 @@ alpine && BIN=/bin || BIN=/usr/bin
 echo "netstat -tnp $1"
 sudo $BIN/netstat -tnp $1
 
-# vim: set ft=sh: #
+# kak: filetype=sh

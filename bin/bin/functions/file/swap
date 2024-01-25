@@ -40,4 +40,4 @@ case $# in
 	* ) usage ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

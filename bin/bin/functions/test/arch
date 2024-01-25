@@ -8,4 +8,4 @@
 
 [ -e /usr/bin/pacman ]
 
-# vim: set ft=sh: #
+# kak: filetype=sh

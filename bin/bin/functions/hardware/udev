@@ -13,4 +13,4 @@ else
 	notify critical udev "reload udev rules failed"
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

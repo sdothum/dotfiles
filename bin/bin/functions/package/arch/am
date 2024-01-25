@@ -13,4 +13,4 @@ usage() { usage: "$(basename $0) <package>"; exit 1; }
 wrappaur=$(aurwrapper)
 $wrappaur -Ss $@
 
-# vim: set ft=sh: #
+# kak: filetype=sh

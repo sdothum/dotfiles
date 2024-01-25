@@ -22,4 +22,4 @@ case $@ in
 	*       )	sudo /sbin/btrfs $@ ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

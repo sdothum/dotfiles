@@ -123,4 +123,4 @@ systemd() {
 
 exists openrc && openrc $@ || exists runit && runit $@ || exists s6 && s6 $@ || systemd $@
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -11,4 +11,4 @@
 # no process && ..
 p $@ && exit 1 || exit 0
 
-# vim: set ft=sh: #
+# kak: filetype=sh

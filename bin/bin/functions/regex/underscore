@@ -11,4 +11,4 @@
 
 [ "$1" ] && echo "$@" | tr ' ' '_' || tr ' ' '_'
 
-# vim: set ft=sh: #
+# kak: filetype=sh

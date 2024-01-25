@@ -75,4 +75,4 @@ esac
 sv show
 reboot
 
-# vim: set ft=sh: #
+# kak: filetype=sh

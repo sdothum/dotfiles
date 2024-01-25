@@ -38,4 +38,4 @@ case ${MEDIA##*/} in
 esac
 lf
 
-# vim: set ft=sh: #
+# kak: filetype=sh

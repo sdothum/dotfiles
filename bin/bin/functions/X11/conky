@@ -21,4 +21,4 @@ else
 	/usr/bin/conky -q &
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -20,4 +20,4 @@ else
 	ditto ERROR "\"$1\" not found"
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

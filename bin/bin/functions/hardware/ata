@@ -34,4 +34,4 @@ done
 # restore original IFS
 IFS=$OLDIFS
 
-# vim: set ft=sh: #
+# kak: filetype=sh

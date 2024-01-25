@@ -10,4 +10,4 @@
 ditto "tcptrack -i $1 \ (eth0, wlan0, ..)"
 sudo /usr/bin/tcptrack -i $1
 
-# vim: set ft=sh: #
+# kak: filetype=sh

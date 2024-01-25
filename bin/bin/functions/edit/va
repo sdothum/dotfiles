@@ -19,4 +19,4 @@ EDITOR=${EDITOR:-kak}
 # al "$@" | exclude | sort | tr '\n' '\0x00' | xargs -r0 $EDITOR $search
 al "$@" | exclude | sort | tr '\n' '\0x00' | xargs -t -r0 $EDITOR
 
-# vim: set ft=sh: #
+# kak: filetype=sh

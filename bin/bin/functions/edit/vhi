@@ -24,4 +24,4 @@ esac
 eval vim $theme -c "'redir! >$vhi | silent! hi | redir END | quit'"
 vi $vhi
 	
-# vim: set ft=sh: #
+# kak: filetype=sh

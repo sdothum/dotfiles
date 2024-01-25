@@ -17,4 +17,4 @@ if [ $# -eq 1 ] ;then
 fi
 ls --color -AFh $@
 
-# vim: set ft=sh: #
+# kak: filetype=sh

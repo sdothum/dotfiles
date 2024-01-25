@@ -18,4 +18,4 @@ if [ -e /usr/bin/btrfs ] && server ;then
 	sudo btrfs filesystem du -s $dir
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

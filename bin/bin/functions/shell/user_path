@@ -15,4 +15,4 @@ export SHELL=dash
 # export colors for log messages
 [ $NOCOLOR ] || . $(which colors)
 
-# vim: set ft=sh: #
+# kak: filetype=sh

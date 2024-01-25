@@ -12,4 +12,4 @@ else
 	[ $1 ] && sudo journalctl -b | ag --regexp "\"$@\"" | less -MRX || sudo journalctl -b
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

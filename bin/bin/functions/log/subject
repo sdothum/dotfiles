@@ -12,4 +12,4 @@ heading ' ' $@
 drawline '═'
 echo
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -13,4 +13,4 @@ elif arch   ;then echo arch
 else              echo unknown  # new distro lacking test/distro
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

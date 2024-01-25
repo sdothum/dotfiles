@@ -43,4 +43,4 @@ if ! xdotool search -classname 'VimbT' >/dev/null ;then
 fi
 /usr/bin/vimb -e $(cat $winid) &
 
-# vim: set ft=sh:
+# kak: filetype=sh

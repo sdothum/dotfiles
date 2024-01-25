@@ -8,4 +8,4 @@
 
 /usr/bin/feh -B black -d --scale-down --start-at $@ $(dirname $@)
 
-# vim: set ft=sh: #
+# kak: filetype=sh

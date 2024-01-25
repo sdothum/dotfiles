@@ -13,4 +13,4 @@ query=$(xbps-query -S $@ | grep "pkgver")
 installed_heading ${query#* }
 exit 0
 
-# vim: set ft=sh: #
+# kak: filetype=sh

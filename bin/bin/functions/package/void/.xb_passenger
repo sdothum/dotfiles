@@ -13,4 +13,4 @@ gems=$(cat $HOME/build/void/bundle/220-framework | grep -v '^ *#' | grep ' g ' |
 # update failure likely ruby 3.x revision bump requiring full gem install
 for i in $gems ;do gem_update $i 2>/dev/null || exec bundle_install $framework  ;done 
 
-# vim: set ft=sh: #
+# kak: filetype=sh

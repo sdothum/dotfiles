@@ -9,4 +9,4 @@
 # notmuch mail client
 vim -g --role=notmuch -c NotMuch
 
-# vim: set ft=sh: #
+# kak: filetype=sh

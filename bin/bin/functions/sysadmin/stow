@@ -45,4 +45,4 @@ case $1 in
 		done ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

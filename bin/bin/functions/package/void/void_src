@@ -18,4 +18,4 @@
 	usermod -a -G xbuilder $USER
 }
 
-# vim: set ft=sh: #
+# kak: filetype=sh

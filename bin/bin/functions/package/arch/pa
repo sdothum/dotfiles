@@ -56,4 +56,4 @@ sudo rm -fv $(ls -1 /var/local/log/pacupg/*.log | head -n -$rollback)
 # clear status
 exit 0
 
-# vim: set ft=sh: #
+# kak: filetype=sh

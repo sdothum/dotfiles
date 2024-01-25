@@ -24,4 +24,4 @@ for fgc in "${fg_colors[@]}" ;do
 	printf '\n'
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

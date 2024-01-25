@@ -11,4 +11,4 @@ sudo systemctl stop ntpd
 sudo ntpd -q -g 2>/dev/null
 sudo systemctl start ntpd
 
-# vim: set ft=sh: #
+# kak: filetype=sh

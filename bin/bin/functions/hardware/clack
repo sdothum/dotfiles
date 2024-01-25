@@ -25,4 +25,4 @@ esac
 
 pstat qwertickle && hint || notify low 'Typewriter Sounds' 'Off'
 
-# vim: set ft=sh: #
+# kak: filetype=sh

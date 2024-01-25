@@ -24,4 +24,4 @@ while read file <&3 ;do
 	ditto ERROR epubcheck "$file ${NOCOLOR}$(grep -E '(FATAL|ERROR)' $LOG | cut -d: -f1 | sort -u | sed 's/ERROR(RSC-/E-/; s/)//'| tr '\n' ' ')"
 done 3< $CATLG
 
-# vim: set ft=sh: #
+# kak: filetype=sh

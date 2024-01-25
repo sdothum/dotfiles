@@ -10,4 +10,4 @@
 console && drawline '  • ' ${red} || drawline '  ‧‧‧••‧‧‧ ' ${teal}
 attention $@
 
-# vim: set ft=sh: #
+# kak: filetype=sh

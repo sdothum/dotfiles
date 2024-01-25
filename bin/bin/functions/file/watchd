@@ -22,4 +22,4 @@ pretty() { sed '/[{}]/d; s/^ *//g; s/"//g; s/,$//'; }
 watchman watch-project $ROOT | pretty
 notify X low 'Watchman' "$(watchman -- trigger $ROOT $NAME -- $CMD | pretty)"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

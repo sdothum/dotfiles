@@ -35,4 +35,4 @@ time() { elapsed $1 $utc | sed "/${H}.'/s/${H}/${H}0/; /'.\"/s/'/'0/"; }
 
 [ $time ] && time $1 || ditto elapsed "$(time $1)"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

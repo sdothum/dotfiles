@@ -45,4 +45,4 @@ echo "${BROWN}Usage: $(sed -r "s/^$dotcommand/$command/; s/($command )/${WHITE}\
 
 exit 1  # parent process must still exercise "exit"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

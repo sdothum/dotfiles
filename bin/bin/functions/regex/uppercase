@@ -10,4 +10,4 @@
 
 tr [:lower:] [:upper:]
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -57,4 +57,4 @@ export PINK=$(printf "\e[1m\e[38;5;212m")
 export teal=$(printf "\e[38;5;023m")
 export TEAL=$(printf "\e[1m\e[38;5;029m")
 
-# vim: set ft=sh: #
+# kak: filetype=sh

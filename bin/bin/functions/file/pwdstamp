@@ -20,4 +20,4 @@ file=$(basename $parent)
 echo "$@ :: $parent/$file.$ext"
 mv $@ $parent/$file.$ext
 
-# vim: set ft=sh: #
+# kak: filetype=sh

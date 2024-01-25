@@ -16,4 +16,4 @@ else
 	xmodmap -e 'keycode 22 = Caps_Lock'
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

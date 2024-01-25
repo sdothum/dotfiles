@@ -34,4 +34,4 @@ case $@ in
 		ditto INFO 'eject and select cdrom in thunar before next merge' ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

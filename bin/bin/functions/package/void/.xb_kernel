@@ -25,4 +25,4 @@ trim() {
 [ $keep ] && { prune; trim; }
 reboot
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -21,4 +21,4 @@ case $1 in
 	*   ) connmanctl services --properties $network; echo; usage ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

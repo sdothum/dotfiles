@@ -37,4 +37,4 @@ for i in $@ ;do
 	grep -qx "$file" $WATCH || echo "$file" >>$WATCH
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -607,4 +607,4 @@ $fforge
 
 rm -f *.ttx
 
-# vim: set ft=sh: #
+# kak: filetype=sh

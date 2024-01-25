@@ -18,4 +18,4 @@ for i in $(al "$1") ;do
 	vim -c "$2" -c 'wq' "$i"
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -1,1 +1,85 @@
-comment
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Edit
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................... modal pipe actions
+
+usage() { echo "<selection> | $(basename $0) [l'eader | t'railer | u'nderline | r'uler [<char>]] | [# | // | --]
+>   where, first word of line is treated as comment symbol
+>          '.' -> default leader/trailer 
+>          '━' -> default (heavy horizontal) underline
+>          '═' -> default (double horizontal) ruler
+>          use '-'  (dash)   for '─' (light horizontal)
+>              '--' (dashes) for '━' (heavy horizontal)
+>              '='  (equal)  for '═' (double horizontal)" | usage:pipe 
+	exit 1
+}
+
+# simplified commenting extensions using modal pipe
+
+# env abbreviations
+width=${width:-80}
+tabwidth=${tabwidth:-3}
+
+[ $2 ] && char="$2"
+[ -t 0 ] && usage    # stdin input?
+action=${1:-leader}  # default leader .
+
+fill() { for i in $(seq $1) ;do echo -n "$2" ;done }
+
+tab="$(fill $tabwidth " ")"
+
+parse() {
+	[ $(echo -n "$line" | wc -w) -gt 1 ] || return 1  # empty or comment symbol only corner case
+	leader=$(echo "$line" | sed -r "s/^([ \t]*).*/\1/")
+	spaces=$(echo "$leader" | sed "s/\t/$tab/g")
+	comment=$(echo "$line" | sed -r "s/^[ \t]*([^ ]*).*/\1/")
+	case $1 in
+		r* ) ;;                              # underline page width
+		u* ) width=$(echo $line | wc -m) ;;  # underline content
+		*  ) # strip existing fill decoration
+			[ "$fill" = '.' ] && content=$(echo "$line" | sed -r "s/^[ \t]*[^ ]* (.*)/\1/; s/ *\.\.\.* *//g") \
+				|| content=$(echo "$line" | sed -r "s/^[ \t]*[^ ]* (.*)/\1/; s/ *$fill${fill}* *//g") ;;
+	esac
+	x_spaces=$(echo -n "$spaces" | wc -m)
+	x_comment=$(echo -n "$comment" | wc -m)
+	[ $x_comment -gt 0 ] || return 1
+	x_content=$(echo -n "$content" | wc -m)
+	x_decoration=$(( $width - $x_spaces - $x_comment - $x_content - 2 ))
+	[ $x_decoration -gt 0 ] && decoration=$(fill $x_decoration "$fill") || return 1
+}
+
+# default fillchars
+fillchar() {
+	case $char in
+		-  ) fill='─' ;;
+		-- ) fill='━' ;;
+		=  ) fill='═' ;;
+		*  ) fill=${char:-$1} ;;
+	esac
+}
+
+case $action in
+	'#'  ) sed 's/^/# /'  ;; # special kakoune commenting action where comment-line failed
+	'//' ) sed 's|^|// |' ;;
+	'--' ) sed 's/^/-- /' ;;
+	l*   ) fillchar . ;;
+	t*   ) fillchar . ;;
+	u*   ) fillchar ━ ;;
+	r*   ) fillchar ═ ;;
+	*    ) usage ;;
+esac
+
+while IFS= read -r line ;do
+	parse $action || { echo "$line"; continue; }
+	case $action in
+		l* ) echo "$leader$comment $decoration $content" ;;
+		t* ) echo "$leader$comment $content $decoration" ;;
+		u* ) echo "$line"; echo "$leader$comment $decoration" ;;
+		r* ) echo "$line"; echo "$leader$comment $decoration$fill" ;;  # extra fill for lack of parse content
+	esac
+done
+
+# kak: filetype=sh

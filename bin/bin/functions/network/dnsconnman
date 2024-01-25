@@ -16,4 +16,4 @@ sudo systemctl stop connman
 sudo systemctl restart dnsmasq
 sudo systemctl start connman
 
-# vim: set ft=sh: #
+# kak: filetype=sh

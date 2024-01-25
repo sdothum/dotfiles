@@ -21,4 +21,4 @@ trap "mailsync $group" EXIT
 # offsetY=4 term mail WAIT 250x45 PAPER $AERC
 offsetY=4 term mail WAIT PAPER $AERC
 
-# vim: set ft=sh: #
+# kak: filetype=sh

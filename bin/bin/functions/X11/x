@@ -145,4 +145,4 @@ else
 	ditto 'window manager' "$(cat $WM) (next X session)"
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

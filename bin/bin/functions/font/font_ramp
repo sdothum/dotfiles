@@ -18,4 +18,4 @@ vsn=$(echo $2 | sed 's/\.//')
 font_ramp $1 $2 >FONT_RAMP
 cat FONT_RAMP
 
-# vim: set ft=sh: #
+# kak: filetype=sh

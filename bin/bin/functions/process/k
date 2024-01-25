@@ -41,4 +41,4 @@ else
 	rm -f $REGEX
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

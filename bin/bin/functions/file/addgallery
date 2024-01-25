@@ -26,4 +26,4 @@ for i in $files ;do
 	convert $i -resize 320  -quality $quality $GALLERY/{i%.jpg}_1.jpg
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

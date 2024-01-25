@@ -11,4 +11,4 @@
 [ -e "$1"      ] && { ditto copy "$(sudo cp -Rv "$1" "$1.save")"; exit 0; }
 exit 1
 
-# vim: set ft=sh: #
+# kak: filetype=sh

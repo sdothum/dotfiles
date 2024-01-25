@@ -787,4 +787,4 @@ fi
 
 udev  # reinitialize udev
 
-# vim: set ft=sh: #
+# kak: filetype=sh

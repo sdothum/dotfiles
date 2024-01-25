@@ -14,4 +14,4 @@ if [ -s $HOME/build/$(dist)/pre_install/$1 ] ;then
 	. $HOME/build/$(dist)/pre_install/$1
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

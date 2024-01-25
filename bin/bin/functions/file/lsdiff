@@ -18,4 +18,4 @@ ditto source "< $SOURCE"
 ditto target "> $1" 
 diff --color /tmp/lsdiff:source /tmp/lsdiff:target | print
 
-# vim: set ft=sh: #
+# kak: filetype=sh

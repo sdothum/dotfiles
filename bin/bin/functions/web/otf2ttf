@@ -22,4 +22,4 @@ otf.generate('$ttf');
 
 python $FORGE
 
-# vim: set ft=sh: #
+# kak: filetype=sh

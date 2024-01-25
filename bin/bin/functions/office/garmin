@@ -8,4 +8,4 @@
 
 WINEPREFIX=$HOME/GarminExpress wine explorer /desktop=garmin,1366x768 "$HOME/GarminExpress/drive_c/Program Files/Garmin/Express/express.exe"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

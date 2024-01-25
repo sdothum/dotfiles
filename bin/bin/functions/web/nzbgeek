@@ -13,4 +13,4 @@ NAME='Geek.*Chromium'
 $BROWSER $NZBGEEK &
 xwait "$NAME"
 
-# vim: set ft=sh: 
+# kak: filetype=sh

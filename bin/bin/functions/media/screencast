@@ -42,4 +42,4 @@ if server ;then
 	}
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

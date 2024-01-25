@@ -12,4 +12,4 @@ alpine && BIN=/usr/sbin || BIN=/usr/bin
 ditto "iftop -B -i ${1:-wlan0} \ (eth0, wlan0, ..)"
 sudo $BIN/iftop -B -i ${1:-wlan0}
 
-# vim: set ft=sh: #
+# kak: filetype=sh

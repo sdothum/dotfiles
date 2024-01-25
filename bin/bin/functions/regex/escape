@@ -12,4 +12,4 @@
 [ "$1" = + ] && { shift; echo "$@" | sed -r "s/([][ '&;<>(){}])/\\\\\\\\\1/g"; } ||
 	echo "$@" | sed -r "s/([][ '&;<>(){}])/\\\\\1/g"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

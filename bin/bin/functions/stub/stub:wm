@@ -8,4 +8,4 @@
 
 ditto 'stub:wm' "$@"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

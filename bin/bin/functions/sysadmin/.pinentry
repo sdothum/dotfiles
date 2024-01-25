@@ -12,4 +12,4 @@ PINENTRY=/usr/bin/pinentry
 console && sudo ln -sf $PINENTRY-curses $PINENTRY || sudo ln -sf $PINENTRY-qt $PINENTRY
 ls -l --color $PINENTRY
 
-# vim: set ft=sh: #
+# kak: filetype=sh

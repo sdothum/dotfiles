@@ -49,4 +49,4 @@ while read wiki <&3 ;do
 	[ $check ] && { ifyes "$wiki" || exit 1; }
 done 3< $wikis
 
-# vim: set ft=sh: #
+# kak: filetype=sh

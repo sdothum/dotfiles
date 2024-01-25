@@ -65,4 +65,4 @@ else
 	esac
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

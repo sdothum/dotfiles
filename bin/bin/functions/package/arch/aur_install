@@ -16,4 +16,4 @@ cd $package
 makepkg -s
 sudo pacman -U --noconfirm $package*pkg.tar.xz
 
-# vim: set ft=sh: #
+# kak: filetype=sh

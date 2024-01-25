@@ -19,4 +19,4 @@ until pgrep -af "$@" | grep -E -qv "$0|/term " ;do sleep $cycle ;done
 # wait for uniquely named window to close before proceeding
 while pgrep -af "$@" | grep -E -qv "$0|/term " ;do sleep $cycle ;done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

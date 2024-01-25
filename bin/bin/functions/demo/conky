@@ -38,4 +38,4 @@ PLAYBACK='
 	alt+bracketleft
 '
 
-# vim: set ft=sh: #
+# kak: filetype=sh

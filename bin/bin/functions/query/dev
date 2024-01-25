@@ -19,4 +19,4 @@ case $1 in
 	*     ) ls --color -l /dev/disk/by-id/ | grep --color=never -i $1 ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

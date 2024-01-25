@@ -34,4 +34,4 @@ done
 
 dirdiff $w $current/$1 $dotfiles/$1 "$2"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

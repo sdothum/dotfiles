@@ -12,4 +12,4 @@ alpine || SU=/usr
 [ "$SSH_CLIENT" ] && echo $SSH_CLIENT >/tmp/.ssh_client
 $SU/bin/su $@
 
-# vim: set ft=sh: #
+# kak: filetype=sh

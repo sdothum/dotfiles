@@ -8,4 +8,4 @@
 
 qutebrowser 'https://kbin.social/'
 
-# vim: set ft=sh: #
+# kak: filetype=sh

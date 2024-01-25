@@ -22,4 +22,4 @@ git clone $uri $repo
 # do post install for previously installed package dependencies
 post_install $1
 
-# vim: set ft=sh: #
+# kak: filetype=sh

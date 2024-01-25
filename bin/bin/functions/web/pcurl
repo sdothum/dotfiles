@@ -15,4 +15,4 @@ curl --silent -L $@ | {
 		sed 's/<[^>]*>//g'  # sed will not filter broken (linefeeds within) tags and javascript
 }
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -9,4 +9,4 @@
 # preview document (see rox)
 vi $@
 
-# vim: set ft=sh: #
+# kak: filetype=sh

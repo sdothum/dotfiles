@@ -26,4 +26,4 @@ esac
 
 [ $dir ] && ${CD:-cd} $dir
 
-# vim: set ft=sh: #
+# kak: filetype=sh

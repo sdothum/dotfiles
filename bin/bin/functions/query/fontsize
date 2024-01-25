@@ -29,4 +29,4 @@ fi
 
 echo $size
 
-# vim: set ft=sh: #
+# kak: filetype=sh

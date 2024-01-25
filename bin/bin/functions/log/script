@@ -26,4 +26,4 @@ dos2unix -f $SESSION
 # sed -i '/\x0d/d; /\[[^-#cC]*\] *[0-9]*%/d' $SESSION
 sed -i '/\[[^-#cC]*\] *[0-9]*%/d' $SESSION
 
-# vim: set ft=sh: #
+# kak: filetype=sh

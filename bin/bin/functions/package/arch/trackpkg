@@ -52,4 +52,4 @@ elif cut -d: -f1 $conf | grep -q "^$@$"  ;then del_pkg $@
 else                                           add_pkg $@
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

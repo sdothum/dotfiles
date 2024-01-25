@@ -4,4 +4,4 @@
 
 ditto INFO tt-rss 'database migration possibly required'
 
-# vim: set ft=sh: #
+# kak: filetype=sh

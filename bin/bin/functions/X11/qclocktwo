@@ -66,4 +66,4 @@ cd $HOME/bin
 	-e conky qclocktwo &
 
 
-# vim: set ft=sh: #
+# kak: filetype=sh

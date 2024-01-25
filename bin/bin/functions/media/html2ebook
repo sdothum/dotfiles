@@ -24,4 +24,4 @@ ebook-convert $htmlz "$kindle/documents/$2 - $3.$format" \
 	--authors "$3"
 sync
 
-# vim: set ft=sh: #
+# kak: filetype=sh

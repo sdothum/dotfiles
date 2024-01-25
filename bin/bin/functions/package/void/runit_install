@@ -17,4 +17,4 @@ cfg_install $SERVICE
 sudo sed -i "s/[$]USER *$/$USER/" $SERVICE/run  # username daemon
 sudo ln -sfv /run/runit/supervise.$1 $SERVICE/supervise
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -17,4 +17,4 @@ for i in $(expac -S '%r/%n' | grep "^$repo") ;do
 	echo "$i^$(expac '%d' ${i#*/})"
 done | column -s^ -t
 
-# vim: set ft=sh: #
+# kak: filetype=sh

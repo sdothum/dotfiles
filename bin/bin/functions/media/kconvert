@@ -11,4 +11,4 @@
 menu econvert azw3 "$@"  # kindle
 menu econvert epub "$@"  # kobo
 
-# vim: set ft=sh: #
+# kak: filetype=sh

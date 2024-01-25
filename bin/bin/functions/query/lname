@@ -8,4 +8,4 @@
 
 [ -L "$1" ] && ls -l $1 | cut -d'>' -f2 | sed 's/^ //; s,/./,/,g'
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -12,4 +12,4 @@ usage() { usage: "$(basename $0) <title - author.ext>"; exit 1; }
 author=$(echo "${1%.*}" | sed 's/ - /:/g' | rev | cut -d: -f1 | rev)
 dmenu ebooks "$author"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

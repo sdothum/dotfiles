@@ -23,4 +23,4 @@ while ! pong $site ;do
 done
 return 0
 
-# vim: set ft=sh: #
+# kak: filetype=sh

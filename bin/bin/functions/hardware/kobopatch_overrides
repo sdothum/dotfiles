@@ -71,4 +71,4 @@ ditto telnet "<kobo device IP>"
 ditto cd "/usr/local/Qt-5.2.1-arm/lib/fonts"
 ditto rm  "Amasis* Caecilia* GillSans* Malabor* OpenDyslexic* Rakuten*"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

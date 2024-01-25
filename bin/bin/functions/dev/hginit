@@ -26,4 +26,4 @@ while read add <&3 ;do
 	[ -d "$add" ] && { find $add -type d | sort | xargs -d'\n' -I '{}' hgadd "{}"; } || hgadd $add
 done 3< $ADD
 
-# vim: set ft=sh: #
+# kak: filetype=sh

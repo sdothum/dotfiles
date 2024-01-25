@@ -20,4 +20,4 @@ else
 	log | sed '/./,$!d'
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

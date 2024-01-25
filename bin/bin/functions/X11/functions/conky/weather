@@ -89,4 +89,4 @@ if [ -z $FEELSLIKE ] ;then [ -n "$CURRENT" ] && echo "${CURRENT%, }$sep${TEMPERA
 else [ -n "$CURRENT" ] && echo "${CURRENT%, }$sep${TEMPERATURE}° Feels ${FEELSLIKE}°" || echo "${TEMPERATURE}° Feels ${FEELSLIKE}°"
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

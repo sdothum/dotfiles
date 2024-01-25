@@ -29,4 +29,4 @@ log -n "$(timestamp)"
 [ $level ] && log -n " ${RED}$level>"
 log "${NOCOLOR}$(message "$msg" "$detail")${NOCOLOR}"  # message passed may contain colors
 
-# vim: set ft=sh: #
+# kak: filetype=sh

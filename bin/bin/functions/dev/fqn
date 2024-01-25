@@ -55,4 +55,4 @@ done 3< $1
 
 [ $2 ] && cp $OUTPUT $2 || cat $OUTPUT
 
-# vim: set ft=sh: #
+# kak: filetype=sh

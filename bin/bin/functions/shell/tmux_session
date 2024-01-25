@@ -22,4 +22,4 @@ else
 	tmux -S /tmp/tmux:$TMUX rename-window "$1*"
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

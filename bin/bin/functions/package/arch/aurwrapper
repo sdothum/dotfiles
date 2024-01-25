@@ -15,4 +15,4 @@ else
 	exists pacaur && echo pacaur || echo yay     # pacaur has systemd dependency
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

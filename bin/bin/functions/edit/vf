@@ -33,4 +33,4 @@ case $1 in
 	*     ) find -L -type f -name "$1" | v0 ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

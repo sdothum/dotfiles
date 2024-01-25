@@ -18,4 +18,4 @@ for i in $($wrappaur -Qu | nocolor | awk '{ print $3 }') ;do
 	$wrappaur -S $i
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

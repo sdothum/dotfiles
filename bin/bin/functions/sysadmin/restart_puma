@@ -15,4 +15,4 @@ sv stop puma
 sleep $delay
 sv start puma
 
-# vim: set ft=sh: #
+# kak: filetype=sh

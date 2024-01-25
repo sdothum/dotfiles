@@ -8,4 +8,4 @@
 
 heading : "$@  --- Installed ---"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

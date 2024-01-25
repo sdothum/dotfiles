@@ -10,4 +10,4 @@
 export LESS='-RX -P ?B %f  %lt-%lb/%L  %Pb\%: [pipe]  %lt-%lb/\.\.'
 /usr/bin/less --use-color -DP208 $@
 
-# vim: set ft=sh: #
+# kak: filetype=sh

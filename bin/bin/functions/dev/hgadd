@@ -41,4 +41,4 @@ done
 notify 'Mercurial' "$(echo "${files#  }" | sed 's,  ,\n,g')"            # newline on /path
 hg commit --$output --cwd $REPO -m "$(date -R | cut -d- -f1) ..$files"  # see hgl alias (hg log) for compact listing
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -43,4 +43,4 @@ ffmpeg -i $mkv -b:v 1M -c:a libvorbis -crf 0 -c:v libvpx \
 
 mv -v ${mkv%.mkv}.webm $target
 
-# vim: set ft=sh: #
+# kak: filetype=sh

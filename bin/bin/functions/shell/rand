@@ -25,4 +25,4 @@ done
 
 tr -dc ${pattern:-0-9} </dev/urandom | head -c ${width:-5}
 
-# vim: set ft=sh: #
+# kak: filetype=sh

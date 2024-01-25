@@ -12,4 +12,4 @@ usage() { usage: "$(basename $0) <group>"; exit 1; }
 
 echo https://groups.google.com/group/$@/feed/rss_v2_0_msgs.xml?num=50
 
-# vim: set ft=sh: #
+# kak: filetype=sh

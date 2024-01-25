@@ -13,4 +13,4 @@ if ! pstat script ;then
 	exit
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

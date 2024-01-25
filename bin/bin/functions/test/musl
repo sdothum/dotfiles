@@ -11,4 +11,4 @@ if void ;then
 fi
 return 1
 
-# vim: set ft=sh: #
+# kak: filetype=sh

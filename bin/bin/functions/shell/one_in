@@ -12,4 +12,4 @@ usage() { usage: "$(basename $0) <number>"; exit 1; }
 
 [ $(expr $(hexdump -n 2 -e '/2 "%u"' /dev/random) % $1 = 0) -eq 1 ]
 
-# vim: set ft=sh: #
+# kak: filetype=sh

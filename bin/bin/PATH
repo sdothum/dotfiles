@@ -18,4 +18,4 @@ do
 	PATH="${i}:$PATH"
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

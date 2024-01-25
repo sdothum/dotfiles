@@ -14,4 +14,4 @@ echo
 echo "${YELLOW}━━━━━━━━━  Press [enter] $cue  ━━━━━━━━━${NOCOLOR}\n"
 read CONTINUE
 
-# vim: set ft=sh: #
+# kak: filetype=sh

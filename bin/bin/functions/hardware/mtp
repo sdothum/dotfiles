@@ -33,4 +33,4 @@ case $1 in
 	*       )	echo $MTP ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

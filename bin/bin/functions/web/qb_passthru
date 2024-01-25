@@ -15,4 +15,4 @@ xdotool type $1
 xdotool key Shift+Escape  # normal mode
 [ "$2" ] && xdotool type $2 || true
 
-# vim: set ft=sh: #
+# kak: filetype=sh

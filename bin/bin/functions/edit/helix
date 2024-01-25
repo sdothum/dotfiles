@@ -45,4 +45,4 @@ done
 # term call doesn't handle "space" names
 term ${name:-helix} PAPER 132x53 $WAIT ${HX:-hx} -c $CONFIG $LOGGING $file  # 50 line page
 
-# vim: set ft=sh: #
+# kak: filetype=sh

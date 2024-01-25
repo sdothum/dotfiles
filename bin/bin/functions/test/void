@@ -8,4 +8,4 @@
 
 [ -e /usr/bin/xbps-install ]
 
-# vim: set ft=sh: #
+# kak: filetype=sh

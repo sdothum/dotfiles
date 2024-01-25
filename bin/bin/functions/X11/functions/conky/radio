@@ -10,4 +10,4 @@ radio=/tmp/radio
 
 [ -e $radio ] && pstat 'mpv --no-cache --quiet' && cat $radio
 
-# vim: set ft=sh: #
+# kak: filetype=sh

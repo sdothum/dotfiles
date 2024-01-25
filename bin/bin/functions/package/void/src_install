@@ -26,4 +26,4 @@ sudo xbps-install --ignore-conf-repos --repository=$REPO/hostdir/binpkgs --force
 
 post_install $1
 
-# vim: set ft=sh: #
+# kak: filetype=sh

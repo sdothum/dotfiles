@@ -15,4 +15,4 @@
 [ $ne ] && echo -ne "$@\r" | tee -a $logfile 2>/dev/null \
 	|| echo "$@" | tee -a $logfile 2>/dev/null  # suppress sudo log "permission denied" error 
 
-# vim: set ft=sh: #
+# kak: filetype=sh

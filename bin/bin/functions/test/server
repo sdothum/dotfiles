@@ -9,4 +9,4 @@
 # server
 [ $(hostname) = "$SERVER" ]
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -9,4 +9,4 @@
 # [ -z $DISPLAY ] && tty | grep -q '/dev/tty[0-9]'
 [ -z $DISPLAY ]
 
-# vim: set ft=sh: #
+# kak: filetype=sh

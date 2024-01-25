@@ -17,4 +17,4 @@ void && sudo gem update $gem --no-document || gem update $gem --no-document
 post_install $gem
 chrono $time
 
-# vim: set ft=sh: #
+# kak: filetype=sh

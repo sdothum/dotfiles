@@ -94,4 +94,4 @@ case $model in
 esac
 sudo chown -R $USER:users $QMK
 
-# vim: set ft=sh: #
+# kak: filetype=sh

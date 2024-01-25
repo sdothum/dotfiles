@@ -35,4 +35,4 @@ for sh in $shells ;do
 	echo
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

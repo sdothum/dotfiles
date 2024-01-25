@@ -18,4 +18,4 @@ xsync $attr "$@"
 # wait for uniquely named window to close before proceeding
 while xdotool search --onlyvisible $attr "$@" >/dev/null ;do sleep $cycle ;done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

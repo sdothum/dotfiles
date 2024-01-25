@@ -19,4 +19,4 @@ else
 	cat $MAILSYNC
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

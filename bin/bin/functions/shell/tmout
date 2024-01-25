@@ -18,4 +18,4 @@ TMPPID=$PPID timeout --foreground $delay $@
 rcode=$?
 [ $rcode = 124 ] && exit 0 || exit $rcode
 
-# vim: set ft=sh: #
+# kak: filetype=sh

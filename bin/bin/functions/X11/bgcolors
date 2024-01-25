@@ -14,4 +14,4 @@ for i in $(find $PALETTE -name '*.png') ;do
 	ifno 'delete this background' || rm -f $i
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

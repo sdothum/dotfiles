@@ -19,4 +19,4 @@ export MONOFONT="Iosevka-proof"
 notify 60 Compose "Must enter <b>To:</b> and <b>Subject:</b> *FIRST*"
 name=compose offsetY=1 kak ID=draft WAIT $@
 
-# vim: set ft=sh: #
+# kak: filetype=sh

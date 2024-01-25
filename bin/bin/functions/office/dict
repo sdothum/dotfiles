@@ -18,4 +18,4 @@ case $1 in
 	*  ) dict $1 ;;  # chop thesaurus
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

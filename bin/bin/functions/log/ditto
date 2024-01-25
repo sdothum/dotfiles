@@ -60,4 +60,4 @@ annotate() {
 echo "$message" | sed '/^$/d' | { [ $justify ] && justify || annotate; }  # omit blank lines
 unset leader
 
-# vim: set ft=sh: #
+# kak: filetype=sh

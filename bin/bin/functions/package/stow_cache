@@ -26,4 +26,4 @@ mkdir -p $BRANCH
 
 ditto copy "$(sudo cp -rvf --preserve=mode --no-preserve=ownership $2 $BRANCH)"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

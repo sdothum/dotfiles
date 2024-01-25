@@ -9,4 +9,4 @@
 # process list
 p $@ | /usr/bin/awk '{ print $2 }'
 
-# vim: set ft=sh: #
+# kak: filetype=sh

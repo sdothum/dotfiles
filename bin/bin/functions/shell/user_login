@@ -33,4 +33,4 @@ elif [ -e $FORTUNE:term ] ;then
 	fi
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

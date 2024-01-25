@@ -212,4 +212,4 @@ esac
 
 trace --  # elapsed time
 
-# vim: set ft=sh: #
+# kak: filetype=sh

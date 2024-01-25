@@ -12,4 +12,4 @@
 # sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"
 perl -pe 's/\e\[?.*?[\@-~]//g'
 
-# vim: set ft=sh: #
+# kak: filetype=sh

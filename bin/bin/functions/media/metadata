@@ -10,4 +10,4 @@
 
 grep -q 'dc:description' "$1" || ditto incomplete "$1"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

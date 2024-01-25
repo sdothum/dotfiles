@@ -22,4 +22,4 @@ echo "$(crontab -l)
 $2" | sudo crontab -u $USER -
 cron "$1"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -18,4 +18,4 @@ vi -f PKGBUILD
 makepkg -Acfs
 sudo pacman -U --noconfirm $package*tar.xz
 
-# vim: set ft=sh: #
+# kak: filetype=sh

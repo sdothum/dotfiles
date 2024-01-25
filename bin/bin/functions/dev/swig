@@ -10,4 +10,4 @@ cpu arm && export SWIG_FEATURES=-cpperraswarn
 
 /usr/bin/swig $@
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -17,4 +17,4 @@ files=$(a "$@" | fZf --multi | nocolor | cut -d: -f1 | uniq | quote)
 
 $EDITOR $files
 
-# vim: set ft=sh: #
+# kak: filetype=sh

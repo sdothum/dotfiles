@@ -48,4 +48,4 @@ fi
 
 [ -e $CATLG ] && cat $CATLG || usage
 
-# vim: set ft=sh: #
+# kak: filetype=sh

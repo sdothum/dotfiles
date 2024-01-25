@@ -21,4 +21,4 @@ for i in $prefix* ;do
 	mv -i $i $parent$suffix
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

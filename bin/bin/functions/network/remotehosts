@@ -8,4 +8,4 @@
 
 grep '^10.1.0' /etc/hosts | awk '{ print $2 }' | sed "/$(hostname)/d"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -14,4 +14,4 @@ usage() { usage: "$(basename $0) [-w] <regex>"; exit 1; }
 # pass parms via env
 AG="$w -l --nocolor --silent" a "$@"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

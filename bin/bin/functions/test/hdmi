@@ -9,4 +9,4 @@
 # active hdmi monitor
 xrandr 2>/dev/null | grep -q '^HDMI[^ ]* connected'
 
-# vim: set ft=sh: #
+# kak: filetype=sh

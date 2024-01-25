@@ -25,4 +25,4 @@ case $2 in
 		percent $(echo "$used 100 * $capacity / p" | dc) ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -62,4 +62,4 @@ console || { gui=-g; [ -e $DYNAMIC ] && focus frame; }
 session="vim $gui $role $fg $cmd $file"
 eval $sudo $session 2>>$LOG
 
-# vim: set ft=sh: #
+# kak: filetype=sh

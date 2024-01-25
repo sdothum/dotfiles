@@ -49,4 +49,4 @@ if [ $1 ] ;then
 	done
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

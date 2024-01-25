@@ -11,4 +11,4 @@
 # warning!
 [ "$*" ] && log "${GREEN}$@${NOCOLOR}"
 
-# vim: set ft=sh: #
+# kak: filetype=sh

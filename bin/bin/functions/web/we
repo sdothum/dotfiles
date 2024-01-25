@@ -18,4 +18,4 @@ done
 # restore prompt if we &, see console_login
 console && sudo console_prompt || return 0
 
-# vim: set ft=sh: #
+# kak: filetype=sh

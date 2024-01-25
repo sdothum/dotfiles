@@ -49,4 +49,4 @@ parec --format=s16le -d record-n-play.monitor | lame -r -q 3 --lowpass 17 --abr 
 export index,curr_sink,module_id
 cleanup
 
-# vim: set ft=sh: #
+# kak: filetype=sh

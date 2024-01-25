@@ -17,4 +17,4 @@ url() {
 
 (sleep 1 && url) &
 
-# vim: set ft=sh: #
+# kak: filetype=sh

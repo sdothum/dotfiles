@@ -16,4 +16,4 @@ if exists $1 ;then
 	post_install $1
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

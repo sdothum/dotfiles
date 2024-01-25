@@ -41,4 +41,4 @@ sudo sed -i -e '/^GRUB_TIMEOUT=/s/[0-9]/3/'                                     
 	/etc/default/grub
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 
-# vim: set ft=sh: #
+# kak: filetype=sh

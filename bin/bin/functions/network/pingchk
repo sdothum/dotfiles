@@ -21,4 +21,4 @@ ping $target | while read sixtyfour bytes latency ;do
 		{ [ $ms -ge $threshold2 ] && trace "${NOCOLOR}$sixtyfour $bytes $latency"; }
 done
 
-# vim: set ft=sh: #
+# kak: filetype=sh

@@ -75,4 +75,4 @@ case $1 in
 		pstat Xorg && alacritty --title "$1" -e "tail -f $log" || tail -f $log ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

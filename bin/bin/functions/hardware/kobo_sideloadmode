@@ -25,4 +25,4 @@ case $1 in
 	*           ) mode SideLodeMode; usage ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

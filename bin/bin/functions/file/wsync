@@ -49,4 +49,4 @@ case $1 in
 	*  ) watchq d $ROOT $NAME $@; archive & ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

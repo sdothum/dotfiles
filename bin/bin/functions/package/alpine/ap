@@ -49,4 +49,4 @@ case $1 in
 	*  ) apk search $1                      | sort | columns | print ;;
 esac
 
-# vim: set ft=sh: #
+# kak: filetype=sh

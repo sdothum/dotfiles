@@ -21,4 +21,4 @@ xsync 'Gmail'
 window size B5
 window snap left
 
-# vim: set ft=sh: #
+# kak: filetype=sh

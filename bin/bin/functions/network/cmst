@@ -10,4 +10,4 @@
 
 sudo /bin/cmst &
 
-# vim: set ft=sh: #
+# kak: filetype=sh

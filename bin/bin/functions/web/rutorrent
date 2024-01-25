@@ -8,4 +8,4 @@
 
 chromium http://localhost/rutorrent/ &
 
-# vim: set ft=sh: #
+# kak: filetype=sh

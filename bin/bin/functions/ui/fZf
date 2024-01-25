@@ -17,4 +17,4 @@ export FZF_DEFAULT_OPTS="--cycle $reverse --prompt='    ─────  ' --ans
 
 eval fzf $@
 
-# vim: set ft=sh: #
+# kak: filetype=sh

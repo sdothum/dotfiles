@@ -14,4 +14,4 @@ font="xft:$MONOFONT:size=$(fontsize)"
 pstat urxvtd || urxvtd -q -o -f 2>/tmp/urxvt.log
 eval urxvtc -fn $font $@
 
-# vim: set ft=sh: #
+# kak: filetype=sh

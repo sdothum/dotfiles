@@ -19,4 +19,4 @@ else
 	convert -size $size xc:"#$1" $PALETTE/$1.png
 fi
 
-# vim: set ft=sh: #
+# kak: filetype=sh

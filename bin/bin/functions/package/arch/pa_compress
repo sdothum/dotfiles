@@ -19,4 +19,4 @@ ifno 'remove ALL local archived packages' || {
 	rm -rf $HOME/.cache/$wrappaur/*
 }
 
-# vim: set ft=sh: #
+# kak: filetype=sh
