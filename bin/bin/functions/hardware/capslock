@@ -4,16 +4,13 @@
 # Hardware
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ..................................................................... Keyboard
+# ............................................................... Keyboard state
 
-# between colemak (backspace) and normal
-if [ "$_backspace_" = Caps_Lock ] ;then
-	unset _backspace_
-	xmodmap -e 'keycode 22 = BackSpace'
+# detectable only under Xorg
+if [ $DISPLAY ] ;then
+	xset q | grep -q 'Caps Lock: *on'
 else
-	# undo initial colemak assignment
-	export _backspace_=Caps_Lock
-	xmodmap -e 'keycode 22 = Caps_Lock'
+	false
 fi
 
 # kak: filetype=sh

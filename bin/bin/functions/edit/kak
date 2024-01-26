@@ -8,6 +8,8 @@
 
 # Usage: [name=<title>] kak [-l | -p [<id>] | -h] [-- | ID=<id>] [WAIT] [<row>x<col>] <file>*
 
+headless=${headless:-false}
+
 # share all instances (clients) with a single kak server session
 ID=$USER  # default session id
 KAK=/usr/bin/kak
@@ -20,10 +22,12 @@ LOG=/tmp/kak.log
 DELAY=0.25        # tuned time to center window
 export TABSTOP=3  # default for (pipe), see align
 
+$KAK -l | grep -q dead | $KAK -clear  # dead sessions
+
 while : ;do
 	case $1 in
 		-l            ) $KAK -l; exit    ;;
-		-p            ) [ $2 ] && $KAK -p $2 || { for i in $($KAK -l); do echo kill | $KAK -p $i ;done }; exit ;;
+		-p            ) [ $2 ] && $KAK -p $2 || { for i in $($KAK -l); do ditto kak "$i ${RED}❌"; echo kill | $KAK -p $i ;done }; exit ;;
 		-h*           ) $KAK -help; ditto '-debug' "hooks | shell | profile | keys | commands"; exit ;;
 		--            ) ID=$(rand)   ;;  # force new instance
 		id=*          ) ID="${1#*=}" ;;
@@ -35,8 +39,11 @@ while : ;do
 	shift
 done
 
-$KAK -l | grep -q dead | $KAK -clear  # dead sessions
-$KAK -l | grep $ID || setsid $KAK -d -s $ID &
+if $headless ;then
+	$KAK -l | grep $ID || setsid $KAK -d -s $ID &
+else
+	$KAK -l | grep -q $ID || session='-s'
+fi
 
 # snapshot sources (in lieu of persistent undo avalability)
 hgadd $@ &  # don' wait :)
@@ -61,6 +68,6 @@ done
 console && exec $KAK $file
 
 (sleep $DELAY; window snap center) &  # potential WAIT
-term ${name:-kak} PAPER ${XY:-132x52} $WAIT $KAK -c $ID $file >>$LOG 2>&1  # 50 line page
+term ${name:-kak} PAPER ${XY:-132x52} $WAIT $KAK ${session:--c} $ID $file >>$LOG 2>&1  # 50 line page
 
 # kak: filetype=sh

@@ -13,7 +13,7 @@ SONARR=http://$SERVER:8989
 DELAY=${DELAY:-0.15}    # long enough for window size to have correct focus
 export NO_PROXY="*"
 
-(window size @$DELAY monocle) &  # resize window after launch
+(window @$DELAY size monocle) &  # resize window after launch
 
 [ $1 ] && page=$(dirname $1 | tr '[:upper:]' '[:lower:]' | sed -r 's/.*(anime|series)/series/; s/[.]/-/g') || page=calendar
 $BROWSER $SONARR/$page

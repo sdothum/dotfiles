@@ -8,15 +8,16 @@
 
 # compose directory for temporary eml files
 export TMPDIR=~/drafts  # override /tmp (because dir is not persistent in alpine)
+MAILDIR=$HOME/Mail
 AERC=/usr/bin/aerc
-group=sdothum
-delay=1.15  # long enough to not trigger 2bwm actions while launching via modkey (down) bindings
+group=$(cat $MAILDIR/.mailsync:group)
+DELAY=1.15  # long enough to not trigger 2bwm actions while launching via modkey (down) bindings
 
 # push out any flag and trash changes when finished
 trap "mailsync $group" EXIT
 
 # in lieu of :vsplit crash from command line (known problem)
-(keyboard off; window size @delay monocle; xdotool search --sync --onlyvisible --classname "mail" type ":vsplit"; xdotool key Return; keyboard on) &
+(keyboard off; window @$DELAY size monocle; xdotool search --sync --onlyvisible --classname "mail" type ":vsplit"; xdotool key Return; keyboard on) &
 
 # offsetY=4 term mail WAIT 250x45 PAPER $AERC
 offsetY=4 term mail WAIT PAPER $AERC
