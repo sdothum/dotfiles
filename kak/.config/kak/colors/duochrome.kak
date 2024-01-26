@@ -20,6 +20,8 @@ declare-option str dark_grey              'rgb:445c65'
 # reds
 declare-option str dark_red               'rgb:a1462a'
 declare-option str soft_red               'rgb:fa8c69'
+# declare-option str desaturated_pink     'rgb:9d748c'  # see kakrc
+# declare-option str pale_pink            'rgb:fadadd'  # see kakrc
 # oranges
 declare-option str strong_orange          'rgb:bf450c'
 # declare-option str desaturated_orange   'rgb:d5b875'  # see kakrc (as master color assignment)
@@ -27,12 +29,12 @@ declare-option str light_orange           'rgb:ffe5b4'
 # declare-option str pale_orange          'rgb:f7f3ee'  # see kakrc
 # greens
 # declare-option str desaturated_green    'rgb:78ab78'  # see kakrc
-# declare-option str pale_green           'rgb:e1f1ea'  # see kakrc
+# declare-option str pale_green           'rgb:d4ebe1'  # see kakrc
 # blues
 declare-option str dark_blue              'rgb:0069af'
 declare-option str dark_cyan              'rgb:0087af'
 # declare-option str desaturated_blue     'rgb:6b9494'  # see kakrc
-declare-option str desaturated_cyan       'rgb:78a0a2'
+# declare-option str desaturated_cyan     'rgb:78a0a2'  # see kakrc
 declare-option str soft_cyan              'rgb:a3d5e4'
 # declare-option str pale_blue            'rgb:caeaef'  # see kakrc
 declare-option str vivid_cyan             'rgb:20fccf'

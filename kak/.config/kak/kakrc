@@ -19,42 +19,91 @@ declare-option str faint_blue                'rgb:add8e6'  # pale blue contrast
 declare-option str faint_orange              'rgb:efe7dd'  # pale orange contrast
 
 if %sh{ [ -n "$DISPLAY" ] && echo true || echo false } %{
+	declare-option str theme                  'duochrome'
+	declare-option str mode                   'normal'      # initial state
+	declare-option str colormode              ''            # initialize colorscheme
 
-	declare-option str theme 'duochrome'
-
-	# see colors/duochrome for highlight str's
-	declare-option str desaturated_green      'rgb:78ab78'
-	declare-option str pale_green             'rgb:e1f1ea'
+	# normal mode background (choices)
+	declare-option str desaturated_cyan       'rgb:78a0a2'
+	declare-option str pale_cyan              'rgb:baf8f8'
 	declare-option str desaturated_blue       'rgb:6b9494'
 	declare-option str pale_blue              'rgb:caeaef'
+	declare-option str light_grey             'rgb:b8c6cb'
+
+	declare-option str normal_background      "%opt{pale_cyan}"
+	declare-option str normal_comment         "%opt{desaturated_cyan}"
+
+	# insert mode background (paper)
 	declare-option str desaturated_orange     'rgb:d5b875'
 	declare-option str pale_orange            'rgb:f7f3ee'
-	declare-option str light_grey             'rgb:b8c6cb'
 	declare-option str pale_grey              'rgb:cfd8dc'
 
+	# capslock background (choices)
+	declare-option str desaturated_green      'rgb:78ab78'
+	declare-option str pale_green             'rgb:d4ebe1'
+	declare-option str desaturated_pink       'rgb:9d748c'
+	declare-option str pale_pink              'rgb:fadadd'
+
 	define-command normal-mode-colorscheme %{
-		declare-option str background          "%opt{pale_blue}"
-		declare-option str comment             "%opt{desaturated_blue}"
-		declare-option str linenr              "%opt{light_grey}"
-		declare-option str menu                "%opt{pale_orange}"
-		colorscheme %opt{theme}
+		set-option window mode                 "normal"
+		if %sh{ [ "$kak_opt_colormode" = 'normal' ] && echo false || echo true } %{
+			declare-option str background       "%opt{normal_background}"
+			declare-option str comment          "%opt{normal_comment}"
+			declare-option str linenr           "%opt{light_grey}"
+			declare-option str menu             "%opt{pale_orange}"
+			set-option window colormode         "normal"
+			colorscheme %opt{theme}
+		} %{
+			nop
+		}
 	}
 
 	define-command insert-mode-colorscheme %{
-		declare-option str background          "%opt{pale_orange}"
-		declare-option str comment             "%opt{desaturated_orange}"
-		declare-option str linenr              "%opt{pale_grey}"
-		declare-option str menu                "%opt{pale_blue}"
-		colorscheme %opt{theme}
+		set-option window mode                 "insert"
+		if %sh{ [ "$kak_opt_colormode" = 'insert' ] && echo false || echo true } %{
+			declare-option str background       "%opt{pale_orange}"
+			declare-option str comment          "%opt{desaturated_orange}"
+			declare-option str linenr           "%opt{pale_grey}"
+			declare-option str menu             "%opt{normal_background}"
+			set-option window colormode         "insert"
+			colorscheme %opt{theme}
+		} %{
+			nop
+		}
 	}
 
-	# window modal "duo"chrome
+	define-command capslock-colorscheme %{
+		if %sh{ [ "$kap_opt_colormode" = 'capslock' ] && echo false || echo true } %{
+			declare-option str background       "%opt{pale_pink}"
+			declare-option str comment          "%opt{desaturated_pink}"
+			declare-option str linenr           "%opt{light_grey}"
+			# declare-option str menu           "%opt{normal_background}"
+			set-option window colormode         "capslock"
+			colorscheme %opt{theme}
+		} %{
+			nop
+		}
+	}
+
+	define-command capslock-check %{
+		if %sh{ [ "$(kapslock)" ] && echo true || echo false } %{
+			capslock-colorscheme
+		} %{
+			if %sh{ [ "$kak_opt_mode" = 'insert' ] && echo true || echo false } %{
+				insert-mode-colorscheme
+			} %{
+				normal-mode-colorscheme
+			}
+		}
+	}
+
+	# window modal/capslock "duo"chrome
 	hook global WinCreate '.*' %{
 		normal-mode-colorscheme
-		hook window ModeChange 'push:.*:insert' insert-mode-colorscheme
-		hook window ModeChange 'push:insert:.*' normal-mode-colorscheme
-		hook window ModeChange 'pop:insert:.*'  normal-mode-colorscheme
-		hook window ModeChange 'pop:.*:insert'  insert-mode-colorscheme
+		hook window ModeChange (push|pop):.*:insert insert-mode-colorscheme
+		hook window ModeChange (push|pop):insert:.* normal-mode-colorscheme
+		hook window InsertIdle .* capslock-check
+		hook window NormalIdle .* capslock-check
 	}
 } %{
 	declare-option str theme 'base16-icy'
@@ -73,9 +122,11 @@ set-option global scrolloff 4,4
 
 # modal line numbers
 declare-option str ruler '│ '
-hook global WinCreate .* %{ add-highlighter window/linenr number-lines -hlcursor -separator %opt{ruler} -relative }
-hook global ModeChange (push|pop):.*:insert %{ add-highlighter -override window/linenr number-lines -hlcursor -separator %opt{ruler} }
-hook global ModeChange (push|pop):insert:.* %{ add-highlighter -override window/linenr number-lines -hlcursor -separator %opt{ruler} -relative }
+hook global WinCreate .* %{
+    add-highlighter window/linenr number-lines -hlcursor -separator %opt{ruler} -relative
+    hook window ModeChange (push|pop):.*:insert %{ add-highlighter -override window/linenr number-lines -hlcursor -separator %opt{ruler} }
+    hook window ModeChange (push|pop):insert:.* %{ add-highlighter -override window/linenr number-lines -hlcursor -separator %opt{ruler} -relative }
+}
 
 # ................................................................... Statusline
 
@@ -102,10 +153,8 @@ hook global FocusIn .* change-directory-current-buffer
 hook global WinCreate '.*' %{
 	set-face window crosshairs_line   "default,default+u"
 	set-face window crosshairs_column "default,%opt{faint_blue}"
-	hook window ModeChange 'push:.*:insert' %{set-face window crosshairs_column "default,%opt{faint_orange}"}
-	hook window ModeChange 'push:insert:.*' %{set-face window crosshairs_column "default,%opt{faint_blue}"}
-	hook window ModeChange 'pop:insert:.*'  %{set-face window crosshairs_column "default,%opt{faint_blue}"}
-	hook window ModeChange 'pop:.*:insert'  %{set-face window crosshairs_column "default,%opt{faint_orange}"}
+	hook window ModeChange (push|pop):.*:insert %{set-face window crosshairs_column "default,%opt{faint_orange}"}
+	hook window ModeChange (push|pop):insert:.* %{set-face window crosshairs_column "default,%opt{faint_blue}"}
 }
 
 map global user | ': cursorcolumn<ret>' -docstring "toggle column"
