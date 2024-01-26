@@ -7,16 +7,18 @@
 
 # ............................................................ Window operations
 
-# Usage: window <msg>, see functions/window
+# Usage: window [@<delay>] <msg>, see functions/window
 
 TWOBWM_CONFIG=$HOME/.config/2bwm/src/config.h
 WINFO=$TWOBWM:window
 
-save_geometry() { xdotool getwindowgeometry --shell $winid >$WINFO:$winid; }  # for revert
-right()         { echo $(( $width - ($X + $WIDTH - 1) + $margin * 2 )); }     # for nearest edge SEE: window snap / stretch
+geometry()      { xdotool getwindowgeometry --shell $winid; }  # X Y WIDTH HEIGHT (doesn't include borders)
+set_geometry()  { eval $(geometry); }
+save_geometry() { geometry >$WINFO:$winid; }                   # for revert
+opposite_side() { echo $(( $width + $margin * 2 - ($X + $WIDTH + $border * 2) )); }  # for nearest edge SEE: window snap / stretch
 winid()         { xdotool getactivewindow; }
 
-# usable desktop
+# usable screen dimensions
 margin=$(query screen margin)
 panel=$(query screen panel)
 width=$(( $(query display width) - $margin * 2 ))
@@ -39,6 +41,9 @@ draw() {
 	xdotool windowmap --sync $1
 	xdotool key Super+Shift+g  # 2bwm vertical center BUG: jitter offset occurs with A4 and B5
 }
+
+# do we need to wait for window creation?
+[ "${1%%@*}" ] || { sleep ${1#@}; winid=$(winid); shift; }
 
 msg=$1
 [ $msg ] && shift || usage: $0

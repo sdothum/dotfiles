@@ -8,30 +8,31 @@
 # .................................................................. Window size
 
 actions() {
-	echo "Mod+0         revert
-Mod+Shift+0   size
-Mod+1         rotate
-Mod+2         monocle
-              top
-              bottom
-              left
-              right
-              top left
-              top right
-              bottom left
-              bottom right
-              near horizontal
-              far horizontal"
+	echo "Mod+Ctrl+w   size
+Mod+0        revert
+Mod+1        rotate
+Mod+2        monocle
+  p          top
+  b          bottom
+  f          left
+  g          right
+  3          top left
+  4          top right
+  5          bottom left
+  6          bottom right
+  7          near horizontal
+  8          far horizontal"
 }
 
 # keybinds to menu windowstretch not currently assigned in 2bwm SEE: menu windowsize
 [ $1 ] && cmd=$(actions | grep "Mod[+]$1 ") || cmd=$(actions | rmenu 'Stretch window to' $cmd -no-custom) || exit
 
-echo "$cmd" | grep -q "Mod" && cmd=$(echo "$cmd" | sed "s/Mod[^ ]* *//")
+cmd=$(echo "$cmd" | sed "s/^[^ ]* *//")
 case $cmd in
+	size    ) menu windowsize            ;;
 	revert  ) window revert              ;;
 	rotate  ) window rotate              ;;
-	size    ) menu windowsize            ;;
+	monocle ) window size monocle        ;;
 	top     ) window stretch top         ;;
 	bottom  ) window stretch bottom      ;;
 	left    ) window stretch left        ;;
@@ -40,8 +41,8 @@ case $cmd in
 	t*right ) window stretch topright    ;;
 	b*left  ) window stretch bottomleft  ;;
 	b*right ) window stretch bottomright ;;
-	near    ) window stretch near        ;;  # horizontal axis
-	far     ) window stretch far         ;;
+	near*   ) window stretch near        ;;  # horizontal axis
+	far*    ) window stretch far         ;;
 esac
 
 # kak: filetype=sh

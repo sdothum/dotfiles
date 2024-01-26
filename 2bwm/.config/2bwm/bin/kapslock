@@ -1,14 +1,12 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="btop $@" . $PARENT
+[ $TRACE ] && CHILD="kapslock $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# .......................................................................... Top
+# ........................................................... kak capslock event
 
-BTOP=/usr/bin/btop
-
-xdotool search --onlyvisible --classname btop windowclose || term btop BLACKBOARD $BTOP
+capslock && echo on || echo ''
 
 # kak: filetype=sh

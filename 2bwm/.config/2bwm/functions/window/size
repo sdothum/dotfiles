@@ -7,7 +7,7 @@
 
 # .............................................................. Set window size
 
-# Usage: window size [@<delay>] <height>x<width> | monocle | rotate | <numerator>/<denominator> (of screen width)
+# Usage: window size <height>x<width> | monocle | rotate | <numerator>/<denominator> (of screen width)
 
 X=1024
 Y=800
@@ -50,9 +50,6 @@ paper() {
 	esac
 }
 
-# do we need to gain correct focus?
-[ "${1%%@*}" ] || { sleep ${1#@}; winid=$(winid); shift; }
-
 case $1 in
 	mon*  ) monocle  ;;
 	[AB]* ) paper $1 $2 ;;
@@ -62,4 +59,4 @@ case $1 in
 esac
 
 
-# KAK: FILETYPE=SH
+# kak: filetype=sh

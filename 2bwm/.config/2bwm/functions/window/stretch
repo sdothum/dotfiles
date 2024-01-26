@@ -9,7 +9,7 @@
 
 # Usage: window stretch [[top | bottom] [left | right] | near | far]
 
-eval $(xdotool getwindowgeometry --shell $winid)         # HEIGHT WIDTH (doesn't include borders)
+set_geometry  # X Y WIDTH HEIGHT
 
 # .................................................................. Stretch top
 
@@ -88,16 +88,16 @@ bottomright() {
 }
 
 # ................................................................. Stretch near
-
+set -x
 near() {
-	[ $X -le $(right) ] && left || right
+	[ $X -le $(opposite_side) ] && left || right
 	xdotool windowactivate --sync $winid
 }
 
 # .................................................................. Stretch far
 
 far() {
-	[ $X -le $(right) ] && right || left
+	[ $X -le $(opposite_side) ] && right || left
 	xdotool windowactivate --sync $winid
 }
 

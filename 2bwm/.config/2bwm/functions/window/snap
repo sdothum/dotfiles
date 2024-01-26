@@ -9,13 +9,12 @@
 
 # Usage: window snap [left | center | right | top | bottom | all (windows on desktop)]
 
-eval $(xdotool getwindowgeometry --shell $winid)         # HEIGHT WIDTH (doesn't include borders)
+set_geometry  # X Y WIDTH HEIGHT
 save_geometry
 
 # .................................................................... Snap left
 
 snapleft() {
-	# xdotool windowmove --sync $winid $(( $margin + $border - 1 )) $(( ($height - $HEIGHT) / 2 - $border ))
 	xdotool windowmove --sync $winid $(( $margin + $border - 1 )) y
 	xdotool windowactivate --sync $winid
 }
@@ -23,17 +22,14 @@ snapleft() {
 # ................................................................... Snap right
 
 snapright() {
-	# xdotool windowmove --sync $winid $(( $width - $WIDTH - $border * 2 - $margin )) $(( ($height - $HEIGHT) / 2 - $border ))
-	# xdotool windowmove --sync $winid $(( $width - $WIDTH - $border * 2 - $margin )) y
 	xdotool windowmove --sync $winid $(( $width - $WIDTH + $border )) y
 	xdotool windowactivate --sync $winid
 }
 
-# .................................................................... Snap edge
+# .................................................................... Snap near
 
 snapnear() {
-	# snap to closest edge!
-	[ $X -le $(right) ] && snapleft || snapright
+	[ $X -le $(opposite_side) ] && snapleft || snapright
 	xdotool windowactivate --sync $winid
 }
 
@@ -52,7 +48,7 @@ snapbottom() {
 	xdotool windowactivate --sync $winid
 }
 
-# ........................................................ Snap windows to level
+# .................................................... Snap all windows to level
 
 snaphorizon() {
 	desktop=$(xdotool get_desktop)

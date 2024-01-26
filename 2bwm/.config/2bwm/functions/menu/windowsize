@@ -8,22 +8,25 @@
 # .................................................................. Window size
 
 actions() {
-	echo "Mod+0        revert
-Mod+Ctrl+0   stretch
-Mod+1        rotate
-Mod+2        monocle
-Mod+3        B4
-Mod+4        A4
-Mod+5        B5
-Mod+6        A5
-Mod+7        B6
-Mod+8        A6
-Mod+9        B7"
+	echo "Mod+Shift+w   stretch
+Mod+0         revert
+Mod+1         rotate
+Mod+2         monocle
+Mod+3         B4
+Mod+4         A4
+Mod+5         B5
+ 5r           B5 rotate
+Mod+6         A5
+Mod+7         B6
+ 6r           B6 rotate
+Mod+8         A6
+Mod+9         B7
+ 7r           B7 rotate"
 }
 
 [ $1 ] && cmd=$(actions | grep "Mod[+]$1 ") || cmd=$(actions | rmenu 'Window size' $cmd -no-custom) || exit
 
-echo "$cmd" | grep -q "Mod" && cmd=$(echo "$cmd" | sed "s/Mod[^ ]* *//")
+cmd=$(echo "$cmd" | sed "s/^[^ ]* *//")
 case $cmd in
 	revert  ) window revert        ;;
 	rotate  ) window rotate        ;;
