@@ -5,9 +5,11 @@
 
 # duochrome theme for Kakoune
 
+# SEE: kakrc for modal/capslock background colorscheme control
+
 # ................................................................ Color palette
 
-# dynamic theme mode contrast
+# dynamic theme modal/capslock contrast
 # background/comment and statusbar must be set by kakrc
 
 # dark to lighter shades
@@ -15,8 +17,8 @@
 declare-option str black                  'rgb:263238'
 declare-option str light_black            'rgb:304047'
 declare-option str dark_grey              'rgb:445c65'
-# declare-option str light_grey           'rgb:b8c6cb'
-# declare-option str pale_grey            'rgb:cfd8dc'
+# declare-option str light_grey           'rgb:b8c6cb'  # see kakrc
+# declare-option str pale_grey            'rgb:cfd8dc'  # see kakrc
 # reds
 declare-option str dark_red               'rgb:a1462a'
 declare-option str soft_red               'rgb:fa8c69'
@@ -25,7 +27,7 @@ declare-option str soft_red               'rgb:fa8c69'
 # oranges
 declare-option str strong_orange          'rgb:bf450c'
 declare-option str light_orange           'rgb:ffe5b4'
-# declare-option str desaturated_orange   'rgb:d5b875'  # see kakrc (as master color assignment)
+# declare-option str desaturated_orange   'rgb:d5b875'  # see kakrc
 # declare-option str pale_orange          'rgb:f7f3ee'  # see kakrc
 # blues
 declare-option str dark_blue              'rgb:0069af'

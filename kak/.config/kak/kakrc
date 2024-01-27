@@ -5,12 +5,12 @@
 
 # config for Kakoune
 
-# ...................................... lambda calculus if-else kakscript block
+# ................................. lambda calculus if-then-else kakscript block
 
-# if %sh{ [ test.. ] && echo true || echo false } %{ then.. } %{ else.. }
-define-command true  -params 2 %{ eval %arg{1} }
-define-command false -params 2 %{ eval %arg{2} }
-define-command if    -params 3 %{ eval -verbatim %arg{1} %arg{2} %arg{3} }
+# if %sh{ [ ..test.. ] && echo then  || echo else } %{ ..then.. } %{ ..else.. }
+define-command if   -params 3 %{ eval -verbatim %arg{1} %arg{2} %arg{3} }
+define-command then -params 2 %{ eval %arg{1} }
+define-command else -params 2 %{ eval %arg{2} }
 
 # ........................................................................ Theme
 
@@ -18,10 +18,10 @@ define-command if    -params 3 %{ eval -verbatim %arg{1} %arg{2} %arg{3} }
 declare-option str faint_blue                'rgb:add8e6'  # pale blue contrast
 declare-option str faint_orange              'rgb:efe7dd'  # pale orange contrast
 
-if %sh{ [ -n "$DISPLAY" ] && echo true || echo false } %{
+if %sh{ [ -n "$DISPLAY" ] && echo then || echo else } %{
 	declare-option str theme                  'duochrome'
 	declare-option str mode                   'normal'      # initial state
-	declare-option str colormode              ''            # initialize colorscheme
+	declare-option str colormode              ''            # force initialize colorscheme
 
 	# normal mode background (choices)
 	declare-option str desaturated_cyan       'rgb:78a0a2'
@@ -43,44 +43,49 @@ if %sh{ [ -n "$DISPLAY" ] && echo true || echo false } %{
 
 	define-command normal-mode-colorscheme %{
 		set-option window mode                 "normal"
-		if %sh{ [ "$kak_opt_colormode" = 'normal' ] && echo false || echo true } %{
+		if %sh{ [ "$kak_opt_colormode" = 'normal' ] && echo then || echo else } %{
+			nop
+		} %{
 			declare-option str background       "%opt{pale_cyan}"
 			declare-option str comment          "%opt{desaturated_cyan}"
 			declare-option str linenr           "%opt{light_grey}"
 			declare-option str menu             "%opt{pale_orange}"
 			set-option window colormode         "normal"
 			colorscheme %opt{theme}
-		} %{ nop }
+		}
 	}
 
 	define-command insert-mode-colorscheme %{
 		set-option window mode                 "insert"
-		if %sh{ [ "$kak_opt_colormode" = 'insert' ] && echo false || echo true } %{
+		if %sh{ [ "$kak_opt_colormode" = 'insert' ] && echo then || echo else } %{
+			nop
+		} %{
 			declare-option str background       "%opt{pale_orange}"
 			declare-option str comment          "%opt{desaturated_orange}"
 			declare-option str linenr           "%opt{pale_grey}"
 			declare-option str menu             "%opt{pale_cyan}"
 			set-option window colormode         "insert"
 			colorscheme %opt{theme}
-		} %{ nop }
+		}
 	}
 
 	define-command capslock-colorscheme %{
-		if %sh{ [ "$kap_opt_colormode" = 'capslock' ] && echo false || echo true } %{
+		if %sh{ [ "$kap_opt_colormode" = 'capslock' ] && echo then || echo else } %{
+			nop
+		} %{
 			declare-option str background       "%opt{pale_pink}"
 			declare-option str comment          "%opt{desaturated_pink}"
 			declare-option str linenr           "%opt{light_grey}"
-			# declare-option str menu           "%opt{normal_background}"
 			set-option window colormode         "capslock"
 			colorscheme %opt{theme}
-		} %{ nop }
+		}
 	}
 
 	define-command capslock-check %{
-		if %sh{ [ "$(kapslock)" ] && echo true || echo false } %{
+		if %sh{ [ "$(kapslock)" ] && echo then || echo else } %{
 			capslock-colorscheme
 		} %{
-			if %sh{ [ "$kak_opt_mode" = 'insert' ] && echo true || echo false } %{
+			if %sh{ [ "$kak_opt_mode" = 'insert' ] && echo then || echo else } %{
 				insert-mode-colorscheme
 			} %{
 				normal-mode-colorscheme
