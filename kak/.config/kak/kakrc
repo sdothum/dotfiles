@@ -30,9 +30,6 @@ if %sh{ [ -n "$DISPLAY" ] && echo true || echo false } %{
 	declare-option str pale_blue              'rgb:caeaef'
 	declare-option str light_grey             'rgb:b8c6cb'
 
-	declare-option str normal_background      "%opt{pale_cyan}"
-	declare-option str normal_comment         "%opt{desaturated_cyan}"
-
 	# insert mode background (paper)
 	declare-option str desaturated_orange     'rgb:d5b875'
 	declare-option str pale_orange            'rgb:f7f3ee'
@@ -47,15 +44,13 @@ if %sh{ [ -n "$DISPLAY" ] && echo true || echo false } %{
 	define-command normal-mode-colorscheme %{
 		set-option window mode                 "normal"
 		if %sh{ [ "$kak_opt_colormode" = 'normal' ] && echo false || echo true } %{
-			declare-option str background       "%opt{normal_background}"
-			declare-option str comment          "%opt{normal_comment}"
+			declare-option str background       "%opt{pale_cyan}"
+			declare-option str comment          "%opt{desaturated_cyan}"
 			declare-option str linenr           "%opt{light_grey}"
 			declare-option str menu             "%opt{pale_orange}"
 			set-option window colormode         "normal"
 			colorscheme %opt{theme}
-		} %{
-			nop
-		}
+		} %{ nop }
 	}
 
 	define-command insert-mode-colorscheme %{
@@ -64,12 +59,10 @@ if %sh{ [ -n "$DISPLAY" ] && echo true || echo false } %{
 			declare-option str background       "%opt{pale_orange}"
 			declare-option str comment          "%opt{desaturated_orange}"
 			declare-option str linenr           "%opt{pale_grey}"
-			declare-option str menu             "%opt{normal_background}"
+			declare-option str menu             "%opt{pale_cyan}"
 			set-option window colormode         "insert"
 			colorscheme %opt{theme}
-		} %{
-			nop
-		}
+		} %{ nop }
 	}
 
 	define-command capslock-colorscheme %{
@@ -80,9 +73,7 @@ if %sh{ [ -n "$DISPLAY" ] && echo true || echo false } %{
 			# declare-option str menu           "%opt{normal_background}"
 			set-option window colormode         "capslock"
 			colorscheme %opt{theme}
-		} %{
-			nop
-		}
+		} %{ nop }
 	}
 
 	define-command capslock-check %{
@@ -194,6 +185,7 @@ set-option global indentwidth 3
 enable-auto-pairs
 
 map global normal <c-l> ': comment-line<ret>' -docstring '(un)comment'  # beakl key position for "#" NOTE: <c-c> unmappable
+map global user   '#' 'x|comment \#<ret>'     -docstring '^# comment'   # BUG: modeline-parse not working(?)
 
 declare-user-mode format
 map global format c ': comment-line<ret>'     -docstring '(un)comment'
@@ -295,7 +287,6 @@ hook global BufOpenFile .* %{ modeline-parse }
 hook global BufOpenFile .*.eml %{ set buffer filetype markdown }
 hook global FocusOut .* write
 
-map global user   '#' ': set buffer filetype sh<ret>'    -docstring 'set filetype=sh'  # BUG: modeline-parse not working(?)
 map global normal <a-ret> ': buffer-next<ret>'           -docstring 'next buffer'
 map global normal <a-backspace> ': buffer-previous<ret>' -docstring 'previous buffer'
 map global normal <a-space> 'ga'                         -docstring 'last buffer'
