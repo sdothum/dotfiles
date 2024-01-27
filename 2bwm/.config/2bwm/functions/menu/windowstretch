@@ -20,8 +20,8 @@ Mod+2        monocle
   4          top right
   5          bottom left
   6          bottom right
-  7          near horizontal
-  8          far horizontal"
+  7          fullscreen left
+  8          fullscreen right"
 }
 
 # keybinds to menu windowstretch not currently assigned in 2bwm SEE: menu windowsize
@@ -41,6 +41,8 @@ case $cmd in
 	t*right ) window stretch topright    ;;
 	b*left  ) window stretch bottomleft  ;;
 	b*right ) window stretch bottomright ;;
+	f*left  ) window stretch fullleft    ;;
+	f*right ) window stretch fullright   ;;
 	near*   ) window stretch near        ;;  # horizontal axis
 	far*    ) window stretch far         ;;
 esac

@@ -15,14 +15,14 @@ save_geometry
 # .................................................................... Snap left
 
 snapleft() {
-	xdotool windowmove --sync $winid $(( $margin + $border - 1 )) y
+	xdotool windowmove $winid $(( $margin + $border - 1 )) y
 	xdotool windowactivate --sync $winid
 }
 
 # ................................................................... Snap right
 
 snapright() {
-	xdotool windowmove --sync $winid $(( $width - $WIDTH + $border )) y
+	xdotool windowmove $winid $(( $width - $WIDTH + $border )) y
 	xdotool windowactivate --sync $winid
 }
 
@@ -36,15 +36,15 @@ snapnear() {
 # ..................................................................... Snap top
 
 snaptop() {
-	xdotool windowmove --sync $winid x $margin
+	xdotool windowmove $winid x $margin
 	xdotool windowactivate --sync $winid
 }
 
 # .................................................................. Snap bottom
 
 snapbottom() {
-	# xdotool windowmove --sync $winid x $(( $height - $HEIGHT - $margin - $border * 2 ))
-	xdotool windowmove --sync $winid x $(( $height - $HEIGHT ))
+	# xdotool windowmove $winid x $(( $height - $HEIGHT - $margin - $border * 2 ))
+	xdotool windowmove $winid x $(( $height - $HEIGHT ))
 	xdotool windowactivate --sync $winid
 }
 
@@ -57,20 +57,35 @@ snaphorizon() {
 	for i in $winids ;do
 		# xdotool windowactivate --sync $i
 		xdotool windowactivate $i  # faster
+		save_geometry $i           # for full desktop restore :)
 		xdotool key Super+Shift+g  # 2bwm vertical center
 	done
 
 	xdotool windowactivate --sync $winid
 }
 
+# .......................................................... Restore all windows
+
+snaprestore() {
+	desktop=$(xdotool get_desktop)
+	winids=$(wmctrl -l | grep "^[^ ]*  *$desktop " | cut -d' ' -f1)  # of current desktop
+
+	for i in $winids ;do
+		window revert $i
+	done
+
+	xdotool windowactivate --sync $winid
+}
+
 case $1 in
-	''     ) snapnear    ;; # nearest left/right edge
-	left   ) snapleft    ;;
-	center ) xdotool key Super+g ;;
-	right  ) snapright   ;;
-	top    ) snaptop     ;;
-	bottom ) snapbottom  ;;
-	all    ) snaphorizon ;;
+	''      ) snapnear    ;; # nearest left/right edge
+	left    ) snapleft    ;;
+	center  ) xdotool key Super+g ;;
+	right   ) snapright   ;;
+	top     ) snaptop     ;;
+	bottom  ) snapbottom  ;;
+	all     ) snaphorizon ;;
+	restore ) snaprestore ;;
 esac
 
 # kak: filetype=sh

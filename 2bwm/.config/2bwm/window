@@ -12,9 +12,9 @@
 TWOBWM_CONFIG=$HOME/.config/2bwm/src/config.h
 WINFO=$TWOBWM:window
 
-geometry()      { xdotool getwindowgeometry --shell $winid; }  # X Y WIDTH HEIGHT (doesn't include borders)
-set_geometry()  { eval $(geometry); }
-save_geometry() { geometry >$WINFO:$winid; }                   # for revert
+geometry()      { xdotool getwindowgeometry --shell ${1:-$winid}; }  # X Y WIDTH HEIGHT (doesn't include borders)
+set_geometry()  { eval $(geometry $1); }
+save_geometry() { geometry $1 >$WINFO:${1:-$winid}; }                   # for revert
 opposite_side() { echo $(( $width + $margin * 2 - ($X + $WIDTH + $border * 2) )); }  # for nearest edge SEE: window snap / stretch
 winid()         { xdotool getactivewindow; }
 

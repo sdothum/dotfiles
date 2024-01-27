@@ -7,7 +7,7 @@
 
 # .............................................................. Stretch windows
 
-# Usage: window stretch [[top | bottom] [left | right] | near | far]
+# Usage: window stretch [[top | bottom | full] [left | right] | near | far]
 
 set_geometry  # X Y WIDTH HEIGHT
 
@@ -16,7 +16,7 @@ set_geometry  # X Y WIDTH HEIGHT
 top() {
 	height=$(( $Y + $HEIGHT - $panel ))
 	draw $winid $WIDTH $height
-	xdotool windowmove --sync $winid $X $panel
+	xdotool windowmove $winid $X $panel
 	xdotool windowactivate --sync $winid
 }
 
@@ -25,7 +25,7 @@ top() {
 bottom() {
 	height=$(( $height - $Y + $border ))
 	draw $winid $WIDTH $height
-	xdotool windowmove --sync $winid $X $Y
+	xdotool windowmove $winid $X $Y
 	xdotool windowactivate --sync $winid
 }
 
@@ -34,7 +34,7 @@ bottom() {
 left() {
 	width=$(( $X + $WIDTH - $margin ))
 	draw $winid $width $HEIGHT
-	xdotool windowmove --sync $winid $margin $Y
+	xdotool windowmove $winid $margin $Y
 	xdotool windowactivate --sync $winid
 }
 
@@ -43,7 +43,7 @@ left() {
 right() {
 	width=$(( $width - $X + $margin ))
 	draw $winid $width $HEIGHT
-	xdotool windowmove --sync $winid $X $Y
+	xdotool windowmove $winid $X $Y
 	xdotool windowactivate --sync $winid
 }
 
@@ -53,7 +53,7 @@ topleft() {
 	height=$(( $Y + $HEIGHT - $panel ))
 	width=$(( $X + $WIDTH - $margin ))
 	draw $winid $width $height
-	xdotool windowmove --sync $winid $margin $panel
+	xdotool windowmove $winid $margin $panel
 	xdotool windowactivate --sync $winid
 }
 
@@ -63,7 +63,7 @@ topright() {
 	height=$(( $Y + $HEIGHT - $panel ))
 	width=$(( $width - $X + $margin ))
 	draw $winid $width $height
-	xdotool windowmove --sync $winid $X $panel
+	xdotool windowmove $winid $X $panel
 	xdotool windowactivate --sync $winid
 }
 
@@ -73,7 +73,7 @@ bottomleft() {
 	height=$(( $height - $Y + $border ))
 	width=$(( $X + $WIDTH - $margin ))
 	draw $winid $width $height
-	xdotool windowmove --sync $winid $margin $Y
+	xdotool windowmove $winid $margin $Y
 	xdotool windowactivate --sync $winid
 }
 
@@ -83,12 +83,32 @@ bottomright() {
 	height=$(( $height - $Y + $border ))
 	width=$(( $width - $X + $margin ))
 	draw $winid $width $height
-	xdotool windowmove --sync $winid $X $Y
+	xdotool windowmove $winid $X $Y
+	xdotool windowactivate --sync $winid
+}
+
+# ..................................................... Stretch full screen left
+
+fullleft() {
+	height=$(( $height - $border * 2 ))
+	width=$(( $X + $WIDTH - $margin ))
+	draw $winid $width $height
+	xdotool windowmove $winid $margin $panel
+	xdotool windowactivate --sync $winid
+}
+
+# .................................................... Stretch full screen right
+
+fullright() {
+	height=$(( $height - $border * 2 ))
+	width=$(( $width - $X + $margin ))
+	draw $winid $width $height
+	xdotool windowmove $winid $X $panel
 	xdotool windowactivate --sync $winid
 }
 
 # ................................................................. Stretch near
-set -x
+
 near() {
 	[ $X -le $(opposite_side) ] && left || right
 	xdotool windowactivate --sync $winid
@@ -111,6 +131,8 @@ case $1 in
 	t*right ) topright    ;;
 	b*left  ) bottomleft  ;;
 	b*right ) bottomright ;;
+	f*left  ) fullleft    ;;
+	f*right ) fullright   ;;
 	near    ) near        ;;  # horizontal axis
 	far     ) far         ;;
 esac

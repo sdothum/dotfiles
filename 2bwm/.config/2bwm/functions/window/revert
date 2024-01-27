@@ -7,10 +7,11 @@
 
 # ....................................................... Revert window geometry
 
-# Usage: window revert SEE: window size and window stretch
+# Usage: window revert [winid]
 
-[ -e $WINFO:$winid ] && eval $(cat $WINFO:$winid) || exit
-draw $winid $WIDTH $HEIGHT
-xdotool windowmove --sync $winid $X $Y
+# SEE: window size,  stretch and snap
+[ -e $WINFO:${1:-$winid} ] && eval $(cat $WINFO:${1:-$winid}) || exit
+draw ${1:-$winid} $WIDTH $HEIGHT
+xdotool windowmove ${1:-$winid} $X $Y
 
 # kak: filetype=sh
