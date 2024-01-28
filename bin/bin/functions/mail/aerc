@@ -11,7 +11,7 @@ export TMPDIR=~/drafts  # override /tmp (because dir is not persistent in alpine
 MAILDIR=$HOME/Mail
 AERC=/usr/bin/aerc
 group=$(cat $MAILDIR/.mailsync:group)
-DELAY=1.15  # long enough to not trigger 2bwm actions while launching via modkey (down) bindings
+DELAY=0.1  # long enough to not trigger 2bwm actions while launching via modkey (down) bindings
 
 # push out any flag and trash changes when finished
 trap "mailsync $group" EXIT
