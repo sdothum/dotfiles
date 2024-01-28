@@ -9,7 +9,7 @@
 config=$(dirname $(dirname $0))/src/${1:-config.h}
 for i in space tab return backspace up down left right home end comma period 0 1 2 3 4 5 6 7 8 9 a b c d e f g h i j k l m n o p q r s t u v w x y z ;do
 	ditto key $i
-	ugrep --ignore-case -v "^[ \t]*//" $config | a "xk_$i," | cut -d'{' -f2- | sed 's/^/{/'
+	ugrep --ignore-case -v "^[ \t]*//" $config | a "xk_$i," | cut -d'{' -f2- | sed 's/^/{/;/DESKTOPCHANGE/s/^[{ \t]*/   /'
 done
 
 # kak: filetype=sh
