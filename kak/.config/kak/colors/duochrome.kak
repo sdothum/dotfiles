@@ -10,46 +10,79 @@
 # ................................................................ Color palette
 
 # dynamic theme modal/capslock contrast
-# background/comment and statusbar must be set by kakrc
+
+evaluate-commands %sh{
+	cat <<-COLORS
 
 # dark to lighter shades
 # blacks
 declare-option str black                  'rgb:263238'
 declare-option str light_black            'rgb:304047'
 declare-option str dark_grey              'rgb:445c65'
-# declare-option str light_grey           'rgb:b8c6cb'  # see kakrc
-# declare-option str pale_grey            'rgb:cfd8dc'  # see kakrc
+declare-option str light_grey             'rgb:b8c6cb'
+declare-option str pale_grey              'rgb:cfd8dc'
 # reds
 declare-option str dark_red               'rgb:a1462a'
 declare-option str soft_red               'rgb:fa8c69'
-# declare-option str desaturated_pink     'rgb:9d748c'  # see kakrc
-# declare-option str pale_pink            'rgb:fadadd'  # see kakrc
+declare-option str desaturated_pink       'rgb:9d748c'
+declare-option str pale_pink              'rgb:fadadd'
 # oranges
 declare-option str strong_orange          'rgb:bf450c'
 declare-option str light_orange           'rgb:ffe5b4'
-# declare-option str desaturated_orange   'rgb:d5b875'  # see kakrc
-# declare-option str pale_orange          'rgb:f7f3ee'  # see kakrc
+declare-option str desaturated_orange     'rgb:d5b875'
+declare-option str faint_orange           'rgb:efe7dd'
+declare-option str pale_orange            'rgb:f7f3ee'
 # blues
 declare-option str dark_blue              'rgb:0069af'
-# declare-option str desaturated_blue     'rgb:6b9494'  # see kakrc
-# declare-option str pale_blue            'rgb:caeaef'  # see kakrc
+declare-option str desaturated_blue       'rgb:6b9494'
+declare-option str faint_blue             'rgb:add8e6'
+declare-option str pale_blue              'rgb:caeaef'
 # cyans
 declare-option str dark_cyan              'rgb:0087af'
 declare-option str soft_cyan              'rgb:a3d5e4'
 declare-option str vivid_cyan             'rgb:20fccf'
-# declare-option str desaturated_cyan     'rgb:78a0a2'  # see kakrc
-# declare-option str pale_cyan            'rgb:baf8f8'  # see kakrc
+declare-option str desaturated_cyan       'rgb:78a0a2'
+declare-option str pale_cyan              'rgb:baf8f8'
 # greens
-# declare-option str desaturated_green    'rgb:78ab78'  # see kakrc
-# declare-option str pale_green           'rgb:d4ebe1'  # see kakrc
+declare-option str desaturated_green      'rgb:78ab78'
+declare-option str pale_green             'rgb:d4ebe1'
+
+	COLORS
 
 # ................................................................ Color objects
 
-# declare-option str background           "%opt{pale_orange}"         # see kakrc
+	# modal highlights
+	case "$kak_opt_colormode" in
+		normal   ) cat <<-NORMAL
+declare-option str background             "%opt{pale_cyan}"
+declare-option str comment                "%opt{desaturated_cyan}"
+declare-option str linenr                 "%opt{light_grey}"
+declare-option str menu                   "%opt{pale_orange}"
+declare-option str ruler                  "%opt{faint_blue}"
+			NORMAL
+			;;
+
+		capslock ) cat <<-CAPSLOCK
+declare-option str background             "%opt{pale_pink}"
+declare-option str comment                "%opt{desaturated_pink}"
+declare-option str linenr                 "%opt{light_grey}"
+			CAPSLOCK
+			;;
+
+		*        ) cat <<-INSERT
+declare-option str background             "%opt{pale_orange}"
+declare-option str comment                "%opt{desaturated_orange}"
+declare-option str linenr                 "%opt{pale_grey}"
+declare-option str menu                   "%opt{pale_cyan}"
+declare-option str ruler                  "%opt{faint_orange}"
+			INSERT
+			;;
+	esac
+
+	cat <<-COLORSCHEME
+
 declare-option str foreground             "%opt{black}"
-# declare-option str linenr               "%opt{pale_grey}"           # see kakr
 declare-option str margin                 "%opt{background}"
-# declare-option str menu                 "%opt{pale_cyan}"           # see kakr
 declare-option str pick                   "%opt{desaturated_cyan}"
 declare-option str statusbar              "%opt{background}"
 declare-option str statusline             "%opt{desaturated_cyan}"
@@ -62,14 +95,13 @@ declare-option str selection              "%opt{dark_cyan}"
 declare-option str wrap                   "%opt{soft_red}"
 
 declare-option str attribute              "%opt{dark_blue}"
-# declare-option str comment              "%opt{desaturated_orange}"  # see kakrc
 declare-option str constant               "%opt{dark_blue}"
 declare-option str function               "%opt{light_black}"
 declare-option str operator               "%opt{strong_orange}"
 declare-option str string                 "%opt{dark_red}"
 declare-option str variable               "%opt{light_black}"
 
-declare-option str heading                "%opt{dark_red}"
+declare-option str heading                "%opt{strong_orange}"
 declare-option str link                   "%opt{soft_red}"
 declare-option str list                   "%opt{soft_red}"
 declare-option str mono                   "%opt{desaturated_cyan}"
@@ -154,6 +186,11 @@ set-face window PeneiraFlag               LineNumberCursor
 set-face window PeneiraMatches            "%opt{background},%opt{selection}+b"
 set-face window PeneiraFileName           attribute
 
+# ............................................................... kak-crosshairs
+
+set-face window crosshairs_line           "default,default+u"
+set-face window crosshairs_column         "default,%opt{ruler}"
+
 # ...................................................................... kak-lsp
 
 set-face window InlayHint                 "+d@type"
@@ -171,17 +208,17 @@ declare-option str magenta                "rgb:a626a4"
 declare-option str cyan                   "rgb:0184bc"
 
 set-face window InlayDiagnosticError      "%opt{lightred}"
-set-face window InlayDiagnosticWarning    "%opt{lightorange}"
-set-face window InlayDiagnosticInfo       "%opt{dark_blue}"
-set-face window InlayDiagnosticHint       "%opt{desaturated_green}"
+set-face window InlayDiagnosticWarning    "%opt{lightred}"
+set-face window InlayDiagnosticInfo       "%opt{lightred}"
+set-face window InlayDiagnosticHint       "%opt{lightred}"
 set-face window LineFlagError             "%opt{lightred}"
-set-face window LineFlagWarning           "%opt{lightorange}"
-set-face window LineFlagInfo              "%opt{dark_blue}"
-set-face window LineFlagHint              "%opt{desaturated_green}"
+set-face window LineFlagWarning           "%opt{lightred}"
+set-face window LineFlagInfo              "%opt{lightred}"
+set-face window LineFlagHint              "%opt{lightred}"
 set-face window DiagnosticError           ",,%opt{lightred}+c"
-set-face window DiagnosticWarning         ",,%opt{lightorange}+c"
-set-face window DiagnosticInfo            ",,%opt{dark_blue}+c"
-set-face window DiagnosticHint            ",,%opt{desaturated_green}+c"
+set-face window DiagnosticWarning         ",,%opt{lightred}+c"
+set-face window DiagnosticInfo            ",,%opt{lightred}+c"
+set-face window DiagnosticHint            ",,%opt{lightred}+c"
 # infobox faces
 set-face window InfoDefault               Information
 set-face window InfoBlock                 block
@@ -197,3 +234,5 @@ set-face window InfoDiagnosticHint        InlayDiagnosticHint
 set-face window InfoDiagnosticInformation InlayDiagnosticInfo
 set-face window InfoDiagnosticWarning     InlayDiagnosticWarning
 
+	COLORSCHEME
+}
