@@ -5,6 +5,15 @@
 
 # config for Kakoune
 
+# ........................................................................ Debug
+
+# hook global BufSetOption filetype=.* %{
+#     echo -debug setting %val{hook_param}
+# }
+# hook global BufSetOption comment_line=.* %{
+#     echo -debug setting %val{hook_param}
+# }
+
 # ................................. lambda calculus if-then-else kakscript block
 
 # if %sh{ [ ..test.. ] && echo then  || echo else } %{ ..then.. } %{ ..else.. }

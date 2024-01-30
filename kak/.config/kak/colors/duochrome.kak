@@ -25,8 +25,6 @@ evaluate-commands %sh{
 	black='rgb:263238'
 	light_black='rgb:304047'
 	dark_grey='rgb:445c65'
-	light_grey='rgb:b8c6cb'
-	pale_grey='rgb:cfd8dc'
 	# reds
 	dark_red='rgb:a1462a'
 	soft_red='rgb:fa8c69'
@@ -34,7 +32,6 @@ evaluate-commands %sh{
 	# oranges
 	strong_orange='rgb:bf450c'
 	light_orange='rgb:ffe5b4'
-	faint_orange='rgb:efe7dd'
 	pale_orange='rgb:f7f3ee'
 	# blues
 	dark_blue='rgb:0069af'
@@ -80,6 +77,7 @@ evaluate-commands %sh{
 	ruler="$(desaturate ${background} '14 / 15')"
 	wrap="${soft_red}"
 
+	# comment="${desaturated_orange}"
 	comment="$(desaturate ${background})"
 	attribute="${dark_blue}"
 	constant="${dark_blue}"
