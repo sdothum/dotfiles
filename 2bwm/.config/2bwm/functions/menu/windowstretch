@@ -20,8 +20,8 @@ Mod+2        monocle
   4          top right
   5          bottom left
   6          bottom right
-  7          fullscreen left
-  8          fullscreen right"
+Mod+8        fullscreen left
+Mod+7        fullscreen right"
 }
 
 # keybinds to menu windowstretch not currently assigned in 2bwm SEE: menu windowsize

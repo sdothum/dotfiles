@@ -17,10 +17,10 @@ Mod+4         A4
 Mod+5         B5
  5r           B5 rotate
 Mod+6         A5
-Mod+7         B6
+Mod+9         B6
  6r           B6 rotate
-Mod+8         A6
-Mod+9         B7
+ 8            A6
+ 7            B7
  7r           B7 rotate"
 }
 
