@@ -6,11 +6,11 @@
 
 # ...................................................... Random string generator
 
-# Usage: rand [ a | l | u | pw ][ n ] [<width>]
+# Usage: rand [ a | l | u | pw ][ n ] | [ h | H ][ # ] [<width>]
 
 while [ $1 ] ;do
 	case $1 in
-		p*     ) pattern='a-zA-Z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' ;;  # OWASP password special characters
+		[0-9]* ) width=$1            ;;
 		a      ) pattern='a-zA-Z'    ;;
 		l      ) pattern='a-z'       ;;
 		u      ) pattern='A-Z'       ;;
@@ -18,7 +18,11 @@ while [ $1 ] ;do
 		an     ) pattern='a-zA-Z0-9' ;;
 		ln     ) pattern='a-z0-9'    ;;
 		un     ) pattern='A-Z0-9'    ;;
-		[0-9]* ) width=$1            ;;
+		h      ) pattern='0-9a-f'; width=6              ;;
+		H      ) pattern='0-9A-F'; width=6              ;;
+		h\#    ) pattern='0-9a-f'; width=6; echo -n '#' ;;
+		H\#    ) pattern='0-9A-F'; width=6; echo -n '#' ;;
+		p*     ) pattern='a-zA-Z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' ;;  # OWASP password special characters
 	esac
 	shift
 done

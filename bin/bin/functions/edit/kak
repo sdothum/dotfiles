@@ -6,7 +6,7 @@
 
 # ....................................................................... Editor
 
-# Usage: [name=<title>] kak [-l | -p [<id>] | -h] [-- | ID=<id>] [WAIT] [<row>x<col>] <file>*
+# Usage: [name=<title>] kak [-l | -p [<id>] | -v | -h] [-X | -- | ID=<id>] [WAIT] [<row>x<col>] <file>*
 
 headless=${headless:-false}
 
@@ -26,12 +26,14 @@ $KAK -l | grep -q dead | $KAK -clear  # dead sessions
 
 while : ;do
 	case $1 in
-		-l            ) $KAK -l; exit    ;;
+		-l            ) $KAK -l; exit ;;
 		-p            ) [ $2 ] && $KAK -p $2 || { for i in $($KAK -l); do ditto kak "$i ${RED}❌"; echo kill | $KAK -p $i ;done }; exit ;;
+		-v*           ) $KAK -version; exit ;;
 		-h*           ) $KAK -help; ditto '-debug' "hooks | shell | profile | keys | commands"; exit ;;
-		--            ) ID=$(rand)   ;;  # force new instance
-		id=*          ) ID="${1#*=}" ;;
-		ID=*          ) ID="${1#*=}" ;;
+		-X            ) unset DISPLAY ;;
+		--            ) ID=$(rand)    ;;  # force new instance
+		id=*          ) ID="${1#*=}"  ;;
+		ID=*          ) ID="${1#*=}"  ;;
 		WAIT          ) WAIT=$1 ;;
 		*[0-9]x[0-9]* ) XY=$1   ;;
 		*             ) break   ;;

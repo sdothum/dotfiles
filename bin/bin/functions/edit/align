@@ -42,6 +42,7 @@ case "$1" in
 	'#'  ) match=$1; gutter='  ' ;;
 	'//' ) match=$1; gutter='  ' ;;
 	'--' ) match=$1; gutter='  ' ;;
+	''   ) match=$1 ;;
 	help ) usage ;;
 	*    ) match=" " ;;  # force drop through (below)
 esac
@@ -55,8 +56,8 @@ case "$match" in
 	'//'       ) sed -r "s|^( *($match)*.*[^ ]) *$match *|\1$delim$gutter$match |$nth" ;;  # ignore leading // c
 	'--'       ) sed -r "s/^( *($match)*.*[^ ]) *$match */\1$delim$gutter$match /$nth" ;;  # ignore leading -- lua
 	semicolons ) sed "s/ *;; */$delim$gutter;; /$nth" ;;
-	"$match"   ) sed "s/ *$match */$delim$gutter$match /$nth" ;;
 	''         ) sed "s/  */$delim /$nth" ;;    # align by spaces
+	"$match"   ) sed "s/ *$match */$delim$gutter$match /$nth" ;;
 	*          ) sed "s/$1/$delim $1/$nth" ;;   # align by string
 esac | sed -r ":a; s/^( *) /\1$space/; ta; s/\t/$tab/g; s/[$]/$dollar/g; s/\\\/$backslash/g" >$LINES         # leading hard char
 
