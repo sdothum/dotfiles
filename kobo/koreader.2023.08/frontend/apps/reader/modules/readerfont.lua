@@ -174,7 +174,7 @@ function ReaderFont:onReadSettings(config)
     self.header_font_face = config:readSetting("header_font_face")
                          or G_reader_settings:readSetting("header_font")
                          or self.ui.document.header_font
-    self.ui.document:setHeaderFont(self.header_font_face)
+    -- self.ui.document:setHeaderFont(self.header_font_face)  -- force my alt statusbar font
 
     self.ui.document:setFontSize(Screen:scaleBySize(self.configurable.font_size))
     self.ui.document:setFontBaseWeight(self.configurable.font_base_weight)

@@ -2007,7 +2007,7 @@ function ReaderFooter:get_separator_symbol()
         return "•"
     end
 
-    return "  "  -- from ""
+    return " "  -- from "" to 1 space (with draft) my changes
 end
 
 function ReaderFooter:genAllFooterText()
