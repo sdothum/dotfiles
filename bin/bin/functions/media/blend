@@ -1,0 +1,107 @@
+#!/usr/bin/lua5.3
+-- sdothum - 2016 (c) wtfpl
+
+--[[
+Version 4.0
+const pSBC=(p,c0,c1,l)=>{
+	let r,g,b,P,f,t,h,i=parseInt,m=Math.round,a=typeof(c1)=="string";
+	if(typeof(p)!="number"||p<-1||p>1||typeof(c0)!="string"||(c0[0]!='r'&&c0[0]!='#')||(c1&&!a))return null;
+	if(!this.pSBCr)this.pSBCr=(d)=>{
+		let n=d.length,x={};
+		if(n>9){
+			[r,g,b,a]=d=d.split(","),n=d.length;
+			if(n<3||n>4)return null;
+			x.r=i(r[3]=="a"?r.slice(5):r.slice(4)),x.g=i(g),x.b=i(b),x.a=a?parseFloat(a):-1
+		}else{
+			if(n==8||n==6||n<4)return null;
+			if(n<6)d="#"+d[1]+d[1]+d[2]+d[2]+d[3]+d[3]+(n>4?d[4]+d[4]:"");
+			d=i(d.slice(1),16);
+			if(n==9||n==5)x.r=d>>24&255,x.g=d>>16&255,x.b=d>>8&255,x.a=m((d&255)/0.255)/1000;
+			else x.r=d>>16,x.g=d>>8&255,x.b=d&255,x.a=-1
+		}return x};
+	h=c0.length>9,h=a?c1.length>9?true:c1=="c"?!h:false:h,f=this.pSBCr(c0),P=p<0,t=c1&&c1!="c"?this.pSBCr(c1):P?{r:0,g:0,b:0,a:-1}:{r:255,g:255,b:255,a:-1},p=P?p*-1:p,P=1-p;
+	if(!f||!t)return null;
+	if(l)r=m(P*f.r+p*t.r),g=m(P*f.g+p*t.g),b=m(P*f.b+p*t.b);
+	else r=m((P*f.r**2+p*t.r**2)**0.5),g=m((P*f.g**2+p*t.g**2)**0.5),b=m((P*f.b**2+p*t.b**2)**0.5);
+	a=f.a,t=t.a,f=a>=0||t>=0,a=f?a<0?t:t<0?a:a*P+t*p:0;
+	if(h)return"rgb"+(f?"a(":"(")+r+","+g+","+b+(f?","+m(a*1000)/1000:"")+")";
+	else return"#"+(4294967296+r*16777216+g*65536+b*256+(f?m(a*255):0)).toString(16).slice(1,f?undefined:-2)
+}
+
+	Converts a color from one to another based on a percentage.
+	pSBC(p, c0, c1, l)
+	p: number - percentage
+	c0: string - initial color
+	c1: string - target color
+	l: boolean - true for linear interpolation, false for square root interpolation
+	returns: string - converted color
+--]]
+
+function pSBC(p, c0, c1, l)
+	local function pSBCr(d)
+		local r, g, b, a
+		local n = #d
+		local x = {}
+		if n > 9 then
+			r, g, b, a = d:match("(%d+),(%d+),(%d+),(%d+)")
+			if n < 3 or n > 4 then
+				return nil
+			end
+			x.r = tonumber(r:sub(4, 5))
+			x.g = tonumber(g)
+			x.b = tonumber(b)
+			x.a = a and tonumber(a) or -1
+		else
+			if n == 8 or n == 6 or n < 4 then
+				return nil
+			end
+			if n < 6 then
+				d = "#" .. d:sub(2, 2) .. d:sub(2, 2) .. d:sub(3, 3) .. d:sub(3, 3) .. d:sub(4, 4) .. d:sub(4, 4) .. (n > 4 and d:sub(5, 6) or "")
+			end
+			d = tonumber(d:sub(2), 16)
+			if n == 9 or n == 5 then
+				x.r = bit32.rshift(d, 24) & 255
+				x.g = bit32.rshift(d, 16) & 255
+				x.b = bit32.rshift(d, 8) & 255
+				x.a = math.floor((d & 255) / 0.255) / 1000
+			else
+				x.r = bit32.rshift(d, 16)
+				x.g = bit32.rshift(d, 8) & 255
+				x.b = d & 255
+				x.a = -1
+			end
+		end
+		return x
+	end
+
+	local r, g, b, a
+	local f = pSBCr(c0)
+	local P = p < 0
+	local t = c1 and c1 ~= "c" and pSBCr(c1) or P and {r = 0, g = 0, b = 0, a = -1} or {r = 255, g = 255, b = 255, a = -1}
+	p = P and p * -1 or p
+	P = 1 - p
+	if not f or not t then
+		return nil
+	end
+	if l then
+		r = math.floor(P * f.r + p * t.r + 0.5)
+		g = math.floor(P * f.g + p * t.g + 0.5)
+		b = math.floor(P * f.b + p * t.b + 0.5)
+	else
+		r = math.floor(((P * f.r ^ 2 + p * t.r ^ 2) ^ 0.5) + 0.5)
+		g = math.floor(((P * f.g ^ 2 + p * t.g ^ 2) ^ 0.5) + 0.5)
+		b = math.floor(((P * f.b ^ 2 + p * t.b ^ 2) ^ 0.5) + 0.5)
+	end
+	a = f.a
+	t = t.a
+	local f = a >= 0 or t >= 0
+	a = f and (a < 0 and t or t < 0 and a or a * P + t * p) or 0
+	if f then
+		return "rgb" .. (a > 0 and "a(" or "(") .. r .. "," .. g .. "," .. b .. (a > 0 and "," .. math.floor(a * 1000) / 1000 or "") .. ")"
+	else
+		return "#" .. string.format("%06x", r * 65536 + g * 256 + b + (a > 0 and math.floor(a * 255) * 65536 or 0))
+	end
+end
+
+-- print (pSBC(tonumber(arg[1]), arg[2], arg[3], arg[4]))
+print (pSBC(tonumber(arg[1]), "0" .. arg[2], arg[3], arg[4]))  -- ???
