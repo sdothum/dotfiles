@@ -5,7 +5,7 @@
 /* Move this many pixels when moving or resizing with keyboard unless the window has hints saying otherwise.
  *0)move step slow   1)move step fast
  *2)mouse slow       3)mouse fast     */
-static const uint16_t movements[] = {20,40,15,400};
+static const uint16_t movements[] = {10,50,15,400};
 /* resize by line like in mcwm -- jmbi */
 static const bool     resize_by_line           = true;
 /* the ratio used when resizing and keeping the aspect */
@@ -14,7 +14,7 @@ static const float    resize_keep_aspect_ratio = 1.03;
 /*0)offsetx          1)offsety
  *2)maxwidth         3)maxheight */
 // static const uint8_t offsets[] = {0,0,0,0};
-static const uint8_t offsets[] = {40,30,80,60};
+static const uint8_t offsets[] = {44,38,88,76};
 ///---Colors---///
 /*0)focuscol         1)unfocuscol
  *2)fixedcol         3)unkilcol

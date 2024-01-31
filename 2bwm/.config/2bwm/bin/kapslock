@@ -1,11 +1,11 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="kapslock $@" . $PARENT
+# [ $TRACE ] && CHILD="kapslock $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ........................................................... kak capslock event
+# .......................................................... kak capslock status
 
 capslock && echo on || echo ''
 
