@@ -5,21 +5,25 @@
 
 # config for Kakoune
 
-# ........................................................................ Debug
-
-# hook global BufSetOption filetype=.* %{
-#     echo -debug setting %val{hook_param}
-# }
-# hook global BufSetOption comment_line=.* %{
-#     echo -debug setting %val{hook_param}
-# }
-
 # ................................. lambda calculus if-then-else kakscript block
 
 # if %sh{ [ ..test.. ] && echo then  || echo else } %{ ..then.. } %{ ..else.. }
 define-command if   -params 3 %{ eval -verbatim %arg{1} %arg{2} %arg{3} }
 define-command then -params 2 %{ eval %arg{1} }
 define-command else -params 2 %{ eval %arg{2} }
+
+# ........................................................................ Debug
+
+if %sh{ [ -n "$DEBUG" ] && echo then || echo else } %{
+	hook global BufSetOption filetype=.* %{
+	    echo -debug setting %val{hook_param}
+	}
+	hook global BufSetOption comment_line=.* %{
+	    echo -debug setting %val{hook_param}
+	}
+} %{
+	nop
+}
 
 # ........................................................................ Theme
 
@@ -82,7 +86,7 @@ if %sh{ [ -n "$DISPLAY" ] && echo then || echo else } %{
 	colorscheme %opt{theme}
 }
 
-map global user <space> ': normal-mode-colorscheme<ret>' -docstring "%opt{theme}"
+# map global user <space> ': normal-mode-colorscheme<ret>' -docstring "%opt{theme}"
 
 # ....................................................................... Layout
 

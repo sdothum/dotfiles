@@ -32,6 +32,7 @@ evaluate-commands %sh{
 	# oranges
 	strong_orange='rgb:bf450c'
 	light_orange='rgb:ffe5b4'
+	desaturated_orange='rgb:d5b875'
 	pale_orange='rgb:f7f3ee'
 	# blues
 	dark_blue='rgb:0069af'
@@ -50,14 +51,18 @@ evaluate-commands %sh{
 			normal   )
 	background="${pale_cyan}"
 	menu="${pale_orange}"
+	comment="$(desaturate ${background})"
 				;;
 			capslock )
 	background="${pale_pink}"
 	menu="${pale_cyan}"
+	comment="$(desaturate ${background})"
 				;;
 			*        )  # insert mode
 	background="${pale_orange}"
 	menu="${pale_cyan}"
+	# comment="$(desaturate ${background})"
+	comment="${desaturated_orange}"
 				;;
 		esac
 
@@ -77,8 +82,6 @@ evaluate-commands %sh{
 	ruler="$(desaturate ${background} '14 / 15')"
 	wrap="${soft_red}"
 
-	# comment="${desaturated_orange}"
-	comment="$(desaturate ${background})"
 	attribute="${dark_blue}"
 	constant="${dark_blue}"
 	function="${light_black}"
