@@ -184,9 +184,10 @@ stage_3() {
 	info ....................................................... system utilities
 	doas apk add btop
 	# doas apk add glances
-	# doas apk add smartmontools
 	# doas apk add htop
+	doas apk add hyperfine
 	# doas apk add iotop
+	# doas apk add smartmontools
 	# doas apk add socklog
 
 	info ................................................................ network
