@@ -7,7 +7,7 @@
 
 # .............................................................. Stretch windows
 
-# Usage: window stretch [[top | bottom | full] [left | right] | near | far]
+# Usage: window stretch [[top | bottom | full | quarter] [left | right] | near | far]
 
 set_geometry  # X Y WIDTH HEIGHT
 
@@ -107,6 +107,27 @@ fullright() {
 	xdotool windowactivate --sync $winid
 }
 
+# .................................................. Stretch quarter screen left
+
+quarterleft() {
+	height=$(( $height - $border * 2 ))
+	width=$(( ($width - $border * 8) / 4 ))
+	draw $winid $width $height
+	xdotool windowmove $winid $margin $panel
+	xdotool windowactivate --sync $winid
+}
+
+# ................................................. Stretch quarter screen right
+
+quarterright() {
+	height=$(( $height - $border * 2 ))
+	X=$width
+	width=$(( ($width - $border * 8) / 4 ))
+	draw $winid $width $height
+	xdotool windowmove $winid $(( $X - $width + $border * 2 )) $panel
+	xdotool windowactivate --sync $winid
+}
+
 # ................................................................. Stretch near
 
 near() {
@@ -122,19 +143,21 @@ far() {
 }
 
 case $1 in
-	''      ) near        ;;
-	top     ) top         ;;
-	bottom  ) bottom      ;;
-	left    ) left        ;;
-	right   ) right       ;;
-	t*left  ) topleft     ;;
-	t*right ) topright    ;;
-	b*left  ) bottomleft  ;;
-	b*right ) bottomright ;;
-	f*left  ) fullleft    ;;
-	f*right ) fullright   ;;
-	near    ) near        ;;  # horizontal axis
-	far     ) far         ;;
+	''      ) near         ;;
+	top     ) top          ;;
+	bottom  ) bottom       ;;
+	left    ) left         ;;
+	right   ) right        ;;
+	t*left  ) topleft      ;;
+	t*right ) topright     ;;
+	b*left  ) bottomleft   ;;
+	b*right ) bottomright  ;;
+	f*left  ) fullleft     ;;
+	f*right ) fullright    ;;
+	q*left  ) quarterleft  ;;
+	q*right ) quarterright ;;
+	near    ) near         ;; # horizontal axis
+	far     ) far          ;;
 esac
 
 # kak: filetype=sh
