@@ -11,6 +11,7 @@
 
 evaluate-commands %sh{
 
+	# from dabruin.kak
 	desaturate() {
 		printf "${1#*:}\n" | fold -b2 | while read -r hex; do
 			base10="$(printf '%d' "0x${hex}")"
@@ -43,6 +44,16 @@ evaluate-commands %sh{
 	soft_cyan='rgb:a3d5e4'
 	vivid_cyan='rgb:20fccf'
 	pale_cyan='rgb:baf8f8'
+
+	# one-light colors for testing.. ltex-ls highlighter overwritten(?)
+	lightred='rgb:e45649'
+	darkred='rgb:ca1243'
+	green='rgb:50a14f'
+	lightorange='rgb:c18401'
+	darkorange='rgb:986801'
+	blue='rgb:4078f2'
+	magenta='rgb:a626a4'
+	cyan='rgb:0184bc'
 
 	# ............................................................. Color objects
 
@@ -185,16 +196,6 @@ set-face window crosshairs_column         "default,${ruler}"
 set-face window InlayHint                 "+d@type"
 set-face window parameter                 "+i@variable"
 set-face window enum                      "${operator}"
-
-# one-light colors for testing.. ltex-ls highlighter overwritten(?)
-declare-option str lightred               "rgb:e45649"
-declare-option str darkred                "rgb:ca1243"
-declare-option str green                  "rgb:50a14f"
-declare-option str lightorange            "rgb:c18401"
-declare-option str darkorange             "rgb:986801"
-declare-option str blue                   "rgb:4078f2"
-declare-option str magenta                "rgb:a626a4"
-declare-option str cyan                   "rgb:0184bc"
 
 set-face window InlayDiagnosticError      "${lightred}"
 set-face window InlayDiagnosticWarning    "${lightred}"

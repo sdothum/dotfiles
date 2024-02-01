@@ -13,7 +13,7 @@ define-command then -params 2 %{ eval %arg{1} }
 define-command else -params 2 %{ eval %arg{2} }
 
 # Plugins
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ━━━━━━━
 if %sh{ [ -z "$DEBUG" ] && echo then || echo else } %{
 
 	# cork-update requires tmux for a git output tab
@@ -155,7 +155,7 @@ if %sh{ [ -z "$DEBUG" ] && echo then || echo else } %{
 } %{
 	nop
 }
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ━━━━━━━━━━━
 # Plugins end
 
 # ........................................................................ Debug
