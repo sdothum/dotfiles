@@ -49,9 +49,9 @@ local Font = {
         -- ffont = "NotoSans-Regular.ttf",
         -- smallffont = "NotoSans-Regular.ttf",
         -- largeffont = "NotoSans-Regular.ttf",
-        ffont = "draft-book.ttf",
-        smallffont = "draft-book.ttf",
-        largeffont = "draft-book.ttf",
+        ffont = "drift-book.ttf",
+        smallffont = "drift-book.ttf",
+        largeffont = "drift-book.ttf",
 
         -- default font for reading position info
         rifont = "NotoSans-Regular.ttf",
