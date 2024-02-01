@@ -6,8 +6,8 @@
 
 # ............................................................... Kakoune editor
 
-AUTOLOAD=$XDG_CONFIG_HOME/kak/autoload/plugs
-mkdir -p $AUTOLOAD
+COLORS=$XDG_CONFIG_HOME/kak/colors
+mkdir -p $COLORS
 KAKLSP=$XDG_CONFIG_HOME/kak-lsp
 mkdir -p $KAKLSP
 
@@ -19,24 +19,27 @@ make
 make man
 doas make install
 
-# plugins
-# https://github.com/occivink/kakoune-buffer-switcher.git
-plugins="
+# NOTE: migrated to cork, so only themes used here
+themes="
 https://github.com/tinted-theming/base16-kakoune.git
 "
 
-for i in $plugins ;do
+for i in $themes ;do
 	cd /net/depot
 	repo=${i##*/}
 	repo=${repo%.git}
 	[ -d $repo ] && { cd $repo; git pull; cd ..; } || git clone --depth 1 $i
 	cd $repo
-	if echo "$repo" | grep -q 'base16' ;then
-		cp -v colors/base16-icy.kak ${AUTOLOAD%/autoload}/colors
-	else
-		find . -regex '.*\.(kak|lua)' -exec cp -v {} $AUTOLOAD \;
-	fi
+	cp -v colors/base16-icy.kak $COLORS
 done
+
+# cork plugin manager
+curl -o ~/.local/bin/cork https://raw.githubusercontent.com/topisani/cork.kak/master/cork.sh
+chmod +x ~/.local/bin/cork
+cargo install kak-popup
+ln -s /usr/bin/dash $HOME/bin/sh  # to circumvent cork's "env sh" -> busybox reference which causes "read" hang
+
+# NOTE: manual management of tree-sitter and kak-lsp to control upstream changes (breakage)
 
 # tree-sitter
 cargo install kak-tree-sitter
