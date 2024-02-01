@@ -6,7 +6,7 @@
 
 # ....................................................................... Editor
 
-# Usage: [name=<title>] kak [-l | -p [<id>] | -v | -h] [-D | -X | -- | ID=<id>] [WAIT] [<row>x<col>] <file>*
+# Usage: [name=<title>] kak [-l | -p [<id>] | -v | -h] [-BENCHMARK | -DEBUG | -X11 | -- | ID=<id>] [WAIT] [<row>x<col>] <file>*
 
 headless=${headless:-false}
 
@@ -30,8 +30,9 @@ while : ;do
 		-p            ) [ $2 ] && $KAK -p $2 || { for i in $($KAK -l); do ditto kak "$i ${RED}❌"; echo kill | $KAK -p $i ;done }; exit ;;
 		-v*           ) $KAK -version; exit ;;
 		-h*           ) $KAK -help; ditto '-debug' "hooks | shell | profile | keys | commands"; ditto 'kak' "-l | -p [<id>] | -v | -D (kakrc debug) | -X (non-modal colorscheme)"; exit ;;
-		-D            ) export DEBUG=true   ;;  # kakrc debug hook
-		-X            ) unset DISPLAY ;;
+		-B*           ) hyperfine -warmup 10 "$KAK -ui dummy -e quit"; exit ;;
+		-D*           ) export DEBUG=true   ;;  # kakrc debug hook
+		-X*           ) unset DISPLAY ;;
 		--            ) ID=$(rand)    ;;  # force new instance
 		id=*          ) ID="${1#*=}"  ;;
 		ID=*          ) ID="${1#*=}"  ;;
