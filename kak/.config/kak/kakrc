@@ -16,10 +16,9 @@ define-command else -params 2 %{ eval %arg{2} }
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 if %sh{ [ -z "$DEBUG" ] && echo then || echo else } %{
 
-	# cork-update requires tmux for a git output tab
-	evaluate-commands %sh{
-		cork init
-	}
+	# WARNING: symlink "ln -s /usr/bin/dash $HOME/bin/sh" to avoid busybox "sh" read hang from cork "env sh"
+	evaluate-commands %sh{ cork init }
+	evaluate-commands %sh{kak-popup init}
 
 	# ................................................................ auto-pairs
 	cork auto-pairs https://github.com/alexherbo2/auto-pairs.kak.git %{
@@ -102,7 +101,7 @@ if %sh{ [ -z "$DEBUG" ] && echo then || echo else } %{
 		}
 
 		map global user b ': buffers<ret>' -docstring 'buffers'
-		map global user e ': files<ret>'   -docstring 'edit'
+		map global user e ': files<ret>'   -docstring 'edit file'
 	}
 
 	# ......................................................... phantom selection
