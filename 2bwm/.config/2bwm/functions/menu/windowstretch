@@ -20,10 +20,13 @@ Mod+2        monocle
   4          top right
   5          bottom left
   6          bottom right
-Mod+8        fullscreen left
-Mod+7        fullscreen right
-  q          quarter screen left
-  9          quarter screen right"
+  j          vertical left
+  k          vertical right
+Mod+8        1/4 screen left
+Mod+7        1/4 screen right
+  y          1/3 screen left
+  x          1/3 screen right
+  :          1/3 screen center"
 }
 
 # keybinds to menu windowstretch not currently assigned in 2bwm SEE: menu windowsize
@@ -31,24 +34,27 @@ Mod+7        fullscreen right
 
 cmd=$(echo "$cmd" | sed "s/^[^ ]* *//")
 case $cmd in
-	size    ) menu windowsize             ;;
-	revert  ) window revert               ;;
-	rotate  ) window rotate               ;;
-	monocle ) window size monocle         ;;
-	top     ) window stretch top          ;;
-	bottom  ) window stretch bottom       ;;
-	left    ) window stretch left         ;;
-	right   ) window stretch right        ;;
-	t*left  ) window stretch topleft      ;;
-	t*right ) window stretch topright     ;;
-	b*left  ) window stretch bottomleft   ;;
-	b*right ) window stretch bottomright  ;;
-	f*left  ) window stretch fullleft     ;;
-	f*right ) window stretch fullright    ;;
-	q*left  ) window stretch quarterleft  ;;
-	q*right ) window stretch quarterright ;;
-	near*   ) window stretch near         ;; # horizontal axis
-	far*    ) window stretch far          ;;
+	size       ) menu windowsize            ;;
+	revert     ) window revert              ;;
+	rotate     ) window rotate              ;;
+	monocle    ) window size monocle        ;;
+	top        ) window stretch top         ;;
+	bottom     ) window stretch bottom      ;;
+	left       ) window stretch left        ;;
+	right      ) window stretch right       ;;
+	t*left     ) window stretch topleft     ;;
+	t*right    ) window stretch topright    ;;
+	b*left     ) window stretch bottomleft  ;;
+	b*right    ) window stretch bottomright ;;
+	v*left     ) window stretch fullleft    ;;
+	v*right    ) window stretch fullright   ;;
+	1/4*left   ) window stretch 4 left      ;;
+	1/4*right  ) window stretch 4 right     ;;
+	1/3*left   ) window stretch 3 left      ;;
+	1/3*center ) window stretch 3 center    ;;
+	1/3*right  ) window stretch 3 right     ;;
+	near*      ) window stretch near        ;; # horizontal axis
+	far*       ) window stretch far         ;;
 esac
 
 # kak: filetype=sh

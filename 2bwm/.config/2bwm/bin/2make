@@ -7,7 +7,7 @@
 
 # ................................................................. Compile 2bwm
 
-SRC=/net/depot/2bwm
+SRC=/net/depot/x11/2bwm
 
 cd $SRC
 ditto 2bwm "Building 2bwm.."

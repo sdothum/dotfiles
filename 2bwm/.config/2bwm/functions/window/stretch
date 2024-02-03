@@ -7,7 +7,7 @@
 
 # .............................................................. Stretch windows
 
-# Usage: window stretch [[top | bottom | full | quarter] [left | right] | near | far]
+# Usage: window stretch [[top | bottom | full | <factor>] left | right] | near | far
 
 set_geometry  # X Y WIDTH HEIGHT
 
@@ -107,23 +107,27 @@ fullright() {
 	xdotool windowactivate --sync $winid
 }
 
-# .................................................. Stretch quarter screen left
+# ........................................................ Stretch factor screen
 
-quarterleft() {
+factor() {
 	height=$(( $height - $border * 2 ))
-	width=$(( ($width - $border * 8) / 4 ))
+	width=$(( ($width - $border * $1 * 2) / $1 ))
 	draw $winid $width $height
+}
+
+# ................................................... Stretch factor screen left
+
+factorleft() {
+	factor $1
 	xdotool windowmove $winid $margin $panel
 	xdotool windowactivate --sync $winid
 }
 
-# ................................................. Stretch quarter screen right
+# .................................................. Stretch factor screen right
 
-quarterright() {
-	height=$(( $height - $border * 2 ))
+factorright() {
 	X=$width
-	width=$(( ($width - $border * 8) / 4 ))
-	draw $winid $width $height
+	factor $1
 	xdotool windowmove $winid $(( $X - $width + $border * 2 )) $panel
 	xdotool windowactivate --sync $winid
 }
@@ -142,22 +146,23 @@ far() {
 	xdotool windowactivate --sync $winid
 }
 
-case $1 in
-	''      ) near         ;;
-	top     ) top          ;;
-	bottom  ) bottom       ;;
-	left    ) left         ;;
-	right   ) right        ;;
-	t*left  ) topleft      ;;
-	t*right ) topright     ;;
-	b*left  ) bottomleft   ;;
-	b*right ) bottomright  ;;
-	f*left  ) fullleft     ;;
-	f*right ) fullright    ;;
-	q*left  ) quarterleft  ;;
-	q*right ) quarterright ;;
-	near    ) near         ;; # horizontal axis
-	far     ) far          ;;
+case "$@" in
+	''           ) near           ;;
+	top          ) top            ;;
+	bottom       ) bottom         ;;
+	left         ) left           ;;
+	right        ) right          ;;
+	t*left       ) topleft        ;;
+	t*right      ) topright       ;;
+	b*left       ) bottomleft     ;;
+	b*right      ) bottomright    ;;
+	f*left       ) fullleft       ;;
+	f*right      ) fullright      ;;
+	[2-9]*left   ) factorleft  $1 ;;
+	[2-9]*right  ) factorright $1 ;;
+	[2-9]*center ) factor $1; window snap center ;;
+	near         ) near           ;; # horizontal axis
+	far          ) far            ;;
 esac
 
 # kak: filetype=sh
