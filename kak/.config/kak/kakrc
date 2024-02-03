@@ -5,16 +5,40 @@
 
 # config for Kakoune
 
-# ................................. lambda calculus if-then-else kakscript block
+# Lambda calculus
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# if %sh{ [ ..test.. ] && echo then  || echo else } %{ ..then.. } %{ ..else.. }
-define-command if   -params 3 %{ eval -verbatim %arg{1} %arg{2} %arg{3} }
+# WARNING: passed %sh{} $kak_opt_<names> must be defined explicitly for the %arg{1} expansion ($1)
+# SEE: the comment (#) list of kak_opt_<names> in the embedded %sh{} block
+
+# ................................................................. if-then-else
+
+# if-else %{ condition } %{ then } %{ else }
+define-command if-else -params 3 %{ eval -verbatim %sh{ eval $1 && echo then || echo else # kak_opt_colormode kak_opt_mode } %arg{2} %arg{3} }
 define-command then -params 2 %{ eval %arg{1} }
 define-command else -params 2 %{ eval %arg{2} }
 
+# ...................................................................... if-then
+
+# if %{ condition } %{ conclusion }
+define-command if -params 2 %{ eval -verbatim %sh{ eval $1 && echo conclusion || echo nop # kak_opt_colormode kak_opt_mode } %arg{2} }
+define-command conclusion -params 1 %{ eval %arg{1} }
+
+# ........................................................................ Debug
+
+# random debug settings along the kakoune journey
+if %{ [ -n "$DEBUG" ] } %{
+	hook global BufSetOption filetype=.* %{
+		 echo -debug setting %val{hook_param}
+	}
+	hook global BufSetOption comment_line=.* %{
+		echo -debug setting %val{hook_param}
+	}
+}
+
 # Plugins
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-if %sh{ [ -z "$DEBUG" ] && echo then || echo else } %{
+if %{ [ -z "$DEBUG" ] } %{
 
 	# WARNING: symlink "ln -s /usr/bin/dash $HOME/bin/sh" to avoid busybox "sh" read hang from cork "env sh"
 	evaluate-commands %sh{ cork init }
@@ -151,37 +175,23 @@ if %sh{ [ -z "$DEBUG" ] && echo then || echo else } %{
 	cork sudo-write https://github.com/occivink/kakoune-sudo-write.git %{
 		map global user Z ': sudo-write<ret>' -docstring 'sudo save'
 	}
-} %{
-	nop
 }
+
+# Plugins end ..................................................................
+
+# GUI
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# Plugins end
 
-# ........................................................................ Debug
+# ................................................................... Colorsheme
 
-if %sh{ [ -n "$DEBUG" ] && echo then || echo else } %{
-	hook global BufSetOption filetype=.* %{
-		 echo -debug setting %val{hook_param}
-	}
-	hook global BufSetOption comment_line=.* %{
-		echo -debug setting %val{hook_param}
-	}
-} %{
-	nop
-}
-
-# ........................................................................ Theme
-
-if %sh{ [ -n "$DISPLAY" ] && echo then || echo else } %{
+if-else %{ [ -n "$DISPLAY" ] } %{
 	declare-option str theme     'duochrome'
 	declare-option str mode      'normal'  # initial state
 	declare-option str colormode ''        # force initialize colorscheme
 
 	define-command normal-mode-colorscheme %{
 		set-option window mode "normal"
-		if %sh{ [ "$kak_opt_colormode" = 'normal' ] && echo then || echo else } %{
-			nop
-		} %{
+		if %{ [ "$kak_opt_colormode" != "normal" ] } %{
 			set-option window colormode "normal"
 			colorscheme %opt{theme}
 		}
@@ -189,28 +199,24 @@ if %sh{ [ -n "$DISPLAY" ] && echo then || echo else } %{
 
 	define-command insert-mode-colorscheme %{
 		set-option window mode "insert"
-		if %sh{ [ "$kak_opt_colormode" = 'insert' ] && echo then || echo else } %{
-			nop
-		} %{
+		if %{ [ "$kak_opt_colormode" != "insert" ] } %{
 			set-option window colormode "insert"
 			colorscheme %opt{theme}
 		}
 	}
 
 	define-command capslock-colorscheme %{
-		if %sh{ [ "$kap_opt_colormode" = 'capslock' ] && echo then || echo else } %{
-			nop
-		} %{
+		if %{ [ "$kak_opt_colormode" != "capslock" ] } %{
 			set-option window colormode "capslock"
 			colorscheme %opt{theme}
 		}
 	}
 
 	define-command capslock-check %{
-		if %sh{ [ "$(kapslock)" ] && echo then || echo else } %{
+		if-else %{ capslock } %{
 			capslock-colorscheme
 		} %{
-			if %sh{ [ "$kak_opt_mode" = 'insert' ] && echo then || echo else } %{
+			if-else %{ [ "$kak_opt_mode" = "insert" ] } %{
 				insert-mode-colorscheme
 			} %{
 				normal-mode-colorscheme
@@ -227,7 +233,7 @@ if %sh{ [ -n "$DISPLAY" ] && echo then || echo else } %{
 		hook window NormalIdle .* capslock-check
 	}
 } %{
-	declare-option str theme 'base16-icy'
+	declare-option str theme %sh{ echo "${COLORSCHEME:-base16-icy}" }
 	colorscheme %opt{theme}
 }
 
@@ -255,7 +261,7 @@ hook global WinCreate .* %{
 # a minimalist statusline of "mode - column [utf-8] - filename [context]"
 declare-option str spacer ' '
 # display utf-8 value for non-latin characters
-set-option global modelinefmt '{{mode_info}} %opt{spacer} %val{buf_line_count}%opt{separator} %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname}{{context_info}} [%sh{[ -z "$kak_opt_filetype" ] && echo "--" || echo "$kak_opt_filetype"}] %opt{spacer} %val{session}(%sh{echo "$kak_client" | sed -r "s/[^0-9]*(.*)/\1/"})'
+set-option global modelinefmt '%sh{[ "$kak_opt_colormode" = "capslock" ] && echo "—CAPS— "}{{mode_info}} %opt{spacer} %val{buf_line_count}%opt{separator} %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname}{{context_info}} [%sh{[ -z "$kak_opt_filetype" ] && echo "--" || echo "$kak_opt_filetype"}] %opt{spacer} %val{session}(%sh{echo "$kak_client" | sed -r "s/[^0-9]*(.*)/\1/"})'
 
 # ........................................................................... UX
 
@@ -281,6 +287,9 @@ add-highlighter global/ regex \h+$ 0:Error
 declare-option str admonition "\s(?i)(bug|example|hack|note|see|tip|todo|usage|warning|why):\s"
 hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt{admonition} 1:WrapMarker }  # select field 1: (vs 0:) to not hilight the colon :)
 
+# Editing
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 # ................................................................... Formatting
 
 set-option global tabstop 3
@@ -293,7 +302,8 @@ declare-user-mode format
 map global format c ': comment-line<ret>'     -docstring '(un)comment'
 map global format l 'x|comment l .<ret>'      -docstring 'leader ... comment'
 map global format t 'x|comment t .<ret>'      -docstring 'trailer comment ...'
-map global format r 'x|comment r =<ret>'      -docstring 'ruler ═══'
+map global format R 'x|comment r =<ret>'      -docstring 'ruler ═══'
+map global format r 'x|comment r --<ret>'     -docstring 'ruler ━━━'
 map global format u 'x|comment u --<ret>'     -docstring 'underline ━━━ comment'
 map global format '#' 'x|align \#<ret>'       -docstring 'align #  comment'
 map global format / 'x|align //<ret>'         -docstring 'align // comment'
@@ -307,18 +317,21 @@ map global normal '#' ': enter-user-mode format<ret>'
 
 # .................................................................... Selection
 
-map global user   / '/(?i)'             -docstring 'case insensitive search'
-map global user   <a-/> '<a-/>(?i)'     -docstring 'case insensitive search'
-map global user   ? '?(?i)'             -docstring 'case insensitive extend search'
-map global user   <a-?> '<a-?>(?i)'     -docstring 'case insensitive extend search'
+map global user   / '/(?i)'         -docstring 'case insensitive search'
+map global user   <a-/> '<a-/>(?i)' -docstring 'case insensitive search'
+map global user   ? '?(?i)'         -docstring 'case insensitive extend search'
+map global user   <a-?> '<a-?>(?i)' -docstring 'case insensitive extend search'
 
-map global normal } ']p'                -docstring 'next paragraph'
-map global normal { '[p'                -docstring 'previous paragraph'
+map global normal } ']p'            -docstring 'next paragraph'
+map global normal { '[p'            -docstring 'previous paragraph'
 
-# ...................................................................... Editing
+# .............................................................. Line operations
 
 map global normal D '<a-l>d' -docstring 'delete to end of line'
 map global normal Y '<a-l>'  -docstring 'yank to end of line'
+
+# Buffers
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # ............................................................ Buffer management
 
@@ -344,16 +357,14 @@ map global user   x ': write-all-quit<ret>'              -docstring 'save all an
 
 # .................................................................. Tree-sitter
 
-if %sh{ [ -z "$DEBUG" ] && echo then || echo else } %{
+if %{ [ -z "$DEBUG" ] } %{
 	# plug 'phaazon/kak-tree-sitter'
 	eval %sh{ kak-tree-sitter -dks --session $kak_session }
-} %{
-	nop
 }
 
 # ...................................................................... kak-lsp
 
-if %sh{ [ -z "$DEBUG" ] && echo then || echo else } %{
+if %{ [ -z "$DEBUG" ] } %{
 	# plug 'kak-lsp/kak-lsp'
 	eval %sh{ kak-lsp --kakoune -s $kak_session }  # Not needed if you load it with plug.kak
 
@@ -378,7 +389,5 @@ if %sh{ [ -z "$DEBUG" ] && echo then || echo else } %{
 
 		map global user l ': enter-user-mode lsp<ret>' -docstring "LSP mode"
 	}
-} %{
-	nop
 }
 
