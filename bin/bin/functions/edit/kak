@@ -32,7 +32,7 @@ while : ;do
 		-h*           ) $KAK -help; ditto '-debug' "hooks | shell | profile | keys | commands"; ditto 'kak' "-l | -p [<id>] | -v | -D (kakrc debug) | -X (non-modal colorscheme)"; exit ;;
 		-B*           ) hyperfine -warmup 10 "$KAK -ui dummy -e quit"; exit ;;
 		-D*           ) export DEBUG=true   ;;  # kakrc debug hook
-		-X*           ) unset DISPLAY ;;
+		-X*           ) unset DISPLAY; export COLORSCHEME=${COLORSCHEME:-dabruin} ;;
 		--            ) ID=$(rand)    ;;  # force new instance
 		id=*          ) ID="${1#*=}"  ;;
 		ID=*          ) ID="${1#*=}"  ;;
