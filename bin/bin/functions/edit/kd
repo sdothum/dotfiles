@@ -1,0 +1,17 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Edit
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Diff editor
+
+usage() { usage: "$(basename $0) <old-file> <new-file>"; exit 1; }
+
+[ -e "$2" ] || usage
+DIFF=${2}.diff
+
+diff -u $1 $2 >$DIFF
+[ $? -eq 1 ] && kak $DIFF
+
+# kak: filetype=sh

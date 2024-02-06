@@ -423,7 +423,7 @@ cmdopts () {
 			t-asymmetric   ) variant $1 ;;
 			t-asymmetric+  ) variant $1 ;;
 			t-asymmetric-  ) variant $1 'FLIPPED'; t_flipped=true; cmdopts i-serifless j-flat l-serifless ;;
-			t-asymmetric-- ) variant $1 'FLIPPED'; t_flipped=true; cmdopts j-flat l-hooky ;;
+			t-asymmetric-- ) variant $1 'FLIPPED'; t_flipped=true; cmdopts l-hooky ;;
 			t-cross        ) variant $1 ;;
 			t-descending   ) variant t-cross 'DESCENDING'; t_descending=true; baseline=true ;;
 			t-flat         ) variant $1 ;;
@@ -581,11 +581,11 @@ echo "
 family = '$family'          # Font menu family name
 spacing = '$spacing'        # Optional; Values: 'normal', 'term', 'fontconfig-mono', or 'fixed'
 serifs = 'sans'             # Optional; Values: 'sans' or 'slab'
-export-glyph-names = false  # Set this to true for ligature support in Kitty (increased file size)
+exportGlyphNames = false  # Set this to true for ligature support in Kitty (increased file size)
 
-no-cv-ss = true
-no-litigation = $no_litigation
-webfont-formats = 'ttf'
+# noCvSs = true
+# noLitigation = $no_litigation
+webfontFormats = 'ttf'
 
 ###################################################################################################
 # Configure variants
@@ -629,17 +629,17 @@ enables  = []  # Optional; enable specific ligation groups, overrides inherited 
 #             and 'shape' properly only supports number between 100 and 900 (inclusive).
 #             If you decide to use custom weights you have to define all the weights you
 #             plan to use otherwise they will not be built.
-[buildPlans.$family.weights.regular]
+[buildPlans.$family.weights.Regular]
 shape = 400  # Weight for glyph shapes.
 menu  = 400  # Weight for the font's names.
 css   = 400  # Weight for webfont CSS.
 
-[buildPlans.$family.weights.book]
+[buildPlans.$family.weights.Book]
 shape = 450
 menu  = 450  # Use 450 here to name the font's weight 'Book'
 css   = 450
 
-[buildPlans.$family.weights.bold]
+[buildPlans.$family.weights.Bold]
 shape = 700
 menu  = 700
 css   = 700
@@ -653,19 +653,19 @@ $weight
 # Override default building slope sets
 # When this section is absent, all slopes would be built.
 
-[buildPlans.$family.slopes.upright]
+[buildPlans.$family.slopes.Upright]
 angle = 0             # Angle in degrees. Valid range [0, 15]
 shape = 'upright'     # Slope grade used for shape selection.  'upright' | 'oblique' | 'italic'
 menu  = 'upright'     # Slope grade used for naming.           'upright' | 'oblique' | 'italic'
 css   = 'normal'      # Slope grade used for webfont CSS.      'normal'  | 'oblique' | 'italic'
 
-# [buildPlans.$family.slopes.oblique]
+# [buildPlans.$family.slopes.Oblique]
 # angle = 9.4
 # shape = 'oblique'
 # menu  = 'oblique'
 # css   = 'oblique'
 
-[buildPlans.$family.slopes.italic]
+[buildPlans.$family.slopes.Italic]
 angle = 9.4
 shape = 'italic'
 menu  = 'italic'
@@ -684,12 +684,12 @@ css   = 'italic'
 #             If you decide to use custom widths you have to define all the widths you plan to use,
 #             otherwise they will not be built.
 
-[buildPlans.$family.widths.normal]
+[buildPlans.$family.widths.Normal]
 $shape            # Unit Width, measured in 1/1000 em.
 menu  = 5         # Width grade for the font's names.
 css   = 'normal'  # 'font-stretch' property of webfont CSS.
 
-# [buildPlans.$family.widths.extended]
+# [buildPlans.$family.widths.Extended]
 # shape = 600
 # menu  = 7
 # css   = 'expanded'
@@ -702,7 +702,7 @@ css   = 'normal'  # 'font-stretch' property of webfont CSS.
 # Specify character ranges in the section below to exclude certain characters from the font being
 # built. Remove this section when this feature is not needed.
 
-[buildPlans.$family.exclude-chars]
+[buildPlans.$family.excludeChars]
 $exclude_chars
 
 # End character exclusion
@@ -715,7 +715,7 @@ $exclude_chars
 # following section to build PUA characters that are generated from the OpenType ligatures.
 # Remove this section when compatibility ligatures are not needed.
 
-# [[buildPlans.$family.compatibility-ligatures]]
+# [[buildPlans.$family.compatibilityLigatures]]
 # unicode = 57600 # 0xE100
 # featureTag = 'calt'
 # sequence = '<*>'
@@ -728,7 +728,7 @@ $exclude_chars
 # Certain metrics like line height (leading) could be overridden in your build plan file.
 # Edit the values to change the metrics. Remove this section when overriding is not needed.
 
-[buildPlans.$family.metric-override]
+[buildPlans.$family.metricOverride]
 # leading = 1250
 winMetricAscenderPad = 0
 winMetricDescenderPad = 0
@@ -737,7 +737,7 @@ powerlineScaleX = 1
 powerlineShiftY = 0
 powerlineShiftX = 0
 
-# metric-override adjustments
+# metricOverride adjustments
 $leading
 $sb
 $cap
