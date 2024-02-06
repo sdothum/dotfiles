@@ -1,0 +1,26 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="window $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .............................................................. Desktop layouts
+
+# Usage: layout <msg>, see functions/layout
+
+winid() { xdotool getactivewindow; }
+
+desktop=$(xdotool get_desktop)
+winids=$(wmctrl -l | grep "^[^ ]*  *$desktop " | cut -d' ' -f1)  # of current desktop
+winid=$(winid)
+
+msg=$1
+[ $msg ] && shift || usage: $0
+if [ -e ${0%/layout}/functions/layout/$msg ] ;then
+	. ${0%/layout}/functions/layout/$msg $@
+else
+	usage: $0
+fi
+
+# kak: filetype=sh

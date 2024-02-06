@@ -1,0 +1,62 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="layout/by $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Tile layout
+
+usage() { usage: "$(basename $0) by 3 | 4 [<name>]"; exit 1; }
+
+# tile application (name)?
+if [ $2 ] ;then
+	for i in $winids ;do
+		name=$(xdotool getwindowname $i)
+		[ "$name" = $2 ] && nameids="$nameids $i"
+	done
+	winids=$nameids
+fi
+
+instance=0  # window placement sequence
+
+# .................................................................... By thirds
+
+thirds() {
+	for i in $winids ;do
+		xdotool windowactivate $i
+		case $instance in
+			1 ) window tile 3 left   ;;
+			0 ) window tile 3 center ;;
+			2 ) window tile 3 right  ;;
+			* ) break ;;
+		esac
+		instance=$(( $instance + 1 ))
+	done
+}
+
+# .................................................................. By quarters
+
+quarters() {
+	for i in $winids ;do
+		xdotool windowactivate $i
+		case $instance in
+			2 ) window tile 4 left        ;;
+			0 ) window tile 4 centerleft  ;;
+			1 ) window tile 4 centerright ;;
+			3 ) window tile 4 right       ;;
+			* ) break ;;
+		esac
+		instance=$(( $instance + 1 ))
+	done
+}
+
+case "$@" in
+	3* ) thirds $2   ;;
+	4* ) quarters $2 ;;
+	*  ) usage ;;
+esac
+
+xdotool windowactivate $winid
+
+# kak: filetype=sh

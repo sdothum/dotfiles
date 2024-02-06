@@ -14,59 +14,73 @@ save_geometry
 
 # .................................................................... Snap left
 
-snapleft() {
+left() {
 	xdotool windowmove $winid $(( $margin + $border - 1 )) y
-	xdotool windowactivate --sync $winid
+	xdotool windowactivate $winid
+}
+
+# .................................................................... Snap left
+
+centerleft() {
+	xdotool windowmove $winid $(( $width / 2 + $margin - $WIDTH - $border * 2 )) y
+	xdotool windowactivate $winid
+}
+
+# .................................................................... Snap left
+
+centerright() {
+	xdotool windowmove $winid $(( $width / 2 + $margin )) y
+	xdotool windowactivate $winid
 }
 
 # ................................................................... Snap right
 
-snapright() {
-	xdotool windowmove $winid $(( $width - $WIDTH + $border )) y
-	xdotool windowactivate --sync $winid
+right() {
+	xdotool windowmove $winid $(( $width - $WIDTH + $border * 2 - 1 )) y
+	xdotool windowactivate $winid
 }
 
 # .................................................................... Snap near
 
-snapnear() {
-	[ $X -le $(opposite_side) ] && snapleft || snapright
-	xdotool windowactivate --sync $winid
+near() {
+	[ $X -le $(opposite_side) ] && left || right
+	xdotool windowactivate $winid
 }
 
 # ..................................................................... Snap top
 
-snaptop() {
+top() {
 	xdotool windowmove $winid x $margin
-	xdotool windowactivate --sync $winid
+	xdotool windowactivate $winid
 }
 
 # .................................................................. Snap bottom
 
-snapbottom() {
+bottom() {
 	# xdotool windowmove $winid x $(( $height - $HEIGHT - $margin - $border * 2 ))
 	xdotool windowmove $winid x $(( $height - $HEIGHT ))
-	xdotool windowactivate --sync $winid
+	xdotool windowactivate $winid
 }
 
 # .................................................... Snap all windows to level
 
-snaphorizon() {
+horizon() {
 	desktop=$(xdotool get_desktop)
 	winids=$(wmctrl -l | grep "^[^ ]*  *$desktop " | cut -d' ' -f1)  # of current desktop
 
 	for i in $winids ;do
-		# xdotool windowactivate --sync $i
+		# xdotool windowactivate $i
 		xdotool windowactivate $i  # faster
 		save_geometry $i           # for full desktop restore :)
 		xdotool key Super+Shift+g  # 2bwm vertical center
 	done
 
-	xdotool windowactivate --sync $winid
+	xdotool windowactivate $winid
 }
 
 # .......................................................... Restore all windows
 
-snaprestore() {
+restore() {
 	desktop=$(xdotool get_desktop)
 	winids=$(wmctrl -l | grep "^[^ ]*  *$desktop " | cut -d' ' -f1)  # of current desktop
 
@@ -74,18 +88,20 @@ snaprestore() {
 		window revert $i
 	done
 
-	xdotool windowactivate --sync $winid
+	xdotool windowactivate $winid
 }
 
 case $1 in
-	''      ) snapnear    ;; # nearest left/right edge
-	left    ) snapleft    ;;
+	''      ) near            ;; # nearest left/right edge
+	left    ) left            ;;
+	c*left  ) centerleft      ;;
 	center  ) xdotool key Super+g ;;
-	right   ) snapright   ;;
-	top     ) snaptop     ;;
-	bottom  ) snapbottom  ;;
-	all     ) snaphorizon ;;
-	restore ) snaprestore ;;
+	c*right ) centerright     ;;
+	right   ) right           ;;
+	top     ) top             ;;
+	bottom  ) bottom          ;;
+	all     ) horizon         ;;
+	restore ) restore         ;;
 esac
 
 # kak: filetype=sh

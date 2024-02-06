@@ -1,0 +1,172 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/tile $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Tile window
+
+# Usage: window tile [top | bottom | full] | [[<factor>] left | centerleft | centerright | right] | [near | far]
+
+set_geometry  # X Y WIDTH HEIGHT
+
+# tile window to the screen edge
+
+# ..................................................................... Tile top
+
+top() {
+	height=$(( $Y + $HEIGHT - $panel ))
+	draw $winid $WIDTH $height
+	xdotool windowmove $winid $X $panel
+	xdotool windowactivate $winid
+}
+
+# .................................................................. Tile bottom
+
+bottom() {
+	height=$(( $height - $Y + $border ))
+	draw $winid $WIDTH $height
+	xdotool windowmove $winid $X $Y
+	xdotool windowactivate $winid
+}
+
+# .................................................................... Tile left
+
+left() {
+	width=$(( $X + $WIDTH - $margin ))
+	draw $winid $width $HEIGHT
+	xdotool windowmove $winid $margin $Y
+	xdotool windowactivate $winid
+}
+
+# ................................................................... Tile right
+
+right() {
+	width=$(( $width - $X + $margin ))
+	draw $winid $width $HEIGHT
+	xdotool windowmove $winid $X $Y
+	xdotool windowactivate $winid
+}
+
+# ................................................................ Tile top left
+
+topleft() {
+	height=$(( $Y + $HEIGHT - $panel ))
+	width=$(( $X + $WIDTH - $margin ))
+	draw $winid $width $height
+	xdotool windowmove $winid $margin $panel
+	xdotool windowactivate $winid
+}
+
+# ............................................................... Tile top right
+
+topright() {
+	height=$(( $Y + $HEIGHT - $panel ))
+	width=$(( $width - $X + $margin ))
+	draw $winid $width $height
+	xdotool windowmove $winid $X $panel
+	xdotool windowactivate $winid
+}
+
+# ............................................................. Tile bottom left
+
+bottomleft() {
+	height=$(( $height - $Y + $border ))
+	width=$(( $X + $WIDTH - $margin ))
+	draw $winid $width $height
+	xdotool windowmove $winid $margin $Y
+	xdotool windowactivate $winid
+}
+
+# ............................................................ Tile bottom right
+
+bottomright() {
+	height=$(( $height - $Y + $border ))
+	width=$(( $width - $X + $margin ))
+	draw $winid $width $height
+	xdotool windowmove $winid $X $Y
+	xdotool windowactivate $winid
+}
+
+# ........................................................ Tile full screen left
+
+fullleft() {
+	height=$(( $height - $border * 2 ))
+	width=$(( $X + $WIDTH - $margin ))
+	draw $winid $width $height
+	xdotool windowmove $winid $margin $panel
+	xdotool windowactivate $winid
+}
+
+# ....................................................... Tile full screen right
+
+fullright() {
+	height=$(( $height - $border * 2 ))
+	width=$(( $width - $X + $margin ))
+	draw $winid $width $height
+	xdotool windowmove $winid $X $panel
+	xdotool windowactivate $winid
+}
+
+# ........................................................... Tile factor screen
+
+factor() {
+	height=$(( $height - $border * 2 ))
+	width=$(( ($width - $border * $1 * 2) / $1 ))
+	draw $winid $width $height
+}
+
+# ...................................................... Tile factor screen left
+
+factorleft() {
+	factor $1
+	xdotool windowmove $winid $margin $panel
+	xdotool windowactivate $winid
+}
+
+# ..................................................... Tile factor screen right
+
+factorright() {
+	X=$width
+	factor $1
+	xdotool windowmove $winid $(( $X - $width + $border * 2 )) $panel
+	xdotool windowactivate $winid
+}
+
+# .................................................................... Tile near
+
+near() {
+	[ $X -le $(opposite_side) ] && left || right
+	xdotool windowactivate $winid
+}
+
+# ..................................................................... Tile far
+
+far() {
+	[ $X -le $(opposite_side) ] && right || left
+	xdotool windowactivate $winid
+}
+
+case "$@" in
+	''            ) near           ;;
+	top           ) top            ;;
+	bottom        ) bottom         ;;
+	left          ) left           ;;
+	right         ) right          ;;
+	t*left        ) topleft        ;;
+	t*right       ) topright       ;;
+	b*left        ) bottomleft     ;;
+	b*right       ) bottomright    ;;
+	f*left        ) fullleft       ;;
+	f*right       ) fullright      ;;
+	[2-9]*c*left  ) factor $1; window snap centerleft  ;;
+	[2-9]*c*right ) factor $1; window snap centerright ;;
+	[2-9]*left    ) factorleft  $1 ;;
+	[2-9]*right   ) factorright $1 ;;
+	[2-9]*center  ) factor $1; window snap center      ;;
+	near          ) near           ;;  # horizontal axis
+	far           ) far            ;;
+esac
+
+# kak: filetype=sh

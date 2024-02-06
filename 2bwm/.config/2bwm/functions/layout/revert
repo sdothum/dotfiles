@@ -1,0 +1,16 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/snap $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Revert layout
+
+for i in $winids ;do
+	window revert $i
+done
+
+xdotool windowactivate $winid
+
+# kak: filetype=sh

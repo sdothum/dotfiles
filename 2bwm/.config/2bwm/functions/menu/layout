@@ -1,0 +1,31 @@
+#!/usr/bin/dash
+#
+# sdothum - 2016 (c) wtfpl
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................... Desktop layout
+
+actions() {
+	echo "q    Quarters
+d    Quarters edit
+b    Quarters browser
+h    Thirds
+k    Thirds edit
+j    Thirds browser"
+}
+
+cmd=$(actions | rmenu 'Layout' $cmd -no-custom) || exit
+
+cmd=$(echo "$cmd" | sed "s/^[^ ]* *//")
+case $cmd in
+	T*browser ) layout by 3 $BROWSER ;;
+	T*edit    ) layout by 3 kak      ;;
+	Thirds    ) layout by 3          ;;
+	Q*browser ) layout by 4 $BROWSER ;;
+	Q*edit    ) layout by 4 kak      ;;
+	Quarters  ) layout by 4          ;;
+esac
+
+# kak: filetype=sh

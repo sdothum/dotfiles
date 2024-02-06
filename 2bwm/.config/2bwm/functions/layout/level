@@ -1,0 +1,18 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/snap $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Level windows
+
+for i in $winids ;do
+	xdotool windowactivate $i
+	save_geometry $i           # for full desktop restore :)
+	xdotool key Super+Shift+g  # 2bwm vertical center
+done
+
+xdotool windowactivate $winid
+
+# kak: filetype=sh

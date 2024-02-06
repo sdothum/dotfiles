@@ -1,0 +1,65 @@
+#!/usr/bin/dash
+#
+# sdothum - 2016 (c) wtfpl
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Window tile
+
+actions() {
+	echo "Mod+Ctrl+w   size
+Mod+0        revert
+Mod+1        rotate
+Mod+2        monocle
+Mod+4        1/4 screen center left
+Mod+9        1/4 screen center right
+Mod+8        1/4 screen left
+Mod+7        1/4 screen right
+Mod+3        1/3 screen center
+Mod+6        1/3 screen left
+Mod+5        1/3 screen right
+  j          vertical left
+  k          vertical right
+  p          top
+  b          bottom
+  y          left
+  u          right
+  pl         top left
+  pr         top right
+  bl         bottom left
+  br         bottom right
+  na         near edge
+  fa         far edge"
+}
+
+[ $1 ] && cmd=$(actions | grep "Mod[+]$1 ") || cmd=$(actions | rmenu 'Tile window to' $cmd -no-custom) || exit
+
+cmd=$(echo "$cmd" | sed "s/^[^ ]* *//")
+case $cmd in
+	size        ) menu windowsize           ;;
+	revert      ) window revert             ;;
+	rotate      ) window rotate             ;;
+	monocle     ) window size monocle       ;;
+	top         ) window tile top           ;;
+	bottom      ) window tile bottom        ;;
+	left        ) window tile left          ;;
+	right       ) window tile right         ;;
+	t*left      ) window tile topleft       ;;
+	t*right     ) window tile topright      ;;
+	b*left      ) window tile bottomleft    ;;
+	b*right     ) window tile bottomright   ;;
+	v*left      ) window tile fullleft      ;;
+	v*right     ) window tile fullright     ;;
+	1/4*c*left  ) window tile 4 centerleft  ;;
+	1/4*c*right ) window tile 4 centerright ;;
+	1/4*left    ) window tile 4 left        ;;
+	1/4*right   ) window tile 4 right       ;;
+	1/3*left    ) window tile 3 left        ;;
+	1/3*center  ) window tile 3 center      ;;
+	1/3*right   ) window tile 3 right       ;;
+	near*       ) window tile near          ;; # horizontal axis
+	far*        ) window tile far           ;;
+esac
+
+# kak: filetype=sh

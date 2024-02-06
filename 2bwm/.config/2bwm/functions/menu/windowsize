@@ -8,23 +8,23 @@
 # .................................................................. Window size
 
 actions() {
-	echo "Mod+Shift+w   stretch
+	echo "Mod+Shift+w   tile
 Mod+0         revert
 Mod+1         rotate
 Mod+2         monocle
-Mod+3         B4
-Mod+4         A4
-Mod+5         B5
+ 3            B4
+ 4            A4
+ 5            B5
  5r           B5 rotate
-Mod+6         A5
-Mod+9         B6
+ 6            A5
+ 9            B6
  6r           B6 rotate
  8            A6
  7            B7
  7r           B7 rotate"
 }
 
-[ $1 ] && cmd=$(actions | grep "Mod[+]$1 ") || cmd=$(actions | rmenu 'Window size' $cmd -no-custom) || exit
+[ $1 ] && cmd=$(actions | grep "Mod[+]$1 ") || cmd=$(actions | rmenu 'Window size (paper)' $cmd -no-custom) || exit
 
 cmd=$(echo "$cmd" | sed "s/^[^ ]* *//")
 case $cmd in
