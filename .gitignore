@@ -9,6 +9,7 @@
 **/astroid
 **/autokey
 **/beets
+**/*.diff
 **/bin/herbst*
 **/btsync
 **/build/cfg/home
