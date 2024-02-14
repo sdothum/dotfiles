@@ -100,8 +100,7 @@
 **/kobopatch
 !**/kobopatch*/*.yaml
 !**/kobopatch*/src/*.yaml
-**/koreader*/data
-!**/koreader*/data/cr3.ini
+**/koreader/dict
 **/.local/bin
 **/*.log
 **/logrotate
