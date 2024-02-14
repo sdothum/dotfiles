@@ -89,6 +89,7 @@
 **/kb-layout-evaluation/README.md
 **/kde
 **/kindlegen
+**/kindle/koreader
 **/klavaro
 **/kobo/**/bin
 **/kobo/**/firmware
@@ -100,7 +101,7 @@
 **/kobopatch
 !**/kobopatch*/*.yaml
 !**/kobopatch*/src/*.yaml
-**/koreader/dict
+**/koreader/**/dict
 **/.local/bin
 **/*.log
 **/logrotate
