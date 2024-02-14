@@ -39,6 +39,12 @@ chmod +x ~/.local/bin/cork
 cargo install kak-popup
 ln -s /usr/bin/dash $HOME/bin/sh  # to circumvent cork's "env sh" -> busybox reference which causes "read" hang
 
+# kakpipe (for kakpipe.kak)
+cd /net/depot
+git clone https://github.com/eburghar/kakpipe.git
+cd kakpipe
+cargo install --path . --root ~/.local
+
 # NOTE: manual management of tree-sitter and kak-lsp to control upstream changes (breakage)
 
 # tree-sitter
@@ -48,7 +54,6 @@ cargo install ktsctl
 # kak-lsp
 cd /net/depot
 git clone https://github.com/kak-lsp/kak-lsp
-
 cd kak-lsp
 cargo install --locked --force --path .
 
