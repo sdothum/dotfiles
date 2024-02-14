@@ -124,7 +124,8 @@ case $wm in
 	setpath $HOME/.config/2bwm cmd
 	. $(which ENV)
 	$TERM &
-	(sleep 0.15; xdotool --sync --onlyvisible --class "Alacritty" windowactivate --sync; sleep 0.65; xdotool type "autostart >/tmp/2bwm.log 2>&1"; xdotool key return) &  # autostart the panel in the terminal window (delay for celeron cpu)
+	# (sleep 0.15; xdotool --sync --onlyvisible --class "Alacritty" windowactivate --sync; sleep 0.65; xdotool type "autostart >/tmp/2bwm.log 2>&1"; xdotool key return) &  # autostart the panel in the terminal window (delay for celeron cpu)
+	(sleep 0.15; autostart >/tmp/2bwm.log 2>&1) &
 	xexec 2bwm ;;
 
 aw* ) xexec awesome ;;
