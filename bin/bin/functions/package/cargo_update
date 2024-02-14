@@ -1,0 +1,26 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Package
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Cargo update
+
+# Usage: cargo_update [<crate>]*
+
+crates() { cargo install --list | grep -E '^[a-z0-9_-]+ v[0-9.]+:$' | cut -f1 -d' '; }
+
+[ $1 ] && crates=$@ || crates=$(crates)
+[ -z "$crates" ] && { ditto crates "none found"; exit; }
+echo "$crates" | tr ' ' '\n'
+ifno 'update crates' && exit
+time=$(chrono)
+
+for i in $crates ;do
+	ditto update $i
+	cargo install $i
+done
+
+chrono $time
+
+# kak: filetype=sh

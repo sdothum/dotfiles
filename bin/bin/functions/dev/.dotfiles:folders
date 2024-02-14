@@ -27,8 +27,8 @@ kobo/calibre:config
 kobo/fonts:*
 kobo/kobopatch_*/src/*yaml
 kobo/kobopatch_*/*yaml
-kobo/koreader.*
 kobo/Nickel*
+koreader
 kustom
 bin/bin/functions/mail/compose
 bin/bin/functions/mail/mailcot

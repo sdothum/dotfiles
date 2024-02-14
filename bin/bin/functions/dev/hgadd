@@ -20,7 +20,8 @@ IGNORE=$REPO/.hgadd:ignore
 output=quiet  # verbose
 delay=20      # notificaton duration
 
-[ "$1" ] || usage
+[ "$1" ]  || usage
+exists hg || exit
 
 exclude=${exclude:-$(cat $IGNORE | sed '1i\\.git*\n\\.hg*' | tr '\n' '|' | sed 's/[|]*$//')}  # see note above!
 # echo $exclude

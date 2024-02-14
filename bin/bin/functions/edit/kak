@@ -6,7 +6,7 @@
 
 # ....................................................................... Editor
 
-# Usage: [name=<title>] kak [-l | -p [<id>] | -v | -h] [-BENCHMARK | -DEBUG | -X11 | -- | ID=<id>] [WAIT] [<row>x<col>] <file>*
+usage() { usage: "$(basename $0) [-l | -p [<id>] | -v | -h] [-BENCHMARK | -DEBUG | -PLUG | -X11 | -- | ID=<id>] [WAIT] [<row>x<col>] <file>*"; exit 1; }
 
 headless=${headless:-false}
 
@@ -29,9 +29,10 @@ while : ;do
 		-l            ) $KAK -l; exit ;;
 		-p            ) [ $2 ] && $KAK -p $2 || { for i in $($KAK -l); do ditto kak "$i ${RED}❌"; echo kill | $KAK -p $i ;done }; exit ;;
 		-v*           ) $KAK -version; exit ;;
-		-h*           ) $KAK -help; ditto '-debug' "hooks | shell | profile | keys | commands"; ditto 'kak' "-l | -p [<id>] | -v | -D (kakrc debug) | -X (non-modal colorscheme)"; exit ;;
+		-h*           ) $KAK -help; ditto '-debug' "hooks | shell | profile | keys | commands"; ditto 'kak' "-l | -p [<id>] | -v | -DEBUG (commands) | -P (no plugins) | -X (non-modal colorscheme)"; usage ;;
 		-B*           ) hyperfine -warmup 10 "$KAK -ui dummy -e quit"; exit ;;
-		-D*           ) export DEBUG=true   ;;  # kakrc debug hook
+		-D*           ) debug='-debug commands'  ;;  # debug trace
+		-P*           ) export UNPLUG=true       ;;  # kakrc plugins exclusions
 		-X*           ) unset DISPLAY; export COLORSCHEME=${COLORSCHEME:-dabruin} ;;
 		--            ) ID=$(rand)    ;;  # force new instance
 		id=*          ) ID="${1#*=}"  ;;
@@ -72,6 +73,8 @@ done
 console && exec $KAK $file
 
 (sleep $DELAY; window snap center) &  # potential WAIT
-term ${name:-kak} PAPER ${XY:-132x52} $WAIT $KAK ${session:--c} $ID $file >>$LOG 2>&1  # 50 line page
+title=$(echo "$file" | sed 's| [^ ]*/||; s/ .*/.../g')
+[ $count -gt 1 ] && title="$title($count)"
+term "title=kak:$title" class=kak PAPER ${XY:-132x52} $WAIT $KAK $debug ${session:--c} $ID $file >>$LOG 2>&1  # 50 line page
 
 # kak: filetype=sh

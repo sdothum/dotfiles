@@ -15,9 +15,9 @@
 [ $TMUX = roxterm ] && pkill -f ' -s roxterm'  # <space> -s, as pattern 
 
 if tmux -S /tmp/tmux:$TMUX has-session -t $TMUX ;then
-	term "${TMUX}" tmux -S /tmp/tmux:$TMUX attach -d -t $TMUX 2>/dev/null
+	term ${TMUX} tmux -S /tmp/tmux:$TMUX attach -d -t $TMUX 2>/dev/null
 else
-	term "${TMUX}" $fortune tmux -S /tmp/tmux:$TMUX "new-session -n '' -s $TMUX $@"
+	term ${TMUX} $fortune tmux -S /tmp/tmux:$TMUX "new-session -n '' -s $TMUX $@"
 	xsync $TMUX
 	tmux -S /tmp/tmux:$TMUX rename-window "$1*"
 fi

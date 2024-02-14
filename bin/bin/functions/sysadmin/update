@@ -6,11 +6,13 @@
 
 # ................................................................ Rsync wrapper
 
-usage() { usage: "$(basename $0) [--list-only] [<option>] alpine | arm | backup | depot | dotfiles | home | pi | server | stow | ttrss | usb [hostname] | vps | wiki | xbps | [--delete] <command>"; exit 1; }
+usage() { usage: "$(basename $0) [--list-only] [<option>] alpine | arm | backup | depot | dotfiles | home | kindle | pi | server | stow | ttrss | usb [hostname] | vps | wiki | xbps | [--delete] <command>"; exit 1; }
 
 EXCLUDE=$(dirname $0)/.rsync_exclude
 PLEX=/opt/plexmediaserver/Library/Application\ Support
 ALPINE=motu                            # test alpine host
+KOBO=/run/media/shum/KOBOeReader
+KINDLE=/run/media/shum/Kindle
 
 # import user path
 . $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
@@ -187,6 +189,17 @@ alpinelinux() {
 	fi
 }
 
+kindle() {
+	cd $KOBO
+	rsync -av books $KINDLE/documents/
+	rsync -av --delete .adds/koreader/patches $KINDLE/koreader/
+	cp -v .adds/koreader/settings/gestures.lua $KINDLE/koreader/settings/
+	HISTORY=$KINDLE/koreader/history.lua
+	ditto update "$HISTORY"
+	mv $HISTORY $HISTORY.last
+	sed 's|/onboard/|/us/documents/|' .adds/koreader/history.lua >$HISTORY
+}
+
 case $1 in
 	''       ) usage ;;
 	alpine   ) alpinelinux ;;
@@ -197,6 +210,7 @@ case $1 in
 	HOME     ) home cron ;;  # cron parm
 	depot    ) depot ;;
 	dotfiles ) dotfiles ;;
+	kindle   ) kindle ;;
 	music    ) music ;;
 	pi       ) server && rsync -r --delete /usr/share/icons/Paper pi:$HOME/.local/share/icons/ ;;
 	server   ) archive ;;
