@@ -14,7 +14,8 @@ export HISTORY=$MENU/.history
 export SEP='∙'             # list separator
 export LEADER='○∘⋯  '
 
-X() { echo "$LEADER$@"; }  # pick list action
+X()        { echo "$LEADER$@"; }  # pick list action
+picklist() { sed "s/\^/^$SEP /" | column -s^ -t ; }
 
 # .................................................................. List macros
 

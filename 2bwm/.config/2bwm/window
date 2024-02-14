@@ -9,9 +9,6 @@
 
 # Usage: window [@<delay>] <msg>, see functions/window
 
-TWOBWM_CONFIG=$HOME/.config/2bwm/src/config.h
-WINFO=$TWOBWM:window
-
 geometry()      { xdotool getwindowgeometry --shell ${1:-$winid}; }  # X Y WIDTH HEIGHT (doesn't include borders)
 set_geometry()  { eval $(geometry $1); }
 save_geometry() { geometry $1 >$WINFO:${1:-$winid}; }                   # for revert
@@ -36,10 +33,10 @@ draw() {
 	save_geometry
 	[ $4 ] && { W=$3; H=$2; } || { W=$2; H=$3; }
 	[ $H -gt $height ] && { swap=$W; W=$H; H=$swap; }
-	xdotool windowunmap $1     # defer visual refresh
-	xdotool windowsize --sync $1 $W $H
-	xdotool windowmap --sync $1
-	xdotool key Super+Shift+g  # 2bwm vertical center BUG: jitter offset occurs with A4 and B5
+	xdotool windowunmap $1      # defer visual refresh
+	xdotool windowsize $1 $W $H
+	xdotool windowmap $1
+	window snap verticalcenter  # BUG: Super+Shift+g jitter offset occurs with A4 and B5
 }
 
 # do we need to wait for window creation?

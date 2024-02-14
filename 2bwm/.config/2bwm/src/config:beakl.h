@@ -1,6 +1,7 @@
 ///---User configurable stuff---///
 ///---Modifiers---///
 #define MOD             XCB_MOD_MASK_4       /* Super/Windows key  or check xmodmap(1) with -pm  defined in /usr/include/xcb/xproto.h */
+#define ALT             XCB_MOD_MASK_1
 ///--Speed---///
 /* Move this many pixels when moving or resizing with keyboard unless the window has hints saying otherwise.
  *0)move step slow   1)move step fast
@@ -14,14 +15,15 @@ static const float    resize_keep_aspect_ratio = 1.03;
 /*0)offsetx          1)offsety
  *2)maxwidth         3)maxheight */
 // static const uint8_t offsets[] = {0,0,0,0};
-static const uint8_t offsets[] = {44,38,88,76};
+static const uint8_t offsets[] = {42,37,84,74};
 ///---Colors---///
 /*0)focuscol         1)unfocuscol
  *2)fixedcol         3)unkilcol
  *4)fixedunkilcol    5)outerbordercol
  *6)emptycol         */
 // static const char *colors[] = {"#35586c","#333333","#7a8c5c","#ff6666","#cc9933","#0d131a","#000000"};
-static const char *colors[] = {"#ff0000","#546e7a","#008b8b","#fa8c69","#a1462a","#505050","#000000"};
+// static const char *colors[] = {"#ff0000","#546e7a","#008b8b","#fa8c69","#a1462a","#505050","#000000"};
+static const char *colors[] = {"#00ffff","#757575","#008b8b","#fa8c69","#a1462a","#505050","#000000"};
 // static const char *colors[] = {"#ff0000","#939393","#008b8b","#fa8c69","#a1462a","#575757","#000000"};
 /* if this is set to true the inner border and outer borders colors will be swapped */
 static const bool inverted_colors = true;
@@ -36,7 +38,9 @@ static const bool inverted_colors = true;
  *1) Full borderwidth    2) Magnet border size
  *3) Resize border size  */
 // static const uint8_t borders[] = {3,5,5,4};
-static const uint8_t borders[] = {1,11,11,10};
+// static const uint8_t borders[] = {1,11,11,10};  // frame_opacity 0.66
+// static const uint8_t borders[] = {2,11,11,10};  // frame_opacity 0.22
+static const uint8_t borders[] = {2,12,12,11};     // frame_opacity 0.22
 // static const uint8_t borders[] = {0,0,0,0};
 /* Windows that won't have a border.
  * It uses substring comparison with what is found in the WM_NAME
@@ -65,16 +69,23 @@ static const char *east[]             = {"closest.sh", "east"                 , 
 static const char *west[]             = {"closest.sh", "west"                 , NULL};
 static const char *north[]            = {"closest.sh", "north"                , NULL};
 static const char *south[]            = {"closest.sh", "south"                , NULL};
+static const char *layout[]           = {"menu", "layout"                     , NULL};
+static const char *layoutkak[]        = {"layout", "fold", "4", "kak"         , NULL};  // developer mode!
+static const char *layoutlevel[]      = {"layout", "level"                    , NULL};  // all windows
+static const char *layoutrevert[]     = {"layout", "revert"                   , NULL};  // all windows
+static const char *shiftleft[]        = {"window", "shift", "left"            , NULL};
+static const char *shiftright[]       = {"window", "shift", "right"           , NULL};
+static const char *shiftup[]          = {"window", "shift", "up"              , NULL};
+static const char *shiftdown[]        = {"window", "shift", "down"            , NULL};
 static const char *snapnear[]         = {"window", "snap"                     , NULL};
 static const char *snapleft[]         = {"window", "snap", "left"             , NULL};
 static const char *snapright[]        = {"window", "snap", "right"            , NULL};
-static const char *snaptop[]          = {"window", "snap", "top"              , NULL};
-static const char *snapbottom[]       = {"window", "snap", "bottom"           , NULL};
-static const char *layout[]           = {"menu", "layout"                     , NULL};
-static const char *layoutlevel[]      = {"layout", "level"                    , NULL};  // all windows
-static const char *layoutrevert[]     = {"layout", "revert"                   , NULL};  // all windows
-static const char *windowtile[]       = {"menu", "windowtile"                 , NULL};
-static const char *layoutkak[]        = {"layout", "by", "4", "kak"           , NULL};  // developer mode!
+static const char *snapup[]           = {"window", "snap", "up"               , NULL};
+static const char *snapdown[]         = {"window", "snap", "down"             , NULL};
+static const char *swapleft[]         = {"window", "swap", "left"             , NULL};
+static const char *swapright[]        = {"window", "swap", "right"            , NULL};
+static const char *swapup[]           = {"window", "swap", "up"               , NULL};
+static const char *swapdown[]         = {"window", "swap", "down"             , NULL};
 static const char *tile3left[]        = {"window", "tile", "3", "left"        , NULL};
 static const char *tile3center[]      = {"window", "tile", "3", "center"      , NULL};
 static const char *tile3right[]       = {"window", "tile", "3", "right"       , NULL};
@@ -82,6 +93,8 @@ static const char *tile4left[]        = {"window", "tile", "4", "left"        , 
 static const char *tile4centerleft[]  = {"window", "tile", "4", "centerleft"  , NULL};
 static const char *tile4centerright[] = {"window", "tile", "4", "centerright" , NULL};
 static const char *tile4right[]       = {"window", "tile", "4", "right"       , NULL};
+static const char *windowfocus[]      = {"menu", "windowfocus"                , NULL};
+static const char *windowtile[]       = {"menu", "windowtile"                 , NULL};
 static const char *windowsize[]       = {"menu", "windowsize"                 , NULL};
 static const char *windowsize0[]      = {"menu", "windowsize", "0"            , NULL};  // Super keybind shortcut
 static const char *windowsize1[]      = {"menu", "windowsize", "1"            , NULL};
@@ -332,16 +345,28 @@ static key keys[] = {
 	{  CONTROL ,              XK_BackSpace,  start,               {.com = notifypop}},
 	{  MOD |SHIFT,            XK_apostrophe, start,               {.com = wikis}},
 	{  MOD |CONTROL,          XK_apostrophe, start,               {.com = notes}},
+	{  MOD ,                  XK_F5,         start,               {.com = north}},
+	{  MOD ,                  XK_F6,         start,               {.com = south}},
+	{  MOD ,                  XK_F7,         start,               {.com = east}},
+	{  MOD ,                  XK_F8,         start,               {.com = west}},
+	{  MOD |SHIFT,            XK_F5,         start,               {.com = shiftup}},
+	{  MOD |SHIFT,            XK_F6,         start,               {.com = shiftdown}},
+	{  MOD |SHIFT,            XK_F7,         start,               {.com = shiftright}},
+	{  MOD |SHIFT,            XK_F8,         start,               {.com = shiftleft}},
+	{  MOD |CONTROL,          XK_F5,         start,               {.com = swapup}},
+	{  MOD |CONTROL,          XK_F6,         start,               {.com = swapdown}},
+	{  MOD |CONTROL,          XK_F7,         start,               {.com = swapright}},
+	{  MOD |CONTROL,          XK_F8,         start,               {.com = swapleft}},
 	{  MOD ,                  XK_a,          start,               {.com = wallclock}},
 	{  MOD |CONTROL,          XK_a,          start,               {.com = unclock}},
 	{  MOD ,                  XK_b,          start,               {.com = browser}},
 	{  MOD |CONTROL,          XK_b,          start,               {.com = browserclr}},
-	{  MOD ,                  XK_c,          start,               {.com = snaptop}},
-	{  MOD |SHIFT,            XK_c,          start,               {.com = snapbottom}},
+	{  MOD ,                  XK_c,          start,               {.com = snapup}},
+	{  MOD |SHIFT,            XK_c,          start,               {.com = snapdown}},
 	{  MOD |SHIFT,            XK_d,          start,               {.com = wallpaper}},
 	{  MOD |CONTROL,          XK_d,          start,               {.com = background}},
-	{  MOD |SHIFT,            XK_e,          start,               {.com = layoutlevel}},
-	{  MOD |CONTROL,          XK_e,          start,               {.com = layoutrevert}},
+	{  MOD |SHIFT,            XK_e,          start,               {.com = layoutkak}},
+	{  MOD |CONTROL,          XK_e,          start,               {.com = layoutlevel}},
 	{  MOD ,                  XK_i,          start,               {.com = hidewindow}},
 	{  MOD |SHIFT,            XK_i,          start,               {.com = unhide}},
 	{  MOD ,                  XK_m,          start,               {.com = mail}},
@@ -362,14 +387,15 @@ static key keys[] = {
 	{  MOD ,                  XK_x,          start,               {.com = filecli}},
 	{  MOD |SHIFT,            XK_x,          start,               {.com = filegui}},
 	{  MOD |SHIFT|CONTROL,    XK_x,          start,               {.com = fileroot}},
-	{  MOD ,                  XK_k,          start,               {.com = north}},
-	{  MOD ,                  XK_j,          start,               {.com = south}},
-	{  MOD ,                  XK_e,          start,               {.com = east}},       // beakl left hand placement
-	{  MOD ,                  XK_h,          start,               {.com = west}},
-	{  MOD |SHIFT,            XK_w,          start,               {.com = windowtile}},
-	{  MOD |CONTROL,          XK_w,          start,               {.com = windowsize}},
+	// {  MOD ,               XK_k,          start,               {.com = north}},
+	// {  MOD ,               XK_j,          start,               {.com = south}},
+	// {  MOD ,               XK_e,          start,               {.com = east}},      // beakl left hand placement
+	// {  MOD ,               XK_h,          start,               {.com = west}},
+	{  MOD |SHIFT,            XK_w,          start,               {.com = windowfocus}},
+	{  MOD |CONTROL,          XK_w,          start,               {.com = windowtile}},
+	{  MOD |SHIFT|CONTROL,    XK_w,          start,               {.com = windowsize}},
 	{  MOD ,                  XK_0,          start,               {.com = windowsize0}},
-	{  MOD |SHIFT,            XK_0,          start,               {.com = layoutkak}},  // developer mode :)
+	{  MOD |SHIFT,            XK_0,          start,               {.com = layoutrevert}},
 	{  MOD |CONTROL,          XK_0,          start,               {.com = layout}},
 	{  MOD ,                  XK_1,          start,               {.com = windowsize1}},
 	{  MOD ,                  XK_2,          start,               {.com = windowsize2}},

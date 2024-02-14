@@ -1,6 +1,6 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="layout/by $@" . $PARENT
+[ $TRACE ] && CHILD="layout/fold $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
@@ -12,7 +12,7 @@ usage() { usage: "$(basename $0) by 3 | 4 [<name>]"; exit 1; }
 # tile application (name)?
 if [ $2 ] ;then
 	for i in $winids ;do
-		name=$(xdotool getwindowname $i)
+		name=$(xdotool getwindowclassname $i)
 		[ "$name" = $2 ] && nameids="$nameids $i"
 	done
 	winids=$nameids
@@ -28,8 +28,7 @@ thirds() {
 		case $instance in
 			1 ) window tile 3 left   ;;
 			0 ) window tile 3 center ;;
-			2 ) window tile 3 right  ;;
-			* ) break ;;
+			2 ) window tile 3 right; instance=-1  ;;
 		esac
 		instance=$(( $instance + 1 ))
 	done
@@ -44,8 +43,7 @@ quarters() {
 			2 ) window tile 4 left        ;;
 			0 ) window tile 4 centerleft  ;;
 			1 ) window tile 4 centerright ;;
-			3 ) window tile 4 right       ;;
-			* ) break ;;
+			3 ) window tile 4 right; instance=-1 ;;
 		esac
 		instance=$(( $instance + 1 ))
 	done

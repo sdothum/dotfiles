@@ -7,7 +7,7 @@
 
 # ..................................................................... Terminal
 
-# Usage: term [<title>] [BLACKBOARD | PAPER | <X>x<Y> | VISIBLE | WAIT | FORTUNE]* [[SHELL] <command>]
+# Usage: term [[title=]<title>] [[class=]<class>] [BLACKBOARD | PAPER | <X>x<Y> | VISIBLE | WAIT | FORTUNE]* [[SHELL] <command>]
 #        title (and default name string)
 #        FORTUNE, login notifier message
 #        BLACKBOARD, cinema background mode for omxplayer
@@ -16,6 +16,7 @@
 #        SHELL <command>, for simpler unquoted command passing
 # Note:  title may not contain spaces, use hyphen or underscore in place
 
+echo $@
 export SHELL=/usr/bin/dash
 options='BLACKBOARD|PAPER|[0-9]+x[0-9]+|VISIBLE|WAIT|FORTUNE|SHELL'
 unset name  # for inadvertant env var conflict usage in calling scripts
@@ -50,6 +51,8 @@ while : ;do
 		FORTUNE       ) touch $FORTUNE:term ;;
 		VISIBLE       ) visible=true ;;
 		WAIT          ) wait=true ;;
+		title=*       ) title=${1#*=}; title="$TITLE $title" ;;
+		class=*       ) class=${1#*=}; name="$NAME $class"   ;;
 	
 		SHELL         )
 			shift
@@ -61,7 +64,8 @@ while : ;do
 			# first parameter may be title
 			if [ -z "$title" ] ;then
 				if echo $1 | grep -E -qv "$options" ;then
-					title="$TITLE $(echo $1 | sed 's/ /_/g')"
+					# title="$TITLE $(echo $1 | sed 's/ /_/g')"
+					title="$TITLE '$1'"
 				fi
 			else
 				process="$@"
@@ -72,7 +76,7 @@ while : ;do
 	shift
 done
 
-[ -z "$name" ] && [ "$title" ] && name="$NAME ${title#* }"
+[ -z "$name" ] && [ "$title" ] && { name="${title#$TITLE }"; name="$NAME '${name%% *}'"; }
 
 $TERM $theme $geometry $title $name $cmd
 

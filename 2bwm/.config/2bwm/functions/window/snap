@@ -7,10 +7,10 @@
 
 # ................................................................. Snap windows
 
-# Usage: window snap [left | center | right | top | bottom | all (windows on desktop)]
+# Usage: window snap [left | center | right | up | down | all (windows on desktop)]
 
-set_geometry  # X Y WIDTH HEIGHT
-save_geometry
+set_geometry     # X Y WIDTH HEIGHT
+# save_geometry  # do not overwrite window sizing/tiling save_geometry
 
 # .................................................................... Snap left
 
@@ -47,61 +47,38 @@ near() {
 	xdotool windowactivate $winid
 }
 
-# ..................................................................... Snap top
+# ...................................................................... Snap up
 
-top() {
+up() {
 	xdotool windowmove $winid x $margin
 	xdotool windowactivate $winid
 }
 
-# .................................................................. Snap bottom
+# .................................................................... Snap down
 
-bottom() {
+down() {
 	# xdotool windowmove $winid x $(( $height - $HEIGHT - $margin - $border * 2 ))
 	xdotool windowmove $winid x $(( $height - $HEIGHT ))
 	xdotool windowactivate $winid
 }
 
-# .................................................... Snap all windows to level
+# ......................................................... Snap vertical center
 
-horizon() {
-	desktop=$(xdotool get_desktop)
-	winids=$(wmctrl -l | grep "^[^ ]*  *$desktop " | cut -d' ' -f1)  # of current desktop
-
-	for i in $winids ;do
-		# xdotool windowactivate $i
-		xdotool windowactivate $i  # faster
-		save_geometry $i           # for full desktop restore :)
-		xdotool key Super+Shift+g  # 2bwm vertical center
-	done
-
-	xdotool windowactivate $winid
-}
-
-# .......................................................... Restore all windows
-
-restore() {
-	desktop=$(xdotool get_desktop)
-	winids=$(wmctrl -l | grep "^[^ ]*  *$desktop " | cut -d' ' -f1)  # of current desktop
-
-	for i in $winids ;do
-		window revert $i
-	done
-
+verticalcenter() {
+	xdotool windowmove $winid x $(( ($height - $HEIGHT) / 2 + $panel - $border ))
 	xdotool windowactivate $winid
 }
 
 case $1 in
-	''      ) near            ;; # nearest left/right edge
-	left    ) left            ;;
-	c*left  ) centerleft      ;;
-	center  ) xdotool key Super+g ;;
-	c*right ) centerright     ;;
-	right   ) right           ;;
-	top     ) top             ;;
-	bottom  ) bottom          ;;
-	all     ) horizon         ;;
-	restore ) restore         ;;
+	''       ) near            ;; # nearest left/right edge
+	left     ) left            ;;
+	c*left   ) centerleft      ;;
+	center   ) xdotool key Super+g ;;
+	c*right  ) centerright     ;;
+	right    ) right           ;;
+	up       ) up              ;;
+	down     ) down            ;;
+	v*center ) verticalcenter  ;;
 esac
 
 # kak: filetype=sh

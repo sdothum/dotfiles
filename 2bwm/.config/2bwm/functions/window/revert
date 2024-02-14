@@ -9,9 +9,11 @@
 
 # Usage: window revert [winid]
 
-# SEE: window size,  stretch and snap
-[ -e $WINFO:${1:-$winid} ] && eval $(cat $WINFO:${1:-$winid}) || exit
-draw ${1:-$winid} $WIDTH $HEIGHT
-xdotool windowmove ${1:-$winid} $X $Y
+# convert wmutils hex ids to xdotool decimal ids
+# winid=$(printf "%d" ${1:-$winid})
+
+[ -e $WINFO:$winid ] && eval $(cat $WINFO:$winid) || exit
+draw $winid $WIDTH $HEIGHT
+xdotool windowmove $winid $X $Y
 
 # kak: filetype=sh

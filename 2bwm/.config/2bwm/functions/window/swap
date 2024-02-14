@@ -1,0 +1,52 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/swap $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Swap window
+
+# Usage: window swap left | right | up | down (of window edge)
+
+
+set_geometry  # X Y WIDTH HEIGHT
+save_geometry
+
+# ............................................................... Closest window
+
+# SEE: wmutils closest.sh
+CUR=$(pfw)
+
+next_west() {
+    printf "%d" $(lsw | xargs wattr xi | sort -nr | sed "0,/$CUR/d" | sed "1s/^[0-9]* //p;d")
+}
+
+next_east() {
+    printf "%d" $(lsw | xargs wattr xi | sort -n | sed "0,/$CUR/d" | sed "1s/^[0-9]* //p;d")
+}
+
+next_north() {
+    printf "%d" $(lsw | xargs wattr yi | sort -nr | sed "0,/$CUR/d" | sed "1s/^[0-9]* //p;d")
+}
+
+next_south() {
+    printf "%d" $(lsw | xargs wattr yi | sort -n | sed "0,/$CUR/d" | sed "1s/^[0-9]* //p;d")
+}
+
+case $1 in
+    left  ) wid=$(next_west)  ;;
+    right ) wid=$(next_east)  ;;
+    up    ) wid=$(next_north) ;;
+    down  ) wid=$(next_south) ;;
+esac
+
+[ "$wid" ] || exit  # no adjacent window
+
+save_geometry $wid
+set -- $(xdotool getwindowgeometry --shell $wid)
+xdotool windowmove $wid $X $Y
+xdotool windowmove $winid ${2#*=} ${3#*=}
+xdotool windowactivate $wid
+
+# kak: filetype=sh

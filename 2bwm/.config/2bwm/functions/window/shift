@@ -1,0 +1,51 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/shift $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Shift window
+
+# Usage: window shift left | right | up | down (of window edge)
+
+
+set_geometry  # X Y WIDTH HEIGHT
+save_geometry
+
+# ................................................................... Shift left
+
+left() {
+	xdotool windowmove --relative $winid -$(( $WIDTH + $border * 2 )) 0
+	xdotool windowactivate $winid
+}
+
+# .................................................................. Shift right
+
+right() {
+	xdotool windowmove --relative $winid $(( $WIDTH + $border * 2 )) 0
+	xdotool windowactivate $winid
+}
+
+# ..................................................................... Shift up
+
+up() {
+	xdotool windowmove --relative $winid 0 -$(( $HEIGHT + $border * 2 ))
+	xdotool windowactivate $winid
+}
+
+# ................................................................... Shift down
+
+down() {
+	xdotool windowmove --relative $winid 0 $(( $HEIGHT + $border * 2 ))
+	xdotool windowactivate $winid
+}
+
+case $1 in
+	left  ) left  ;;
+	right ) right ;;
+	up    ) up    ;;
+	down  ) down  ;;
+esac
+
+# kak: filetype=sh

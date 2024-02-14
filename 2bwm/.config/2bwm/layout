@@ -9,10 +9,12 @@
 
 # Usage: layout <msg>, see functions/layout
 
-winid() { xdotool getactivewindow; }
+geometry()      { xdotool getwindowgeometry --shell ${1:-$winid}; }  # X Y WIDTH HEIGHT (doesn't include borders)
+set_geometry()  { eval $(geometry $1); }
+save_geometry() { geometry $1 >$WINFO:${1:-$winid}; }                # for revert
+winid()         { xdotool getactivewindow; }
 
-desktop=$(xdotool get_desktop)
-winids=$(wmctrl -l | grep "^[^ ]*  *$desktop " | cut -d' ' -f1)  # of current desktop
+winids=$(query winids)  # of current desktop
 winid=$(winid)
 
 msg=$1

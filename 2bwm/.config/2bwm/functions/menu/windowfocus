@@ -1,0 +1,24 @@
+#!/usr/bin/dash
+#
+# sdothum - 2016 (c) wtfpl
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Window focus
+
+desktop=$(xdotool get_desktop)
+winids=$(query winids)  # of current desktop
+
+winids() {
+	for i in $winids ;do
+		echo "$i ^$(xdotool getwindowname $i | sed 's/kak:/& /')"
+	done | picklist
+}
+
+winid=$(winids | column -s^ -t | rmenu 'Focus window' $cmd -no-custom) || exit
+
+xdotool windowraise ${winid%% *}
+xdotool getactivewindow ${winid%% *}
+
+# kak: filetype=sh

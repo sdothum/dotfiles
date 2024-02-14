@@ -1,16 +1,17 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="layout/revert $@" . $PARENT
+[ $TRACE ] && CHILD="query/winids $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ................................................................ Revert layout
+# ....................................................................... winids
 
-for i in $winids ;do
-	window revert $i
+desktop=$(xdotool get_desktop)
+
+# convert wmutils hex ids to xdotool decimal id
+for i in $(wmctrl -l | grep "^[^ ]*  *$desktop " | cut -d' ' -f1) ;do
+	printf "%d\n" $i
 done
-
-xdotool windowactivate $winid
 
 # kak: filetype=sh
