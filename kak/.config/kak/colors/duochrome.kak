@@ -15,7 +15,7 @@ evaluate-commands %sh{
 	desaturate() {
 		printf "${1#*:}\n" | fold -b2 | while read -r hex; do
 			base10="$(printf '%d' "0x${hex}")"
-			printf '%02x' "$(( $base10 * ${2:-7 / 10} ))"
+			printf '%02x' "$(( base10 * ${2:-7 / 10} ))"
 		done | xargs printf 'rgb:%s'
 	}
 
@@ -58,24 +58,24 @@ evaluate-commands %sh{
 	# ............................................................. Color objects
 
 	# modal highlights
-		case "${kak_opt_colormode}" in
-			normal   )
-	background="${pale_cyan}"
-	menu="${pale_orange}"
-	comment="$(desaturate ${background})"
-				;;
-			capslock )
-	background="${pale_pink}"
-	menu="${pale_cyan}"
-	comment="$(desaturate ${background})"
-				;;
-			*        )  # insert mode
-	background="${pale_orange}"
-	menu="${pale_cyan}"
-	# comment="$(desaturate ${background})"
-	comment="${desaturated_orange}"
-				;;
-		esac
+	case "${kak_opt_colormode}" in
+		normal   )
+			background="${pale_cyan}"
+			menu="${pale_orange}"
+			comment="$(desaturate ${background})"
+			;;
+		capslock )
+			background="${pale_pink}"
+			menu="${pale_cyan}"
+			comment="$(desaturate ${background})"
+			;;
+		*        )  # insert mode (default non-modal mode)
+			background="${pale_orange}"
+			menu="${pale_cyan}"
+			# comment="$(desaturate ${background})"
+			comment="${desaturated_orange}"  # from duochrome.vim
+			;;
+	esac
 
 	foreground="${black}"
 	margin="${background}"
@@ -109,6 +109,8 @@ evaluate-commands %sh{
 	match="${soft_red}"
 
 	cat <<-COLORSCHEME
+# Syntax highlighting
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # ......................................................................... Code
 
@@ -139,6 +141,9 @@ set-face window link                      "${link}"
 set-face window list                      "${list}"
 set-face window mono                      "${mono}+b"
 set-face window title                     "${heading}"
+
+# Kakoune UI
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # ................................................................ Builtin faces
 
@@ -178,6 +183,9 @@ set-face window BufferPadding             "${background},${background}"  # hide 
 # .................................................................. Admonitions
 
 set-face window Admonitions               "+bf@Error"
+
+# Plugins
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # ...................................................................... Peneira
 

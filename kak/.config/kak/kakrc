@@ -5,11 +5,15 @@
 
 # config for Kakoune
 
-# Lambda calculus
+# Lambda calculus flow control
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# WARNING: passed %sh{} $kak_opt_<names> must be defined explicitly for the %arg{1} expansion ($1)
-# SEE: the comment (#) list of kak_opt_<names> in the embedded %sh{} block
+# simplifying "try %{ .. } catch %{ .. }" to "eval -verbatim %arg{1} %arg{2} %arg{3}"
+# where %arg{1} is "%sh{ test .. && echo .. || echo .. }"
+# further refactored to "%{ test .. }" by the define-command with %arg{1} as $1 SEE: ATTENTION
+
+# ATTENTION: refactored syntactic sugar requires $1 $kak_opt_<names> listed in the define-command for %sh{} env variable export
+# SEE: the comment (#) list of kak_opt_<names> in the define-command "%sh{ .. # .. }" block
 
 # ................................................................. if-then-else
 
@@ -20,25 +24,21 @@ define-command else -params 2 %{ eval %arg{2} }
 
 # ...................................................................... if-then
 
-# if %{ condition } %{ conclusion }
-define-command if -params 2 %{ eval -verbatim %sh{ eval $1 && echo conclusion || echo nop # kak_opt_colormode kak_opt_mode } %arg{2} }
-define-command conclusion -params 1 %{ eval %arg{1} }
+# if %{ condition } %{ then }
+define-command if -params 2 %{ if-else %arg{1} %arg{2} %{ nop } }
 
 # ........................................................................ Debug
 
-# random debug settings along the kakoune journey
-if %{ [ -n "$DEBUG" ] } %{
-	hook global BufSetOption filetype=.* %{
-		 echo -debug setting %val{hook_param}
-	}
-	hook global BufSetOption comment_line=.* %{
-		echo -debug setting %val{hook_param}
-	}
+# *debug* hook trace
+if %{ [ -n "$UNPLUG" ] } %{
+	hook global BufSetOption filetype=.* %{ echo -debug setting %val{hook_param} }
+	hook global WinSetOption filetype=.* %{ echo -debug setting %val{hook_param} }
+	hook global WinCreate .*             %{ echo -debug setting %val{hook_param} }
 }
 
 # Plugins
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-if %{ [ -z "$DEBUG" ] } %{
+if %{ [ -z "$UNPLUG" ] } %{
 
 	# WARNING: symlink "ln -s /usr/bin/dash $HOME/bin/sh" to avoid busybox "sh" read hang from cork "env sh"
 	evaluate-commands %sh{ cork init }
@@ -57,10 +57,11 @@ if %{ [ -z "$DEBUG" ] } %{
 
 	# ................................................................ crosshairs
 	cork crosshairs https://github.com/insipx/kak-crosshairs.git %{
-		map global user | ': cursorcolumn<ret>' -docstring "toggle column"
-		map global user + ': crosshairs<ret>'   -docstring "toggle crosshairs"  # BUG: occasional hidden underline
+		# map global user | ': cursorcolumn<ret>' -docstring "toggle column"
+		# map global user + ': crosshairs<ret>'   -docstring "toggle crosshairs"  # BUG: occasional hidden underline
+		map global user + ': cursorcolumn<ret>' -docstring "toggle column"
 	}
-
+ 
 	# ..................................................................... fandt
 	cork fandt https://github.com/listentolist/kakoune-fandt.git %{
 		require-module fandt
@@ -73,6 +74,14 @@ if %{ [ -z "$DEBUG" ] } %{
 	cork find https://github.com/occivink/kakoune-find.git %{
 		map global user f ': find ' -docstring "find and replace"
 	}
+
+	# .......................................................... focus selections
+	cork focus https://github.com/caksoylar/kakoune-focus.git %{
+		map global user <space> ': focus-toggle<ret>' -docstring "toggle selections focus"
+	}
+
+	# ......................................................... forth interpreter
+	cork forth https://gitlab.com/kstr0k/kak-stkmach
 
 	# ...................................................... kakboard (clipboard)
 	cork kakboard https://github.com/lePerdu/kakboard.git %{
@@ -88,6 +97,41 @@ if %{ [ -z "$DEBUG" ] } %{
 		map global user R ': kakboard-with-pull-clipboard R<ret>' -docstring 'replace with clipboard'
 	}
 
+	# ................................................................... kakpipe
+	cork kakpipe https://github.com/eburghar/kakpipe.git %{
+		# NOTE: manually install binary from git folder with: cargo install --path . --root ~/.local
+		require-module kakpipe
+		map global user | ': kakpipe ' -docstring "kakpipe FIFO buffer"
+	}
+
+	# ................................................................... kak-lsp
+	cork lsp https://github.com/kak-lsp/kak-lsp.git %{
+		# currently running commit 36f99810bdcc060617479d6c5405e868584ef0ff BUG: lsp-inlay-diagnostics-enable command option
+		# cargo install --locked --force --path .
+		# diff kak-lsp.toml $HOME/.config/kak/kak-lsp/kak-lsp.toml.unmarksman
+		nop eval %sh{ kak-lsp -s $kak_session --kakoune }
+
+		set-option global lsp_cmd "kak-lsp -v -c $HOME/.config/kak-lsp/kak-lsp.toml -s %val{session} --log /tmp/kak-lsp.log"  # debug lsp with -vvv
+		declare-option str linemark '►'                                    # diagnostic line marker
+		set-option global lsp_diagnostic_line_error_sign "%opt{linemark}"  # lsp glyph overrides
+		set-option global lsp_diagnostic_line_hint_sign "%opt{linemark}"
+		set-option global lsp_diagnostic_line_info_sign "%opt{linemark}"
+		set-option global lsp_diagnostic_line_warning_sign "%opt{linemark}"
+		set-option global lsp_inlay_diagnostic_sign ''                    # diagnostic fence meter (visual ticks replace ■'s)
+
+		hook global WinSetOption filetype=(sh|c|cpp|go|javascript|latex|lua|markdown|perl|python|ruby|rust|toml|typescript) %{
+			lsp-enable-window
+			lsp-auto-hover-enable
+			lsp-inlay-diagnostics-enable global
+			colorscheme %opt{theme}  # WHY: restore Diagnostic faces (overwritten by kak-lsp injection above)
+
+			map global user l ': enter-user-mode lsp<ret>' -docstring "LSP mode"
+		}
+		hook global KakEnd .* lsp-exit
+
+		define-command lsp-restart %{ lsp-stop; lsp-start } -docstring 'restart lsp server'
+	}
+
 	# ...................................................................... mark
 	cork mark https://gitlab.com/fsub/kakoune-mark.git %{
 		map global user m ': mark-word<ret>'  -docstring "(un)mark word / clear marks"
@@ -96,8 +140,8 @@ if %{ [ -z "$DEBUG" ] } %{
 
 	# ................................................................ move lines
 	cork move-lines https://git.sr.ht/~raiguard/kak-move-lines %{
-		map global normal <a-up> ': move-lines-up %val{count}<ret>'     -docstring 'shift up'
-		map global normal <a-down> ': move-lines-down %val{count}<ret>' -docstring 'shift down'
+		map global normal <c-up> ': move-lines-up %val{count}<ret>'     -docstring 'shift up'
+		map global normal <c-down> ': move-lines-down %val{count}<ret>' -docstring 'shift down'
 	}
 
 	# .................................................... peneira (fuzzy finder)
@@ -175,6 +219,13 @@ if %{ [ -z "$DEBUG" ] } %{
 	cork sudo-write https://github.com/occivink/kakoune-sudo-write.git %{
 		map global user Z ': sudo-write<ret>' -docstring 'sudo save'
 	}
+
+	# ............................................................... tree-sitter
+	cork tree-sitter https://github.com/phaazon/kak-tree-sitter.git %{
+		# cargo install kak-tree-sitter
+		# cargo install ktsctl
+		nop eval %sh{ kak-tree-sitter -dks --session $kak_session }
+	}
 }
 
 # Plugins end ..................................................................
@@ -182,12 +233,12 @@ if %{ [ -z "$DEBUG" ] } %{
 # GUI
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# ................................................................... Colorsheme
+# .................................................................. Colorscheme
 
 if-else %{ [ -n "$DISPLAY" ] } %{
 	declare-option str theme     'duochrome'
 	declare-option str mode      'normal'  # initial state
-	declare-option str colormode ''        # force initialize colorscheme
+	declare-option str colormode ''        # force colorscheme initialization
 
 	define-command normal-mode-colorscheme %{
 		set-option window mode "normal"
@@ -212,6 +263,7 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 		}
 	}
 
+	# BUG: capslock colorscheme switching defers until the first keystroke (vs the realtime statusline reporting)
 	define-command capslock-check %{
 		if-else %{ capslock } %{
 			capslock-colorscheme
@@ -225,12 +277,13 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 	}
 
 	# window modal/capslock "duo"chrome
-	hook global WinCreate '.*' %{
+	hook global WinCreate .* %{
 		normal-mode-colorscheme
 		hook window ModeChange (push|pop):.*:insert insert-mode-colorscheme
 		hook window ModeChange (push|pop):insert:.* normal-mode-colorscheme
 		hook window InsertIdle .* capslock-check
 		hook window NormalIdle .* capslock-check
+		hook window PromptIdle .* capslock-check
 	}
 } %{
 	declare-option str theme %sh{ echo "${COLORSCHEME:-base16-icy}" }
@@ -239,7 +292,7 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 
 # map global user <space> ': normal-mode-colorscheme<ret>' -docstring "%opt{theme}"
 
-# ....................................................................... Layout
+# ....................................................................... Screen
 
 # set-option global ui_options terminal_status_on_top=true terminal_assistant=cat
 # set-option global ui_options terminal_status_on_top=true
@@ -247,45 +300,35 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 # lines and columns displayed around the cursor
 set-option global scrolloff 4,4
 
+# ................................................................. Line numbers
+
 # modal line numbers
-declare-option str separator '│'
-declare-option str indent    '  '
+declare-option str ruler '│'  # SEE: statusline
+
+define-command margin -params ..1 %{ eval add-highlighter -override window/linenr number-lines -hlcursor -separator "'%opt{ruler}   '" %arg{@} }  # escape 'quotes' for eval
+
 hook global WinCreate .* %{
-	 add-highlighter window/linenr number-lines -hlcursor -separator "%opt{separator}%opt{indent}" -relative
-	 hook window ModeChange (push|pop):.*:insert %{ add-highlighter -override window/linenr number-lines -hlcursor -separator "%opt{separator}%opt{indent}" }
-	 hook window ModeChange (push|pop):insert:.* %{ add-highlighter -override window/linenr number-lines -hlcursor -separator "%opt{separator}%opt{indent}" -relative }
+	 margin '-relative'  # on normal mode open
+	 hook window ModeChange (push|pop):.*:insert %{ margin }
+	 hook window ModeChange (push|pop):insert:.* %{ margin '-relative' }
 }
+
+# .................................................................... Soft wrap
+
+define-command softwrap -params ..1 %{ eval add-highlighter -override global/ wrap -word -indent -marker "'  ↪ '" %arg{@} }  # escape 'quotes' for eval
+
+hook global WinSetOption filetype=markdown %{ softwrap '-width 80' }
+hook global WinSetOption filetype=(sh|c|cpp|go|javascript|latex|lua|perl|python|ruby|rust|toml|typescript) softwrap
+hook global BufOpenFile  .*(conf|config|log|rc|text|txt) softwrap
 
 # ................................................................... Statusline
 
 # a minimalist statusline of "mode - column [utf-8] - filename [context]"
 declare-option str spacer ' '
 # display utf-8 value for non-latin characters
-set-option global modelinefmt '%sh{[ "$kak_opt_colormode" = "capslock" ] && echo "—CAPS— "}{{mode_info}} %opt{spacer} %val{buf_line_count}%opt{separator} %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname}{{context_info}} [%sh{[ -z "$kak_opt_filetype" ] && echo "--" || echo "$kak_opt_filetype"}] %opt{spacer} %val{session}(%sh{echo "$kak_client" | sed -r "s/[^0-9]*(.*)/\1/"})'
-
-# ........................................................................... UX
+set-option global modelinefmt '%sh{capslock && echo "—CAPS— "}{{mode_info}} %opt{spacer} %val{buf_line_count}%opt{ruler} %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname}{{context_info}} [%sh{[ -z "$kak_opt_filetype" ] && echo "--" || echo "$kak_opt_filetype"}] %opt{spacer} %val{session}(%sh{echo "$kak_client" | sed -r "s/[^0-9]*(.*)/\1/"})'
 
 # set-option global ui_options terminal_assistant=cat
-
-# ................................................................. Highlighting
-
-define-command softwrap %{ add-highlighter -override global/ wrap -word -indent -marker "  ↪ " }
-
-# softwrap long lines
-hook global WinSetOption filetype=markdown %{ add-highlighter -override global/ wrap -word -indent -marker "  ↪ " -width 80 }
-hook global WinSetOption filetype=(sh|c|cpp|go|javascript|latex|lua|perl|python|ruby|rust|toml|typescript) softwrap
-hook global BufOpenFile  .*(conf|config|log|rc|text|txt) softwrap
-
-add-highlighter global/ show-matching
-add-highlighter global/ dynregex '%reg{/}' 0:+u
-add-highlighter global/ show-whitespaces -tab '┊' -tabpad ' ' -spc ' ' -lf ' '
-
-# highlight trailing whitespace
-add-highlighter global/ regex \h+$ 0:Error
-
-# inline admonitions
-declare-option str admonition "\s(?i)(bug|example|hack|note|see|tip|todo|usage|warning|why):\s"
-hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt{admonition} 1:WrapMarker }  # select field 1: (vs 0:) to not hilight the colon :)
 
 # Editing
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -330,12 +373,17 @@ map global normal { '[p'            -docstring 'previous paragraph'
 map global normal D '<a-l>d' -docstring 'delete to end of line'
 map global normal Y '<a-l>'  -docstring 'yank to end of line'
 
+# ........................................................................ Paste
+
+map global normal <c-p> ':<space>yank-ring-previous<ret>'
+map global normal <c-n> ':<space>yank-ring-next<ret>'
+
 # Buffers
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# ............................................................ Buffer management
-
 set-option global autoreload yes
+
+# ..................................................................... Filetype
 
 # modeline inline context: "# kak: filetype=.." (comment delimiter by filetype)
 # NOTE: markdown statement '#[ kak: ... ]: #' issues *debug* "Unsupported kakoune variable:" message for trailing ']'
@@ -344,6 +392,8 @@ hook global BufOpenFile .* %{ modeline-parse }
 
 hook global BufOpenFile .*.eml %{ set buffer filetype markdown }
 hook global FocusOut .* write
+
+# ............................................................ Buffer management
 
 map global normal <a-ret> ': buffer-next<ret>'           -docstring 'next buffer'
 map global normal <a-backspace> ': buffer-previous<ret>' -docstring 'previous buffer'
@@ -355,39 +405,17 @@ map global user   q ': quit<ret>'                        -docstring 'quit'
 map global user   w ': write<ret>'                       -docstring 'save'
 map global user   x ': write-all-quit<ret>'              -docstring 'save all and quit'
 
-# .................................................................. Tree-sitter
+# Highlighting
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-if %{ [ -z "$DEBUG" ] } %{
-	# plug 'phaazon/kak-tree-sitter'
-	eval %sh{ kak-tree-sitter -dks --session $kak_session }
-}
+add-highlighter global/ show-matching
+add-highlighter global/ dynregex '%reg{/}' 0:+u
+add-highlighter global/ show-whitespaces -tab '┊' -tabpad ' ' -spc ' ' -lf ' '
 
-# ...................................................................... kak-lsp
+# highlight trailing whitespace
+add-highlighter global/ regex \h+$ 0:Error
 
-if %{ [ -z "$DEBUG" ] } %{
-	# plug 'kak-lsp/kak-lsp'
-	eval %sh{ kak-lsp --kakoune -s $kak_session }  # Not needed if you load it with plug.kak
-
-	# set-option global lsp_cmd "kak-lsp -vvv -c $HOME/.config/kak-lsp/kak-lsp.toml -s %val{session} --log /tmp/kak-lsp.log"
-	set-option global lsp_cmd "kak-lsp -v -c $HOME/.config/kak-lsp/kak-lsp.toml -s %val{session} --log /tmp/kak-lsp.log"
-	define-command lsp-restart %{ lsp-stop; lsp-start } -docstring 'restart lsp server'
-	hook global KakEnd .* lsp-exit
-
-	# lsp glyph overrides
-	declare-option str linemark '►'                   # diagnostic line marker
-	set-option global lsp_diagnostic_line_error_sign "%opt{linemark}"
-	set-option global lsp_diagnostic_line_hint_sign "%opt{linemark}"
-	set-option global lsp_diagnostic_line_info_sign "%opt{linemark}"
-	set-option global lsp_diagnostic_line_warning_sign "%opt{linemark}"
-	set-option global lsp_inlay_diagnostic_sign ''   # diagnostic fence meter (visual ticks replace ■'s)
-
-	hook global WinSetOption filetype=(sh|c|cpp|go|javascript|latex|lua|markdown|perl|python|ruby|rust|toml|typescript) %{
-		lsp-enable-window
-		lsp-auto-hover-enable
-		lsp-inlay-diagnostics-enable global
-		colorscheme %opt{theme}  # WHY: restore Diagnostic faces (overwritten by kak-lsp injection above)
-
-		map global user l ': enter-user-mode lsp<ret>' -docstring "LSP mode"
-	}
-}
+# admonitions
+declare-option str admonition "\s(?i)(attn|attention|bug|example|hack|note|see|tip|todo|usage|warning|why):\s"
+hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt{admonition} 1:WrapMarker }  # select field 1: (vs 0:) to not hilight the colon :)
 
