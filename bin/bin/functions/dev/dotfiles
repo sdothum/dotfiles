@@ -124,10 +124,7 @@ case $1 in
 		shift; DESC=$@
 		[ "$DESC" ] && git commit --amend --no-edit --message="$DESC" || git commit --amend ;;
 	
-	dry*    )
-		git commit --dry-run >$MESSAGES
-		cat $MESSAGES | print ;;
-
+	dry*    ) git commit --dry-run >$MESSAGES; cat $MESSAGES ;;  # | print ;;
 	folder* ) vim -g $DOTFILES .gitignore $(messages) ;;
 	hints   ) git config advice.addIgnoredFile true; ditto git "hints on" ;;
 	nohints ) git config advice.addIgnoredFile false; ditto git "hints off" ;;
