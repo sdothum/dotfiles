@@ -3,7 +3,7 @@
 --
 -- frontend/document/credocument.lua
 --
--- set alt-statusbar font to custom font
+-- set alt-statusbar font to reading font
 
 local CreDocument = require("document/credocument")
 
