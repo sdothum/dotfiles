@@ -11,8 +11,6 @@ usage() { usage: "$(basename $0) [--list-only] [<option>] alpine | arm | backup 
 EXCLUDE=$(dirname $0)/.rsync_exclude
 PLEX=/opt/plexmediaserver/Library/Application\ Support
 ALPINE=motu                            # test alpine host
-KOBO=/run/media/shum/KOBOeReader
-KINDLE=/run/media/shum/Kindle
 
 # import user path
 . $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
@@ -189,15 +187,22 @@ alpinelinux() {
 	fi
 }
 
+KOBO=/run/media/shum/KOBOeReader
+KINDLE=/run/media/shum/Kindle
+
 kindle() {
+	[ -e $KINDLE ] && [ -e $KOBO ] || { echo "connect Kobo and Kindle to usb"; exit 1; }
 	cd $KOBO
+	ditto kindle "syncing library, history and user patches to kobo master"
 	rsync -av books $KINDLE/documents/
 	rsync -av --delete .adds/koreader/patches $KINDLE/koreader/
-	cp -v .adds/koreader/settings/gestures.lua $KINDLE/koreader/settings/
 	HISTORY=$KINDLE/koreader/history.lua
 	ditto update "$HISTORY"
 	mv $HISTORY $HISTORY.last
 	sed 's|/onboard/|/us/documents/|' .adds/koreader/history.lua >$HISTORY
+	ditto kindle "update metadata for added books via calibre"
+	ifno "copy gestures" || { sed 's/210/220/' .adds/koreader/settings/gestures.lua >$KINDLE/koreader/settings/gestures.lua; }
+	sync
 }
 
 case $1 in
