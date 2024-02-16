@@ -309,7 +309,7 @@ define-command margin -params ..1 %{ eval add-highlighter -override window/linen
 
 hook global WinCreate .* %{
 	 margin '-relative'  # on normal mode open
-	 hook window ModeChange (push|pop):.*:insert %{ margin }
+	 hook window ModeChange (push|pop):.*:insert margin
 	 hook window ModeChange (push|pop):insert:.* %{ margin '-relative' }
 }
 
