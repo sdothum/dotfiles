@@ -194,15 +194,29 @@ kindle() {
 	[ -e $KINDLE ] && [ -e $KOBO ] || { echo "connect Kobo and Kindle to usb"; exit 1; }
 	cd $KOBO
 	ditto kindle "syncing library, history and user patches to kobo master"
-	rsync -av books $KINDLE/documents/
-	rsync -av --delete .adds/koreader/patches $KINDLE/koreader/
-	HISTORY=$KINDLE/koreader/history.lua
-	ditto update "$HISTORY"
-	mv $HISTORY $HISTORY.last
-	sed 's|/onboard/|/us/documents/|' .adds/koreader/history.lua >$HISTORY
+	rsync -av --update books $KINDLE/documents/
 	ditto kindle "update metadata for added books via calibre"
-	ifno "copy gestures" || { sed 's/210/220/' .adds/koreader/settings/gestures.lua >$KINDLE/koreader/settings/gestures.lua; }
+	rsync -av --delete .adds/koreader/patches $KINDLE/koreader/
+	ifno "sync Kindle history" || {
+		HISTORY=$KINDLE/koreader/history.lua
+		ditto update "$HISTORY"
+		mv -v $HISTORY $HISTORY.last
+		sed 's|/onboard/|/us/documents/|' .adds/koreader/history.lua >$HISTORY
+	}
+	ifno "copy gestures" || cp .adds/koreader/settings/gestures.lua $KINDLE/koreader/settings/
 	sync
+}
+
+kindle() {
+	[ -e $KINDLE ] && [ -e $KOBO ] || { echo "connect Kobo and Kindle to usb"; exit 1; }
+	ifno "sync Kobo history" && exit
+	cd $KINDLE
+	ditto kindle "syncing library (sdr) and history to kobo master"
+	rsync -av --update documents/books $KOBO/
+	HISTORY=$KOBO/.adds/koreader/history.lua
+	ditto update "$HISTORY"
+	mv -v $HISTORY $HISTORY.last
+	sed 's|/us/documents/|/onboard/|' koreader/history.lua >$HISTORY
 }
 
 case $1 in
@@ -216,6 +230,7 @@ case $1 in
 	depot    ) depot ;;
 	dotfiles ) dotfiles ;;
 	kindle   ) kindle ;;
+	kobo     ) kobo ;;
 	music    ) music ;;
 	pi       ) server && rsync -r --delete /usr/share/icons/Paper pi:$HOME/.local/share/icons/ ;;
 	server   ) archive ;;
