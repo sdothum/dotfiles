@@ -1,7 +1,7 @@
 -- koreader/patches
 -- sdothum - 2016 (c) wtfpl
 --
--- frontend/document/credocument.lua
+-- frontend/apps/reader/modules/readerfont.lua
 --
 -- set alt-statusbar font to reading font
 
@@ -13,7 +13,7 @@ ReaderFont.onReadSettings = function(self)
 	-- self.font_face = config:readSetting("font_face")
 	-- 			or G_reader_settings:readSetting("cre_font")
 	-- 			or self.ui.document.default_font
-	self.font_face = "drift"
+	self.font_face = "drift"                               -- reading font
 	self.ui.document:setFontFace(self.font_face)
 
 	-- self.header_font_face = config:readSetting("header_font_face")
