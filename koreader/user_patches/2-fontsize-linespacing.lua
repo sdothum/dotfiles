@@ -1,9 +1,19 @@
 -- koreader/patches
 -- sdothum - 2016 (c) wtfpl
 --
+-- frontend/ui/data/creoptions.lua
 -- frontend/apps/reader/modules/readerfont.lua
 -- 
--- set minimum font size / maximum line spacing range
+-- extend font size and line spacing ranges
+
+-- my new ranges
+local min_fontsize = 10      -- point size
+local max_linespacing = 250  -- percent
+
+local CreOptions = require("ui/data/creoptions")
+
+CreOptions[3].options[4].more_options_param.value_max = max_linespacing  -- tweak visual "proof" mode
+CreOptions[4].options[2].more_options_param.value_min = min_fontsize     -- allow even smaller point sizes
 
 local Screen = require("device").screen
 local Event = require("ui/event")
@@ -14,7 +24,7 @@ local ReaderFont = require("apps/reader/modules/readerfont")
 
 -- ReaderFont.onSetFontSize = function(self, size)
 function ReaderFont:onSetFontSize(size)
-	size = math.max(10, math.min(size, 255))  -- from 12
+	size = math.max(min_fontsize, math.min(size, 255))      -- from 12pt min
 	self.configurable.font_size = size
 	self.ui.document:setFontSize(Screen:scaleBySize(size))
 	self.ui:handleEvent(Event:new("UpdatePos"))
@@ -24,7 +34,7 @@ end
 
 -- ReaderFont.onSetLineSpace = function(self, space)
 function ReaderFont:onSetLineSpace(space)
-	space = math.max(50, math.min(space, 250))  -- from 200
+	space = math.max(50, math.min(space, max_linespacing))  -- from 200% max
 	self.configurable.line_spacing = space
 	self.ui.document:setInterlineSpacePercent(space)
 	self.ui:handleEvent(Event:new("UpdatePos"))
