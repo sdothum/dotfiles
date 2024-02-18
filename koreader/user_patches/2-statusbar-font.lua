@@ -13,6 +13,8 @@ local fontsource = "drift-book.ttf"
 -- alt-statusbar header
 local CreDocument = require("document/credocument")
 
+# ATTENTION: if the expected alt-statusbar font does not display for the current document, tap..
+# top menu -> document -> document settings -> reset document settings to default
 CreDocument.header_font = fontface  -- see frontend/apps/reader/modules/readerfont.lua:onReadSettings()
 
 -- statusbar footer
