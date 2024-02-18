@@ -6,7 +6,7 @@
 
 # ................................................................ ebook convert
 
-# Usage: [dropcap=<class>] kconvert <epub>*
+# Usage: [dropcap=<class>] kconvert [poetry] <epub>*
 
 menu econvert azw3 "$@"  # kindle
 menu econvert epub "$@"  # kobo
