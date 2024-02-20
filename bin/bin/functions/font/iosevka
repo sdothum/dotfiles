@@ -40,7 +40,7 @@ usage() {
 > book+regular | descenders | double | open[+]
 > emdash=<decimal> 
 > family=<name>
-> serifless
+> serifless | serifed
 > space=[M|<decimal>]
 
 > D-serifless
@@ -131,7 +131,7 @@ monolexic() {
 	d=toothed-serifless
 	f=flat-hook-serifless-crossbar-at-x-height
 	g=single-storey-serifless
-	i=hooky
+	i=hooky; S_i='i'
 	j=flat-hook-serifed
 	k=straight-serifless
 	l=flat-tailed
@@ -156,7 +156,7 @@ geometric() {
 	capital_b=standard-serifless
 	capital_d=more-rounded-serifless
 	capital_g=toothless-rounded-serifless-hooked
-	capital_i=serifless
+	capital_i=serifless; S_I='I'
 	capital_j=descending-serifless
 	capital_k=symmetric-touching-serifless
 	capital_p=closed-serifless
@@ -168,10 +168,10 @@ geometric() {
 	d=toothed-serifless
 	f=serifless-crossbar-at-x-height
 	g=single-storey-serifless
-	i=serifless
-	j=straight-line
+	i=serifless; s_i='i'
+	j=straight-line; s_j='j'
 	k=symmetric-touching-serifless
-	l=serifless
+	l=serifless; s_l='l'
 	m=serifless
 	p=eared-serifless
 	q=straight-serifless
@@ -216,8 +216,8 @@ variant() {
 			G-rounded      ) glyph capital_g=toothless-rounded-serifless-hooked ;;
 			G-toothed      ) glyph capital_g=toothed-serifless-hooked ;;
 			G-toothless    ) glyph capital_g=toothless-corner-serifless-hooked ;;
-			I-serifed      ) glyph capital_i=short-serifed; unset S_I ;;
-			I-serifless    ) glyph capital_i=serifless; S_I='I' ;;
+			I-serifed      ) glyph capital_i=short-serifed; unset s_I ;;
+			I-serifless    ) glyph capital_i=serifless; s_I='I' ;;
 			J-descending   ) glyph capital_j=descending-serifless ;;
 			J-flat         ) glyph capital_j=descending-flat-hook-serifless ;;
 			J-serifless    ) glyph capital_j=serifless ;;
@@ -244,16 +244,16 @@ variant() {
 			f-extended     ) glyph f=flat-hook-extended-crossbar-at-x-height ;;
 			f-serifless    ) glyph f=flat-hook-serifless-crossbar-at-x-height ;;
 			g-double       ) glyph g=double-storey ;;
-			i-hooky        ) glyph i=hooky; unset S_i ;;
-			i-serifed      ) glyph i=serifed; unset S_i ;;
-			i-serifed-     ) glyph i=hooky; unset S_i ;;
-			i-serifless    ) glyph i=serifless; S_i='i' ;;
-			j-flat         ) glyph j=flat-hook-serifless ;;
-			j-serifed      ) glyph j=flat-hook-serifed ;;
-			j-serifless    ) glyph j=serifless ;;
-			l-bottom       ) glyph l=hooky-bottom; unset S_l ;;
-			l-hooky        ) glyph l=hooky; unset S_l ;;
-			l-serifless    ) glyph l=serifless; S_l='l' ;;
+			i-hooky        ) glyph i=hooky; S_i='i'; unset s_i ;;
+			i-serifed      ) glyph i=serifed; unset s_i S_i ;;
+			i-serifed-     ) glyph i=hooky; S_i='i'; unset s_i ;;
+			i-serifless    ) glyph i=serifless; s_i='i'; unset S_i ;;
+			j-flat         ) glyph j=flat-hook-serifless; S_j='j' ;;
+			j-serifed      ) glyph j=flat-hook-serifed; unset S_j ;;
+			j-serifless    ) glyph j=serifless; unset S_j ;;
+			l-bottom       ) glyph l=hooky-bottom; unset s_l S_l ;;
+			l-hooky        ) glyph l=hooky; S_l='l'; unset s_l ;;
+			l-serifless    ) glyph l=serifless; s_l='l'; unset S_l ;;
 			m-rounded      ) glyph m=earless-rounded-double-arch-serifless ;;
 			m-serifless    ) glyph m=serifless ;;
 			p-eared        ) glyph p=eared-serifless ;;
@@ -364,6 +364,7 @@ cmdopts () {
 			open           ) variant B-open P-open R-open ;;
 			open+          ) cmdopts open 4-open+ ;;
 			serifless      ) variant "SERIFLESS"; serifless=true ;;
+			serifed        ) variant "SERIFED"; serifed=true ;;
 			space=*        ) space ${1#*=}  || usage; [ ${space#*=} = 1 ] && unset space ;;  # space width
 
 			# glyphs
@@ -780,10 +781,11 @@ fi
 
 [ $ebook ] && [ $spacing != 'quasi-proportional' ] && fforge ligature $width ${shape##* } $family  # ae width character adjustment
 
-[ $baseline  ] && fforge baseline ${shape##* }                 $family  # force baseline adjustment for descending caps and q-hook
-[ $serifless ] && fforge serifless "$S_I$S_i$S_l" ${shape##* } $family  # adjust serifless "I i l" cell width
-[ $space ]     && fforge space $space                          $family  # lengthen space character cell width
-[ $ebook ]     && fforge ${regular}weight $adjust              $family  # rename weight for e-reader (as regular)
+[ $baseline  ] && fforge baseline ${shape##* } $family  # force baseline adjustment for descending caps and q-hook
+[ $serifless ] && fforge serifless "$s_I$s_i$s_j$s_l" ${shape##* } $family  # adjust serifless "I i j l" cell width
+[ $serifed   ] && fforge serifed "$S_i$S_j$S_l" ${shape##* }       $family  # adjust serifed "i j l" cell width
+[ $space ]     && fforge space $space                              $family  # lengthen space character cell width
+[ $ebook ]     && fforge ${regular}weight $adjust                  $family  # rename weight for e-reader (as regular)
 
 udev  # reinitialize udev
 

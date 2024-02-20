@@ -60,6 +60,7 @@ tighten() {
 	case $1 in
 		I) utf='0u0049' ;;
 		i) utf='0u0069' ;;
+		j) utf='0u006a' ;;
 		l) utf='0u006c' ;;
 	esac
 
@@ -70,7 +71,7 @@ SetWidth($width);
 "
 }
 
-# scale serifless "i l" cell width 
+# scale serifless "I i j l" cell width
 serifless() {
 	echo "
 Open(\$1);
@@ -89,6 +90,29 @@ Generate(\$1);
 	for i in *.ttf ;do
 		ditto serifless $i
 		fontforge --script /tmp/fontforge:serifless.script $i
+	done
+}
+
+# scale serifed "i j l" cell width
+serifed() {
+	Xshift=10
+	echo "
+Open(\$1);
+" >/tmp/fontforge:serifed.script
+
+	set -- $(echo $letters | sed -r "s/(.)/\1 /g")
+	while [ $1 ] ;do
+		tighten $1 >>/tmp/fontforge:serifed.script
+		shift
+	done
+
+	echo "
+Generate(\$1);
+" >>/tmp/fontforge:serifed.script
+
+	for i in *.ttf ;do
+		ditto serifed $i
+		fontforge --script /tmp/fontforge:serifed.script $i
 	done
 }
 
@@ -587,9 +611,10 @@ case $1 in
 	Q_custom      ) shape=$2; shift ;;
 	q_hook        ) ;;
 	Q_hook        ) ;;
-	ligature      ) [ $4 ] && { width=$2; shift 2; } || { shape=$2; shift; } ;;               # see iosevka for tricky bits
+	ligature      ) [ $4 ] && { width=$2; shift 2; } || { shape=$2; shift; } ;;  # see iosevka for tricky bits
 	punctuation   ) emdash=$2; shape=$3; shift 2 ;;
-	serifless     ) letters=$2; width=$(( $3 * 85 / 100 )); shift 2 ;;                        # percent of "I i l" (serifless)
+	serifless     ) letters=$2; width=$(( $3 * 85 / 100 )); shift 2 ;;           # percent of "I i l" (serifless)
+	serifed       ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "i j l" (serifed)
 	space         ) space=$2; shift ;;
 	*weight       ) regular=${1%weight}; fforge=weight; [ "$2" = 'book+regular' ] && { adjust=true; shift; } ;;
 	copy          ) [ $3 ] && { family=$2; alias=$3; shift 2; copy; exit; }      || usage ;;  # pwd commandline only!
@@ -600,7 +625,7 @@ shift
 [ $2 ] && usage
 
 FONT=$HOME/.fonts/${1:-Iosevka}
-[ $shape ] && HAlF=$(( $shape / 2 ))  # half cell width (see punctuation)
+[ $shape ] && HALF=$(( $shape / 2 ))  # half cell width (see punctuation)
 cd $FONT || usage
 
 $fforge
