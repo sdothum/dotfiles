@@ -183,6 +183,7 @@ abbr ghcc 'stack build'
 abbr ghcx 'stack runghc'
 abbr ghci 'stack exec ghci'
 abbr git1 'git clone --depth 1'
+abbr lua 'rlwrap lua'
 abbr mysql 'mysql -h localhost -u root -p'
 abbr perli 'perl -de 1'
 
