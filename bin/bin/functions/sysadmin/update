@@ -197,6 +197,7 @@ kindle() {
 	rsync -av --update books $KINDLE/documents/
 	ditto kindle "update metadata for added books via calibre"
 	rsync -av --delete .adds/koreader/patches $KINDLE/koreader/
+	rsync -av --delete .adds/koreader/fonts $KINDLE/koreader/
 	ifno "sync Kindle history" || {
 		HISTORY=$KINDLE/koreader/history.lua
 		ditto update "$HISTORY"

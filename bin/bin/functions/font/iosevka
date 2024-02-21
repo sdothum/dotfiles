@@ -134,7 +134,7 @@ monolexic() {
 	i=hooky; S_i='i'
 	j=flat-hook-serifed
 	k=straight-serifless
-	l=flat-tailed
+	l=flat-tailed; T_l='l'
 	m=earless-rounded-double-arch-serifless
 	p=earless-corner-serifless
 	q=tailed-serifless
@@ -784,6 +784,7 @@ fi
 [ $baseline  ] && fforge baseline ${shape##* } $family  # force baseline adjustment for descending caps and q-hook
 [ $serifless ] && fforge serifless "$s_I$s_i$s_j$s_l" ${shape##* } $family  # adjust serifless "I i j l" cell width
 [ $serifed   ] && fforge serifed "$S_i$S_j$S_l" ${shape##* }       $family  # adjust serifed "i j l" cell width
+[ $serifed   ] && fforge tailed "$T_l" ${shape##* }                $family  # adjust tailed "l" cell width
 [ $space ]     && fforge space $space                              $family  # lengthen space character cell width
 [ $ebook ]     && fforge ${regular}weight $adjust                  $family  # rename weight for e-reader (as regular)
 

@@ -116,6 +116,29 @@ Generate(\$1);
 	done
 }
 
+# scale tailed "l" cell width
+tailed() {
+	Xshift=-20
+	echo "
+Open(\$1);
+" >/tmp/fontforge:tailed.script
+
+	set -- $(echo $letters | sed -r "s/(.)/\1 /g")
+	while [ $1 ] ;do
+		tighten $1 >>/tmp/fontforge:tailed.script
+		shift
+	done
+
+	echo "
+Generate(\$1);
+" >>/tmp/fontforge:tailed.script
+
+	for i in *.ttf ;do
+		ditto tailed $i
+		fontforge --script /tmp/fontforge:tailed.script $i
+	done
+}
+
 # flip serifed i ** cannot override italic **
 i_flipped() {
 	Xright=$(( ${Xshift#-} * 2 ))
@@ -615,6 +638,7 @@ case $1 in
 	punctuation   ) emdash=$2; shape=$3; shift 2 ;;
 	serifless     ) letters=$2; width=$(( $3 * 85 / 100 )); shift 2 ;;           # percent of "I i l" (serifless)
 	serifed       ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "i j l" (serifed)
+	tailed        ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "l" (tailed)
 	space         ) space=$2; shift ;;
 	*weight       ) regular=${1%weight}; fforge=weight; [ "$2" = 'book+regular' ] && { adjust=true; shift; } ;;
 	copy          ) [ $3 ] && { family=$2; alias=$3; shift 2; copy; exit; }      || usage ;;  # pwd commandline only!
