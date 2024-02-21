@@ -8,7 +8,7 @@
 
 -- my new ranges
 local min_fontsize = 10      -- point size
-local max_linespacing = 250  -- percent
+local max_linespacing = 300  -- percent
 
 local CreOptions = require("ui/data/creoptions")
 
