@@ -164,8 +164,9 @@ if %{ [ -z "$UNPLUG" ] } %{
 		}
 
 		define-command files %{
-			peneira-resync
-			peneira-files -hide-opened
+			# peneira-resync
+			# peneira-files -hide-opened
+			peneira-files
 		}
 
 		map global user b ': buffers<ret>' -docstring 'buffers'
