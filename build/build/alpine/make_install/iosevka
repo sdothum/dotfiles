@@ -236,9 +236,9 @@ elif [ "$mu" ] ;then
 	e_ink tundra Y-descending a-single
 
 elif [ -z $ecopy ] ;then
-	cmdopts quasi-ext space=1.125 Q-straight open+
+	cmdopts quasi-ext space=1.125 Q-straight open+ j-flat serifless serifed
  	emdash
-	e_ink drift grote   I-serifless  t-asymmetric-- serifless serifed
+	e_ink stria altmono I-serifless                
 
 elif [ "$quad" ] ;then
 	cmdopts quasi-ext space=1.125 Q-straight open+
@@ -251,7 +251,8 @@ elif [ "$quad" ] ;then
 elif [ "$serifed" ] ;then
 	cmdopts quasi-ext space=1.125 Q-straight open+ j-flat serifless serifed
  	emdash
-	e_ink adrift grote  I-serifed    t-asymmetric-- l-serifless
+	e_ink adrift grote  I-descending t-asymmetric-- l-serifless
+	e_ink draft grote   I-serifed    t-asymmetric-- l-serifless
 	e_ink drift grote   I-serifless  t-asymmetric--
 	e_ink patio grote   a-single t-cross           
 	e_ink stria altmono I-serifless                
@@ -280,10 +281,10 @@ elif [ $family ] ;then                    # custom e-ink font (non-published)
 
 elif [ $web ] ;then                       # www fonts
 	unset cap; emdash; cmdopts t-asymmetric--
-	wfont heading  quasi-ext              space=1.100 webfont family=wMonolegible serifless
-	wfont dyslexic quasi-ext              space=1.125 webfont family=wMonolexic   serifless
-	wfont dyslexic quasi-ext I-serifed    space=1.125 webfont family=wCaps
-	wfont expanded quasi-pro I-serifed    space=1     webfont family=wQuasilexic sb=1
+	wfont heading  quasi-ext              space=1.100 webfont family=wMonolegible serifless serifed
+	wfont dyslexic quasi-ext              space=1.125 webfont family=wMonolexic   serifless serifed
+	# wfont dyslexic quasi-ext I-serifed    space=1.125 webfont family=wCaps
+	# wfont expanded quasi-pro I-serifed    space=1     webfont family=wQuasilexic sb=1
 
 elif [ $coding ] ;then                    # classic coding font
 	cmdopts cap=extended
