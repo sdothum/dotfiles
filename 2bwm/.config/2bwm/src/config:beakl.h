@@ -400,12 +400,12 @@ static key keys[] = {
 	{  MOD ,                  XK_1,          start,               {.com = windowsize1}},
 	{  MOD ,                  XK_2,          start,               {.com = windowsize2}},
 	{  MOD ,                  XK_3,          start,               {.com = tile3center}},
-	{  MOD ,                  XK_4,          start,               {.com = tile4centerleft}},
+	{  MOD ,                  XK_4,          start,               {.com = tile4left}},
 	{  MOD ,                  XK_5,          start,               {.com = tile3right}},
 	{  MOD ,                  XK_6,          start,               {.com = tile3left}},
-	{  MOD ,                  XK_7,          start,               {.com = tile4right}},
-	{  MOD ,                  XK_8,          start,               {.com = tile4left}},
-	{  MOD ,                  XK_9,          start,               {.com = tile4centerright}},
+	{  MOD ,                  XK_7,          start,               {.com = tile4centerright}},
+	{  MOD ,                  XK_8,          start,               {.com = tile4centerleft}},
+	{  MOD ,                  XK_9,          start,               {.com = tile4right}},
 	// Exit or restart 2bwm
 	{  MOD |CONTROL,          XK_q,          twobwm_exit,         {.i=0}},
 	// {  MOD |CONTROL,       XK_q,          start,               {.com = quit2bwm}},  // avoid creating dead kak sessions
