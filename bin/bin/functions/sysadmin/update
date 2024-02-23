@@ -192,6 +192,7 @@ KINDLE=/run/media/shum/Kindle
 
 kindle() {
 	[ -e $KINDLE ] && [ -e $KOBO ] || { echo "connect Kobo and Kindle to usb"; exit 1; }
+	ifno "sync Kobo -> Kindle" && exit
 	cd $KOBO
 	ditto kindle "syncing library, history and user patches to kobo master"
 	rsync -av --update books $KINDLE/documents/
@@ -210,6 +211,7 @@ kindle() {
 
 kobo() {
 	[ -e $KINDLE ] && [ -e $KOBO ] || { echo "connect Kobo and Kindle to usb"; exit 1; }
+	ifno "sync Kindle -> Kobo" && exit
 	ifno "sync Kobo history" && exit
 	cd $KINDLE
 	ditto kindle "syncing library (sdr) and history to kobo master"

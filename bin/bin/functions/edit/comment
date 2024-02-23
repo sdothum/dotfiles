@@ -6,7 +6,7 @@
 
 # ........................................................... modal pipe actions
 
-usage() { echo "<selection> | $(basename $0) l'eader | t'railer | u'nderline | r'uler [<char>]
+usage() { echo "<selection> | $(basename $0) l'eader | t'railer | u'nderline | r'uler [<char>] | c'ode
 >   where, first word of line is treated as comment symbol
 >          '.' -> default leader/trailer 
 >          '━' -> default (heavy horizontal) underline
@@ -61,7 +61,13 @@ fillchar() {
 	esac
 }
 
+code() {
+	sed 's/\t/  /g; /^[^ ]/s/$/`/; /^ /s/$/\\`/; s/^/`/; s/^`$/` `/'  # wiki markdown backtick code block
+	exit
+}
+
 case $action in
+	c*   ) code       ;;  # wiki codeblock wrapper
 	l*   ) fillchar . ;;
 	t*   ) fillchar . ;;
 	u*   ) fillchar ━ ;;
