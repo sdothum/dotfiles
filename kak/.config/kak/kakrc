@@ -164,9 +164,8 @@ if %{ [ -z "$UNPLUG" ] } %{
 		}
 
 		define-command files %{
-			# peneira-resync
-			# peneira-files -hide-opened
-			peneira-files
+			peneira-resync
+			peneira-files -hide-opened
 		}
 
 		map global user b ': buffers<ret>' -docstring 'buffers'
@@ -357,6 +356,7 @@ map global format { 'x|align \{<ret>'         -docstring 'align  { block'
 map global format ) 'x|align \)<ret>'         -docstring 'align  ) case'
 map global format ';' 'x|align \;\;<ret>'     -docstring 'align ;; endcase'
 map global format '\' 'x|align \\<ret>'       -docstring 'align  \ continuation'
+map global format '`' 'x|comment c<ret>'      -docstring 'css <code></code> block'
 map global normal '#' ': enter-user-mode format<ret>'
 
 # .................................................................... Selection
