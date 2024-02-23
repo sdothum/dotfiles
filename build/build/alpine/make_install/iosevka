@@ -218,7 +218,7 @@ e_ink() {
 
 dfont()   { iosevka extended cap=extended G-hookless+ y-straight t-asymmetric+ 1-base 4-open+ q-hook Q-bar $(options $@) at-tall $cap; }
 # wfont() { iosevka english  j-serifed G-hookless+ Q-bar $(options $@) asterisk-high; }  # override dyslexic "asterisk-low"
-wfont()   { iosevka english G-hookless+ y-straight t-asymmetric+ 4-open+ Q-bar $(options $@)  i-hooky asterisk-high $emdash 4-open+; }
+wfont()   { iosevka english G-hookless+ y-straight t-asymmetric+ 4-open+ Q-bar $(options $@) i-hooky asterisk-high $emdash 4-open+; }
 efont()   { iosevka $language $(options $@); }
 emdash()  { [ "$ereader" = kobo ] && emdash="emdash=$emkobo" || emdash="emdash=$emkindle"; }  # == M + space width
 
@@ -283,8 +283,8 @@ elif [ $web ] ;then                       # www fonts
 	unset cap; emdash; cmdopts t-asymmetric--
 	wfont heading  quasi-ext              space=1.100 webfont family=wMonolegible serifless serifed
 	wfont dyslexic quasi-ext              space=1.125 webfont family=wMonolexic   serifless serifed
-	# wfont dyslexic quasi-ext I-serifed    space=1.125 webfont family=wCaps
-	# wfont expanded quasi-pro I-serifed    space=1     webfont family=wQuasilexic sb=1
+	wfont dyslexic quasi-ext I-serifed    space=1.125 webfont family=wCaps
+	wfont expanded quasi-pro I-serifed    space=1     webfont family=wQuasilexic sb=1
 
 elif [ $coding ] ;then                    # classic coding font
 	cmdopts cap=extended
@@ -292,12 +292,12 @@ elif [ $coding ] ;then                    # classic coding font
 
 else                                      # desktop fonts
 	cmdopts t-asymmetric-- j-flat
-	dfont $leading
-	dfont proof    I-descending Q-straight
-	dfont menu     I-descending Q-straight
+	# dfont $leading
+	# dfont proof    I-descending Q-straight
+	dfont menu     I-serifed    Q-straight
 	# dfont dyslexic            Q-straight      space=2     family=qclocktwo leading=1.40
-	dfont dyslexic I-serifed    Q-straight      space=2.2   family=qclocktwo              # conky qclocktwo font
-	dfont dyslexic I-descending quasi-extension space=1.125 family=monograffic serifless  # panel/dunst/browser font
+	# dfont dyslexic I-serifed    Q-straight      space=2.2   family=qclocktwo              # conky qclocktwo font
+	dfont dyslexic I-serifed    quasi-extension space=1.125 family=monograffic serifless  # panel/dunst/browser font
 fi
 
 # kak: filetype=sh
