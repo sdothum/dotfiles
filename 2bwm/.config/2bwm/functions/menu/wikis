@@ -47,9 +47,10 @@ add() {
 	file=$WIKIS/$wiki/$title.wiki
 	# prepend h1 title
 	echo "# $title\n\n[ kak: filetype=markdown ]: #" >"$file"
-	filename_check
-	name=wiki $EDITOR "$file" $DICTIONARY
-	[ $linkname ] && rm -f $linkname
+	# HACK: link gets written over as regular file so loop back to menu to edit as old (?)
+	# filename_check
+	# name=wiki $EDITOR "$file" $DICTIONARY
+	# [ $linkname ] && rm -f $linkname
 }
 
 wiki() {
@@ -78,7 +79,10 @@ while : ;do
 
 	case ${file#$(X)} in
 		"$DIARY" ) exec menu wikis diary ;;
-		"$EDIT"  ) add ;;
+		"$EDIT"  )
+			add  # only creates stub
+			(sleep 0.1; xdotool key Return) &
+			continue ;;
 		*        ) wiki || continue ;;
 	esac
 	break
