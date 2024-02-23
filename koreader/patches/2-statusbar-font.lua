@@ -26,12 +26,12 @@ local Font = require("ui/font")
 
 names = { "-book.ttf", "-book.otf", "-regular.ttf", "-regular.otf" }  -- selection order of user ttf and otf font files
 
-for i, n in pairs(names) do
+for _, n in pairs(names) do
 	local f = io.open(DataStorage:getDataDir() .. "/fonts/" .. fontface .. n, "r")
 	if f ~= nil then  -- font source exists
 		io.close(f)
 		local fontsource = fontface .. n
-		for k, v in pairs(Font.fontmap) do
+		for k, _ in pairs(Font.fontmap) do
 			if k == "ffont" then
 				Font.fontmap[k] = fontsource
 			elseif k == "smallffont" then

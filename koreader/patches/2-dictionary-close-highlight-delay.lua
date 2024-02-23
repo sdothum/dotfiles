@@ -7,7 +7,6 @@
 
 local Event = require("ui/event")
 local UIManager = require("ui/uimanager")
-local _ = require("gettext")
 local DictQuickLookup = require("ui/widget/dictquicklookup")
 
 DictQuickLookup.onClose = function(self)
