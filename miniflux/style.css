@@ -2,27 +2,27 @@
 @font-face {
 	font-family: "asymmetric";
 	font-weight: 400;
-	src: url("/fonts/drift-book.ttf") format("truetype");
+	src: url("/fonts/adrift-book.ttf") format("truetype");
 }
 
 @font-face {
 	font-family: "asymmetric";
 	font-weight: 400;
 	font-style: italic;
-	src: url("/fonts/drift-bookitalic.ttf") format("truetype");
+	src: url("/fonts/adrift-bookitalic.ttf") format("truetype");
 }
 
 @font-face {
 	font-family: "asymmetric";
 	font-weight: 600;
-	src: url("/fonts/drift-bold.ttf") format("truetype");
+	src: url("/fonts/adrift-bold.ttf") format("truetype");
 }
 
 @font-face {
 	font-family: "asymmetric";
 	font-weight: 600;
 	font-style: italic;
-	src: url("/fonts/drift-bolditalic.ttf") format("truetype");
+	src: url("/fonts/adrift-bolditalic.ttf") format("truetype");
 }
 
 :root {
