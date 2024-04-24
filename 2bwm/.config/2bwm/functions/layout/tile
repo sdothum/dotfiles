@@ -1,0 +1,40 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="layout/level $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Tile windows
+
+# Usage: layout tile <count> [desktop] <name>
+
+desktop=$(xdotool get_desktop)
+
+count=$1
+shift
+while [ $1 ] ;do
+	case $1 in
+		[1-9] ) desktop=$1 ;;
+		*     ) name=$1   ;;
+	esac
+	shift
+done
+
+# determine next tile position
+tile=$(query wincount $desktop $name)
+
+pos() {
+	tile=$(expr $tile % $count)   # tile position left to right
+	[ $tile -eq 0 ] && tile=$count
+	case $count in
+		2 ) echo 2 1 ;;
+		3 ) echo 2 3 1 ;;
+		4 ) echo 2 3 1 4 ;;
+		5 ) echo 3 2 4 1 5 ;;
+		* ) echo $count ;;
+	esac | cut -d' ' -f$tile
+}
+
+window tile $count $(pos)
+
+# kak: filetype=sh

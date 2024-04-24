@@ -1,0 +1,39 @@
+#
+# ruler for 2bwm
+#
+class="calibre"
+	window move 5 ;\
+	xdotool key Super+z
+
+class="mail"
+	window move 4 ;\
+	window size monocle
+
+name="kak:aerc-compose.*"
+	window tile 4 4
+
+class="feh"
+	window size monocle
+
+class="Firefox"
+	window tile 3 2
+
+class="kak"
+	window move 3 ;\
+	layout tile 4 3 kak
+
+class="wiki"
+	window move 1 ;\
+	layout tile 3 wiki
+
+class="mpv"
+	window move 5 ;\
+	xdotool key Super+Shift+z
+
+class="qutebrowser"
+	layout tile 3 qutebrowser
+
+class="Surf"
+	window move 2 ;\
+	window tile 4 1
+

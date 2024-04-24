@@ -1,4 +1,3 @@
-#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="window/tile $@" . $PARENT
 
@@ -7,157 +6,46 @@
 
 # .................................................................. Tile window
 
-# Usage: window tile [top | bottom | full] | [[<factor>] left | centerleft | centerright | right] | [near | far]
+# Usage: window tile <panes> [position]
 
+save_geometry
 set_geometry  # X Y WIDTH HEIGHT
 
-# tile window to the screen edge
-
-# ..................................................................... Tile top
-
-top() {
-	height=$(( $Y + $HEIGHT - $panel ))
-	draw $winid $WIDTH $height
-	xdotool windowmove $winid $X $panel
-}
-
-# .................................................................. Tile bottom
-
-bottom() {
-	height=$(( $height - $Y + $border ))
-	draw $winid $WIDTH $height
-	xdotool windowmove $winid $X $Y
-}
+H=$(( $height - $border * 2 ))  # tiles are full vertical panes
 
 # .................................................................... Tile left
 
 left() {
 	width=$(( $X + $WIDTH - $margin ))
-	draw $winid $width $HEIGHT
-	xdotool windowmove $winid $margin $Y
+	wtp $margin $panel $width $H $(pfw)
 }
 
 # ................................................................... Tile right
 
 right() {
 	width=$(( $width - $X + $margin ))
-	draw $winid $width $HEIGHT
-	xdotool windowmove $winid $X $Y
+	wtp $X $panel $width $H $(pfw)
 }
 
-# ................................................................ Tile top left
+# .................................................................. Tile panels
 
-topleft() {
-	height=$(( $Y + $HEIGHT - $panel ))
-	width=$(( $X + $WIDTH - $margin ))
-	draw $winid $width $height
-	xdotool windowmove $winid $margin $panel
-}
-
-# ............................................................... Tile top right
-
-topright() {
-	height=$(( $Y + $HEIGHT - $panel ))
-	width=$(( $width - $X + $margin ))
-	draw $winid $width $height
-	xdotool windowmove $winid $X $panel
-}
-
-# ............................................................. Tile bottom left
-
-bottomleft() {
-	height=$(( $height - $Y + $border ))
-	width=$(( $X + $WIDTH - $margin ))
-	draw $winid $width $height
-	xdotool windowmove $winid $margin $Y
-}
-
-# ............................................................ Tile bottom right
-
-bottomright() {
-	height=$(( $height - $Y + $border ))
-	width=$(( $width - $X + $margin ))
-	draw $winid $width $height
-	xdotool windowmove $winid $X $Y
-}
-
-# ........................................................ Tile full screen left
-
-fullleft() {
-	height=$(( $height - $border * 2 ))
-	width=$(( $X + $WIDTH - $margin ))
-	draw $winid $width $height
-	xdotool windowmove $winid $margin $panel
-}
-
-# ....................................................... Tile full screen right
-
-fullright() {
-	height=$(( $height - $border * 2 ))
-	width=$(( $width - $X + $margin ))
-	draw $winid $width $height
-	xdotool windowmove $winid $X $panel
-}
-
-# ........................................................... Tile factor screen
-
-factor() {
-	height=$(( $height - $border * 2 ))
-	width=$(( ($width - $border * $1 * 2) / $1 ))
-	draw $winid $width $height
-}
-
-# ...................................................... Tile factor screen left
-
-factorleft() {
-	factor $1
-	xdotool windowmove $winid $margin $panel
-}
-
-# ..................................................... Tile factor screen right
-
-factorright() {
+tile() {
 	X=$width
-	factor $1
-	xdotool windowmove $winid $(( $X - $width + $border * 2 )) $panel
+	width=$(( ($width - $border * $1 * 2) / $1 ))
+
+	tile=$(expr $2 % $1)   # tile position left to right
+	[ $tile -eq 0 ] && tile=$1
+	tile=$(( $tile - 1 ))  # 0 -> left
+
+	wtp $(( $width * $tile + $margin + $border * $tile * 2  )) $panel $width $H $(pfw)
 }
 
-# .................................................................... Tile near
-
-near() {
-	[ $X -le $(opposite_side) ] && left || right
-}
-
-# ..................................................................... Tile far
-
-far() {
-	[ $X -le $(opposite_side) ] && right || left
-}
-
-xdotool windowunmap $winid
-
-case "$@" in
-	''            ) near           ;;
-	top           ) top            ;;
-	bottom        ) bottom         ;;
-	left          ) left           ;;
-	right         ) right          ;;
-	t*left        ) topleft        ;;
-	t*right       ) topright       ;;
-	b*left        ) bottomleft     ;;
-	b*right       ) bottomright    ;;
-	f*left        ) fullleft       ;;
-	f*right       ) fullright      ;;
-	[2-9]*c*left  ) factor $1; window snap centerleft  ;;
-	[2-9]*c*right ) factor $1; window snap centerright ;;
-	[2-9]*left    ) factorleft  $1 ;;
-	[2-9]*right   ) factorright $1 ;;
-	[2-9]*center  ) factor $1; window snap center      ;;
-	near          ) near           ;;  # horizontal axis
-	far           ) far            ;;
+case $1 in
+	left  ) left       ;;
+	right ) right      ;;
+	*     ) tile $1 $2 ;;
 esac
 
-xdotool windowmap $winid
 xdotool windowactivate $winid
 
 # kak: filetype=sh

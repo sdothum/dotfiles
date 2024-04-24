@@ -1,16 +1,15 @@
+#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="layout/revert $@" . $PARENT
+[ $TRACE ] && CHILD="2make $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ................................................................ Revert layout
+# ................................................................. Restart 2bwm
 
-for i in $winids ;do
-	window revert $i
-done
-
-xdotool windowactivate $winid
-notify 2bwm "layout revert <b>ALL</b>"
+# delay required for reload trigger
+sleep 0.1
+xdotool key -delay 100 Super+Shift+Control+r
+notify '2bwm' 'restarted'
 
 # kak: filetype=sh

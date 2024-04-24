@@ -1,4 +1,3 @@
-#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
 # 2bwm
@@ -35,12 +34,14 @@ cd $library
 
 # exclude directory kludge of .anime links in main series folder
 permissions() {
-	if server || $usb ;then
+	if server && [ $(hostname) != motu ] || $usb ;then
 		find "$library" -maxdepth 2 -type d ! -user sonarr -exec sudo chown -R sonarr:users {} \; 2>/dev/null
-		find "$library" -maxdepth 2 -type d -user sonarr -exec sudo chmod -R 775 {} \; 2>/dev/null
+		find "$library" -maxdepth 2 -type d -user sonarr -exec sudo chmod -R ug+rwx {} \; 2>/dev/null
+		find "$library" -maxdepth 3 -type f -user sonarr -exec sudo chmod -R ug+rw {} \; 2>/dev/null
 	else
 		ssh $SERVER "find '$library' -maxdepth 2 -type d ! -user sonarr -exec sudo chown -R sonarr:users {} \\;"
-		ssh $SERVER "find '$library' -maxdepth 2 -type d -user sonarr -exec sudo chmod -R 775 {} \\;"
+		ssh $SERVER "find '$library' -maxdepth 2 -type d -user sonarr -exec sudo chmod ug+rwx {} \\;"
+		ssh $SERVER "find '$library' -maxdepth 3 -type f -user sonarr -exec sudo chmod ug+rw {} \\;"
 	fi
 	find "$library" -name '*sample*' -exec rm {} \;
 }
@@ -88,7 +89,7 @@ while : ;do
 	# rebuilding catalogue?
 	[ ! -s $catlg ] && { sleep 0.1; continue; }
 	[ $(episodes | wc -l) -gt 0 ] && CATLG="\\n$(X $CATALOGUE)" || unset CATLG
-	[ $show ] || show=3
+	[ $show ] || show=4
 
 	show=$(cat "$catlg" | sed "1i$(X $SERIES)\n$(X $SONARR)\n$(X $FILE)$CATLG" | sed "1i$(X $(sortlist $T))" | rmenu 'Series' "$show" -no-custom) || break
 	# force menu focus (continue within do loop doesn't guarantee focus)

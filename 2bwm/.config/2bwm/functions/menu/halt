@@ -1,4 +1,3 @@
-#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
 # 2bwm
@@ -7,7 +6,7 @@
 # ...................................................................... Session
 
 default=reboot
-set -x
+
 # disconnect nfs to prevent shutdown wait..
 disconnect() {
 	if ! server ;then

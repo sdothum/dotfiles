@@ -16,6 +16,7 @@ export XDG_CONFIG_HOME=$HOME/.config
 export ROOT=${ROOT:-/tmp}
 export TWOBWM=$ROOT/2bwm
 export TWOBWM_CONFIG=$HOME/.config/2bwm/src/config.h
+export HIDDEN=$TWOBWM:hidden
 export WINFO=$TWOBWM:window
 export SESSION=$HOME/.session
 export UI=$SESSION/2bwm

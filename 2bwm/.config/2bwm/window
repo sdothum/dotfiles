@@ -9,12 +9,6 @@
 
 # Usage: window [@<delay>] <msg>, see functions/window
 
-geometry()      { xdotool getwindowgeometry --shell ${1:-$winid}; }  # X Y WIDTH HEIGHT (doesn't include borders)
-set_geometry()  { eval $(geometry $1); }
-save_geometry() { geometry $1 >$WINFO:${1:-$winid}; }                   # for revert
-opposite_side() { echo $(( $width + $margin * 2 - ($X + $WIDTH + $border * 2) )); }  # for nearest edge SEE: window snap / stretch
-winid()         { xdotool getactivewindow; }
-
 # usable screen dimensions
 margin=$(query screen margin)
 panel=$(query screen panel)
@@ -23,7 +17,17 @@ height=$(( $(query display height) - $panel * 2 ))
 
 # 2bwm window geometry
 border=$(echo $(grep '^static const uint8_t borders' $TWOBWM_CONFIG | sed 's/.*[{]//; s/[}].*//; s/,/ /g' | cut -d' ' -f2))
-winid=$(winid)
+winid=$(pfw)
+# xdotool windowstate --remove fullscreen $winid  # fullscreen negates any attempted window actions
+
+AMDlay=0.0001  # AMD Ryzen 7950x is too fast for X11 redraw :)
+
+xdotool()       { /usr/bin/xdotool $@; sleep $AMDlay; }              # refresh wrapper
+geometry()      { xdotool getwindowgeometry --shell ${1:-$winid}; }  # X Y WIDTH HEIGHT (doesn't include borders)
+set_geometry()  { eval $(geometry ${1:-$winid}); }
+cat_geometry()  { [ -e $WINFO:$winid ] && eval $(cat $WINFO:$winid) || exit 1; }
+save_geometry() { geometry $1 >$WINFO:${1:-$winid}; }                                # for revert
+opposite_side() { echo $(( $width + $margin * 2 - ($X + $WIDTH + $border * 2) )); }  # for nearest edge SEE: window snap / stretch
 
 # ..................................................................... X Y size
 
@@ -33,10 +37,7 @@ draw() {
 	save_geometry
 	[ $4 ] && { W=$3; H=$2; } || { W=$2; H=$3; }
 	[ $H -gt $height ] && { swap=$W; W=$H; H=$swap; }
-	xdotool windowunmap $1      # defer visual refresh
-	xdotool windowsize $1 $W $H
-	xdotool windowmap $1
-	window snap verticalcenter  # BUG: Super+Shift+g jitter offset occurs with A4 and B5
+	wtp $X $Y $W $H $1
 }
 
 # do we need to wait for window creation?
@@ -49,5 +50,7 @@ if [ -e ${0%/window}/functions/window/$msg ] ;then
 else
 	usage: $0
 fi
+
+mapw -m $winid  # regain focus
 
 # kak: filetype=sh

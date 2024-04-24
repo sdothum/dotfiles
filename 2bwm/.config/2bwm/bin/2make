@@ -8,13 +8,12 @@
 # ................................................................. Compile 2bwm
 
 SRC=/net/depot/x11/2bwm
+[ -e /home/depot ] && SRC=/home/depot/2bwm
 
 cd $SRC
 ditto 2bwm "Building 2bwm.."
-make && doas make install || { press_enter; exit; }
-console || ifno "reload 2bwm" && exit
-# delay required for reload trigger
-sleep 0.1
-xdotool key -delay 100 Super+Control+r
+make && sudo make install || { press_enter; exit; }
+console || ifno "restart 2bwm" && exit
+2restart
 
 # kak: filetype=sh

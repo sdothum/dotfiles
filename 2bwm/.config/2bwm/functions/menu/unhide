@@ -1,4 +1,3 @@
-#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
 # 2bwm
@@ -6,18 +5,21 @@
 
 # ........................................................ Unhide hidden windows
 
-
-finished() { [ $(hidden -c | wc -l) -eq 0 ]; }
+finished() { [ $(ls -1 $HIDDEN* 2>/dev/null | wc -l) -eq 0 ]; }
 
 windows() {
-	hidden -c | while read window ;do
-		echo $window | sed "s/'//g; s/:/^$SEP /"
+	for i in $(ls -1 $HIDDEN*) ;do
+		sed "s/:/^$SEP /" $i
 	done 
 }
 
 finished && exit
 while window=$(windows | column -s^ -t  | rmenu 'raise' -no-custom) || exit ;do
-	exec ${window#*$SEP}
+	winid=$(echo $window | cut -d' ' -f2)
+	mapw -m $winid
+	xdotool windowraise $winid
+	window revert      # to last position
+	rm $HIDDEN:$winid  # see window hide
 	finished && break
 done
 

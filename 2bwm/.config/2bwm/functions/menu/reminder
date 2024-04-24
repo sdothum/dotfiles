@@ -1,4 +1,3 @@
-#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
 # 2bwm
@@ -20,10 +19,10 @@ while appmt=$(reminder 52 | sed  "1i$(X $ADD)\n$(X $EDIT)" | rmenu 'Appointment'
 				date --date "$date" >/dev/null 2>&1 || { error=": $date ?"; continue; }
 				reminder "$date"
 				break
-			done ;;
-	
-		"$EDIT" )	vi -f -c 'normal|G' $REMINDERS ;;  # helix file:row positions cursor at eof (not last line)
-		*       )	vi -f -c "/$(echo ${appmt#*$SEP } | escape)" $REMINDERS ;;
+			done
+			;;
+		"$EDIT" ) kak +: $REMINDERS ;;  # helix file:row positions cursor at eof (not last line)
+		*       ) kak -e "/${appmt#*$SEP }" $REMINDERS ;;
 	esac
 done
 

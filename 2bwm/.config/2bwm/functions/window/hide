@@ -1,4 +1,3 @@
-#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="window/hide $@" . $PARENT
 
@@ -7,14 +6,17 @@
 
 # .................................................................. Hide action
 
-# hide active window and focus next, see 2bwm config.h
+# hide active window and focus next NOTE: 2bwm "hidden" function is broken
 keyboard off
-xdotool key Super+Control+Shift+i  # remapped keybinding
+echo "$(desktop) $winid:$(wname $winid)" >$HIDDEN:$winid  # SEE: menu unhide
+save_geometry
+mapw -u $winid
 window next
 keyboard on
 
 # clear xtitle.. see draw panel
 [ -e $(cat $PANEL_FIFO) ] || exit
-[ $(xdotool search --onlyvisible --desktop $(xdotool get_desktop) --class '.*' | wc -l) -eq 0 ] && echo "X" >$(cat $PANEL_FIFO)
+[ $(xdotool search --onlyvisible --desktop $(desktop) --class '.*' | wc -l) -eq 0 ] && echo "X" >$(cat $PANEL_FIFO)
+exit  # avoid window (parent) windowunmap
 
 # kak: filetype=sh

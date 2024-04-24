@@ -1,4 +1,3 @@
-#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="window/swap $@" . $PARENT
 
@@ -9,44 +8,30 @@
 
 # Usage: window swap left | right | up | down (of window edge)
 
+save_geometry  # X Y WIDTH HEIGHT
 
-set_geometry  # X Y WIDTH HEIGHT
-save_geometry
-
-# ............................................................... Closest window
-
-# SEE: wmutils closest.sh
-CUR=$(pfw)
-
-next_west() {
-    printf "%d" $(lsw | xargs wattr xi | sort -nr | sed "0,/$CUR/d" | sed "1s/^[0-9]* //p;d")
-}
-
-next_east() {
-    printf "%d" $(lsw | xargs wattr xi | sort -n | sed "0,/$CUR/d" | sed "1s/^[0-9]* //p;d")
-}
-
-next_north() {
-    printf "%d" $(lsw | xargs wattr yi | sort -nr | sed "0,/$CUR/d" | sed "1s/^[0-9]* //p;d")
-}
-
-next_south() {
-    printf "%d" $(lsw | xargs wattr yi | sort -n | sed "0,/$CUR/d" | sed "1s/^[0-9]* //p;d")
-}
+west()  { lsw | xargs wattr xi | sort -nr | sed "0,/$winid/d" | sed "1s/^[0-9]* //p;d"; }
+east()  { lsw | xargs wattr xi | sort -n  | sed "0,/$winid/d" | sed "1s/^[0-9]* //p;d"; }
+north() { lsw | xargs wattr yi | sort -nr | sed "0,/$winid/d" | sed "1s/^[0-9]* //p;d"; }
+south() { lsw | xargs wattr yi | sort -n  | sed "0,/$winid/d" | sed "1s/^[0-9]* //p;d"; }
 
 case $1 in
-    left  ) wid=$(next_west)  ;;
-    right ) wid=$(next_east)  ;;
-    up    ) wid=$(next_north) ;;
-    down  ) wid=$(next_south) ;;
+	left  ) wid=$(west)  ;;  # SEE: wmutils closest.sh
+	right ) wid=$(east)  ;;
+	up    ) wid=$(north) ;;
+	down  ) wid=$(south) ;;
 esac
 
 [ "$wid" ] || exit  # no adjacent window
 
+# set -- $(xdotool getwindowgeometry --shell $winid)
+xdotool windowactivate $wid
 save_geometry $wid
-set -- $(xdotool getwindowgeometry --shell $wid)
-xdotool windowmove $wid $X $Y
-xdotool windowmove $winid ${2#*=} ${3#*=}
+set_geometry $wid
+wtp $X $Y $WIDTH $HEIGHT $winid
+# wtp ${2#*=} ${3#*=} ${4#*=} ${5#*=} $wid
+cat_geometry $winid
+wtp $X $Y $WIDTH $HEIGHT $wid
 xdotool windowactivate $wid
 
 # kak: filetype=sh

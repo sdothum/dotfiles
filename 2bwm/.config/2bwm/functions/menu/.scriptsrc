@@ -1,7 +1,9 @@
 $HOME/bin
 $HOME/build/alpine
 $HOME/build/arch
+$HOME/build/artix
 $HOME/build/cfg
+$HOME/build/nvidia
 $HOME/build/obarun
 $HOME/build/void
 $HOME/.config/2bwm

@@ -16,13 +16,12 @@
 #        SHELL <command>, for simpler unquoted command passing
 # Note:  title may not contain spaces, use hyphen or underscore in place
 
-echo $@
 export SHELL=/usr/bin/dash
 options='BLACKBOARD|PAPER|[0-9]+x[0-9]+|VISIBLE|WAIT|FORTUNE|SHELL'
 unset name  # for inadvertant env var conflict usage in calling scripts
 
 # HACK: quikey cannot be spawned by autostart (the way invoked for 2bwm)
-pgrep quikey >/dev/null || qk start
+exists qk && { pgrep quikey >/dev/null || qk start; }
 
 [ -e /usr/bin/alacritty ] && TERM=alacritty || TERM=urxvt
 case $TERM in
@@ -76,7 +75,7 @@ while : ;do
 	shift
 done
 
-[ -z "$name" ] && [ "$title" ] && { name="${title#$TITLE }"; name="$NAME '${name%% *}'"; }
+[ -z "$name" ] && [ "$title" ] && { name="$NAME ${title#$TITLE }"; }
 
 $TERM $theme $geometry $title $name $cmd
 

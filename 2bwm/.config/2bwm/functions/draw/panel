@@ -1,4 +1,3 @@
-#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="draw/panel $@" . $PARENT
 
@@ -118,12 +117,13 @@ desktops() {
 
 # .................................................................... Cpu stats
 
-cpu_stat() { stat="${TAG_PAD} $cpu_usage ${STATPAD}$cpu_temp${STATPAD}$mem_usage${DESKPAD}${TAG_PAD}"; }
+cpu_stat() { stat="${TAG_PAD} $cpu_usage ${STATPAD}$cpu_speed ${STATPAD}$cpu_temp ${STATPAD}$mem_usage${DESKPAD}${TAG_PAD}"; }
 
 # ............................................................... Current window
 
 # tag desktop description.. the place to tag desktop names if you like :)
-name()  { echo "ONE TWO THREE FOUR FIVE SIX SEVEN EIGHT NINE TEN" | cut -d' ' -f$(( $1 + 1 )); }
+# name()  { echo "ONE TWO THREE FOUR FIVE SIX SEVEN EIGHT NINE TEN" | cut -d' ' -f$(( $1 + 1 )); }
+name()  { echo "DESK CHAT CODE MAIL MEDIA SYSTEM SEVEN EIGHT NINE TEN" | cut -d' ' -f$(( $1 + 1 )); }
 title() { title="$(name $(active))"; }
 
 # desktop details
@@ -141,7 +141,7 @@ active_window() {
 	fi
 	if has_visible $active ;then
 		[ "$(xtitle)" = '' ] && { window next; return; }  # will trigger X record
-		name=$(xtitle | sed -r 's/^(.)/\u\1/')  # trap unfocused error messages
+		name=$(xtitle | sed -r "s/^(.)/\u\1/; s/'(.*)'/\1/")  # trap unfocused error messages & discard xtitle quotes
 		# title="${title}${LSEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}$name%{F-}%{B-}%{F$DEFAULT_FG}"
 		[ "$name" ] && name="${LSEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}$name%{F-}%{B-}%{F$DEFAULT_FG}"
 		title="${title}${name}"
@@ -233,9 +233,10 @@ weather() { unset update_weather; conky weather panel | sed "s/\^/$RSEP/g" >/tmp
 # tic indicator: none (unset), dot, circle, square, bar, tape, seconds
 [ -e $TICKER ] && { TIC=$(cat $TICKER); TIC=${TIC:-tape}; }
 
-touch /tmp/${STAT##*/}:cpu /tmp/${STAT##*/}:temp /tmp/${STAT##*/}:mem
+touch /tmp/${STAT##*/}:cpu /tmp/${STAT##*/}:speed /tmp/${STAT##*/}:temp /tmp/${STAT##*/}:mem
 cpu_usage=$(cat /tmp/${STAT##*/}:cpu | sed 's/^.$/  &/; s/^..$/ &/')  # to avoid line centering shift
 cpu_temp=$(cat /tmp/${STAT##*/}:temp)
+cpu_speed=$(cat /tmp/${STAT##*/}:speed)
 mem_usage=$(cat /tmp/${STAT##*/}:mem)
 
 TUMBLING="▶ ◢ ▼ ◣ ◀ ◤ ▲ ◥"
@@ -311,8 +312,9 @@ panel() {
 		case $line in
 			S*         ) EPOCH=${line%%^*}; currently  ;;  # clock based info
 			X*         ) active_window; EPOCH=true     ;;  # realtime xtitle update
-			C*         ) [ "${line#?}" = '  0%' ] || cpu_usage=${line#?}; cpu_stat ;;  # ignore 0%
+			U*         ) [ "${line#?}" = '  0%' ] || cpu_usage=${line#?}; cpu_stat ;;  # ignore 0%
 			T*         ) cpu_temp=${line#?};  cpu_stat ;;
+			C*         ) cpu_speed=${line#?}; cpu_stat ;;
 			M*         ) mem_usage=${line#?}; cpu_stat ;;
 			!*         ) echo "$cpu_usage" >/tmp/${STAT##*/}:cpu; echo "$cpu_temp" >/tmp/${STAT##*/}:temp; echo "$mem_usage" >/tmp/${STAT##*/}:mem ;;  # save stats for draw root redraw
 		esac
@@ -346,9 +348,10 @@ xtitle -sf 'X%s\n' >$PANEL_FIFO:$fifo 2>/dev/null &
 
 # cpu usage, cpu temperature, memory usage stats
 if [ -e $STAT ] ;then
-	while : ;do sar -u --dec=0 1 1 | tail -1 | sed 's/  */ /g' | cut -d' ' -f3 | sed -r 's/^/00/; s/.*(.)(..)$/\1.\2/' | awk '{ printf "C%3.2fᵁ\n", $1 }' | sed 's/0\./ ./' >$PANEL_FIFO:$fifo ;done &  # cycle >~ 1 second
+	while : ;do echo "U$(cpu_percent)ᵁ" >$PANEL_FIFO:$fifo ;done &  # sar cycle >~ 1 second
+	while : ;do echo "C$(cpu_speed)ᴳ" >$PANEL_FIFO:$fifo; sleep 1; done &
 	while : ;do echo "T$(cpu_temp)°" >$PANEL_FIFO:$fifo; sleep 2; done &
-	while : ;do free -h | grep 'Mem:' | sed -r 's/^[^ ]* *[^ ]* *([0-9.]*)Mi.*/\1ᴹ/; s/^[^ ]* *[^ ]* *([0-9.]*)Gi.*/\1ᴳ/; s/^/M/' >$PANEL_FIFO:$fifo; sleep 3; done &
+	while : ;do free -h | grep 'Mem:' | sed -r 's/^[^ ]* *[^ ]* *([0-9.]*)Mi.*/\1ᴹ/; s/^[^ ]* *[^ ]* *([0-9.]*)Gi.*/\1ᴹ/; s/^/M/' >$PANEL_FIFO:$fifo; sleep 3; done &
 fi
 
 cat $PANEL_FIFO:$fifo | panel                                    \

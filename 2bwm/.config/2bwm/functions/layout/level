@@ -1,4 +1,3 @@
-#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="layout/level $@" . $PARENT
 
@@ -8,9 +7,9 @@
 # ................................................................ Level windows
 
 for i in $winids ;do
-	save_geometry $i            # for full desktop restore :)
+	save_geometry $i             # for full desktop restore :)
 	xdotool windowactivate $i
-	window snap verticalcenter  # BUG: Super+Shift+g jitter offset occurs when used in a loop
+	window snap center vertical  # NOTE: Super+Shift+g jitter offset occurs when used in a loop
 done
 
 xdotool windowactivate $winid

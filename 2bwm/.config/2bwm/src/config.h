@@ -1,1 +1,1 @@
-config:beakl.h
+config:sxhkd.h

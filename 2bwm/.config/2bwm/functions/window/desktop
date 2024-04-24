@@ -1,16 +1,15 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="layout/revert $@" . $PARENT
+[ $TRACE ] && CHILD="window/desktop $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ................................................................ Revert layout
+# ............................................................ Window to desktop
 
-for i in $winids ;do
-	window revert $i
-done
+# Usage: window desktop <desktop> [teleport], desktop = 0..5
 
-xdotool windowactivate $winid
-notify 2bwm "layout revert <b>ALL</b>"
+mapw -m $winid  # ruler windowmap delay
+xdotool set_desktop_for_window $winid $1
+[ $2 ] || desktop $1
 
 # kak: filetype=sh

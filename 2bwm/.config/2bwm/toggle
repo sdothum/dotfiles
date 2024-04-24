@@ -12,7 +12,7 @@ msg=$1
 if [ -e ${0%/toggle}/functions/toggle/$msg ] ;then
 	. ${0%/toggle}/functions/toggle/$msg $@
 elif winid=$(xdotool search --classname "$1" | head -1) ;then
-	xwininfo -id $winid | grep -q "IsViewable" && xdotool windowunmap $winid || xdotool windowmap $winid
+	xwininfo -id $winid | grep -q "IsViewable" && mapw -u $winid || mapw -m $winid
 else
 	$@
 fi

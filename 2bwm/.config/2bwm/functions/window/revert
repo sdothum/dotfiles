@@ -1,4 +1,3 @@
-#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="window/revert $@" . $PARENT
 
@@ -12,8 +11,9 @@
 # convert wmutils hex ids to xdotool decimal ids
 # winid=$(printf "%d" ${1:-$winid})
 
-[ -e $WINFO:$winid ] && eval $(cat $WINFO:$winid) || exit
+cat_geometry
 draw $winid $WIDTH $HEIGHT
 xdotool windowmove $winid $X $Y
+sleep $AMDlay
 
 # kak: filetype=sh

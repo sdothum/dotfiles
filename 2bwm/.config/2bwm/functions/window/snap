@@ -1,4 +1,3 @@
-#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="window/snap $@" . $PARENT
 
@@ -7,78 +6,60 @@
 
 # ................................................................. Snap windows
 
-# Usage: window snap [left | center | right | up | down | all (windows on desktop)]
+# Usage: window snap left | right | 'near | center [left | right | horizontal | vertical] | top [left | right] | bottom [left | right]
 
-set_geometry     # X Y WIDTH HEIGHT
-# save_geometry  # do not overwrite window sizing/tiling save_geometry
+save_geometry  # NOTE: comment out to not overwrite window sizing/tiling geometry
+set_geometry   # X Y WIDTH HEIGHT
 
-# .................................................................... Snap left
-
-left() {
-	xdotool windowmove $winid $(( $margin + $border - 1 )) y
+move()   {
+	# xdotool windowmove $1 $2 $3
+	wtp $1 $2 $WIDTH $HEIGHT $(pfw)
 	xdotool windowactivate $winid
 }
 
-# .................................................................... Snap left
+L=$(( $margin + $border - 1 ))
+R=$(( $width - $WIDTH + $border * 2 - 1 ))
+V=$(( ($height - $HEIGHT) / 2 + $panel - $border ))
 
-centerleft() {
-	xdotool windowmove $winid $(( $width / 2 + $margin - $WIDTH - $border * 2 )) y
-	xdotool windowactivate $winid
+left()   { move $L $Y; }
+right()  { move $R $Y; }
+near()   { [ $X -le $(opposite_side) ] && left || right; }
+
+center() {
+	case $1 in
+		left  ) move $(( $width / 2 + $margin - $WIDTH - $border * 2 )) $Y ;;
+		right ) move $(( $width / 2 + $margin )) $Y ;;
+		hori* ) move $(( ($width - $WIDTH) / 2 + $margin - $border )) $Y ;;
+		vert* ) move $X $V ;;
+		*     ) move $(( ($width - $WIDTH) / 2 + $margin - $border )) $V ;;
+	esac
 }
 
-# .................................................................... Snap left
-
-centerright() {
-	xdotool windowmove $winid $(( $width / 2 + $margin )) y
-	xdotool windowactivate $winid
+top()    {
+	case $1 in
+		left  ) move $L $margin ;;
+		right ) move $R $margin ;;
+ 		*     ) move $X $margin ;;
+	esac
 }
 
-# ................................................................... Snap right
-
-right() {
-	xdotool windowmove $winid $(( $width - $WIDTH + $border * 2 - 1 )) y
-	xdotool windowactivate $winid
-}
-
-# .................................................................... Snap near
-
-near() {
-	[ $X -le $(opposite_side) ] && left || right
-	xdotool windowactivate $winid
-}
-
-# ...................................................................... Snap up
-
-up() {
-	xdotool windowmove $winid x $margin
-	xdotool windowactivate $winid
-}
-
-# .................................................................... Snap down
-
-down() {
-	# xdotool windowmove $winid x $(( $height - $HEIGHT - $margin - $border * 2 ))
-	xdotool windowmove $winid x $(( $height - $HEIGHT ))
-	xdotool windowactivate $winid
-}
-
-# ......................................................... Snap vertical center
-
-verticalcenter() {
-	xdotool windowmove $winid x $(( ($height - $HEIGHT) / 2 + $panel - $border ))
-	xdotool windowactivate $winid
+bottom() {
+	B=$(( $height - $HEIGHT + $border ))
+	case $1 in
+		left  ) move $L $B ;;
+		right ) move $R $B ;;
+		*     ) move $X $B ;;
+	esac
 }
 
 case $1 in
-	''       ) near            ;; # nearest left/right edge
-	left     ) left            ;;
-	c*left   ) centerleft      ;;
-	center   ) xdotool key Super+g ;;
-	c*right  ) centerright     ;;
-	right    ) right           ;;
-	up       ) up              ;;
-	down     ) down            ;;
-	v*center ) verticalcenter  ;;
+	''     ) near      ;; # nearest left/right edge
+	left   ) left      ;;
+	right  ) right     ;;
+	near   ) near      ;;
+	center ) center $2 ;;
+	top    ) top    $2 ;;
+	bottom ) bottom $2 ;;
 esac
 
 # kak: filetype=sh

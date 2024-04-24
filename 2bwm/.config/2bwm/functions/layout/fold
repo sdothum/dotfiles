@@ -1,4 +1,3 @@
-#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="layout/fold $@" . $PARENT
 
@@ -26,9 +25,9 @@ thirds() {
 	for i in $winids ;do
 		xdotool windowactivate $i
 		case $instance in
-			1 ) window tile 3 left   ;;
-			0 ) window tile 3 center ;;
-			2 ) window tile 3 right; instance=-1  ;;
+			1 ) window tile 3 1 ;;
+			0 ) window tile 3 2 ;;
+			2 ) window tile 3 3 ; instance=-1  ;;
 		esac
 		instance=$(( $instance + 1 ))
 	done
@@ -40,10 +39,10 @@ quarters() {
 	for i in $winids ;do
 		xdotool windowactivate $i
 		case $instance in
-			2 ) window tile 4 left        ;;
-			0 ) window tile 4 centerleft  ;;
-			1 ) window tile 4 centerright ;;
-			3 ) window tile 4 right; instance=-1 ;;
+			2 ) window tile 4 1 ;;
+			0 ) window tile 4 2 ;;
+			1 ) window tile 4 3 ;;
+			3 ) window tile 4 4 ; instance=-1 ;;
 		esac
 		instance=$(( $instance + 1 ))
 	done

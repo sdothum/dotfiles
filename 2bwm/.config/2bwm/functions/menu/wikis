@@ -1,4 +1,3 @@
-#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
 # 2bwm
@@ -60,7 +59,7 @@ wiki() {
 		file="$(expand "$file")"
 		filename_check
 		# name=wiki $EDITOR "$file" "$DICTIONARY"
-		name=wiki $EDITOR WAIT "$file" $DICTIONARY
+		class=wiki $EDITOR WAIT "$file" $DICTIONARY
 		[ $linkname ] && rm -f $linkname
 		# history file cleanup usually precedes impending edit
 		# expand "$file" | grep -q menu/.history && { pwait "vim.*"$(expand "$file")""; menu edit; }
