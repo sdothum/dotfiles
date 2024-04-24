@@ -39,52 +39,49 @@ if %{ [ -n "$UNPLUG" ] } %{
 # Plugins
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 if %{ [ -z "$UNPLUG" ] } %{
-	source "%val{config}/bundle/kak-bundle/rc/kak-bundle.kak"
-	bundle-noload kak-bundle https://github.com/jdugan6240/kak-bundle
+   source "%val{config}/bundle/kak-bundle/rc/kak-bundle.kak"
+   bundle-noload kak-bundle https://github.com/jdugan6240/kak-bundle
 	# WARNING: symlink "ln -s /usr/bin/dash $HOME/bin/sh" to avoid busybox "sh" read hang from cork "env sh"
 	# evaluate-commands %sh{ cork init }  # DEPRECATED: migrated to kak-bundle
 
 	# ................................................................ auto-pairs
-	bundle auto-pairs.kak https://github.com/alexherbo2/auto-pairs.kak.git %{
+	nop bundle auto-pairs.kak https://github.com/alexherbo2/auto-pairs.kak.git %{
 		enable-auto-pairs
 	}
 
 	# .......................................................... change-directory
-	if %{ [ -z "$DIFF" ] } %{
-		# change-directory action fails diff-jump - within a "dirdiff" loop SEE: kakdiff
-		bundle kakoune-cd  https://github.com/Delapouite/kakoune-cd.git %{
-			hook global WinDisplay .* change-directory-current-buffer
-			hook global FocusIn .* change-directory-current-buffer
-		}
+	nop bundle kakoune-cd  https://github.com/Delapouite/kakoune-cd.git %{
+		hook global WinDisplay .* change-directory-current-buffer
+		hook global FocusIn .* change-directory-current-buffer
 	}
 
 	# ................................................................ crosshairs
-	bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
+	nop bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
 		# map global user | ': cursorcolumn<ret>' -docstring "toggle column"
 		# map global user + ': crosshairs<ret>'   -docstring "toggle crosshairs"  # BUG: occasional hidden underline
 		map global user + ': cursorcolumn<ret>' -docstring "toggle column"
 	}
  
 	# ..................................................................... fandt
-	bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
+	nop bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
 		require-module fandt
 	}
 
 	# .......................................................... find and replace
-	bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
+	nop bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
 		map global user f ': find ' -docstring "find and replace"
 	}
 
 	# .......................................................... focus selections
-	bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
+	nop bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
 		map global user <space> ': focus-toggle<ret>' -docstring "toggle selections focus"
 	}
 
 	# ......................................................... forth interpreter
-	bundle kak-stkmach https://gitlab.com/kstr0k/kak-stkmach
+	nop bundle kak-stkmach https://gitlab.com/kstr0k/kak-stkmach
 
 	# ...................................................... kakboard (clipboard)
-	bundle kakboard https://github.com/lePerdu/kakboard.git %{
+	nop bundle kakboard https://github.com/lePerdu/kakboard.git %{
 		set global kakboard_copy_cmd 'xclip -in -selection clipboard'
 		set global kakboard_paste_cmd 'xclip -out -selection clipboard'
 		hook global WinCreate .* %{ kakboard-enable }
@@ -98,17 +95,17 @@ if %{ [ -z "$UNPLUG" ] } %{
 	}
 
 	# ................................................................... kakpipe
-	bundle kakpipe https://github.com/eburghar/kakpipe.git %{
+	nop bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 		# NOTE: manually install binary from git folder with: cargo install --path . --root ~/.local
 		require-module kakpipe
 		map global user | ': kakpipe ' -docstring "kakpipe FIFO buffer"
 	}
 
 	# ................................................................... kak-lsp
-	bundle-install-hook kak-lsp %{
-		cargo install --locked --force --path .
-	}
-	bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
+   bundle-install-hook kak-lsp %{
+      cargo install --locked --force --path .
+   }
+	nop bundle kak-lsp https://github.com/kak-lsp/kak-lsp.git %{
 		# currently running commit 36f99810bdcc060617479d6c5405e868584ef0ff BUG: lsp-inlay-diagnostics-enable command option
 		# cargo install --locked --force --path .
 		# diff kak-lsp.toml $HOME/.config/kak/kak-lsp/kak-lsp.toml.unmarksman
@@ -143,36 +140,34 @@ if %{ [ -z "$UNPLUG" ] } %{
 	}
 
 	# ........................................................... lua interpreter
-	bundle luar https://github.com/gustavo-hms/luar.git %{
+	nop bundle luar https://github.com/gustavo-hms/luar.git %{
 		require-module luar
 		set-option global luar_interpreter luajit
 	}
 
 	# ...................................................................... mark
-	bundle kakoune-mark https://gitlab.com/fsub/kakoune-mark.git %{
+	nop bundle kakoune-mark https://gitlab.com/fsub/kakoune-mark.git %{
 		map global user m ': mark-word<ret>'  -docstring "(un)mark word / clear marks"
 		map global user M ': mark-clear<ret>' -docstring "(un)mark word / clear marks"
 	}
 
 	# ................................................................ move lines
-	bundle kak-move-lines https://git.sr.ht/~raiguard/kak-move-lines %{
+	nop bundle move-lines https://git.sr.ht/~raiguard/kak-move-lines %{
 		map global normal <c-up> ': move-lines-up %val{count}<ret>'     -docstring 'shift up'
 		map global normal <c-down> ': move-lines-down %val{count}<ret>' -docstring 'shift down'
-		map global normal <c-left> '<'                                  -docstring 'shift left'  # finger convenience :)
-		map global normal <c-right> '>'                                 -docstring 'shift right'
 	}
 
 	# .................................................... peneira (fuzzy finder)
-	bundle peneira https://github.com/gustavo-hms/peneira.git %{
+	nop bundle peneira https://github.com/gustavo-hms/peneira.git %{
 		require-module luar
 		require-module peneira
 		set-option global peneira_files_command "rg --files --sort=path"  # single threaded --sort is fast enough for my folder organization
 
 		# HACK: multi-client focus switching causes peneira to lose active client buffer directory
 		define-command peneira-resync %{
-			change-directory-current-buffer  # handled by hook FocusIn above, otherwise required
-			buffer *debug*
-			execute-keys ga
+			# change-directory-current-buffer  # handled by hook FocusIn above, otherwise required
+			# buffer *debug*
+			# execute-keys ga
 		}
 
 		define-command buffers %{
@@ -182,7 +177,6 @@ if %{ [ -z "$UNPLUG" ] } %{
 
 		define-command files %{
 			peneira-resync
-			# peneira-files -hide-opened
 			peneira-files -hide-opened
 		}
 
@@ -191,21 +185,21 @@ if %{ [ -z "$UNPLUG" ] } %{
 	}
 
 	# ......................................................... phantom selection
-	bundle kakoune-phantom-selection https://github.com/occivink/kakoune-phantom-selection.git
+	nop bundle kakoune-phantom-selection https://github.com/occivink/kakoune-phantom-selection.git
 
 	# ..................................................................... popup
-	bundle popup.kak https://github.com/enricozb/popup.kak.git %{
-		evaluate-commands %sh{kak-popup init}
+	nop bundle popup.kak https://github.com/enricozb/popup.kak.git %{
+   	evaluate-commands %sh{kak-popup init}
 	}
 
 	# ............................................................... search docs
-	bundle search-doc.kak https://github.com/jbomanson/search-doc.kak.git %{
+	nop bundle search-doc.kak https://github.com/jbomanson/search-doc.kak.git %{
 		require-module search-doc
 		alias global sd search-doc
 	}
 
 	# .................................................................. smarttab
-	bundle smarttab.kak https://github.com/andreyorst/smarttab.kak.git %{
+	nop bundle smarttab.kak https://github.com/andreyorst/smarttab.kak.git %{
 		require-module smarttab
 		set-option global softtabstop 3
 
@@ -214,7 +208,7 @@ if %{ [ -z "$UNPLUG" ] } %{
 	}
 
 	# .................................................................. snippets
-	bundle kakoune-snippets https://github.com/occivink/kakoune-snippets.git %{
+	nop bundle kakoune-snippets https://github.com/occivink/kakoune-snippets.git %{
 		set-option global snippets_auto_expand true
 
 		define-command user-snippets %{
@@ -238,21 +232,17 @@ if %{ [ -z "$UNPLUG" ] } %{
 		}
 	}
 
-	# .................................................................... splash
-	# bundle splash.kak https://github.com/ftonneau/splash.kak.git
-	bundle splash.kak https://github.com/Hjagu09/splash.kak.git
-
 	# ................................................................ sudo-write
-	bundle kakoune-sudo-write https://github.com/occivink/kakoune-sudo-write.git %{
+	nop bundle kakoune-sudo-write https://github.com/occivink/kakoune-sudo-write.git %{
 		map global user W ': sudo-write<ret>' -docstring 'sudo save'
 	}
 
 	# ............................................................... tree-sitter
-	bundle-install-hook kak-tree-sitter %{
+   bundle-install-hook kak-tree-sitter %{
 		cargo install kak-tree-sitter
 		cargo install ktsctl
-	}
-	bundle kak-tree-sitter https://github.com/phaazon/kak-tree-sitter.git %{
+   }
+	nop bundle kak-tree-sitter https://github.com/phaazon/kak-tree-sitter.git %{
 		nop eval %sh{ kak-tree-sitter -dks --session $kak_session }
 	}
 }
@@ -337,9 +327,9 @@ declare-option str ruler '│'  # SEE: statusline
 define-command margin -params ..1 %{ eval add-highlighter -override window/linenr number-lines -hlcursor -separator "'%opt{ruler}   '" %arg{@} }  # escape 'quotes' for eval
 
 hook global WinCreate .* %{
-	margin '-relative'  # on normal mode open
-	hook window ModeChange (push|pop):.*:insert margin
-	hook window ModeChange (push|pop):insert:.* %{ margin '-relative' }
+	 margin '-relative'  # on normal mode open
+	 hook window ModeChange (push|pop):.*:insert margin
+	 hook window ModeChange (push|pop):insert:.* %{ margin '-relative' }
 }
 
 # .................................................................... Soft wrap
@@ -376,7 +366,6 @@ map global format l 'x|comment l .<ret>'      -docstring 'leader ... comment'
 map global format t 'x|comment t .<ret>'      -docstring 'trailer comment ...'
 map global format R 'x|comment r =<ret>'      -docstring 'ruler ═══'
 map global format r 'x|comment r --<ret>'     -docstring 'ruler ━━━'
-map global format U 'x|comment u =<ret>'      -docstring 'underline ═══ comment'
 map global format u 'x|comment u --<ret>'     -docstring 'underline ━━━ comment'
 map global format '#' 'x|align \#<ret>'       -docstring 'align #  comment'
 map global format / 'x|align //<ret>'         -docstring 'align // comment'
@@ -401,12 +390,11 @@ map global normal { '[p'            -docstring 'previous paragraph'
 
 # .............................................................. Line operations
 
-map global normal G 'ge'      -docstring 'goto buffer end'
-map global normal ^ 'gh'      -docstring 'goto line begin'
-map global normal $ 'gl'      -docstring 'goto line end'
-map global normal C '<a-l>di' -docstring 'replace to end of line'
-map global normal D '<a-l>d'  -docstring 'delete to end of line'
-map global normal Y '<a-l>'   -docstring 'yank to end of line'
+map global normal G 'ge'     -docstring 'goto buffer end'
+map global normal ^ 'gh'     -docstring 'goto line begin'
+map global normal $ 'gl'     -docstring 'goto line end'
+map global normal D '<a-l>d' -docstring 'delete to end of line'
+map global normal Y '<a-l>'  -docstring 'yank to end of line'
 
 # ........................................................................ Paste
 
@@ -431,10 +419,6 @@ hook global FocusOut .* write
 # ............................................................ Buffer management
 
 map global normal <a-ret> ': buffer-next<ret>'           -docstring 'next buffer'
-hook global BufOpenFile .*.diff %{
-	# map global normal <ret> ': diff-jump<ret>'          -docstring 'diff-jump new file'
-	map global normal <a-ret> ': diff-jump -<ret>'        -docstring 'diff-jump old file'
-}
 map global normal <a-backspace> ': buffer-previous<ret>' -docstring 'previous buffer'
 map global normal <a-space> 'ga'                         -docstring 'last buffer'
 
@@ -447,7 +431,7 @@ map global user   x ': write-all-quit<ret>'              -docstring 'save all an
 # Terminal
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-map global user   t ': terminal fish<ret>'               -docstring 'terminal'
+map global user   t ': terminal fish'                    -docstring 'terminal'
 
 # Highlighting
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -460,6 +444,6 @@ add-highlighter global/ show-whitespaces -tab '┊' -tabpad ' ' -spc ' ' -lf ' '
 add-highlighter global/ regex \h+$ 0:Error
 
 # admonitions
-declare-option str admonition "\s(?i)(attn|attention|bug|deprecated|donot|example|hack|note|see|tip|todo|usage|warning|why):\s"
+declare-option str admonition "\s(?i)(attn|attention|bug|deprecated|example|hack|note|see|tip|todo|usage|warning|why):\s"
 hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt{admonition} 1:WrapMarker }  # select field 1: (vs 0:) to not hilight the colon :)
 
