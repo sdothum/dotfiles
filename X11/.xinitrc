@@ -1,7 +1,8 @@
 #!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
 
 # X11 Initialization
-# ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+# ══════════════════════════════════════════════════════════════════════════════
 
 # Executed by startx (run your window manager from here):
 #   startx -- -layout Multihead
@@ -123,6 +124,8 @@ case $wm in
 	xrdb -load $HOME/.Xresources
 	setpath $HOME/.config/2bwm cmd
 	. $(which ENV)
+	sxhkd -c $HOME/.config/2bwm/sxhkdrc &
+	ruler -i -c $HOME/.config/2bwm/rulerrc &
 	$TERM &
 	# (sleep 0.15; xdotool --sync --onlyvisible --class "Alacritty" windowactivate --sync; sleep 0.65; xdotool type "autostart >/tmp/2bwm.log 2>&1"; xdotool key return) &  # autostart the panel in the terminal window (delay for celeron cpu)
 	(sleep 0.15; autostart >/tmp/2bwm.log 2>&1) &
@@ -164,7 +167,7 @@ he* )
 	setpath $HOME/.config/herbstluftwm
 	. $HOME/.config/herbstluftwm/config/ENV
 	which xdotool >/dev/null || $TERM &  # initial build install?
-	# $TERM &
+	$TERM &
 	xexec herbstluftwm ;;
 
 gn* ) xexec gnome-session ;;
@@ -207,6 +210,7 @@ wo* )
 	xwallpaper --zoom $HOME/images/default
 	xrdb -load $HOME/.Xresources
 	setpath $HOME/.config/worm
+	sxhkd -c $HOME/.config/worm/sxhkdrc &
 	$TERM &
 	conky clock auto
 	xexec worm ;;
