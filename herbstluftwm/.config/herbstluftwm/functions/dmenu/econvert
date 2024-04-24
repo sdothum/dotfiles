@@ -116,7 +116,7 @@ ditto $format "$file"
 
 # ebook-convert "$file" "${output%.*}.epub"  # test image
 # convert even .azw3 to inject folder title and author
-alpine && EBOOK_CONVERT='flatpak run --command="ebook-convert" --user com.calibre_ebook.calibre' || EBOOK_CONVERT=ebook-convert
+alpine && EBOOK_CONVERT='flatpak run --command="ebook-convert" --user com.calibre_ebook.calibre' || EBOOK_CONVERT=/usr/bin/ebook-convert
 eval $EBOOK_CONVERT \"$file\" \"${output%.*}.$format\"                          \
 	$([ $reformat ] && echo || echo "--title=\"$title\" --authors=\"$author\"")  \
 	--change-justification=\"$justify\"                                          \
