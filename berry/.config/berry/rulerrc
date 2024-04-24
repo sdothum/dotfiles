@@ -1,0 +1,39 @@
+#
+# ruler for 2bwm
+#
+class="calibre"
+	window desktop 4 ;\
+	xdotool key Super+z
+
+class="mail"
+	window desktop 3 ;\
+	window size monocle
+
+class="email"
+	window tile 4 4
+
+class="feh"
+	window size monocle
+
+class="Firefox"
+	window size monocle
+
+class="kak"
+	window desktop 2 ;\
+	layout tile 4 kak
+
+class="wiki"
+	window desktop 0 ;\
+	layout tile 3 wiki
+
+class="mpv"
+	window desktop 4 ;\
+	xdotool key Super+Shift+z ;\
+
+class="qutebrowser"
+	layout tile 3 qutebrowser
+
+class="Surf"
+	window desktop 1 ;\
+	window tile 4 1
+

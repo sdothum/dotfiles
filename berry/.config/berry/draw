@@ -1,18 +1,18 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-# [ $TRACE ] && CHILD="query $@" . $PARENT
+# [ $TRACE ] && CHILD="draw $@" . $PARENT
 
 # 2bwm
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ............................................................. Query operations
+# .............................................................. Draw operations
 
-# Usage: query <msg>, see functions/query
+# Usage: draw <msg>, see functions/draw
 
 msg=$1
 [ $msg ] && shift || usage: $0
-if [ -e ${0%/query}/functions/query/$msg ] ;then
-	. ${0%/query}/functions/query/$msg $@
+if [ -e ${0%/draw}/functions/draw/$msg ] ;then
+	. ${0%/draw}/functions/draw/$msg $@
 else
 	usage: $0
 fi

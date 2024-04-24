@@ -1,0 +1,50 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="menu $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .............................................................. Menu operations
+
+# Usage: menu <msg>, see functions/menu
+
+export MENU=${MENU:-$(dirname $0)/functions/menu}
+export HISTORY=$MENU/.history
+export SEP='∙'             # list separator
+export LEADER='○∘⋯  '
+
+X()        { echo "$LEADER$@"; }  # pick list action
+picklist() { sed "s/\^/^$SEP /" | column -s^ -t ; }
+
+# .................................................................. List macros
+
+# return list of existing applications
+appslist() {
+	unset apps
+	for i in $@ ;do apps="$apps$(which $i >/dev/null 2>&1 && echo "$i ")" ;done
+	echo $apps | sed 's/ /\n/g'
+}
+
+# usage: playlist library played, see menu series/movies
+playlist() {
+	cat "$2" | while read line ;do
+		[ "$line" ] && grep -q "$line" $1 && sed -i "/^$line/s/^$line/$SEP $line/" "$1"
+	done
+	cat "$1"
+}
+
+sortlist() { [ $1 ] && echo 'sort by name' || echo 'sort by date'; }  # playlist order
+previous() { echo | mhistory $1 | head -1; }  # most recent (app) history
+
+# ................................................................. Menu wrapper
+
+msg=${1:-run}
+[ $1 ] && shift
+if [ -e ${0%/menu}/functions/menu/$msg ] ;then
+	. ${0%/menu}/functions/menu/$msg $@
+else
+	usage: $0
+fi
+
+# kak: filetype=sh

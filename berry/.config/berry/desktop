@@ -1,0 +1,38 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="desktop $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................. Query operations
+
+# Usage: desktop <msg> [option]
+
+desktop=$(xdotool get_desktop)
+
+desktop() {
+	[ $desktop -eq $1 ] && return
+	echo $desktop >$TWOBWM:desktop
+	xdotool set_desktop $1
+}
+
+plus() {
+	desktop=$(( $desktop + $1 ))
+	if [ $desktop -gt 5 ] ;then
+		desktop=0
+	elif [ $desktop -lt 0 ] ;then
+		desktop=5
+	fi
+	echo $desktop
+}
+
+case $1 in
+	''    ) echo $desktop ;;
+	get   ) plus $2 ;;  # for relative desktop actions SEE: sxhkdrc
+	[0-5] ) desktop $1 ;;
+	last  ) [ -e $TWOBWM:desktop ] && desktop $(cat $TWOBWM:desktop) ;;
+	*     ) desktop $(plus $1) ;;	 # -1/+1
+esac
+
+# kak: filetype=sh

@@ -1,10 +1,221 @@
 #
+# 2bwm independent hotkeys
+#
+super + shift + space
+	menu
+
+super + control + space
+	window snap
+
+super + Return
+	scratchpad scratchy
+
+super + shift + Return
+	scratchpad itchy
+
+super + control + Return
+	term
+
+control + space
+	dunstctl close
+
+control + shift + space
+	dunstctl close-all
+
+control + BackSpace
+	dunstctl history-pop
+
+super + shift + apostrophe
+	menu wikis
+
+super + control + apostrophe
+	menu notes
+
+super + F5
+	closest.sh north
+
+super + F6
+	closest.sh south
+
+super + F7
+	closest.sh east
+
+super + F8
+	closest.sh west
+
+super + shift + F5
+	window shift up
+
+super + shift + F6
+	window shift down
+
+super + shift + F7
+	window shift right
+
+super + shift + F8
+	window shift left
+
+super + control + F5
+	window swap up
+
+super + control + F6
+	window swap down
+
+super + control + F7
+	window swap right
+
+super + control + F8
+	window swap left
+
+super + a
+	conky clock
+
+super + control + a
+	conky clock toggle
+
+super + b
+	qutebrowser
+
+super + control + b
+	qutebrowser closeall
+
+super + c
+	window snap up
+
+super + shift + c
+	window snap down
+
+super + shift + d
+	toggle wallpaper
+
+super + control + d
+	toggle background
+
+super + shift + e
+	layout fold 4 kak
+
+super + control + e
+	layout level
+
+super + i
+	window hide
+
+super + shift + i
+	menu unhide
+
+super + m
+	xdotool search --onlyvisible --classname mail windowclose || aerc
+
+super + shift + m
+	menu abook
+
+super + o
+	menu scripts
+
+super + shift + o
+	menu projects
+
+super + shift + q
+	menu halt
+
+super + control + q
+	pkill -KILL 2bwm
+
+super + r
+	window snap right
+
+super + shift + r
+	term 2bwm 2make
+
+super + control + r
+	2restart
+
+super + shift + s
+	menu system
+
+super + t
+	window snap left
+
+super + u
+	btop
+
+super + shift + u
+	menu passwords
+
+super + v
+	toggle panel
+
+super + shift + v
+	menu media
+
+super + control + v
+	invert_panel
+
+super + x
+	xdotool search --onlyvisible --classname nnn windowclose || nnn TMUX
+
+super + shift + x
+	xdotool search --onlyvisible --classname pcmanfm windowclose || pcmanfm
+
+super + control + x
+	xdotool search --onlyvisible --classname root windowclose || nnn ROOT
+
+super + shift + w
+	menu windowfocus
+
+super + control + w
+	menu windowtile
+
+super + shift + control + w
+	menu windowsize
+
+super + 0
+	window revert
+
+super + shift + 0
+	layout revert
+
+super + control + 0
+	menu layout
+
+super + 1
+	window rotate
+
+super + 2
+	window size monocle
+
+super + 3
+	window tile 3 center
+
+super + 4
+	window tile 4 left
+
+super + 5
+	window tile 3 right
+
+super + 6
+	window tile 3 left
+
+super + 7
+	window tile 4 centerright
+
+super + 8
+	window tile 4 centerleft
+
+super + 9
+	window tile 4 right
+
+super + Escape
+	notify shkkd "config reloaded"
+	pkill -USR1 -x sxhkd
+
+#
 # wm independent hotkeys
 #
 
 # terminal emulator
 super + Return
-	term
+	urxvt
 
 # program launcher
 super + d
@@ -56,6 +267,3 @@ super + c
 
 ~button1
     berryc pointer_focus
-
-super + t
-    conky clock
