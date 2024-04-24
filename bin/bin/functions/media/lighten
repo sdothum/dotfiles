@@ -9,14 +9,14 @@ end
 local function roundH(num)
 	return math.floor((num * 100) +0.5) / 100
 end
- 
+
 -- Converts hexadecimal color to HSL
 -- Lightness (L) is changed based on amt
 -- Converts HSL back to hex
 -- amt (0-100) can be negative to darken or positive to lighten
 -- The amt specified is added to the color's existing Lightness
 -- e.g., (#000000, 25) L = 25 but (#404040, 25) L = 50
- 
+
 function lighten(hex_color, amt)
 	local r, g, b, a
 	local hex = hex_color:gsub("#", "")
@@ -34,7 +34,7 @@ function lighten(hex_color, amt)
 	if #hex ~= 6 then
 		a = roundH(tonumber(hex:sub(7,8), 16)/255)
 	end
- 
+
 	local max = math.max(r, g, b)
 	local min = math.min(r, g, b)
 	local c = max - min
@@ -67,7 +67,7 @@ function lighten(hex_color, amt)
 	H = round(h)/360
 	S = round(s*100)/100
 	L = round(l*100)/100
- 
+
 	amt = amt/100
 	if L + amt > 1 then
 		L = 1
@@ -76,7 +76,7 @@ function lighten(hex_color, amt)
 	else
 		L = L + amt
 	end
- 
+
 	local R, G, B
 	if S == 0 then
 		R, G, B = round(L*255), round(L*255), round(L*255)
@@ -103,7 +103,7 @@ function lighten(hex_color, amt)
 		G = round(hue2rgb(p, q, H)*255)
 		B = round(hue2rgb(p, q, (H - 1/3))*255)
 	end
- 
+
 	if a ~= nil then
 		A = round(a*255)
 		return string.format("#"..'%.2x%.2x%.2x%.2x', R, G, B, A)
@@ -111,7 +111,7 @@ function lighten(hex_color, amt)
 		return string.format("#"..'%.2x%.2x%.2x', R, G, B)
 	end
 end
- 
+
 print (lighten(arg[1], arg[2]))
 
 

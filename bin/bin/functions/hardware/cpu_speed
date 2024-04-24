@@ -1,0 +1,14 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Hardware
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .......................................................................... CPU
+
+# Usage: echo $(cpu_speed)GHz
+
+speed=$(inxi -c | head -1 | cut -d: -f3 | cut -d/ -f1)  # current speed in MHz
+echo "scale=4; $speed / 1000. + 0.05" | bc | cut -c-3   # to GHz
+
+# kak: filetype=sh

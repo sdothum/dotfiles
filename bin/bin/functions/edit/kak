@@ -13,7 +13,7 @@ headless=${headless:-false}
 # share all instances (clients) with a single kak server session
 ID=$USER  # default session id
 KAK=/usr/bin/kak
-# [ -e /usr/local/bin/kak ] && KAK=/usr/local/bin/kak
+[ -e /usr/local/bin/kak ] && KAK=/usr/local/bin/kak
 
 CONF=$XDG_CONFIG_HOME/kak
 DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary
@@ -23,6 +23,7 @@ DELAY=0.25        # tuned time to center window
 export TABSTOP=3  # default for (pipe), see align
 
 $KAK -l | grep -q dead | $KAK -clear  # dead sessions
+sudo chmod 666 $LOG                   # in case first time creation by root
 
 while : ;do
 	case $1 in
@@ -70,11 +71,11 @@ done
 
 # term call doesn't handle "space" names
 # console && { $KAK $file >>$LOG 2>&1; exit; }
-console && exec $KAK $file
+console && exec $KAK $file  # nvidia tty console doesn't play well with full default kak config
 
-(sleep $DELAY; window snap center) &  # potential WAIT
-title=$(echo "$file" | sed 's| [^ ]*/||; s/ .*/.../g')
+# (sleep $DELAY; window snap center) &  # see rulerrc
+title=$(echo "$file" | sed 's|\.\/||g; s| [^ ]*/||; s/ .*/.../g')
 [ $count -gt 1 ] && title="$title($count)"
-term "title=kak:$title" class=kak PAPER ${XY:-132x52} $WAIT $KAK $debug ${session:--c} $ID $file >>$LOG 2>&1  # 50 line page
+term "title=kak:$title" class=${class:-kak} PAPER ${XY:-132x52} $WAIT $KAK $debug ${session:--c} $ID $file >>$LOG 2>&1  # 50 line page
 
 # kak: filetype=sh

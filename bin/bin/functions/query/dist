@@ -8,8 +8,8 @@
 
 # using package managers..
 if   alpine ;then echo alpine
-elif void   ;then echo void
-elif arch   ;then echo arch
+elif arch   ;then echo artix
+elif void   ;then echo nvidia   # asus/ryzen/nvidia sff build
 else              echo unknown  # new distro lacking test/distro
 fi
 

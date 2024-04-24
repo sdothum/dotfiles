@@ -1,0 +1,23 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Hardware
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................... Disk test
+
+# Usage: diskio [name]
+
+# ditto ${1:-worst-case} "single 4KiB random write process"
+fio --name=random-write --ioengine=posixaio --rw=randwrite --bs=4k --size=4g --numjobs=1 --iodepth=1 --runtime=60 --time_based --end_fsync=1
+rm ramdom-write.*
+
+# ditto ${1-:multi-user} "16 parallel 64KiB random write processes"
+fio --name=random-write --ioengine=posixaio --rw=randwrite --bs=64k --size=256m --numjobs=16 --iodepth=16 --runtime=60 --time_based --end_fsync=1
+rm ramdom-write.*
+
+ditto ${1:-real-world} "single 1MiB random write process"
+fio --name=random-write --ioengine=posixaio --rw=randwrite --bs=1m --size=16g --numjobs=1 --iodepth=1 --runtime=60 --time_based --end_fsync=1
+rm ramdom-write.*
+
+# kak: filetype=sh

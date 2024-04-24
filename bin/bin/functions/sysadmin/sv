@@ -9,21 +9,21 @@
 openrc() {
 	usage() { usage: "$(basename $0) [add | delete | show | start | stop | restart | status | list] <service> [runlevel]"; exit 1; }
 
-	sv() { eval doas rc-update  $1 $2 $3; }
-	rc() { eval doas rc-service $1 $2 $3; }
+	rc() { eval sudo rc-update  $1 $2 $3; }
+	sv() { eval sudo rc-service $1 $2 $3; }
 
 	# configure openrc daemon
 	case $1 in
-		''      ) sv show; usage                 ;;
-		add     ) sv add $2 $3                   ;;
-		delete  ) sv delete $2 $3                ;;
-		show    ) sv show                        ;;
-		start   ) rc $2 start                    ;;
-		restart ) rc $2 stop; doas killall -q $2; rc $2 start ;; 
-		stop    ) rc $2 stop; doas killall -q $2 ;;  # kill dangling daemons
-		status  ) rc $2 status                   ;;
-		list    ) rc --list | column; usage      ;;
-		*       ) [ $2 ] && usage || rc $1 status || usage ;;
+		''      ) rc show; usage                 ;;
+		add     ) rc add $2 $3                   ;;
+		delete  ) rc delete $2 $3                ;;
+		show    ) rc show                        ;;
+		start   ) sv $2 start                    ;;
+		restart ) sv $2 stop; sudo killall -q $2; sv $2 start ;; 
+		stop    ) sv $2 stop; sudo killall -q $2 ;;  # kill dangling daemons
+		status  ) sv $2 status                   ;;
+		list    ) sv --list | column; usage      ;;
+		*       ) [ $2 ] && usage || sv $1 status || usage ;;
 	esac
 	exit
 }
@@ -31,9 +31,11 @@ openrc() {
 runit() {
 	usage() { usage: "$(basename $0) [UP | [status | disable | enable | up | down | restart | mask] <service>]"; exit 1; }
 
+	SV='sudo /usr/bin/sv'
+
 	check()   { [ $service ] && [ -e /etc/sv/$service ] || usage; }
 	enabled() { [ -L /var/service/$service ]; }
-	status()  { sleep 1; enabled && sudo sv status $service || ditto service "$service unavailable"; }
+	status()  { sleep 1; enabled && { $SV status $service 2>/dev/null; true; } || ditto service "$service unavailable"; }
 
 	service=$2
 	case $1 in
@@ -55,14 +57,33 @@ runit() {
 	case $1 in
 		disable ) sudo rm -fv /var/service/$service ;;
 		stop    |\
-		down    ) enabled && sudo sv down $service; status ;;
+		down    ) enabled && $SV down $service; status ;;
 		enable  ) sudo ln -sfv /etc/sv/$service /var/service/; sudo rm -f /etc/sv/$service/down; status ;;
 		mask    ) enabled && sudo touch /etc/sv/$service/down; status ;;  # down at boot
-		restart ) enabled && sudo sv restart $service || service enable $service; status ;;
+		restart ) enabled && runit stop $service || runit start $service; status ;;
 		status  ) status ;;
 		start   |\
-		up      ) enabled && sudo sv up $service; status ;;
+		up      ) enabled && $SV up $service; status ;;
 		*       ) enabled && status || usage ;;
+	esac
+	exit
+}
+
+dinit() {
+	usage() { usage: "$(basename $0) [list | disable | enable | start | stop | restart] <service>"; exit 1; }
+
+	sv() { eval sudo dinitctl $1 $2; }
+
+	# configure dinit daemon
+	case $1 in
+		''      ) usage ;;
+		disable ) sv $1 $2 ;;
+		enable  ) sv $1 $2 ;;
+		restart ) sv $1 $2 ;;
+		start   ) sv $1 $2 ;;
+		stop    ) sv $1 $2 ;;
+		list    ) sv $1 $2 ;;
+		*       ) usage ;;
 	esac
 	exit
 }
@@ -121,6 +142,6 @@ systemd() {
 	exit
 }
 
-exists openrc && openrc $@ || exists runit && runit $@ || exists s6 && s6 $@ || systemd $@
+exists openrc && openrc $@ || exists runit && runit $@ || exists dinit && dinit $@ || exists s6 && s6 $@ || systemd $@
 
 # kak: filetype=sh

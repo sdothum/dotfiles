@@ -12,7 +12,7 @@
 
 fontsize=36
 ext='avi|Avi|divx|Divx|m4v|M4v|mkv|Mkv|mp4|Mp4|wmv|Wmv'
-delay=1.55  # for "next" xdotool key sequence
+delay=1.65  # for "next" xdotool key sequence
 
 pgrep -f 'menu series' && next='next\n'
 
@@ -42,8 +42,8 @@ videomode on
 while : ;do
 	mpv --vf=eq "$STREAM" --sub-font-size=$fontsize >/dev/null 2>&1 &
 	# zoom window after window focus delay
-	xdotool search --sync --class mpv windowactivate  # activate instead of key direct
-	xdotool key Super+Shift+z
+	# xdotool search --sync --class mpv windowactivate  # activate instead of key direct
+	# xdotool key Super+Shift+z                         # see rulerrc
 	notify 30 blackboard "$title" "$(printf '1/2^Contrast\n3/4^Brightness\n5/6^Gamma\n7/8^Saturation\n9/0^Volume^m^Mute\n-/+^Audio Delay^ #^Language\nj/J^Subtitles^ v^Toggle\nx/z^Subtitle Delay' | column -s^ -t)"
 	xdotool search --sync --class Dunst windowraise
 	pwait "mpv --vf=eq"

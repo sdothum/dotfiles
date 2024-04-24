@@ -14,9 +14,9 @@ trap "xdotool search --onlyvisible --classname mail windowactivate; window size 
 # provide aerc an compose mode with custom linespacing 
 # toggle focus defer   # share aerc frame
 export MONOFONT="Iosevka-proof"
-(keyboard off; window @$DELAY tile 4 left; window snap left; xdotool search --onlyvisible --classname mail windowraise; keyboard on) &
+# (keyboard off; window @$DELAY tile 4 left; xdotool search --onlyvisible --classname mail windowraise; keyboard on) &  # see rulerrc
 
 notify 60 Compose "Must enter <b>To:</b> and <b>Subject:</b> *FIRST*"
-name=compose offsetY=1 kak ID=draft WAIT $@
+class=email offsetY=1 kak ID=draft WAIT $@
 
 # kak: filetype=sh

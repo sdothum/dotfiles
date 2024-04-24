@@ -1,0 +1,21 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Edit
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Diff editor
+
+usage() { usage: "$(basename $0) <file> <reference>"; exit 1; }
+
+KAK=/usr/bin/kak
+[ -e /usr/local/bin/kak ] && KAK=/usr/local/bin/kak
+
+[ -e "$2" ] || usage
+# dirdiff export to suppress bundle (load) kakoune-cd SEE: kakrc
+export DIFF=${1}.diff
+
+diff -u $1 $2 >$DIFF
+[ $? -eq 1 ] && $KAK $DIFF $1 $2
+
+# kak: filetype=sh

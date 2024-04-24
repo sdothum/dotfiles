@@ -1,0 +1,20 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# File
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................................... Link
+
+# ignore repo sublinks and misc packages
+ignore='dotfiles/[^.]|kb-layout|kindle|node_modules|qmk|runtime|src|void-packages/[^.]'
+
+# update repo links to depot
+cd /home/depot
+for i in $(find -name '*git' | grep -Ev "$ignore") ;do
+	git=$(dirname $i)
+	[ -e ${git##*/} ] && continue
+	ln -sv $git .
+done
+
+# kak: filetype=sh

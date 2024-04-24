@@ -8,6 +8,8 @@
 
 # Usage: vi [--role <role> | -f | -c <command>]* [<file>]*
 
+exists vim || { /usr/bin/vi $@; exit; }
+
 # va va voom
 SHELL=/usr/bin/dash
 VIMTRACE=$HOME/.session/vim:trace
@@ -37,8 +39,8 @@ else
 		unset sudo
 	else
 		[ -L /root/.vim ] && sudo='sudo -Es' || {
-			doas test -L /root/stow || {
-				doas ln -sv $HOME/stow /root
+			sudo test -L /root/stow || {
+				sudo ln -sv $HOME/stow /root
 				ditto root "stow session/$(hostname)"
 				ditto root "stow vim"
 			}
@@ -54,7 +56,9 @@ file="$file $(escape $1)"
 	shift
 	[ $# -gt 0 ] || break 
 done
-[ $count -gt 1 ] && notify low 'Gvim' "$count files to edit"
+
+exists vim || exec /usr/bin/vi $file  # moving to kakoune
+[ $count -gt 1 ] && notify low 'Gvim' "$count files to edit" 2>/dev/null
 
 console || { gui=-g; [ -e $DYNAMIC ] && focus frame; }
 [ -e $SESSION/vim ] && fg=-f

@@ -1,0 +1,14 @@
+# sdothum - 2016 (c) wtfpl
+
+# Sysadmin
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Rsync wrapper
+
+if server ;then
+	ifyes "backup depot to $laptop" && rsync -r --delete /net/depot $laptop:/net/
+else
+	ifno "restore depot to $SERVER" || rsync /net/depot $SERVER:/net/
+fi
+
+# kak: filetype=sh

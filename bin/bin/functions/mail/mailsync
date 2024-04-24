@@ -48,7 +48,7 @@ tag_messages() {
 
 one_pass() {
 	logmsg "Starting mbsync $1.." /tmp/mbsync.log
-	rm -f $MAILDIR/.notmuch/xapian/flintlock
+	rm -f $MAILDIR/.notmuch/xapian/flintlock >/dev/null
 	mkdir -p $MAILDIR/$(grep 'Inbox' $HOME/.mbsyncrc | cut -d/ -f3)  # mbsync requires existence of mail account folder!
 	find $MAILBOX -type f -size 0 -exec rm -fv {} \;                 # purge empty messages
 	# mbsync -a --verbose >>/tmp/mbsync.log 2>&1
@@ -81,7 +81,7 @@ initialize() {
 	index
 	pull="--pull"
 	one_pass
- }
+}
 
 # ........................................................... mail server daemon
 

@@ -8,6 +8,8 @@
 
 usage() { usage: "$(basename $0) [shell=<shell>] [[-] <regex>]"; exit 1; }
 
+ACK={ACK:-ag}
+
 BASH=$HOME/.bash_history
 FISH=$HOME/.local/share/fish/fish_history
 ZSH=$HOME/.zhistory
@@ -71,7 +73,7 @@ history() {
 	shift
 	if [ $1 ] ;then
 		# $shell_history | ack "$@" | weekof
-		$shell_history | /usr/bin/ag --ignore-case --regexp "$@" | weekof
+		$shell_history | $ACK --ignore-case "$@" | weekof
 	else
 		$shell_history | weekof -r
 	fi

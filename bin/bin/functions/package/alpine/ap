@@ -14,9 +14,11 @@ $(basename $0) f'ix | t'esing | u'update | [U]U'pgrade | -h'elp" | usage:
 	exit 1
 }
 
+ACK={ACK:-ag}
+
 vsn ()       { apk list -I | grep -E -i "^$1-([0-9]+\.*)+-r[0-9]" | cut -d' ' -f1; }
-# testing () { [ $(hostname) != 'thedarnedestthing.com' ] && { apk_edge -t $(ag 'apk_edge -t' $HOME/build/alpine | sed 's/.* -t //; s/ #.*//'); flatpak update -user; } }
-testing ()   { [ $(hostname) != 'thedarnedestthing.com' ] && { apk testing $(ag 'apk testing' $HOME/build/alpine | sed 's/.*apk testing //; s/ #.*//'); flatpak update -user; } }
+# testing () { [ $(hostname) != 'thedarnedestthing.com' ] && { apk_edge -t $($ACK 'apk_edge -t' $HOME/build/alpine | sed 's/.* -t //; s/ #.*//'); flatpak update -user; } }
+testing ()   { [ $(hostname) != 'thedarnedestthing.com' ] && { apk testing $($ACK 'apk testing' $HOME/build/alpine | sed 's/.*apk testing //; s/ #.*//'); flatpak update -user; } }
 
 LINUX=$(vsn linux-lts)
 
@@ -30,20 +32,20 @@ case $1 in
 	-h ) usage ;;
 	.  ) apk dot $2 | grep "^ *\"$2" | sed -r 's/^.*( -> )"/\1/; s/-[0-9].*$//' | sort -u ;;
 	.. ) apk dot $2 | grep '^ *"'    | sed -r 's/^.*( -> )"/\1/; s/-[0-9].*$//' | sort -u ;;
-	a  ) shift; doas apk add $@ ;;
-	A  ) shift; doas apk add $1 $1-doc ;;
-	d  ) shift; doas apk del $@ ;;
-	D  ) shift; doas apk del $1 $1-doc ;;
-	f  ) doas apk fix ;;
+	a  ) shift; sudo apk add $@ ;;
+	A  ) shift; sudo apk add $1 $1-doc ;;
+	d  ) shift; sudo apk del $@ ;;
+	D  ) shift; sudo apk del $1 $1-doc ;;
+	f  ) sudo apk fix ;;
 	i  ) shift; apk info $@ ;;
 	l  ) apk list -I | grep -i $2 | sort ;;
 	L  ) apk list -I | grep -i "^$2" | sort ;;
-	-m ) shift; for i in $@; do doas apk del $i-doc ;done ;;
-	m  ) shift; for i in $@; do doas apk add $i-doc ;done ;;
+	-m ) shift; for i in $@; do sudo apk del $i-doc ;done ;;
+	m  ) shift; for i in $@; do sudo apk add $i-doc ;done ;;
 	t  ) testing ;;
-	u  ) doas apk update ;;
-	U  ) doas apk update; packages && ifyes 'upgrade packages' && { doas apk upgrade; [ $LINUX != $(vsn linux-lts) ] && reboot; } ;;
-	UU ) doas apk update; doas apk upgrade --available; testing; sync; reboot ;;  # alpine lts release upgrade
+	u  ) sudo apk update ;;
+	U  ) sudo apk update; packages && ifyes 'upgrade packages' && { sudo apk upgrade; [ $LINUX != $(vsn linux-lts) ] && reboot; } ;;
+	UU ) sudo apk update; sudo apk upgrade --available; testing; sync; reboot ;;  # alpine lts release upgrade
 	/* ) apk search ${1#?} | grep "${1#?}"  | sort | columns | print ;;
 	^* ) apk search ${1#?} | grep "^${1#?}" | sort | columns | print ;;
 	*  ) apk search $1                      | sort | columns | print ;;

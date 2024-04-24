@@ -1,4 +1,4 @@
-#!/usr/bin/dash
+#!/usr/bin/bash
 # sdothum - 2016 (c) wtfpl
 
 # Media
@@ -6,33 +6,40 @@
 
 # ....................................................... KOReader metadata edit
 
-usage() { usage: "$(basename $0) [t'op | b'ottom <margin>] [s'yncmargins 0|1] [f'ont | h'eaderfont <font>]"; exit 1; }
+usage() { usage: "$(basename $0) [clearpages] [t'op | b'ottom <margin>] [l'inespacing <percent>] [s'yncmargins 0|1] [f'ont | h'eaderfont <font>]"; exit 1; }
+
+# update sdr files to match ever changing default settings :)
 
 number() {
-	[[ "$1" =~ '^[0-9]+$' ]] || return 1
+	[[ "$1" =~ ^[0-9]+$ ]] || return 1
 	echo $1
 }
 
 binary() {
-	[[ "$1" =~ '^[01]$' ]] || return 1
+	[[ "$1" =~ ^[01]$ ]] || return 1
 	echo $1
 }
 
 string() {
-	[[ "$1" =~ '^[A-Za-z0-9]+$' ]] || return 1
+	[[ "$1" =~ ^[A-Za-z0-9]+$ ]] || return 1
 	echo $1
 }
 
-update() { ditto metadata "$1"; sudo find -regex '.*metadata.epub.lua' -exec sed -i "$1" {} \; ; }
+update()     { ditto "$1" "$2"; sudo find -regex '.*metadata.epub.lua' -exec sed -i "$2" {} \; ; }
+
+clearpages() { update 'clearpages' '/\"doc_pages\"/d; /\"pages\"/d'; }  # force page count refresh
 
 [ $1 ] || usage
+ifno "update koreader ebook.sdr files" && exit
 while [ $1 ] ;do
 	case $1 in
-		t*   ) margin=$(number $2) && update '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/' || usage ;;
-		b*   ) margin=$(number $2) && update '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/' || usage ;;
-		s*   ) sync=$(binary $2) && update '/\"copt_sync_t_b_page_margins\"/s/[01]/'${sync}'/'     || usage ;;
-		f*   ) font=$(string $2) && update '/\"font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'           || usage ;;
-		h*   ) font=$(string $2) && update '/\"header_font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'    || usage ;;
+		c*   ) clearpages; shift; continue ;;
+		t*   ) margin=$(number $2) && update 'topmargin' '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'    || usage ;;
+		b*   ) margin=$(number $2) && update 'bottommargin' '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/' || usage ;;
+		l*   ) percent=$(number $2) && update 'linespacing' '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/' || usage; clearpages ;;
+		s*   ) sync=$(binary $2) && update 'syncmargins' '/\"copt_sync_t_b_page_margins\"/s/[01]/'${sync}'/'      || usage ;;
+		f*   ) font=$(string $2) && update 'font' '/\"font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'                   || usage; clearpages ;;
+		h*   ) font=$(string $2) && update 'headerfont' '/\"header_font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'      || usage ;;
 		*    ) usage ;;
 	esac
 	shift 2

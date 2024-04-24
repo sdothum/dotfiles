@@ -18,6 +18,7 @@ SEAT=/tmp/console:width  # see console_login
 font=pagga
 font=future
 font=emboss
+font=ascii12
 
 [ "${1#@}" != "$1" ] && { sleep ${1#@}; shift; }  # see user_login for delayed launch
 
@@ -64,6 +65,7 @@ esac
 
 # for xorg session restricted nfs: $SESSION/nfs
 nfs() {
+return ## TODO
 	server && return
 	case $1 in
 		mount  )
@@ -88,8 +90,8 @@ if console ;then
 	wm=$(cat $WM)
 	[ ${#wm} -le 12 ] && extra=' '  # emboss spacing
 	[ $font = emboss ] && seat=$(echo $wm | sed -r "s/(.)/\1 $extra/g; s/ *$//") || seat=$wm
-	[ $(cat $SEAT) -lt 240 ] && seat="$(echo $seat | cut -c -24)"  # assumes display width jump from 1920 to 1366
-	void && toilet -F gay -f $font "$seat" || { echo $BLACK; figlet -t -S -f lean "$seat"; echo $NOCOLOR; }
+	[ $(cat $SEAT) -lt 240 ] && seat="$(echo $seat | cut -c -24)"  # assumes display width jump from 1920 to 1366 ## TODO
+	void || artix && toilet -F metal -f $font "$seat" || { echo $BLACK; figlet -t -S -f lean "$seat"; echo $NOCOLOR; }
 	[ $wm = shell ] && exit  # escape to shell prompt
 
 	pstat startx && exit

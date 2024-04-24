@@ -36,8 +36,9 @@ case $1 in
 		# switch desktops with conkyrc window_type (override) change to prevent 2bwm race condition
 		xdotool get_desktop >$DESKTOP
 		xdotool set_desktop 9
+		rm -rf /tmp/qclocktwo  # clear qclock buffers
 		/usr/bin/conky -c $CONKYRC 2>/dev/null &
-		rm -rf /tmp/qclocktwo ;;  # clear qclock buffers
+		;;
 	
 	off    )
 		clock || exit

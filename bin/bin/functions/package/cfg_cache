@@ -34,11 +34,6 @@ if [ -d $1 ] ;then
 		ditto rm 'runit supervise links..'
 		find $ROOT$1$host -type l -name 'supervise' -exec rm -v {} \;
 	fi
-else
-	if [ $(find $ROOT$DIR$host -type l -name 'supervise' | wc -l) -gt 0 ] ;then
-		ditto rm 'runit supervise links..'
-		find $ROOT$DIR$host -type l -name 'supervise' -exec rm -v {} \;
-	fi
 fi
 
 # kak: filetype=sh

@@ -8,6 +8,9 @@
 
 usage() { usage: "$(basename $0) [vim], see vim command :Map"; exit 1; }
 
+ACK={ACK:-ag}
+[ $ACK = ag ] && ACK='ag --nonumbers' || ACK='rg --no-line-number'
+
 vimrc="$STOW/vim/.vimrc $HOME/.vim/config/*.vim"
 index=$CACHEDIR/vmap
 vmap=/tmp/vim:map
@@ -26,9 +29,9 @@ maps() {
 		ag --ignore-case --nonumbers "<.*F$i>" $vmap
 	done >$index:fkey
 
-	ag --ignore-case --nonumbers "^.  *$leader" $vmap | sed -r "s/^(.  *)($leader)([^ ]*) /\1\2\t\3 /"                             \
+	$ACK --ignore-case "^.  *$leader" $vmap | sed -r "s/^(.  *)($leader)([^ ]*) /\1\2\t\3 /"                             \
 	| sort -t"$(printf '\t')" -k2 | sed "s/\t//" >$index:leader
-	ag --ignore-case --nonumbers -v "^.  *($leader|<SNR>)|<[^ ]*F[0-9]*>|$ignore_plug" $vmap | sed -r "s/^(.  *)([^ ]*) /\1\t\2 /" \
+	$ACK --ignore-case -v "^.  *($leader|<SNR>)|<[^ ]*F[0-9]*>|$ignore_plug" $vmap | sed -r "s/^(.  *)([^ ]*) /\1\t\2 /" \
 	| sort -t"$(printf '\t')" -k2 | sed "s/\t//" >$index:map
 }
 

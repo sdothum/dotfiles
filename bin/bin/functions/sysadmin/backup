@@ -1,0 +1,30 @@
+#!/usr/bin/bash
+# sdothum - 2016 (c) wtfpl
+
+# Sysadmin
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Rsync wrapper
+
+usage() { usage: "$(basename $0) root | home | all"; exit 1; }
+
+NVME=${NVME:-/dev/nvme1n1p3}
+EXCLUDE='--exclude=/dev --exclude=/home --exclude=/mnt --exclude=/net --exclude=/proc --exclude=/run --exclude=/sys --exclude=/tmp'
+# DRYRUN='--dry-run'
+
+[ $noprompt ] || { ifno "backup $1" && exit; }
+trace -- "backup $1"
+
+SUDO=sudo  # as root SEE: rsync wrapper
+case $1 in
+	''   ) usage ;;
+	root ) subvol '@'     && rsync $DRYRUN -a --delete $EXCLUDE / /mnt ;;
+	home ) subvol '@home' && rsync $DRYRUN -a --delete /home/ /mnt ;;
+	all  ) noprompt=true backup root; noprompt=true backup home ;;
+	*    ) usage ;;
+esac
+
+sudo umount /mnt
+# trace --  # elapsed time SEE: rsync wrapper
+
+# kak: filetype=sh

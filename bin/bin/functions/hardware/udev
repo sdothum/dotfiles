@@ -6,9 +6,9 @@
 
 # ....................................................................... Device
 
-if doas udevadm control --reload-rules ;then
+if sudo udevadm control --reload-rules ;then
 	ditto udev "reload udev rules"
-	doas udevadm trigger
+	sudo udevadm trigger
 else
 	notify critical udev "reload udev rules failed"
 fi

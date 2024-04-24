@@ -1,0 +1,30 @@
+# sdothum - 2016 (c) wtfpl
+
+# Sysadmin
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Rsync wrapper
+
+KOBO=/run/media/shum/KOBOeReader
+KINDLE=/run/media/shum/Kindle
+
+[ -e $KINDLE ] && [ -e $KOBO ] || { echo "connect Kobo and Kindle to usb"; exit 1; }
+ifno "sync Kobo -> Kindle" && exit
+cd $KOBO
+
+ditto kindle "syncing library, history and user patches to kobo master"
+rsync -av --update books $KINDLE/documents/
+ditto kindle "update metadata for added books via calibre"
+rsync -av --delete .adds/koreader/patches $KINDLE/koreader/
+rsync -av --delete .adds/koreader/fonts $KINDLE/koreader/
+
+ifno "sync Kindle history" || {
+	HISTORY=$KINDLE/koreader/history.lua
+	ditto update "$HISTORY"
+	mv -v $HISTORY $HISTORY.last
+	sed 's|/onboard/|/us/documents/|' .adds/koreader/history.lua >$HISTORY
+}
+ifno "copy gestures" || cp .adds/koreader/settings/gestures.lua $KINDLE/koreader/settings/
+sync
+
+# kak: filetype=sh

@@ -1,0 +1,18 @@
+# sdothum - 2016 (c) wtfpl
+
+# Sysadmin
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Rsync wrapper
+
+if server ;then
+	sudo chown -cR $USER:users $HOME/stow/build/build/qmk_firmware
+	ifyes "backup stow to $laptop" &&
+		rsync -r --delete --exclude=.SyncArchive $STOW $USER@$laptop:$HOME/
+	ifyes "backup stow to $netbook" &&
+		rsync -r --delete --exclude=.SyncArchive $STOW $USER@$netbook:$HOME/
+else
+	ifno "update stow to $SERVER" || rsync --exclude=.SyncArchive $STOW $USER@$SERVER:$HOME/
+fi
+
+# kak: filetype=sh

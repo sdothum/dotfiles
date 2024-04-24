@@ -6,10 +6,12 @@
 
 # .................................................................. Systemd log
 
+ACK={ACK:-ag}
+
 if void ;then
-	[ $1 ] && cat /var/log/socklog/everything/current | ack $@ | less -MRX || less -MRX /var/log/socklog/everything/current 
+	[ $1 ] && cat /var/log/socklog/everything/current | $ACK $@ | less -MRX || less -MRX /var/log/socklog/everything/current
 else
-	[ $1 ] && sudo journalctl -b | ag --regexp "\"$@\"" | less -MRX || sudo journalctl -b
+	[ $1 ] && sudo journalctl -b | $ACK "\"$@\"" | less -MRX || sudo journalctl -b
 fi
 
 # kak: filetype=sh

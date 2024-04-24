@@ -6,27 +6,29 @@
 
 # .......................................................................... CPU
 
-usage() { usage: "$(basename $0) [i7 | celeron | atom | arm]"; exit 1; }
+usage() { usage: "$(basename $0) [ryzen 9 | i7 | celeron | atom | arm]"; exit 1; }
 
 # usage: processor <name> <field> <delimeter>
 processor() {
-	[ "$(cat /proc/cpuinfo | grep 'model name' | sed 's/model name.*: //' | uniq | cut -d' ' -f$2 | cut -d$3 -f1)" = $1 ] || return
+	[ "$(cat /proc/cpuinfo | grep 'model name' | sed 's/model name.*: //' | uniq | cut -d' ' -f$2 | cut -d$3 -f1)" = "$1" ] || return
 	echo "$1" | lowercase
 	exit
 }
 
 case $1 in
-	''      )
-		processor i7      '3' '-'
-		processor Celeron '2' '('
-		processor Atom    '2' '('
-		processor ARM     '1' 'v' ;;
-	
-	i7      |\
-	arm     |\
-	atom    |\
-	celeron )	[ "$(cpu)" = $1 ] ;;
-	*       )	usage ;;
+	''        )
+		processor 'Ryzen 9' '2-3' ':'  # AMD rules!
+		processor i7        '3'   '-'
+		processor Celeron   '2'   '('
+		processor Atom      '2'   '('
+		processor ARM       '1'   'v'
+		;;
+	'ryzen 9' |\
+	i7        |\
+	arm       |\
+	atom      |\
+	celeron   )	[ "$(cpu)" = $1 ] ;;
+	*         )	usage ;;
 esac
 
 # kak: filetype=sh

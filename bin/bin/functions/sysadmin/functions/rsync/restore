@@ -1,0 +1,24 @@
+# sdothum - 2016 (c) wtfpl
+
+# Sysadmin
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Rsync wrapper
+
+SUDO=sudo  # see rsync
+
+if server ;then
+	ifno 'restore media server databases from /net/archive' || {
+		sudo systemctl stop sonarr
+		rsync -r --delete /net/archive/var/lib/sonarr /var/lib/
+		sudo systemctl start sonarr
+		sudo systemctl stop mysqld
+		rsync -r --delete /net/archive/var/lib/mysql /var/lib/
+		sudo systemctl start mysqld
+		sudo systemctl stop tt-rss
+		rsync /net/archive/etc/webapps/tt-rss/config.php /etc/webapps/tt-rss/
+		sudo systemctl start tt-rss
+	}
+fi
+
+# kak: filetype=sh

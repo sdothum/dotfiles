@@ -12,6 +12,6 @@ usage() { usage: "$(basename $0) [-w] <regex>"; exit 1; }
 [ "$1" = -w ] && { w=-w; shift; }
 
 # pass parms via env
-AG="$w -l --nocolor --silent" a "$@"
+AG="$w -l --nocolor --silent" RG="$w -l --color=never" a "$@"  # SEE: 'a' for which search engine
 
 # kak: filetype=sh

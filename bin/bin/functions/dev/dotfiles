@@ -36,6 +36,7 @@ git reset >/dev/null  # undo any previous aborted dotfiles
 find . -name '*.sync-conflict-*' -exec rm {} \;
 find . -name '*.syncthing.hsts.tmp' -exec rm {} \;
 sudo find . -name '.uuid' -exec rm {} \;
+find -regex '.*\/\.[^\]+\.kak\.[^.][^.][^.][^.][^.][^.]' -exec mv -v /tmp/{} \;
 
 init() {
 	git init

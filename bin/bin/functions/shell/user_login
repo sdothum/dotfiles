@@ -15,11 +15,10 @@ trap "rm -f $FORTUNE:term" EXIT
 
 # console login check
 if console ;then
-	find $HOME -iname '*sync-conflict*' -exec rm -v {} \;  # purge syncthing conflicts
-	echo
+	exists syncthing && find $HOME -iname '*sync-conflict*' -exec rm -v {} \;  # purge syncthing conflicts
 	# delayed startup of default wm for remote computers
 	if [ -s $BOOTWM ] ;then   # see console_login
-		exec x @$(cat $BOOTWM)  # will not spawn otherwise (alpine requires delay in x)
+		exec x $(cat $BOOTWM)  # will not spawn otherwise (alpine requires delay in x)
 	fi
 elif [ -e $FORTUNE:term ] ;then
 	if [ ! -e $FORTUNE ] ;then

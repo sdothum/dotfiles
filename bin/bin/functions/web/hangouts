@@ -17,8 +17,9 @@ case $BROWSER in
 	*      ) WIDTH=800 DELAY=1.5 qutebrowser $URL & ;;
 esac
 
-xsync 'Gmail'
-window size B5
-window snap left
+# xsync 'Gmail'
+# window size B5
+# window snap left
+# window tile 4 1
 
 # kak: filetype=sh

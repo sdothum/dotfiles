@@ -1,0 +1,26 @@
+#!/usr/bin/bash
+# sdothum - 2016 (c) wtfpl
+
+# Sysadmin
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Mount subvol
+
+usage() { usage: "$(basename $0) @ | root | [@]home"; exit 1; }
+
+NVME=${NVME:-/dev/nvme1n1p3}
+
+subvol() {
+	mount | grep -q /mnt && sudo umount /mnt
+	sudo mount -noatime,compress=lzo,space_cache=v2,subvol=$1 $NVME /mnt
+	ditto btrfs "/mnt/$1"
+}
+
+case $1 in
+	''           ) usage          ;;
+	root | @     ) subvol '@'     ;;
+	home | @home ) subvol '@home' ;;
+	*            ) usage          ;;
+esac
+
+# kak: filetype=sh

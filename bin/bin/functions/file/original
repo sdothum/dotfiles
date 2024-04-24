@@ -1,6 +1,5 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-
 # File
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -8,25 +7,34 @@
 
 usage() { usage: "$(basename $0) [-f | -q]* <file>"; exit 1; }
 
+case $(dist) in
+	alpine ) EXTENSION='@apk'      ;;
+	artix  ) EXTENSION='@pacman'   ;;
+	arch   ) EXTENSION='@pacman'   ;;
+	void   ) EXTENSION='@xbps'     ;;
+	nvidia ) EXTENSION='@xbps'     ;;  # nvidia specific void install
+	*      ) EXTENSION='@original' ;;
+esac
+
 V=-v
 while : ;do
 	case "$1" in
-		-f ) eval sudo rm -rf "\$$#.original"; shift; continue ;;
+		-f ) eval sudo rm -rf "\$$#.$EXTENSION"; shift; continue ;;
 		-q ) unset V;                          shift; continue ;;
 		'' ) usage ;;
 		*  ) break ;;
 	esac
 done
 
-[ -e "$1.original" ] && exit 1
+[ -e "$1.$EXTENSION" ] && exit 1
 
 # save distribution original
 if [ -e "$1" ] ;then
 	if [ $V ] ;then
-		ditto copy "$(sudo cp -pR $V "$1" "$1.original")"
+		ditto copy "$(sudo cp -pR $V "$1" "$1.$EXTENSION")"
 	else
-		ditto copy "'$1' -> '$1.original'"
-		sudo cp -pR "$1" "$1.original"
+		ditto copy "'$1' -> '$1.$EXTENSION'"
+		sudo cp -pR "$1" "$1.$EXTENSION"
 	fi
 	exit 0
 fi
