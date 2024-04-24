@@ -1,0 +1,5 @@
+type            = process
+command         = /usr/bin/rpc.statd -F -d
+smooth-recovery = true
+logfile         = /var/log/dinit/statd.log
+depends-on      = rpcbind

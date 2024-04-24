@@ -6,7 +6,7 @@
 
 # ........................................................................ unrar
 
-cd /net/depot
+cd /home/depot
 [ -d unrar ] && { cd unrar; git pull; } || { git clone --depth 1 https://github.com/pmachapman/unrar.git; cd unrar; }
 
 make clean

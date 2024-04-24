@@ -1,0 +1,66 @@
+# utilities packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= file conversion
+= ═══════════════
+  dos2unix
+
+
+= file compression
+= ════════════════
+  file-roller
+  par2cmdline
+  7zip
+  p7zip-unrar
+  squashfs-tools
+  unrar
+  unzip
+  zip
+
+
+= disk utility
+= ════════════
+# convmv
+# gparted
+  gptfdisk
+
+
+= sync
+= ════
+  lsyncd
+! stow lsyncd
+" check lsyncd configuration before sv enable
+  rsync
+  rclone
+# syncthing
+  vsftpd
+# watchman
+
+
+= system monitor
+= ══════════════
+  btop
+# glances
+# gsmartcontrol [server]
+# htop
+  iotop
+  nvtop
+  psensor
+# smartmontools
+  socklog-void  
+  sysstat
+
+
+= test
+= ════
+  fio
+  hdparm
+  memtest86+
+" memtest installed for boot invocation
+m speedtest
+
+
+# vim: set ft=conf: #

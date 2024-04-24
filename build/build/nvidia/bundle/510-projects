@@ -1,0 +1,27 @@
+# project packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= mpu programmer
+= ══════════════
+  avr-gcc
+  avr-libc
+  avrdude
+  dfu-programmer
+  
+
+= font editor
+= ═══════════
+  fontforge
+  fonttools
+  nodejs
+  otfcc
+  ttfautohint
+
+
+# vim: set ft=conf: #
+
+
+

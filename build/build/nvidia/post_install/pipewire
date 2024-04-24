@@ -1,0 +1,19 @@
+# sdothum - 2016 (c) wtfpl
+
+# Post_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ..................................................................... pipewire
+
+CONFIG=$XDG_CONFIG_HOME/pipewire
+CONFIG_D=$CONFIG/pipewire.conf.d
+
+mkdir -p $CONFIG_D
+ln -s /usr/share/examples/wireplumber/10-wireplumber.conf $CONFIG_D/
+ln -s /usr/share/examples/pipewire/20-pipewire-pulse.conf $CONFIG_D/                
+
+cp -vf /usr/share/pipewire/pipewire.conf $CONFIG
+sed -i '/pipewire-pulse.conf/s/#//' $CONFIG/pipewire.conf
+
+# vim: set ft=sh: #
+

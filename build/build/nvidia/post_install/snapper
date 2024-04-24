@@ -1,0 +1,38 @@
+# sdothum - 2016 (c) wtfpl
+
+# Post_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ...................................................................... snapper
+
+# fresh setup
+[ -d /.snapshots ] && { ifno "re-initialize snapper config" || exit; }
+sudo umount /.snapshots 2>/dev/null
+sudo rm -rf /.snapshots
+
+# create our @snapshots subvol
+sudo mount (df --output=source / | tail -n 1) /mnt
+sudo btrfs subvolume create /mnt/@snapshots
+echo (df --output=source / | tail -n 1)" /.snapshots btrfs defaults,autodefrag,compress=zstd,commit=120,noatime,subvol=@snapshots 0 0
+"  | sudo tee -a /etc/fstab
+sudo umount /mnt
+
+sudo snapper -c root create-config /  # creates a /.snapshots subvol
+
+sudo sed -i -e "/^ALLOW_USERS=/cALLOW_USERS=\"$USER\""        \
+	-e '/^TIMELINE_LIMIT_HOURLY=/cTIMELINE_LIMIT_HOURLY="24"'  \
+	-e '/^TIMELINE_LIMIT_DAILY=/cTIMELINE_LIMIT_DAILY="10"'    \
+	-e '/^TIMELINE_LIMIT_WEEKLY=/cTIMELINE_LIMIT_WEEKLY="3"'   \
+	-e '/^TIMELINE_LIMIT_MONTHLY=/cTIMELINE_LIMIT_MONTHLY="0"' \
+	-e '/^TIMELINE_LIMIT_YEARLY=/cTIMELINE_LIMIT_YEARLY="0"'   \
+	/etc/snapper/configs/root
+
+sudo btrfs subvolume delete /.snapshots  # use our @snapshots subvolume (just for @subvol convention)
+sudo mkdir /.snapshots
+sudo chmod a+rx /.snapshots
+sudo chown :users /.snapshots
+sudo mount /.snapshots                   # see fstab above
+
+sudo snapper setup-quota
+
+# vim: set ft=sh: #

@@ -1,0 +1,44 @@
+# email packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= imap
+= ════
+# d dovecot-dinit
+# d dovecot
+#   imapfilter
+# # offlineimap
+#   python3-keyrings-alt
+# ! stow imap
+  isync
+! stow isync mail
+
+
+= mail client
+= ═══════════
+  aerc
+! stow aerc mime
+! cfg_install -link /etc/aliases
+# alot
+  notmuch
+! stow notmuch
+d ! notmuch new
+
+
+= mail utility
+= ════════════
+# afew-git
+  msmtp
+  pam
+# sharutils
+
+
+= mime
+= ════
+  catdoc
+  docx2txt
+
+
+# vim: set ft=conf: #

@@ -1,0 +1,17 @@
+# sdothum - 2016 (c) wtfpl
+
+# User_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................................ krita
+
+VERSION=1.16.1
+
+cd /home/depot
+wget https://github.com/Acly/krita-ai-diffusion/releases/download/v${VERSION}/krita_ai_diffusion-${VERSION}.zip
+ditto krita "tools > scripts > import python plugin > krita_ai_diffusion-${VERSION}.zip"
+ditto krita "settings > dockers > ai image generation"
+ditto krita "ai image generation > configure > install"
+
+
+# vim: set ft=sh: #

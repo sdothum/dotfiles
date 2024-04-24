@@ -1,0 +1,62 @@
+# media packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= media server
+= ════════════
+# kodi
+
+
+= music
+= ═════
+# beets
+# deadbeef      [server]
+# mpc
+# mpd
+# ncmpcpp
+
+
+= drawing
+= ═══════
+# inkscape
+  krita
+  python3-PyQt5  # python plugin dependency
+
+
+= photography
+= ═══════════
+  digikam
+  dispcalGUI
+  gimp
+  gpick
+  # gmic-gimp
+  ImageMagick
+  resynthesizer
+  rawtherapee
+
+
+= radio
+= ═════
+
+
+= ripping
+= ═══════
+# asunder       [server]
+# audacity      [server]
+# cdrdao        [server]
+# ffmpeg        [server]
+# handbrake     [server]
+# mkvtoolnix    [server]
+# transcode     [server]
+# xfburn        [server]
+
+
+= video
+= ═════
+  blender
+  mpv
+
+
+# vim: set ft=conf: #

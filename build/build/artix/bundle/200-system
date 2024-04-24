@@ -1,0 +1,86 @@
+# system packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= codec
+= ═════
+  gst-libav
+  gst-plugins-base
+  gst-plugins-good
+  gst-plugins-ugly
+  gstreamer
+  gstreamer-vaapi
+  libmediainfo
+
+
+= hardware
+= ════════
+# dmidecode
+# intel-ucode
+  inxi
+# iucode-tools  # intel specific
+  lm_sensors
+
+
+= power
+= ═════
+# acpi          [laptop]
+# cpupower      [laptop]
+# tlp-dinit     [laptop]
+# tlp           [laptop]
+# xfce4-power-manager
+
+
+= security
+= ════════
+# gksu
+  gnome-keyring
+d gnupg
+d pass
+# d pinentry-gtk
+# d pinentry-qt   # for x11 desktop passphrase
+# polkit-gnome
+
+
+= sound
+= ════
+  alsa-utils
+  alsa-plugins
+# alsaequal
+# alsa-ucm-conf
+# ConsoleKit2
+# mpg123
+# pulseaudio
+# alsa-plugins-pulseaudio
+# pulseaudio-equalizer-ladspa
+# pipewire-dinit
+# pipewire-pulse-dinit
+  pipewire
+  pipewire-alsa
+  pipewire-pulse
+# pipewire-audio
+  wireplumber
+# pulseeffects
+# rtkit         # pipewire run dependency, in addition to dbus
+  pavucontrol
+
+
+= system utility
+= ══════════════
+  cronie-dinit
+  cronie
+! sv enable cronie
+  logrotate
+! stow logrotate
+# preload
+  psmisc
+# udevil        # no-config automount (less involved setup than udiskie) 
+  udiskie
+! stow udiskie
+! sudo groupadd plugdev
+! sudo usermod -aG plugdev $USER
+
+
+# vim: set ft=conf: #

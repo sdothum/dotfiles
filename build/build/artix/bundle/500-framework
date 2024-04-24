@@ -1,0 +1,39 @@
+# web framework packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= sinatra web framework
+= ═════════════════════
+  g kramdown
+  g mail
+  g rack
+  g sanitize
+  g sinatra
+  g slim
+  g term-ansicolor
+  g thin
+  g xapian-fu
+# libuuid-devel  # xapian-ruby dependency
+  zlib           # xapian-ruby dependency
+  g xapian-ruby
+
+
+= web server
+= ══════════
+  caddy
+! sudo /usr/bin/caddy fmt --overwrite  /etc/caddy/Caddyfile
+! sudo usermod -aG $USER caddy
+
+  g puma
+
+" configure /srv/http/thedarnedestthing.com/
+! stow vimwiki thedarnedestthing
+! sudo mkdir -p /srv/http
+! sudo ln -s $HOME/thedarnedestthing.com /srv/http
+! sudo find -L /srv/http/thedarnedestthing.com -type d -exec chmod ug+rwx {} \;
+! sudo find -L /srv/http/thedarnedestthing.com -type f -exec chmod ug+rw {} \;
+
+
+# vim: set ft=conf: #

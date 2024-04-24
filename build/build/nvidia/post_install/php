@@ -1,0 +1,20 @@
+# sdothum - 2016 (c) wtfpl
+
+# Post_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .......................................................................... php
+
+original /etc/php/php.ini
+sudo sed -i -e '/open_basedir/s/=.*/=/' \
+         -e '/max_execution_time/s/=.*/= 300/' \
+         -e '/max_execution_time/s/;//' \
+         -e '/date.timezone/s|=.*|= "Canada/Eastern"|' \
+         -e '/date.timezone/s/;//' \
+         -e '/display_errors=/s/off/on/' \
+         -e '/;extension=openssl/s/;//' \
+         /etc/php/php.ini
+
+ditto INFO sv 'enable nginx'
+
+# vim: set ft=sh: #

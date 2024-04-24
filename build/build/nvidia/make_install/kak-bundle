@@ -1,0 +1,13 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................. language servers
+
+mkdir -p $HOME/.config/kak/bundle/
+git clone https://github.com/jdugan6240/kak-bundle $HOME/.config/kak/bundle/kak-bundle
+ditto kak "run :bundle-install to enable plugins (even if bundle folder exists)"
+
+# kak: filetype=sh

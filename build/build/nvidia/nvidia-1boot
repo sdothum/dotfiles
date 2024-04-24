@@ -1,0 +1,183 @@
+#!/bin/bash
+# sdothum - 2016 (c) wtfpl
+
+# voidlinux boot configuration
+#
+# Usage: nvidia-1boot [asia | hold | <user>]*
+
+
+source ./nvidia-functions
+
+SERVER=10.1.0.11  # motu takeover
+
+heading 'setup'
+# ══════════════════════════════════════════════════════════════════════════════
+cd /
+while [ $1 ] ;do
+  case $1 in
+  asia) asia=true ;;
+  hold) hold=true ;;
+  *   ) user=$1 ;;
+  esac
+  shift
+done
+
+user=${user:-shum}
+echo "--> USER: $user"
+xbps-query -S musl && { musl=-musl; echo '--> void musl'; }
+checkpoint
+
+
+# heading 'sudo'
+# # ══════════════════════════════════════════════════════════════════════════════
+# original /etc/sudoers
+# sed -i '/# %wheel ALL=(ALL.*) NOPASSWD: ALL/s/# //; /## Defaults specification/aDefaults insults' /etc/sudoers
+# echo -e "\n# see https://www.reddit.com/r/voidlinux/comments/dsdn5a/did_sudo_behaviour_change_recently/\nDefaults umask = 022" | sudo tee -a /etc/sudoers
+# cat /etc/sudoers
+# checkpoint
+# 
+# 
+# heading 'check kvm compatibility'
+# # ══════════════════════════════════════════════════════════════════════════════
+# # [ $hostname = luna ] || cfg_install /etc/modprobe.d/blacklist-kvm.conf
+# checkpoint
+# 
+# 
+# heading 'hold'
+# # ══════════════════════════════════════════════════════════════════════════════
+# # headers will not match a held kernel.. could be problematic
+# [ $hold ] && xbps-pkgdb -m hold
+# xbps-query --list-hold-pkgs
+# checkpoint
+# 
+# 
+# heading 'update repo'
+# # ══════════════════════════════════════════════════════════════════════════════
+# mkdir -p /etc/xbps.d
+# cp -v /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d
+# [ $asia ] && sed -i 's|https://alpha.de.repo.voidlinux.org|https://void.webconverger.org|g' /etc/xbps.d/*-repository-*.conf ||
+#              sed -i 's|https://alpha.de.repo.voidlinux.org|https://mirror.clarkson.edu/voidlinux|g' /etc/xbps.d/*-repository-*.conf
+# xbps-install -Suv
+# checkpoint
+
+xbps-install -y linux-firmware
+xbps-install -y linux-firmware-network
+xbps-query -L
+checkpoint
+
+
+heading 'session env'
+# ══════════════════════════════════════════════════════════════════════════════
+xbps-install -y bc
+xbps-install -y dos2unix
+xbps-install -y dash
+xbps-install -y fish-shell
+xbps-install -y perl
+xbps-install -y rsync
+xbps-install -y stow
+# cfg_install /etc/profile.d/path.sh
+checkpoint
+
+
+heading 'xorg keymap prep'
+# ══════════════════════════════════════════════════════════════════════════════
+original /etc/X11/xorg.conf.d/10-keyboard.conf
+xkbdconf() {
+  cat <<EOF
+Section "InputClass"
+	Identifier "Fix Alt-Shift chords"
+	MatchIsKeyboard "on"	# Limit these settings to keyboards
+ 	Driver "libinput"
+	# Keyboard layout - comma-separated list for multiple layouts
+	Option "XkbLayout" "us"
+EndSection
+EOF
+}
+mkdir -p /etc/X11/xorg.conf.d
+xkbdconf | tee /etc/X11/xorg.conf.d/10-keyboard.conf
+checkpoint
+
+
+heading 'wireless network'
+# ══════════════════════════════════════════════════════════════════════════════
+# xbps-install -y dbus
+# xbps-install -y connman
+xbps-install -y inetutils-hostname
+ln -sf /usr/bin/inetutils-hostname /usr/bin/hostname
+xbps-install -y wifi-firmware
+# echo 'nameserver 10.1.0.10' | tee /etc/resolv.conf
+# chattr +i /etc/resolv.conf
+# echo noarp | tee -a /etc/dhcpcd.conf
+# vi /etc/dhcpcd.conf
+# checkpoint
+# 
+# 
+# heading 'rc.conf'
+# # ══════════════════════════════════════════════════════════════════════════════
+# original /etc/rc.conf
+# rcconf() {
+#   cat <<EOF
+# HOSTNAME=$hostname
+# 
+# # Set RTC to UTC or localtime.
+# HARDWARECLOCK="UTC"
+# 
+# # Set timezone, availables timezones at /usr/share/zoneinfo.
+# TIMEZONE="Canada/Eastern"
+# 
+# # Keymap to load, see loadkeys(8).
+# KEYMAP="us"
+# 
+# # Console font to load, see setfont(8).
+# #FONT="lat9w-16"
+# 
+# # Console map to load, see setfont(8).
+# #FONT_MAP=
+# 
+# # Font unimap to load, see setfont(8).
+# #FONT_UNIMAP=
+# 
+# # Kernel modules to load, delimited by blanks.
+# #MODULES=""
+# EOF
+# }
+# rcconf | tee /etc/rc.conf
+# vi /etc/rc.conf
+# checkpoint
+
+#
+# heading 'edit fstab'
+# # ══════════════════════════════════════════════════════════════════════════════
+# original /etc/fstab
+# vi /etc/fstab
+# checkpoint
+
+
+# heading 'set and generate locale'
+# # ══════════════════════════════════════════════════════════════════════════════
+# original /etc/default/libc-locales
+# sed -i '/#en_US.UTF-8 UTF-8/s/#//' /etc/default/libc-locales
+# echo LANG=en_US.UTF-8 | tee /etc/locale.conf
+# echo LC_COLLATE=C | tee -a /etc/locale.conf
+# export LANG=en_US.UTF-8
+# [ $musl ] || xbps-reconfigure -f glibc-locales
+# checkpoint
+
+
+# heading 'copy user stow'
+# # ══════════════════════════════════════════════════════════════════════════════
+# rsync -av $user@$SERVER:/home/$user/stow /home/$user
+# chown -R $user:users /home/$user
+# cp /home/$user/stow/bin/bin/path.sh /etc/profile.d
+
+
+heading 'stow bin build fish herbstluftwm X11/8pt'
+# ══════════════════════════════════════════════════════════════════════════════
+checkpoint
+
+
+heading 'reboot'
+# ══════════════════════════════════════════════════════════════════════════════
+
+
+# vim: set ft=sh: #

@@ -1,0 +1,53 @@
+# internet packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= chat/twitter
+= ════════════
+# bitlbee
+# libotr
+# hangups
+# mcabber
+# weechat
+# znc
+
+
+= cloud storage
+= ═════════════
+  dropbox
+  onedrive
+
+
+= file transfer
+= ═════════════
+  gftp
+d nzbget
+# sabnzbd  [server]
+d m sonarr [server]
+# qbittorrent
+  transmission-gtk
+
+
+= proxy
+= ═════
+# squid    [server]
+
+
+= web aggregator
+= ══════════════
+# php-gd
+# surfraw
+
+
+= miniflux
+= ════════
+# pgadmin3
+  postgresql
+  postgresql-client
+  postgresql-contrib
+  miniflux
+
+
+# vim: set ft=conf: #

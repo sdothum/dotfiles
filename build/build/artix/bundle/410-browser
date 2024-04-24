@@ -1,0 +1,27 @@
+# browser packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= browser
+= ═══════
+  chromium
+  elinks
+  firefox
+  lynx
+  qutebrowser
+! stow qutebrowser
+  surf
+# torbrowser-launcher
+# vimb
+  w3m-imgcat
+
+
+= browser addon
+= ═════════════
+# chromium-widevine  # required for netflix (qutebrowser and chromium)
+# youtube-dl
+
+
+# vim: set ft=conf: #

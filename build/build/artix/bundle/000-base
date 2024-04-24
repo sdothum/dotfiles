@@ -1,0 +1,115 @@
+# base packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+# first things first
+= autologin
+= ═════════
+# sudo  # post_install update of /etc/sudoers
+! sudo sed -i "/^command/s/$/ -a $USER/" /etc/dinit.d/tty1
+# ! sudo usermod -aG tty $USER 
+
+
+= wifi
+= ════
+# networkmanager-dinit  # should already be installed from initial chroot steps for completing bundle install
+! post_install networkmanager
+  inetutils  # for hostname tests
+
+
+= console font
+= ════════════
+  terminus-font
+! setfont ter-i18b  # sized for mobo video out
+
+
+= file transfer
+= ═════════════
+  curl
+  git
+  rsync
+  wget
+
+
+= archlinux repos
+= ═══════════════
+  artix-archlinux-support
+! sudo pacman-key --populate archlinux
+! post_install archlinux-mirrorlist
+m yay
+
+
+= linux firmware
+= ══════════════
+  linux-firmware-xz
+  # linux-firmware-network
+  # wifi-firmware
+
+
+= nvidia
+= ══════
+  nvidia             [gpu nvidia]
+  nvidia-settings    [gpu nvidia]
+  nvidia-utils-dinit [gpu nvidia]
+  nvidia-utils       [gpu nvidia]
+  libxnvctrl         [gpu nvidia]
+  opencl-nvidia      [gpu nvidia]
+
+
+= package manager
+= ═══════════════
+  pkg-config
+
+
+= development
+= ═══════════
+  base-devel
+  ragel
+
+
+= entropy
+= ═══════
+  haveged-dinit
+  haveged
+! sv enable haveged
+
+
+= file system
+= ═══════════
+# bcache-tools
+# btrbk
+  dosfstools
+# exfat-utils
+  exfatprogs
+  fuse
+# fuse-exfat
+# gvfs
+# mbuffer
+# mtpfs     # for supernote
+# gvfs-mtp  # for supernote
+  jmtpfs    # for supernote
+# ntfs-3g
+
+
+= session
+= ═══════
+  bc
+  dos2unix
+  dash
+  fish
+  glibc-locales  # post_install setup
+  perl
+  stow-dotfiles
+! stow bin build fish
+! sudo cp /home/$USER/stow/bin/bin/path.sh /etc/profile.d  # PATH generator
+
+
+= sound
+= ═════
+  alsa-utils-dinit
+  alsa-utils
+
+
+# vim: set ft=conf: #

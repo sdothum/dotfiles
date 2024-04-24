@@ -1,0 +1,7 @@
+type            = process
+run-as          = shum
+working-dir     = /srv/http/thedarnedestthing.com/application
+command         = /home/shum/.local/share/gem/ruby/3.0.0/bin/pumactl -F puma.rb start
+stop-command    = /home/shum/.local/share/gem/ruby/3.0.0/bin/pumactl -F puma.rb stop
+smooth-recovery = true
+depends-on      = network

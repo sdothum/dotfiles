@@ -1,0 +1,30 @@
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ....................................................................... sonarr
+
+version=2
+DEPOT=/home/depot/sonarr
+LIB=/usr/lib/sonarr
+SONARR=/srv/http/sonarr
+
+if [ ! -d $DEPOT ] ;then
+  mkdir -p $DEPOT
+  cd $DEPOT
+  wget http://update.sonarr.tv/v$version/master/mono/NzbDrone.master.tar.gz
+fi
+
+sudo mkdir -p $LIB
+sudo tar xvfz $DEPOT/NzbDrone.master.tar.gz --directory $LIB
+
+runit_install sonarr
+
+[ -e $SONARR/nzbdrone.db ] && exit
+sudo mkdir -p $SONARR
+[ -e /home/archive$SONARR ] && sudo rsync /home/archive$SONARR/ $SONARR
+sudo chown -R sonarr:sonarr $SONARR
+sudo rm $SONARR/*pid
+
+# vim: set ft=sh: #

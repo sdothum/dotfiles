@@ -1,0 +1,120 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# post install/upgrade configuration
+
+if [ ! -d $HOME/stow ] ;then
+  ditto ERROR error 'stow directory not present'
+  exit
+fi
+
+
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+                                                                   title "setup"
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+heading "/opt/bin, /etc/hosts link"
+# ══════════════════════════════════════════════════════════════════════════════
+cfg_install -link /opt/bin
+cfg_install -link /etc/hosts
+
+
+if [ ! -d /net/downloads/http ] ;then
+heading "/net/* directories"
+# ══════════════════════════════════════════════════════════════════════════════
+  sudo mkdir -pv /net/archive
+  sudo mkdir -pv /net/depot/virtualbox
+  sudo mkdir -pv /net/depot/vms
+  sudo mkdir -pv /net/downloads/depot
+  sudo mkdir -pv /net/downloads/http
+  sudo mkdir -pv /net/downloads/nzbs
+  sudo mkdir -pv /net/downloads/torrents
+  sudo mkdir -pv /net/media/ebooks
+  sudo mkdir -pv /net/media/music
+  sudo mkdir -pv /net/media/videos/animation
+  sudo mkdir -pv /net/media/videos/anime
+  sudo mkdir -pv /net/media/videos/movies
+  sudo mkdir -pv /net/media/videos/series
+  sudo mkdir -pv /net/media/videos/tutorials
+  sudo mkdir -pv /net/photos
+  permissions /net
+fi
+
+
+if laptop && [ ! -d /net/downloads/http ] ;then
+heading "/net/* directories"
+# ══════════════════════════════════════════════════════════════════════════════
+  sudo mkdir -pv /net/archive
+  sudo mkdir -pv /net/downloads/depot
+  sudo mkdir -pv /net/downloads/http
+  sudo mkdir -pv /net/downloads/nzbs
+  sudo mkdir -pv /net/downloads/torrents
+  permissions /net
+fi
+
+
+if sudo test ! -f /root/.forward ;then
+heading "root setup"
+# ══════════════════════════════════════════════════════════════════════════════
+  sudo usermod -s /bin/bash root
+  sudo mkdir -pv /root/tmp
+  sudo mkdir -pv /root/log
+  passphrase uid/gmail | sudo tee /root/.forward
+  original /root/.config
+  sudo ln -sf $HOME/bin /root/
+  sudo ln -sf $HOME/.config /root/
+  sudo ln -sf $HOME/.fonts /root/
+  original /root/.bashrc
+  sudo ln -sf $HOME/.bashrc /root/
+  sudo ln -sf $HOME/.vim /root/
+  sudo ln -sf $HOME/.vimrc /root/
+fi
+
+
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+                                                                title "hardware"
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+# if laptop && [ ! -f /etc/modules-load.d/pciehp.conf ] ;then
+# heading "acer sdhc card reader"
+# # ══════════════════════════════════════════════════════════════════════════════
+#     cfg_install /etc/modules-load.d/pciehp.conf
+#   fi
+# fi
+
+
+if server && ! grep -q '/net' /etc/fstab ;then
+heading "/net raid"
+# ══════════════════════════════════════════════════════════════════════════════
+  original /etc/fstab
+  cat /etc/fstab.original $HOME/build/cfg/etc/fstab.$(hostname).raid >$HOME/build/cfg/etc/fstab.$(hostname)
+  cfg_install /etc/fstab $(hostname)
+fi
+
+if gpu inspiron ;then
+# ══════════════════════════════════════════════════════════════════════════════
+heading "hdmi no blanking"
+  cfg_install /etc/X11/xorg.conf.d/10-monitor.conf
+fi
+
+
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+                                                                    title "boot"
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+if ! grep -q '/images/' /etc/default/grub ;then
+heading "grub splash"
+# ══════════════════════════════════════════════════════════════════════════════
+  grub_splash
+fi
+
+
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+                                                                  title "finish"
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+$HOME/build/void/nvidia-update
+
+# vim: set ft=sh: #

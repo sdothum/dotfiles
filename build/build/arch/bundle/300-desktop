@@ -8,12 +8,12 @@
 = ══════════
 # breeze-obsidian-cursor-theme
 # breeze-snow-cursor-theme
-  compton
 # compton-git
-# hsetroot
+  hsetroot
   lxappearance
 # nitrogen
-  setroot
+  picom
+# setroot
 # xcompmgr
 # shantz-xwinwrap-bzr     [server]
   unclutter

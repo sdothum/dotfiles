@@ -1,0 +1,46 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................. language servers
+
+BINARY_HOME="${HOME}/.local/bin"
+DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+LTEXVSN=16.0.0
+
+sudo xbps-install -y cargo git nodejs ruby ruby-devel
+
+sudo npm install -g bash-language-server                   # shell
+sudo npm install -g typescript typescript-language-server  # javascript
+sudo npm install -g vscode-langservers-extracted           # css / html / json
+sudo npm install -g yaml-language-server@next              # yaml
+cargo install --force --locked taplo-cli --features lsp    # toml
+cargo install --force buffer-language-server
+ditto lsp "gem install.. (be patient)"
+# gem installed via make_install ruby
+sudo gem install solargraph
+
+# markdown
+# wget -P /tmp https://github.com/artempyanykh/marksman/releases/download/2023-07-25/marksman-linux-x64
+# mv /tmp/marksman-linux-x64 $HOME/.local/bin/marksman
+# chmod +x $HOME/.local/bin/marksman
+
+# better markdown with full latex/grammar/spellcheck
+sudo xbps-install -y openjdk21
+sudo ln -s /usr/lib/jvm/openjdk21 /usr/lib/jvm/default-jvm
+
+wget -P /tmp https://github.com/valentjn/ltex-ls/releases/download/$LTEXVSN/ltex-ls-$LTEXVSN.tar.gz
+cd /tmp
+tar -xvf ltex-ls-$LTEXVSN.tar.gz
+sudo mv ltex-ls-$LTEXVSN /opt/ltex-ls
+
+# lexical language server (for document tokens)
+sudo npm install -g vim-language-server
+# scls snippets only (see languages.toml)
+cd /home/depot
+[ -d simple-completion-language-server ] && { cd simple-completion-language-server; git pull; } || {  git clone https://github.com/estin/simple-completion-language-server.git;  cd simple-completion-language-server; }
+cargo install --path .
+
+# kak: filetype=sh

@@ -1,0 +1,25 @@
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .......................................................................... nnn
+
+sudo xbps-install -y readline-devel
+
+cd /home/depot
+[ -d nnn ] && { cd nnn; git pull; cd ..; } || git clone https://github.com/jarun/nnn.git
+[ -d icons-in-terminal ] && { cd icons-in-terminal; git pull; cd ..; } || git clone https://github.com/sebastiencs/icons-in-terminal.git
+
+cd nnn
+make clean
+make O_NERD=1      # enable nerdfont icons
+sudo make install  # into local/bin
+mkdir -p $HOME/.config/nnn/plugins
+cp -v plugins/* $HOME/.config/nnn/plugins/
+find plugins -name '.*' -exec cp -v {} $HOME/.config/nnn/plugins/ \;  # cp plugins/.* does not reference hidden files
+
+cd ../icons-in-terminal
+./install.sh
+
+# vim: set ft=sh: #

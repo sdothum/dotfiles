@@ -1,0 +1,261 @@
+    1  cd
+    2  ls
+    3  pwd
+    4  mkdir mnt
+    5  mount /dev/sdb1 mnt
+    6  cd mnt
+    7  vi artix-chroot 
+    8  ./artix-chroot 
+    9  vi artix-chroot 
+   10  pacman -S vi
+   11  vi artix-chroot 
+   12  ./artix-chroot 
+   13  vi artix-chroot 
+   14  ./artix-grub 
+   15  ping www.google.com
+   16  pacman -S grub-install grub-mkconfig
+   17  which grub-install
+   18  ls /usr/bin/grub
+   19  ls /sbin
+   20  ls /sbin/grub*
+   21  ls
+   22  vi artix-install 
+   23  vi artix-grub 
+   24  ./artix-grub
+   25  cat artix-grub
+   26  cd
+   27  umount mnt
+   28  umount -R /mnt
+   29  exit
+   30  echo $PATH
+   31  which dhcpcd
+   32  cd /usr/bin
+   33  ls d*
+   34  cd /sbin
+   35  ls
+   36  ls dh*
+   37  ls wpaO
+   38  ls wpa*
+   39  ls net*
+   40  cd /usr/bin
+   41  ls net*
+   42  ls wpa*
+   43  cd /
+   44  cd /bin
+   45  ls
+   46  ls|mor
+   47  ls|more
+   48  ls grub*
+   49  ls wpa*
+   50  ls os*
+   51  ls dc*
+   52  ls ip
+   53  reboot
+   54  pacman -S dhcpcd wpa_supplicant
+   55  pacman -S wpa_cli
+   56  pacman -S wpa-cli
+   57  cd /etc
+   58  ls
+   59  vi pacman.conf
+   60  ping www.google.com
+   61  ps -ef | wpa
+   62  ps -ef | grep wpa
+   63  wpa_cli
+   64  vi /etc/wpa_supplicant/wpa_supplicant.conf
+   65  wpa_supplicant -B -i wlan0 /etc/wpa_supplicant/wpa_supplicant.conf
+   66  wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+   67  wpa_cli
+   68  ping -c2 www.google.com
+   69  cd /etc
+   70  cat resolv.conf
+   71  vi /etc/resolv.conf
+   72  ping -c2 www.google.com
+   73  dhcpd &
+   74  dhcpcd &
+   75  ping -c2 www.google.com
+   76  ping -c2 www.google.com
+   77  pacman -S kakoune
+   78  cd /home/shum/build/artix
+   79  ls
+   80  cat pacman.conf 
+   81  cd /etc
+   82  vi pacman.conf 
+   83  vi pacman.conf 
+   84  pacman -Su
+   85  pacman -S
+   86  pacman -S artix-archlinux-support
+   87  vi pacman.conf
+   88  pacman -S artix-archlinux-support
+   89  pacman-key --populate archlinux
+   90  vi pacman.conf
+   91  pacman -S kakoune
+   92  pacman -Sy
+   93  pacman -S kakoune
+   94  cd /home/shum/build/artix
+   95  ls
+   96  history
+   97  pwd
+   98  history >history.root.txt
+    1  cd
+    2  ls
+    3  pwd
+    4  mkdir mnt
+    5  mount /dev/sdb1 mnt
+    6  cd mnt
+    7  vi artix-chroot 
+    8  ./artix-chroot 
+    9  vi artix-chroot 
+   10  pacman -S vi
+   11  vi artix-chroot 
+   12  ./artix-chroot 
+   13  vi artix-chroot 
+   14  ./artix-grub 
+   15  ping www.google.com
+   16  pacman -S grub-install grub-mkconfig
+   17  which grub-install
+   18  ls /usr/bin/grub
+   19  ls /sbin
+   20  ls /sbin/grub*
+   21  ls
+   22  vi artix-install 
+   23  vi artix-grub 
+   24  ./artix-grub
+   25  cat artix-grub
+   26  cd
+   27  umount mnt
+   28  umount -R /mnt
+   29  exit
+   30  echo $PATH
+   31  which dhcpcd
+   32  cd /usr/bin
+   33  ls d*
+   34  cd /sbin
+   35  ls
+   36  ls dh*
+   37  ls wpaO
+   38  ls wpa*
+   39  ls net*
+   40  cd /usr/bin
+   41  ls net*
+   42  ls wpa*
+   43  cd /
+   44  cd /bin
+   45  ls
+   46  ls|mor
+   47  ls|more
+   48  ls grub*
+   49  ls wpa*
+   50  ls os*
+   51  ls dc*
+   52  ls ip
+   53  reboot
+   54  pacman -S dhcpcd wpa_supplicant
+   55  pacman -S wpa_cli
+   56  pacman -S wpa-cli
+   57  cd /etc
+   58  ls
+   59  vi pacman.conf
+   60  ping www.google.com
+   61  ps -ef | wpa
+   62  ps -ef | grep wpa
+   63  wpa_cli
+   64  vi /etc/wpa_supplicant/wpa_supplicant.conf
+   65  wpa_supplicant -B -i wlan0 /etc/wpa_supplicant/wpa_supplicant.conf
+   66  wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+   67  wpa_cli
+   68  ping -c2 www.google.com
+   69  cd /etc
+   70  cat resolv.conf
+   71  vi /etc/resolv.conf
+   72  ping -c2 www.google.com
+   73  dhcpd &
+   74  dhcpcd &
+   75  ping -c2 www.google.com
+   76  ping -c2 www.google.com
+   77  pacman -S kakoune
+   78  cd /home/shum/build/artix
+   79  ls
+   80  cat pacman.conf 
+   81  cd /etc
+   82  vi pacman.conf 
+   83  vi pacman.conf 
+   84  pacman -Su
+   85  pacman -S
+   86  pacman -S artix-archlinux-support
+   87  vi pacman.conf
+   88  pacman -S artix-archlinux-support
+   89  pacman-key --populate archlinux
+   90  vi pacman.conf
+   91  pacman -S kakoune
+   92  pacman -Sy
+   93  pacman -S kakoune
+   94  cd /home/shum/build/artix
+   95  ls
+   96  history
+   97  pwd
+   98  history >history.root.txt
+   99  cd build
+  100  cd bundle
+  101  ls
+  102  more base
+  103  more 000-base
+  104  path
+  105  echo $PATH
+  106  ls ~/bin
+  107  cd /etc
+  108  cd wpa_supplicant/
+  109  ls -l
+  110  cat wpa_supplicant.conf 
+  111  cd -
+  112  ls
+  113  cd -
+  114  cd -
+  115  cd /home/shum/build/artix/bundle
+  116  head 000-base 
+  117  head -15 000-base 
+  118  cd /etc
+  119  ls
+  120  find . -name '*tty*'
+  121  ls .dinit.d/tty1
+  122  ls dinit.d/tty1
+  123  ls -l dinit.d/tty1
+  124  ls -lR dinit.d/tty1
+  125  cat dinit.d/tty1
+  126  cd -
+  127  kak 000-base 
+  128  cd -
+  129  cd dinit.d/tty2
+  130  cd dinit.d/
+  131  ls
+  132  vi tty2
+  133  ls -l /usr/lib/dinit/agetty*
+  134  cat /usr/lib/dinit/agetty-default 
+  135  cat /etc/dinit.d/tty2
+  136  c
+  137  cd config
+  138  ls
+  139  pwd
+  140  vi agetty-tty2.conf
+  141  head -15 /home/shum/build/artix/bundle/000-base
+  142  vi agetty-tty2.conf
+  143  ls
+  144  dinitctl list
+  145  dinitctl stop getty
+  146  cp -i /home/shum/bin/path.sh /etc/profile.d/
+  147  ls -l /etc/profile.d/
+  148  cd /etc
+  149  cat /home/shum/build/artix/post_install/sudo
+  150  kak /etc/sudoers
+  151  cat group
+  152  usermod -aG wheel shum
+  153  cat group
+  154  wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf 
+  155  ifconfig
+  156  dhcpcd &
+  157  ping www.google.com
+  158  setfont ter-i18b
+  159  ls /home/shum/build/artix/
+  160  ls /home/shum/build/artix/bundle/
+  161  ls /home/shum/build/artix/
+  162  ls /home/shum/build/artix/history.root.txt 
+  163  history >>/home/shum/build/artix/history.root.txt 

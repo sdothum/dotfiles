@@ -1,0 +1,17 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................................ caddy
+
+stow caddy/puma
+# stow nginx/puma
+cfg_install /etc/dinit.d/puma
+
+sv restart caddy
+sv enable puma
+sv start puma
+
+# vim: set ft=conf: #

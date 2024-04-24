@@ -6,7 +6,7 @@
 
 # ....................................................................... pastel
 
-cd /net/depot
+cd /home/depot
 [ -d pastel ] && { cd pastel; git pull; cd ..; } || git clone --depth 1 https://github.com/sharkdp/pastel.git
 
 doas apk add rust

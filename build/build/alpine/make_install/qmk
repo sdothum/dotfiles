@@ -14,7 +14,7 @@ apk testing dfu-programmer dfu-util
 # SUPERCEDED by sdothum chording engine mods
 ditto georgi "see sdothum chording_engine"
 # install dennytom chording engine first 'cause util/qmk_install.sh fails (alpine unsupported OS)
-# cd /net/depot
+# cd /home/depot
 # rm -rf qmk_firmware
 # git clone https://github.com/DennyTom/qmk_firmware.git
 # cd qmk_firmware

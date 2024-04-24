@@ -1,0 +1,11 @@
+acpilight 
+texlive-bin 
+gnupg 
+pass 
+dnsmasq 
+! notmuch new
+nzbget 
+m sonarr
+m fontmatrix
+m foliate
+gimp-plugin-resynthesizer-git 

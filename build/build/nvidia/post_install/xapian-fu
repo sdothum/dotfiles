@@ -1,0 +1,16 @@
+# sdothum - 2016 (c) wtfpl
+
+# Post_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................... xapian-fu
+
+# ruby 3.2 update patch
+cd /usr/lib/ruby/gems
+for i in $(al 'File.exists?' | grep 'lib/xapian_fu') ;do
+	original $i
+	# HACK: comment out UTF-8 hash conversion to integer (fails)
+	sudo sed -i 's/File.exists?/File.exist?/g; /<< .* :encoding => "UTF-8"/s/^/#/' $i
+done
+
+# vim: set ft=sh: #

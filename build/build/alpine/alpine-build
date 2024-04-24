@@ -273,7 +273,8 @@ stage_33() {
 	doas apk upgrade
 
 	info ..................................................... package management
-	doas apk add flatpak
+	# doas apk add flatpak
+	make_install flatpak
 	# make_install flatseal
 	# xdg-user-dirs-update
 
@@ -497,7 +498,7 @@ stage_33() {
 	# make_install imap
 	# make_install imapfilter
 	# make_install mox
-	stow imap
+	# stow imap
 
 	info ............................................................ mail client
 	doas apk add aerc aerc-doc

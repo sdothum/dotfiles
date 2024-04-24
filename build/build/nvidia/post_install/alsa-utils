@@ -1,0 +1,13 @@
+# sdothum - 2016 (c) wtfpl
+
+# Post_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................................... alsa
+
+# see post-install pulseaudio
+# amixer sset Master unmute
+sudo usermod -aG audio $USER
+sv enable alsa
+
+# vim: set ft=sh: #

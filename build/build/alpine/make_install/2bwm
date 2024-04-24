@@ -9,7 +9,7 @@
 doas apk add libxcb-dev
 doas apk add xcb-util-keysyms-dev xcb-util-wm-dev xcb-util-xrm-dev
 
-cd /net/depot
+cd /home/depot
 [ -d 2bwm ] && { cd 2bwm; mv config.h $HOME/tmp/2bwm:config.h; git pull; } || { git clone --depth 1 https://github.com/venam/2bwm.git; cd 2bwm; }
 
 stow 2bwm

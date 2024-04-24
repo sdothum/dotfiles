@@ -8,7 +8,7 @@
 
 COMMIT=cc5a648
 
-cd /net/depot
+cd /home/depot
 doas apk del openssl1.1-compat-dev  # required by ruby 2.x install
 doas apk add openssl-dev
 

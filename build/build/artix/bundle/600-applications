@@ -1,0 +1,87 @@
+# application packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= android
+= ═══════
+  android-tools
+  scrcpy
+
+= astronomy
+= ═════════
+# stellarium
+# wego
+
+
+= benchtest
+= ═════════
+  hyperfine
+# sdl2 sdl2_image sdl2_mixer
+  phoronix-test-suite
+
+
+= dictionary
+= ══════════
+# aspell
+# aspell-en
+# dict
+# dictd
+# hunspell
+# hunspell-en_gb
+# hunspell-en_us
+  sdcv
+! stow stardict
+
+
+= ebook
+= ═════
+  calibre
+
+
+= font manager
+= ════════════
+# fontmanager.app
+d m fontmatrix
+
+
+= game
+= ════
+# steam
+
+
+= keyboard
+= ════════
+# d m amphetype
+# m amphetype2
+
+
+= productivity
+= ════════════
+# abiword
+  calc
+  gnumeric
+  tk           # tkremind
+  tcllib       # tkremind
+  remind
+! stow remind
+# sc-im
+  speedcrunch
+
+
+= viewer
+= ══════
+  bat          # syntax highlighting for nnn preview-tui
+  catimg       # image viewer for nnn preview-tui
+  nsxiv        # image viewer for nnn imgview
+# epdfview-git
+# fbreader
+  feh
+d m foliate
+  zathura
+  zathura-ps
+  zathura-pdf-mupdf
+
+
+# vim: set ft=conf: #

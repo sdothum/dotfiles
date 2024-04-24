@@ -1,0 +1,14 @@
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .......................................................................... yay
+
+cd /home/depot
+[ -d yay ] && { cd yay; git pull; cd ..; } || git clone https://aur.archlinux.org/yay.git
+
+cd yay
+makepkg -si
+
+# vim: set ft=sh: #

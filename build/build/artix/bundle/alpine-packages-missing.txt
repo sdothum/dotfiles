@@ -1,0 +1,95 @@
+[1m[38;5;051m@notinstalled [1m[38;5;039mgcompat[0;0m
+[1m[38;5;051m@notinstalled [1m[38;5;039mmingetty[0;0m
+[1m[38;5;051m@notinstalled [1m[38;5;039mutil-linux-misc[0;0m
+[1m[38;5;051m@notinstalled [1m[38;5;039mpm-utils[0;0m
+[1m[38;5;051m@notinstalled [1m[38;5;039mmandoc-apropos[0;0m
+[1m[38;5;051m@notinstalled [1m[38;5;039mpcre-tools[0;0m
+[1m[38;5;051m@notinstalled [1m[38;5;039mopenntpd[0;0m
+[-] [1;33mopenntpd[0m[K-6.8p1_6 FREE, easy to use implementation of the Network Time Protocol
+[1m[38;5;051m@notinstalled [1m[38;5;039mhyperfine[0;0m
+[-] [1;33mhyperfine[0m[K-1.18.0_1 Command-line benchmarking tool
+[1m[38;5;051m@notinstalled [1m[38;5;039mspeedtest-cli[0;0m
+[-] [1;33mspeedtest-cli[0m[K-2.1.3_4 Command line bandwidth test using speedtest.net
+[1m[38;5;051m@notinstalled [1m[38;5;039mpcmanfm[0;0m
+[-] libfm-1.3.2_1             Core library of [1;33mPCManFM[0m[K file manager
+[-] libfm-devel-1.3.2_1       Core library of [1;33mPCManFM[0m[K file manager - development files
+[-] libfm-gtk+3-1.3.2_1       Core library of [1;33mPCManFM[0m[K file manager - GTK+3 library
+[-] libfm-gtk+3-devel-1.3.2_1 Core library of [1;33mPCManFM[0m[K file manager - GTK+3 library (development files)
+[-] libfm-qt-1.4.0_1          Core library of [1;33mPCManFM[0m[K-Qt
+[-] libfm-qt-devel-1.4.0_1    Core library of [1;33mPCManFM[0m[K-Qt - development files
+[-] [1;33mpcmanfm[0m[K-1.3.2_2           LXDE file manager
+[-] [1;33mpcmanfm[0m[K-qt-1.4.1_1        Qt port of [1;33mPCManFM[0m[K
+[1m[38;5;051m@notinstalled [1m[38;5;039mragel[0;0m
+[-] [1;33mragel[0m[K-6.10_2 Compile regular languages into executable state machines
+[1m[38;5;051m@notinstalled [1m[38;5;039mpipx[0;0m
+[-] python3-[1;33mpipx[0m[K-1.4.3_1 Install and Run Python Applications in Isolated Environments
+[1m[38;5;051m@notinstalled [1m[38;5;039mlua-devel[0;0m
+[-] fcitx5-[1;33mlua-devel[0m[K-5.0.12_1 Lua scripting support for fcitx5 - development files
+[-] icu4[1;33mlua-devel[0m[K-0.2B_14     Binary module for providing Unicode support to Lua - development files
+[-] [1;33mlua-devel[0m[K-5.3.6_1         Powerful, fast, lightweight, embeddable scripting language (5.3.x) - development files (transitional dummy package)
+[-] to[1;33mlua-devel[0m[K-5.2.0_3       Tool that greatly simplifies the integration of C/C++ code with Lua - development files
+[1m[38;5;051m@notinstalled [1m[38;5;039mfiglet[0;0m
+[-] [1;33mfiglet[0m[K-2.2.5_6           Program for making large letters out of ordinary text
+[-] [1;33mfiglet[0m[K-fonts-20150508_4  Additional fonts for [1;33mfiglet[0m[K
+[-] python3-py[1;33mfiglet[0m[K-0.8.0_6 Implementation of [1;33mfiglet[0m[K written in Python
+[1m[38;5;051m@notinstalled [1m[38;5;039mzoxide[0;0m
+[-] [1;33mzoxide[0m[K-0.9.4_1 Faster way to navigate your filesystem
+[1m[38;5;051m@notinstalled [1m[38;5;039mmesa-dri-gallium[0;0m
+[1m[38;5;051m@notinstalled [1m[38;5;039mmesa-va-gallium[0;0m
+[1m[38;5;051m@notinstalled [1m[38;5;039mlibxft[0;0m
+[*] [1;33mlibXft[0m[K-2.3.8_1       Library for configuring and customizing font access
+[*] [1;33mlibXft[0m[K-devel-2.3.8_1 Library for configuring and customizing font access - development files
+[1m[38;5;051m@notinstalled [1m[38;5;039mgtk-murrine-engine[0;0m
+[1m[38;5;051m@notinstalled [1m[38;5;039mxdg-user-dirs[0;0m
+[-] [1;33mxdg-user-dirs[0m[K-0.18_1     Tool to help manage user directories
+[-] [1;33mxdg-user-dirs[0m[K-gtk-0.10_4 GTK+ tool to help manage user directories
+[1m[38;5;051m@notinstalled [1m[38;5;039mxwallpaper[0;0m
+[-] [1;33mxwallpaper[0m[K-0.7.4_1 Wallpaper setting utility for X
+[1m[38;5;051m@notinstalled [1m[38;5;039mgpick[0;0m
+[-] [1;33mgpick[0m[K-0.3_1 Advanced color picker written in C++ using GTK+ toolkit
+[1m[38;5;051m@notinstalled [1m[38;5;039mlm-sensors[0;0m
+[1m[38;5;051m@notinstalled [1m[38;5;039malsa-ucm-conf[0;0m
+[-] [1;33malsa-ucm-conf[0m[K-1.2.11_1 ALSA Use Case Manager topology configurations
+[1m[38;5;051m@notinstalled [1m[38;5;039malsaconf[0;0m
+[1m[38;5;051m@notinstalled [1m[38;5;039mpipewire-pulse[0;0m
+[1m[38;5;051m@notinstalled [1m[38;5;039mpavucontrol-qt[0;0m
+[-] [1;33mpavucontrol-qt[0m[K-1.4.0_1 Pulseaudio mixer in Qt
+[1m[38;5;051m@notinstalled [1m[38;5;039mgvim[0;0m
+[-] [1;33mgvim[0m[K-9.1.0104_1      Vim editor (vi clone) - GTK+ GUI
+[-] [1;33mgvim[0m[K-huge-9.1.0104_1 Vim editor (vi clone) - GTK+ GUI - Huge (all features enabled)
+[1m[38;5;051m@notinstalled [1m[38;5;039mhelix[0;0m
+[-] [1;33mhelix[0m[K-23.10_1 Post-modern modal text editor
+[1m[38;5;051m@notinstalled [1m[38;5;039melinks[0;0m
+[-] [1;33melinks[0m[K-0.17.0_1 Full-Featured Text WWW Browser
+[1m[38;5;051m@notinstalled [1m[38;5;039mw3m-image[0;0m
+[1m[38;5;051m@notinstalled [1m[38;5;039mnotmuch-libs[0;0m
+[1m[38;5;051m@notinstalled [1m[38;5;039mtcl-lib[0;0m
+[1m[38;5;051m@notinstalled [1m[38;5;039mrclone[0;0m
+[-] [1;33mRclone[0m[KBrowser-1.8.0_2 Simple, cross-platform GUI for [1;33mrclone[0m[K
+[-] [1;33mrclone[0m[K-1.66.0_1       Rsync for cloud storage
+[1m[38;5;051m@notinstalled [1m[38;5;039mgststeamer-vaapi[0;0m
+[1m[38;5;051m@notinstalled [1m[38;5;039mfoliate[0;0m
+[-] [1;33mfoliate[0m[K-3.1.0_2 Simple and modern GTK eBook reader
+[1m[38;5;051m@notinstalled [1m[38;5;039mexfatprogs[0;0m
+[-] [1;33mexfatprogs[0m[K-1.2.2_1 Tools to create, check and label exFAT filesystems
+[1m[38;5;051m@notinstalled [1m[38;5;039msimple-mtpfs[0;0m
+[-] [1;33msimple-mtpfs[0m[K-0.4.0_1 FUSE filesystem that supports reading/writing from MTP devices
+[1m[38;5;051m@notinstalled [1m[38;5;039mlsyncd[0;0m
+[-] [1;33mlsyncd[0m[K-2.3.1_1 Syncing Daemon that synchronizes local directories with remote targets
+[1m[38;5;051m@notinstalled [1m[38;5;039mfontforge-gui[0;0m
+[1m[38;5;051m@notinstalled [1m[38;5;039mpython3-fontforge[0;0m
+[1m[38;5;051m@notinstalled [1m[38;5;039mnpm[0;0m
+[-] p[1;33mnpm[0m[K-8.15.4_1               Fast, disk space efficient package manager
+[-] python3-changelogs-0.15.0_4 Changelog finder and parser for vendors like PyPi and [1;33mnpm[0m[K
+[1m[38;5;051m@notinstalled [1m[38;5;039mimagemagick[0;0m
+[-] [1;33mImageMagick[0m[K-7.1.1.29_1     Create, edit, compose, or convert bitmap images
+[-] libmagick-7.1.1.29_1       [1;33mImageMagick[0m[K low-level image manipulation libraries
+[-] libmagick-devel-7.1.1.29_1 [1;33mImageMagick[0m[K low-level image manipulation development files
+[-] libmagick-perl-7.1.1.29_1  [1;33mImageMagick[0m[K perl library bindings
+[-] php-imagick-8.3_1          PHP [1;33mImageMagick[0m[K library wrapper meta package
+[-] php8.1-imagick-3.7.0_10    Provides a PHP wrapper to the [1;33mImageMagick[0m[K library
+[-] php8.2-imagick-3.7.0_10    Provides a PHP wrapper to the [1;33mImageMagick[0m[K library
+[-] php8.3-imagick-3.7.0_3     Provides a PHP wrapper to the [1;33mImageMagick[0m[K library
+[1m[38;5;051m@notinstalled [1m[38;5;039mqbittorrent[0;0m
+[-] [1;33mqbittorrent[0m[K-4.5.4_1     Free software alternative to µtorrent
+[-] [1;33mqbittorrent[0m[K-nox-4.5.4_1 Free software alternative to µtorrent - no X11

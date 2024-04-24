@@ -1,0 +1,21 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ...................................................................... foliate
+
+# HACK: for "display is null" runtime error
+
+sudo xbps-install -y gjs-devel gtk4-devel libadwaita-devel libwebkitgtk60-devel
+
+cd /home/depot
+git clone --recurse-submodules https://github.com/johnfactotum/foliate.git
+cd foliate/src
+sed -i '/import Gtk from /aGtk.init()' main.js
+cd ..
+meson setup build
+sudo ninja -C build install
+
+# kak: filetype=sh

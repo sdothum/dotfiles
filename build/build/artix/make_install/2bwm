@@ -1,0 +1,17 @@
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................................... 2bwm
+
+cd /home/depot
+[ -d 2bwm ] || git clone https://github.com/venam/2bwm.git
+
+cd 2bwm
+original config.h
+ln -s $HOME/.config/2bwm/src/config.h .
+make
+sudo make install
+
+# vim: set ft=sh: #

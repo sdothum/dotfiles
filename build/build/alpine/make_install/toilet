@@ -6,7 +6,7 @@
 
 # ....................................................................... toilet
 
-cd /net/depot
+cd /home/depot
 [ -d toilet ] && { cd toilet; git pull; cd ..; } || git clone --depth 1 https://github.com/cacalabs/toilet.git
 
 doas apk add libcaca libcaca-dev

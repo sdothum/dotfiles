@@ -1,0 +1,23 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................... Kakoune editor
+
+XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
+COLORS=$XDG_CONFIG_HOME/kak/colors
+mkdir -p $COLORS
+KAKLSP=$XDG_CONFIG_HOME/kak-lsp
+mkdir -p $KAKLSP
+
+sudo pacman -U --noconfirm rust git lua luajit
+cd /home/depot
+[ -d kakoune ] && { cd kakoune; git pull; cd ..; } || git clone --depth 1 https://github.com/mawww/kakoune.git
+cd kakoune
+make
+make man
+sudo make install
+
+# kak: filetype=sh

@@ -1,0 +1,148 @@
+#!/bin/sh
+# sdothum - 2016 (c) wtfpl
+
+# fresh artix pre-installer
+
+
+MACHINE=motu
+ADDRESS=10.1.0.11/24
+ROUTE=10.1.0.1
+NAME=shum
+
+
+source ./artix-functions
+loadkeys us
+
+
+heading 'boot disk'
+# ══════════════════════════════════════════════════════════════════════════════
+
+device=/dev/nvme0n1
+
+# reread partition tables
+cat /proc/partitions
+checkpoint
+
+heading "format $device partitions 1,2,3"
+checkpoint
+
+mkfs.fat -F32 ${device}p1
+fatlabel ${device}p1 UEFI
+mkswap -L SWAP ${device}p2
+swaplabel -L SWAP ${device}p2  # if unable to create swap
+mkfs.ext4 -L ROOT ${device}p3
+e2label ${device}p4 HOME
+
+
+heading 'mount partitions'
+# ══════════════════════════════════════════════════════════════════════════════
+checkpoint
+swapon /dev/disk/by-label/SWAP
+mount /dev/disk/by-label/ROOT /mnt
+mkdir -p /mnt/boot/efi
+mkdir /mnt/home
+mount /dev/disk/by-label/HOME /mnt/home
+mount /dev/disk/by-label/UEFI /mnt/boot/efi
+
+interface=$(ip link show | grep '^3:' | cut -d: -f2)
+
+
+heading "enable wifi on $interface"
+# ══════════════════════════════════════════════════════════════════════════════
+checkpoint
+echo "
+ctrl_interface=/run/wpa_supplicant
+update_config=1" | tee /etc/wpa_supplicant/wpa_supplicant.conf
+wpa_supplicant -B -i $interface -c /etc/wpa_supplicant/wpa_supplicant.conf
+echo "
+> scan
+> scan_results
+> add_network
+0
+> set_network 0 ssid "myssid"
+> sed_network 0 psk "passphrase"
+> enable_network 0
+> save_config
+> quit
+"
+checkpoint
+wpa_cli
+dhcpcd $interface
+ping -c1 artixlinux.org
+echo "
+ip link set dev $interface up
+ip addr add $ADDRESS brd + dev $interface
+ip route add default via $ROUTE" | tee -a /etc/rc.local
+
+
+heading "set clock"
+# ══════════════════════════════════════════════════════════════════════════════
+checkpoint
+dinitctl start ntpd
+
+
+heading "install base system"
+# ══════════════════════════════════════════════════════════════════════════════
+checkpoint
+basestrap /mnt base base-devel dinit  # elogind-dinit
+basestrap /mnt linux linux-firmware
+fstabgen -L /mnt >> /mnt/etc/fstab
+
+cat /mnt/etc/fstab
+
+
+heading "chroot and configure base system"
+# ══════════════════════════════════════════════════════════════════════════════
+checkpoint
+artix-chroot /mnt
+
+ln -sf /usr/share/zoneinfo/America/Toronto /etc/localtime
+hwclock --systohc
+
+pacman -S vi
+vi /etc/locale.gen
+locale-gen
+echo "
+LANG=en_US.UTF-8
+LC_COLLATE=C" | tee -a /etc/locale.conf
+vi /etc/locale.conf
+
+
+heading "boot loader"
+# ══════════════════════════════════════════════════════════════════════════════
+checkpoint
+pacman -S grub os-prober efibootmgr
+grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=grub
+grub-mkconfig -o /boot/grub/grub.cfg
+
+
+heading "users"
+# ══════════════════════════════════════════════════════════════════════════════
+checkpoint
+echo root password
+passwd
+useradd -m $NAME
+passwd $NAME
+
+
+heading "network configuration"
+# ══════════════════════════════════════════════════════════════════════════════
+checkpoint
+echo $MACHINE | tee /etc/hostname
+echo "
+127.0.0.1        localhost
+::1              localhost
+127.0.1.1        $MACHINE.localdomain  $MACHINE" | tee -a /etc/hosts
+
+pacman -S dhcpcd dhcpcd-dinit wpa_supplicant wpa_supplicant-dinit
+
+
+heading "reboot system"
+# ══════════════════════════════════════════════════════════════════════════════
+checkpoint
+exit 
+umount -R /mnt
+# reboot
+
+
+# kak: filetype=sh

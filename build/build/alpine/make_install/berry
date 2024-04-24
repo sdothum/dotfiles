@@ -9,7 +9,7 @@
 doas apk add libxinerama-dev
 doas apk add sxhkd
 
-cd /net/depot
+cd /home/depot
 [ -d berry ] && { cd berry; git pull; } || { git clone --depth 1 https://github.com/JLErvin/berry.git; cd berry; }
 
 make clean

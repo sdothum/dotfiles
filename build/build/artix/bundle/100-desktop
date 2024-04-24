@@ -1,0 +1,95 @@
+# desktop packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= appearance
+= ══════════
+  lxappearance
+  picom
+! stow picom
+  unclutter
+d acpilight  # xbacklight
+
+
+= desktop
+= ═══════
+  conky
+! stow conky/$(hostname)
+  hsetroot
+  lemonbar-xft-git
+  xwallpaper
+
+
+= desktop utilities
+= ═════════════════
+  grabc
+  maim
+  pastel  # for panel color to hex
+# pywal
+  xautolock
+
+
+= font
+= ════
+  adobe-source-sans-fonts
+  noto-fonts
+  ttf-dejavu
+  ttf-roboto
+  ttf-roboto-mono
+# font-symbola
+# msttcorefonts
+
+
+= gtk/qt5 theme/engine
+= ════════════════
+  adapta-gtk-theme
+# adwaita-qt
+# arc-theme           # qt5 dark themes
+  xcursor-breeze
+# gtk-engine-murrine  # for rox-filer lxappearance theming
+  meson
+# paper-icon-theme    # missing down arrow menu button
+  papirus-icon-theme
+# qt5-styleplugins
+
+
+= notification
+= ════════════
+  dunst
+! stow dunst/$(hostname)
+  libnotify
+# screenkey-git
+
+
+= screensaver
+= ═══════════
+# xscreensaver
+
+
+= user interface
+= ══════════════
+  autocutsel
+  dmenu
+  gpaste
+  rofi
+! stow rofi
+  xclip
+  xdotool
+  xsel
+  xvkbd
+
+
+= window property
+= ═══════════════
+  sutils
+  xtitle
+  xorg-xprop
+  xorg-xwininfo
+  
+
+# vim: set ft=conf: #
+
+
+

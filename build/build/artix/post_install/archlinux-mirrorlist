@@ -1,0 +1,31 @@
+# sdothum - 2016 (c) wtfpl
+
+# Post_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ....................................................................... pacman
+
+# arch repos
+echo "
+
+
+###  ARCHLINUX  ###
+
+[extra]
+Include = /etc/pacman.d/mirrorlist-arch
+
+[community]
+Include = /etc/pacman.d/mirrorlist-arch
+
+[multilib]
+Include = /etc/pacman.d/mirrorlist-arch
+" | sudo tee -a /etc/pacman.conf
+
+sudo sed -i '/#ParallelDownloads/s/^#//; /^ParallelDownloads/a\
+\
+ILoveCandy' /etc/pacman.conf
+
+sudo pacman -Sy
+
+
+# vim: set ft=conf: #

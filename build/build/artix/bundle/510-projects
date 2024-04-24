@@ -1,0 +1,25 @@
+# web framework packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= font editor
+= ═══════════
+  fontforge
+  python-fonttools
+  nodejs
+  otfcc
+  ttfautohint
+
+
+= mpu programmer
+= ══════════════
+  avr-gcc
+# avr-libc-git
+  avr-libc
+  avrdude
+  dfu-programmer
+  
+
+# vim: set ft=conf: #

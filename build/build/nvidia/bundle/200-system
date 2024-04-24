@@ -1,0 +1,84 @@
+# system packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= codec
+= ═════
+  gst-libav
+  gst-plugins-base1
+  gst-plugins-good1
+  gst-plugins-ugly1
+  gstreamer1
+  gstreamer-vaapi
+  libmediainfo
+
+
+= hardware
+= ════════
+# dmidecode
+# intel-ucode
+  inxi
+# iucode-tools  # intel specific
+  lm_sensors
+m powerpanel
+
+
+= power
+= ═════
+# acpi          [laptop]
+# cpupower      [laptop]
+# tlp           [laptop]
+# xfce4-power-manager
+
+
+= security
+= ════════
+# gksu
+  gnome-keyring
+  gnupg2
+d pass
+# d pinentry-gtk
+d pinentry-qt   # for x11 desktop passphrase
+# polkit-gnome
+
+
+= sound
+= ════
+  alsa-utils
+# alsa-plugins
+  alsa-plugins-pulseaudio
+  alsa-pipewire
+# alsaequal
+# alsa-ucm-conf
+# ConsoleKit2
+# mpg123
+# pulseaudio
+# alsa-plugins-pulseaudio
+# pulseaudio-equalizer-ladspa
+  libpulseaudio
+  pipewire
+  wireplumber
+  pulseeffects
+  rtkit         # pipewire run dependency, in addition to dbus
+  pavucontrol
+
+
+= system utility
+= ══════════════
+  cronie
+  logrotate
+! stow logrotate
+  preload
+  psmisc
+  runit-swap
+  udevil                # no-config automount (less involved setup than udiskie)
+  udiskie
+! stow udiskie
+! sudo groupadd colord  # HACK: prevent udev boot error message
+! sudo usermod -aG plugdev $USER
+! sudo usermod -aG storage $USER
+
+
+# vim: set ft=conf: #

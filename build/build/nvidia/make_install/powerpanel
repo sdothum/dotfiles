@@ -1,0 +1,36 @@
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .............................................................. ookla speedtest
+
+VSN=v1.4.1
+
+cd /home/depot
+mkdir -p powerpanel
+cd powerpanel
+rm -rf *
+
+wget https://dl4jz3rbrsfum.cloudfront.net/software/PPL_64bit_${VSN}.tar..gz
+tar -xvf *gz
+cd powerpanel-*
+
+sudo cp -v bin/pwrstat* /usr/local/bin/
+sed 's|/etc/|/etc/powerpanel/' conf/pwrstatd.conf | sudo tee /etc/pwrstatd.conf
+sudo mkdir /etc/powerpanel
+for i in powerfail lowbatt email shutdown ;do sudo cp -v script/*${i}* /etc/powerpanel/ ;done
+sudo ln -s /etc/powerpanel/shutdown.sh /etc/
+
+sudo mkdir /usr/local/lib/powerpanel
+sudo cp -v lib/* /usr/local/lib/powerpanel/
+sudo ln -s /usr/local/lib/powerpanel/libpaho-mqtt3cs.so.1.3.1 /usr/local/lib/powerpanel/libpaho-mqtt3cs.so.1  # BUG: in v1.4.4 repo binary
+
+sudo cp -v doc/pwrstat*.8 /usr/share/man/man8/
+sudo gzip -9 /usr/share/man/man8/pwrstat.8
+sudo gzip -9 /usr/share/man/man8/pwrstatd.8
+
+cfg_install /etc/sv/powerpanel
+sv enable powerpanel
+
+# vim: set ft=sh: #

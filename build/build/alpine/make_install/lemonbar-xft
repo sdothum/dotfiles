@@ -6,7 +6,7 @@
 
 # ..................................................................... lemonbar
 
-cd /net/depot
+cd /home/depot
 [ -d lemonbar-xft ] && { cd lemonbar-xft; git pull; cd ..; } || git clone --depth 1 https://github.com/drscream/lemonbar-xft.git
 
 doas apk add libx11-dev libxcb-dev libxft-dev

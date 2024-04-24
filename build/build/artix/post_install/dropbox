@@ -1,0 +1,10 @@
+# sdothum - 2016 (c) wtfpl
+
+# Post_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ...................................................................... dropbox
+
+ditto config "run 'dropbox start -i' to install daemon and complete web browser authorization"
+
+# vim: set ft=sh: #

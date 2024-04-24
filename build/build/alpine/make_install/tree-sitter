@@ -7,7 +7,7 @@
 # ............................................................... helix grammars
 
 # see helix languages.toml
-cd /net/depot
+cd /home/depot
 
 # add vim syntax highlighting grammar to helix
 git clore --depth 1  https://github.com/neovim/tree-sitter-vim.git

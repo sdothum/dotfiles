@@ -1,0 +1,7 @@
+type = process
+command = /usr/lib/dinit/dbus --print-address=4
+depends-on = setup
+depends-on = dbus-pre
+logfile = /var/log/dinit/dbus-daemon.log
+ready-notification = pipefd:4
+smooth-recovery = no

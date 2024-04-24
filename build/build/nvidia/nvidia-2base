@@ -1,0 +1,49 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# install base packages
+
+
+# ./nvidia-wireless
+# service enable dbus
+# service enable connmand
+
+
+title "setup"
+# ══════════════════════════════════════════════════════════════════════════════
+# pong || post_install connman
+# default mail addresses
+# cfg_install -link /etc/aliases
+
+
+heading 'enable tty autologin'
+# ══════════════════════════════════════════════════════════════════════════════
+# sudo cp -Rv /etc/sv/agetty-tty1 /etc/sv/agetty-autologin-tty1
+autologin() {
+  cat <<EOF
+GETTY_ARGS="--autologin $USER --noclear"
+BAUD_RATE=38400
+TERM_NAME=linux
+EOF
+}
+# autologin | sudo tee /etc/sv/agetty-autologin-tty1/conf
+
+
+title "update base"
+# ══════════════════════════════════════════════════════════════════════════════
+xbps-query -Rs void-repo
+sudo xbps-install void-repo-nonfree
+sudo xbps-install -Syu
+# bundle_install $HOME/build/nvidia/bundle/[0]*
+session_defaults
+
+
+title "installation errors:"
+# ══════════════════════════════════════════════════════════════════════════════
+grep '> \(ERROR\|WARNING\)' $HOME/typescript
+
+ditto INFO boot 'exit console (script)'
+ditto INFO run 'startx (x)'
+ditto INFO run 'nvidia-3apps'
+
+# vim: set ft=sh: #

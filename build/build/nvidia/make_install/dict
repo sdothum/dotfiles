@@ -1,0 +1,17 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................................... dict
+
+cd /home/depot
+[ -d dict ] && { cd dict; git pull; cd ..; } || git clone --depth 1 https://github.com/BetaPictoris/dict.git 
+
+cd dict
+make clean
+make binary
+sudo make install
+
+# kak: filetype=sh

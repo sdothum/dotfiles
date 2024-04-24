@@ -1,0 +1,19 @@
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ....................................................................... quikey
+
+# --break-system-packages to circumvent python venv restriction for system wide access
+# pip3 uninstall --break-system-packages quikey     # if fresh install required
+pip3 install --user --break-system-packages quikey  
+
+if [ ! -L $HOME/.local/share/quikey ] ;then
+  cd stow >/dev/null
+  stow quikey
+fi
+
+qk start
+
+# vim: set ft=sh: #

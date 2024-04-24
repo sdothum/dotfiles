@@ -1,0 +1,11 @@
+#!/usr/bin/dash
+# base packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+
+sudo pacman -S archlinux-mirrorlist
+echo -e "#ARCHLINUX\n[extra]\nInclude = /etc/pacman.d/mirrorlist-arch\n[community]\nInclude = /etc/pacman.d/mirrorlist-arch\n[multilib]\nInclude = /etc/pacman.d/mirrorlist-arch\n" | sudo tee -a /etc/pacman.conf
+sudo pacman -Sy

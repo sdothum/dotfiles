@@ -1,0 +1,5 @@
+type       = scripted
+command    = /usr/lib/dinit/pre/dbus
+depends-on = pseudofs
+after      = setup
+restart    = false

@@ -19,7 +19,7 @@ doas npm install -g yaml-language-server@next              # yaml
 cargo install --force taplo-cli --features lsp                     # toml (--locked option fails compile)
 cargo install --force buffer-language-server
 ditto lsp "gem install.. (be patient)"
-# gem installed via make_instlal ruby
+# gem installed via make_install ruby
 doas gem install solargraph
 
 # markdown
@@ -38,7 +38,7 @@ doas mv ltex-ls-$LTEXVSN /opt/ltex-ls
 # lexical language server (for document tokens)
 doas npm install -g vim-language-server
 # scls snippets only (see languages.toml)
-cd /net/depot
+cd /home/depot
 [ -d simple-completion-language-server ] && { cd simple-completion-language-server; git pull; } || {  git clone https://github.com/estin/simple-completion-language-server.git;  cd simple-completion-language-server; }
 cargo install --path .
 

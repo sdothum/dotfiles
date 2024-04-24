@@ -1,0 +1,17 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................. language servers
+
+BUNDLEDIR=$HOME/.config/kak/bundle/kak-bundle
+
+[ -e $BUNDLEDIR ] && rm -rf $BUNDLEDIR
+mkdir -p $BUNDLEDIR
+
+git clone https://github.com/jdugan6240/kak-bundle $BUNDLEDIR
+ditto kak "run :bundle-install to install plugins"
+
+# kak: filetype=sh

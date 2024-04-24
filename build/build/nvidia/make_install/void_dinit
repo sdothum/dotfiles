@@ -1,0 +1,14 @@
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. dinit system
+
+cd /home/depot
+[ -d void_dinit ] && { cd void_dinit; git pull; cd ..; } || git clone https://github.com/summrum/void_dinit.git
+
+cd void_dinit
+
+
+# vim: set ft=sh: #

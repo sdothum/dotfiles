@@ -1,0 +1,59 @@
+# wm packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= file manager
+= ════════════
+  pcmanfm
+# rox
+  tumbler
+
+
+= terminal
+= ════════
+  alacritty    [! cpu atom]
+# kitty        # need for nnn preview-tui plugin
+# rxvt-unicode [cpu atom]
+# urxvt-perls  [cpu atom]
+# xterm
+
+
+= window manager
+= ══════════════
+# herbstluftwm
+! stow herbstluftwm
+# windowchef
+
+
+= window utilities
+= ════════════════
+  libxcb-devel
+  xcb-util-cursor-devel
+  wmctrl
+m wmutils
+  windowchef
+  ruler
+  sxhkd
+
+
+= 2bwm
+= ════
+  libxcb-devel
+  xcb-util-keysyms-devel
+  xcb-util-wm-devel
+  xcb-util-xrm-devel
+m 2bwm
+! stow 2bwm
+
+
+= x11 configurations
+= ══════════════════
+! cfg_install /etc/X11/xorg.conf.d/10-evdev.conf
+! cfg_install /etc/X11/xorg.conf.d/10-keyboard.conf
+! cfg_install /etc/X11/xorg.conf.d/10-libinput.conf
+! sudo ln -s /usr/share/X11/xorg.conf.d/40-libinput.conf /etc/X11/xorg.conf.d/
+
+
+# vim: set ft=conf: #

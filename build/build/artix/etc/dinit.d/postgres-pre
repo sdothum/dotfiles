@@ -1,0 +1,5 @@
+type      = scripted
+command   = /usr/lib/dinit/pre/postgres
+restart   = false
+logfile   = /var/log/dinit/postgres-pre.log
+after     = loginready

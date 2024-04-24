@@ -11,9 +11,9 @@ vsn=1.7.5
 # perl text align for helix
 wget -P /tmp https://kinzler.com/me/align/align-$vsn.tgz
 tar zxvf /tmp/align-$vsn.tgz
-mv -fv /tmp/align-$vsn /net/depot
+mv -fv /tmp/align-$vsn /home/depot
 
-cd /net/depot/align-$vsn
+cd /home/depot/align-$vsn
 make
 doas make install
 

@@ -1,0 +1,102 @@
+# base packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+# first things first
+= autologin
+= ═════════
+  sudo  # post_install update of /etc/sudoers
+! echo 'GETTY_ARGS="--autologin $USER"' | sudo tee /etc/dinit.d/config/agetty-tty1.conf
+! sudo usermod -aG tty $USER 
+
+
+= console font
+= ════════════
+  terminus-font
+# ! setfont ter-i16b.psf.gz
+! setfont ter-i16b
+
+
+= linux firmware
+= ══════════════
+  linux-firmware-xz
+  # linux-firmware-network
+  networkmanager-dinit
+  networkmanager
+  # wifi-firmware
+
+
+= nvidia
+= ══════
+  nvidia
+  nvidia-dkms
+  nvidia-open
+  nvidia-settings
+  nvidia-utils-dinit
+  nvidia-utils
+  libxnvctrl
+  opencl-nvidia
+
+
+= package manager
+= ═══════════════
+  pkg-config
+
+
+= development
+= ═══════════
+  base-devel
+  ragel
+
+
+= entropy
+= ═══════
+  haveged
+
+
+= file system
+= ═══════════
+# bcache-tools
+# btrbk
+  dosfstools
+# exfat-utils
+  exfatprogs
+  fuse
+  fuse-exfat
+# gvfs
+# mbuffer
+# mtpfs     # for supernote
+# gvfs-mtp  # for supernote
+  jmtpfs    # for supernote
+# ntfs-3g
+
+
+= file transfer
+= ═════════════
+  curl
+  git
+  rsync
+  wget
+
+
+= session
+= ═══════
+  bc
+  dos2unix
+  dash
+  fish
+  glibc-locales  # post_install setup
+  perl
+  stow-dotfiles
+| stow bin build fish
+! sudo cp /home/$USER/stow/bin/bin/path.sh /etc/profile.d  # PATH generator
+
+
+= sound
+= ═════
+  alsa-utils
+
+
+# vim: set ft=conf: #

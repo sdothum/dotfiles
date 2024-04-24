@@ -6,7 +6,7 @@
 
 # ...................................................................... premake
 
-cd /net/depot
+cd /home/depot
 [ -d premake-core ] && { cd premake-core; git pull; cd ..; } || git clone --depth 1 https://github.com/premake/premake-core.git
 
 cd premake-core

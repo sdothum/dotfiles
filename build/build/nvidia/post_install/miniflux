@@ -1,0 +1,67 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ..................................................................... miniflux
+
+VERSION=16
+
+POSTGRESQL=postgresql$VERSION
+# HTTP=nginx
+HTTP=caddy
+FONT=adrift  # my ebook font :)
+
+sv enable $POSTGRESQL
+sv start $POSTGRESQL
+
+# HACK: add superuser to miniflux user to overcome miniflux.app pq error
+echo "
+create user miniflux with superuser password 'miniflux';
+-- alter user miniflux set work_mem='64MB';
+create database miniflux;
+grant all privileges on database miniflux to miniflux;
+\connect miniflux;
+create extension hstore;
+" >/tmp/miniflux:postgres
+
+
+sed -i "/export PGDATA=/s|=.*|=/var/lib/$POSTGRESQL/data|" $HOME/.profile
+grep -q 'export PGDATA=' $HOME/.profile || sed -i "1iexport PGDATA=/var/lib/$POSTGRESQL/data" $HOME/.profile
+sudo -u postgres psql </tmp/miniflux:postgres
+# sudo sed -i '/^local *all *all *trust/s/trust/md5/' /var/lib/$POSTGRESQL/data/pg_hba.conf
+sv restart $POSTGRESQL
+sleep 5  # wait for database to come back up
+
+# high polling low batch for reddit throttle
+# HACK: user/password changed from postgres/secret (on miniflux documentation)
+echo "
+LOG_DATE_TIME=yes
+LISTEN_ADDR=127.0.0.1:8080
+DATABASE_URL=user=miniflux password=miniflux dbname=miniflux sslmode=disable
+WORKER_POOL_SIZE=5
+POLLING_FREQUENCY=5
+POLLING_PARSING_ERROR_LIMIT=0
+POLLING_SCHEDULER=round_robin
+BATCH_SIZE=10
+CLEANUP_FREQUENCY_HOURS=1
+CLEANUP_ARCHIVE_UNREAD_DAYS=7
+CLEANUP_ARCHIVE_READ_DAYS=7
+CLEANUP_REMOVE_SESSIONS_DAYS=9999
+" | sudo tee /etc/miniflux.conf
+
+miniflux.app -c /etc/miniflux.conf -migrate
+miniflux.app -c /etc/miniflux.conf -create-admin
+
+sudo rm -f /etc/$HTTP/http.d/miniflux.*
+stow $HTTP/miniflux
+sv restart $HTTP
+sudo grep -q miniflux.conf /etc/sv/miniflux/run || sudo sed -i '/exec .* miniflux.app/s|$| -c /etc/miniflux.conf|' /etc/sv/miniflux/run  # HACK: see above
+sv enable miniflux
+sv start miniflux
+
+sudo mkdir -pv /var/www/localhost/fonts
+sudo cp -v $HOME/.fonts/$FONT/*.ttf /var/www/localhost/fonts
+
+# kak: filetype=sh

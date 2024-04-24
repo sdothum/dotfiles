@@ -1,0 +1,47 @@
+# edit packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= document formatting
+= ═══════════════════
+# enscript
+  lowdown
+
+
+= kakoune
+= ═══════
+  kakoune  # for autoload/rc
+m kakoune  # v2024 required for lsp annotations
+m kak-bundle
+m language_servers
+! stow kak notes
+
+
+= editors
+= ═══════
+  helix
+! stow helix
+# gvim
+# ! stow vim
+# neovim
+d texlive-bin
+  ctags
+
+
+= keyboard macros
+= ═══════════════
+  quikey
+
+
+= version control
+= ═══════════════
+  git
+  mercurial
+  patchutils
+
+
+# vim: set ft=conf: #
+
+

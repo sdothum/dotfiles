@@ -1,0 +1,24 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................................ caddy
+
+sudo mkdir -p /etc/caddy/http.d
+sudo grep -q 'http.d' /etc/caddy/Caddyfile || echo "import http.d/*.caddy" | sudo tee -a /etc/caddy/Caddyfile
+
+[ -e /etc/init.d/miniflux ] && stow caddy/miniflux
+[ -e /etc/init.d/puma     ] && stow caddy/puma
+
+# switch with nginx
+sv stop nginx
+sv disable nginx
+
+sudo usermod -aG caddy $USER
+# sv enable caddy
+# sv start caddy
+ditto caddy "sv enable post miniflux/puma installs"
+
+# vim: set ft=conf: #

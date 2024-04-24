@@ -9,7 +9,7 @@
 doas apk add libmaa-dev
 
 # install dictfmt and dictzip
-cd /net/depot
+cd /home/depot
 [ -d dictd ] && { cd dictd ; git pull; cd ..; } || git clone https://github.com/cheusov/dictd.git
 cd dictd
 git checkout 635b890  # v1.13.1
@@ -17,27 +17,27 @@ git checkout 635b890  # v1.13.1
 make
 doas make install
 
-cd /net/depot
+cd /home/depot
 [ -d pyglossary ] && { cd pyglossary ; git pull; cd ..; } || git clone --depth 1 https://github.com/ilius/pyglossary.git
 
 # NOTE: dircopy urban-dictionary-dictionary to -p1 and -p2 and split data/{*-k}* data/{l-z}* to split dictionary size 
 
-cd /net/depot
+cd /home/depot
 [ -d urban-dictionary-dictionary ] && { cd urban-dictionary-dictionary ; git pull; cd ..; } || git clone --depth 1 https://github.com/riley-martine/urban-dictionary-dictionary.git
 cp -r urban-dictionary-dictionary urban-dictionary-dictionary-p1
 cp -r urban-dictionary-dictionary urban-dictionary-dictionary-p2
 cd urban-dictionary-dictionary-p1
 ls -1 data | grep '[L-Z].*' | xargs -I{} rm data/{}
 ./build_dict.sh
-cp ud.dict.dz /net/depot/pyglossary/ud1.dict.dz 
-cp ud.index /net/depot/pyglossary/ud1.index 
+cp ud.dict.dz /home/depot/pyglossary/ud1.dict.dz 
+cp ud.index /home/depot/pyglossary/ud1.index 
 cd ../urban-dictionary-dictionary-p2
 ls -1 data | grep -v '[L-Z].*' | xargs -I{} rm data/{}
 ./build_dict.sh
-cp ud.dict.dz /net/depot/pyglossary/ud2.dict.dz 
-cp ud.index /net/depot/pyglossary/ud2.index 
+cp ud.dict.dz /home/depot/pyglossary/ud2.dict.dz 
+cp ud.index /home/depot/pyglossary/ud2.index 
 
-cd /net/depot/pyglossary
+cd /home/depot/pyglossary
 python3 main.py ud1.index urban-dictionary-p1 --read-format=DictOrg --write-format=Stardict --indirect --name='Urban Dictionary'
 python3 main.py ud2.index urban-dictionary-p2 --read-format=DictOrg --write-format=Stardict --indirect --name='Urban Dictionary'
 

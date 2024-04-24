@@ -8,7 +8,7 @@
 
 # NOTE: waiting on musl implementing POSIX fts_{open,read,close}
 
-cd /net/depot
+cd /home/depot
 [ -d nnn ] && { cd nnn; git pull; cd ..; } || git clone --depth 1 https://github.com/jarun/nnn.git
 
 doas apk add musl-fts-dev readline-dev

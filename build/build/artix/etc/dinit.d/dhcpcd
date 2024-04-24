@@ -1,0 +1,8 @@
+type            = process
+command         = /usr/bin/dhcpcd -B -M
+smooth-recovery = true
+logfile         = /var/log/dinit/dhcpcd.log
+after           = udev-settle
+after           = root-rw
+depends-on      = network-pre
+before          = network

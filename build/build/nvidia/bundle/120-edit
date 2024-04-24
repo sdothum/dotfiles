@@ -1,0 +1,63 @@
+# edit packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= document formatting
+= ═══════════════════
+# enscript
+  lowdown
+
+
+= kakoune
+= ═══════
+# kakoune
+m kakoune  # v2024 required for lsp annotations
+! stow kak
+m kak-bundle
+! stow notes
+
+
+= editors
+= ═══════
+  helix
+! stow helix
+# gvim
+# ! stow vim
+# neovim
+d texlive-bin
+  ctags
+
+
+= language servers
+= ════════════════
+# shellcheck
+# bash-language_server
+  lua-language_server
+# python3-language_server
+m language_servers
+
+
+= hex editor
+= ══════════
+  imhex
+m hexwalk
+" mount /boot/efi partition, backup EFI/Void/grubx64.efi and hex null 'Welcome to GRUB!'
+
+
+= keyboard macros
+= ═══════════════
+m quikey
+
+
+= version control
+= ═══════════════
+  git
+  mercurial
+  patchutils
+
+
+# vim: set ft=conf: #
+
+

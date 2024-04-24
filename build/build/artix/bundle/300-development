@@ -1,0 +1,111 @@
+# development packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= library
+= ═══════
+# libX11-devel        # herbstluftwm
+# libXrandr-devel     # herbstluftwm
+# libXfixes-devel     # herbstluftwm
+# libXft-devel        # herbstluftwm
+
+
+= c
+= ═
+  cmake
+  gcc
+
+
+= elixir
+= ══════
+# elixir              [server]
+
+
+= erlang
+= ══════
+# erlang              [server]
+
+
+= haskell
+= ═══════
+# ghc
+# pandoc
+
+
+= go
+= ══
+  go
+! addpath $HOME/go/bin
+
+
+= java
+= ════
+  nodejs
+  jre-openjdk
+
+
+= julia
+= ════
+# julia
+# julia-doc
+# ! addpath $HOME/julia/bin
+
+
+= lua
+= ═══
+  lua
+  luajit
+! stow lua
+
+
+= perl tool
+= ═════════
+  perl
+  colordiff
+  perl-app-cpanminus  # perl-HTML dependency
+  perl-curses
+# d s perl-HTML-Strip
+
+
+= python
+= ══════
+# python-pip
+# python-setuptools
+# python-devel
+  python-bottleneck  # optimization
+  python-numexpr     # optimization
+  python-pip
+# python-pipx
+# python-wheel
+
+
+= prototyping
+= ═══════════
+  ruby
+# g rack-test
+
+
+= rust
+= ════
+  rust
+! addpath $HOME/.cargo/bin
+
+
+= web
+= ═══
+  php
+  
+
+= debug
+= ═════
+# gdb
+  strace
+  time
+  
+
+# vim: set ft=conf: #
+
+
+

@@ -1,0 +1,14 @@
+# sdothum - 2016 (c) wtfpl
+
+# Post_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ...................................................................... ondrive
+
+ONEDIR=$XDG_CONFIG_HOME/onedrive
+mkdir -p $ONEDIR
+cp /usr/share/onedrive/config.default $ONEDIR/config
+
+ditto config "run 'onedrive' to obtain authorization uri from web browser login"
+
+# vim: set ft=sh: #

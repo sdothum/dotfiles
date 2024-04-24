@@ -1,0 +1,75 @@
+# network packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= connectivity
+= ════════════
+# connman
+# cmst      # qt gui for connman
+# gnome-bluetooth
+# wpa-cute  # gui for wpa-supplicant boot install
+
+
+= hostname
+= ════════
+! cfg_install /etc/hosts motu
+
+
+= network
+= ═══════
+  bind
+  dhcpcd-dinit
+  dhcpcd
+d dnsmasq-dinit
+d dnsmasq
+! stow adblock dnsmasq
+  inetutils  # contains telnet
+
+
+= clock
+= ═════
+# ntp-dinit
+# ntp
+  openntpd-dinit
+  openntpd
+! sv enable ntpd
+
+
+= network monitor
+= ═══════════════
+  iftop
+  mtr
+  net-tools
+  nethogs
+  traceroute
+
+
+= network security
+= ════════════════
+  lynis-git
+  openssh-dinit
+  openssh   # post_install open ssh login
+! sv enable sshd
+
+
+= network share
+= ═════════════
+# avahi
+  nfs-utils
+  rpcbind
+! sudo mkdir /net
+
+
+= penetration testing
+= ═══════════════════
+# nmap
+
+
+= socket
+= ══════
+# socat
+
+
+# vim: set ft=conf: #

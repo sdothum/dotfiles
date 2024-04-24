@@ -1,0 +1,62 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ..................................................................... miniflux
+
+# HTTP=nginx
+HTTP=caddy
+FONT=adrift  # my ebook font :)
+
+sv enable postgres
+sv start postgres
+
+echo "
+create user miniflux with password 'miniflux';
+-- alter user miniflux set work_mem='64MB';
+create database miniflux;
+grant all privileges on database miniflux to miniflux;
+\connect miniflux;
+create extension hstore;
+" >/tmp/miniflux:postgres
+
+grep -q 'export PGDATA=' $HOME/.profile || sed -i "1iexport PGDATA=/var/lib/postgres/data" $HOME/.profile
+sudo -u postgres psql </tmp/miniflux:postgres
+# sudo sed -i '/^local *all *all *trust/s/trust/md5/' /var/lib/postgres/data/pg_hba.conf
+sv restart postgres
+
+# high polling low batch for reddit throttle
+echo "
+LOG_DATE_TIME=yes
+LISTEN_ADDR=127.0.0.1:8080
+DATABASE_URL=user=postgres password=secret dbname=miniflux sslmode=disable
+WORKER_POOL_SIZE=5
+POLLING_FREQUENCY=5
+POLLING_PARSING_ERROR_LIMIT=0
+POLLING_SCHEDULER=round_robin
+BATCH_SIZE=10
+CLEANUP_FREQUENCY_HOURS=1
+CLEANUP_ARCHIVE_UNREAD_DAYS=7
+CLEANUP_ARCHIVE_READ_DAYS=7
+CLEANUP_REMOVE_SESSIONS_DAYS=9999
+HTTP_CLIENT_USER_AGENT=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/6.6.1 Chrome/112.0.5615.213 Safari/537.36
+$(cat $HOME/build/nvidia/make_install/.miniflux:oauth2.conf)
+" | sudo tee /etc/miniflux.conf
+
+sudo miniflux -c /etc/miniflux.conf -migrate
+sudo miniflux -c /etc/miniflux.conf -create-admin
+
+sudo rm /etc/$HTTP/conf.d/miniflux.*
+stow $HTTP/miniflux
+sv restart $HTTP
+
+cfg_install /etc/dinit.d/miniflux
+sv enable miniflux
+sv start miniflux
+
+sudo mkdir -pv /var/www/localhost/fonts
+sudo cp -v $HOME/.fonts/$FONT/*.ttf /var/www/localhost/fonts
+
+# kak: filetype=sh

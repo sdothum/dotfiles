@@ -8,19 +8,19 @@
 
 # mail server
 
-if [ ! -d /home/mox ] ;then
+if [ ! -d /home//mox ] ;then
 	doas delgroup mox 2>/dev/null
 	doas deluser mox 2>/dev/null
-	doas adduser -h /home/mox -D mox
+	doas adduser -h /home//mox -D mox
 	doas addgroup $USER mox  # add USER to complete install -- daas install leaves residual go subdirectories(?) -- requires logout
-	doas chmod 775 /home/mox
+	doas chmod 775 /home//mox
 	ditto mox "you must log out and back in to rerun 'make_install mox' to complete install"
 else
 	doas apk add go
-	cd /home/mox
+	cd /home//mox
 	GOBIN=$PWD CGO_ENABLED=0 go install github.com/mjl-/mox@latest
 
-	doas chown -R mox:mox /home/mox
+	doas chown -R mox:mox /home//mox
 	doas -u mox ./mox quickstart mox@$(hostname)
 	doas sed -i '/CheckUpdates:/s/^#//' config/mox.conf
 

@@ -1,0 +1,12 @@
+# sdothum - 2016 (c) wtfpl
+
+# Post_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ...................................................................... zathura
+
+# configure mime open for pdfs
+cfg_install /usr/share/applications/zathura.desktop
+xdg-mime default zathura.desktop application/pdf
+
+# vim: set ft=sh: #

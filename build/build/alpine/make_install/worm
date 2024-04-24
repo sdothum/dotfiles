@@ -8,7 +8,7 @@
 
 doas apk add nim nimble
 
-cd /net/depot
+cd /home/depot
 [ -d worm ] && { cd worm; mv config.h $HOME/tmp/worm:config.h; git pull; } || { git clone --depth 1 https://github.com/codic12/worm.git; cd worm; }
 
 nimble build -d:release

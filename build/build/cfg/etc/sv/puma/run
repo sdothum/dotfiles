@@ -1,0 +1,10 @@
+#!/bin/sh
+
+export USERNAME=shum
+export DIR=/srv/http/thedarnedestthing.com/application
+export PUMA=/usr/lib/ruby/gems/3.2.0/bin/pumactl
+
+cd $DIR
+exec 2>&1
+exec chpst -u "$USERNAME" "$PUMA" start -F puma.rb
+

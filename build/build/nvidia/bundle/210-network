@@ -1,0 +1,68 @@
+# network packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= connectivity
+= ════════════
+# connman
+# cmst      # qt gui for connman
+# gnome-bluetooth
+! echo noarp | sudo tee -a /etc/dhcpcd.conf
+! cfg_install /etc/rc.local $(hostname)
+d networkmanager
+  wpa-cute  # gui for wpa-supplicant boot install
+" add 5G network after xorg install
+  speedtest
+
+
+= network
+= ═══════
+  bind-utils
+d dnsmasq
+! stow adblock dnsmasq
+  inetutils-telnet
+
+
+= clock
+= ═════
+# ntp
+  openntpd
+
+
+= network monitor
+= ═══════════════
+  iftop
+  mtr
+  net-tools
+  nethogs
+  traceroute
+
+
+= network security
+= ════════════════
+  lynis
+  openssh   # post_install open ssh login
+
+
+= network share
+= ═════════════
+# avahi
+  nfs-utils
+  rpcbind
+  sv-netmount
+! sudo mkdir /net
+
+
+= penetration testing
+= ═══════════════════
+# nmap
+
+
+= socket
+= ══════
+# socat
+
+
+# vim: set ft=conf: #

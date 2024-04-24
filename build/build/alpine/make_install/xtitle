@@ -6,7 +6,7 @@
 
 # ....................................................................... xtitle
 
-cd /net/depot
+cd /home/depot
 [ -d xtitle ] && { cd xtitle; git pull; cd ..; } || git clone --depth 1 https://github.com/baskerville/xtitle.git
 
 doas apk add libxcb-dev xcb-util-dev xcb-util-wm-dev

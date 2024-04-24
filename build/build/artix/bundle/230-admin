@@ -1,0 +1,46 @@
+# admin packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= cups printing
+= ═════════════
+  cups-dinit
+  cups
+! sv enable cupsd
+  cups-filters
+# foomatic-db
+# foomatic-db-nonfree
+  ghostscript
+  gsfonts
+  gutenprint
+  hplip
+  libcups
+# system-config-printer
+
+
+= database management
+= ═══════════════════
+  sqlite
+  sqlitebrowser
+
+
+= package management
+= ══════════════════
+  flatpak
+  xdg-user-dirs
+! xdg-user-dirs-update  # for flatpak apps common folders
+" link user profile to root
+! sudo ln -s /home/shum/.local/share/cork /root/.local/share/
+! sudo ln -s /home/shum/.fonts /root/
+! sudo ln -s /home/shum/.config/ /root/
+
+
+= package rollback (btrfs)
+= ════════════════════════
+# grub-utils
+# snapper
+
+
+# vim: set ft=conf: #

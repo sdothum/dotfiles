@@ -1,0 +1,4 @@
+type            = process
+command         = /usr/bin/crond -n
+smooth-recovery = true
+after           = loginready
