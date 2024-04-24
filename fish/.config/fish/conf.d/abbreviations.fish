@@ -17,33 +17,33 @@ abbr K 'env sig=-KILL k'
 abbr KK 'env sig=-KILL kk'
 abbr sv 'sv'  # override service abbrev (from fish-completions)
 if alpine
-	abbr sva  'sv add'
-	abbr svd  'sv delete'
-	abbr svi  'sv status'
-	abbr svl  'sv list'
-	abbr svq  'sv status'
-	abbr svr  'sv restart'
-	abbr svs  'sv start'
-	abbr svx  'sv stop'
+	abbr sva 'sv add'
+	abbr svd 'sv delete'
+	abbr svi 'sv status'
+	abbr svl 'sv list'
+	abbr svq 'sv status'
+	abbr svr 'sv restart'
+	abbr svs 'sv start'
+	abbr svt 'sv stop'
 else if void
-	abbr svd  'sv disable'
-	abbr svdn 'sv down'
-	abbr sve  'sv enable'
-	abbr svm  'sv mask'  # at boot
-	abbr svr  'sv restart'
-	abbr svs  'sv status'
-	abbr svu  'sv up'
-	abbr svup 'sv UP'
+	abbr svd 'sv disable'
+	abbr svt 'sv down'
+	abbr sve 'sv enable'
+	abbr svm 'sv mask'  # at boot
+	abbr svr 'sv restart'
+	abbr svi 'sv status'
+	abbr svs 'sv up'
+	abbr svu 'sv UP'
 else
-	abbr svd  'sv disable'
-	abbr sve  'sv enable'
-	abbr svi  'sv info'
-	abbr svl  'sv reload'
-	abbr svm  'sv mask'
-	abbr svr  'sv restart'
-	abbr svs  'sv start'
-	abbr svx  'sv stop'  # terminate
-	abbr svu  'sv unmask'
+	abbr svd 'sv disable'
+	abbr sve 'sv enable'
+	abbr svi 'sv info'
+	abbr svl 'sv reload'
+	abbr svm 'sv mask'
+	abbr svr 'sv restart'
+	abbr svs 'sv start'
+	abbr svt 'sv stop'  # terminate
+	abbr svu 'sv unmask'
 end
 
 # ....................................................................... Device
@@ -56,8 +56,8 @@ abbr umount 'sudo umount'
 # ....................................................................... System
 
 abbr blame 'systemd-analyze blame'
-abbr font-manager 'font-manager ; sudo rm -f ~/.fonts.conf'
-abbr fontmatrix 'fontmatrix ; sudo rm -f ~/.fonts.conf'
+abbr font-manager 'font-manager ; rm -f ~/.fonts.conf'
+abbr fontmatrix 'fontmatrix ; rm -f ~/.fonts.conf'
 abbr gtop 'glances'
 abbr htop 'htop --sort-key PERCENT_CPU'
 abbr ttop 'htop --tree'
@@ -65,26 +65,21 @@ abbr iotop 'sudo iotop'
 abbr lpr 'lpr -P hp-LaserJet-1320-series'
 abbr screenfetch 'fetch'
 abbr services "systemctl list-units -t service --no-pager --no-legend | grep active | grep -E -v 'systemd|exited' | cut -d' ' -f1"
-abbr bash 'bash -norc'
-abbr sh 'rlwrap -n dash'
 abbr time '/usr/bin/time -p'
 abbr traceroute 'mtr --report -c 1'
 abbr who 'command w'
 
-# ...................................................................... Network
-
-abbr friendlybear 'smbclient -R bcast //friendlybear/patricia motu om'
-
 # ......................................................................... File
 
-abbr b 'doas bat'
-abbr c 'doas cat'
+abbr b 'bat'
+abbr ca 'cat'
 abbr cp 'cp -i'
 abbr cpf 'cp -rf'
 abbr cpl 'cp -iLRfv'
 abbr cpr 'cp -rf'
 abbr cpv 'cp -iv'
 abbr gprename 'gprename $PWD'
+abbr h 'head'
 abbr m 'less'
 abbr mv 'mv -i'
 abbr mvf 'mv -f'
@@ -93,7 +88,7 @@ abbr rm 'rm -i'
 abbr rmf 'rm -rf'
 abbr rmr 'rm -rf'
 abbr rmv 'rm -iv'
-abbr s 'sort -n'
+abbr so 'sort -n'
 abbr t 'tail -f'
 abbr tar 'tar -xvf'
 
@@ -123,14 +118,18 @@ abbr hgr 'hg revert -r'
 abbr N 'nnn -p -'  # cmd .. (N) file picker mode
 abbr n 'nnn'
 abbr nb 'nnn -s ebooks'
-abbr r 'vifm'
-abbr R 'ranger'
+# abbr r 'vifm'
+# abbr R 'ranger'
+abbr r '/usr/bin/rsync --info=progress2 -a'
 
 # ....................................................................... Search
 
-abbr fd 'sudo find -type d'
-abbr ff 'sudo find -type f'
-abbr f 'sudo find -iname'
+abbr f 'find'
+abbr fi 'find -iname'
+abbr fr 'find -regex'
+abbr ft 'find -type'
+abbr f1 'find -maxdepth 1'
+abbr ff1 'find -maxdepth 1 -type f'
 abbr g 'ugrep --ignore-case'
 abbr locate 'sudo locate'
 abbr mgrep 'pcregrep -r -M'
@@ -152,14 +151,15 @@ abbr X x
 
 abbr d 'diff'
 abbr ddf 'dirdiff'
-abbr ddfn 'dirdiff (nnn -p -)'              # file picker mode
+abbr ddfn 'dirdiff (nnn -p -)'               # file picker mode
 abbr de 'dmenu - edit'
 abbr dp 'dmenu - projects'
 abbr dr 'dmenu - run'
 abbr ds 'dmenu - scripts'
-abbr h 'helix'
-abbr hsh "helix $HOME/.local/share/fish/fish_history"
+# abbr h 'helix'
+abbr K '/usr/local/bin/kak'                  # for filename with spaces
 abbr k 'kak'
+abbr kd 'kakdiff'
 abbr kl 'kak -l'
 abbr kp 'kak -p'
 abbr nv 'nvpy'
@@ -168,7 +168,6 @@ abbr vdn 'vi -d --role=gvimdiff (nnn -p -)'  # file picker mode
 abbr sd 'sdiff -b -E -W -w(tput cols)'
 abbr vdarchive 'dirdiff ./ /net/archive(pwd)'
 abbr vdbackup 'dirdiff ./ /net/backup(pwd)'
-abbr vsh "vi $HOME/.local/share/fish/fish_history"
 
 # ........................................................................ Regex
 
@@ -183,16 +182,23 @@ abbr ghcc 'stack build'
 abbr ghcx 'stack runghc'
 abbr ghci 'stack exec ghci'
 abbr git1 'git clone --depth 1'
+abbr gitb 'git clone --depth 1 --branch'
 abbr lua 'rlwrap lua'
 abbr mysql 'mysql -h localhost -u root -p'
 abbr perli 'perl -de 1'
 
 # ........................................................................ Shell
 
+abbr c 'z'
+abbr dash 'rlwrap -n dash'
 abbr hdel 'history delete'
 abbr hi 'hist'
+abbr hk "kak $HOME/.local/share/fish/fish_history"
 abbr hv "vi $HOME/.local/share/fish/fish_history"
-abbr su "sudo su -c fish"  # su otherwise just invokes sh
+abbr rl 'rlwrap'
+abbr s 'sudo'
+abbr sh 'bash -norc'
+abbr ss 'sudo su -c fish'  # su otherwise just invokes sh
 
 # .................................................................. Application
 
@@ -226,10 +232,12 @@ abbr kc "kconvert '*epub'"
 abbr kindle 'dmenu econvert azw3'
 abbr eformat 'dmenu econvert reformat'
 abbr kobo 'dmenu econvert epub'
+abbr ma 'man'
 abbr md 'lowdown -tterm'
 abbr mdtxt 'lowdown -tterm --term-no-colour'
-abbr miniflux-migrate 'doas miniflux -c /etc/miniflux.conf -migrate'
+abbr miniflux-migrate 'sudo miniflux -c /etc/miniflux.conf -migrate'
 abbr music '!p ncmpcpp ;and ncmpcpp'
+abbr pts 'phoronix-test-suite'
 abbr scrot 'scrot -e "mv \$f /net/photos/batchqueue/"'
 abbr td 'td -i'
 # abbr todo 'rlwrap -n todo-screen'

@@ -33,6 +33,7 @@ or set -x PATH $PATH ~/.gem/ruby/(rubyver)/bin ~/.cabal/bin /bin /sbin /usr/sbin
 
 set -x LC_ALL en_US.UTF-8
 set -x LANG en_US.UTF-8
+set -x export LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib
 
 # gpg key
 test -S ~/.gnupg/S.gpg-agent
@@ -70,25 +71,29 @@ and set -x http_proxy $HTTP_PROXY
 
 set -x XDG_DOWNLOAD_DIR /net/downloads/http
 set -x NNTPSERVER news.sunnyusenet.com
-set -x NO_PROXY '*'  # required by webkit browsers to access gmail
-
+set -x NO_PROXY '*'                       # required by webkit browsers to access gmail
+set -x WEBKIT_DISABLE_COMPOSITING_MODE  1  # prevent blank web pages with nvidia
 # ..................................................................... Defaults
 
 # default editor
 # set -x EDITOR 'vi -e'
 # set -x EDITOR vim
 # set -x VISUAL 'gvim -f'
-# set -x VISUAL 'vim -g -f' # foreground required for crontab -e ..avoids gvim library errors (?)
+# set -x VISUAL 'vim -g -f'   # foreground required for crontab -e ..avoids gvim library errors (?)
 # let scripts set helix/kak calls (whether term, foreground or not)
-set -x VISUAL 'kak'
+set -x VISUAL '/usr/bin/kak'  # foreground required for crontab -e
 
 set -x XIVIEWER feh
 set -x PLAYER mpv
 # less prompt (replaced by wrapper to be able to set prompt colour)
 # set -x LESS '-RX -P ?B %f  %lt-%lb/%L  %Pb\%: [pipe]  %lt-%lb/\.\.'
 set -x PAGER less
+set -x PAGER print  # my smart pager
 
 # ..................................................... Development environments
+
+# NOTE: required to recover AMD performance for intel-MKL libraries (looking at you python)
+set -x MKL_DEBUG_CPU_TYPE 5
 
 # java
 set -x JAVA_HOME "/usr/lib/jvm/default-jvm"
