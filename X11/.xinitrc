@@ -95,6 +95,8 @@ case $(hostname) in
 esac
 # pulseeffects --gapplication-service &
 
+# gpu nvidia && nvidia_fan
+
 # ............................................................... Window manager
 
 export XDG_CONFIG_HOME=$HOME/.config
@@ -189,9 +191,11 @@ wmi*) xexec wmii ;;
 wi* )
 	setpath $HOME/.config/windowchef
 	export SXHKD_SHELL=/usr/bin/dash
-	xsetroot -solid grey20
 	xrdb -load $HOME/.Xresources
+	. $(which ENV)
 	sxhkd -c $HOME/.config/windowchef/sxhkdrc &
+	ruler -i -c $HOME/.config/windowchef/rulerrc &
+	(sleep 0.15; autostart >/tmp/2bwm.log 2>&1) &
 	$TERM &
 	xexec windowchef ;;
 
