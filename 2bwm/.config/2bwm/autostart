@@ -15,5 +15,6 @@ restore unclutter
 pulse
 udev
 qk stop  # HACK: need to start in a term session
+desktop 0
 
 # kak: filetype=sh

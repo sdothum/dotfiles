@@ -15,5 +15,6 @@ cat_geometry
 draw $winid $WIDTH $HEIGHT
 xdotool windowmove $winid $X $Y
 sleep $AMDlay
+xdotool windowactivate $winid
 
 # kak: filetype=sh

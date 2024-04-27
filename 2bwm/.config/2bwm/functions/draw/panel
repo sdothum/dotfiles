@@ -55,8 +55,6 @@ esac
 
 # ..................................................................... Geometry
 
-TWOBWM_CONFIG=$HOME/.config/2bwm/src/config.h
-
 # 2bwm panel geometry
 PANEL_HEIGHT=$(query screen panel)
 PANEL_INDENT=$(query screen indent)  # assumes equal left/right screen margins
@@ -79,8 +77,6 @@ DESKTOPS=$(seq 0 $(( $tagcount - 1 )) )
 OCCUPIED='■'
 FREE='□'
 
-active()  { xdotool get_desktop; }
-
 # desktop windows
 windows()     { xdotool search --desktop $1 --class '.*' | wc -l; }
 visible()     { xdotool search --onlyvisible --desktop $1 --class '.*' | wc -l; }
@@ -99,7 +95,7 @@ desktops() {
 		# has_visible $i && icon=$OCCUPIED || icon=$FREE
 		has_windows $i && icon=$OCCUPIED || icon=$FREE
 
-		if [ $i = $(active) ] ;then
+		if [ $i = $(desktop) ] ;then
 			has_visible $i && format="${format}%{F$ACTIVE_FG}"
 			has_hidden  $i && format="${format}%{F$ACTIVE_FG}%{U$ACTIVE_FG}%{+u}"
 		elif ! has_windows $i ;then
@@ -121,15 +117,10 @@ cpu_stat() { stat="${TAG_PAD} $cpu_usage ${STATPAD}$cpu_speed ${STATPAD}$cpu_tem
 
 # ............................................................... Current window
 
-# tag desktop description.. the place to tag desktop names if you like :)
-# name()  { echo "ONE TWO THREE FOUR FIVE SIX SEVEN EIGHT NINE TEN" | cut -d' ' -f$(( $1 + 1 )); }
-name()  { echo "DESK CHAT CODE MAIL MEDIA SYSTEM SEVEN EIGHT NINE TEN" | cut -d' ' -f$(( $1 + 1 )); }
-title() { title="$(name $(active))"; }
-
 # desktop details
 active_window() {
-	title
-	active=$(active)
+	title="$(query desktop)"
+	active=$(desktop)
 	if has_windows $active ;then
 		if has_visible $active && has_hidden $active ;then
 			title="${title}${LSEP}$(visible $active)${LSEP}%{U$DEFAULT_FG}%{+u}$(hidden $active)%{-u}%{U-}"

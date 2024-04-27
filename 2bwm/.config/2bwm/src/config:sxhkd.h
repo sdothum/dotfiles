@@ -16,7 +16,8 @@ static const float    resize_keep_aspect_ratio = 1.03;
 /*0)offsetx          1)offsety
  *2)maxwidth         3)maxheight */
 // static const uint8_t offsets[] = {0,0,0,0};
-static const uint8_t offsets[] = {42,37,84,74};
+// static const uint8_t offsets[] = {42,37,84,74};
+static const uint8_t offsets[] = {40,37,80,74};
 ///---Colors---///
 /*0)focuscol         1)unfocuscol
  *2)fixedcol         3)unkilcol
@@ -24,7 +25,9 @@ static const uint8_t offsets[] = {42,37,84,74};
  *6)emptycol         */
 
 // static const char *colors[] = {"#35586c","#333333","#7a8c5c","#ff6666","#cc9933","#0d131a","#000000"};
-static const char *colors[] = {"#f7f3ee","#757575","#008b8b","#fa8c69","#a1462a","#505050","#000000"};
+// static const char *colors[] = {"#f7f3ee","#757575","#008b8b","#fa8c69","#a1462a","#505050","#000000"};
+static const char *colors[] = {"#00ffff","#757575","#008b8b","#fa8c69","#a1462a","#505050","#000000"};
+// static const char *colors[] = {"#ff8c00","#757575","#008b8b","#fa8c69","#a1462a","#505050","#000000"};
 
 /* if this is set to true the inner border and outer borders colors will be swapped */
 static const bool inverted_colors = true;
@@ -185,6 +188,7 @@ static key keys[] = {
 	{  MOD ,                  XK_space,      maxvert_hor,         {.i=TWOBWM_MAXIMIZE_VERTICALLY}},
 	// Maximize horizontally
 	// {  MOD |SHIFT,         XK_m,          maxvert_hor,         {.i=TWOBWM_MAXIMIZE_HORIZONTALLY}},      // 4K screens are too wide
+	{  MOD |CONTROL,          XK_space,      maxvert_hor,         {.i=TWOBWM_MAXIMIZE_HORIZONTALLY}},
 	// Maximize and move
 	// vertically left
 	// {  MOD |SHIFT,         XK_y,          maxhalf,             {.i=TWOBWM_MAXHALF_VERTICAL_LEFT}},      // 4K screens are too wide
@@ -250,7 +254,6 @@ static key keys[] = {
 	// {  MOD |CONTROL,       XK_r,          twobwm_restart,      {.i=0}},
 	{  MOD |SHIFT|CONTROL,    XK_r,          twobwm_restart,      {.i=0}},  // see sxhkdrc super + r
 	// {  MOD ,               XK_space,      halfandcentered,     {.i=0}},
-	{  MOD |SHIFT|CONTROL,    XK_1,          halfandcentered,     {.i=0}},  // monocle
 	// {  MOD ,               XK_s,          toggle_sloppy,       {.com = sloppy_switch_cmd}},
 	{  MOD |CONTROL,          XK_s,          toggle_sloppy,       {.com = sloppy_switch_cmd}},
 	// Change current workspace

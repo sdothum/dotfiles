@@ -16,7 +16,7 @@ width=$(( $(query display width) - $margin * 2 ))
 height=$(( $(query display height) - $panel * 2 ))
 
 # 2bwm window geometry
-border=$(echo $(grep '^static const uint8_t borders' $TWOBWM_CONFIG | sed 's/.*[{]//; s/[}].*//; s/,/ /g' | cut -d' ' -f2))
+border=$(query screen window_border)
 winid=$(pfw)
 # xdotool windowstate --remove fullscreen $winid  # fullscreen negates any attempted window actions
 
@@ -41,7 +41,7 @@ draw() {
 }
 
 # do we need to wait for window creation?
-[ "${1%%@*}" ] || { sleep ${1#@}; winid=$(winid); shift; }
+[ $1 ] && { [ "${1%%@*}" ] || { sleep ${1#@}; winid=$(winid); shift; } }
 
 msg=$1
 [ $msg ] && shift || usage: $0

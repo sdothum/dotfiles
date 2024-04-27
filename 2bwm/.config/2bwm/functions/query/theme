@@ -6,7 +6,7 @@
 
 # .................................................................... Wallpaper
 
-[ $WALLPAPER ] || . $XDG_CONFIG_HOME/2bwm/ENV
+[ $WALLPAPER ] || . $XDG_CONFIG_HOME/$WM/ENV
 
 ls -l $WALLPAPER | awk '{ gsub(".(png|jpg)", ".theme", $NF); print $NF }'
 

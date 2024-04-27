@@ -5,8 +5,8 @@
 super + shift + space
 	menu
 
-super + control + space
-	window snap
+# super + control + space
+# 	window snap
 
 super + Return
 	scratchpad scratchy
@@ -101,9 +101,6 @@ super + {shift,control} + d
 super + {shift,control} + e
 	layout {fold 4 kak, level}
 
-# super + control + e
-# 	layout level
-
 super + g
 	window snap center
 
@@ -192,7 +189,7 @@ super + Escape
 	pkill -USR1 -x ruler
 
 super + shift + Escape
-	kak $HOME/.config/2bwm/sxhkdrc $HOME/.config/2bwm/rulerrc
+	kak $HOME/.config/2bwm/sxhkdrc $HOME/.config/2bwm/rulerrc $HOME/.config/2bwm/src/config.h
 
 super + button1
 	chwso -r $(pfw)

@@ -11,6 +11,7 @@ $HOME/.config/fish
 $HOME/.config/kak
 $HOME/.config/herbstluftwm
 $HOME/.config/nnn/plugins
+$HOME/.config/windowchef
 $HOME/.vim/after
 $HOME/.vim/config
 $HOME/.vim/plugged/vim-duochrome

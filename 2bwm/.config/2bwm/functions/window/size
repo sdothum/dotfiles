@@ -1,4 +1,5 @@
 # sdothum - 2016 (c) wtfpl
+
 [ $TRACE ] && CHILD="window/size $@" . $PARENT
 
 # 2bwm
@@ -6,7 +7,7 @@
 
 # .............................................................. Set window size
 
-# Usage: window size <height>x<width> | monocle | rotate | <numerator>/<denominator> (of screen width)
+# Usage: window size <height>x<width> | monocle | rotate|landscape | <numerator>/<denominator> (of screen width)
 
 ASPECT=4:3  # (photographic) ratio
 
@@ -34,9 +35,10 @@ aspect() {
 # ...................................................................... Monocle
 
 monocle() {
-	save_geometry
-	sleep 0.1                                   # allow user keyboard release
-	xdotool key --delay 100 Super+Shift+Ctrl+1  # see 2bwm config.h
+	set -- $(xdotool getwindowgeometry --shell $winid)  # save this geometry (not tile)
+	window tile 2 1
+	window snap center
+	echo $@ | tr ' ' '\n' >$WINFO:$winid
 }
 
 # ................................................................... Paper size

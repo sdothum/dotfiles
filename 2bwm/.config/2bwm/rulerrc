@@ -2,8 +2,7 @@
 # ruler for 2bwm
 #
 class="calibre"
-	window desktop 4 ;\
-	xdotool key Super+z
+	window desktop 4
 
 class="mail"
 	window desktop 3 ;\
@@ -28,7 +27,15 @@ class="wiki"
 
 class="mpv"
 	window desktop 4 ;\
-	xdotool key Super+Shift+z ;\
+	xdotool key Super+Shift+z
+
+class="pavucontrol"
+	window desktop 5                ;\
+	window size B6 landscape        ;\
+	window snap center              ;\
+	[ -e $WME:pavucontrol ] && exit ;\
+	touch $WME:pavucontrol          ;\
+	desktop 0
 
 class="qutebrowser"
 	layout tile 3 qutebrowser

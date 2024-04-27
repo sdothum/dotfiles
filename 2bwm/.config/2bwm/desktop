@@ -13,7 +13,7 @@ desktop=$(xdotool get_desktop)
 
 desktop() {
 	[ $desktop -eq $1 ] && return
-	echo $desktop >$TWOBWM:desktop
+	echo $desktop >$WME:desktop
 	xdotool set_desktop $1
 }
 
@@ -31,7 +31,7 @@ case $1 in
 	''    ) echo $desktop ;;
 	get   ) plus $2 ;;  # for relative desktop actions SEE: sxhkdrc
 	[0-5] ) desktop $1 ;;
-	last  ) [ -e $TWOBWM:desktop ] && desktop $(cat $TWOBWM:desktop) ;;
+	last  ) [ -e $WME:desktop ] && desktop $(cat $WME:desktop) ;;
 	*     ) desktop $(plus $1) ;;	 # -1/+1
 esac
 

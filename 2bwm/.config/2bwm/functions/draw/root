@@ -20,7 +20,7 @@
 exists xwallpaper && XSETROOT=xwallpaper || XSETROOT=hsetroot  # alpine wallpaper
 
 # cpu arm && exit
-SHUFFLE=$TWOBWM:shuffle
+SHUFFLE=$WME:shuffle
 brighten=-0.025
 modulo=3    # modulo of random number for random desktop wallpaper
 delay=0.25  # frame latency window

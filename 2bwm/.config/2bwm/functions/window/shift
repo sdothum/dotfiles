@@ -8,45 +8,17 @@
 
 # Usage: window shift left | right | up | down (of window edge)
 
-
 set_geometry  # X Y WIDTH HEIGHT
 save_geometry
 
-# ................................................................... Shift left
-
-left() {
-	xdotool windowmove --relative $winid -$(( $WIDTH + $border * 2 )) 0
-	xdotool windowactivate $winid
-}
-
-# .................................................................. Shift right
-
-right() {
-	xdotool windowmove --relative $winid $(( $WIDTH + $border * 2 )) 0
-	xdotool windowactivate $winid
-}
-
-# ..................................................................... Shift up
-
-up() {
-	xdotool windowmove --relative $winid 0 -$(( $HEIGHT + $border * 2 ))
-	xdotool windowactivate $winid
-}
-
-# ................................................................... Shift down
-
-down() {
-	xdotool windowmove --relative $winid 0 $(( $HEIGHT + $border * 2 ))
-	xdotool windowactivate $winid
-}
-
 case $1 in
-	left  ) left  ;;
-	right ) right ;;
-	up    ) up    ;;
-	down  ) down  ;;
+	left  ) xdotool windowmove --relative $winid -$(( $WIDTH + $border * 2 )) 0  ;;
+	right ) xdotool windowmove --relative $winid  $(( $WIDTH + $border * 2 )) 0  ;;
+	up    ) xdotool windowmove --relative $winid 0 -$(( $HEIGHT + $border * 2 )) ;;
+	down  ) xdotool windowmove --relative $winid 0  $(( $HEIGHT + $border * 2 )) ;;
 esac
 
 sleep $AMDlay
+xdotool windowactivate $winid
 
 # kak: filetype=sh
