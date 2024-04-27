@@ -8,7 +8,7 @@
 sudo xbps-install -y qt5-charts-devel
 
 cd /home/depot
-[ -d HexWalk ] && { cd HexWalk; git pull; cd ..; } || git clone https://github.com/gcarmix/HexWalk.git
+exists -r HexWalk && { cd HexWalk; git pull; cd ..; } || git clone https://github.com/gcarmix/HexWalk.git
 
 cd HexWalk
 ./linux_build.sh

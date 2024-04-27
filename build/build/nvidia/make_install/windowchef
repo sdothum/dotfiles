@@ -3,16 +3,14 @@
 # Make_install
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ......................................................................... 2bwm
+# ................................................................... windowchef
 
 sudo xbps-install -y libxcb-devel xcb-util-keysyms-devel xcb-util-wm-devel xcb-util-xrm-devel
 
 cd /home/depot
-exists -r 2bwm || git clone https://github.com/venam/2bwm.git
+exists -r windowchef || git clone https://github.com/tudorom/windowchef.git
 
-cd 2bwm
-original config.h
-ln -s $HOME/.config/2bwm/src/config.h .
+cd windowchef
 make
 sudo make install
 

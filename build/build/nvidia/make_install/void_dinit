@@ -6,7 +6,7 @@
 # ................................................................. dinit system
 
 cd /home/depot
-[ -d void_dinit ] && { cd void_dinit; git pull; cd ..; } || git clone https://github.com/summrum/void_dinit.git
+exists -r void_dinit && { cd void_dinit; git pull; cd ..; } || git clone https://github.com/summrum/void_dinit.git
 
 cd void_dinit
 

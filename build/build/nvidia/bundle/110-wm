@@ -33,7 +33,7 @@
   xcb-util-cursor-devel
   wmctrl
 m wmutils
-  windowchef
+m windowchef  # xbps version is broken
   ruler
   sxhkd
 

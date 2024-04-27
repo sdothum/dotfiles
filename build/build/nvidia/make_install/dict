@@ -7,7 +7,7 @@
 # ......................................................................... dict
 
 cd /home/depot
-[ -d dict ] && { cd dict; git pull; cd ..; } || git clone --depth 1 https://github.com/BetaPictoris/dict.git 
+exists -r dict && { cd dict; git pull; cd ..; } || git clone --depth 1 https://github.com/BetaPictoris/dict.git
 
 cd dict
 make clean
