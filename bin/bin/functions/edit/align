@@ -6,7 +6,7 @@
 
 # ........................................................... modal pipe actions
 
-usage() { echo "<selection> | $(basename $0) [<nth>] [')' | '{' | '|' | '&' | '=' | '#' | '\' | '//' | '--' | '||' | '&&' | ';;' | <string>]
+usage() { echo "<selection> | $(basename $0) [<nth>] [')' | '{' | '|' | '&' | '=' | '#' | '\' | ';\' | '//' | '--' | '||' | '&&' | ';;' | <string>]
 >   where, 'pattern' -> ' pattern '
 >          '#'       -> '  # ' (appended comment)
 >          ''        -> ' '    (nth <space>* column)
@@ -18,14 +18,15 @@ usage() { echo "<selection> | $(basename $0) [<nth>] [')' | '{' | '|' | '&' | '=
 LINES=/tmp/align:stdin
 tabstop=${TABSTOP:-3}
 
-delim='⁋'      # split char
-dollar='¢'     # hard char to avoid "echo" loss
-space='•'      # hard char
-tab=$(for i in $(seq $tabstop) ;do echo -n "‣" ;done )    # hard char to avoid "echo" loss
-nth=1          # pattern position
-gutter=' '     # pattern gutter prefix
-ignore='❌'    # nth space column split case avoidance (see below)
-backslash='◌'  # preserve backslash
+delim='⁋'         # split char
+dollar='¢'        # hard char to avoid "echo" loss
+space='•'         # hard char
+tab=$(for i in $(seq $tabstop) ;do echo -n "‣" ;done )  # hard char to avoid "echo" loss
+nth=1             # pattern position
+gutter=' '        # pattern gutter prefix
+ignore='❌'       # nth space column split case avoidance (see below)
+backslash='◌'     # preserve backslash
+continuation='➥'  # special ;\ pair
 
 case "$1" in
 	')'   ) match=$1; ignore="()" ;;  # align case pattern ')'
@@ -44,6 +45,7 @@ case "$1" in
 	*     ) match=" " ;;                   # force drop through (below)
 esac
 [ "$1" = ';;' ] && match=semicolons       # case cannot match on statement terminator
+[ "$1" = ';\' ] && match=semibslash       # case cannot match on statement terminator
 
 # insert split char and mark special chars
 case "$match" in
@@ -53,6 +55,7 @@ case "$match" in
 	'//'       ) sed -r "s|^( *($match)*.*[^ ]) *$match *|\1$delim$gutter$match |$nth" ;;  # ignore leading // c
 	'--'       ) sed -r "s/^( *($match)*.*[^ ]) *$match */\1$delim$gutter$match /$nth" ;;  # ignore leading -- lua
 	semicolons ) sed "s/ *;; */$delim$gutter;; /$nth" ;;
+	semibslash ) sed "s/ *;\\ */$delim$gutter;$continuation /$nth" ;;  # backslash continuation variant
 	''         ) sed "s/  */$delim /$nth" ;;    # align by spaces
 	"$match"   ) sed "s/ *$match */$delim$gutter$match /$nth" ;;
 	*          ) sed "s/$1/$delim $1/$nth" ;;   # align by string
@@ -78,6 +81,6 @@ while read line <&3 ;do
 	else
 		echo "$line"
 	fi
-done 3< $LINES | sed -r ":a; s/^(${space}*)$space/\1 /; ta; s/$tab/\t/g; s/$dollar/$/g; s/$backslash/\\\/g"  # leading :space:
+done 3< $LINES | sed -r ":a; s/^(${space}*)$space/\1 /; ta; s/$tab/\t/g; s/$dollar/$/g; s/$backslash/\\\/g; s/$continuation //"  # leading :space:
 
 # kak: filetype=sh

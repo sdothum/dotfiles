@@ -1,0 +1,13 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Hardware
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................... Nvidia fan control
+
+# Usage: nvidia_fan [<percent>]
+
+sudo nvidia-settings -a GPUFanControlState=1 -a GPUTargetFanSpeed=${1:-30}
+
+# kak: filetype=sh

@@ -239,8 +239,9 @@ elif [ "$mu" ] ;then
 	e_ink tundra Y-descending a-single
 
 elif [ "$test" ] ;then
-	cmdopts t-asymmetric-- j-flat 1-nobase
-	dfont dyslexic I-serifed    quasi-extension space=1.125 family=monograffic serifless  # panel/dunst font
+	cmdopts quasi-ext space=1.085 Q-straight open+ j-flat serifless serifed
+ 	emdash
+	e_ink adrift grote  I-descending t-asymmetric--
 
 elif [ "$quad" ] ;then
 	cmdopts quasi-ext space=1.125 Q-straight open+

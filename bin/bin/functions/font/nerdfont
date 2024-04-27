@@ -21,7 +21,7 @@ family=${FONT##*/}
 # install nerd-font patcher
 void && xb_check fontforge nodejs otfcc ttfautohint
 ditto warning 'nerd-fonts v2.x may break ligatures'
-if [ -d $REPO ] || [ -L $REPO ] ;then
+if exists -r $REPO ;then
 	cd $REPO
 	if [ ! -e $MAKE_INSTALL ] ;then
 		/home/depot/nerd-fonts/font-patcher --version

@@ -91,7 +91,7 @@ if console ;then
 	[ ${#wm} -le 12 ] && extra=' '  # emboss spacing
 	[ $font = emboss ] && seat=$(echo $wm | sed -r "s/(.)/\1 $extra/g; s/ *$//") || seat=$wm
 	[ $(cat $SEAT) -lt 240 ] && seat="$(echo $seat | cut -c -24)"  # assumes display width jump from 1920 to 1366 ## TODO
-	void || artix && toilet -F metal -f $font "$seat" || { echo $BLACK; figlet -t -S -f lean "$seat"; echo $NOCOLOR; }
+	void || artix && toilet -w240 -F metal -f $font "$seat" || { echo $BLACK; figlet -t -S -f lean "$seat"; echo $NOCOLOR; }
 	[ $wm = shell ] && exit  # escape to shell prompt
 
 	pstat startx && exit

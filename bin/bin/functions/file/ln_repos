@@ -14,7 +14,7 @@ cd /home/depot
 for i in $(find -name '*git' | grep -Ev "$ignore") ;do
 	git=$(dirname $i)
 	[ -e ${git##*/} ] && continue
-	ln -sv $git .
+	ln -sv ${git#./} .
 done
 
 # kak: filetype=sh

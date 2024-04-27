@@ -1,7 +1,6 @@
 2bwm
 amphetype
 bash
-berry
 bin
 bspwm
 build
@@ -53,6 +52,7 @@ vim/.vim/after
 vim/.vim/config
 vim/.vim/plugged/vim-duochrome
 weechat
+windowchef
 wyrd
 X11
 xorg

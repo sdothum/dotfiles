@@ -17,7 +17,7 @@ DELAY=180  # unattended wm startup if set
 # bootstrap SSD scheduler
 if [ $USER != root ] ;then
 	if console && [ ! -e /tmp/login:console ] ;then
-		for i in $(find /tmp -mtime +1 2>/dev/null | grep -v '/tmp/adblock') ;do sudo rm -rf $i 2>/dev/null ;done  # clear out stale entries
+		# for i in $(find /tmp -mtime +1 2>/dev/null | grep -v '/tmp/adblock') ;do sudo rm -rf $i 2>/dev/null ;done  # clear out stale entries
 		tty >/tmp/login:console
 		setfont ter-i16b
 		[ -e /var/log/journal ] && sudo rm /var/log/journal  # systemd
