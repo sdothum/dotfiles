@@ -1,0 +1,16 @@
+# sdothum - 2016 (c) wtfpl
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................................... Menu
+
+# meta menu menu!
+while : ;do
+	script=$(ls -1 $(dirname $0)/functions/menu | grep -E -v 'browser|compose|help|menu|urlib' \
+		| rmenu 'Menu' "$script" -no-custom) || exit
+
+	menu $script
+done
+
+# kak: filetype=sh

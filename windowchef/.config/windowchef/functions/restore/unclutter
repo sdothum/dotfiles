@@ -1,0 +1,11 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="restore/unclutter $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................ Restore unclutter
+
+[ -e $SESSION ] && toggle unclutter on
+
+# kak: filetype=sh

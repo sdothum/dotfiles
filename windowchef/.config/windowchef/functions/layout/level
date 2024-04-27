@@ -1,0 +1,17 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="layout/level $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Level windows
+
+for i in $winids ;do
+	save_geometry $i             # for full desktop restore :)
+	waitron window_focus $i
+	window snap center vertical  # NOTE: Super+Shift+g jitter offset occurs when used in a loop
+done
+
+waitron window_focus $winid
+
+# kak: filetype=sh

@@ -1,0 +1,19 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="2make $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Compile 2bwm
+
+SRC=/net/depot/x11/2bwm
+[ -e /home/depot ] && SRC=/home/depot/2bwm
+
+cd $SRC
+ditto 2bwm "Building 2bwm.."
+make && sudo make install || { press_enter; exit; }
+console || ifno "restart 2bwm" && exit
+2restart
+
+# kak: filetype=sh

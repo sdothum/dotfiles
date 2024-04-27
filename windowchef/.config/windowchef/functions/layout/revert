@@ -1,0 +1,16 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="layout/revert $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Revert layout
+
+for i in $winids ;do
+	window revert $i
+done
+
+waitron window_focus $winid
+notify 2bwm "layout revert <b>ALL</b>"
+
+# kak: filetype=sh

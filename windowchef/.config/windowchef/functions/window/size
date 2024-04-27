@@ -1,0 +1,65 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/size $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .............................................................. Set window size
+
+# Usage: window size <height>x<width> | monocle | rotate|landscape | <numerator>/<denominator> (of screen width)
+
+ASPECT=4:3  # (photographic) ratio
+
+size() {
+	save_geometry
+	set_geometry
+	[ $4 ] && { W=$3; H=$2; } || { W=$2; H=$3; }
+	[ $H -gt $height ] && { swap=$W; W=$H; H=$swap; }
+	wtp $X $margin $W $H $1  # size from top else bottom may be truncated
+	wmv -a $(( $X + $W / 2 )) $(( $height / 2 )) $1
+}
+
+# ................................................................. Aspect ratio
+
+aspect() {
+	numerator=$1
+	denominator=$2
+	# an arbitrary aspect ratio calculation
+	X=$(echo "scale=2\n$width * $numerator / $denominator - $margin" | bc | cut -d. -f1)
+	Y=$(echo "scale=2\n$X * ${ASPECT%:*} / ${ASPECT#*:}" | bc | cut -d. -f1)
+	[ $Y -lt $height ] || Y=$(echo "scale=2\n$X * ${ASPECT#*:} / ${ASPECT%:*}" | bc | cut -d. -f1)  # fit window to screen
+	size $winid $X $Y
+}
+
+# ...................................................................... Monocle
+
+monocle() {
+	window tile 2 1
+	waitron window_snap middle
+}
+
+# ................................................................... Paper size
+
+paper() {
+	case $1 in
+		A3* ) size $winid 1334 1890 $2 ;;
+		B4* ) size $winid 1123 1587 $2 ;;
+		A4* ) size $winid  945 1334 $2 ;;
+		B5* ) size $winid  794 1123 $2 ;;
+		A5* ) size $winid  665  945 $2 ;;
+		B6* ) size $winid  559  794 $2 ;;
+		A6* ) size $winid  472  665 $2 ;;
+		B7* ) size $winid  397  559 $2 ;;
+	esac
+}
+
+case $1 in
+	mon*  ) monocle  ;;
+	[AB]* ) paper $1 $2 ;;
+	*/*   ) aspect ${1%/*} ${1#*/} ;;
+	*x*   ) size $winid ${1%x*} ${1#*x} ;;
+	*     ) size $winid ${width:-$X} ${height:-$Y} ;;
+esac
+
+
+# kak: filetype=sh

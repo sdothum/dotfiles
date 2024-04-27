@@ -1,0 +1,14 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/rotate $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Rotate window
+
+# Usage: window rotate SEE: window size and window stretch
+
+eval $(xdotool getwindowgeometry --shell $winid)
+draw $winid $HEIGHT $WIDTH
+
+# kak: filetype=sh

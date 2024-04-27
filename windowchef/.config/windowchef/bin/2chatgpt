@@ -1,0 +1,21 @@
+#!/usr/bin/php
+<?php
+// from https://www.reddit.com/user/KraZhtest
+
+stream_set_blocking(STDIN, true);
+$ask = ""; // Will contain the multiline question
+// Read multilines STDIN while (FALSE !== ($line = fgets(STDIN))) { $ask .= $line; }
+$model = "gpt-3.5-turbo-1106";
+$OPENAI_API_KEY = "sk-WOW<REPLACE_BY_YOUR_API_KEY>FNF3WOW";
+$api_url = 'https://api.openai.com/v1/chat/completions';
+$headers = [ 'Content-Type: application/json', 'Authorization: Bearer ' . $OPENAI_API_KEY ];
+$data = [ 'model' => $model, 'messages' => [ [ 'role' => 'system', 'content' => 'You are an expert in programming and should provide only code-based responses in PHP.' ], [ 'role' => 'user', 'content' => $ask ] ] ];
+$options = [ 'http' => [ 'header' => implode("\r\n", $headers), 'method' => 'POST', 'content' => json_encode($data) ] ];
+$context = stream_context_create($options);
+$response = file_get_contents($api_url, false, $context);
+$answer = json_decode($response, true)["choices"][0]["message"]["content"];
+preg_match_all('/php(.*?)/s', $answer, $matches);
+$code = $matches[1][0];
+echo $ask . $code; // Output to STDOUT
+
+// kak: set filetype=php //

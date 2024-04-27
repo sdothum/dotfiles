@@ -1,0 +1,14 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="toggle/background $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................................... Root
+
+pkill -KILL -f "draw panel"
+menu root
+toggle picom on
+draw panel
+
+# kak: filetype=sh

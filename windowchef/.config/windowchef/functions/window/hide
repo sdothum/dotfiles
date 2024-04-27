@@ -1,0 +1,22 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/hide $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Hide action
+
+# hide active window and focus next BECAUSE: 2bwm "hidden" function is broken
+keyboard off
+echo "$(desktop) $winid:$(wname $winid)" >$HIDDEN:$winid  # SEE: menu unhide
+save_geometry
+mapw -u $winid
+window next
+keyboard on
+
+# clear xtitle.. see draw panel
+[ -e $(cat $PANEL_FIFO) ] || exit
+[ $(xdotool search --onlyvisible --desktop $(desktop) --class '.*' | wc -l) -eq 0 ] && echo "X" >$(cat $PANEL_FIFO)
+exit  # avoid window (parent) windowunmap
+
+# kak: filetype=sh

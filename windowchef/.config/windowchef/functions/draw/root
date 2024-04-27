@@ -1,0 +1,115 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="draw/root $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .............................................................. Draw background
+
+# Usage: draw root [color [<color>] | restore | save]
+#        draw root [select | shuffle | wallpaper]
+#        draw root, refresh background if necessary, shuffling if set
+#        draw root color, draw random background color
+#        draw root restore, restore background color
+#        draw root invert, switch contrast
+#        draw root select, select default background and disable shuffling
+#        draw root shuffle, enable random background shuffling
+#        draw root wallpaper, draw background
+
+[ -e $BLACKBOARD ] && exit
+exists xwallpaper && XSETROOT=xwallpaper || XSETROOT=hsetroot  # alpine wallpaper
+
+# cpu arm && exit
+SHUFFLE=$WME:shuffle
+brighten=-0.025
+modulo=3    # modulo of random number for random desktop wallpaper
+delay=0.25  # frame latency window
+
+# set background image
+pick_image() {
+	# (sleep 0.25; xdotool key Super+g) &
+	# (sleep 0.35; window size moncle) &  # see rulerrc
+	/usr/bin/feh -W 1690 --stretch --thumbnails -X -E 108 -y 192 -B black --cache-thumbnails --scale-down -r --start-at $(lname $WALLPAPER) -A "ln -sf %f $WALLPAPER && xdotool key q" $1 2>/dev/null  # ignore .theme file warnings
+}
+
+# ....................................................... Set colored background
+
+color() {
+	if [ $1 ] ;then
+		color=$1
+		[ $color = 000000 ] && blackboard=true || echo color >$SETROOT  # blackboard reserved for media
+	else
+		color=$(rand h)
+		rm -f $SETROOT
+	fi
+	# setroot --blank-color "#$color" 2>/dev/null
+	hsetroot -solid "#$color" 2>/dev/null
+	[ $blackboard ] || echo $color >$COLOR                                       # blackboard reserved for media playback background
+	[ $2 ] || { luminance -$color && echo light >$THEME || echo dark >$THEME; }  # luminance set by menu root
+}
+
+select_color() {
+	notify time=5 low 'Root Background' '<Space>  Show next\n<Enter>  Select color'
+	lname $WALLCOLOR >/dev/null || ln -sf $(find $PALETTE -name '*.png' | head -1) $WALLCOLOR
+	ln -sf $WALLCOLOR $BACKGROUND
+	pick_image $(find $PALETTE -name '*.png')
+	color $(basename $(readlink -f $WALLCOLOR) .png)
+}
+
+# ................................................................ Set wallpaper
+
+wallpaper() {
+	[ -e $WALLPAPER ] || ln -sf $(find ${WALLPAPER%/default} -iname '*.png' | head -1) $WALLPAPER
+	ln -sf $WALLPAPER $BACKGROUND
+	rm -f $COLOR
+	rm -f $THEME
+	invert_panel notify  # keybind message
+}
+
+select_wallpaper() {
+	notify time=5 low 'Desktop Wallpaper' '<Space>  Show next\n<Enter>  Select image'
+	wallpaper
+	pick_image ${WALLPAPER%/default}/${WALL#.} 2>/dev/null  # ignore .theme file warnings
+}
+
+shuffle() {
+	ln -sf $(find ${WALLPAPER%/default} -name '*.png' | shuf -n1) $WALLPAPER
+	rm -f $COLOR
+	rm -f $THEME
+}
+
+# ...................................................................... Setroot
+
+# remember current background state for autostart
+case $1 in
+	color     ) color $2 $3 ;;  # $3, see menu root
+	restore   ) select_color ;;
+	invert    ) grep -q dark $THEME && echo light >$THEME || echo dark >$THEME; cp $THEME $(query theme) ;;
+	wallpaper ) wallpaper ;;
+
+	select    )
+		rm -f $SHUFFLE
+		select_wallpaper
+		echo wallpaper >$SETROOT
+		invert_panel notify ;;  # keybind message
+
+	shuffle   )
+		touch $SHUFFLE
+		shuffle
+		echo wallpaper >$SETROOT ;;
+
+	*         ) [ -e $SHUFFLE ] && one_in $modulo && shuffle ;;  # increase modulo to reduce frequency of shuffle
+esac
+
+# .................................................................. Apply theme
+
+root() {
+	# set panel theme
+	background=$(query theme)
+	[ -e "$background" ] && cp $background $THEME || echo light >$THEME
+	[ $XSETROOT = xwallpaper ] && echo "--screen $1 --zoom $WALLPAPER" || echo "--on $1 --zoom $WALLPAPER"; 
+}
+
+[ $blackboard ] || [ -e $COLOR ] || $XSETROOT $(root 0) &
+
+# kak: filetype=sh

@@ -1,0 +1,86 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="term $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ..................................................................... Terminal
+
+# Usage: term [[title=]<title>] [[class=]<class>] [BLACKBOARD | PAPER | <X>x<Y> | VISIBLE | WAIT | FORTUNE]* [[SHELL] <command>]
+#        title (and default name string)
+#        FORTUNE, login notifier message
+#        BLACKBOARD, cinema background mode for omxplayer
+#        VISIBLE, wait for window visibility
+#        WAIT, for process to complete before returning
+#        SHELL <command>, for simpler unquoted command passing
+# Note:  title may not contain spaces, use hyphen or underscore in place
+
+export SHELL=/usr/bin/dash
+options='BLACKBOARD|PAPER|[0-9]+x[0-9]+|VISIBLE|WAIT|FORTUNE|SHELL'
+unset name  # for inadvertant env var conflict usage in calling scripts
+
+# HACK: quikey cannot be spawned by autostart (the way invoked for 2bwm)
+exists qk && { pgrep quikey >/dev/null || qk start; }
+
+[ -e /usr/bin/alacritty ] && TERM=alacritty || TERM=urxvt
+case $TERM in
+	alacritty )
+		TITLE=--title
+		NAME=--class
+		blackboard=blackboard ;;
+	
+	urxvt     )
+		TITLE=-title
+		NAME=-name
+		blackboard="-bg '$blackboard' -fg '$blackboard' -cr '$blackboard'"
+		geometry='-geometry 1024x600+0+0' ;;
+esac
+
+# menu border calculation
+border() { echo $(( $(query display height) * 2 / 15 )); }
+theme()  { theme="$theme $@"; }
+
+while : ;do
+	case $1 in
+		''            ) break ;;
+		BLACKBOARD    ) theme $1 ;;
+		PAPER         ) theme $1 ;;
+		*[0-9]x[0-9]* ) theme $1 ;;
+		FORTUNE       ) touch $FORTUNE:term ;;
+		VISIBLE       ) visible=true ;;
+		WAIT          ) wait=true ;;
+		title=*       ) title=${1#*=}; title="$TITLE $title" ;;
+		class=*       ) class=${1#*=}; name="$NAME $class"   ;;
+	
+		SHELL         )
+			shift
+			process=$@
+			[ "$1" ] && cmd="-e $SHELL -c '$@'"
+			break ;;
+
+		*          )
+			# first parameter may be title
+			if [ -z "$title" ] ;then
+				if echo $1 | grep -E -qv "$options" ;then
+					# title="$TITLE $(echo $1 | sed 's/ /_/g')"
+					title="$TITLE '$1'"
+				fi
+			else
+				process="$@"
+				cmd="-e $@"
+				break
+			fi ;;
+	esac
+	shift
+done
+
+[ -z "$name" ] && [ "$title" ] && { name="$NAME ${title#$TITLE }"; }
+
+$TERM $theme $geometry $title $name $cmd
+
+[ $visible ] && [ "$title" ] && xdotool search --sync --onlyvisible --limit 1 --classname "${title#* }"
+# window snap center
+[ $wait    ] && pwait "$process"
+
+# kak: filetype=sh

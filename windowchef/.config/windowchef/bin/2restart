@@ -1,0 +1,15 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="2make $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Restart 2bwm
+
+# delay required for reload trigger
+sleep 0.1
+xdotool key -delay 100 Super+Shift+Control+r
+notify '2bwm' 'restarted'
+
+# kak: filetype=sh

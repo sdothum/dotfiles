@@ -1,0 +1,20 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/revert $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ....................................................... Revert window geometry
+
+# Usage: window revert [winid]
+
+# convert wmutils hex ids to xdotool decimal ids
+# winid=$(printf "%d" ${1:-$winid})
+
+cat_geometry
+draw $winid $WIDTH $HEIGHT
+xdotool windowmove $winid $X $Y
+sleep $AMDlay
+waitron window_focus $winid
+
+# kak: filetype=sh

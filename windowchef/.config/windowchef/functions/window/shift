@@ -1,0 +1,24 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/shift $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Shift window
+
+# Usage: window shift left | right | up | down (of window edge)
+
+set_geometry  # X Y WIDTH HEIGHT
+save_geometry
+
+case $1 in
+	left  ) xdotool windowmove --relative $winid -$(( $WIDTH + $border * 2 )) 0  ;;
+	right ) xdotool windowmove --relative $winid  $(( $WIDTH + $border * 2 )) 0  ;;
+	up    ) xdotool windowmove --relative $winid 0 -$(( $HEIGHT + $border * 2 )) ;;
+	down  ) xdotool windowmove --relative $winid 0  $(( $HEIGHT + $border * 2 )) ;;
+esac
+
+sleep $AMDlay
+waitron window_focus $winid
+
+# kak: filetype=sh

@@ -1,0 +1,15 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/desktop $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................ Window to desktop
+
+# Usage: window desktop <desktop> [teleport], desktop = 0..5
+
+mapw -m $winid  # ruler windowmap delay
+waitron group_add_window $1
+[ $2 ] || desktop $1
+
+# kak: filetype=sh

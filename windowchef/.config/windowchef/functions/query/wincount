@@ -1,0 +1,24 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="query/wincount $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. window count
+
+# Usage: query wincount [desktop] [name]
+
+while [ $1 ] ;do
+	case $1 in
+		[0-9] ) desktop=$1 ;;
+		*     ) name=$1    ;;
+	esac
+	shift
+done
+
+desktop=${desktop:-$(xdotool get_desktop)}
+name=${name:-.*}
+
+wmctrl -l | grep "^[^ ]*  *$desktop" | grep "$name" | wc -l
+
+# kak: filetype=sh

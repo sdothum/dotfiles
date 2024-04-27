@@ -1,0 +1,37 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/swap $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Swap window
+
+# Usage: window swap left | right | up | down (of window edge)
+
+save_geometry  # X Y WIDTH HEIGHT
+
+west()  { lsw | xargs wattr xi | sort -nr | sed "0,/$winid/d" | sed "1s/^[0-9]* //p;d"; }
+east()  { lsw | xargs wattr xi | sort -n  | sed "0,/$winid/d" | sed "1s/^[0-9]* //p;d"; }
+north() { lsw | xargs wattr yi | sort -nr | sed "0,/$winid/d" | sed "1s/^[0-9]* //p;d"; }
+south() { lsw | xargs wattr yi | sort -n  | sed "0,/$winid/d" | sed "1s/^[0-9]* //p;d"; }
+
+case $1 in
+	left  ) wid=$(west)  ;;  # SEE: wmutils closest.sh
+	right ) wid=$(east)  ;;
+	up    ) wid=$(north) ;;
+	down  ) wid=$(south) ;;
+esac
+
+[ "$wid" ] || exit  # no adjacent window
+
+# set -- $(xdotool getwindowgeometry --shell $winid)
+waitron window_focus $wid
+save_geometry $wid
+set_geometry $wid
+wtp $X $Y $WIDTH $HEIGHT $winid
+# wtp ${2#*=} ${3#*=} ${4#*=} ${5#*=} $wid
+cat_geometry $winid
+wtp $X $Y $WIDTH $HEIGHT $wid
+waitron window_focus $wid
+
+# kak: filetype=sh

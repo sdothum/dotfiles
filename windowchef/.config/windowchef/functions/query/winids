@@ -1,0 +1,16 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="query/winids $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ....................................................................... winids
+
+desktop=$(xdotool get_desktop)
+
+# convert wmutils hex ids to xdotool decimal id
+for i in $(wmctrl -l | grep "^[^ ]*  *$desktop " | cut -d' ' -f1) ;do
+	printf "%d\n" $i
+done
+
+# kak: filetype=sh

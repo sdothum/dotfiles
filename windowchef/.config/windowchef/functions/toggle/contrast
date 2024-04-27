@@ -1,0 +1,14 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="toggle/contrast $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................................... Root
+
+pkill -KILL -f "draw panel"
+draw root invert
+toggle picom on
+draw panel
+
+# kak: filetype=sh

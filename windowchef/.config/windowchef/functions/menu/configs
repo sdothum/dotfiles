@@ -1,0 +1,34 @@
+# sdothum - 2016 (c) wtfpl
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................................... Edit
+
+# Usage: menu configs [cache]
+
+REFRESH='refresh cache'  # catalogue, see ffcache
+
+EDITOR=${EDITOR:-kak}
+# system conf files
+INCLUDE='.*(cfg|conf(ig)*|ini|[^.][^s]rc)$'
+
+# search these project library folders..
+sources=$(cat $MENU/.configsrc | sed "s|\$HOME|$HOME|g; s/\$INCLUDE/$INCLUDE/")  # manual eval of $HOME
+
+files()   { ffcache $refresh configs $sources | sed -r "s,^$HOME,~,; s,(.*)/([^/]*)$,\2^$SEP \1,"; unset refresh; }
+configs() { column -s^ -t | sed "2i$(X $REFRESH)"; }
+
+# .................................................................. Edit config
+
+while : ;do
+	file=$(files | mhistory configs | configs | rmenu 'Edit Config' -no-custom) || exit
+
+	[ "${file#$(X)}" = "$REFRESH" ] && { refresh=-; unset file; continue; }
+	mhistory configs "$(echo $file | sed "s/ *$SEP/^$SEP/")"
+	# why do people put spaces in filenames, especially config files!
+	file=$(echo $file | sed -r "s,^(.*)  *${SEP}  *(.*),\2/\1,; s/ /\\\\\\\\ /; s,^~,$HOME,")
+	exec $EDITOR $file
+done
+
+# kak: filetype=sh

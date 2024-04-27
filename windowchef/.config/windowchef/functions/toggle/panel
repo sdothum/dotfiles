@@ -1,0 +1,10 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="toggle/panel $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Toggle panel
+
+xdotool search --onlyvisible --limit 1 --maxdepth 1 --name "lemonbar" windowunmap >/dev/null || xdotool search --limit 1 --maxdepth 1 --name "lemonbar" windowmap >/dev/null
+# kak: filetype=sh

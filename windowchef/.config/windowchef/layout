@@ -1,0 +1,28 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="window $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .............................................................. Desktop layouts
+
+# Usage: layout <msg>, see functions/layout
+
+geometry()      { xdotool getwindowgeometry --shell ${1:-$winid}; }  # X Y WIDTH HEIGHT (doesn't include borders)
+set_geometry()  { eval $(geometry $1); }
+save_geometry() { geometry $1 >$WINFO:${1:-$winid}; }                # for revert
+winid()         { xdotool getactivewindow; }
+
+winids=$(query winids)  # of current desktop
+winid=$(winid)
+
+msg=$1
+[ $msg ] && shift || usage: $0
+if [ -e ${0%/layout}/functions/layout/$msg ] ;then
+	. ${0%/layout}/functions/layout/$msg $@
+else
+	usage: $0
+fi
+
+# kak: filetype=sh

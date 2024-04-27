@@ -1,0 +1,30 @@
+# sdothum - 2016 (c) wtfpl
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................... Desktop layout
+
+actions() {
+	echo "q ^Quarters
+d ^Quarters edit
+b ^Quarters browser
+h ^Thirds
+k ^Thirds edit
+j ^Thirds browser
+" | picklist
+}
+
+cmd=$(actions | rmenu 'Layout' $cmd -no-custom) || exit
+
+cmd=$(echo "$cmd" | sed "s/.*$SEP //")
+case $cmd in
+	T*browser ) layout fold 3 $BROWSER ;;
+	T*edit    ) layout fold 3 kak      ;;
+	Thirds    ) layout fold 3          ;;
+	Q*browser ) layout fold 4 $BROWSER ;;
+	Q*edit    ) layout fold 4 kak      ;;
+	Quarters  ) layout fold 4          ;;
+esac
+
+# kak: filetype=sh

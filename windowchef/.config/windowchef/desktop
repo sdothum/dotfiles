@@ -1,0 +1,40 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="desktop $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................. Query operations
+
+# Usage: desktop <msg> [option]
+
+[ -e $WME:desktop ] && desktop=$(cat $WME:desktop)
+desktop=${desktop:-1}
+
+desktop() {
+	[ $desktop -eq $1 ] && return
+	echo $1 >$WME:desktop
+	waitron group_activate $1
+	notify Group "$1 $(query desktop)"
+}
+
+plus() {
+	desktop=$(( $desktop + $1 ))
+	if [ $desktop -gt 6 ] ;then
+		desktop=1
+	elif [ $desktop -lt 1 ] ;then
+		desktop=6
+	fi
+	echo $desktop
+}
+
+case $1 in
+	''    ) echo $desktop ;;
+	get   ) plus $2 ;;  # for relative desktop actions SEE: sxhkdrc
+	[1-6] ) desktop $1 ;;
+	last  ) [ -e $WME:desktop ] && desktop $(cat $WME:desktop) ;;
+	*     ) desktop $(plus $1) ;;	 # -1/+1
+esac
+
+# kak: filetype=sh
