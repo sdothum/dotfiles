@@ -1,3 +1,4 @@
+**/2bwm:wmutils
 **/adblock
 **/adnw
 **/aerc
@@ -9,6 +10,7 @@
 **/astroid
 **/autokey
 **/beets
+**/berry
 **/*.diff
 **/bin/herbst*
 **/btsync
@@ -21,6 +23,7 @@
 **/build/vps
 **/byobu
 **/.cache
+**/caddy
 **/calcurse
 **/calibre
 **/centerim
@@ -36,6 +39,7 @@
 **/default
 **/.deprecated
 **/description
+**/dinit
 **/dmenu/.config
 **/dmenu/.d
 !**/dmenu/notes
@@ -259,7 +263,9 @@
 !**/.weechat/python/*.py
 **/.wego
 **/wego
+**/wireplumber
 **/wmutils
+**/worm
 **/xfce4
 **/xmobar
 **/Xmodmap
