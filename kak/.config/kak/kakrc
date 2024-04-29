@@ -50,12 +50,14 @@ if %{ [ -z "$UNPLUG" ] } %{
 	}
 
 	# .......................................................... change-directory
-	if %{ [ -z "$DIFF" ] } %{
+	if-else %{ [ -z "$DIFF" ] } %{
 		# change-directory action fails diff-jump - within a "dirdiff" loop SEE: kakdiff
 		bundle kakoune-cd  https://github.com/Delapouite/kakoune-cd.git %{
 			hook global WinDisplay .* change-directory-current-buffer
 			hook global FocusIn .* change-directory-current-buffer
 		}
+	} %{
+		define-command change-directory-current-buffer %{ nop }
 	}
 
 	# ................................................................ crosshairs
@@ -434,7 +436,7 @@ hook global FocusOut .* write
 map global normal <a-ret> ': buffer-next<ret>'           -docstring 'next buffer'
 hook global BufOpenFile .*.diff %{
 	# map global normal <ret> ': diff-jump<ret>'          -docstring 'diff-jump new file'
-	map global normal <a-ret> ': diff-jump -<ret>'        -docstring 'diff-jump old file'
+	map global normal <c-ret> ': diff-jump -<ret>'        -docstring 'diff-jump old file'
 }
 map global normal <a-backspace> ': buffer-previous<ret>' -docstring 'previous buffer'
 map global normal <a-space> 'ga'                         -docstring 'last buffer'
