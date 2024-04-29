@@ -1,17 +1,22 @@
+# sdothum - 2016 (c) wtfpl
 #
-# ruler for 2bwm
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
 #
-class="calibre"
-	xdotool key Super+z
-
+# ........................................................................ Rules
+#
+# NOTE: there cannot be a blank line before the first rule! (hence, the deviation from standard headers)
+#
+# class="calibre"
+# 	waitron window_monocle
+#
 class="mail"
-	window size monocle        ;\
-	waitron group_add_window 4 ;\
-	window desktop 4
+	window desktop 3 ;\
+	window size monocle
 
 class="email"
-	window tile 4 4 ;\
-	waitron group_add_window 4
+	window desktop 3 ;\
+	window tile 4 4
 
 class="feh"
 	window size monocle
@@ -20,28 +25,30 @@ class="Firefox"
 	window size monocle
 
 class="kak"
-	layout tile 4 kak          ;\
-	waitron group_add_window 3 ;\
-	window desktop 3
+	window desktop 2 ;\
+	layout tile 4 kak
 
 class="wiki"
-	layout tile 3 wiki         ;\
-	waitron group_add_window 5 ;\
-	window desktop 5
+	window desktop 4 ;\
+	layout tile 3 wiki
 
 class="mpv"
 	xdotool key Super+Shift+z
 
 class="pavucontrol"
+	window desktop 5           ;\
 	window size B6 rotate      ;\
 	window snap center         ;\
-	waitron group_add_window 6 ;\
-	waitron group_deactivate 6
-
+	waitron group_deactivate 5 ;\
+	desktop 0
+ 
 class="qutebrowser"
+	window desktop $(desktop) ;\
 	layout tile 3 qutebrowser
 
 class="Surf"
-	window tile 4 1 ;\
-	window desktop 2
+	window @2 desktop 1 ;\
+	window tile 4 1
+
+# kak: filetype=sh
 

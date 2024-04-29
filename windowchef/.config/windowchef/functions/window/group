@@ -1,0 +1,45 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/hide $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................... Group info
+
+# Usage: window group <group> [visible | hidden] | <group> add <winid> | remove <winid>
+
+count() {
+	wmctrl -l | cut -d' ' -f1 >$WINDOW:visible
+	visible=0
+	hidden=0
+	for i in $(cat $ACTIVE) ;do
+		grep -q $i $WINDOW:visible && visible=$(( $visible + 1 )) || hidden=$(( $hidden + 1 ))
+	done
+	[ $1 = visible ] && echo $visible || echo $hidden
+}
+
+case $1 in
+	[0-9]  )
+		ACTIVE=$GROUP:$1
+		touch $ACTIVE  # create
+		case $2 in
+			add     ) grep -q $3 $ACTIVE || echo $3 >>$ACTIVE ;;
+			visible ) count visible ;;
+			hidden  ) count hidden  ;;
+			*       ) cat $ACTIVE | wc -l ;;
+		esac
+		;;
+	remove )
+		for i in $(ag --nocolor -l ${2:-$winid} $GROUP:*) ;do
+			grep -v ${2:-$winid} $i >$GROUP:swap
+			cp $GROUP:swap $i
+		done
+		;;
+esac
+
+# update application closed windows
+for i in $(cat $GROUP:*) ;do
+	wmctrl -l | grep -q $i || window group remove $i
+done
+
+# kak: filetype=sh

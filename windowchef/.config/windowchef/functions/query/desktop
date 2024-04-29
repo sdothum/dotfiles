@@ -1,11 +1,11 @@
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="query/winids $@" . $PARENT
 
-# 2bwm
+# Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
 # .............................................................. desktop (group)
 
-echo "DESK CHAT CODE MAIL WIKI SYSTEM SEVEN EIGHT NINE TEN" | cut -d' ' -f$(cat $WME:desktop)
+echo "DESK CHAT CODE MAIL WIKI SYSTEM SEVEN EIGHT NINE TEN" | cut -d' ' -f$(( $(cat $WME:desktop) + 1 ))
 
 # kak: filetype=sh

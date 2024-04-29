@@ -1,15 +1,14 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
-# 2bwm
+# Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
 # .................................................................... Autostart
 
 # see .xinitrc for 2bwm autostart hack :)
 
-xdotool set_desktop 0  # for window hide/unhide BECAUSE: windowchef does not define any desktops
-
+desktop 0  # initialize the group so windows don't get assigned to the null group
 restore root
 conky clock auto
 draw panel

@@ -17,12 +17,12 @@ waitron wm_config internal_color_unfocused 0x505050
 	# ...................................................................... Gaps
 
 waitron wm_config gap_width all 37
-waitron wm_config grid_gap_width 10
+waitron wm_config grid_gap_width 0  # not using windowchef grids at the moment
 
 # ....................................................................... Groups
 
 waitron wm_config groups_nr 10
-waitron wm_config sticky_windows true
+waitron wm_config sticky_windows false
 
 # .................................................................... Behaviour
 
@@ -38,3 +38,5 @@ waitron wm_config replay_click_on_focus true
 waitron wm_config pointer_actions move resize_side resize_corner
 waitron wm_config pointer_modifier super
 waitron wm_config click_to_focus any
+
+# kak: filetype=sh

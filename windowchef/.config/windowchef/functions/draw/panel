@@ -1,13 +1,14 @@
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="draw/panel $@" . $PARENT
 
-# 2bwm
+# Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ................................................................... Draw panel
 
 # Usage: draw panel [<fifo>], see restore panel
 # NOTE:  adjustments made to accomodate alpine linux differences
+# NOTE:  desktop 0..9 conversion to windowchef groups *in progress*
 
 SPANEL=$SESSION/panel   # toggle state
 [ -e $SPANEL ] || exit  # no panel
@@ -55,7 +56,7 @@ esac
 
 # ..................................................................... Geometry
 
-# 2bwm panel geometry
+# Windowchef panel geometry
 PANEL_HEIGHT=$(query screen panel)
 PANEL_INDENT=$(query screen indent)  # assumes equal left/right screen margins
 
@@ -78,12 +79,12 @@ OCCUPIED='■'
 FREE='□'
 
 # desktop windows
-windows()     { xdotool search --desktop $1 --class '.*' | wc -l; }
-visible()     { xdotool search --onlyvisible --desktop $1 --class '.*' | wc -l; }
-hidden()      { echo "$(( $(windows $1) - $(visible $1) ))"; }
-has_windows() { [ $(windows $1) -gt 0 ]; }
-has_visible() { [ $(visible $1) -gt 0 ]; }
-has_hidden()  { [ $(hidden  $1) -gt 0 ]; }
+windows()     { window group $1; }
+visible()     { window group $1 visible; }
+hidden()      { window group $1 hidden; }
+has_windows() { [ $(window group $1) -gt 0 ]; }
+has_visible() { [ $(window group $1 visible) -gt 0 ]; }
+has_hidden()  { [ $(window group $1 hidden) -gt 0 ]; }
 
 desktops() {
 	unset desktops viewscreen
@@ -117,9 +118,9 @@ cpu_stat() { stat="${TAG_PAD} $cpu_usage ${STATPAD}$cpu_speed ${STATPAD}$cpu_tem
 
 # ............................................................... Current window
 
-# desktop details
+# desktop details NOTE: windowchef cannot track window visibility states (so just count all)
 active_window() {
-	title="$(query desktop)"
+	title="$(query desktop)"  # current/last group
 	active=$(desktop)
 	if has_windows $active ;then
 		if has_visible $active && has_hidden $active ;then

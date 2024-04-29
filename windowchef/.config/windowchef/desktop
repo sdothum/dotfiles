@@ -2,38 +2,61 @@
 # sdothum - 2016 (c) wtfpl
 # [ $TRACE ] && CHILD="desktop $@" . $PARENT
 
-# 2bwm
+# Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ............................................................. Query operations
 
-# Usage: desktop <msg> [option]
+# Usage: desktop <msg> [specific | toggle]
 
 [ -e $WME:desktop ] && desktop=$(cat $WME:desktop)
-desktop=${desktop:-1}
+desktop=${desktop:-0}
+
+current() {
+	if [ -e $WME:desktop ] ;then
+		if [ -e $WME:desktop:last ] ;then
+			[ $WME:desktop -ne $(cat $WME:desktop:last) ] && mv -f $WME:desktop $WME:desktop:last
+		fi
+	else
+		echo $desktop >$WME:desktop:last
+	fi
+	echo $1 >$WME:desktop
+	notify Group "$(( $1 + 1 )) $(query desktop)"
+}
 
 desktop() {
-	[ $desktop -eq $1 ] && return
-	echo $1 >$WME:desktop
-	waitron group_activate $1
-	notify Group "$1 $(query desktop)"
+	case $2 in
+		specific )
+			[ $desktop -eq $1 ] || current $1
+			waitron group_activate_specific $1
+			;;
+		toggle   )
+			[ $desktop -eq $1 ] || current $1
+			waitron group_toggle $1
+			;;
+		*        )
+			[ $desktop -eq $1 ] && { waitron group_toggle $1; return; }
+			current $1
+			waitron group_activate $1
+			;;
+	esac
+
 }
 
 plus() {
 	desktop=$(( $desktop + $1 ))
-	if [ $desktop -gt 6 ] ;then
-		desktop=1
-	elif [ $desktop -lt 1 ] ;then
-		desktop=6
+	if [ $desktop -gt 5 ] ;then
+		desktop=0
+	elif [ $desktop -lt 0 ] ;then
+		desktop=5
 	fi
 	echo $desktop
 }
 
 case $1 in
 	''    ) echo $desktop ;;
-	get   ) plus $2 ;;  # for relative desktop actions SEE: sxhkdrc
-	[1-6] ) desktop $1 ;;
-	last  ) [ -e $WME:desktop ] && desktop $(cat $WME:desktop) ;;
+	[0-5] ) desktop $1 $2 ;;
+	last  ) [ -e $WME:desktop:last ] && desktop $(cat $WME:desktop:last) ;;
 	*     ) desktop $(plus $1) ;;	 # -1/+1
 esac
 

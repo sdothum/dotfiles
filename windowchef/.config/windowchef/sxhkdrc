@@ -1,42 +1,33 @@
-#
-# 2bwm independent hotkeys
-#
+# sdothum - 2016 (c) wtfpl
 
-super + space
-	waitron window_ver_maximize
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
 
-super + alt + space
-	waitron window_hor_maximize
+# ...................................................................... Hotkeys
+
+super + {_,alt} + space
+	waitron {window_ver_maximize, window_hor_maximize}
 
 super + shift + space
 	menu
 
-super + control + space
+super + ctrl + space
 	window snap
 
-super + Return
-	scratchpad scratchy
+super + {_,shift} + Return
+	scratchpad {scratchy, itchy}
 
-super + shift + Return
-	scratchpad itchy
-
-super + control + Return
+super + ctrl + Return
 	term
 
-control + space
-	dunstctl close
+ctrl + {_,shift} + space
+	dunstctl {close, close-all}
 
-control + shift + space
-	dunstctl close-all
-
-control + BackSpace
+ctrl + BackSpace
 	dunstctl history-pop
 
-super + shift + apostrophe
-	menu wikis
-
-super + control + apostrophe
-	menu notes
+super + {shift,ctrl} + apostrophe
+	menu {wikis, notes}
 
 super + {0,1}
 	window {revert, rotate}
@@ -44,7 +35,7 @@ super + {0,1}
 super + shift + 0
 	layout revert
 
-super + control + 0
+super + ctrl + 0
 	menu layout
 
 super + 2
@@ -56,64 +47,49 @@ super + {5,6,3}
 super + {4,8,7,9}
 	window tile 4 {1, 2, 3, 4}
 
-alt + {comma,period,1,2,3,4,5,6}
-	desktop {-1, +1, last, 1, 2, 3, 4, 5, 6}
+alt + {comma,period,0,1,2,3,4,5,6}
+	desktop {-1, +1, last, 0, 1, 2, 3, 4, 5}
 
-alt + {comma,period,1,2,3,4,5,6}
-	desktop {-1, +1, last, 1, 2, 3, 4, 5, 6}
+alt + super + {1,2,3,4,5,6}
+	desktop {0, 1, 2, 3, 4, 5} toggle
 
-super + alt + {1,2,3,4,5,6}
-	window desktop {1, 2, 3, 4, 5, 6}
+alt + ctrl + {1,2,3,4,5,6}
+	desktop {0, 1, 2, 3, 4, 5} specific
 
-super + alt + {comma,period}
-	window desktop $(desktop get {-1, +1})
+alt + ctrl + super + {1,2,3,4,5,6}
+	waitron group_remove_all_windows {0, 1, 2, 3, 4, 5}
 
-super + shift + {1,2,3,4,5,6}
-	window desktop {1, 2, 3, 4, 5, 6} teleport
-
-super + shift + {comma,period}
-	window desktop $(desktop get {-1, +1}) teleport
-
-super + alt + ctrl + {1,2,3,4,5,6}
-	waitron group_remove_all_windows {1, 2, 3, 4, 5, 6}
-
-super + alt + {Left,Down,Up,Right}
+alt + super + {Left,Down,Up,Right}
 	window swap {left, down, up, right}
 
-super + control + {p,l,n,f}
+super + ctrl + {p,l,n,f}
 	window shift {left, down, up, right}
 
-super + a
-	conky clock
+super + {_,ctrl} + a
+	conky clock {_, toggle}
 
-super + control + a
-	conky clock toggle
-
-super + b
-	qutebrowser
-
-super + control + b
-	qutebrowser closeall
+super + {_,ctrl} + b
+	qutebrowser {_, closeall}
 
 super + c
 	window snap center vertical
 
-super + {shift,control} + c
+super + {shift,ctrl} + c
 	window snap {top, bottom}
 
 super + {d,n}
 	window snap top {left, right}
 
-super + {shift,control} + d
+super + {shift,ctrl} + d
 	toggle {wallpaper, background}
 
-super + {shift,control} + e
+super + {shift,ctrl} + e
 	layout {fold 4 kak, level}
 
 super + g
 	window snap center
 
-super + {control,shift} + g
+super + {ctrl,shift} + g
 	window snap center {left, right}
 
 super + i
@@ -128,11 +104,8 @@ super + m
 super + shift + m
 	menu abook
 
-super + o
-	menu scripts
-
-super + shift + o
-	menu projects
+super + {_,shift} + o
+	menu {scripts, projects}
 
 super + {p,l}
 	window snap bottom {left, right}
@@ -140,17 +113,14 @@ super + {p,l}
 super + shift + q
 	menu halt
 
-super + control + q
+super + ctrl + q
 	waitron wm_quit 0
 
 super + {r,t}
 	window snap {right, left}
 
-super + shift + r
-	term 2bwm 2make
-
-super + control + r
-	2restart
+super + s
+	waitron window_focus $(pfw)
 
 super + shift + s
 	menu system
@@ -167,7 +137,7 @@ super + v
 super + shift + v
 	menu media
 
-super + control + v
+super + ctrl + v
 	invert_panel
 
 super + x
@@ -176,21 +146,17 @@ super + x
 super + shift + x
 	xdotool search --onlyvisible --classname pcmanfm windowclose || pcmanfm
 
-super + control + x
+super + ctrl + x
 	notify critical 15 nnn '<b>root</b> user' ;\
 	xdotool search --onlyvisible --classname root windowclose || nnn ROOT
 
 super + w
-	waitron window_close
+	window group remove  ;\
+	waitron window_close ;\
+	waitron window_focus_last
 
-super + shift + w
-	menu windowfocus
-
-super + control + w
-	menu windowtile
-
-super + alt + w
-	menu windowsize
+super + {shift,ctrl,alt} + w
+	menu {windowfocus, windowtile, windowsize}
 
 super + Escape
 	notify reloading "sxhkd & ruler" ;\
@@ -198,15 +164,14 @@ super + Escape
 	pkill -USR1 -x ruler
 
 super + shift + Escape
+	window desktop 2  ;\
+	layout tile 4 kak ;\
 	kak $HOME/.config/${WM}/sxhkdrc $HOME/.config/${WM}/rulerrc $HOME/.config/${WM}/windowchefrc
 
-# super + button1
-# 	chwso -r $(pfw)
-
-super + control + {Left,Down,Up,Right}
+super + ctrl + {Left,Down,Up,Right}
 	waitron window_move {-20 0, 0 20, 0 -20, 20 0}
 
-super + control + shift + {Left,Down,Up,Right}
+super + ctrl + shift + {Left,Down,Up,Right}
 	waitron window_resize {-20 0, 0 20, 0 -20, 20 0}
 
 super + {Left,Down,Up,Right}
@@ -222,17 +187,19 @@ super + shift + z
 	waitron window_maximize
 
 super + z
-	window size monocle
+	waitron window_monocle
 
-super + Tab
-	waitron window_cycle
+super + {_,shift} + Tab
+	waitron {window_cycle_in_group, window_rev_cycle_in_group}
 
-super + shift + Tab
-	waitron window_rev_cycle
+alt + {_,super} + Tab
+	waitron {window_cycle, window_rev_cycle}
 
 super + ctrl + Tab
 	waitron window_focus_last
 
 super + ctrl + r
 	waitron group_remove_window
+
+# kak: filetype=sh
 

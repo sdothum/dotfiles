@@ -4,7 +4,7 @@
 export PARENT=$(which parent)
 [ $TRACE ] && CHILD="ENV $@" . $PARENT
 
-# 2bwm
+# Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
 # Usage: . $(which ENV)
@@ -16,11 +16,13 @@ export XDG_CONFIG_HOME=$HOME/.config
 export ROOT=${ROOT:-/tmp}
 export WM=$(cat $HOME/.windowmanager)
 export WME=$ROOT/$WM
+export GROUP=$WME:group
 export HIDDEN=$WME:hidden
-export WINFO=$WME:window
+export WINDOW=$WME:window
 export SESSION=$HOME/.session
 export UI=$SESSION/$WM
 
+export AMDlay=0.0005             # AMD Ryzen 7950x is too fast for X11 redraw :)
 echo $DISPLAY >$SESSION/display  # for cron notifications, see notify
 
 # .................................................................... WM states
@@ -30,7 +32,7 @@ export FORTUNE=$WME:fortune
 
 export PANEL=$WME:panel
 export PANEL_FIFO=${PANEL_FIFO:-${PANEL}-fifo}
-# 2bwm is not fully started yet, so assume monitor 0 focus
+# Windowchef is not fully started yet, so assume monitor 0 focus
 echo $PANEL_FIFO:0 >$PANEL_FIFO  # set by draw panel but needed beforehand
 
 # ............................................................... Session states

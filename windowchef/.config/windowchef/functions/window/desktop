@@ -1,7 +1,7 @@
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="window/desktop $@" . $PARENT
 
-# 2bwm
+# Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ............................................................ Window to desktop
@@ -9,7 +9,10 @@
 # Usage: window desktop <desktop> [teleport], desktop = 0..5
 
 mapw -m $winid  # ruler windowmap delay
+waitron group_remove_window
 waitron group_add_window $1
+# waitron group_activate $1  # BUG: windowchef has a quirky behaviour of unmapping current group windows
+window group $1 add $winid
 [ $2 ] || desktop $1
 
 # kak: filetype=sh
