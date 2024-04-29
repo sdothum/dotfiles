@@ -33,9 +33,15 @@ case $1 in
 		clock && exit
 		toggle unclutter on
 		xdotool search --onlyvisible --limit 1 --maxdepth 1 --name "lemonbar" windowunmap >/dev/null  # disable panel
-		# switch desktops with conkyrc window_type (override) change to prevent 2bwm race condition
-		xdotool get_desktop >$DESKTOP
-		xdotool set_desktop 9
+		if [ $WM = 2bwm ] ;then
+			# switch desktops with conkyrc window_type "override" to prevent 2bwm race condition
+			sed -i '/own_window_type =/s/panel/override/' $HOME/.conkyrc.qclocktwo
+			xdotool get_desktop >$DESKTOP
+			xdotool set_desktop 9
+		else
+			# conkyrc panel draw over desktop
+			sed -i '/own_window_type =/s/override/panel/' $HOME/.conkyrc.qclocktwo
+		fi
 		rm -rf /tmp/qclocktwo  # clear qclock buffers
 		/usr/bin/conky -c $CONKYRC 2>/dev/null &
 		;;
@@ -44,7 +50,9 @@ case $1 in
 		clock || exit
 		restore unclutter
 		xdotool search --limit 1 --maxdepth 1 --name "lemonbar" windowmap >/dev/null  # restore panel
-		[ -e $DESKTOP ] && xdotool set_desktop $(cat $DESKTOP)
+		if [ $WM = 2bwm ] ;then
+			[ -e $DESKTOP ] && xdotool set_desktop $(cat $DESKTOP)
+		fi
 		pkill -KILL -f "conky -c $CONKYRC"
 		# restart 2bwm to kill race condition avoided with above window_type change and desktop switching
 		# xdotool key Super+Control+r
