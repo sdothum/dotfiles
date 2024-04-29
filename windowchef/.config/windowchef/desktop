@@ -10,7 +10,7 @@
 # Usage: desktop <msg> [specific | toggle]
 
 [ -e $WME:desktop ] && desktop=$(cat $WME:desktop)
-desktop=${desktop:-0}
+desktop=${desktop:-0}  # desktops in windowchef are groups!
 
 current() {
 	if [ -e $WME:desktop ] ;then

@@ -5,7 +5,6 @@
 
 # ................................................................. Window focus
 
-desktop=$(xdotool get_desktop)
 winids=$(query winids)  # of current desktop
 
 winids() {
@@ -16,7 +15,7 @@ winids() {
 
 winid=$(winids | column -s^ -t | rmenu 'Focus window' $cmd -no-custom) || exit
 
-xdotool windowraise ${winid%% *}
-xdotool getactivewindow ${winid%% *}
+mapw -m ${winid%% *}
+waitron window_focus ${winid%% *}
 
 # kak: filetype=sh

@@ -72,19 +72,20 @@ panel_width=$(( $width - $PANEL_INDENT * 2 ))
 # ................................................................... Tag status
 
 # desktops
-# tagcount=$(xdotool get_num_desktops)
 tagcount=6  # don't need all TEN :)
 DESKTOPS=$(seq 0 $(( $tagcount - 1 )) )
 OCCUPIED='■'
 FREE='□'
 
 # desktop windows
-windows()     { window group $1; }
-visible()     { window group $1 visible; }
-hidden()      { window group $1 hidden; }
-has_windows() { [ $(window group $1) -gt 0 ]; }
-has_visible() { [ $(window group $1 visible) -gt 0 ]; }
-has_hidden()  { [ $(window group $1 hidden) -gt 0 ]; }
+windows()        { window group $1; }
+unassigned()     { window group -1; }  # group count
+visible()        { window group $1 visible; }
+hidden()         { window group $1 hidden; }
+has_windows()    { [ $(window group $1) -gt 0 ]; }
+has_unassigned() { [ $(window group -1) -gt 0 ]; }
+has_visible()    { [ $(window group $1 visible) -gt 0 ]; }
+has_hidden()     { [ $(window group $1 hidden)  -gt 0 ]; }
 
 desktops() {
 	unset desktops viewscreen
@@ -118,7 +119,7 @@ cpu_stat() { stat="${TAG_PAD} $cpu_usage ${STATPAD}$cpu_speed ${STATPAD}$cpu_tem
 
 # ............................................................... Current window
 
-# desktop details NOTE: windowchef cannot track window visibility states (so just count all)
+# desktop details NOTE: windowchef does not track window visibility states (so just count all)
 active_window() {
 	title="$(query desktop)"  # current/last group
 	active=$(desktop)
@@ -130,6 +131,9 @@ active_window() {
 		else
 			title="${title}${LSEP}%{U$DEFAULT_FG}%{+u}$(hidden $active)%{-u}%{U-}"
 		fi
+	fi
+	if has_unassigned ;then
+		title="${title}${LSEP}-$(unassigned)"  # group -1 windows
 	fi
 	if has_visible $active ;then
 		[ "$(xtitle)" = '' ] && { window next; return; }  # will trigger X record

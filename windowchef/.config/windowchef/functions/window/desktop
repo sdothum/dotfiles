@@ -11,7 +11,7 @@
 mapw -m $winid  # ruler windowmap delay
 waitron group_remove_window
 waitron group_add_window $1
-# waitron group_activate $1  # BUG: windowchef has a quirky behaviour of unmapping current group windows
+# waitron group_activate $1  # BUG: interferes with "window tile" layout
 window group $1 add $winid
 [ $2 ] || desktop $1
 

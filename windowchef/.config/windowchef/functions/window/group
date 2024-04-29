@@ -6,16 +6,23 @@
 
 # ................................................................... Group info
 
-# Usage: window group <group> [visible | hidden] | <group> add <winid> | remove <winid>
+# Usage: window group <group> [visible | hidden] | <group> add <winid> | remove <winid> | -1 | vacuum
+
+wmctrl -l | cut -d' ' -f1 >$WINDOW:visible
 
 count() {
-	wmctrl -l | cut -d' ' -f1 >$WINDOW:visible
 	visible=0
 	hidden=0
 	for i in $(cat $ACTIVE) ;do
 		grep -q $i $WINDOW:visible && visible=$(( $visible + 1 )) || hidden=$(( $hidden + 1 ))
 	done
 	[ $1 = visible ] && echo $visible || echo $hidden
+}
+
+unassigned() {
+	for i in $(wmctrl -l | cut -d' ' -f1) ;do
+		xprop -id $i WINDOWCHEF_STATUS | tr '\\' ' ' | tr '"' ' ' | sed -r 's/ *//g; s/.*group:([-0-9]*).*/\1/'
+	done | grep '\-1' | wc -l
 }
 
 case $1 in
@@ -29,10 +36,16 @@ case $1 in
 			*       ) cat $ACTIVE | wc -l ;;
 		esac
 		;;
+	-1     ) unassigned ;;  # group "-1" count
 	remove )
 		for i in $(ag --nocolor -l ${2:-$winid} $GROUP:*) ;do
 			grep -v ${2:-$winid} $i >$GROUP:swap
 			cp $GROUP:swap $i
+		done
+		;;
+	vacuum )
+		for i in $(cat $GROUP:*) ;do
+			grep -q $i $WINDOW:visible || window group remove $i
 		done
 		;;
 esac

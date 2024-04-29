@@ -17,7 +17,7 @@ finished && exit
 while window=$(windows | column -s^ -t  | rmenu 'raise' -no-custom) || exit ;do
 	winid=$(echo $window | cut -d' ' -f2)
 	mapw -m $winid
-	xdotool windowraise $winid
+	waitron window_focus $winid
 	window revert      # to last position
 	rm $HIDDEN:$winid  # see window hide
 	finished && break

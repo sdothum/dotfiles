@@ -89,8 +89,8 @@ super + {shift,ctrl} + e
 super + g
 	window snap center
 
-super + {ctrl,shift} + g
-	window snap center {left, right}
+super + {alt,ctrl,shift} + g
+	window snap center {vertical,left, right}
 
 super + i
 	window hide

@@ -16,7 +16,7 @@ keyboard on
 
 # clear xtitle.. see draw panel
 [ -e $(cat $PANEL_FIFO) ] || exit
-[ $(xdotool search --onlyvisible --desktop $(desktop) --class '.*' | wc -l) -eq 0 ] && echo "X" >$(cat $PANEL_FIFO)
+[ $(xdotool search --onlyvisible --class '.*' | wc -l) -eq 0 ] && echo "X" >$(cat $PANEL_FIFO)
 exit  # avoid window (parent) windowunmap
 
 # kak: filetype=sh

@@ -40,12 +40,15 @@ tile() {
 	wtp $(( $width * $tile + $margin + $border * $tile * 2  )) $panel $width $H $(pfw)
 }
 
+sleep $AMDlay
 case $1 in
 	left  ) left       ;;
 	right ) right      ;;
 	*     ) tile $1 $2 ;;
 esac
 
+# BUG: windowchef randomly(?) unmaps windows in group so re-activate group (possibly wtp side-effect)
+[ -e $WME:desktop ] && { sleep 0.01; waitron group_activate $(cat $WME:desktop); }
 waitron window_focus $winid
 
 # kak: filetype=sh

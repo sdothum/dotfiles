@@ -6,11 +6,6 @@
 
 # ....................................................................... winids
 
-desktop=$(xdotool get_desktop)
-
-# convert wmutils hex ids to xdotool decimal id
-for i in $(wmctrl -l | grep "^[^ ]*  *$desktop " | cut -d' ' -f1) ;do
-	printf "%d\n" $i
-done
+wmctrl -l | cut -d' ' -f1
 
 # kak: filetype=sh
