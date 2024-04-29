@@ -38,7 +38,7 @@ monocle() {
 	set -- $(xdotool getwindowgeometry --shell $winid)  # save this geometry (not tile)
 	window tile 2 1
 	window snap center
-	echo $@ | tr ' ' '\n' >$WINFO:$winid
+	echo $@ | tr ' ' '\n' >$WINDOW:$winid
 }
 
 # ................................................................... Paper size

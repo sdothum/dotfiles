@@ -1,5 +1,11 @@
+# sdothum - 2016 (c) wtfpl
 #
-# ruler for 2bwm
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+#
+# ........................................................................ Rules
+#
+# NOTE: there cannot be a blank line before the first rule! (hence, the deviation from standard headers)
 #
 class="calibre"
 	window desktop 4
@@ -43,4 +49,6 @@ class="qutebrowser"
 class="Surf"
 	window desktop 1 ;\
 	window tile 4 1
+
+# kak: filetype=sh
 

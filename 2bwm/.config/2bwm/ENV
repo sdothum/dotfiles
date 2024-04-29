@@ -17,10 +17,11 @@ export ROOT=${ROOT:-/tmp}
 export WM=$(cat $HOME/.windowmanager)
 export WME=$ROOT/$WM
 export HIDDEN=$WME:hidden
-export WINFO=$WME:window
+export WINDOW=$WME:window
 export SESSION=$HOME/.session
 export UI=$SESSION/$WM
 
+export AMDlay=0.0001             # AMD Ryzen 7950x is too fast for X11 redraw :)
 echo $DISPLAY >$SESSION/display  # for cron notifications, see notify
 
 # .................................................................... WM states
