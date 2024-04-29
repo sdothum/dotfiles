@@ -129,7 +129,7 @@ case $wm in
 	sxhkd -c $HOME/.config/2bwm/sxhkdrc &
 	ruler -i -c $HOME/.config/2bwm/rulerrc &
 	$TERM &
-	# (sleep 0.15; xdotool --sync --onlyvisible --class "Alacritty" windowactivate --sync; sleep 0.65; xdotool type "autostart >/tmp/2bwm.log 2>&1"; xdotool key return) &  # autostart the panel in the terminal window (delay for celeron cpu)
+	# autostart the panel in the terminal window (delay for celeron cpu)
 	(sleep 0.15; autostart >/tmp/2bwm.log 2>&1) &
 	xexec 2bwm ;;
 
