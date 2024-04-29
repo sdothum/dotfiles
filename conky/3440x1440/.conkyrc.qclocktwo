@@ -19,8 +19,8 @@ conky.config = {
 	own_window_hints = 'undecorated,above',
 	own_window_transparent = false,
 	own_window = true,
-	-- changed from panel to override to prevent 2bwm race condition
-	own_window_type = 'override',
+	-- SEE: conky clock for wm dependent own_window_type settings
+	own_window_type = 'panel',
 	update_interval = 1.0,
 	use_xft = true,
 	xftalpha = 0.1,
