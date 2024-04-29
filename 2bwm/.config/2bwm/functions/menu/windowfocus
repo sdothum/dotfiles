@@ -5,7 +5,6 @@
 
 # ................................................................. Window focus
 
-desktop=$(xdotool get_desktop)
 winids=$(query winids)  # of current desktop
 
 winids() {
