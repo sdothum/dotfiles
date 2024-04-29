@@ -10,6 +10,9 @@
   avr-libc
   avrdude
   dfu-programmer
+  dfu-util
+  libusb-compat-devel
+  teensy_loader_cli
   
 
 = font editor
