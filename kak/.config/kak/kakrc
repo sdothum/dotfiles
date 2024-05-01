@@ -442,7 +442,7 @@ map global normal <a-backspace> ': buffer-previous<ret>' -docstring 'previous bu
 map global normal <a-space> 'ga'                         -docstring 'last buffer'
 
 map global user   d ': buffer *debug*<ret>'              -docstring '*debug*'
-map global user   D ': delete-buffer<ret>'               -docstring 'delete buffer'
+map global user   D ': write<ret>: delete-buffer<ret>'   -docstring 'delete buffer'
 map global user   q ': quit<ret>'                        -docstring 'quit'
 map global user   w ': write<ret>'                       -docstring 'save'
 map global user   x ': write-all-quit<ret>'              -docstring 'save all and quit'
