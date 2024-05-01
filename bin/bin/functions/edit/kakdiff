@@ -17,5 +17,6 @@ export DIFF=${1}.diff
 
 diff -u $1 $2 >$DIFF
 [ $? -eq 1 ] && $KAK $DIFF $1 $2
+rm $DIFF
 
 # kak: filetype=sh
