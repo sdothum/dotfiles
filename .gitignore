@@ -192,6 +192,7 @@
 **/*.save
 **/scratchpad*
 **/screen
+!**/query/screen
 **/.session*
 **/slrn
 **/spacemacs
