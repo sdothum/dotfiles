@@ -73,19 +73,22 @@ panel_width=$(( $width - $PANEL_INDENT * 2 ))
 
 # desktops
 tagcount=6  # don't need all TEN :)
-DESKTOPS=$(seq 0 $(( $tagcount - 1 )) )
+DESKTOPS=$(seq 1 $tagcount)
 OCCUPIED='■'
 FREE='□'
 
 # desktop windows
-windows()        { window group $1; }
-unassigned()     { window group -1; }  # group count
-visible()        { window group $1 visible; }
-hidden()         { window group $1 hidden; }
-has_windows()    { [ $(window group $1) -gt 0 ]; }
-has_unassigned() { [ $(window group -1) -gt 0 ]; }
-has_visible()    { [ $(window group $1 visible) -gt 0 ]; }
-has_hidden()     { [ $(window group $1 hidden)  -gt 0 ]; }
+echo 0 >$PANEL:unassigned  # initialize
+echo 0 >$PANEL:hidden
+
+windows()        { cat $GROUP:$1 | wc -l; }
+unassigned()     { cat $PANEL:unassigned; }
+visible()        { cat $GROUP:$1 | wc -l; }
+hidden()         { cat $PANEL:hidden; }
+has_windows()    { [ $(windows $1) -gt 0 ]; }
+has_unassigned() { [ $(unassigned) -gt 0 ]; }
+has_visible()    { [ $(visible $1) -gt 0 ]; }
+has_hidden()     { [ $(hidden)     -gt 0 ]; }
 
 desktops() {
 	unset desktops viewscreen
@@ -94,7 +97,6 @@ desktops() {
 
 		# NOTE: visible *ONLY* returns correct value for active desktop
 
-		# has_visible $i && icon=$OCCUPIED || icon=$FREE
 		has_windows $i && icon=$OCCUPIED || icon=$FREE
 
 		if [ $i = $(desktop) ] ;then
@@ -129,7 +131,7 @@ active_window() {
 		elif has_visible $active ;then
 			title="${title}${LSEP}$(visible $active)"
 		else
-			title="${title}${LSEP}%{U$DEFAULT_FG}%{+u}$(hidden $active)%{-u}%{U-}"
+			title="${title}${LSEP}%{U$DEFAULT_FG}%{+u}$(hidden)%{-u}%{U-}"
 		fi
 	fi
 	if has_unassigned ;then
@@ -250,7 +252,8 @@ currently() {
 
 	line=$(echo "$line" | sed -r 's/#[{]/%{/g; s/(AM|PM)/\L\1/')  # recover lemonbar format strings, see clock below
 	if [ -e $STARTREK ] ;then
-		[ $counter -lt $(( $tagcount - 1 )) ] && counter=$(( $counter + 1 )) || { counter=0; cardinal=0; }
+		# [ $counter -lt $(( $tagcount - 1 )) ] && counter=$(( $counter + 1 )) || { counter=0; cardinal=0; }
+		[ $counter -lt $tagcount ] && counter=$(( $counter + 1 )) || { counter=1; cardinal=0; }
 		if [ -e $STARTREK:cardinal ] ;then  # very silly tumbling triangle.. works best with 8 workspaces ¯\(°_o)/¯
 			[ $cardinal -lt 8 ] && cardinal=$(( $cardinal + 1 )) || cardinal=1
 			tumble=$(echo $TUMBLING | cut -d' ' -f$cardinal)
@@ -341,6 +344,8 @@ esac
 
 # event driven panel update
 xtitle -sf 'X%s\n' >$PANEL_FIFO:$fifo 2>/dev/null &
+window group init
+while : ;do window group snapshot $(desktop); sleep 1; done &
 
 # cpu usage, cpu temperature, memory usage stats
 if [ -e $STAT ] ;then

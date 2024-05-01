@@ -48,16 +48,16 @@ super + {4,8,7,9}
 	window tile 4 {1, 2, 3, 4}
 
 alt + {comma,period,0,1,2,3,4,5,6}
-	desktop {-1, +1, last, 0, 1, 2, 3, 4, 5}
+	desktop {-1, +1, last, 1, 2, 3, 4, 5, 6}
 
 alt + super + {1,2,3,4,5,6}
-	desktop {0, 1, 2, 3, 4, 5} toggle
+	desktop {1, 2, 3, 4, 5, 6} toggle
 
 alt + ctrl + {1,2,3,4,5,6}
-	desktop {0, 1, 2, 3, 4, 5} specific
+	desktop {1, 2, 3, 4, 5, 6} specific
 
 alt + ctrl + super + {1,2,3,4,5,6}
-	waitron group_remove_all_windows {0, 1, 2, 3, 4, 5}
+	waitron group_remove_all_windows {1, 2, 3, 4, 5, 6}
 
 alt + super + {Left,Down,Up,Right}
 	window swap {left, down, up, right}
@@ -164,9 +164,7 @@ super + Escape
 	pkill -USR1 -x ruler
 
 super + shift + Escape
-	window desktop 2  ;\
-	layout tile 4 kak ;\
-	kak $HOME/.config/${WM}/sxhkdrc $HOME/.config/${WM}/rulerrc $HOME/.config/${WM}/windowchefrc
+	kak $HOME/.config/${WM}/*rc
 
 super + ctrl + {Left,Down,Up,Right}
 	waitron window_move {-20 0, 0 20, 0 -20, 20 0}

@@ -11,11 +11,11 @@
 # 	waitron window_monocle
 #
 class="mail"
-	window desktop 3 ;\
+	window desktop 4 ;\
 	window size monocle
 
 class="email"
-	window desktop 3 ;\
+	window desktop 4 ;\
 	window tile 4 4
 
 class="feh"
@@ -25,29 +25,32 @@ class="Firefox"
 	window size monocle
 
 class="kak"
-	window desktop 2 ;\
+	window desktop 3 ;\
 	layout tile 4 kak
 
 class="wiki"
-	window desktop 4 ;\
+	window desktop 5 ;\
 	layout tile 3 wiki
 
 class="mpv"
 	xdotool key Super+Shift+z
 
 class="pavucontrol"
-	window desktop 5           ;\
-	window size B6 rotate      ;\
-	window snap center         ;\
-	waitron group_deactivate 5 ;\
-	desktop 0
+	window desktop 6                ;\
+	window size B6 rotate           ;\
+	window snap center              ;\
+	[ -e $WME:pavucontrol ] && exit ;\
+	touch $WME:pavucontrol          ;\
+	sleep 1                         ;\
+	waitron group_deactivate 6      ;\
+	desktop 1
  
 class="qutebrowser"
 	window desktop $(desktop) ;\
 	layout tile 3 qutebrowser
 
 class="Surf"
-	window @2 desktop 1 ;\
+	window @2 desktop 2 ;\
 	window tile 4 1
 
 # kak: filetype=sh

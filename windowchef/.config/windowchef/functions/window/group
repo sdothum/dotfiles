@@ -6,53 +6,47 @@
 
 # ................................................................... Group info
 
-# Usage: window group <group> [visible | hidden] | <group> add <winid> | remove <winid> | -1 | vacuum
+# Usage: window group <group> [visible | hidden] | <group> add <winid> | remove <winid> | -1 | init|vacuum
 
-wmctrl -l | cut -d' ' -f1 >$WINDOW:visible
+# NOTE: draw panel "cat <file>" simplifies timing interference
 
-count() {
-	visible=0
-	hidden=0
-	for i in $(cat $ACTIVE) ;do
-		grep -q $i $WINDOW:visible && visible=$(( $visible + 1 )) || hidden=$(( $hidden + 1 ))
+remove() {
+	for i in $(ag --nocolor -l ${1:-$winid} $GROUP:*) ;do
+		grep -v ${1:-$winid} $i >$GROUP:swap
+		mv $GROUP:swap $i
 	done
-	[ $1 = visible ] && echo $visible || echo $hidden
 }
 
-unassigned() {
-	for i in $(wmctrl -l | cut -d' ' -f1) ;do
-		xprop -id $i WINDOWCHEF_STATUS | tr '\\' ' ' | tr '"' ' ' | sed -r 's/ *//g; s/.*group:([-0-9]*).*/\1/'
-	done | grep '\-1' | wc -l
+vacuum() {
+	wmctrl -l | cut -d' ' -f1 >$PANEL:visible
+	touch $GROUP:$1
+	for i in $(cat $GROUP:$1) ;do
+		grep -q $i $PANEL:visible || { remove $i; change=true; }
+	done
+	[ $change ]
+}
+
+snapshot() {
+	mv $PANEL:unassigned $PANEL:unassigned:last 2>/dev/null || echo 0 >$PANEL:unassigned:last
+	wmctrl -l | grep ' -1 ' | wc -l >$PANEL:unassigned  # count only
+	ls -1 $HIDDEN:* 2>/dev/null | wc -l >$PANEL:hidden || echo 0 >$PANEL:hidden
+	vacuum $1 || cmp --silent $PANEL:unassigned $PANEL:unassigned:last && echo "X" >$(cat $PANEL_FIFO)  # update panel
 }
 
 case $1 in
-	[0-9]  )
+	[1-9]    )
 		ACTIVE=$GROUP:$1
 		touch $ACTIVE  # create
 		case $2 in
-			add     ) grep -q $3 $ACTIVE || echo $3 >>$ACTIVE ;;
-			visible ) count visible ;;
-			hidden  ) count hidden  ;;
-			*       ) cat $ACTIVE | wc -l ;;
+			add ) grep -q $3 $ACTIVE || echo $3 >>$ACTIVE ;;
+			*   ) cat $ACTIVE | wc -l ;;
 		esac
 		;;
-	-1     ) unassigned ;;  # group "-1" count
-	remove )
-		for i in $(ag --nocolor -l ${2:-$winid} $GROUP:*) ;do
-			grep -v ${2:-$winid} $i >$GROUP:swap
-			cp $GROUP:swap $i
-		done
-		;;
-	vacuum )
-		for i in $(cat $GROUP:*) ;do
-			grep -q $i $WINDOW:visible || window group remove $i
-		done
-		;;
+	-1       ) cat $PANEL:unassigned ;;                          # group "-1" count
+	init     ) for i in $(seq 1 9) ;do touch $GROUP:$i ;done ;;  # see draw panel
+	remove   ) remove $2  ;;
+	snapshot ) snapshot $2 ;;
+	vacuum   ) if [ $2 ] ;then vacuum $2 ;else for i in $(seq 1 9) ;do vacuum $i ;done ;fi ;;
 esac
-
-# update application closed windows
-for i in $(cat $GROUP:*) ;do
-	wmctrl -l | grep -q $i || window group remove $i
-done
 
 # kak: filetype=sh

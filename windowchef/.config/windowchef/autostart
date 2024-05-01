@@ -8,10 +8,9 @@
 
 # see .xinitrc for 2bwm autostart hack :)
 
-desktop 0  # initialize the group so windows don't get assigned to the null group
 restore root
-conky clock auto
 draw panel
+conky clock auto
 restore unclutter
 pulse
 udev

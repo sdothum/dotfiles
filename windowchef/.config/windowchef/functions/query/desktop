@@ -6,6 +6,8 @@
 
 # .............................................................. desktop (group)
 
-echo "DESK CHAT CODE MAIL WIKI SYSTEM SEVEN EIGHT NINE TEN" | cut -d' ' -f$(( $(cat $WME:desktop) + 1 ))
+# Usage: query desktop [<desktop>]
+
+echo "DESK CHAT CODE MAIL WIKI SYSTEM SEVEN EIGHT NINE TEN" | cut -d' ' -f${1:-$(cat $WME:desktop)}
 
 # kak: filetype=sh

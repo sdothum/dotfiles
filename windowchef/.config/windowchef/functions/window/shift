@@ -18,7 +18,6 @@ case $1 in
 	down  ) xdotool windowmove --relative $winid 0  $(( $HEIGHT + $border * 2 )) ;;
 esac
 
-sleep $AMDlay
 waitron window_focus $winid
 
 # kak: filetype=sh

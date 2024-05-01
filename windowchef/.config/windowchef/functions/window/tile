@@ -40,7 +40,6 @@ tile() {
 	wtp $(( $width * $tile + $margin + $border * $tile * 2  )) $panel $width $H $(pfw)
 }
 
-sleep $AMDlay
 case $1 in
 	left  ) left       ;;
 	right ) right      ;;

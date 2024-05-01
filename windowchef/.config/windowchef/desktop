@@ -5,7 +5,7 @@
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ............................................................. Query operations
+# ............................................................. Group operations
 
 # Usage: desktop <msg> [specific | toggle]
 
@@ -15,13 +15,13 @@ desktop=${desktop:-0}  # desktops in windowchef are groups!
 current() {
 	if [ -e $WME:desktop ] ;then
 		if [ -e $WME:desktop:last ] ;then
-			[ $WME:desktop -ne $(cat $WME:desktop:last) ] && mv -f $WME:desktop $WME:desktop:last
+			[ $WME:desktop != "$(cat $WME:desktop:last)" ] && mv -f $WME:desktop $WME:desktop:last
 		fi
 	else
 		echo $desktop >$WME:desktop:last
 	fi
 	echo $1 >$WME:desktop
-	notify Group "$(( $1 + 1 )) $(query desktop)"
+	notify Group "$1 $(query desktop)"
 }
 
 desktop() {
@@ -55,7 +55,7 @@ plus() {
 
 case $1 in
 	''    ) echo $desktop ;;
-	[0-5] ) desktop $1 $2 ;;
+	[1-6] ) desktop $1 $2 ;;
 	last  ) [ -e $WME:desktop:last ] && desktop $(cat $WME:desktop:last) ;;
 	*     ) desktop $(plus $1) ;;	 # -1/+1
 esac

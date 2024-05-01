@@ -1,0 +1,18 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="query/winids $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. winid group
+
+# Usage: query group [<winid>]
+
+# BUG: only works from command line but not from "draw panel/window group -1"(?)
+# group=$(ag --nocolor -l ${1:-$(pfw)} $GROUP:* | head -1 | cut -d: -f3)
+# [ "$group" ] && echo $group || echo '-1'
+
+# the windowchef way..
+xprop -id ${1:-$(pfw)} WINDOWCHEF_STATUS | tr '\\' ' ' | tr '"' ' ' | sed -r 's/ *//g; s/.*group:([-0-9]*).*/\1/'
+
+# kak: filetype=sh
