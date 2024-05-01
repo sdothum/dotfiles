@@ -102,6 +102,8 @@ esac
 export XDG_CONFIG_HOME=$HOME/.config
 
 xexec() {
+	pkill -f "draw panel"  # kill all dangling window manager procemses
+	pkill -f "fifo"
 	export ROOT=${ROOT:-/tmp}
 	mv -f $ROOT/$1.log $ROOT/$1.last.log 2>/dev/null
 	rm -f $ROOT/$1:*
@@ -195,9 +197,9 @@ wi* )
 	. $(which ENV)
 	sxhkd -c $HOME/.config/windowchef/sxhkdrc &
 	ruler -i -c $HOME/.config/windowchef/rulerrc &
-	(sleep 0.15; autostart >/tmp/2bwm.log 2>&1) &
-	$TERM &
-	xexec windowchef ;;
+	# (sleep 0.15; autostart >/tmp/2bwm.log 2>&1) &  # NOTE: this hack causes root window issues
+	# $TERM &  # NOTE: windowchef cannot properly manage windows opened before it!
+	xexec windowchef -c $HOME/.config/windowchef/windowchefrc ;;
 
 wm* )
 	setpath $HOME/.config/wmutils
