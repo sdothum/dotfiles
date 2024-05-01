@@ -1,17 +1,16 @@
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="window/hide $@" . $PARENT
-set -x
+
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
 # .................................................................. Hide action
 
-# hide active window and focus next BECAUSE: 2bwm "hidden" function is broken
 keyboard off
 echo "$(desktop) $winid:$(wname $winid)" >$HIDDEN:$winid  # SEE: menu unhide
 save_geometry
 mapw -u $winid
-window next
+waitron window_focus_last
 keyboard on
 
 # clear xtitle.. see draw panel

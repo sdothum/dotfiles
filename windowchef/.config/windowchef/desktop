@@ -45,10 +45,10 @@ desktop() {
 
 plus() {
 	desktop=$(( $desktop + $1 ))
-	if [ $desktop -gt 5 ] ;then
-		desktop=0
-	elif [ $desktop -lt 0 ] ;then
-		desktop=5
+	if [ $desktop -gt 6 ] ;then
+		desktop=1
+	elif [ $desktop -lt 1 ] ;then
+		desktop=6
 	fi
 	echo $desktop
 }
