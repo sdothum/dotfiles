@@ -14,9 +14,12 @@ waitron wm_config color_unfocused 0x757575
 waitron wm_config internal_color_focused 0x505050
 waitron wm_config internal_color_unfocused 0x505050
 
-	# ...................................................................... Gaps
+# ......................................................................... Gaps
 
-waitron wm_config gap_width all 37
+waitron wm_config gap_width top 37
+waitron wm_config gap_width bottom 37
+waitron wm_config gap_width left 40
+waitron wm_config gap_width right 40
 waitron wm_config grid_gap_width 0  # not using windowchef grids at the moment
 
 # ....................................................................... Groups

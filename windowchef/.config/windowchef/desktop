@@ -15,7 +15,7 @@ desktop=${desktop:-0}  # desktops in windowchef are groups!
 current() {
 	if [ -e $WME:desktop ] ;then
 		if [ -e $WME:desktop:last ] ;then
-			[ $WME:desktop != "$(cat $WME:desktop:last)" ] && mv -f $WME:desktop $WME:desktop:last
+			cmp --silent $WME:desktop  $WME:desktop:last && mv $WME:desktop $WME:desktop:last
 		fi
 	else
 		echo $desktop >$WME:desktop:last
