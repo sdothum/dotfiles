@@ -60,7 +60,7 @@ alt + ctrl + {comma,period}
 	window desktop $(desktop get {-1, +1}) teleport
 
 alt + {Left,Down,Up,Right}
-	closest.sh {west, south, north, east} $(pfw)
+	2closest {west, south, north, east} $(pfw)
 
 alt + super + {Left,Down,Up,Right}
 	window swap {left, down, up, right}

@@ -5,17 +5,22 @@
 
 # ................................................................. Window focus
 
-winids=$(query winids)  # of current desktop
-
-winids() {
-	for i in $winids ;do
-		echo "$i ^$(xdotool getwindowname $i | sed 's/kak:/& /')"
-	done | picklist
-}
+winids() { wmctrl -l | sed 's/ [ -][0-9]/&   ^/' | picklist; }
 
 winid=$(winids | column -s^ -t | rmenu 'Focus window' $cmd -no-custom) || exit
+winid=$(echo $winid | sed 's/  */ /g')
+desktop=$(echo $winid | sed -r 's/^[^ ]* *([-0-9]*).*/\1/')
+winid=${winid%% *}
 
-xdotool windowraise ${winid%% *}
-xdotool getactivewindow ${winid%% *}
+# move window from another desktop
+if [ $desktop -ne $(desktop) ] && [ $desktop -ne -1 ] ;then
+	current=$(desktop)
+	desktop $desktop  # HACK: desktop switching needed to make window visible(?)
+	xdotool set_desktop_for_window $winid $current
+	desktop $current
+fi
+
+xdotool windowraise $winid
+xdotool windowfocus $winid
 
 # kak: filetype=sh

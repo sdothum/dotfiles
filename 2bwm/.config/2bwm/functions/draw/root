@@ -107,7 +107,7 @@ root() {
 	# set panel theme
 	background=$(query theme)
 	[ -e "$background" ] && cp $background $THEME || echo light >$THEME
-	[ $XSETROOT = xwallpaper ] && echo "--screen $1 --zoom $WALLPAPER" || echo "--on $1 --zoom $WALLPAPER"; 
+	[ $XSETROOT = xwallpaper ] && echo "--screen $1 --zoom $WALLPAPER" || echo "-cover $WALLPAPER";
 }
 
 [ $blackboard ] || [ -e $COLOR ] || $XSETROOT $(root 0) &

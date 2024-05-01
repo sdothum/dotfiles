@@ -20,11 +20,10 @@ border=$(query screen window_border)
 winid=$(pfw)
 # xdotool windowstate --remove fullscreen $winid  # fullscreen negates any attempted window actions
 
-xdotool()       { /usr/bin/xdotool $@; sleep $AMDlay; }              # refresh wrapper
 geometry()      { xdotool getwindowgeometry --shell ${1:-$winid}; }  # X Y WIDTH HEIGHT (doesn't include borders)
 set_geometry()  { eval $(geometry ${1:-$winid}); }
-cat_geometry()  { [ -e $WINDOW:$winid ] && eval $(cat $WINDOW:$winid) || exit 1; }
-save_geometry() { geometry $1 >$WINDOW:${1:-$winid}; }                                # for revert
+cat_geometry()  { [ -e $WINFO:$winid ] && eval $(cat $WINFO:$winid) || exit 1; }
+save_geometry() { geometry $1 >$WINFO:${1:-$winid}; }                                # for revert
 opposite_side() { echo $(( $width + $margin * 2 - ($X + $WIDTH + $border * 2) )); }  # for nearest edge SEE: window snap / stretch
 
 # ..................................................................... X Y size
@@ -38,7 +37,6 @@ draw() {
 	wtp $X $Y $W $H $1
 }
 
-sleep $AMDlay
 # do we need to wait longer for window creation?
 [ $1 ] && { [ "${1%%@*}" ] || { sleep ${1#@}; winid=$(winid); shift; } }
 

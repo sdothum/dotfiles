@@ -11,10 +11,9 @@
 
 geometry()      { xdotool getwindowgeometry --shell ${1:-$winid}; }  # X Y WIDTH HEIGHT (doesn't include borders)
 set_geometry()  { eval $(geometry $1); }
-save_geometry() { geometry $1 >$WINDOW:${1:-$winid}; }                # for revert
+save_geometry() { geometry $1 >$WINFO:${1:-$winid}; }                # for revert
 winid()         { xdotool getactivewindow; }
 
-sleep $AMDlay
 winids=$(query winids)  # of current desktop
 winid=$(winid)
 
