@@ -1,0 +1,34 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="query/screen $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Screen layout
+
+# Usage: query screen margin | panel | indent | window_border
+
+
+TWOBWM_CONFIG=$HOME/.config/2bwm/src/config.h
+SPANEL=$SESSION/panel   # toggle state
+
+indent=$(cat $SPANEL)   # panel indent ratio expressed as fraction, default "3 / 2"
+
+# 2bwm window geometry SEE: draw panel
+parse() {
+	set -- $(grep '^static const uint8_t offsets' $TWOBWM_CONFIG | sed 's/.*[{]//; s/[}].*//; s/,/ /g')
+	PANEL_HEIGHT=$(( $4 - $2 ))
+	PANEL_INDENT=$(( $1 * ${indent:-4 / 3} ))  # assumes equal left/right screen margins
+	MARGIN=$1
+	BORDER=$(grep '^static const uint8_t borders' $TWOBWM_CONFIG | sed 's/.*[{]//; s/[}].*//; s/,/ /g' | cut -d' ' -f2)
+}
+
+parse
+case $1 in
+	panel   ) echo $PANEL_HEIGHT ;;
+	indent  ) echo $PANEL_INDENT ;;
+	margin  ) echo $MARGIN ;;
+	*border ) echo $BORDER ;;
+esac
+
+# kak: filetype=sh
