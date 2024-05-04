@@ -428,15 +428,15 @@ set-option global autoreload yes
 set-option global modelines 2  # BUG: avoid "otherwords:" error (not kak: or vim:) within modeline scan range (default 5)
 hook global BufOpenFile .* %{ modeline-parse }
 
-hook global BufOpenFile .*.eml %{ set buffer filetype markdown }
+hook global BufOpenFile .*(.eml|.note) %{ set buffer filetype markdown }
 hook global FocusOut .* write
 
 # ............................................................ Buffer management
 
 map global normal <a-ret> ': buffer-next<ret>'           -docstring 'next buffer'
-hook global BufOpenFile .*.diff %{
-	# map global normal <ret> ': diff-jump<ret>'          -docstring 'diff-jump new file'
-	map global normal <c-ret> ': diff-jump -<ret>'        -docstring 'diff-jump old file'
+hook global WinDisplay filetype=diff %{
+	# map global normal <ret> ': diff-jump<ret>'          -docstring 'diff-jump new file'  # default
+	map global normal <a-ret> ': diff-jump -<ret>'        -docstring 'diff-jump old file'
 }
 map global normal <a-backspace> ': buffer-previous<ret>' -docstring 'previous buffer'
 map global normal <a-space> 'ga'                         -docstring 'last buffer'
