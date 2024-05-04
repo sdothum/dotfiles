@@ -1,0 +1,17 @@
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................... cbonsai
+
+sudo xbps-install -y ncurses-devel
+
+cd /home/depot
+exists -r cbonsai || git clone https://gitlab.com/jallbrit/cbonsai.git
+
+cd cbonsai
+make install PREFIX=~/.local
+sudo make install
+
+# vim: set ft=sh: #
