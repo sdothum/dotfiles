@@ -24,7 +24,8 @@ export NOCOLOR=$(printf "\e[0;0m")
 # normal
 # BRIGHT
 export black=$(printf "\e[0;30m")
-export BLACK=$(printf "\e[1;90m")
+# export BLACK=$(printf "\e[1;90m")
+export BLACK=$(printf "\e[1m\e[38;5;233m")
 export white=$(printf "\e[0;37m")
 export WHITE=$(printf "\e[1;97m")
 export blue=$(printf "\e[0;34m")
