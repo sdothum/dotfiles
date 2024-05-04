@@ -19,7 +19,8 @@ set -x NOCOLOR       (printf "\e[0;0m")
 # normal
 # BRIGHT
 set -x black         (printf "\e[0;30m")
-set -x BLACK         (printf "\e[1;90m")
+# set -x BLACK       (printf "\e[1;90m")
+set -x BLACK         (printf "\e[1m\e[38;5;232m")
 set -x white         (printf "\e[0;37m")
 set -x WHITE         (printf "\e[1;97m")
 set -x blue          (printf "\e[0;34m")
