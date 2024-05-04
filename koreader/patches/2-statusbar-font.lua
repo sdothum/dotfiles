@@ -27,7 +27,7 @@ local Font = require("ui/font")
 names = { "-book.ttf", "-book.otf", "-regular.ttf", "-regular.otf" }  -- selection order of user ttf and otf font files
 
 for _, n in pairs(names) do
-	local f = io.open(DataStorage:getDataDir() .. "/fonts/" .. fontface .. n, "r")
+	local f = io.open(DataStorage:getDataDir() .. "/fonts/CUSTOM/" .. fontface .. n, "r")  -- NOTE: folder for keeping "custom" fonts separate from KOReader installed fonts!
 	if f ~= nil then  -- font source exists
 		io.close(f)
 		local fontsource = fontface .. n
