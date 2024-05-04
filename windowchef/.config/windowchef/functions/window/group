@@ -6,7 +6,7 @@
 
 # ................................................................... Group info
 
-# Usage: window group <group> [visible | hidden] | <group> add <winid> | remove <winid> | -1 | init|vacuum
+# Usage: window group [<group> | add <winid> | remove <winid>] | -1 | init | snapshot | vacuum
 
 # NOTE: draw panel "cat <file>" simplifies timing interference
 

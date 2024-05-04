@@ -6,13 +6,14 @@
 
 # ............................................................ Window to desktop
 
-# Usage: window desktop <winid> | <desktop> [teleport], desktop = 0..5
+# Usage: window desktop <group> [teleport], group = 0..5
 
 # mapw -m $winid  # ruler windowmap delay
 waitron group_remove_window
 waitron group_add_window $1
 # waitron group_activate $1  # BUG: interferes with "window tile" layout
 window group $1 add $winid
+echo $winid >$WME:group:$1:focus  # see window stack
 [ $2 ] || desktop $1
 
 # kak: filetype=sh

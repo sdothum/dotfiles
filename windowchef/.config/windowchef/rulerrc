@@ -7,9 +7,6 @@
 #
 # NOTE: there cannot be a blank line before the first rule! (hence, the deviation from standard headers)
 #
-# class="calibre"
-# 	waitron window_monocle
-#
 class="mail"
 	window desktop 4 ;\
 	window size monocle

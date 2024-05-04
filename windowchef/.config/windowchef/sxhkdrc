@@ -12,7 +12,7 @@ super + shift + space
 	menu
 
 super + ctrl + space
-	window snap
+	xdotool mousemove $(( $(query display width) / 2 )) $(( $(query display height) / 2 ))
 
 super + {_,shift} + Return
 	scratchpad {scratchy, itchy}
@@ -32,11 +32,8 @@ super + {shift,ctrl} + apostrophe
 super + {0,1}
 	window {revert, rotate}
 
-super + shift + 0
-	layout revert
-
-super + ctrl + 0
-	menu layout
+super + {shift,ctrl} + 0
+	{layout revert, menu layout}
 
 super + 2
 	window size monocle
@@ -71,8 +68,8 @@ super + {_,ctrl} + a
 super + {_,ctrl} + b
 	qutebrowser {_, closeall}
 
-super + c
-	window snap center vertical
+super + {c,g}
+	window snap {center vertical, center}
 
 super + {shift,ctrl} + c
 	window snap {top, bottom}
@@ -86,17 +83,11 @@ super + {shift,ctrl} + d
 super + {shift,ctrl} + e
 	layout {fold 4 kak, level}
 
-super + g
-	window snap center
-
 super + {alt,ctrl,shift} + g
 	window snap center {vertical,left, right}
 
-super + i
-	window hide
-
-super + shift + i
-	menu unhide
+super + {_,shift} + i
+	{window hide, menu unhide}
 
 super + m
 	xdotool search --onlyvisible --classname mail windowclose || aerc
@@ -110,35 +101,24 @@ super + {_,shift} + o
 super + {p,l}
 	window snap bottom {left, right}
 
-super + shift + q
-	menu halt
-
-super + ctrl + q
-	waitron wm_quit 0
+super + {shift,ctrl} + q
+	{menu halt, waitron wm_quit 0}
 
 super + {r,t}
 	window snap {right, left}
 
 super + s
-	waitron window_focus $(pfw)
+	waitron window_focus $(pfw) ;\
+	window stack update
 
-super + shift + s
-	menu system
+super + shift + {s,u,v}
+	menu {system, passwords, media}
 
 super + u
 	btop
 
-super + shift + u
-	menu passwords
-
-super + v
-	toggle panel
-
-super + shift + v
-	menu media
-
-super + ctrl + v
-	invert_panel
+super + {_,ctrl} + v
+	{toggle panel, invert_panel}
 
 super + x
 	xdotool search --onlyvisible --classname nnn windowclose || nnn TMUX
@@ -151,9 +131,10 @@ super + ctrl + x
 	xdotool search --onlyvisible --classname root windowclose || nnn ROOT
 
 super + w
-	window group remove  ;\
-	waitron window_close ;\
-	waitron window_focus_last
+	window group remove       ;\
+	waitron window_close      ;\
+	waitron window_focus_last ;\
+	window stack update
 
 super + {shift,ctrl,alt} + w
 	menu {windowfocus, windowtile, windowsize}
@@ -179,25 +160,31 @@ super + shift + {Left,Down,Up,Right}
 	waitron window_resize {-50 0, 0 50, 0 -50, 50 0}
 
 alt + {Left,Down,Up,Right}
-	waitron window_cardinal_focus {left, down, up, right}
+	waitron window_cardinal_focus {left, down, up, right} ;\
+	window stack update
 
-super + shift + z
-	waitron window_maximize
-
-super + z
-	waitron window_monocle
+super + {_,shift} + z
+	waitron {window_monocle, window_maximize}
 
 super + {_,shift} + Tab
-	waitron {window_cycle_in_group, window_rev_cycle_in_group}
+	waitron {window_cycle_in_group, window_rev_cycle_in_group} ;\
+	window stack update
 
 alt + {_,super} + Tab
-	waitron {window_cycle, window_rev_cycle}
+	waitron {window_cycle, window_rev_cycle} ;\
+	window stack update
 
 super + ctrl + Tab
-	waitron window_focus_last
+	waitron window_focus_last ;\
+	window stack update
 
 super + ctrl + r
-	waitron group_remove_window
+	waitron group_remove_window ;\
+	window stack update
+
+~button1
+	waitron window_focus $(pfw) ;\
+	window stack update
 
 # kak: filetype=sh
 

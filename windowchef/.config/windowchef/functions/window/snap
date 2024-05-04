@@ -17,8 +17,8 @@ move()   {
 	waitron window_focus $winid
 }
 
-L=$(( $margin + $border - 1 ))
-R=$(( $width - $WIDTH + $border * 2 - 1 ))
+L=$(( $margin ))
+R=$(( $width - $WIDTH + $margin - $border * 2 ))
 V=$(( ($height - $HEIGHT) / 2 + $panel - $border ))
 
 left()   { move $L $Y; }
@@ -37,14 +37,14 @@ center() {
 
 top()    {
 	case $1 in
-		left  ) move $L $margin ;;
-		right ) move $R $margin ;;
- 		*     ) move $X $margin ;;
+		left  ) move $L $panel ;;
+		right ) move $R $panel ;;
+ 		*     ) move $X $panel ;;
 	esac
 }
 
 bottom() {
-	B=$(( $height - $HEIGHT + $border ))
+	B=$(( $height - $HEIGHT + $border + 1 ))
 	case $1 in
 		left  ) move $L $B ;;
 		right ) move $R $B ;;

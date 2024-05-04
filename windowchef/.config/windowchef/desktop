@@ -10,7 +10,7 @@
 # Usage: desktop <msg> [specific | toggle]
 
 [ -e $WME:desktop ] && desktop=$(cat $WME:desktop)
-desktop=${desktop:-0}  # desktops in windowchef are groups!
+desktop=${desktop:--1}  # desktops in windowchef are groups!
 
 current() {
 	if [ -e $WME:desktop ] ;then
@@ -24,6 +24,20 @@ current() {
 	notify Group "$1 $(query desktop)"
 }
 
+toggle() {
+	if [ -e $WME:activate:$1 ] ;then
+		waitron group_activate $1
+		waitron window_focus $(window stack $1)
+		rm $WME:activate:$1
+	else
+		winid=$(cat $WME:group:$1 | head -1 2>/dev/null)
+		[ $winid ] || return
+		waitron window_focus $winid  # BUG: waitron group_toggle/_deactivate does not deactivate whole group unless the top of the window stack has focus
+		waitron group_deactivate $1
+		touch $WME:activate:$1
+	fi
+}
+
 desktop() {
 	case $2 in
 		specific )
@@ -32,10 +46,11 @@ desktop() {
 			;;
 		toggle   )
 			[ $desktop -eq $1 ] || current $1
-			waitron group_toggle $1
+			toggle $1
 			;;
 		*        )
-			[ $desktop -eq $1 ] && { waitron group_toggle $1; return; }
+			echo $(pfw) >$WME:group:$1:focus  # see window stack
+			[ $desktop -eq $1 ] && return
 			current $1
 			waitron group_activate $1
 			;;

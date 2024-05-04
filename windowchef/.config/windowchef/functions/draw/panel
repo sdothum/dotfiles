@@ -8,7 +8,7 @@
 
 # Usage: draw panel [<fifo>], see restore panel
 # NOTE:  adjustments made to accomodate alpine linux differences
-# NOTE:  desktop 0..9 conversion to windowchef groups *in progress*
+# NOTE:  desktop 1..9 conversion to windowchef groups *in progress*
 
 SPANEL=$SESSION/panel   # toggle state
 [ -e $SPANEL ] || exit  # no panel

@@ -1,0 +1,18 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/stack $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................... Manage group stack
+
+# Usage: window stack <group> | update
+
+# HACK: waitron group_toggle/_activate does not restore the group window stack order (focused window)
+# SEE: desktop and sxhkdrc
+case $1 in
+	[1-9]  ) cat $WME:group:$1:focus ;;
+	update ) for i in $(ag --nocolor -l $winid $WME:group:?) ;do echo $winid >$i:focus ;done ;;
+esac
+
+# kak: filetype=sh
