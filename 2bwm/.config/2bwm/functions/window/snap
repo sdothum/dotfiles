@@ -37,9 +37,9 @@ center() {
 
 top()    {
 	case $1 in
-		left  ) move $L $margin ;;
-		right ) move $R $margin ;;
- 		*     ) move $X $margin ;;
+		left  ) move $L $panel ;;
+		right ) move $R $panel ;;
+ 		*     ) move $X $panel ;;
 	esac
 }
 
