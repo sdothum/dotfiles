@@ -24,6 +24,7 @@ current() {
 	notify Group "$1 $(query desktop)"
 }
 
+# NOTE: see window stack and sxhkdrc for waitron group_toggle/_activate window stack recovery
 toggle() {
 	if [ -e $WME:activate:$1 ] ;then
 		waitron group_activate $1
