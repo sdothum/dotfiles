@@ -12,7 +12,7 @@
 # SEE: desktop and sxhkdrc
 case $1 in
 	[1-9]  ) cat $WME:group:$1:focus ;;
-	update ) for i in $(ag --nocolor -l $winid $WME:group:?) ;do echo $winid >$i:focus ;done ;;
+	update ) for i in $(ag --nocolor -l $winid $WME:group:?) ;do echo $winid >$i:focus; desktop ${i##*:} ;done ;;
 esac
 
 # kak: filetype=sh

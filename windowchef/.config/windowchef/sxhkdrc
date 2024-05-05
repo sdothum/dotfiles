@@ -47,11 +47,17 @@ super + {4,8,7,9}
 alt + {comma,period,0,1,2,3,4,5,6}
 	desktop {-1, +1, last, 1, 2, 3, 4, 5, 6}
 
-alt + super + {1,2,3,4,5,6}
-	desktop {1, 2, 3, 4, 5, 6} toggle
+alt + super + {0, 1,2,3,4,5,6}
+	desktop {$(desktop), 1, 2, 3, 4, 5, 6} toggle
 
-alt + ctrl + {1,2,3,4,5,6}
-	desktop {1, 2, 3, 4, 5, 6} specific
+alt + ctrl + {0, 1,2,3,4,5,6}
+	desktop {$(desktop), 1, 2, 3, 4, 5, 6} specific
+
+alt + ctrl + super + 0
+	for i in $(seq 1 6) ;do waitron group_activate $i ;done ;\
+	rm $WME:group:?:deactivated 2>/dev/null                          ;\
+	waitron window_focus $(cat $WME:group:$(desktop):focus) ;\
+	desktop $(desktop)
 
 alt + ctrl + super + {1,2,3,4,5,6}
 	waitron group_remove_all_windows {1, 2, 3, 4, 5, 6}
@@ -80,8 +86,13 @@ super + {d,n}
 super + {shift,ctrl} + d
 	toggle {wallpaper, background}
 
-super + {shift,ctrl} + e
-	layout {fold 4 kak, level}
+super + shift + e
+	layout fold 4 kak                              ;\
+	waitron window_focus $(cat $WME:group:3:focus) ;\
+	desktop 3
+
+super + ctrl + e
+	layout level
 
 super + {alt,ctrl,shift} + g
 	window snap center {vertical,left, right}

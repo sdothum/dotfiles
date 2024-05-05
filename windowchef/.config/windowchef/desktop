@@ -7,7 +7,9 @@
 
 # ............................................................. Group operations
 
-# Usage: desktop <msg> [specific | toggle]
+# Usage: desktop <msg>
+#          where <msg>: <group> [specific | toggle]
+#                       last
 
 [ -e $WME:desktop ] && desktop=$(cat $WME:desktop)
 desktop=${desktop:--1}  # desktops in windowchef are groups!
@@ -24,18 +26,18 @@ current() {
 	notify Group "$1 $(query desktop)"
 }
 
-# NOTE: see window stack and sxhkdrc for waitron group_toggle/_activate window stack recovery
 toggle() {
-	if [ -e $WME:activate:$1 ] ;then
+	if [ -e $WME:group:$1:deactivated ] ;then
 		waitron group_activate $1
 		waitron window_focus $(window stack $1)
-		rm $WME:activate:$1
+		rm $WME:group:$1:deactivated
+		desktop $1
 	else
 		winid=$(cat $WME:group:$1 | head -1 2>/dev/null)
 		[ $winid ] || return
 		waitron window_focus $winid  # BUG: waitron group_toggle/_deactivate does not deactivate whole group unless the top of the window stack has focus
 		waitron group_deactivate $1
-		touch $WME:activate:$1
+		touch $WME:group:$1:deactivated
 	fi
 }
 
