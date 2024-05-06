@@ -52,13 +52,13 @@ desktop() {
 			toggle $1
 			;;
 		*        )
-			echo $(pfw) >$WME:group:$1:focus  # see window stack
+			echo $(pfw) >$WME:group:$1:focus                 # see window stack
 			[ $desktop -eq $1 ] && return
 			current $1
 			waitron group_activate $1
+			waitron window_focus $(cat $WME:group:$1:focus)  # restore window stack NOTE: this also fixes calibre mouse focus issue!
 			;;
 	esac
-
 }
 
 plus() {
