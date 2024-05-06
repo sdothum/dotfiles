@@ -55,7 +55,7 @@ alt + ctrl + {0, 1,2,3,4,5,6}
 
 alt + ctrl + super + 0
 	for i in $(seq 1 6) ;do waitron group_activate $i ;done ;\
-	rm $WME:group:?:deactivated 2>/dev/null                          ;\
+	rm $WME:group:?:deactivated 2>/dev/null                 ;\
 	waitron window_focus $(cat $WME:group:$(desktop):focus) ;\
 	desktop $(desktop)
 
@@ -194,9 +194,9 @@ super + ctrl + r
 	window stack update
 
 ~button1
-	waitron window_focus $(pfw) ;\
-	window stack update         ;\
-	wmctrl -l | grep $(pfw) | grep -q calibre && xdotool click --window $(pfw) 1
+	wmctrl -l | grep $(pfw) | grep -q calibre && exit ;\
+	waitron window_focus $(pfw)                       ;\
+	window stack update
  
 # kak: filetype=sh
 
