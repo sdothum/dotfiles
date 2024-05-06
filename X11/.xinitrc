@@ -127,6 +127,7 @@ case $wm in
 	pkill -KILL -f '2bwm'
 	xrdb -load $HOME/.Xresources
 	setpath $HOME/.config/2bwm cmd
+	export SXHKD_SHELL=/usr/bin/dash
 	. $(which ENV)
 	sxhkd -c $HOME/.config/2bwm/sxhkdrc &
 	ruler -i -c $HOME/.config/2bwm/rulerrc &
