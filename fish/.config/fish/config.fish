@@ -100,7 +100,7 @@ set -x JAVA_HOME "/usr/lib/jvm/default-jvm"
 # lua
 set -x LUA_INIT "@$HOME/.luarc"
 # python
-set -x PYTHONPATH '/usr/lib/python3.11'
+set -x PYTHONPATH '/usr/lib/python3.12'
 # ruby
 set -x RI '--format ansi --no-pager'
 
