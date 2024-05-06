@@ -1,5 +1,5 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="window/hide $@" . $PARENT
+[ $TRACE ] && CHILD="window/group $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
@@ -18,7 +18,7 @@ remove() {
 }
 
 vacuum() {
-	wmctrl -l | cut -d' ' -f1 >$PANEL:visible
+	query winids >$PANEL:visible
 	touch $GROUP:$1
 	for i in $(cat $GROUP:$1) ;do
 		grep -q $i $PANEL:visible || { remove $i; change=true; }

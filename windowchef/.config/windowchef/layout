@@ -13,7 +13,7 @@ geometry()      { xdotool getwindowgeometry --shell ${1:-$winid}; }  # X Y WIDTH
 set_geometry()  { eval $(geometry $1); }
 save_geometry() { geometry $1 >$WINFO:${1:-$winid}; }                # for revert
 
-winids=$(query winids)  # of current desktop
+winids=$(query winids)
 winid=$(pfw)
 
 msg=$1

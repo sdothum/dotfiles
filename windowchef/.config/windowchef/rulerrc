@@ -7,6 +7,9 @@
 #
 # NOTE: there cannot be a blank line before the first rule! (hence, the deviation from standard headers)
 #
+class="calibre"
+	window @0.1 snap center
+
 class="mail"
 	window desktop 4 ;\
 	window size monocle

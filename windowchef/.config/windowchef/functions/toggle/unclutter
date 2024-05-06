@@ -6,7 +6,7 @@
 
 # ............................................................. Toggle unclutter
 
-# Usage: toggle unclutter [on | off]
+# Usage: [silent=true] toggle unclutter [on | off]
 
 on() {
 	# unclutter (original) doesn't play nice with X, so give it some initialization time
@@ -14,7 +14,7 @@ on() {
 	# unclutter-xfixes
 	pstat unclutter || unclutter --timeout 1 --jitter 2 --exclude-root --ignore-scrolling --fork
 	touch $UNCLUTTER
-	notify low 'Unclutter On' 'Ignore mouse'
+	[ $silent ] || notify low 'Unclutter On' 'Ignore mouse'  # see conky clock
 }
 
 off() (

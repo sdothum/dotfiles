@@ -195,7 +195,8 @@ super + ctrl + r
 
 ~button1
 	waitron window_focus $(pfw) ;\
-	window stack update
-
+	window stack update         ;\
+	wmctrl -l | grep $(pfw) | grep -q calibre && xdotool click --window $(pfw) 1
+ 
 # kak: filetype=sh
 

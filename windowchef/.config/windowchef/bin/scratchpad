@@ -1,11 +1,14 @@
+#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="query/winids $@" . $PARENT
+[ $TRACE ] && CHILD="scratchpad $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ....................................................................... winids
+# ................................................................... Scratchpad
 
-wmctrl -l | cut -d' ' -f1  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
+# Usage: scratchpad [name]
+
+xdotool search --onlyvisible --classname ${1:-scratchpad} windowclose || { tmux_session ${1:-scratchpad}; window snap center; }
 
 # kak: filetype=sh
