@@ -191,6 +191,7 @@
 **/sandbox
 **/*.save
 **/scratchpad*
+!**/scratchpad
 **/screen
 !**/query/screen
 **/.session*
