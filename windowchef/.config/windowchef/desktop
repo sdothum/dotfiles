@@ -8,7 +8,7 @@
 # ............................................................. Group operations
 
 # Usage: desktop <msg>
-#          where <msg>: <group> [specific | toggle]
+#          where <msg>: <group> [specific | toggle | close]
 #                       last
 
 [ -e $WME:desktop ] && desktop=$(cat $WME:desktop)
@@ -51,6 +51,15 @@ desktop() {
 			[ $desktop -eq $1 ] || current $1
 			toggle $1
 			;;
+		close    )
+			for i in $(cat $WME:group:$1) ;do
+				waitron window_focus $i
+				waitron window_close
+			done
+			waitron group_remove_all_windows $1  # redundancy trap for unknown group juggling corner cases
+			>$WME:group:$1
+			rm $WME:group:$1:focus
+			;;
 		*        )
 			echo $(pfw) >$WME:group:$1:focus                 # see window stack
 			[ $desktop -eq $1 ] && return
@@ -73,7 +82,7 @@ plus() {
 
 case $1 in
 	''    ) echo $desktop ;;
-	[1-6] ) desktop $1 $2 ;;
+	[1-9] ) desktop $1 $2 ;;       # see query desktop and rulerrc
 	last  ) [ -e $WME:desktop:last ] && desktop $(cat $WME:desktop:last) ;;
 	*     ) desktop $(plus $1) ;;	 # -1/+1
 esac

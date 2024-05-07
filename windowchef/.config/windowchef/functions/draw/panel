@@ -72,10 +72,17 @@ panel_width=$(( $width - $PANEL_INDENT * 2 ))
 # ................................................................... Tag status
 
 # desktops
-tagcount=6  # don't need all TEN :)
+tagcount=$(( $(query desktop "''") - 1 ))  # number of labeled groups!
 DESKTOPS=$(seq 1 $tagcount)
-OCCUPIED='■'
-FREE='□'
+if [ -e $STARTREK ] ;then
+	OCCUPIED='■'
+	FREE='□'
+	CURRENT='□'  # active and FREE
+else
+	OCCUPIED='●'
+	FREE='○'
+	CURRENT='◯'  # active and FREE
+fi
 
 # desktop windows
 echo 0 >$PANEL:unassigned  # initialize
@@ -97,7 +104,7 @@ desktops() {
 
 		# NOTE: visible *ONLY* returns correct value for active desktop
 
-		has_windows $i && icon=$OCCUPIED || icon=$FREE
+		has_windows $i && icon=$OCCUPIED || { [ $i = $(desktop) ] && icon=$CURRENT || icon=$FREE; }
 
 		if [ $i = $(desktop) ] ;then
 			has_visible $i && format="${format}%{F$ACTIVE_FG}"
