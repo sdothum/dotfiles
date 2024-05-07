@@ -84,7 +84,7 @@ shuffle() {
 case $1 in
 	color     ) color $2 $3 ;;  # $3, see menu root
 	restore   ) select_color ;;
-	invert    ) grep -q dark $THEME && echo light >$THEME || echo dark >$THEME; cp $THEME $(query theme) ;;
+	invert    ) grep -q dark $THEME && echo light >$THEME || echo dark >$THEME; cp $THEME $(chef theme) ;;
 	wallpaper ) wallpaper ;;
 
 	select    )
@@ -105,7 +105,7 @@ esac
 
 root() {
 	# set panel theme
-	background=$(query theme)
+	background=$(chef theme)
 	[ -e "$background" ] && cp $background $THEME || echo light >$THEME
 	[ $XSETROOT = xwallpaper ] && echo "--screen $1 --zoom $WALLPAPER" || echo "-cover $WALLPAPER";
 }

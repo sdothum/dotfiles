@@ -1,11 +1,13 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="query/winids $@" . $PARENT
+[ $TRACE ] && CHILD="chef/theme $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ....................................................................... winids
+# .................................................................... Wallpaper
 
-wmctrl -l | cut -d' ' -f1  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
+[ $WALLPAPER ] || . $XDG_CONFIG_HOME/$WM/ENV
+
+ls -l $WALLPAPER | awk '{ gsub(".(png|jpg)", ".theme", $NF); print $NF }'
 
 # kak: filetype=sh

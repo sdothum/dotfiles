@@ -51,7 +51,7 @@ padsize() {
 	fontsize=$2
 }
 
-width=$(query display width)
+width=$(chef display width)
 indent='        '
 
 # tune padding to displaywidth / (font * factor) for current monitor resolutions in system

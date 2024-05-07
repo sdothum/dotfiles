@@ -12,7 +12,7 @@ super + shift + space
 	menu
 
 super + ctrl + space
-	xdotool mousemove $(( $(query display width) / 2 )) $(( $(query display height) / 2 ))
+	xdotool mousemove $(( $(chef display width) / 2 )) $(( $(chef display height) / 2 ))
 
 super + {_,shift} + Return
 	scratchpad {scratchy, itchy}
@@ -62,7 +62,7 @@ alt + ctrl + super + 0
 alt + ctrl + super + {1,2,3,4,5,6,7,8,9}
 	desktop {1, 2, 3, 4, 5, 6, 7, 8, 9} close ;\
 	waitron window_focus_last                 ;\
-	window stack update
+	chef panel desktop
 
 alt + super + {Left,Down,Up,Right}
 	window swap {left, down, up, right}
@@ -100,7 +100,8 @@ super + {alt,ctrl,shift} + g
 	window snap center {vertical,left, right}
 
 super + {_,shift} + i
-	{window hide, menu unhide}
+	{window hide, menu unhide} ;\
+	chef panel hidden
 
 super + m
 	xdotool search --onlyvisible --classname mail windowclose || aerc
@@ -122,7 +123,7 @@ super + {r,t}
 
 super + s
 	waitron window_focus $(pfw) ;\
-	window stack update
+	chef panel desktop
 
 super + shift + {s,u,v}
 	menu {system, passwords, media}
@@ -147,7 +148,7 @@ super + w
 	window group remove       ;\
 	waitron window_close      ;\
 	waitron window_focus_last ;\
-	window stack update
+	chef panel desktop
 
 super + {shift,ctrl,alt} + w
 	menu {windowfocus, windowtile, windowsize}
@@ -174,29 +175,29 @@ super + shift + {Left,Down,Up,Right}
 
 alt + {Left,Down,Up,Right}
 	waitron window_cardinal_focus {left, down, up, right} ;\
-	window stack update
+	chef panel desktop
 
 super + {_,shift} + z
 	waitron {window_monocle, window_maximize}
 
 super + {_,shift} + Tab
 	waitron {window_cycle_in_group, window_rev_cycle_in_group} ;\
-	window stack update
+	chef panel desktop
 
 alt + {_,super} + Tab
 	waitron {window_cycle, window_rev_cycle} ;\
-	window stack update
+	chef panel desktop
 
 super + ctrl + Tab
 	waitron window_focus_last ;\
-	window stack update
+	chef panel desktop
 
 super + ctrl + r
 	waitron group_remove_window ;\
-	window stack update
+	chef panel desktop
 
 ~button1
-	window stack update
+	chef panel desktop
  
 # kak: filetype=sh
 

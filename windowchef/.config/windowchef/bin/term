@@ -38,7 +38,7 @@ case $TERM in
 esac
 
 # menu border calculation
-border() { echo $(( $(query display height) * 2 / 15 )); }
+border() { echo $(( $(chef display height) * 2 / 15 )); }
 theme()  { theme="$theme $@"; }
 
 while : ;do

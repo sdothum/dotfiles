@@ -6,47 +6,23 @@
 
 # ................................................................... Group info
 
-# Usage: window group [<group> | add <winid> | remove <winid>] | -1 | init | snapshot | vacuum
-
-# NOTE: draw panel "cat <file>" simplifies timing interference
+# Usage: window group <group> [add <winid>] | remove [<winid>]
 
 remove() {
-	for i in $(ag --nocolor -l ${1:-$winid} $GROUP:*) ;do
-		grep -v ${1:-$winid} $i >$GROUP:swap
+	for i in $(ag --nocolor -l $1 $GROUP:*) ;do
+		grep -v $1 $i >$GROUP:swap
 		mv $GROUP:swap $i
 	done
 }
 
-vacuum() {
-	query winids >$PANEL:visible
-	touch $GROUP:$1
-	for i in $(cat $GROUP:$1) ;do
-		grep -q $i $PANEL:visible || { remove $i; change=true; }
-	done
-	[ $change ]
-}
-
-snapshot() {
-	mv $PANEL:unassigned $PANEL:unassigned:last 2>/dev/null || echo 0 >$PANEL:unassigned:last
-	wmctrl -l | grep ' -1 ' | wc -l >$PANEL:unassigned  # count only
-	ls -1 $HIDDEN:* 2>/dev/null | wc -l >$PANEL:hidden || echo 0 >$PANEL:hidden
-	vacuum $1 || cmp --silent $PANEL:unassigned $PANEL:unassigned:last && echo "X" >$(cat $PANEL_FIFO)  # update panel
-}
-
 case $1 in
 	[1-9]    )
-		ACTIVE=$GROUP:$1
-		touch $ACTIVE  # create
 		case $2 in
-			add ) grep -q $3 $ACTIVE || echo $3 >>$ACTIVE ;;
-			*   ) cat $ACTIVE | wc -l ;;
+			add ) grep -q $3 $GROUP:$1 || echo $3 >>$GROUP:$1 ;;
+			*   ) cat $GROUP:$1 | wc -l ;;
 		esac
 		;;
-	-1       ) cat $PANEL:unassigned ;;                          # group "-1" count
-	init     ) for i in $(seq 1 9) ;do touch $GROUP:$i ;done ;;  # see draw panel
-	remove   ) remove $2  ;;
-	snapshot ) snapshot $2 ;;
-	vacuum   ) if [ $2 ] ;then vacuum $2 ;else for i in $(seq 1 9) ;do vacuum $i ;done ;fi ;;
+	remove   ) remove ${2:-$winid}  ;;
 esac
 
 # kak: filetype=sh

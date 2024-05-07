@@ -1,13 +1,13 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="query/theme $@" . $PARENT
+[ $TRACE ] && CHILD="chef/wincount $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# .................................................................... Wallpaper
+# ................................................................. window count
 
-[ $WALLPAPER ] || . $XDG_CONFIG_HOME/$WM/ENV
+# Usage: chef wincount [name]
 
-ls -l $WALLPAPER | awk '{ gsub(".(png|jpg)", ".theme", $NF); print $NF }'
+wmctrl -l | grep "${1:-.*}" | wc -l
 
 # kak: filetype=sh

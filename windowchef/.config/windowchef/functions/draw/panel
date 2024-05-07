@@ -46,33 +46,33 @@ PANEL_FONT=monograffic
 PANEL_UNDERLINE=2             # thickness
 
 # panel symbols (tag numbers option dropped to simplify colour assignments)
-case $(query display width) in
+case $(chef display width) in
 	3440 ) TAG_PAD='      '; STATPAD='   ' ;;  # tag bar separator (visual spacing)
 	1920 ) TAG_PAD='     ' ; STATPAD='  '  ;;
 	*    ) TAG_PAD='    '  ; STATPAD='  '  ;;
 esac
-[ $(query display width) -lt 1920 ] && scaledown=true
+[ $(chef display width) -lt 1920 ] && scaledown=true
 [ $scaledown ] && { LSEP=${LSEP# }; LSEP=${LSEP% }; RSEP=${RSEP# }; RSEP=${RSEP% }; }
 
 # ..................................................................... Geometry
 
 # Windowchef panel geometry
-PANEL_HEIGHT=$(query screen panel)
-PANEL_INDENT=$(query screen indent)  # assumes equal left/right screen margins
+PANEL_HEIGHT=$(chef screen panel)
+PANEL_INDENT=$(chef screen indent)  # assumes equal left/right screen margins
 
 fontsize=$(fontsize)
 [ $scaledown ] && fontsize=$(( fontsize - 1 ))
-width=$(query display width)
+width=$(chef display width)
 chop=$(( $width / $fontsize / 2 ))  # hackey column width calculation for title trim below
 
-[ -e $PANELTOP ] && panel_offsetY=0 || panel_offsetY=$(( $(query display height) - $PANEL_HEIGHT ))
+[ -e $PANELTOP ] && panel_offsetY=0 || panel_offsetY=$(( $(chef display height) - $PANEL_HEIGHT ))
 panel_offsetX=$PANEL_INDENT
 panel_width=$(( $width - $PANEL_INDENT * 2 ))
 
 # ................................................................... Tag status
 
 # desktops
-tagcount=$(( $(query desktop "''") - 1 ))  # number of labeled groups!
+tagcount=$(( $(chef desktop "''") - 1 ))  # number of labeled groups!
 DESKTOPS=$(seq 1 $tagcount)
 if [ -e $STARTREK ] ;then
 	OCCUPIED='■'
@@ -85,17 +85,18 @@ else
 fi
 
 # desktop windows
-echo 0 >$PANEL:unassigned  # initialize
-echo 0 >$PANEL:hidden
+echo 0 >$PANEL:hidden  # NOTE: assumes draw panel launched before other application windows!!
+echo 0 >$PANEL:nilgroup
+for i in $(seq 1 9) ;do >$GROUP:$i ;done
 
 windows()        { cat $GROUP:$1 | wc -l; }
 visible()        { cat $GROUP:$1 | wc -l; }
 hidden()         { cat $PANEL:hidden; }
-unassigned()     { cat $PANEL:unassigned; }
+nilgroup()       { cat $PANEL:nilgroup; }  # SEE: window group (snapshot)
 has_windows()    { [ $(windows $1) -gt 0 ]; }
 has_visible()    { [ $(visible $1) -gt 0 ]; }
 has_hidden()     { [ $(hidden)     -gt 0 ]; }
-has_unassigned() { [ $(unassigned) -gt 0 ]; }
+has_nilgroup()   { [ $(nilgroup)   -gt 0 ]; }
 
 desktops() {
 	unset desktops viewscreen
@@ -130,7 +131,7 @@ cpu_stat() { stat="${TAG_PAD} $cpu_usage ${STATPAD}$cpu_speed ${STATPAD}$cpu_tem
 
 # desktop details NOTE: windowchef does not track window visibility states (so just count all)
 active_window() {
-	title="$(query desktop)"  # current/last group
+	title="$(chef desktop)"  # current/last group
 	active=$(desktop)
 	if has_windows $active ;then
 		if has_visible $active && has_hidden $active ;then
@@ -141,8 +142,8 @@ active_window() {
 			title="${title}${LSEP}%{U$DEFAULT_FG}%{+u}$(hidden)%{-u}%{U-}"
 		fi
 	fi
-	if has_unassigned ;then
-		title="${title}${LSEP}-$(unassigned)"  # group -1 windows
+	if has_nilgroup ;then
+		title="${title}${LSEP}-$(nilgroup)"  # group -1 windows
 	fi
 	if has_visible $active ;then
 		[ "$(xtitle)" = '' ] && { waitron window_focus_last; return; }  # will trigger X record
@@ -350,8 +351,7 @@ esac
 
 # event driven panel update
 xtitle -sf 'X%s\n' >$PANEL_FIFO:$fifo 2>/dev/null &
-window group init
-while : ;do window group snapshot $(desktop); sleep 1; done &
+while : ;do chef panel snapshot; sleep 1; done &
 
 # cpu usage, cpu temperature, memory usage stats
 if [ -e $STAT ] ;then

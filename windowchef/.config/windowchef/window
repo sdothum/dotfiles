@@ -10,13 +10,13 @@
 # Usage: window [@<delay>] <msg>, see functions/window
 
 # usable screen dimensions
-margin=$(query screen margin)
-panel=$(query screen panel)
-width=$(( $(query display width) - $margin * 2 ))
-height=$(( $(query display height) - $panel * 2 ))
+margin=$(chef screen margin)
+panel=$(chef screen panel)
+width=$(( $(chef display width) - $margin * 2 ))
+height=$(( $(chef display height) - $panel * 2 ))
 
 # Windowchef window geometry
-border=$(query screen window_border)
+border=$(chef screen window_border)
 winid=$(pfw)
 # xdotool windowstate --remove fullscreen $winid  # fullscreen negates any attempted window actions
 

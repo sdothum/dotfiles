@@ -6,13 +6,8 @@
 
 # ........................................................... Manage group stack
 
-# Usage: window stack <group> | update
+# Usage: window stack <group>
 
-# HACK: waitron group_toggle/_activate does not restore the group window stack order (focused window)
-# SEE: desktop and sxhkdrc
-case $1 in
-	[1-9]  ) cat $WME:group:$1:focus ;;
-	update ) for i in $(ag --nocolor -l $winid $WME:group:?) ;do echo $winid >$i:focus; desktop ${i##*:} ;done ;;
-esac
+cat $WME:group:$1:focus  # return top of stack
 
 # kak: filetype=sh

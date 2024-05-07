@@ -1,13 +1,11 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="query/wincount $@" . $PARENT
+# [ $TRACE ] && CHILD="chef/winids $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ................................................................. window count
+# ....................................................................... winids
 
-# Usage: query wincount [name]
-
-wmctrl -l | grep "${1:-.*}" | wc -l
+wmctrl -l | cut -d' ' -f1  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
 
 # kak: filetype=sh

@@ -1,18 +1,18 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-# [ $TRACE ] && CHILD="query $@" . $PARENT
+# [ $TRACE ] && CHILD="chef $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ............................................................. Query operations
+# .......................................................... Windowchef metadata
 
-# Usage: query <msg>, see functions/query
+# Usage: chef <msg>, see functions/chef
 
 msg=$1
 [ $msg ] && shift || usage: $0
-if [ -e ${0%/query}/functions/query/$msg ] ;then
-	. ${0%/query}/functions/query/$msg $@
+if [ -e ${0%/chef}/functions/chef/$msg ] ;then
+	. ${0%/chef}/functions/chef/$msg $@
 else
 	usage: $0
 fi

@@ -14,11 +14,11 @@ min=1360
 case $1 in
 	'+min' ) exec is display +${MIN_DISPLAY:-$min} ;;
 	'-min' ) exec is display -${MIN_DISPLAY:-$min} ;;
-	+=*    ) [ $(query display width) -ge ${1#??} ] ;;
-	+*     ) [ $(query display width) -gt ${1#?} ]  ;;
-	=*     ) [ $(query display width) -eq ${1#?} ]  ;;
-	-=*    ) [ $(query display width) -le ${1#??} ] ;;
-	-*     ) [ $(query display width) -lt ${1#?} ]  ;;
+	+=*    ) [ $(chef display width) -ge ${1#??} ] ;;
+	+*     ) [ $(chef display width) -gt ${1#?} ]  ;;
+	=*     ) [ $(chef display width) -eq ${1#?} ]  ;;
+	-=*    ) [ $(chef display width) -le ${1#??} ] ;;
+	-*     ) [ $(chef display width) -lt ${1#?} ]  ;;
 	*      ) false ;;
 esac
 

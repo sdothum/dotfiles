@@ -8,16 +8,16 @@
 # NOTE: there cannot be a blank line before the first rule! (hence, the deviation from standard headers)
 #
 class="calibre"
-	window desktop $(query desktop "BOOKS") ;\
+	window desktop $(chef desktop "BOOKS") ;\
 	window @0.1 snap center
 
 class="mail"
-	window desktop  $(query desktop "MAIL") ;\
+	window desktop  $(chef desktop "MAIL") ;\
 	window size monocle
 
 class="email"
-	window desktop $(query desktop "MAIL") ;\
-	window tile 4 4
+	window desktop $(chef desktop "MAIL") ;\
+	window tile 3 email
 
 class="feh"
 	window size monocle
@@ -26,32 +26,32 @@ class="Firefox"
 	window size monocle
 
 class="kak"
-	window desktop $(query desktop "CODE") ;\
+	window desktop $(chef desktop "CODE") ;\
 	layout tile 4 kak
 
 class="wiki"
-	window desktop $(query desktop "WIKI") ;\
+	window desktop $(chef desktop "WIKI") ;\
 	layout tile 3 wiki
 
 class="mpv"
 	xdotool key Super+Shift+z
 
 class="pavucontrol"
-	window desktop $(query desktop "SYSTEM")           ;\
-	window size B6 rotate                              ;\
-	window snap center                                 ;\
-	[ -e $WME:pavucontrol ] && exit                    ;\
-	touch $WME:pavucontrol                             ;\
-	sleep 1                                            ;\
-	waitron group_deactivate $(query desktop "SYSTEM") ;\
-	desktop $(query desktop "DESK")
+	window desktop $(chef desktop "SYSTEM")           ;\
+	window size B6 rotate                             ;\
+	window snap center                                ;\
+	[ -e $WME:pavucontrol ] && exit                   ;\
+	touch $WME:pavucontrol                            ;\
+	sleep 1                                           ;\
+	waitron group_deactivate $(chef desktop "SYSTEM") ;\
+	desktop $(chef desktop "DESK")
  
 class="qutebrowser"
 	window desktop $(desktop) ;\
 	layout tile 3 qutebrowser
 
 class="Surf"
-	window @2 desktop $(query desktop "CHAT") ;\
+	window @2 desktop $(chef desktop "CHAT") ;\
 	window tile 4 1
 
 # kak: filetype=sh

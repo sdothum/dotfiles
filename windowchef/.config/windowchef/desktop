@@ -23,7 +23,7 @@ current() {
 		echo $desktop >$WME:desktop:last
 	fi
 	echo $1 >$WME:desktop
-	notify Group "$1 $(query desktop)"
+	notify Group "$1 $(chef desktop)"
 }
 
 toggle() {
@@ -82,7 +82,7 @@ plus() {
 
 case $1 in
 	''    ) echo $desktop ;;
-	[1-9] ) desktop $1 $2 ;;       # see query desktop and rulerrc
+	[1-9] ) desktop $1 $2 ;;       # SEE: chef desktop and rulerrc
 	last  ) [ -e $WME:desktop:last ] && desktop $(cat $WME:desktop:last) ;;
 	*     ) desktop $(plus $1) ;;	 # -1/+1
 esac
