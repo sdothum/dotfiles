@@ -9,7 +9,7 @@ finished() { [ $(ls -1 $HIDDEN* 2>/dev/null | wc -l) -eq 0 ]; }
 
 windows() {
 	for i in $(ls -1 $HIDDEN*) ;do
-		sed "s/:/^$SEP /" $i
+		sed "s/:/  ^$SEP /" $i
 	done 
 }
 
