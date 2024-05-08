@@ -4,37 +4,36 @@
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# .............................................................. Sync panel info
+# .............................................................. Windowchef stat
 
-# Usage: chef panel desktop | hidden | snapshot
+# Usage: chef stat desktop | hidden | snapshot
 
 # HACK: waitron group_toggle/_activate does not restore the group window stack order (focused window)
 # SEE: draw panel, desktop and sxhkdrc
 
-fifo() { echo "X" >$(cat $PANEL_FIFO); exit; }  # update panel
+fifo() { echo "X" >$(cat $PANEL_FIFO); }  # update panel
 
 # track closed windows
 vacuum() {
 	chef winids >$PANEL:winids
 	for i in $(cat $GROUP:$1) ;do
-		grep -q $i $PANEL:winids || { window group remove $i; change=true; }
+		grep -q $i $PANEL:winids || { window group remove $i; removals=true; }
 	done
-	[ $change ]
+	[ $removals ] && fifo
 }
 
-# draw panel "cat <file>" info
 snapshot() {
+	touch $PANEL:nilgroup
 	cp $PANEL:nilgroup $PANEL:nilgroup:last
 	wmctrl -l | grep ' -1 ' | wc -l >$PANEL:nilgroup  # count only
-	vacuum $(desktop) && fifo
-	cmp --silent $PANEL:nilgroup $PANEL:nilgroup:last && fifo
+	cmp --silent $PANEL:nilgroup $PANEL:nilgroup:last || fifo
 }
 
-# draw panel "cat <file>" info
 hidden() {
+	touch $PANEL:hidden
 	cp $PANEL:hidden $PANEL:hidden:last
-	ls -1 $HIDDEN:* >/dev/null 2>&1; [ $? -eq 0 ] && ls -1 $HIDDEN:* | wc -l >$PANEL:hidden || echo 0 >$PANEL:hidden
-	cmp --silent $PANEL:hidden $PANEL:hidden:last && fifo
+	find /tmp -regex "$HIDDEN:.*" | wc -l >$PANEL:hidden
+	cmp --silent $PANEL:hidden $PANEL:hidden:last || fifo
 }
 
 desktop_update() {
@@ -47,7 +46,7 @@ desktop_update() {
 case $1 in
 	desktop  ) desktop_update ;;
 	hidden   ) hidden; desktop_update ;;
-	snapshot ) snapshot ;;
+	snapshot ) snapshot; vacuum $(desktop) ;;
 esac
 
 # kak: filetype=sh

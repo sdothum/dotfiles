@@ -109,12 +109,12 @@ desktops() {
 
 		if [ $i = $(desktop) ] ;then
 			has_visible $i && format="${format}%{F$ACTIVE_FG}"
-			has_hidden  $i && format="${format}%{F$ACTIVE_FG}%{U$ACTIVE_FG}%{+u}"
+			has_hidden     && format="${format}%{F$ACTIVE_FG}%{U$ACTIVE_FG}%{+u}"
 		elif ! has_windows $i ;then
 			format="${format}%{F$FREE_FG}"
 		else
 			# has_visible $i && format="${format}%{F$INACTIVE_FG}"
-			# has_hidden  $i && format="${format}%{F$INACTIVE_FG}%{U$INACTIVE_FG}%{+u}"
+			# has_hidden     && format="${format}%{F$INACTIVE_FG}%{U$INACTIVE_FG}%{+u}"
 			format="${format}%{F$INACTIVE_FG}"  # has_windows $i
 		fi
 		desktops="${desktops}${TAG_PAD}${format}${icon}%{-u}%{U-}%{B-}%{F-}"
@@ -134,8 +134,8 @@ active_window() {
 	title="$(chef desktop)"  # current/last group
 	active=$(desktop)
 	if has_windows $active ;then
-		if has_visible $active && has_hidden $active ;then
-			title="${title}${LSEP}$(visible $active)${LSEP}%{U$DEFAULT_FG}%{+u}$(hidden $active)%{-u}%{U-}"
+		if has_visible $active && has_hidden ;then
+			title="${title}${LSEP}$(visible $active)${LSEP}%{U$DEFAULT_FG}%{+u}$(hidden)%{-u}%{U-}"
 		elif has_visible $active ;then
 			title="${title}${LSEP}$(visible $active)"
 		else
@@ -351,7 +351,7 @@ esac
 
 # event driven panel update
 xtitle -sf 'X%s\n' >$PANEL_FIFO:$fifo 2>/dev/null &
-while : ;do chef panel snapshot; sleep 1; done &
+while : ;do chef stat snapshot; sleep 1; done &
 
 # cpu usage, cpu temperature, memory usage stats
 if [ -e $STAT ] ;then

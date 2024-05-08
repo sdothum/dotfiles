@@ -43,9 +43,9 @@ class="pavucontrol"
 	[ -e $WME:pavucontrol ] && exit                   ;\
 	touch $WME:pavucontrol                            ;\
 	sleep 1                                           ;\
-	waitron group_deactivate $(chef desktop "SYSTEM") ;\
-	desktop $(chef desktop "DESK")
- 
+	desktop $(chef desktop "DESK")                    ;\
+	waitron group_deactivate $(chef desktop "SYSTEM")
+
 class="qutebrowser"
 	window desktop $(desktop) ;\
 	layout tile 3 qutebrowser
