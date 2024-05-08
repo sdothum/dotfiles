@@ -92,11 +92,11 @@ for i in $(seq 1 9) ;do >$GROUP:$i ;done
 windows()        { cat $GROUP:$1 | wc -l; }
 visible()        { cat $GROUP:$1 | wc -l; }
 hidden()         { cat $PANEL:hidden; }
-nilgroup()       { cat $PANEL:nilgroup; }  # SEE: window group (snapshot)
+nilgroup()       { cat $PANEL:nilgroup; }
 has_windows()    { [ $(windows $1) -gt 0 ]; }
 has_visible()    { [ $(visible $1) -gt 0 ]; }
 has_hidden()     { [ $(hidden)     -gt 0 ]; }
-has_nilgroup()   { [ $(nilgroup)   -gt 0 ]; }
+has_nilgroup()   { [ $(nilgroup)   -gt 0 ]; }  # ATTN: random "unexpected operator"(?) SEE: chef stat
 
 desktops() {
 	unset desktops viewscreen
