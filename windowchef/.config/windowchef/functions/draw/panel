@@ -126,9 +126,13 @@ cpu_stat() { stat="${TAG_PAD} $cpu_usage ${STATPAD}$cpu_speed ${STATPAD}$cpu_tem
 
 # ............................................................... Current window
 
+map=$(for i in $(seq 1 $tagcount) ;do echo -n '‧' ;done)
+
+map() { echo "$map" | sed "s/‧/•/$(chef desktop $(chef desktop))"; }
+
 # desktop details NOTE: windowchef does not track window visibility states
 active_window() {
-	title="$(chef desktop)"  # current/last group
+	title="$(map)  $(chef desktop)"  # current/last group
 	active=$(desktop)
 	if has_windows $active ;then
 		if deactivated $active ;then
