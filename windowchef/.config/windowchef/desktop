@@ -8,17 +8,18 @@
 # ............................................................. Group operations
 
 # Usage: desktop <msg>
-#          where <msg>: <group> [specific | toggle | close]
-#                       last
+#          where <msg>: <group> [specific | toggle | close] | last
+
+# NOTE: waitron group handling deficiencies (quirks) and extensions are handled here
+# HACK: waitron group_toggle/_activate does not restore the group window stack order (focused window)
+# SEE:  also chef --
 
 [ -e $WME:desktop ] && desktop=$(cat $WME:desktop)
-desktop=${desktop:--1}  # desktops in windowchef are groups!
+desktop=${desktop:--1}
 
 current() {
 	if [ -e $WME:desktop ] ;then
-		if [ -e $WME:desktop:last ] ;then
-			cmp --silent $WME:desktop  $WME:desktop:last && mv $WME:desktop $WME:desktop:last
-		fi
+		cmp --silent $WME:desktop $WME:desktop:last || mv $WME:desktop $WME:desktop:last
 	else
 		echo $desktop >$WME:desktop:last
 	fi
@@ -31,7 +32,7 @@ toggle() {
 		waitron group_activate $1
 		waitron window_focus $(window stack $1)
 		rm $WME:group:$1:deactivated
-		for i in $(cat $WME:group:$1) ;do [ -e $HIDDEN:$i ] && rm $HIDDEN:$i ;done  # activating group unhides manually hidden group windows
+		for i in $(cat $WME:group:$1) ;do [ -e $HIDDEN:$i ] && rm $HIDDEN:$i ;done  # NOTE: activating group unhides manually hidden group windows
 		desktop $1
 	else
 		winid=$(cat $WME:group:$1 | head -1 2>/dev/null)
@@ -63,7 +64,7 @@ desktop() {
 			;;
 		*        )
 			echo $(pfw) >$WME:group:$1:focus                 # see window stack
-			[ $desktop -eq $1 ] && return
+			[ ${desktop:--1} -eq $1 ] && return
 			current $1
 			waitron group_activate $1
 			waitron window_focus $(cat $WME:group:$1:focus)  # restore window stack NOTE: this also fixes calibre mouse focus issue!

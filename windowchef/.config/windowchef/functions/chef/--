@@ -8,16 +8,14 @@
 
 # Usage: chef -- desktop | hidden | snapshot
 
-# HACK: waitron group_toggle/_activate does not restore the group window stack order (focused window)
 # SEE: draw panel, desktop and sxhkdrc
 
 fifo() { echo "X" >$(cat $PANEL_FIFO); }  # trigger panel redraw
 
 # not all windows necessarily closed via sxhkd
 vacuum() {
-	mv $PANEL:winids $PANEL:winids:last  # ignore first pass file errors for maximum efficiency :)
+	chef winids | cmp --silent $PANEL:winids && exit  # ignore initial pass file error
 	chef winids >$PANEL:winids
-	cmp --silent $PANEL:winids $PANEL:winids:last && exit
 	for i in $(cat $GROUP:$1) ;do
 		grep -q $i $PANEL:winids || { window group remove $i; removals=true; }
 	done
@@ -34,7 +32,7 @@ desktop_focus() {
 case $1 in
 	desktop ) desktop_focus ;;
 	hidden  ) fifo; desktop_focus ;;
-	vacuum  ) vacuum $(desktop) ;;
+	vacuum  ) vacuum $(desktop) ;;  # SEE: draw panel while:loop
 esac
 
 # kak: filetype=sh
