@@ -31,6 +31,7 @@ toggle() {
 		waitron group_activate $1
 		waitron window_focus $(window stack $1)
 		rm $WME:group:$1:deactivated
+		for i in $(cat $WME:group:$1) ;do [ -e $HIDDEN:$i ] && rm $HIDDEN:$i ;done  # activating group unhides manually hidden group windows
 		desktop $1
 	else
 		winid=$(cat $WME:group:$1 | head -1 2>/dev/null)
@@ -71,11 +72,12 @@ desktop() {
 }
 
 plus() {
+	tagcount=$(chef desktop count)
 	desktop=$(( $desktop + $1 ))
-	if [ $desktop -gt 6 ] ;then
+	if [ $desktop -gt $tagcount ] ;then
 		desktop=1
 	elif [ $desktop -lt 1 ] ;then
-		desktop=6
+		desktop=$tagcount
 	fi
 	echo $desktop
 }

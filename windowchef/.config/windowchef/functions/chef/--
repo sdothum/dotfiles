@@ -13,27 +13,13 @@
 
 fifo() { echo "X" >$(cat $PANEL_FIFO); }  # trigger panel redraw
 
-# track closed windows
+# not all windows necessarily closed via sxhkd
 vacuum() {
 	chef winids >$PANEL:winids
 	for i in $(cat $GROUP:$1) ;do
 		grep -q $i $PANEL:winids || { window group remove $i; removals=true; }
 	done
 	[ $removals ] && fifo
-}
-
-nilgroup() {
-	touch $PANEL:nilgroup
-	cp $PANEL:nilgroup $PANEL:nilgroup:last
-	wmctrl -l | grep ' -1 ' | wc -l >$PANEL:nilgroup  # count only
-	cmp --silent $PANEL:nilgroup $PANEL:nilgroup:last || fifo
-}
-
-hidden() {
-	touch $PANEL:hidden
-	cp $PANEL:hidden $PANEL:hidden:last
-	find /tmp -regex "$HIDDEN:.*" | wc -l >$PANEL:hidden
-	cmp --silent $PANEL:hidden $PANEL:hidden:last || fifo
 }
 
 desktop_focus() {
@@ -44,9 +30,9 @@ desktop_focus() {
 }
 
 case $1 in
-	desktop  ) desktop_focus ;;
-	hidden   ) hidden; desktop_focus ;;
-	snapshot ) nilgroup; vacuum $(desktop) ;;
+	desktop ) desktop_focus ;;
+	hidden  ) fifo; desktop_focus ;;
+	vacuum  ) vacuum $(desktop) ;;
 esac
 
 # kak: filetype=sh

@@ -6,7 +6,7 @@
 
 # .............................................................. desktop (group)
 
-# Usage: chef desktop [<desktop> | <label>]
+# Usage: chef desktop [<desktop> | <label> | count]
 
 GROUPS="DESK CHAT CODE MAIL BOOKS WIKI SYSTEM ''"  # '' end of groups SEE: draw panel and windowchefrc
 
@@ -17,6 +17,7 @@ index() { echo "$GROUPS" | tr ' ' '\n' | grep -n $1 | cut -d: -f1; }  # NOTE: as
 case $1 in
 	''    ) label $(cat $WME:desktop) ;;
 	[1-9] ) label $1 ;;
+	count ) echo $(( $(index "''") - 1 )) ;;
 	*     ) index $1 ;;  # see rulerrc
 esac
 
