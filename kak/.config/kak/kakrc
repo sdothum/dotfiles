@@ -184,7 +184,6 @@ if %{ [ -z "$UNPLUG" ] } %{
 
 		define-command files %{
 			peneira-resync
-			# peneira-files -hide-opened
 			peneira-files -hide-opened
 		}
 
