@@ -15,7 +15,9 @@ fifo() { echo "X" >$(cat $PANEL_FIFO); }  # trigger panel redraw
 
 # not all windows necessarily closed via sxhkd
 vacuum() {
+	mv $PANEL:winids $PANEL:winids:last  # ignore first pass file errors for maximum efficiency :)
 	chef winids >$PANEL:winids
+	cmp --silent $PANEL:winids $PANEL:winids:last && exit
 	for i in $(cat $GROUP:$1) ;do
 		grep -q $i $PANEL:winids || { window group remove $i; removals=true; }
 	done
