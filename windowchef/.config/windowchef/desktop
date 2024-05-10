@@ -25,6 +25,7 @@ current() {
 	fi
 	echo $1 >$WME:desktop
 	refresh_panel
+	notify Group "$1 $(chef desktop)"
 }
 
 toggle() {

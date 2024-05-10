@@ -4,7 +4,7 @@
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
-set -x
+
 # ..................................................................... Terminal
 
 # Usage: term [[title=]<title>] [[class=]<class>] [BLACKBOARD | PAPER | <X>x<Y> | VISIBLE | WAIT | FORTUNE]* [[SHELL] <command>]

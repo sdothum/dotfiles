@@ -5,6 +5,8 @@
 
 # ...................................................................... Hotkeys
 
+# NOTE: only use groups 1-9 with desktop 0 reserved for special actions (typically, "last")
+ 
 super + {_,alt} + space
 	waitron {window_ver_maximize, window_hor_maximize}
 
@@ -128,8 +130,8 @@ super + s
 super + shift + {s,u,v}
 	menu {system, passwords, media}
 
-super + u
-	btop
+super + {_,ctrl} + u
+	{btop, nvidia_fan toggle}
 
 super + {_,ctrl} + v
 	{toggle panel, invert_panel}
@@ -195,6 +197,8 @@ super + ctrl + Tab
 super + ctrl + r
 	waitron group_remove_window ;\
 	chef -- desktop
+
+# NOTE: restore mouse focus after group_activate (of top of window stack)
 
 ~button1
 	pfw >$WME:mouse ;\
