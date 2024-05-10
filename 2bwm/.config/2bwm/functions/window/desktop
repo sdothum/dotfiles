@@ -6,10 +6,11 @@
 
 # ............................................................ Window to desktop
 
-# Usage: window desktop <desktop> [teleport], desktop = 0..5
+# Usage: window desktop <desktop>
 
-mapw -m $winid  # ruler windowmap delay
-xdotool set_desktop_for_window $winid $1
-[ $2 ] || desktop $1
+# allow dynamic movement of windows between groups
+window group remove $winid  # windows may only belong to one group
+window group $1 add $winid
+desktop $1
 
 # kak: filetype=sh
