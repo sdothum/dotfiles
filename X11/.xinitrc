@@ -122,11 +122,12 @@ setpath() {
 	export PATH=$(echo $path:$(echo $PATH | sed "s|$path:||g"))
 }
 
+xrdb -load $HOME/.Xresources
+export SXHKD_SHELL=/usr/bin/dash
+
 case $wm in
 2b* )
-	xrdb -load $HOME/.Xresources
 	setpath $HOME/.config/2bwm cmd
-	export SXHKD_SHELL=/usr/bin/dash
 	. $(which ENV)
 	sxhkd -c $HOME/.config/2bwm/sxhkdrc &
 	ruler -i -c $HOME/.config/2bwm/rulerrc &
@@ -138,19 +139,17 @@ case $wm in
 aw* ) xexec awesome ;;
 
 be* )
-	xwallpaper --zoom $HOME/images/default
-	xrdb -load $HOME/.Xresources
 	setpath $HOME/.config/berry
-	$TERM &
+	xwallpaper --zoom $HOME/images/default
 	sxhkd -c $HOME/.config/berry/sxhkdrc &
 	conky clock auto
+	$TERM &
 	xexec berry ;;
 
 bs* ) 
-	killall panel 2>/dev/null
+	setpath $HOME/.config/bspwm
 	rm -f /tmp/bspwm-socket 2>/dev/null
 	rm -f /tmp/bspwm.lock
-	setpath $HOME/.config/bspwm
 	sxhkd -c $HOME/.config/bspwm/sxhkdrc &
 	xexec bspwm ;;
 
@@ -164,12 +163,11 @@ go* ) xexec goomwwm ;;
 dw* ) xexec dwm ;;
 
 he* )
-	pkill -KILL -f 'herbst'
+	setpath $HOME/.config/herbstluftwm
 	# export ROOT=$HOME/tmp
 	export PANEL_BOTTOM=true
 	export SETROOT=$(cat $HOME/.setroot 2>/dev/null)  # setroot last wallpaper or wall, otherwise random wall
-	setpath $HOME/.config/herbstluftwm
-	. $HOME/.config/herbstluftwm/config/ENV
+	. $(which ENV)
 	which xdotool >/dev/null || $TERM &  # initial build install?
 	$TERM &
 	xexec herbstluftwm ;;
@@ -192,8 +190,6 @@ wmi*) xexec wmii ;;
 
 wi* )
 	setpath $HOME/.config/windowchef
-	export SXHKD_SHELL=/usr/bin/dash
-	xrdb -load $HOME/.Xresources
 	. $(which ENV)
 	sxhkd -c $HOME/.config/windowchef/sxhkdrc &
 	ruler -i -c $HOME/.config/windowchef/rulerrc &
@@ -202,22 +198,19 @@ wi* )
 
 wm* )
 	setpath $HOME/.config/wmutils
-	export SXHKD_SHELL=/usr/bin/dash
 	xsetroot -solid grey20
-	xrdb -load $HOME/.Xresources
 	sxhkd -c $HOME/.config/wmutils/sxhkdrc &
 	wew | yawee &
 	$TERM &
 	pwait wew ;;
 
 wo* )
+	setpath $HOME/.config/worm
 	export BLACKBOARD=/tmp/worm:blackboard
 	xwallpaper --zoom $HOME/images/default
-	xrdb -load $HOME/.Xresources
-	setpath $HOME/.config/worm
 	sxhkd -c $HOME/.config/worm/sxhkdrc &
-	$TERM &
 	conky clock auto
+	$TERM &
 	xexec worm ;;
 
 wt* )
