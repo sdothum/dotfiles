@@ -1,14 +1,12 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="scratchpad $@" . $PARENT
+[ $TRACE ] && CHILD="refresh_panel $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ................................................................... Scratchpad
+# ................................................................ Refresh panel
 
-# Usage: scratchpad [name]
-
-xdotool search --onlyvisible --name ${1:-scratchpad} windowclose || { tmux_session ${1:-scratchpad}; window snap center; }
+echo "X" >$(cat $PANEL_FIFO)
 
 # kak: filetype=sh

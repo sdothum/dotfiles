@@ -4,7 +4,7 @@
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
-
+set -x
 # ..................................................................... Terminal
 
 # Usage: term [[title=]<title>] [[class=]<class>] [BLACKBOARD | PAPER | <X>x<Y> | VISIBLE | WAIT | FORTUNE]* [[SHELL] <command>]
@@ -28,13 +28,15 @@ case $TERM in
 	alacritty )
 		TITLE=--title
 		NAME=--class
-		blackboard=blackboard ;;
-	
+		blackboard=blackboard
+		name="$NAME term"  # default class SEE: rulerrc
+		;;
 	urxvt     )
 		TITLE=-title
 		NAME=-name
 		blackboard="-bg '$blackboard' -fg '$blackboard' -cr '$blackboard'"
-		geometry='-geometry 1024x600+0+0' ;;
+		geometry='-geometry 1024x600+0+0'
+		;;
 esac
 
 # menu border calculation

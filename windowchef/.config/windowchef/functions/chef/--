@@ -10,8 +10,6 @@
 
 # SEE: draw panel, desktop and sxhkdrc
 
-fifo() { echo "X" >$(cat $PANEL_FIFO); }  # trigger panel redraw
-
 # not all windows necessarily closed via sxhkd
 vacuum() {
 	chef winids | cmp --silent $PANEL:winids && exit  # ignore initial pass file error
@@ -19,7 +17,7 @@ vacuum() {
 	for i in $(cat $GROUP:$1) ;do
 		grep -q $i $PANEL:winids || { window group remove $i; removals=true; }
 	done
-	[ $removals ] && fifo
+	[ $removals ] && refresh_panel
 }
 
 desktop_focus() {
@@ -31,7 +29,7 @@ desktop_focus() {
 
 case $1 in
 	desktop ) desktop_focus ;;
-	hidden  ) fifo; desktop_focus ;;
+	hidden  ) refresh_panel; desktop_focus ;;
 	vacuum  ) vacuum $(desktop) ;;  # SEE: draw panel while:loop
 esac
 

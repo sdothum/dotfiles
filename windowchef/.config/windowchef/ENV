@@ -37,7 +37,7 @@ echo $PANEL_FIFO:0 >$PANEL_FIFO  # set by draw panel but needed beforehand
 # ............................................................... Session states
 
 # wm states, see gaps
-export DESKTOP=$SESSION:desktop
+export DESKTOP=$SESSION/desktop
 export SETROOT=$DESKTOP:setroot
 
 # application states

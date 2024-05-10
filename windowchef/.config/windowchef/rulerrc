@@ -8,7 +8,7 @@
 # NOTE: there cannot be a blank line before the first rule! (hence, the deviation from standard headers)
 #
 class="calibre"
-	window desktop $(chef desktop "BOOKS") ;\
+	window desktop $(chef desktop "BOOK") ;\
 	window @0.1 snap center
 
 class="mail"
@@ -37,14 +37,14 @@ class="mpv"
 	xdotool key Super+Shift+z
 
 class="pavucontrol"
-	window desktop $(chef desktop "SYSTEM") ;\
-	window size B6 rotate                   ;\
-	window snap center                      ;\
-	[ -e $WME:pavucontrol ] && exit         ;\
-	touch $WME:pavucontrol                  ;\
-	sleep 1                                 ;\
-	desktop $(chef desktop "DESK")          ;\
-	waitron group_deactivate $(chef desktop "SYSTEM")
+	window desktop $(chef desktop "CHEF") ;\
+	window size B6 rotate                 ;\
+	window snap center                    ;\
+	[ -e $WME:pavucontrol ] && exit       ;\
+	touch $WME:pavucontrol                ;\
+	sleep 1                               ;\
+	desktop $(chef desktop "DESK")        ;\
+	waitron group_deactivate $(chef desktop "CHEF")
 
 class="qutebrowser"
 	window desktop $(desktop) ;\
@@ -53,6 +53,9 @@ class="qutebrowser"
 class="Surf"
 	window @2 desktop $(chef desktop "CHAT") ;\
 	window tile 4 1
+
+class="term"
+	window desktop $(desktop)
 
 # kak: filetype=sh
 

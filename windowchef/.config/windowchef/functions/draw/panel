@@ -356,7 +356,7 @@ esac
 
 # event driven panel update
 xtitle -sf 'X%s\n' >$PANEL_FIFO:$fifo 2>/dev/null &
-while : ;do chef -- vacuum; sleep 1; done &
+while : ;do chef -- vacuum; sleep 0.5; done &
 
 # cpu usage, cpu temperature, memory usage stats
 if [ -e $STAT ] ;then

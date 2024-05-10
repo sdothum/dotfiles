@@ -197,7 +197,9 @@ super + ctrl + r
 	chef -- desktop
 
 ~button1
-	chef -- desktop
+	pfw >$WME:mouse ;\
+	chef -- desktop ;\
+	waitron window_focus $(cat $WME:mouse)
  
 # kak: filetype=sh
 
