@@ -6,8 +6,26 @@
 
 # ........................................................... Nvidia fan control
 
-# Usage: nvidia_fan [<percent>]
+# Usage: nvidia_fan on [<percent>] | off | toggle
 
-sudo nvidia-settings -a GPUFanControlState=1 -a GPUTargetFanSpeed=${1:-30}
+off() {
+	sudo nvidia-settings -a GPUFanControlState=0
+	notify nvidia "Fan OFF"
+	rm $SESSION/nvidia_fan
+}
+
+on() {
+	sudo nvidia-settings -a GPUFanControlState=1 -a GPUTargetFanSpeed=${1:-30}
+	notify nvidia "Fan ON ${1:-30}%"
+	touch $SESSION/nvidia_fan
+}
+
+	
+case $1 in
+	toggle ) [ -e $SESSION/nvidia_fan ] && off || on ;;
+	off    ) off ;;
+	on     ) on $2 ;;
+	*      ) [ -e $SESSION/nvidia_fan ] && on ;;
+esac
 
 # kak: filetype=sh
