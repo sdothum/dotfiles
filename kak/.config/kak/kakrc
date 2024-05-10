@@ -225,17 +225,17 @@ if %{ [ -z "$UNPLUG" ] } %{
 
 		hook -once global BufSetOption filetype=sh %{
 			user-snippets
-			set -add buffer snippets 'usage:' 'us:'     %{ snippets-insert %{usage() { usage: "$(basename $0) ${1:options}"; exit 1; } }}
-			set -add buffer snippets 'usage:pipe' 'up:' %{ snippets-insert %{usage() { usage: "$(basename $0) ${1:options}" | usage:pipe
+			set -add buffer snippets 'usage:' 'us^'     %{ snippets-insert %{usage() { usage: "$(basename $0) ${1:options}"; exit 1; } }}
+			set -add buffer snippets 'usage:pipe' 'up^' %{ snippets-insert %{usage() { usage: "$(basename $0) ${1:options}" | usage:pipe
 			exit 1
 		} }}
 		}
 
 		hook -once global BufSetOption filetype=markdown %{
 			user-snippets
-			set -add buffer snippets 'date' 'da:'       %{ snippets-insert %sh{ date '+## %A, %d %B %Y' | tr '[:upper:]' '[:lower:]' }}
-			set -add buffer snippets 'img' 'im:'        %{ snippets-insert %{![${1:img}](/images/${1:img}.jpg) }}
-			set -add buffer snippets 'search' 'se:'     %{ snippets-insert %{[${1:search}](http://thedarnedestthing.com/search?query=${1:search}) }}
+			set -add buffer snippets 'date' 'da^'       %{ snippets-insert %sh{ date '+## %A, %d %B %Y' | tr '[:upper:]' '[:lower:]' }}
+			set -add buffer snippets 'img' 'im^'        %{ snippets-insert %{![${1:img}](/images/${1:img}.jpg) }}
+			set -add buffer snippets 'search' 'se^'     %{ snippets-insert %{[${1:search}](http://thedarnedestthing.com/search?query=${1:search}) }}
 		}
 	}
 
