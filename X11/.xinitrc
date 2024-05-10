@@ -95,7 +95,7 @@ case $(hostname) in
 esac
 # pulseeffects --gapplication-service &
 
-# gpu nvidia && nvidia_fan
+gpu nvidia && nvidia_fan
 
 # ............................................................... Window manager
 
@@ -124,7 +124,6 @@ setpath() {
 
 case $wm in
 2b* )
-	pkill -KILL -f '2bwm'
 	xrdb -load $HOME/.Xresources
 	setpath $HOME/.config/2bwm cmd
 	export SXHKD_SHELL=/usr/bin/dash
@@ -198,7 +197,6 @@ wi* )
 	. $(which ENV)
 	sxhkd -c $HOME/.config/windowchef/sxhkdrc &
 	ruler -i -c $HOME/.config/windowchef/rulerrc &
-	# (sleep 0.15; autostart >/tmp/2bwm.log 2>&1) &  # NOTE: this hack causes root window issues
 	# $TERM &  # NOTE: windowchef cannot properly manage windows opened before it!
 	xexec windowchef -c $HOME/.config/windowchef/windowchefrc ;;
 
