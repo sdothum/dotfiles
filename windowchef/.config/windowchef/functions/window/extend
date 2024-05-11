@@ -11,8 +11,8 @@
 save_geometry
 set_geometry  # X Y WIDTH HEIGHT
 
-lwidth=$(( $X + $WIDTH - $margin ))
-rwidth=$(( $width - $X + $margin ))
+lwidth=$(( X + WIDTH - margin ))
+rwidth=$(( width - X + margin ))
 
 # .......................................................... Extend horizontally
 
@@ -24,18 +24,18 @@ far()   { [ $X -le $(opposite_side) ] && right || left; }
 # ................................................................... Extend top
 
 top() {
-	height=$(( $Y + $HEIGHT - $panel ))
+	height=$(( Y + HEIGHT - top ))
 	case $1 in
-		left  ) wtp $margin $panel $lwidth $height $(pfw) ;;
-		right ) wtp $X $panel $rwidth $height $(pfw) ;;
-		*     ) wtp $X $panel $WIDTH $height $(pfw) ;;
+		left  ) wtp $margin $top $lwidth $height $(pfw) ;;
+		right ) wtp $X $top $rwidth $height $(pfw) ;;
+		*     ) wtp $X $top $WIDTH $height $(pfw) ;;
 	esac
 }
 
 # ................................................................ Extend bottom
 
 bottom() {
-	height=$(( $height - $Y + $border ))
+	height=$(( height - Y + border ))
 	case $1 in
 		left  ) wtp $margin $Y $lwidth $height $(pfw) ;;
 		right ) wtp $X $Y $rwidth $height $(pfw) ;;

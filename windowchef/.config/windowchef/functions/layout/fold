@@ -6,17 +6,9 @@
 
 # .................................................................. Tile layout
 
-usage() { usage: "$(basename $0) by 3 | 4 [<name>]"; exit 1; }
+usage() { usage: "$(basename $0) fold 3 | 4 | 5 [<classname>]"; exit 1; }
 
-# tile application (name)?
-if [ $2 ] ;then
-	for i in $winids ;do
-		name=$(xdotool getwindowclassname $i)
-		[ "$name" = $2 ] && nameids="$nameids $i"
-	done
-	winids=$nameids
-fi
-
+winids=$(chef winids $2)
 instance=0  # window placement sequence
 
 # .................................................................... By thirds
@@ -25,11 +17,11 @@ thirds() {
 	for i in $winids ;do
 		waitron window_focus $i
 		case $instance in
-			1 ) window tile 3 1 ;;
+			2 ) window tile 3 1; instance=-1 ;;
 			0 ) window tile 3 2 ;;
-			2 ) window tile 3 3 ; instance=-1  ;;
+			1 ) window tile 3 3 ;;
 		esac
-		instance=$(( $instance + 1 ))
+		instance=$(( instance + 1 ))
 	done
 }
 
@@ -42,18 +34,35 @@ quarters() {
 			2 ) window tile 4 1 ;;
 			0 ) window tile 4 2 ;;
 			1 ) window tile 4 3 ;;
-			3 ) window tile 4 4 ; instance=-1 ;;
+			3 ) window tile 4 4; instance=-1 ;;
 		esac
-		instance=$(( $instance + 1 ))
+		instance=$(( instance + 1 ))
+	done
+}
+
+# .................................................................... By fifths
+
+fifths() {
+	for i in $winids ;do
+		mapw -m $i
+		case $instance in
+			4 ) window tile 5 1; instance=-1 ;;
+			2 ) window tile 5 2 ;;
+			0 ) window tile 5 3 ;;
+			1 ) window tile 5 4 ;;
+			3 ) window tile 5 5 ;;
+		esac
+		instance=$(( instance + 1 ))
 	done
 }
 
 case "$@" in
-	3* ) thirds $2   ;;
-	4* ) quarters $2 ;;
+	3* ) thirds   ;;
+	4* ) quarters ;;
+	5* ) fifths   ;;
 	*  ) usage ;;
 esac
 
-waitron window_focus $winid
+waitron window_focus ${i:-$winid}
 
 # kak: filetype=sh

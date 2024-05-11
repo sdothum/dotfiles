@@ -6,6 +6,14 @@
 
 # ....................................................................... winids
 
-wmctrl -l | cut -d' ' -f1  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
+# Usage: chef winids [classname]
+
+winids() { wmctrl -l | cut -d' ' -f1; }  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
+
+case $1 in
+	'' ) winids ;;
+	*  ) for i in $(winids) ;do [ "$(xdotool getwindowclassname $i)" = $1 ] && echo $i ;done ;;
+esac
+
 
 # kak: filetype=sh

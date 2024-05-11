@@ -78,6 +78,9 @@ super + {_,ctrl} + a
 super + {_,ctrl} + b
 	qutebrowser {_, closeall}
 
+super + shift + b
+	layout fold 3 qutebrowser
+
 super + {c,g}
 	window snap {center vertical, center}
 
@@ -91,15 +94,18 @@ super + {shift,ctrl} + d
 	toggle {wallpaper, background}
 
 super + shift + e
-	layout fold 4 kak                              ;\
-	waitron window_focus $(cat $WME:group:3:focus) ;\
-	desktop 3
+	layout fold 4 kak                                                   ;\
+	waitron window_focus $(cat $WME:group:$(chef desktop "CODE"):focus) ;\
+	desktop $(chef desktop "CODE")
 
 super + ctrl + e
 	layout level
 
 super + {alt,ctrl,shift} + g
 	window snap center {vertical,left, right}
+
+super + h
+	xdotool search --onlyvisible --classname "Surf" && window tile 4 1 || hangouts
 
 super + {_,shift} + i
 	{window hide, menu unhide} ;\
@@ -129,6 +135,9 @@ super + s
 
 super + shift + {s,u,v}
 	menu {system, passwords, media}
+
+super + shift + t
+	layout fold 5 term
 
 super + {_,ctrl} + u
 	{btop, nvidia_fan toggle}
@@ -199,10 +208,12 @@ super + ctrl + r
 	chef -- desktop
 
 # NOTE: restore mouse focus after group_activate (of top of window stack)
+# HACK: bypass python QT apps to avoid interference with mouse menus
 
 ~button1
-	pfw >$WME:mouse ;\
-	chef -- desktop ;\
+	[ "$(xdotool getwindowclassname $(pfw))" = "calibre" ] && exit ;\
+	pfw >$WME:mouse                                                ;\
+	chef -- desktop                                                ;\
 	waitron window_focus $(cat $WME:mouse)
  
 # kak: filetype=sh

@@ -16,7 +16,7 @@ size() {
 	[ $4 ] && { W=$3; H=$2; } || { W=$2; H=$3; }
 	[ $H -gt $height ] && { swap=$W; W=$H; H=$swap; }
 	wtp $X $margin $W $H $1  # size from top else bottom may be truncated
-	wmv -a $(( $X + $W / 2 )) $(( $height / 2 )) $1
+	wmv -a $(( X + W / 2 )) $(( height / 2 )) $1
 }
 
 # ................................................................. Aspect ratio

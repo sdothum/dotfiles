@@ -95,7 +95,7 @@ highlight() {
 	return
 	file=$(previous $catlg)
 	# file=$mhistory
-	cat $NOTES | grep -qn "$file" && echo $(( $(cat $NOTES | grep -n "$file" | cut -d: -f1) + $offset )) || echo 0
+	cat $NOTES | grep -qn "$file" && echo $(( $(cat $NOTES | grep -n "$file" | cut -d: -f1) + offset )) || echo 0
 }
 
 notes()   { cat $NOTES | cut -d^ -f2- | column -s^ -t | sed "1i$PROMPT"; }

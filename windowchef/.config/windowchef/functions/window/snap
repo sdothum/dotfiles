@@ -17,9 +17,9 @@ move()   {
 	waitron window_focus $winid
 }
 
-L=$(( $margin ))
-R=$(( $width - $WIDTH + $margin - $border * 2 ))
-V=$(( ($height - $HEIGHT) / 2 + $panel - $border ))
+L=$(( margin ))
+R=$(( width - WIDTH + margin - border * 2 ))
+V=$(( (height - HEIGHT) / 2 + top - border ))
 
 left()   { move $L $Y; }
 right()  { move $R $Y; }
@@ -27,24 +27,24 @@ near()   { [ $X -le $(opposite_side) ] && left || right; }
 
 center() {
 	case $1 in
-		left  ) move $(( $width / 2 + $margin - $WIDTH - $border * 2 )) $Y ;;
-		right ) move $(( $width / 2 + $margin )) $Y ;;
-		hori* ) move $(( ($width - $WIDTH) / 2 + $margin - $border )) $Y ;;
+		left  ) move $(( width / 2 + margin - WIDTH - border * 2 )) $Y ;;
+		right ) move $(( width / 2 + margin )) $Y ;;
+		hori* ) move $(( (width - WIDTH) / 2 + margin - border )) $Y ;;
 		vert* ) move $X $V ;;
-		*     ) move $(( ($width - $WIDTH) / 2 + $margin - $border )) $V ;;
+		*     ) move $(( (width - WIDTH) / 2 + margin - border )) $V ;;
 	esac
 }
 
 top()    {
 	case $1 in
-		left  ) move $L $panel ;;
-		right ) move $R $panel ;;
- 		*     ) move $X $panel ;;
+		left  ) move $L $top ;;
+		right ) move $R $top ;;
+ 		*     ) move $X $top ;;
 	esac
 }
 
 bottom() {
-	B=$(( $height - $HEIGHT + $border + 1 ))
+	B=$(( height - HEIGHT + border + 1 ))
 	case $1 in
 		left  ) move $L $B ;;
 		right ) move $R $B ;;

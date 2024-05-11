@@ -74,7 +74,7 @@ desktop() {
 
 plus() {
 	tagcount=$(chef desktop count)
-	desktop=$(( $desktop + $1 ))
+	desktop=$(( desktop + $1 ))
 	if [ $desktop -gt $tagcount ] ;then
 		desktop=1
 	elif [ $desktop -lt 1 ] ;then

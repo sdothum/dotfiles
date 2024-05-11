@@ -63,11 +63,11 @@ PANEL_INDENT=$(chef screen indent)  # assumes equal left/right screen margins
 fontsize=$(fontsize)
 [ $scaledown ] && fontsize=$(( fontsize - 1 ))
 width=$(chef display width)
-chop=$(( $width / $fontsize / 2 ))  # hackey column width calculation for title trim below
+chop=$(( width / fontsize / 2 ))  # hackey column width calculation for title trim below
 
-[ -e $PANELTOP ] && panel_offsetY=0 || panel_offsetY=$(( $(chef display height) - $PANEL_HEIGHT ))
+[ -e $PANELTOP ] && panel_offsetY=0 || panel_offsetY=$(( $(chef display height) - PANEL_HEIGHT ))
 panel_offsetX=$PANEL_INDENT
-panel_width=$(( $width - $PANEL_INDENT * 2 ))
+panel_width=$(( width - PANEL_INDENT * 2 ))
 
 # ................................................................... Tag status
 
@@ -228,7 +228,7 @@ tape() {
 		pos=$(( ${pos:-0} + 1 ))
 		[ $pos -gt 10 ] && pos=0
 	fi
-	tic="$(echo "$tic" | tail -c $(( $len - $pos )))$(echo "$tic" | head -c $pos)"
+	tic="$(echo "$tic" | tail -c $(( len - pos )))$(echo "$tic" | head -c $pos)"
 }
 
 # ................................................................ Weather watch
@@ -265,9 +265,9 @@ currently() {
 
 	line=$(echo "$line" | sed -r 's/#[{]/%{/g; s/(AM|PM)/\L\1/')  # recover lemonbar format strings, see clock below
 	if [ -e $STARTREK ] ;then
-		[ $counter -lt $tagcount ] && counter=$(( $counter + 1 )) || { counter=1; cardinal=1; }
+		[ $counter -lt $tagcount ] && counter=$(( counter + 1 )) || { counter=1; cardinal=1; }
 		if [ -e $STARTREK:cardinal ] ;then  # very silly tumbling triangle.. works best with 8 workspaces ¯\(°_o)/¯
-			[ $cardinal -lt 8 ] && cardinal=$(( $cardinal + 1 )) || cardinal=1
+			[ $cardinal -lt 8 ] && cardinal=$(( cardinal + 1 )) || cardinal=1
 			tumble=$(echo $TUMBLING | cut -d' ' -f$cardinal)
 		else
 			# tumble='⬤'
