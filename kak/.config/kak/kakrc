@@ -54,7 +54,7 @@ if %{ [ -z "$UNPLUG" ] } %{
 		# change-directory action fails diff-jump - within a "dirdiff" loop SEE: kakdiff
 		bundle kakoune-cd  https://github.com/Delapouite/kakoune-cd.git %{
 			hook global WinDisplay .* change-directory-current-buffer
-			hook global FocusIn .* change-directory-current-buffer
+			hook global FocusIn .* change-directory-current-buffer  # BUG: fails on filename with leading dashes
 		}
 	} %{
 		define-command change-directory-current-buffer %{ nop }
