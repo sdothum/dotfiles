@@ -102,7 +102,7 @@ gpu nvidia && nvidia_fan
 export XDG_CONFIG_HOME=$HOME/.config
 
 xexec() {
-	pkill -f "draw panel"  # kill all dangling window manager procemses
+	# pkill -f "$WM"  # kill all dangling window manager procemses
 	pkill -f "fifo"
 	export ROOT=${ROOT:-/tmp}
 	mv -f $ROOT/$1.log $ROOT/$1.last.log 2>/dev/null
@@ -189,11 +189,12 @@ su* ) xexec subtle ;;
 wmi*) xexec wmii ;;
 
 wi* )
+	pkill -f "windowchef"  # kill all dangling window manager procemses
 	setpath $HOME/.config/windowchef
 	. $(which ENV)
 	sxhkd -c $HOME/.config/windowchef/sxhkdrc &
 	ruler -i -c $HOME/.config/windowchef/rulerrc &
-	# $TERM &  # NOTE: windowchef cannot properly manage windows opened before it!
+	# $TERM &              # NOTE: windowchef cannot properly manage windows opened before it!
 	xexec windowchef -c $HOME/.config/windowchef/windowchefrc ;;
 
 wm* )
