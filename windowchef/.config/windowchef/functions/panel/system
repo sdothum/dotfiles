@@ -1,0 +1,133 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="panel/statusbar $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................... Draw panel
+
+# Usage: panel systembar [<offset Y>]
+#
+# NOTE: this script is executed via "draw panel" SEE: also restore panel
+
+[ $1 ] && panel_offsetY=$1
+
+if [ -e $STARTREK ] ;then
+	OCCUPIED='■'
+	FREE='□'
+	CURRENT='□'  # active and FREE
+else
+	OCCUPIED='●'
+	FREE='○'
+	CURRENT='◯'  # active and FREE
+fi
+
+# ............................................................ Desktops (groups)
+
+desktops() {
+	unset desktops viewscreen
+	for i in $DESKTOPS ;do
+		format="%{B$DEFAULT_BG}"
+
+		# NOTE: visible *ONLY* returns correct value for active desktop
+
+		has_windows $i && icon=$OCCUPIED || { [ $i = $(desktop) ] && icon=$CURRENT || icon=$FREE; }
+
+		if [ $i = $(desktop) ] ;then
+			has_visible $i && format="${format}%{F$ACTIVE_FG}"
+			deactivated $i && format="${format}%{F$ACTIVE_FG}%{U$ACTIVE_FG}%{+u}"
+		elif ! has_windows $i ;then
+			format="${format}%{F$FREE_FG}"
+		else
+			format="${format}%{F$INACTIVE_FG}"
+		fi
+		desktops="${desktops}${TAG_PAD}${format}${icon}%{-u}%{U-}%{B-}%{F-}"
+		viewscreen="${viewscreen} ${format} ${icon}"  # star trek!
+	done
+	[ -e $STAT ] || desktops="${desktops}$TAG_PAD"  # center tags with triple padding, see $stat
+}
+
+# .................................................................... Cpu stats
+
+cpu_stat() { stat="${TAG_PAD} $cpu_usage ${STATPAD}$cpu_speed ${STATPAD}$cpu_temp ${STATPAD}$mem_usage${DESKPAD}${TAG_PAD}"; }
+
+# .................................................................. System info
+
+# initialize (for overlay redraw), see draw root
+# $STARTREK == ['', #<color>, $ACTIVE_FG, ..] 
+[ -s $STARTREK ] && eval VIEWSCREEN="%{F$(cat $STARTREK)}"
+
+touch /tmp/${STAT##*/}:cpu /tmp/${STAT##*/}:speed /tmp/${STAT##*/}:temp /tmp/${STAT##*/}:mem
+cpu_usage=$(cat /tmp/${STAT##*/}:cpu | sed 's/^.$/  &/; s/^..$/ &/')  # to avoid line centering shift
+cpu_temp=$(cat /tmp/${STAT##*/}:temp)
+cpu_speed=$(cat /tmp/${STAT##*/}:speed)
+mem_usage=$(cat /tmp/${STAT##*/}:mem)
+
+TUMBLING="▶ ◢ ▼ ◣ ◀ ◤ ▲ ◥"
+counter=0   # desktops
+cardinal=0  # directioons
+
+currently() {
+	# prevent lemonbar race to catch up (impossible to force race condition to test..)
+	[ ${EPOCH#S} -lt $(date +%s -d "-1 seconds") ] && { unset EPOCH; return; }
+	desktops
+
+	if [ -e $STARTREK ] ;then
+		[ $counter -lt $tagcount ] && counter=$(( counter + 1 )) || { counter=1; cardinal=1; }
+		if [ -e $STARTREK:cardinal ] ;then  # very silly tumbling triangle.. works best with 8 workspaces ¯\(°_o)/¯
+			[ $cardinal -lt 8 ] && cardinal=$(( cardinal + 1 )) || cardinal=1
+			tumble=$(echo $TUMBLING | cut -d' ' -f$cardinal)
+		else
+			# tumble='⬤'
+			tumble=${TUMBLING%% *}
+		fi
+		set -- ${viewscreen}
+		unset desktops
+		for j in $DESKTOPS ;do
+			[ $counter = $j ] && icon="${VIEWSCREEN}$tumble" || icon=$2
+			desktops="${desktops}${TAG_PAD}$1${icon}%{-u}%{U-}%{B-}%{F-}"
+			shift 2
+		done
+	fi
+}
+
+# ............................................................... FIFO read loop
+
+panel() {
+	desktops  # initialize
+	while read -r line ;do
+		case $line in
+			S*         ) EPOCH=${line}; currently  ;;
+			U*         ) [ "${line#?}" = '  0%' ] || cpu_usage=${line#?}; cpu_stat ;;  # ignore 0%
+			T*         ) cpu_temp=${line#?};  cpu_stat ;;
+			C*         ) cpu_speed=${line#?}; cpu_stat ;;
+			M*         ) mem_usage=${line#?}; cpu_stat ;;
+			!*         ) echo "$cpu_usage" >/tmp/${STAT##*/}:cpu; echo "$cpu_temp" >/tmp/${STAT##*/}:temp; echo "$mem_usage" >/tmp/${STAT##*/}:mem ;;  # save stats for draw root redraw
+		esac
+		
+		# [ "$desktops" ] || desktops
+		[ $EPOCH ] && printf "%s\n" "%{c}${desktops}${stat}"
+		unset line EPOCH
+	done
+}
+
+# ......................................................................... FIFO
+
+# initialize fifo
+[ -e $PANEL_FIFO:$fifo ] && rm -f $PANEL_FIFO:$fifo
+mkfifo $PANEL_FIFO:$fifo
+
+# event driven panel update
+clock -i 1 -sf "S%s" >$PANEL_FIFO:$fifo &
+
+# cpu usage, cpu temperature, memory usage stats
+if [ -e $STAT ] ;then
+	while : ;do echo "U$(cpu_percent)ᵁ" >$PANEL_FIFO:$fifo ;done &  # sar cycle >~ 1 second
+	while : ;do echo "C$(cpu_speed)ᴳ" >$PANEL_FIFO:$fifo; sleep 1; done &
+	while : ;do echo "T$(cpu_temp)°" >$PANEL_FIFO:$fifo; sleep 2; done &
+	while : ;do free -h | grep 'Mem:' | sed -r 's/^[^ ]* *[^ ]* *([0-9.]*)Mi.*/\1ᴹ/; s/^[^ ]* *[^ ]* *([0-9.]*)Gi.*/\1ᴹ/; s/^/M/' >$PANEL_FIFO:$fifo; sleep 3; done &
+fi
+
+cat $PANEL_FIFO:$fifo | panel | handlebar &
+
+# kak: filetype=sh

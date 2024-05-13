@@ -16,11 +16,16 @@ waitron wm_config internal_color_unfocused 0x505050
 
 # ......................................................................... Gaps
 
-waitron wm_config gap_width top 32
-waitron wm_config gap_width bottom 40
-waitron wm_config gap_width left 32
-waitron wm_config gap_width right 32
-waitron wm_config grid_gap_width 12
+# waitron wm_config gap_width top 32
+# waitron wm_config gap_width bottom 40
+waitron wm_config gap_width top 34
+waitron wm_config gap_width bottom 38
+# waitron wm_config gap_width left 32
+# waitron wm_config gap_width right 32
+waitron wm_config gap_width left 36
+waitron wm_config gap_width right 36
+# waitron wm_config grid_gap_width 12
+waitron wm_config grid_gap_width 9
 
 # ....................................................................... Groups
 

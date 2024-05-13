@@ -6,9 +6,8 @@
 
 # ......................................................................... Root
 
-pkill -KILL -f "draw panel"
 draw root select
 toggle picom on
-draw panel
+restore panel
 
 # kak: filetype=sh

@@ -1,17 +1,15 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="chef/wincount $@" . $PARENT
+[ $TRACE ] && CHILD="restore/panel $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ................................................................. window count
+# ................................................................ Restore panel
 
-# Usage: chef wincount [name]
+pkill -KILL -f "panel .*"
 
-case $1 in
-	'' ) wmctrl -l | wc -l ;;
-	*  ) wmctrl -l | grep -w "$1" | wc -l ;;  # WARNING: can still be fooled by browser url titles
-esac
-
+[ -e $SESSION/panel ] || exit
+panel=$(cat $SESSION/panel)
+draw panel $panel
 
 # kak: filetype=sh

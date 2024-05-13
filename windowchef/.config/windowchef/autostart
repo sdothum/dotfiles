@@ -9,7 +9,7 @@
 # see .xinitrc for 2bwm autostart hack :)
 
 restore root
-draw panel
+restore panel
 conky clock auto
 restore unclutter
 pulse

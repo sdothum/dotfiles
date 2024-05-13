@@ -112,7 +112,7 @@ super + {_,shift} + i
 	chef -- hidden
 
 super + m
-	xdotool search --onlyvisible --classname mail windowclose || aerc
+	xdotool search --onlyvisible --name mail windowclose || aerc
 
 super + shift + m
 	menu abook
@@ -146,14 +146,14 @@ super + {_,ctrl} + v
 	{toggle panel, invert_panel}
 
 super + x
-	xdotool search --onlyvisible --classname nnn windowclose || nnn TMUX
+	xdotool search --onlyvisible --name nnn windowclose || nnn TMUX
 
 super + shift + x
 	xdotool search --onlyvisible --classname pcmanfm windowclose || pcmanfm
 
 super + ctrl + x
 	notify critical 15 nnn '<b>root</b> user' ;\
-	xdotool search --onlyvisible --classname root windowclose || nnn ROOT
+	xdotool search --onlyvisible --name root windowclose || nnn ROOT
 
 super + w
 	window group remove       ;\
@@ -208,12 +208,12 @@ super + ctrl + r
 	chef -- desktop
 
 # NOTE: restore mouse focus after group_activate (of top of window stack)
-# HACK: bypass python QT apps to avoid interference with mouse menus
+# HACK: bypass QT apps to avoid interference with mouse menus
 
 ~button1
-	[ "$(xdotool getwindowclassname $(pfw))" = "calibre" ] && exit ;\
-	pfw >$WME:mouse                                                ;\
-	chef -- desktop                                                ;\
+	xdotool getwindowclassname $(pfw) | grep -q -E "calibre|fontmatrix" && exit ;\
+	pfw >$WME:mouse                                                             ;\
+	chef -- desktop                                                             ;\
 	waitron window_focus $(cat $WME:mouse)
  
 # kak: filetype=sh

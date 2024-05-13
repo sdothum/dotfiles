@@ -1,0 +1,120 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="panel/infobar $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................... Draw panel
+
+# Usage: panel clock [<offset Y>]
+#
+# NOTE: this script is executed via "draw panel" SEE: also restore panel
+
+[ $1 ] && panel_offsetY=$1
+
+if [ "$panel_offsetY" = "0" ] ;then   # WHY: use of -eq fails comparison(?)
+	LSEP="  %{F$INACTIVE_FG}%{F-}  "  # top bar
+	RSEP="  %{F$INACTIVE_FG}%{F-}  "
+else
+	LSEP="  %{F$INACTIVE_FG}%{F-}  "  # bottom bar
+	RSEP="  %{F$INACTIVE_FG}%{F-}  "
+fi
+
+# ....................................................................... Clocks
+
+seconds() { tic=${line#*| }; tic=${tic%|*}; }
+
+tape() {
+	tic=${line#*|}
+	tic=${tic%|*}
+	if [ "${tic%%:*}" -lt 10 ] ;then
+		# hours 0 - 9, cycle aligns on ten second intervals
+		len=11
+		pos=${tic##*:}
+		# pos=$(( ${pos%??} % 10 ))  # crashes in dash (memory leak on arm?)
+		pos=$(echo "${pos%??} % 10" | bc)
+		[ $pos = 0 ] && pos=10
+	else
+		# hours 10 - 12, format string continously cycles
+		len=12
+		pos=$(( ${pos:-0} + 1 ))
+		[ $pos -gt 10 ] && pos=0
+	fi
+	tic="$(echo "$tic" | tail -c $(( len - pos )))$(echo "$tic" | head -c $pos)"
+}
+
+# ................................................................ Weather watch
+
+weather() { unset update_weather; conky weather panel | sed "s/\^/$RSEP/g" >/tmp/${WEATHER##*/} & }
+
+# initialize (for overlay redraw), see draw root
+[ -e $WEATHER ] && { [ -s /tmp/${WEATHER##*/} ] && current_weather=$(cat /tmp/${WEATHER##*/}); weather; }
+
+# ...................................................... Clock & weather refresh
+
+# tic indicator: none (unset), dot, circle, square, bar, tape, seconds
+[ -e $TICKER ] && { TIC=$(cat $TICKER); TIC=${TIC:-tape}; }
+
+currently() {
+	# prevent lemonbar race to catch up (impossible to force race condition to test..)
+	[ ${EPOCH#S} -lt $(date +%s -d "-1 seconds") ] && { unset EPOCH; return; }
+	line="S${line#$EPOCH}"  # restore S record format (sans epoch time)
+
+	[ "$(xtitle)" = '' ] && active_window  # no focused window
+
+	line=$(echo "$line" | sed -r 's/#[{]/%{/g; s/(AM|PM)/\L\1/')  # recover lemonbar format strings, see clock below
+
+	unset clock
+	if [ $TIC ] ;then
+		case $TIC in
+			s*  ) seconds ;;
+			t*  ) tape    ;;
+		esac
+		clock="%{F$DEFAULT_FG}$tic%{F-}"
+	fi
+
+	# refresh weather every 10 minutes
+	if [ -e $WEATHER ] ;then
+		minute=${line#*:?}    # hh:mm:ss.* -> m:ss.*
+		case ${minute%:*} in  #            -> m
+			0 ) [ $update_weather ] && weather ;;
+			* ) update_weather=true ;;
+		esac
+	fi
+	[ -s /tmp/${WEATHER##*/} ] && [ "$(cat /tmp/${WEATHER##*/})" != '' ] && current_weather=$(cat /tmp/${WEATHER##*/})  # prevent blanking during update, see weather()
+
+	line="${line%%^*}${current_weather}${line#*^}"
+	line="${line%%|*}${clock}%{F-}${line##*|}"
+	system="%{F$DEFAULT_FG}%{B$DEFAULT_BG}${line#?}%{B-}%{F-}"
+}
+
+# ............................................................... FIFO read loop
+
+panel() {
+	while read -r line ;do
+		EPOCH=${line%%^*}
+		currently
+		
+		[ $EPOCH ] && printf "%s\n" "%{r}${system}"
+		unset line EPOCH
+	done
+}
+
+# ......................................................................... FIFO
+
+# initialize fifo
+[ -e $PANEL_FIFO:$fifo ] && rm -f $PANEL_FIFO:$fifo
+mkfifo $PANEL_FIFO:$fifo
+
+# note physical linebreaks for each format specification (to accomodate slow processors, notably arm)
+# NOTE: lemonbar %{F..} changed to #{F..} for alpine "clock" (fails on % char, see function currently)
+# NOTE: added time since epoch for race condition trap
+case $TIC in
+	se* ) clock -i 1 -sf "S%s^${RSEP}#{F$ACTIVE_FG}| %-I:%M %S%p|#{F-}${RSEP}%a %-d %b '%y" >$PANEL_FIFO:$fifo & ;;
+	t*  ) clock -i 1 -sf "S%s^${RSEP}#{F$ACTIVE_FG}| %-I:%M:%S%p|#{F-}${RSEP}%a %-d %b '%y" >$PANEL_FIFO:$fifo & ;;
+	*   ) clock -i 1 -sf "S%s^${RSEP}#{F$ACTIVE_FG}%-I:%M#{F-} %p|%S|${RSEP}%a %-d %b '%y"  >$PANEL_FIFO:$fifo & ;;
+esac
+
+cat $PANEL_FIFO:$fifo | panel | handlebar &
+
+# kak: filetype=sh

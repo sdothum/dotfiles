@@ -7,6 +7,7 @@
 
 # ................................................................ Refresh panel
 
+# xtitle -f "X%s" >$(cat $PANEL_FIFO)
 echo "X" >$(cat $PANEL_FIFO)
 
 # kak: filetype=sh

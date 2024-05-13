@@ -33,6 +33,9 @@ class="wiki"
 	window desktop $(chef desktop "WIKI") ;\
 	layout tile 3 wiki
 
+class="krita"
+	window desktop $(chef desktop "DESK")
+
 class="mpv"
 	xdotool key Super+Shift+z
 

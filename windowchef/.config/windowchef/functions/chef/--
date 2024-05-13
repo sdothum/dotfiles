@@ -1,5 +1,5 @@
 # sdothum - 2016 (c) wtfpl
-# [ $TRACE ] && CHILD="chef/panel $@" . $PARENT
+# [ $TRACE ] && CHILD="chef/-- $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════

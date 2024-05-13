@@ -6,5 +6,11 @@
 
 # ................................................................. Toggle panel
 
-xdotool search --onlyvisible --limit 1 --maxdepth 1 --name "lemonbar" windowunmap >/dev/null || xdotool search --limit 1 --maxdepth 1 --name "lemonbar" windowmap >/dev/null
+if [ -e $SESSION/panel:single ] ;then
+	xdotool search --onlyvisible --limit 1 --maxdepth 1 --name "lemonbar" windowunmap >/dev/null || xdotool search --limit 1 --maxdepth 1 --name "lemonbar" windowmap >/dev/null
+else
+	xdotool search --onlyvisible --limit 1 --maxdepth 1 --name "lemonbar:topbar" windowunmap >/dev/null || xdotool search --limit 1 --maxdepth 1 --name "lemonbar:topbar" windowmap >/dev/null
+	xdotool search --onlyvisible --limit 1 --maxdepth 1 --name "lemonbar:bottombar" windowunmap >/dev/null || xdotool search --limit 1 --maxdepth 1 --name "lemonbar:bottombar" windowmap >/dev/null
+fi
+
 # kak: filetype=sh
