@@ -60,8 +60,6 @@ currently() {
 	[ ${EPOCH#S} -lt $(date +%s -d "-1 seconds") ] && { unset EPOCH; return; }
 	line="S${line#$EPOCH}"  # restore S record format (sans epoch time)
 
-	[ "$(xtitle)" = '' ] && active_window  # no focused window
-
 	line=$(echo "$line" | sed -r 's/#[{]/%{/g; s/(AM|PM)/\L\1/')  # recover lemonbar format strings, see clock below
 
 	unset clock

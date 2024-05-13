@@ -6,9 +6,13 @@
 
 # ................................................................ Restore panel
 
-pkill -KILL -f "panel .*"
+# Usage: restore panel [<panel>]
 
+pkill -KILL -f "$WM/panel .*"
+
+[ $1 ] && echo $1 >$SESSION/panel
 [ -e $SESSION/panel ] || exit
+
 panel=$(cat $SESSION/panel)
 draw panel $panel
 

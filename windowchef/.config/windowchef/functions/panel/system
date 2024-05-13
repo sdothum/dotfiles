@@ -84,7 +84,7 @@ currently() {
 		set -- ${viewscreen}
 		unset desktops
 		for j in $DESKTOPS ;do
-			[ $counter = $j ] && icon="${VIEWSCREEN}$tumble" || icon=$2
+			[ $counter = $j ] && { ! has_windows $j && icon="${VIEWSCREEN}$tumble" || icon="${VIEWSCREEN}$2"; } || icon=$2
 			desktops="${desktops}${TAG_PAD}$1${icon}%{-u}%{U-}%{B-}%{F-}"
 			shift 2
 		done
