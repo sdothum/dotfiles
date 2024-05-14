@@ -13,14 +13,19 @@
 [ $1 ] && panel_offsetY=$1
 
 if [ -e $STARTREK ] ;then
-	OCCUPIED='■'
-	FREE='□'
-	CURRENT='□'  # active and FREE
+	# OCCUPIED='■'
+	# FREE='□'
+	# CURRENT='□'  # active and FREE
+	OCCUPIED=''
+	FREE=''
+	CURRENT=''  # active and FREE
 else
 	OCCUPIED='●'
 	FREE='○'
 	CURRENT='◯'  # active and FREE
 fi
+
+# [ $tagcount -gt 7 ] && TAG_PAD=${TAG_PAD#?}
 
 # ............................................................ Desktops (groups)
 

@@ -11,19 +11,22 @@ class="calibre"
 	window desktop $(chef desktop "BOOK") ;\
 	window @0.1 snap center
 
-class="mail"
+name="mail"
 	window desktop $(chef desktop "MAIL") ;\
 	window size monocle
 
 class="email"
 	window desktop $(chef desktop "MAIL") ;\
-	window tile 3 email
+	window tile 3 2
 
 class="feh"
 	window size monocle
 
 class="Firefox"
 	window size monocle
+
+class="gimp"
+	window desktop $(chef desktop "DESK")
 
 class="kak"
 	window desktop $(chef desktop "CODE") ;\
