@@ -48,7 +48,7 @@ active_window() {
 		fi
 	fi
 	if has_visible $active || has_nilgroup ;then
-		[ "$(xtitle)" = '' ] && { waitron window_focus_last; return; }  # will trigger X record
+		[ "$(xtitle)" = '' ] && { waitron window_cycle; return; }
 		name=$(xtitle | sed -r "s/^(.)/\u\1/; s/'(.*)'/\1/")  # trap unfocused error messages & discard xtitle quotes
 		[ "$name" ] && name="${LSEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}$name%{F-}%{B-}%{F$DEFAULT_FG}"
 		title="${title}${name}"

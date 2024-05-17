@@ -75,6 +75,9 @@ super + ctrl + {p,l,n,f}
 super + {_,ctrl} + a
 	conky clock {_, toggle}
 
+super + shift + a
+	menu reminder
+
 super + {_,ctrl} + b
 	qutebrowser {_, closeall}
 
@@ -105,7 +108,7 @@ super + {alt,ctrl,shift} + g
 	window snap center {vertical,left, right}
 
 super + h
-	xdotool search --onlyvisible --classname "Surf" && window tile 4 1 || hangouts
+	xdotool search --onlyvisible --classname "Surf" windowactivate && window tile 4 1 || hangouts
 
 super + {_,shift} + i
 	{window hide, menu unhide} ;\

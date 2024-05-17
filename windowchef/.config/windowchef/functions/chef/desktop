@@ -8,7 +8,7 @@
 
 # Usage: chef desktop [<desktop> | <label> | count]
 
-GROUPS="DESK CHAT CODE MAIL BOOK WIKI BRAW CHEF ''"  # '' end of groups SEE: draw panel and windowchefrc
+GROUPS="DESK CHAT CODE MAIL BOOK WIKI DRAW CHEF ''"  # '' end of groups SEE: draw panel and windowchefrc
 
 label() { echo "$GROUPS" | cut -d' ' -f$1; }
 index() { echo "$GROUPS" | tr ' ' '\n' | grep -n $1 | cut -d: -f1; }  # NOTE: assumes only valid script calls SEE: rulerrc!

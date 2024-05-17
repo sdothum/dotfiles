@@ -122,7 +122,7 @@ panel() {
 [ -e $PANEL_FIFO:$fifo ] && rm -f $PANEL_FIFO:$fifo
 mkfifo $PANEL_FIFO:$fifo
 
-# event driven panel update
+# desktop panel update
 clock -i 1 -sf "S%s" >$PANEL_FIFO:$fifo &
 
 # cpu usage, cpu temperature, memory usage stats

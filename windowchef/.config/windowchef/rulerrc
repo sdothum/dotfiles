@@ -26,7 +26,7 @@ class="Firefox"
 	window size monocle
 
 class="gimp"
-	window desktop $(chef desktop "DESK")
+	window desktop $(chef desktop "DRAW")
 
 class="kak"
 	window desktop $(chef desktop "CODE") ;\
@@ -37,7 +37,7 @@ class="wiki"
 	layout tile 3 wiki
 
 class="krita"
-	window desktop $(chef desktop "DESK")
+	window desktop $(chef desktop "DRAW")
 
 class="mpv"
 	xdotool key Super+Shift+z
