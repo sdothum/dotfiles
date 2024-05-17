@@ -68,9 +68,8 @@ cpu_temp=$(cat /tmp/${STAT##*/}:temp)
 cpu_speed=$(cat /tmp/${STAT##*/}:speed)
 mem_usage=$(cat /tmp/${STAT##*/}:mem)
 
-TUMBLING="▶ ◢ ▼ ◣ ◀ ◤ ▲ ◥"
+beacon="▶"
 counter=0   # desktops
-cardinal=0  # directioons
 
 currently() {
 	# prevent lemonbar race to catch up (impossible to force race condition to test..)
@@ -78,18 +77,12 @@ currently() {
 	desktops
 
 	if [ -e $STARTREK ] ;then
-		[ $counter -lt $tagcount ] && counter=$(( counter + 1 )) || { counter=1; cardinal=1; }
-		if [ -e $STARTREK:cardinal ] ;then  # very silly tumbling triangle.. works best with 8 workspaces ¯\(°_o)/¯
-			[ $cardinal -lt 8 ] && cardinal=$(( cardinal + 1 )) || cardinal=1
-			tumble=$(echo $TUMBLING | cut -d' ' -f$cardinal)
-		else
-			# tumble='⬤'
-			tumble=${TUMBLING%% *}
-		fi
+		[ $counter -lt $tagcount ] && counter=$(( counter + 1 )) || counter=1
+
 		set -- ${viewscreen}
 		unset desktops
 		for j in $DESKTOPS ;do
-			[ $counter = $j ] && { ! has_windows $j && icon="${VIEWSCREEN}$tumble" || icon="${VIEWSCREEN}$2"; } || icon=$2
+			[ $j = $counter ] && { ! has_windows $j && icon="${VIEWSCREEN}$beacon" || icon="${VIEWSCREEN}$2"; } || icon=$2
 			desktops="${desktops}${TAG_PAD}$1${icon}%{-u}%{U-}%{B-}%{F-}"
 			shift 2
 		done
@@ -110,7 +103,6 @@ panel() {
 			!*         ) echo "$cpu_usage" >/tmp/${STAT##*/}:cpu; echo "$cpu_temp" >/tmp/${STAT##*/}:temp; echo "$mem_usage" >/tmp/${STAT##*/}:mem ;;  # save stats for draw root redraw
 		esac
 		
-		# [ "$desktops" ] || desktops
 		[ $EPOCH ] && printf "%s\n" "%{c}${desktops}${stat}"
 		unset line EPOCH
 	done
