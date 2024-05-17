@@ -6,7 +6,7 @@
 
 # ....................................................... KOReader metadata edit
 
-usage() { usage: "$(basename $0) [clearpages] [t'op | b'ottom <margin>] [l'inespacing <percent>] [s'yncmargins 0|1] [f'ont | h'eaderfont <font>] [font g'amma <gamma>]"; exit 1; }
+usage() { usage: "$(basename $0) [clearPages] [t'op | b'ottom <margin>] [l'ineSpacing <percent>] [s'yncMargins 0|1] [f'ont | h'eaderFont <font>] [font g'amma <gamma>]"; exit 1; }
 
 # update sdr files to match ever changing default settings :)
 
@@ -25,23 +25,34 @@ string() {
 	echo $1
 }
 
-update()     { ditto "$1" "$2"; sudo find -regex '.*metadata.epub.lua' -exec sed -i "$2" {} \; ; }
-gestures()   { ditto gestures "$1"; sed -i "$2" ../.adds/koreader/settings/gestures.lua; }
+sdr()      { ifno "$1 .. $2" && skip=true || sudo find -regex '.*metadata.epub.lua' -exec sed -i "$2" {} \; ; }
+gestures() { ditto gestures "$1"; sed -i "$2" ../.adds/koreader/settings/gestures.lua; }
+settings() { ditto settings "$1"; sed -i "$2" ../.adds/koreader/settings.reader.lua; }
 
-clearpages() { update 'clearpages' '/\"doc_pages\"/d; /\"pages\"/d'; }  # force page count refresh
+clearpages() { sdr 'clearpages' '/\"doc_pages\"/d; /\"pages\"/d'; }  # force page count refresh
 
 [ $1 ] || usage
-ifno "update koreader ebook.sdr files" && exit
+
 while [ $1 ] ;do
+	unset skip
 	case $1 in
 		c*   ) clearpages; shift; continue ;;
-		t*   ) margin=$(number $2)  && update 'topmargin' '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'    || usage ;;
-		b*   ) margin=$(number $2)  && update 'bottommargin' '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/' || usage ;;
-		l*   ) percent=$(number $2) && update 'linespacing' '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'  || usage; clearpages ;;
-		s*   ) sync=$(binary $2)    && update 'syncmargins' '/\"copt_sync_t_b_page_margins\"/s/[01]/'${sync}'/'    || usage ;;
-		f*   ) font=$(string $2)    && update 'font' '/\"font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'                 || usage; clearpages ;;
-		h*   ) font=$(string $2)    && update 'headerfont' '/\"header_font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'    || usage ;;
-		g*   ) gamma=$(number $2)   && update 'fontgamma' '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'        || usage ;;
+		t*   ) margin=$(number $2)  && sdr 'topmargin' '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'    || usage ;;
+		b*   ) margin=$(number $2)  && sdr 'bottommargin' '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/' || usage ;;
+		l*   ) percent=$(number $2) && sdr 'linespacing' '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'  || usage; clearpages=true ;;
+		s*   ) sync=$(binary $2)    && sdr 'syncmargins' '/\"copt_sync_t_b_page_margins\"/s/[01]/'${sync}'/'    || usage ;;
+		f*   ) font=$(string $2)    && sdr 'font' '/\"font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'                 || usage; clearpages=true ;;
+		h*   ) font=$(string $2)    && sdr 'headerfont' '/\"header_font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'    || usage ;;
+		g*   ) gamma=$(number $2)   && sdr 'fontgamma' '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'        || usage ;;
+		*    ) usage ;;
+	esac
+	[ $skip ] && { shift 2; continue; }
+	case $1 in
+		t*   ) margin=$(number $2)  && settings 'topmargin' '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'    ;;
+		b*   ) margin=$(number $2)  && settings 'bottommargin' '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/' ;;
+		l*   ) percent=$(number $2) && settings 'linespacing' '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'  ;;
+		h*   ) font=$(string $2)    && settings 'font' '/\"cre_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                  ;;
+		g*   ) gamma=$(number $2)   && settings 'fontgamma' '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'        ;;
 		*    ) usage ;;
 	esac
 	case $1 in
@@ -54,5 +65,7 @@ while [ $1 ] ;do
 	esac
 	shift 2
 done
+
+[ $clearpages ] && clearpages
 
 # kak: filetype=sh

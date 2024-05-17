@@ -499,16 +499,7 @@ menu  = $weight
 css   = $weight
 "
 
-[ -e $MAKE_INSTALL ] &&  ditto make_install "build $family"|| { ifyes "build $family" || usage; }
-# install iosevka repo
-if exists -r $REPO ;then
-	cd $REPO
-	[ -e $MAKE_INSTALL ] || { ifno 'sync iosevka repo' || git pull; }
-else
-	cd ${REPO%/*}
-	git clone --depth 1 https://github.com/be5invis/Iosevka.git
-	cd Iosevka
-fi
+cd $REPO
 # rm -rf build dist 2>/dev/null
 
 # a tweaked :-) atkinson hyperlegible font character emulation

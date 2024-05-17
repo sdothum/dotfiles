@@ -6,6 +6,8 @@
 
 # ......................................................................... Link
 
+# Usage: ln_repos [-f]
+
 # ignore repo sublinks and misc packages
 ignore='dotfiles/[^.]|kb-layout|kindle|node_modules|qmk|runtime|src|void-packages/[^.]'
 
@@ -14,7 +16,7 @@ cd /home/depot
 for i in $(find -name '*git' | grep -Ev "$ignore") ;do
 	git=$(dirname $i)
 	[ -e ${git##*/} ] && continue
-	ln -sv ${git#./} .
+	ln -sv $1 ${git#./} .
 done
 
 # kak: filetype=sh

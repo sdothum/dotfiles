@@ -20,7 +20,6 @@ on() {
 	touch $SESSION/nvidia_fan
 }
 
-	
 case $1 in
 	toggle ) [ -e $SESSION/nvidia_fan ] && off || on ;;
 	off    ) off ;;
