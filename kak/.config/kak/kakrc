@@ -39,7 +39,8 @@ if %{ [ -n "$UNPLUG" ] } %{
 # Plugins
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# Ncurses plugins ..............................................................
+# Ncurses plugins
+# ═══════════════
 
 if %{ [ -z "$UNPLUG" ] } %{
 	source "%val{config}/bundle/kak-bundle/rc/kak-bundle.kak"
@@ -194,7 +195,8 @@ if %{ [ -z "$UNPLUG" ] } %{
 
 }
 
-# Terminal $DISPLAY plugins ....................................................
+# Terminal $DISPLAY plugins
+# ═════════════════════════
 
 if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] } %{
 
@@ -403,6 +405,7 @@ map global normal '#' ': enter-user-mode format<ret>'
 
 # .................................................................... Selection
 
+map global user   S 'xS\n<ret>s'    -docstring 'split:select:'
 map global user   / '/(?i)'         -docstring 'case insensitive search'
 map global user   <a-/> '<a-/>(?i)' -docstring 'case insensitive search'
 map global user   ? '?(?i)'         -docstring 'case insensitive extend search'
