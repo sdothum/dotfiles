@@ -38,6 +38,9 @@ if %{ [ -n "$UNPLUG" ] } %{
 
 # Plugins
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Ncurses plugins ..............................................................
+
 if %{ [ -z "$UNPLUG" ] } %{
 	source "%val{config}/bundle/kak-bundle/rc/kak-bundle.kak"
 	bundle-noload kak-bundle https://github.com/jdugan6240/kak-bundle
@@ -84,6 +87,116 @@ if %{ [ -z "$UNPLUG" ] } %{
 
 	# ......................................................... forth interpreter
 	bundle kak-stkmach https://gitlab.com/kstr0k/kak-stkmach
+
+	# ........................................................... lua interpreter
+	bundle luar https://github.com/gustavo-hms/luar.git %{
+		require-module luar
+		set-option global luar_interpreter luajit
+	}
+
+	# ...................................................................... mark
+	bundle kakoune-mark https://gitlab.com/fsub/kakoune-mark.git %{
+		map global user m ': mark-word<ret>'  -docstring "(un)mark word / clear marks"
+		map global user M ': mark-clear<ret>' -docstring "(un)mark word / clear marks"
+	}
+
+	# ................................................................ move lines
+	bundle kak-move-lines https://git.sr.ht/~raiguard/kak-move-lines %{
+		map global normal <c-up> ': move-lines-up %val{count}<ret>'     -docstring 'shift up'
+		map global normal <c-down> ': move-lines-down %val{count}<ret>' -docstring 'shift down'
+		map global normal <c-left> '<'                                  -docstring 'shift left'  # finger convenience :)
+		map global normal <c-right> '>'                                 -docstring 'shift right'
+	}
+
+	# .................................................... peneira (fuzzy finder)
+	bundle peneira https://github.com/gustavo-hms/peneira.git %{
+		require-module luar
+		require-module peneira
+		set-option global peneira_files_command "rg --files --sort=path"  # single threaded --sort is fast enough for my folder organization
+
+		# HACK: multi-client focus switching causes peneira to lose active client buffer directory
+		define-command peneira-resync %{
+			change-directory-current-buffer  # handled by hook FocusIn above, otherwise required
+			buffer *debug*
+			execute-keys ga
+		}
+
+		define-command buffers %{
+			peneira-resync
+			peneira 'buffers: ' %{ printf '%s\n' $kak_quoted_buflist } %{ buffer %arg{1} }
+		}
+
+		define-command files %{
+			peneira-resync
+			peneira-files -hide-opened
+		}
+
+		map global user b ': buffers<ret>' -docstring 'buffers'
+		map global user e ': files<ret>'   -docstring 'edit file'
+	}
+
+	# ......................................................... phantom selection
+	bundle kakoune-phantom-selection https://github.com/occivink/kakoune-phantom-selection.git
+
+	# ............................................................... search docs
+	bundle search-doc.kak https://github.com/jbomanson/search-doc.kak.git %{
+		require-module search-doc
+		alias global sd search-doc
+	}
+
+	# .................................................................. smarttab
+	bundle smarttab.kak https://github.com/andreyorst/smarttab.kak.git %{
+		require-module smarttab
+		set-option global softtabstop 3
+
+		hook global BufOpenFile .* smarttab
+		hook global BufNewFile  .* smarttab
+	}
+
+	# .................................................................. snippets
+	bundle kakoune-snippets https://github.com/occivink/kakoune-snippets.git %{
+		set-option global snippets_auto_expand true
+
+		define-command user-snippets %{
+			set buffer snippets %opt{snippets}  # keep any global snippets
+			map global user s ': snippets-info<ret>' -docstring 'Snippets'
+		}
+
+		hook -once global BufSetOption filetype=sh %{
+			user-snippets
+			set -add buffer snippets 'usage:' 'us^'     %{ snippets-insert %{usage() { usage: "$(basename $0) ${1:options}"; exit 1; } }}
+			set -add buffer snippets 'usage:pipe' 'up^' %{ snippets-insert %{usage() { usage: "$(basename $0) ${1:options}" | usage:pipe
+			exit 1
+		} }}
+		}
+
+		hook -once global BufSetOption filetype=markdown %{
+			user-snippets
+			set -add buffer snippets 'date' 'da^'       %{ snippets-insert %sh{ date '+## %A, %d %B %Y' | tr '[:upper:]' '[:lower:]' }}
+			set -add buffer snippets 'img' 'im^'        %{ snippets-insert %{![${1:img}](/images/${1:img}.jpg) }}
+			set -add buffer snippets 'search' 'se^'     %{ snippets-insert %{[${1:search}](http://thedarnedestthing.com/search?query=${1:search}) }}
+		}
+	}
+
+	# ................................................................ sudo-write
+	bundle kakoune-sudo-write https://github.com/occivink/kakoune-sudo-write.git %{
+		map global user W ': sudo-write<ret>' -docstring 'sudo save'
+	}
+
+	# ............................................................... tree-sitter
+	bundle-install-hook kak-tree-sitter %{
+		cargo install kak-tree-sitter
+		cargo install ktsctl
+	}
+	bundle kak-tree-sitter https://github.com/phaazon/kak-tree-sitter.git %{
+		nop eval %sh{ kak-tree-sitter -dks --session $kak_session }
+	}
+
+}
+
+# Terminal $DISPLAY plugins ....................................................
+
+if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] } %{
 
 	# ...................................................... kakboard (clipboard)
 	bundle kakboard https://github.com/lePerdu/kakboard.git %{
@@ -144,118 +257,15 @@ if %{ [ -z "$UNPLUG" ] } %{
 		define-command lsp-restart %{ lsp-stop; lsp-start } -docstring 'restart lsp server'
 	}
 
-	# ........................................................... lua interpreter
-	bundle luar https://github.com/gustavo-hms/luar.git %{
-		require-module luar
-		set-option global luar_interpreter luajit
-	}
-
-	# ...................................................................... mark
-	bundle kakoune-mark https://gitlab.com/fsub/kakoune-mark.git %{
-		map global user m ': mark-word<ret>'  -docstring "(un)mark word / clear marks"
-		map global user M ': mark-clear<ret>' -docstring "(un)mark word / clear marks"
-	}
-
-	# ................................................................ move lines
-	bundle kak-move-lines https://git.sr.ht/~raiguard/kak-move-lines %{
-		map global normal <c-up> ': move-lines-up %val{count}<ret>'     -docstring 'shift up'
-		map global normal <c-down> ': move-lines-down %val{count}<ret>' -docstring 'shift down'
-		map global normal <c-left> '<'                                  -docstring 'shift left'  # finger convenience :)
-		map global normal <c-right> '>'                                 -docstring 'shift right'
-	}
-
-	# .................................................... peneira (fuzzy finder)
-	bundle peneira https://github.com/gustavo-hms/peneira.git %{
-		require-module luar
-		require-module peneira
-		set-option global peneira_files_command "rg --files --sort=path"  # single threaded --sort is fast enough for my folder organization
-
-		# HACK: multi-client focus switching causes peneira to lose active client buffer directory
-		define-command peneira-resync %{
-			change-directory-current-buffer  # handled by hook FocusIn above, otherwise required
-			buffer *debug*
-			execute-keys ga
-		}
-
-		define-command buffers %{
-			peneira-resync
-			peneira 'buffers: ' %{ printf '%s\n' $kak_quoted_buflist } %{ buffer %arg{1} }
-		}
-
-		define-command files %{
-			peneira-resync
-			peneira-files -hide-opened
-		}
-
-		map global user b ': buffers<ret>' -docstring 'buffers'
-		map global user e ': files<ret>'   -docstring 'edit file'
-	}
-
-	# ......................................................... phantom selection
-	bundle kakoune-phantom-selection https://github.com/occivink/kakoune-phantom-selection.git
-
 	# ..................................................................... popup
 	bundle popup.kak https://github.com/enricozb/popup.kak.git %{
 		evaluate-commands %sh{kak-popup init}
-	}
-
-	# ............................................................... search docs
-	bundle search-doc.kak https://github.com/jbomanson/search-doc.kak.git %{
-		require-module search-doc
-		alias global sd search-doc
-	}
-
-	# .................................................................. smarttab
-	bundle smarttab.kak https://github.com/andreyorst/smarttab.kak.git %{
-		require-module smarttab
-		set-option global softtabstop 3
-
-		hook global BufOpenFile .* smarttab
-		hook global BufNewFile  .* smarttab
-	}
-
-	# .................................................................. snippets
-	bundle kakoune-snippets https://github.com/occivink/kakoune-snippets.git %{
-		set-option global snippets_auto_expand true
-
-		define-command user-snippets %{
-			set buffer snippets %opt{snippets}  # keep any global snippets
-			map global user s ': snippets-info<ret>' -docstring 'Snippets'
-		}
-
-		hook -once global BufSetOption filetype=sh %{
-			user-snippets
-			set -add buffer snippets 'usage:' 'us^'     %{ snippets-insert %{usage() { usage: "$(basename $0) ${1:options}"; exit 1; } }}
-			set -add buffer snippets 'usage:pipe' 'up^' %{ snippets-insert %{usage() { usage: "$(basename $0) ${1:options}" | usage:pipe
-			exit 1
-		} }}
-		}
-
-		hook -once global BufSetOption filetype=markdown %{
-			user-snippets
-			set -add buffer snippets 'date' 'da^'       %{ snippets-insert %sh{ date '+## %A, %d %B %Y' | tr '[:upper:]' '[:lower:]' }}
-			set -add buffer snippets 'img' 'im^'        %{ snippets-insert %{![${1:img}](/images/${1:img}.jpg) }}
-			set -add buffer snippets 'search' 'se^'     %{ snippets-insert %{[${1:search}](http://thedarnedestthing.com/search?query=${1:search}) }}
-		}
 	}
 
 	# .................................................................... splash
 	# bundle splash.kak https://github.com/ftonneau/splash.kak.git
 	bundle splash.kak https://github.com/Hjagu09/splash.kak.git
 
-	# ................................................................ sudo-write
-	bundle kakoune-sudo-write https://github.com/occivink/kakoune-sudo-write.git %{
-		map global user W ': sudo-write<ret>' -docstring 'sudo save'
-	}
-
-	# ............................................................... tree-sitter
-	bundle-install-hook kak-tree-sitter %{
-		cargo install kak-tree-sitter
-		cargo install ktsctl
-	}
-	bundle kak-tree-sitter https://github.com/phaazon/kak-tree-sitter.git %{
-		nop eval %sh{ kak-tree-sitter -dks --session $kak_session }
-	}
 }
 
 # Plugins end ..................................................................
