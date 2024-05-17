@@ -5,10 +5,11 @@
 										"THU1", "THU2", "THU3",        "THU4", "THU5", "THU6"
 	],
 	"parameters": {
+		"_comment": "tighten leader_timeout from 750 to counter unexpected ',.' -> ';' autorepeat",
 		"layout_function_name": "LAYOUT_georgi",
 		"chord_timeout": 100,
 		"dance_timeout": 100,
-		"leader_timeout": 750,
+		"leader_timeout": 500,
 		"tap_timeout": 50,
 		"command_max_length": 5,
 		"leader_max_length": 5,
@@ -80,6 +81,7 @@
 				},
 				{
 					"type": "visual_array",
+					"_comment": "str(;) will disable (unknown trigger of) autorepeat of ',.' -> ';'",
 					"keys": ["TOP2", "TOP3", "BOT3", "BOT4", "TOP6", "BOT6", "TOP8", "BOT8"],
 					"dictionary": [
 						["X", " ", " ", " ", " ", " ", "X", "X",         ";"],
