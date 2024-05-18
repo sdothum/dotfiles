@@ -405,7 +405,7 @@ map global normal '#' ': enter-user-mode format<ret>'
 
 # .................................................................... Selection
 
-map global user   S 'xS\n<ret>s'    -docstring 'split:select:'
+map global user   s 'xS\n<ret>s'    -docstring 'split:select:'
 map global user   / '/(?i)'         -docstring 'case insensitive search'
 map global user   <a-/> '<a-/>(?i)' -docstring 'case insensitive search'
 map global user   ? '?(?i)'         -docstring 'case insensitive extend search'
