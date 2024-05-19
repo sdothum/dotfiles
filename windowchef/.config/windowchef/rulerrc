@@ -43,14 +43,14 @@ class="mpv"
 	xdotool key Super+Shift+z
 
 class="pavucontrol"
-	window desktop $(chef desktop "CHEF") ;\
-	window size B6 rotate                 ;\
-	window snap center                    ;\
-	[ -e $WME:pavucontrol ] && exit       ;\
-	touch $WME:pavucontrol                ;\
-	sleep 1                               ;\
-	desktop $(chef desktop "DESK")        ;\
-	waitron group_deactivate $(chef desktop "CHEF")
+	window desktop $(chef desktop "CHEF")                                 ;\
+	window size B6 rotate                                                 ;\
+	window snap center                                                    ;\
+	[ -e $WME:pavucontrol ] && exit                                       ;\
+	touch $WME:pavucontrol                                                ;\
+	xdotool search --onlyvisible --classname "pavucontrol" windowactivate ;\
+	desktop $(chef desktop "CHEF") toggle                                 ;\
+	desktop $(chef desktop "DESK")
 
 class="qutebrowser"
 	window desktop $(desktop) ;\

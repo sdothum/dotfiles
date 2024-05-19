@@ -13,11 +13,9 @@
 [ $1 ] && panel_offsetY=$1
 
 if [ "$panel_offsetY" = "0" ] ;then   # WHY: use of -eq fails comparison(?)
-	LSEP="  %{F$INACTIVE_FG}%{F-}  "  # top bar
-	RSEP="  %{F$INACTIVE_FG}%{F-}  "
+	SEP="  %{F$INACTIVE_FG}%{F-}  "  # top bar
 else
-	LSEP="  %{F$INACTIVE_FG}%{F-}  "  # bottom bar
-	RSEP="  %{F$INACTIVE_FG}%{F-}  "
+	SEP="  %{F$INACTIVE_FG}%{F-}  "  # bottom bar
 fi
 
 # ............................................................... Current window
@@ -32,25 +30,25 @@ active_window() {
 	active=$(desktop)
 	if has_windows $active ;then
 		if deactivated $active ;then
-			title="${title}${LSEP}%{U$DEFAULT_FG}%{+u}$(visible $active)%{-u}%{U-}"
+			title="${title}${SEP}%{U$DEFAULT_FG}%{+u}$(visible $active)%{-u}%{U-}"
 		else
-			title="${title}${LSEP}$(visible $active)"
+			title="${title}${SEP}$(visible $active)"
 		fi
 	fi
 	if has_hidden ;then
-		title="${title}${LSEP}%{U$DEFAULT_FG}%{+u}$(hidden)%{-u}%{U-}"
+		title="${title}${SEP}%{U$DEFAULT_FG}%{+u}$(hidden)%{-u}%{U-}"
 	fi
 	if has_nilgroup ;then
 		if has_hidden ;then
 			title="${title}  -$(nilgroup)"  # group -1 windows
 		else
-			title="${title}${LSEP}-$(nilgroup)"  # group -1 windows
+			title="${title}${SEP}-$(nilgroup)"  # group -1 windows
 		fi
 	fi
 	if has_visible $active || has_nilgroup ;then
 		[ "$(xtitle)" = '' ] && { waitron window_cycle; return; }
 		name=$(xtitle | sed -r "s/^(.)/\u\1/; s/'(.*)'/\1/")  # trap unfocused error messages & discard xtitle quotes
-		[ "$name" ] && name="${LSEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}$name%{F-}%{B-}%{F$DEFAULT_FG}"
+		[ "$name" ] && name="${SEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}$name%{F-}%{B-}%{F$DEFAULT_FG}"
 		title="${title}${name}"
 	fi
 }

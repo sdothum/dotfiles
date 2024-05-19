@@ -13,11 +13,9 @@
 [ $1 ] && panel_offsetY=$1
 
 if [ "$panel_offsetY" = "0" ] ;then   # WHY: use of -eq fails comparison(?)
-	LSEP="  %{F$INACTIVE_FG}%{F-}  "  # top bar
-	RSEP="  %{F$INACTIVE_FG}%{F-}  "
+	SEP="  %{F$INACTIVE_FG}%{F-}  "  # top bar
 else
-	LSEP="  %{F$INACTIVE_FG}%{F-}  "  # bottom bar
-	RSEP="  %{F$INACTIVE_FG}%{F-}  "
+	SEP="  %{F$INACTIVE_FG}%{F-}  "  # bottom bar
 fi
 
 # ....................................................................... Clocks
@@ -45,7 +43,7 @@ tape() {
 
 # ................................................................ Weather watch
 
-weather() { unset update_weather; conky weather panel | sed "s/\^/$RSEP/g" >/tmp/${WEATHER##*/} & }
+weather() { unset update_weather; conky weather panel | sed "s/\^/$SEP/g" >/tmp/${WEATHER##*/} & }
 
 # initialize (for overlay redraw), see draw root
 [ -e $WEATHER ] && { [ -s /tmp/${WEATHER##*/} ] && current_weather=$(cat /tmp/${WEATHER##*/}); weather; }
@@ -108,9 +106,9 @@ mkfifo $PANEL_FIFO:$fifo
 # NOTE: lemonbar %{F..} changed to #{F..} for alpine "clock" (fails on % char, see function currently)
 # NOTE: added time since epoch for race condition trap
 case $TIC in
-	se* ) clock -i 1 -sf "S%s^${RSEP}#{F$ACTIVE_FG}| %-I:%M %S%p|#{F-}${RSEP}%a %-d %b '%y" >$PANEL_FIFO:$fifo & ;;
-	t*  ) clock -i 1 -sf "S%s^${RSEP}#{F$ACTIVE_FG}| %-I:%M:%S%p|#{F-}${RSEP}%a %-d %b '%y" >$PANEL_FIFO:$fifo & ;;
-	*   ) clock -i 1 -sf "S%s^${RSEP}#{F$ACTIVE_FG}%-I:%M#{F-} %p|%S|${RSEP}%a %-d %b '%y"  >$PANEL_FIFO:$fifo & ;;
+	se* ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I:%M %S%p|#{F-}${SEP}%a %-d %b '%y" >$PANEL_FIFO:$fifo & ;;
+	t*  ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I:%M:%S%p|#{F-}${SEP}%a %-d %b '%y" >$PANEL_FIFO:$fifo & ;;
+	*   ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}%-I:%M#{F-} %p|%S|${SEP}%a %-d %b '%y"  >$PANEL_FIFO:$fifo & ;;
 esac
 
 cat $PANEL_FIFO:$fifo | panel | handlebar &

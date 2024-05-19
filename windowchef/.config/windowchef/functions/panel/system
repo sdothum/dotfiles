@@ -25,6 +25,8 @@ else
 	CURRENT='◯'  # active and FREE
 fi
 
+SEP="${TAG_PAD} %{F$INACTIVE_FG}%{F-}${TAG_PAD}"
+
 # [ $tagcount -gt 7 ] && TAG_PAD=${TAG_PAD#?}
 
 # ............................................................ Desktops (groups)
@@ -36,16 +38,19 @@ desktops() {
 
 		# NOTE: visible *ONLY* returns correct value for active desktop
 
-		has_windows $i && icon=$OCCUPIED || { [ $i = $(desktop) ] && icon=$CURRENT || icon=$FREE; }
+		has_windows $i && ! deactivated $i && icon=$OCCUPIED || { [ $i = $(desktop) ] && icon=$CURRENT || icon=$FREE; }
 
 		if [ $i = $(desktop) ] ;then
 			has_visible $i && format="${format}%{F$ACTIVE_FG}"
-			deactivated $i && format="${format}%{F$ACTIVE_FG}%{U$ACTIVE_FG}%{+u}"
+			deactivated $i && format="${format}%{U$ACTIVE_FG}%{+u}"
 		elif ! has_windows $i ;then
 			format="${format}%{F$FREE_FG}"
+			deactivated $i && format="${format}%{U$FREE_FG}%{+u}"
 		else
 			format="${format}%{F$INACTIVE_FG}"
+			deactivated $i && format="${format}%{U$INACTIVE_FG}%{+u}"
 		fi
+		deactivated $i && format="${format}%{U$ACTIVE_FG}%{+u}"
 		desktops="${desktops}${TAG_PAD}${format}${icon}%{-u}%{U-}%{B-}%{F-}"
 		viewscreen="${viewscreen} ${format} ${icon}"  # star trek!
 	done
@@ -54,7 +59,7 @@ desktops() {
 
 # .................................................................... Cpu stats
 
-cpu_stat() { stat="${TAG_PAD} $cpu_usage ${STATPAD}$cpu_speed ${STATPAD}$cpu_temp ${STATPAD}$mem_usage${DESKPAD}${TAG_PAD}"; }
+cpu_stat() { stat="$cpu_usage ${STATPAD}$cpu_speed ${STATPAD}$cpu_temp ${STATPAD}$mem_usage${DESKPAD}${TAG_PAD}"; }
 
 # .................................................................. System info
 
@@ -82,7 +87,7 @@ currently() {
 		set -- ${viewscreen}
 		unset desktops
 		for j in $DESKTOPS ;do
-			[ $j = $counter ] && { ! has_windows $j && icon="${VIEWSCREEN}$beacon" || icon="${VIEWSCREEN}$2"; } || icon=$2
+			[ $j = $counter ] && { deactivated $j && icon="${VIEWSCREEN}$OCCUPIED" || { ! has_windows $j && icon="${VIEWSCREEN}$beacon" || icon="${VIEWSCREEN}$2"; } } || icon=$2
 			desktops="${desktops}${TAG_PAD}$1${icon}%{-u}%{U-}%{B-}%{F-}"
 			shift 2
 		done
@@ -103,7 +108,7 @@ panel() {
 			!*         ) echo "$cpu_usage" >/tmp/${STAT##*/}:cpu; echo "$cpu_temp" >/tmp/${STAT##*/}:temp; echo "$mem_usage" >/tmp/${STAT##*/}:mem ;;  # save stats for draw root redraw
 		esac
 		
-		[ $EPOCH ] && printf "%s\n" "%{c}${desktops}${stat}"
+		[ $EPOCH ] && printf "%s\n" "%{c}${desktops}${SEP}${stat}"
 		unset line EPOCH
 	done
 }

@@ -49,6 +49,7 @@ desktop() {
 		specific )
 			[ $desktop -eq $1 ] || current $1
 			waitron group_activate_specific $1
+			rm -f $WME:group:$1:deactivated
 			;;
 		toggle   )
 			[ $desktop -eq $1 ] || current $1
@@ -62,12 +63,14 @@ desktop() {
 			waitron group_remove_all_windows $1  # redundancy trap for unknown group juggling corner cases
 			>$WME:group:$1
 			rm $WME:group:$1:focus
+			rm -f $WME:group:$1:deactivated
 			;;
 		*        )
 			[ $desktop -eq $1 ] && { echo $(pfw) >$WME:group:$1:focus; return; }
 			current $1
 			waitron group_activate $1
 			waitron window_focus $(cat $WME:group:$1:focus)  # restore window stack NOTE: this also fixes calibre mouse focus issue!
+			rm -f $WME:group:$1:deactivated
 			;;
 	esac
 }

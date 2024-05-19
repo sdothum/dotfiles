@@ -28,8 +28,36 @@ ctrl + {_,shift} + space
 ctrl + BackSpace
 	dunstctl history-pop
 
-super + {shift,ctrl} + apostrophe
-	menu {wikis, notes}
+super + {_,shift} + Tab
+	waitron {window_cycle_in_group, window_rev_cycle_in_group} ;\
+	chef -- desktop
+
+alt + {_,super} + Tab
+	waitron {window_cycle, window_rev_cycle} ;\
+	chef -- desktop
+
+super + ctrl + Tab
+	waitron window_focus_last ;\
+	chef -- desktop
+
+super + ctrl + {Left,Down,Up,Right}
+	waitron window_move {-20 0, 0 20, 0 -20, 20 0}
+
+super + ctrl + shift + {Left,Down,Up,Right}
+	waitron window_resize {-20 0, 0 20, 0 -20, 20 0}
+
+super + {Left,Down,Up,Right}
+	waitron window_move {-50 0, 0 50, 0 -50, 50 0}
+
+super + shift + {Left,Down,Up,Right}
+	waitron window_resize {-50 0, 0 50, 0 -50, 50 0}
+
+alt + {Left,Down,Up,Right}
+	waitron window_cardinal_focus {west, south, north, east} ;\
+	chef -- desktop
+
+alt + super + {Left,Down,Up,Right}
+	window swap {west, south, north, east}
 
 super + {0,1}
 	window {revert, rotate}
@@ -52,22 +80,19 @@ alt + {comma,period,0,1,2,3,4,5,6,7,8,9}
 alt + super + {0,1,2,3,4,5,6,7,8,9}
 	desktop {$(desktop), 1, 2, 3, 4, 5, 6, 7, 8, 9} toggle
 
-alt + ctrl + {0,1,2,3,4,5,6,7,8,9}
+alt + shift + {0,1,2,3,4,5,6,7,8,9}
 	desktop {$(desktop), 1, 2, 3, 4, 5, 6, 7, 8, 9} specific
 
-alt + ctrl + super + 0
+alt + ctrl + 0
 	for i in $(seq 1 9) ;do waitron group_activate $i ;done ;\
 	rm $WME:group:?:deactivated 2>/dev/null                 ;\
 	waitron window_focus $(cat $WME:group:$(desktop):focus) ;\
 	desktop $(desktop)
 
-alt + ctrl + super + {1,2,3,4,5,6,7,8,9}
+alt + ctrl + {1,2,3,4,5,6,7,8,9}
 	desktop {1, 2, 3, 4, 5, 6, 7, 8, 9} close ;\
 	waitron window_focus_last                 ;\
 	chef -- desktop
-
-alt + super + {Left,Down,Up,Right}
-	window swap {left, down, up, right}
 
 super + ctrl + {p,l,n,f}
 	window shift {left, down, up, right}
@@ -132,6 +157,10 @@ super + {shift,ctrl} + q
 super + {r,t}
 	window snap {right, left}
 
+super + ctrl + r
+	waitron group_remove_window ;\
+	chef -- desktop
+
 super + s
 	waitron window_focus $(pfw) ;\
 	chef -- desktop
@@ -142,8 +171,11 @@ super + shift + {s,u,v}
 super + shift + t
 	layout fold 5 term
 
-super + {_,ctrl} + u
-	{btop, nvidia_fan toggle}
+super + u
+	xdotool search --onlyvisible --name btop windowclose || btop
+
+super + ctrl + u
+	nvidia_fan toggle
 
 super + {_,ctrl} + v
 	{toggle panel, invert_panel}
@@ -167,6 +199,12 @@ super + w
 super + {shift,ctrl,alt} + w
 	menu {windowfocus, windowtile, windowsize}
 
+super + {_,shift} + z
+	waitron {window_monocle, window_maximize}
+
+super + {shift,ctrl} + apostrophe
+	menu {wikis, notes}
+
 super + Escape
 	notify reloading "sxhkd & ruler" ;\
 	pkill -USR1 -x sxhkd             ;\
@@ -174,41 +212,6 @@ super + Escape
 
 super + shift + Escape
 	kak $HOME/.config/${WM}/*rc
-
-super + ctrl + {Left,Down,Up,Right}
-	waitron window_move {-20 0, 0 20, 0 -20, 20 0}
-
-super + ctrl + shift + {Left,Down,Up,Right}
-	waitron window_resize {-20 0, 0 20, 0 -20, 20 0}
-
-super + {Left,Down,Up,Right}
-	waitron window_move {-50 0, 0 50, 0 -50, 50 0}
-
-super + shift + {Left,Down,Up,Right}
-	waitron window_resize {-50 0, 0 50, 0 -50, 50 0}
-
-alt + {Left,Down,Up,Right}
-	waitron window_cardinal_focus {left, down, up, right} ;\
-	chef -- desktop
-
-super + {_,shift} + z
-	waitron {window_monocle, window_maximize}
-
-super + {_,shift} + Tab
-	waitron {window_cycle_in_group, window_rev_cycle_in_group} ;\
-	chef -- desktop
-
-alt + {_,super} + Tab
-	waitron {window_cycle, window_rev_cycle} ;\
-	chef -- desktop
-
-super + ctrl + Tab
-	waitron window_focus_last ;\
-	chef -- desktop
-
-super + ctrl + r
-	waitron group_remove_window ;\
-	chef -- desktop
 
 # NOTE: restore mouse focus after group_activate (of top of window stack)
 # HACK: bypass QT apps to avoid interference with mouse menus
