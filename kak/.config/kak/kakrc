@@ -160,7 +160,7 @@ if %{ [ -z "$UNPLUG" ] } %{
 
 		define-command user-snippets %{
 			set buffer snippets %opt{snippets}  # keep any global snippets
-			map global user s ': snippets-info<ret>' -docstring 'Snippets'
+			map global user S ': snippets-info<ret>' -docstring 'Snippets'
 		}
 
 		hook -once global BufSetOption filetype=sh %{
