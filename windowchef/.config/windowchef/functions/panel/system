@@ -25,9 +25,7 @@ else
 	CURRENT='◯'  # active and FREE
 fi
 
-SEP="${TAG_PAD} %{F$INACTIVE_FG}%{F-}${TAG_PAD}"
-
-# [ $tagcount -gt 7 ] && TAG_PAD=${TAG_PAD#?}
+SEP="${TAG_PAD} %{F$INACTIVE_FG}%{F-}${TAG_PAD#?}"
 
 # ............................................................ Desktops (groups)
 
@@ -42,15 +40,16 @@ desktops() {
 
 		if [ $i = $(desktop) ] ;then
 			has_visible $i && format="${format}%{F$ACTIVE_FG}"
-			deactivated $i && format="${format}%{U$ACTIVE_FG}%{+u}"
+			# deactivated $i && format="${format}%{U$ACTIVE_FG}%{+u}"
 		elif ! has_windows $i ;then
 			format="${format}%{F$FREE_FG}"
-			deactivated $i && format="${format}%{U$FREE_FG}%{+u}"
+			# deactivated $i && format="${format}%{U$FREE_FG}%{+u}"
 		else
 			format="${format}%{F$INACTIVE_FG}"
-			deactivated $i && format="${format}%{U$INACTIVE_FG}%{+u}"
+			# deactivated $i && format="${format}%{U$INACTIVE_FG}%{+u}"
 		fi
 		deactivated $i && format="${format}%{U$ACTIVE_FG}%{+u}"
+		
 		desktops="${desktops}${TAG_PAD}${format}${icon}%{-u}%{U-}%{B-}%{F-}"
 		viewscreen="${viewscreen} ${format} ${icon}"  # star trek!
 	done
@@ -67,11 +66,10 @@ cpu_stat() { stat="$cpu_usage ${STATPAD}$cpu_speed ${STATPAD}$cpu_temp ${STATPAD
 # $STARTREK == ['', #<color>, $ACTIVE_FG, ..] 
 [ -s $STARTREK ] && eval VIEWSCREEN="%{F$(cat $STARTREK)}"
 
-touch /tmp/${STAT##*/}:cpu /tmp/${STAT##*/}:speed /tmp/${STAT##*/}:temp /tmp/${STAT##*/}:mem
-cpu_usage=$(cat /tmp/${STAT##*/}:cpu | sed 's/^.$/  &/; s/^..$/ &/')  # to avoid line centering shift
-cpu_temp=$(cat /tmp/${STAT##*/}:temp)
-cpu_speed=$(cat /tmp/${STAT##*/}:speed)
-mem_usage=$(cat /tmp/${STAT##*/}:mem)
+cpu_usage=' .00ᵁ'  # to avoid line centering shif on launch
+cpu_temp='__._°'
+cpu_speed='.__ᴳ'
+mem_usage='_._ᴹ'
 
 beacon="▶"
 counter=0   # desktops
