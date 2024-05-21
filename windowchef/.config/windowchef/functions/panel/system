@@ -15,15 +15,20 @@
 if [ -e $STARTREK ] ;then
 	# OCCUPIED='■'
 	# FREE='□'
-	# CURRENT='□'  # active and FREE
+	# CURRENT='□'   # active and FREE
 	OCCUPIED=''
 	FREE=''
-	CURRENT=''  # active and FREE
+	CURRENT=''    # active and FREE
 else
 	OCCUPIED='●'
 	FREE='○'
-	CURRENT='◯'  # active and FREE
+	CURRENT='◯'     # active and FREE
 fi
+
+cpu_usage=' .00ᵁ'  # avoid line centering jitter on launch
+cpu_temp='__._°'
+cpu_speed='.__ᴳ'
+mem_usage='_._ᴹ'
 
 SEP="${TAG_PAD} %{F$INACTIVE_FG}%{F-}${TAG_PAD#?}"
 
@@ -49,27 +54,18 @@ desktops() {
 			# deactivated $i && format="${format}%{U$INACTIVE_FG}%{+u}"
 		fi
 		deactivated $i && format="${format}%{U$ACTIVE_FG}%{+u}"
-		
+
 		desktops="${desktops}${TAG_PAD}${format}${icon}%{-u}%{U-}%{B-}%{F-}"
 		viewscreen="${viewscreen} ${format} ${icon}"  # star trek!
 	done
 	[ -e $STAT ] || desktops="${desktops}$TAG_PAD"  # center tags with triple padding, see $stat
 }
 
-# .................................................................... Cpu stats
-
-cpu_stat() { stat="$cpu_usage ${STATPAD}$cpu_speed ${STATPAD}$cpu_temp ${STATPAD}$mem_usage${DESKPAD}${TAG_PAD}"; }
-
-# .................................................................. System info
+# .................................................................... Animation
 
 # initialize (for overlay redraw), see draw root
 # $STARTREK == ['', #<color>, $ACTIVE_FG, ..] 
 [ -s $STARTREK ] && eval VIEWSCREEN="%{F$(cat $STARTREK)}"
-
-cpu_usage=' .00ᵁ'  # to avoid line centering shif on launch
-cpu_temp='__._°'
-cpu_speed='.__ᴳ'
-mem_usage='_._ᴹ'
 
 beacon="▶"
 counter=0   # desktops
@@ -94,6 +90,8 @@ currently() {
 
 # ............................................................... FIFO read loop
 
+cpu_stat() { stat="$cpu_usage ${STATPAD}$cpu_speed ${STATPAD}$cpu_temp ${STATPAD}$mem_usage${DESKPAD}${TAG_PAD}"; }
+
 panel() {
 	desktops  # initialize
 	while read -r line ;do
@@ -103,9 +101,8 @@ panel() {
 			T*         ) cpu_temp=${line#?};  cpu_stat ;;
 			C*         ) cpu_speed=${line#?}; cpu_stat ;;
 			M*         ) mem_usage=${line#?}; cpu_stat ;;
-			!*         ) echo "$cpu_usage" >/tmp/${STAT##*/}:cpu; echo "$cpu_temp" >/tmp/${STAT##*/}:temp; echo "$mem_usage" >/tmp/${STAT##*/}:mem ;;  # save stats for draw root redraw
 		esac
-		
+
 		[ $EPOCH ] && printf "%s\n" "%{c}${desktops}${SEP}${stat}"
 		unset line EPOCH
 	done
