@@ -9,7 +9,7 @@
 		"layout_function_name": "LAYOUT_georgi",
 		"chord_timeout": 100,
 		"dance_timeout": 100,
-		"leader_timeout": 500,
+		"leader_timeout": 450,
 		"tap_timeout": 50,
 		"command_max_length": 5,
 		"leader_max_length": 5,
