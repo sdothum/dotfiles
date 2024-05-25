@@ -1,0 +1,4 @@
+type        = scripted
+command     = /etc/dinit.d/scripts/apparmor.sh
+restart     = false
+waits-for   = auxfilesystems

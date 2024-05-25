@@ -1,0 +1,5 @@
+type            = process
+command         = /usr/bin/snapperd
+smooth-recovery = true
+logfile         = /var/log/dinit/snapperd.log
+after           = loginready

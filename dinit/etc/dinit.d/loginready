@@ -1,0 +1,9 @@
+# Virtual service run before login is enabled.
+
+type = internal
+restart = false
+options = runs-on-console
+
+depends-on = rcboot
+after = dbusd
+after = metalog

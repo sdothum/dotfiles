@@ -1,0 +1,5 @@
+type            = process
+command         = /usr/local/bin/pwrstatd
+smooth-recovery = true
+logfile         = /var/log/dinit/powerpanel.log
+after           = loginready

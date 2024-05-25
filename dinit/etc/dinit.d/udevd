@@ -1,0 +1,6 @@
+type = scripted
+command = /etc/dinit.d/scripts/udevd.sh start
+stop-command = /etc/dinit.d/scripts/udevd.sh stop
+restart = false
+depends-on = early-filesystems
+options = shares-console

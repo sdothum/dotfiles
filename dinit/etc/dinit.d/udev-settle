@@ -1,0 +1,5 @@
+type = scripted
+command = /usr/bin/udevadm settle
+restart = false
+depends-on = udev-trigger
+options = shares-console
