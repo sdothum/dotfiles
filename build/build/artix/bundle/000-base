@@ -15,7 +15,8 @@
 = wifi
 = ════
 # networkmanager-dinit  # should already be installed from initial chroot steps for completing bundle install
-! post_install networkmanager
+# ! post_install networkmanager
+! sudo nmtui
   inetutils  # for hostname tests
 
 

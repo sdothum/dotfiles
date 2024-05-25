@@ -9,11 +9,11 @@
 # connman
 # cmst      # qt gui for connman
 # gnome-bluetooth
-# NetworkManager
+# ! cfg_install /etc/rc.local $(hostname)
+# wpa-cute  # gui for wpa-supplicant boot install
+# " add 5G network after xorg install
 ! echo noarp | sudo tee -a /etc/dhcpcd.conf
-! cfg_install /etc/rc.local $(hostname)
-  wpa-cute  # gui for wpa-supplicant boot install
-" add 5G network after xorg install
+  NetworkManager  # replaces rclocal ip configuration for dinit
   speedtest
 
 
@@ -43,7 +43,7 @@ d dnsmasq
 = network security
 = ════════════════
   lynis
-  openssh   # post_install open ssh login
+  openssh         # post_install open ssh login
 
 
 = network share

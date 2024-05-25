@@ -21,16 +21,20 @@ ipaddr() {
 }
 
 sudo rfkill unblock wifi
-read -p"ssid: " ssid
-read -p"password: " password
-sudo nmcli device wifi connect "$ssid" password "$password"
+if console ;then
+	read -p"ssid: " ssid
+	read -p"password: " password
+	sudo nmcli device wifi connect "$ssid" password "$password"
 
-address=$(ipaddr "address: " /)
-gateway=$(ipaddr "gateway: ")
-dns=$(ipaddr "dns: ")
-sudo nmcli connect modify "$ssid" ipv4.addresses $address ipv4.gateway $gateway ipv4.dns ${dns:-8.8.8.8} ipv4.method manual
+	address=$(ipaddr "address: " /)
+	gateway=$(ipaddr "gateway: ")
+	dns=$(ipaddr "dns: ")
+	sudo nmcli connect modify "$ssid" ipv4.addresses $address ipv4.gateway $gateway ipv4.dns ${dns:-8.8.8.8} ipv4.method manual
 
-sudo nmcli connect up "$ssid"
-sudo cat /etc/NetworkManager/system-connections/$ssid.nmconnection
+	sudo nmcli connect up "$ssid"
+	sudo cat /etc/NetworkManager/system-connections/$ssid.nmconnection
+else
+	sudo nmtui
+fi
 
 # vim: set ft=sh: #
