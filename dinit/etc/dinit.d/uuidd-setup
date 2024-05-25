@@ -1,5 +1,4 @@
-type            = scripted
-command         = /etc/dinit.d/scripts/uuidd-setup.sh
-logfile         = /var/log/dinit/uuidd-setup.log
-depends-on      = rcboot
-
+type       = scripted
+command    = /etc/dinit.d/scripts/uuidd-setup.sh
+logfile    = /var/log/dinit/uuidd-setup.log
+depends-on = rcboot

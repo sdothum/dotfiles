@@ -4,4 +4,3 @@ run-as          = shum
 smooth-recovery = true
 logfile         = /var/log/dinit/puma.log
 waits-for       = loginready
-

@@ -2,6 +2,6 @@
 # we'll run "sulogin" from util-linux, to prompt for root password and then
 # run a shell.
 
-type = process
+type    = process
 command = /sbin/sulogin
 options = runs-on-console

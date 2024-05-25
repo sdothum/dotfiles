@@ -5,4 +5,3 @@ smooth-recovery     = true
 restart-limit-count = 0
 logfile             = /var/log/dinit/netmount.log
 depends-on          = network
-

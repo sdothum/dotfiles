@@ -5,4 +5,3 @@ smooth-recovery = true
 term-signal     = INT
 logfile         = /var/log/dinit/postgresql16.log
 waits-for       = loginready
-

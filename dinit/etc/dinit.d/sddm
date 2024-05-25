@@ -1,4 +1,5 @@
 # SDDM service
+
 type            = process
 command         = /etc/dinit.d/scripts/sddm.sh
 smooth-recovery = true
