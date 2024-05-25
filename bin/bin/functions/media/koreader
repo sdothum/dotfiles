@@ -6,7 +6,7 @@
 
 # ....................................................... KOReader metadata edit
 
-usage() { usage: "$(basename $0) [clearPages] [t'op | b'ottom <margin>] [l'ineSpacing <percent>] [s'yncMargins 0|1] [f'ont | h'eaderFont <font>] [font g'amma <gamma>]"; exit 1; }
+usage() { usage: "$(basename $0) [c'learPages] [t'op | b'ottom <margin>] [l'ineSpacing <percent>] [s'yncMargins 0|1] [f'ont | h'eaderFont <font>] [font g'amma <gamma>]"; exit 1; }
 
 # update sdr files to match ever changing default settings :)
 

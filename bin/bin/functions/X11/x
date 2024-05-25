@@ -100,6 +100,7 @@ if console ;then
 	# mount any dangling nfs shares
 	# sudo mount -a
 	startx -- 2>/tmp/startx:x.log
+	[ $? -ne 0 ] && ditto x11 "check hdmi is connected to nvidia if wm does not launch"
 
 	# session specific clean up
 	pkill -KILL $wm

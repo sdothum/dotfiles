@@ -7,6 +7,7 @@ build
 chimera/qmk_firmware/keyboards/chimera_ergo_42
 conky
 corne/qmk_firmware/keyboards/crkbd
+dinit
 dunst
 fish
 fonts/.fonts/Iosevka*

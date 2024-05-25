@@ -6,6 +6,13 @@
 
 # .................................................................... Voidlinux
 
-[ -e /usr/bin/xbps-install ]
+# Usage: void [<init>]
+
+void() { [ -e /usr/bin/xbps-install ]; }
+
+case $1 in
+	'' ) void ;;
+	*  ) void && ls -l /sbin/init | grep -q "$1" ;;
+esac
 
 # kak: filetype=sh
