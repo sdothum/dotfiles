@@ -68,7 +68,7 @@ if %{ [ -z "$UNPLUG" ] } %{
 	bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
 		# map global user | ': cursorcolumn<ret>' -docstring "toggle column"
 		# map global user + ': crosshairs<ret>'   -docstring "toggle crosshairs"  # BUG: occasional hidden underline
-		map global user + ': cursorcolumn<ret>' -docstring "toggle column"
+		map global user c ': cursorcolumn<ret>' -docstring "toggle column"
 	}
  
 	# ..................................................................... fandt
@@ -180,9 +180,7 @@ if %{ [ -z "$UNPLUG" ] } %{
 	}
 
 	# ................................................................ sudo-write
-	bundle kakoune-sudo-write https://github.com/occivink/kakoune-sudo-write.git %{
-		map global user W ': sudo-write<ret>' -docstring 'sudo save'
-	}
+	bundle kakoune-sudo-write https://github.com/occivink/kakoune-sudo-write.git
 
 	# ............................................................... tree-sitter
 	bundle-install-hook kak-tree-sitter %{
@@ -437,27 +435,27 @@ set-option global autoreload yes
 
 # modeline inline context: "# kak: filetype=.." (comment delimiter by filetype)
 # NOTE: markdown statement '#[ kak: ... ]: #' issues *debug* "Unsupported kakoune variable:" message for trailing ']'
-set-option global modelines 2  # BUG: avoid "otherwords:" error (not kak: or vim:) within modeline scan range (default 5)
+set-option global modelines 2       # BUG: avoid "otherwords:" error (not kak: or vim:) within modeline scan range (default 5)
 hook global BufOpenFile .* %{ modeline-parse }
 
 hook global BufOpenFile .*(.eml|.note) %{ set buffer filetype markdown }
-hook global FocusOut .* write
+hook global FocusOut .* sudo-write  # over "write" for system files
 
 # ............................................................ Buffer management
 
-map global normal <a-ret> ': buffer-next<ret>'           -docstring 'next buffer'
+map global normal <a-ret> ': buffer-next<ret>'               -docstring 'next buffer'
 hook global WinDisplay filetype=diff %{
-	map global normal <ret> ': diff-jump<ret>'            -docstring 'diff-jump new file'
-	map global normal <a-ret> ': diff-jump -<ret>'        -docstring 'diff-jump old file'
+	map global normal <ret> ': diff-jump<ret>'                -docstring 'diff-jump new file'
+	map global normal <a-ret> ': diff-jump -<ret>'            -docstring 'diff-jump old file'
 }
-map global normal <a-backspace> ': buffer-previous<ret>' -docstring 'previous buffer'
-map global normal <a-space> 'ga'                         -docstring 'last buffer'
+map global normal <a-backspace> ': buffer-previous<ret>'     -docstring 'previous buffer'
+map global normal <a-space> 'ga'                             -docstring 'last buffer'
 
-map global user   d ': buffer *debug*<ret>'              -docstring '*debug*'
-map global user   D ': write<ret>: delete-buffer<ret>'   -docstring 'delete buffer'
-map global user   q ': quit<ret>'                        -docstring 'quit'
-map global user   w ': write<ret>'                       -docstring 'save'
-map global user   x ': write-all-quit<ret>'              -docstring 'save all and quit'
+map global user   d ': buffer *debug*<ret>'                  -docstring '*debug*'
+map global user   D ': sudo-write<ret>: delete-buffer<ret>'  -docstring 'delete buffer'
+map global user   q ': quit<ret>'                            -docstring 'quit'
+map global user   w ': sudo-write<ret>'                      -docstring 'save'
+map global user   x ': sudo-write<ret>: write-all-quit<ret>' -docstring 'save all and quit'
 
 # Terminal
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
