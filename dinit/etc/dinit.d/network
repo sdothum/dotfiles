@@ -1,12 +1,7 @@
 # Service to check for network connectivity
 
-type        = internal
-# command   = /etc/dinit.d/scripts/network.sh
-restart     = false
-# waits-for = early-filesystems
-# waits-for = rcboot
-after       = late-filesystems
-depends-on  = rclocal
-
-# Add depends-on for any required network service(s) for connectivity, e.g. NetworkManager
-depends-on  = NetworkManager
+type       = internal
+restart    = false
+waits-for  = early-filesystems
+waits-for  = rcboot
+depends-on = NetworkManager
