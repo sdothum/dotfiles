@@ -20,9 +20,9 @@ done
 
 tput cnorm  # recover before closing sshd session
 sudo rm -f /tmp/login:console
-(sleep 0.1; pkill -f "sshd: $USER" 2>/dev/null) &  # close remote ssh session connect
+(sleep 0.1; sudo pkill -f "sshd: $USER" 2>/dev/null) &               # close remote ssh session connect
 (sleep 0.1; pkill tmux) &
 (sleep 0.1; pkill $(cat $HOME/.windowmanager)) &
-exec sudo /sbin/reboot
+(sleep 0.1; console && exec sudo /sbin/reboot || touch $WMREBOOT) &  # SEE x (script)
 
 # kak: filetype=sh

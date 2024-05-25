@@ -22,6 +22,9 @@ font=ascii12
 
 [ "${1#@}" != "$1" ] && { sleep ${1#@}; shift; }  # see user_login for delayed launch
 
+export WMREBOOT=/tmp/wm:reboot  # SEE: reboot (script)
+rm -f $WMREBOOT
+
 # see .xinitrc
 case $1 in
 	abort | halt | stop ) [ -e $BOOTWM ] && ditto user_login 'canceling startx'; rm -f $BOOTWM; exit ;;  # boot intercept shortcut
@@ -148,5 +151,12 @@ else
 	# already in X11 session
 	ditto 'window manager' "$(cat $WM) (next X session)"
 fi
+
+# reboot exit from wm SEE: reboot (script)
+[ -e $WMREBOOT ] || exit
+echo
+echo
+sleep 3
+exec sudo /sbin/reboot
 
 # kak: filetype=sh
