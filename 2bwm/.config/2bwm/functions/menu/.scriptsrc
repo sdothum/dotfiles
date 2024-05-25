@@ -16,5 +16,6 @@ $HOME/.vim/after
 $HOME/.vim/config
 $HOME/.vim/plugged/vim-duochrome
 $HOME/.weechat/python
+/home/depot
 /etc/sv
 
