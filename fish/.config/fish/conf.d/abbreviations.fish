@@ -25,7 +25,15 @@ if alpine
 	abbr svr 'sv restart'
 	abbr svs 'sv start'
 	abbr svt 'sv stop'
-else if void
+else if void 'dinit'
+	abbr svd 'sv disable'
+	abbr sve 'sv enable'
+	abbr svs 'sv start'
+	abbr svt 'sv stop'
+	abbr svr 'sv restart'
+	abbr svi 'sv status'
+	abbr svl 'sv log'
+else if void           # runit
 	abbr svd 'sv disable'
 	abbr svt 'sv down'
 	abbr sve 'sv enable'
