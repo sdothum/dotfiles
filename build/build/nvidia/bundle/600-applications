@@ -9,6 +9,7 @@
   android-tools
   scrcpy
 
+
 = astronomy
 = ═════════
 # stellarium
@@ -25,10 +26,10 @@
 
 = dictionary
 = ══════════
+# dictd
   aspell
   aspell-en
   dict
-# dictd
   hunspell
   hunspell-en_GB
   hunspell-en_US
@@ -49,8 +50,8 @@
 
 = game
 = ════
-m cbonsai
 # steam
+m cbonsai
   ternimal
 
 
@@ -63,23 +64,23 @@ m cbonsai
 = productivity
 = ════════════
 # abiword
+# sc-im
   calc
   gnumeric
   tk           # tkremind
   tcllib       # tkremind
   remind
 ! stow remind
-# sc-im
   speedcrunch
 
 
 = viewer
 = ══════
+# fbreader
   bat          # syntax highlighting for nnn preview-tui
   catimg       # image viewer for nnn preview-tui
   nsxiv        # image viewer for nnn imgview
   epdfview
-# fbreader
   feh
 m foliate
   zathura

@@ -6,23 +6,23 @@
 
 = file manager
 = ════════════
-  pcmanfm
 # rox
+  pcmanfm
   tumbler
 
 
 = terminal
 = ════════
-  alacritty
 # kitty        # need for nnn preview-tui plugin
 # xterm
+  alacritty
 
 
 = window manager
 = ══════════════
 # herbstluftwm
-! stow herbstluftwm
 # windowchef
+! stow herbstluftwm
 
 
 = window utilities
@@ -34,6 +34,7 @@
   xcb-util-cursor
   wmctrl
   wmutils-git
+  windowchef
   ruler-git
   sxhkd
 

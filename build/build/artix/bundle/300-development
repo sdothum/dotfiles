@@ -66,7 +66,7 @@
   colordiff
   perl-app-cpanminus  # perl-HTML dependency
   perl-curses
-# d s perl-HTML-Strip
+d s perl-HTML-Strip
 
 
 = python
@@ -74,17 +74,17 @@
 # python-pip
 # python-setuptools
 # python-devel
+# python-pipx
+# python-wheel
   python-bottleneck  # optimization
   python-numexpr     # optimization
   python-pip
-# python-pipx
-# python-wheel
 
 
 = prototyping
 = ═══════════
   ruby
-# g rack-test
+g rack-test
 
 
 = rust

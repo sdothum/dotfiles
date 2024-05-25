@@ -8,7 +8,16 @@
 cd /home/depot
 exists -r void_dinit && { cd void_dinit; git pull; cd ..; } || git clone https://github.com/summrum/void_dinit.git
 
-cd void_dinit
+cd  /home/depot/void-packages
+./xbps-src binary-bootstrap
+ditto dinit update /home/depot/void-packages/dinit/template using void_dinit template
+ditto dinit ./xbps-src pkg dinit
+ditto dinit sudo xi dinit-x.xx.x_x 
+ditto dinit update /etc/dinit.d with $HOME/build scripts
 
+# for "ln -s runit-init init" recovery sessions
+original /sbin/halt
+original /sbin/runit-init
+original /sbin/shutdown
 
 # vim: set ft=sh: #

@@ -9,9 +9,9 @@
 # connman
 # cmst      # qt gui for connman
 # gnome-bluetooth
+# NetworkManager
 ! echo noarp | sudo tee -a /etc/dhcpcd.conf
 ! cfg_install /etc/rc.local $(hostname)
-d networkmanager
   wpa-cute  # gui for wpa-supplicant boot install
 " add 5G network after xorg install
   speedtest

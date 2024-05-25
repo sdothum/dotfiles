@@ -51,13 +51,14 @@ CLEANUP_ARCHIVE_READ_DAYS=7
 CLEANUP_REMOVE_SESSIONS_DAYS=9999
 " | sudo tee /etc/miniflux.conf
 
+sudo grep -q miniflux.conf /etc/sv/miniflux/run || sudo sed -i '/exec .* miniflux.app/s|$| -c /etc/miniflux.conf|' /etc/sv/miniflux/run  # HACK: see above
+
 miniflux.app -c /etc/miniflux.conf -migrate
 miniflux.app -c /etc/miniflux.conf -create-admin
 
 sudo rm -f /etc/$HTTP/http.d/miniflux.*
 stow $HTTP/miniflux
 sv restart $HTTP
-sudo grep -q miniflux.conf /etc/sv/miniflux/run || sudo sed -i '/exec .* miniflux.app/s|$| -c /etc/miniflux.conf|' /etc/sv/miniflux/run  # HACK: see above
 sv enable miniflux
 sv start miniflux
 

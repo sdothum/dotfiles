@@ -6,25 +6,25 @@
 
 = file manager
 = ════════════
-  pcmanfm
 # rox
+  pcmanfm
   tumbler
 
 
 = terminal
 = ════════
-  alacritty    [! cpu atom]
 # kitty        # need for nnn preview-tui plugin
 # rxvt-unicode [cpu atom]
 # urxvt-perls  [cpu atom]
 # xterm
+  alacritty    [! cpu atom]
 
 
 = window manager
 = ══════════════
 # herbstluftwm
-! stow herbstluftwm
 # windowchef
+! stow herbstluftwm
 
 
 = window utilities

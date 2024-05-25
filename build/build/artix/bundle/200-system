@@ -19,8 +19,8 @@
 = ════════
 # dmidecode
 # intel-ucode
-  inxi
 # iucode-tools  # intel specific
+  inxi
   lm_sensors
 
 
@@ -36,18 +36,16 @@
 = security
 = ════════
 # gksu
-  gnome-keyring
-d gnupg
-d pass
 # d pinentry-gtk
 # d pinentry-qt   # for x11 desktop passphrase
 # polkit-gnome
+  gnome-keyring
+d gnupg
+d pass
 
 
 = sound
 = ════
-  alsa-utils
-  alsa-plugins
 # alsaequal
 # alsa-ucm-conf
 # ConsoleKit2
@@ -57,13 +55,15 @@ d pass
 # pulseaudio-equalizer-ladspa
 # pipewire-dinit
 # pipewire-pulse-dinit
+# pipewire-audio
+# pulseeffects
+  alsa-utils
+  alsa-plugins
   pipewire
   pipewire-alsa
   pipewire-pulse
-# pipewire-audio
   wireplumber
-# pulseeffects
-# rtkit         # pipewire run dependency, in addition to dbus
+  rtkit         # pipewire run dependency, in addition to dbus
   pavucontrol
 
 
@@ -74,9 +74,9 @@ d pass
 ! sv enable cronie
   logrotate
 ! stow logrotate
-# preload
+  preload
   psmisc
-# udevil        # no-config automount (less involved setup than udiskie) 
+  udevil        # no-config automount (less involved setup than udiskie) 
   udiskie
 ! stow udiskie
 ! sudo groupadd plugdev

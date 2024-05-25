@@ -6,18 +6,18 @@
 
 = cups printing
 = ═════════════
+# foomatic-db
+# foomatic-db-nonfree
+# system-config-printer
   cups-dinit
   cups
 ! sv enable cupsd
   cups-filters
-# foomatic-db
-# foomatic-db-nonfree
   ghostscript
   gsfonts
   gutenprint
   hplip
   libcups
-# system-config-printer
 
 
 = database management
@@ -28,9 +28,9 @@
 
 = package management
 = ══════════════════
-  flatpak
-  xdg-user-dirs
-! xdg-user-dirs-update  # for flatpak apps common folders
+# flatpak
+# xdg-user-dirs
+# ! xdg-user-dirs-update  # for flatpak apps common folders
 " link user profile to root
 ! sudo ln -s /home/shum/.local/share/cork /root/.local/share/
 ! sudo ln -s /home/shum/.fonts /root/
@@ -40,7 +40,7 @@
 = package rollback (btrfs)
 = ════════════════════════
 # grub-utils
-# snapper
+  snapper
 
 
 # vim: set ft=conf: #

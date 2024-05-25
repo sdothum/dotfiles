@@ -6,16 +6,16 @@
 
 = cups printing
 = ═════════════
-  cups
-  cups-filters
 # foomatic-db
 # foomatic-db-nonfree
+# system-config-printer [server]
+  cups
+  cups-filters
   ghostscript
   gsfonts
   gutenprint
   hplip
   libcups
-# system-config-printer [server]
 
 
 = database management
@@ -26,9 +26,9 @@
 
 = package management
 = ══════════════════
-  flatpak
-  xdg-user-dirs
-! xdg-user-dirs-update  # for flatpak apps common folders
+# flatpak
+# xdg-user-dirs
+# ! xdg-user-dirs-update  # for flatpak apps common folders
 " link user profile to root
 ! sudo ln -s /home/shum/.local/share/cork /root/.local/share/
 ! sudo ln -s /home/shum/.fonts /root/

@@ -9,6 +9,7 @@
   android-tools
   scrcpy
 
+
 = astronomy
 = ═════════
 # stellarium
@@ -17,20 +18,20 @@
 
 = benchtest
 = ═════════
-  hyperfine
 # sdl2 sdl2_image sdl2_mixer
+  hyperfine
   phoronix-test-suite
 
 
 = dictionary
 = ══════════
-# aspell
-# aspell-en
-# dict
-# dictd
-# hunspell
-# hunspell-en_gb
-# hunspell-en_us
+  aspell
+  aspell-en
+  dict
+  dictd
+  hunspell
+  hunspell-en_gb
+  hunspell-en_us
   sdcv
 ! stow stardict
 
@@ -60,23 +61,23 @@ d m fontmatrix
 = productivity
 = ════════════
 # abiword
+# sc-im
   calc
   gnumeric
   tk           # tkremind
   tcllib       # tkremind
   remind
 ! stow remind
-# sc-im
   speedcrunch
 
 
 = viewer
 = ══════
+# epdfview-git
+# fbreader
   bat          # syntax highlighting for nnn preview-tui
   catimg       # image viewer for nnn preview-tui
   nsxiv        # image viewer for nnn imgview
-# epdfview-git
-# fbreader
   feh
 d m foliate
   zathura

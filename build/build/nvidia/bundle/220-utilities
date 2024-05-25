@@ -30,26 +30,26 @@
 
 = sync
 = ════
+# syncthing
+# watchman
   lsyncd
 ! stow lsyncd
 " check lsyncd configuration before sv enable
   rsync
   rclone
-# syncthing
   vsftpd
-# watchman
 
 
 = system monitor
 = ══════════════
-  btop
 # glances
 # gsmartcontrol [server]
 # htop
+# smartmontools
+  btop
   iotop
   nvtop
   psensor
-# smartmontools
   socklog-void  
   sysstat
 

@@ -6,7 +6,10 @@
 
 = dinit
 = ═════
-d m void_dinit
+# m void_dinit        # prep for post void dinit install 
+#   metalog
+# ! sudo mkdir /var/log/dinit
+
 
 = library
 = ═══════
@@ -78,11 +81,11 @@ d s perl-HTML-Strip
 = ══════
 # python-pip
 # python-setuptools
+# python3-pipx
   python3-devel
   python3-Bottleneck  # optimization
   python3-numexpr     # optimization
   python3-pip
-# python3-pipx
   python3-wheel
 
 

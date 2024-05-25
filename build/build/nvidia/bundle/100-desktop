@@ -6,10 +6,10 @@
 
 = appearance
 = ══════════
+# unclutter
   lxappearance
   picom
 ! stow picom
-# unclutter
   unclutter-xfixes
   xbacklight  [laptop]
 
@@ -25,37 +25,37 @@
 
 = desktop utilities
 = ═════════════════
+# pywal
   grabc
   maim
   pastel  # for panel color to hex
-# pywal
   xautolock
 
 
 = font
 = ════
 # xorg-fonts
-  font-adobe-100dpi
 # font-adobe-75dpi
-  noto-fonts-ttf
 # courier-unicode
-  dejavu-fonts-ttf
-  fonts-roboto-ttf
 # font-symbola
 # msttcorefonts
+  font-adobe-100dpi
+  noto-fonts-ttf
+  dejavu-fonts-ttf
+  fonts-roboto-ttf
 
 
 = gtk/qt5 theme/engine
 = ════════════════
-  Adapta
 # adwaita-qt
 # arc-theme           # qt5 dark themes
-  breeze-hacked-cursor-theme
 # gtk-engine-murrine  # for rox-filer lxappearance theming
-  meson
 # paper-icon-theme    # missing down arrow menu button
-  papirus-icon-theme
 # qt5-styleplugins
+  Adapta
+  breeze-hacked-cursor-theme
+  meson
+  papirus-icon-theme
 
 
 = notification

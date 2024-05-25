@@ -6,15 +6,15 @@
 
 = browser
 = ═══════
+# torbrowser-launcher
+# lynx
+# vimb
   chromium
   elinks
   firefox
-  lynx
   qutebrowser
 ! stow qutebrowser
   surf
-# torbrowser-launcher
-# vimb
   w3m-imgcat
 
 

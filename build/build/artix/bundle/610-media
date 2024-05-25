@@ -21,18 +21,18 @@
 = drawing
 = ═══════
 # inkscape
-  krita
 # python-pyqt5  # python plugin dependency
+  krita
 
 
 = photography
 = ═══════════
+  # gmic-gimp
   digikam
   displaycal
   gimp
 d gimp-plugin-resynthesizer-git
   gpick
-  # gmic-gimp
   imagemagick
   rawtherapee
 

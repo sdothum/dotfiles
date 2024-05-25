@@ -17,10 +17,10 @@
 
 = mail client
 = ═══════════
+# alot
   aerc
 ! stow aerc mime
 ! cfg_install -link /etc/aliases
-# alot
   notmuch
 ! stow notmuch
 d ! notmuch new

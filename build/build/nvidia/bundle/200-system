@@ -19,8 +19,8 @@
 = ════════
 # dmidecode
 # intel-ucode
-  inxi
 # iucode-tools  # intel specific
+  inxi
   lm_sensors
 m powerpanel
 
@@ -36,20 +36,17 @@ m powerpanel
 = security
 = ════════
 # gksu
+# d pinentry-gtk
+# polkit-gnome
   gnome-keyring
   gnupg2
 d pass
-# d pinentry-gtk
 d pinentry-qt   # for x11 desktop passphrase
-# polkit-gnome
 
 
 = sound
 = ════
-  alsa-utils
 # alsa-plugins
-  alsa-plugins-pulseaudio
-  alsa-pipewire
 # alsaequal
 # alsa-ucm-conf
 # ConsoleKit2
@@ -57,6 +54,9 @@ d pinentry-qt   # for x11 desktop passphrase
 # pulseaudio
 # alsa-plugins-pulseaudio
 # pulseaudio-equalizer-ladspa
+  alsa-utils
+  alsa-plugins-pulseaudio
+  alsa-pipewire
   libpulseaudio
   pipewire
   wireplumber

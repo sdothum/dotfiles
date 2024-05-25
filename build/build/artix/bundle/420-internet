@@ -23,11 +23,11 @@
 
 = file transfer
 = ═════════════
+# sabnzbd
+# qbittorrent
   gftp
 d nzbget
-# sabnzbd
 d m sonarr
-# qbittorrent
   transmission-gtk
 
 
@@ -46,10 +46,10 @@ d m sonarr
 = miniflux
 = ════════
 # pgadmin3
+# postgresql-contrib
   postgresql-dinit
   postgresql
   postgresql-libs
-# postgresql-contrib
   miniflux
 
 

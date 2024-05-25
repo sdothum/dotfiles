@@ -21,11 +21,11 @@ m kak-bundle
 
 = editors
 = ═══════
-  helix
-! stow helix
 # gvim
 # ! stow vim
 # neovim
+  helix
+! stow helix
 d texlive-bin
   ctags
 
@@ -34,8 +34,8 @@ d texlive-bin
 = ════════════════
 # shellcheck
 # bash-language_server
-  lua-language_server
 # python3-language_server
+  lua-language_server
 m language_servers
 
 

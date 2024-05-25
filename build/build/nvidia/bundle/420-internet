@@ -22,11 +22,11 @@
 
 = file transfer
 = ═════════════
+# sabnzbd  [server]
+# qbittorrent
   gftp
 d nzbget
-# sabnzbd  [server]
 d m sonarr [server]
-# qbittorrent
   transmission-gtk
 
 

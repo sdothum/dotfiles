@@ -24,35 +24,35 @@ d acpilight  # xbacklight
 
 = desktop utilities
 = ═════════════════
+# pywal
   grabc
   maim
   pastel  # for panel color to hex
-# pywal
   xautolock
 
 
 = font
 = ════
+# font-symbola
+# msttcorefonts
   adobe-source-sans-fonts
   noto-fonts
   ttf-dejavu
   ttf-roboto
   ttf-roboto-mono
-# font-symbola
-# msttcorefonts
 
 
 = gtk/qt5 theme/engine
 = ════════════════
-  adapta-gtk-theme
 # adwaita-qt
 # arc-theme           # qt5 dark themes
-  xcursor-breeze
 # gtk-engine-murrine  # for rox-filer lxappearance theming
-  meson
 # paper-icon-theme    # missing down arrow menu button
-  papirus-icon-theme
 # qt5-styleplugins
+  adapta-gtk-theme
+  xcursor-breeze
+  meson
+  papirus-icon-theme
 
 
 = notification

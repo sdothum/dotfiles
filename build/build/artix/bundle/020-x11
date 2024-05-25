@@ -13,27 +13,27 @@
 = video driver
 = ════════════
 # bbswitch             [gpu inspiron]
+# nvidia               [gpu nvidia && ! gpu intel]  # dual gpu card check
   libva-intel-driver   [gpu intel]
   libvdpau-va-gl       [gpu intel]
-# nvidia               [gpu nvidia && ! gpu intel]  # dual gpu card check
 
 
 = x11 driver
 = ══════════
+# xf86-input-wacom     [server]
+# xf86-video-ati       [gpu ati && ! gpu nvidia]    # dual gpu card check
+# xf86-video-nouveau   [gpu nvidia && ! gpu intel]  # dual gpu card check
   xf86-input-evdev
   xf86-input-libinput
-# xf86-input-wacom     [server]
   xf86-input-synaptics [laptop]
-# xf86-video-ati       [gpu ati && ! gpu nvidia]    # dual gpu card check
   xf86-video-intel     [gpu intel]
-# xf86-video-nouveau   [gpu nvidia && ! gpu intel]  # dual gpu card check
 
 
 = x11 server
 = ══════════
 # mesa-ati-dri         [gpu ati && ! gpu nvidia]    # dual gpu card check
-  mesa-intel-dri       [gpu intel]
 # mesa-nouveau-dri     [gpu nvidia && ! gpu intel]  # dual gpu card check
+# mesa-intel-dri       [gpu intel]
   mesa                 [gpu intel]
   libva-mesa-driver    [gpu intel]
   mesa-vdpau           [gpu intel]
@@ -47,13 +47,13 @@
 
 = x11 utility
 = ═══════════
+# xorg
+# xorg-minimal
   arandr
   libva-utils
   lxrandr
   xorg-setxkbmap
   vdpauinfo
-# xorg
-# xorg-minimal
   xorgproto
   xorg-xev
   xorg-xinput

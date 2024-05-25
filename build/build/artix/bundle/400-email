@@ -18,10 +18,10 @@
 
 = mail client
 = ═══════════
+# alot
   aerc
 ! stow aerc mime
 ! cfg_install -link /etc/aliases
-# alot
   notmuch
 ! stow notmuch
 d ! notmuch new
@@ -29,10 +29,10 @@ d ! notmuch new
 
 = mail utility
 = ════════════
-# afew-git
+  afew-git
   msmtp
   pam
-# sharutils
+  sharutils
 
 
 = mime

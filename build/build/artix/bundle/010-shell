@@ -14,12 +14,12 @@
 
 = file manager
 = ════════════
-  ncdu
 # nnn
-  m nnn    # with icons
-! stow nnn
 # ranger   # for scope with nnn
 # vifm
+  ncdu
+  m nnn    # with icons
+! stow nnn
 
 
 = info screen
@@ -44,19 +44,19 @@
 
 = shell tool
 = ══════════
+# pv
+# shellcheck
   ack
   expect
   fzf
   less
   pcre
-# pv
-# ripgrep  # required by vim-fzf
+  ripgrep  # required by vim-fzf
   rlwrap
-# m shell-functools
-# shellcheck
+  m shell-functools
   the_silver_searcher
 ! stow ag
-# ugrep
+  ugrep
   zoxide
 
 

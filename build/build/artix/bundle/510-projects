@@ -4,6 +4,15 @@
 # see bundle_install
 
 
+= mpu programmer
+= ══════════════
+# avr-libc-git
+  avr-gcc
+  avr-libc
+  avrdude
+  dfu-programmer
+
+
 = font editor
 = ═══════════
   fontforge
@@ -11,15 +20,6 @@
   nodejs
   otfcc
   ttfautohint
-
-
-= mpu programmer
-= ══════════════
-  avr-gcc
-# avr-libc-git
-  avr-libc
-  avrdude
-  dfu-programmer
   
 
 # vim: set ft=conf: #

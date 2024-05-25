@@ -11,29 +11,29 @@
 = video driver
 = ════════════
 # bbswitch             [gpu inspiron]
+# nvidia               [gpu nvidia && ! gpu intel]  # dual gpu card check
   libva-intel-driver   [gpu intel]
   libvdpau-va-gl       [gpu intel]
-# nvidia               [gpu nvidia && ! gpu intel]  # dual gpu card check
 
 
 = x11 driver
 = ══════════
+# xf86-video-ati       [gpu ati && ! gpu nvidia]    # dual gpu card check
+# xf86-video-nouveau
+# xf86-video-fbdev
+# xf86-video-vesa
   xf86-input-evdev
   xf86-input-libinput
   xf86-input-wacom
   xf86-input-synaptics [laptop]
-# xf86-video-ati       [gpu ati && ! gpu nvidia]    # dual gpu card check
   xf86-video-intel     [gpu intel]
-# xf86-video-nouveau
-# xf86-video-fbdev
-# xf86-video-vesa
 
 
 = x11 server
 = ══════════
 # mesa-ati-dri         [gpu ati && ! gpu nvidia]    # dual gpu card check
-  mesa-intel-dri       [gpu intel]
 # mesa-nouveau-dri     [gpu nvidia && ! gpu intel]  # dual gpu card check
+  mesa-intel-dri       [gpu intel]
   mesa                 [gpu intel]
   libva-mesa-driver    [gpu intel]
   mesa-vdpau           [gpu intel]
@@ -46,12 +46,13 @@
 
 = x11 utility
 = ═══════════
+# xorg
+# xwallpaper
   arandr
   libva-utils
   lxrandr
   setxkbmap
   vdpauinfo
-# xorg
   xorg-minimal
   xev
   xinput
@@ -60,7 +61,6 @@
   xrdb
   xset
   xsetroot
-# xwallpaper
 
 
 = font rendering

@@ -21,11 +21,11 @@ m language_servers
 
 = editors
 = ═══════
-  helix
-! stow helix
 # gvim
 # ! stow vim
 # neovim
+  helix
+! stow helix
 d texlive-bin
   ctags
 

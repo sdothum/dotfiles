@@ -40,11 +40,11 @@
 
 = nvidia
 = ══════
-  void-repo-nonfree
 # void-repo-multilib-nonfree
+# vulkan-loader
+  void-repo-nonfree
 ! sudo xbps-install -Su
   nvidia
-# vulkan-loader
 ! sudo sed -i \'/GRUB_CMDLINE_LINUX_DEFAULT/s/\"\$/ nomodeset\"/; s/.*GRUB_GFXMODE=.*/GRUB_GFXMODE=3440x1440x32/\' /etc/default/grub
 ! cat /etc/default/grub
 ! ifno "grub ok" && exit 1
@@ -70,17 +70,17 @@
 = file system
 = ═══════════
 # bcache-tools
-  dosfstools
 # exfat-utils
-  exfatprogs
-  fuse
-  fuse-exfat
 # gvfs
 # mbuffer
 # mtpfs     # for supernote
 # gvfs-mtp  # for supernote
-  jmtpfs    # for supernote
 # ntfs-3g
+  dosfstools
+  exfatprogs
+  fuse
+  fuse-exfat
+  jmtpfs    # for supernote
 
 
 = file transfer

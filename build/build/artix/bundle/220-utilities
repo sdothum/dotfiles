@@ -29,27 +29,27 @@
 
 = sync
 = ════
+# syncthing-dinit
+# syncthing
+# watchman
 m lsyncd
 ! stow lsyncd
 " check lsyncd configuration before sv enable
   rsync
   rclone
-# syncthing-dinit
-# syncthing
   vsftpd-dinit
   vsftpd
-# watchman
 
 
 = system monitor
 = ══════════════
-  btop
 # glances
 # gsmartcontrol
 # htop
+# smartmontools
+  btop
   iotop-c
   psensor
-# smartmontools
   sysstat
 
 

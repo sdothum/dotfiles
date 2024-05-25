@@ -6,6 +6,7 @@
 
 = sinatra web framework
 = ═════════════════════
+# libuuid-devel  # xapian-ruby dependency
   g kramdown
   g mail
   g rack
@@ -15,7 +16,6 @@
   g term-ansicolor
   g thin
   g xapian-fu
-# libuuid-devel  # xapian-ruby dependency
   zlib-devel     # xapian-ruby dependency
   g xapian-ruby
 

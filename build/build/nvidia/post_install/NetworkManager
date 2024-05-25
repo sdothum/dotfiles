@@ -5,7 +5,7 @@
 
 # ............................................................... networkmanager
 
-sv endable dbus
+sv endable dbusd
 sv enable NetworkManager
 ip link show
 

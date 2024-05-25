@@ -6,16 +6,16 @@
 
 = browser
 = ═══════
+# luakit
+# lynx
+# torbrowser-launcher
+# vimb
   chromium
   elinks
   firefox
-# luakit
-# lynx
   qutebrowser
 ! stow qutebrowser
   surf
-# torbrowser-launcher
-# vimb
   w3m-img
 
 
