@@ -1,12 +1,12 @@
 #!/bin/sh
 case "$1" in
-    start)
+	start)
 		for conf in /etc/wireguard/*.conf; do
 			[ -e "$conf" ] || continue;
 			wg-quick up "$conf"
 		done
 		;;
-	stop)	
+	stop)
 		for conf in /etc/wireguard/*.conf; do
 			[ -e "$conf" ] || continue;
 			wg-quick down "$conf"

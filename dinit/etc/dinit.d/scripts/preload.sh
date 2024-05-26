@@ -1,5 +1,5 @@
 #!/bin/sh
-# copy from Void Runit
+# Code from Void Runit
 
 # Miminum memory that the system should have for preload to be launched.
 # In megabytes.

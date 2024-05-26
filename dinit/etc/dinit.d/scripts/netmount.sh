@@ -1,5 +1,5 @@
 #!/bin/sh
-# copy from Void Runit
+# Code from Void Runit
 . /etc/dinit.d/config/netmount.conf
 
 case $1 in
@@ -9,8 +9,8 @@ case $1 in
 
 		# If it's running or not in used - rc.local - discover default gateway
 		if [ -z "$GATEWAY" ]; then
-		    set -- $(ip route show | grep default)
-		    GATEWAY="$3"
+			set -- $(ip route show | grep default)
+			GATEWAY="$3"
 		fi
 
 		ping -W 1 -c 1 $GATEWAY > /dev/null 2>&1 || exit 1

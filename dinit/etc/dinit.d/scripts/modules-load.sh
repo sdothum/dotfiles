@@ -1,5 +1,5 @@
 #!/bin/sh
-# code from Void Runit
+# Code from Void Runit
 # modules-load [-n] [-v] - modules-load.d(5) compatible kernel module loader
 
 export PATH=/bin:/sbin
@@ -10,7 +10,7 @@ sed -nr 's/,/\n/g;s/(.* |^)(rd\.)?modules-load=([^ ]*).*/\3/p' /proc/cmdline
 
 # Find files /{etc,run,usr/lib}/modules-load.d/*.conf in that order.
 find -L /etc/modules-load.d /run/modules-load.d /usr/lib/modules-load.d \
-       	-maxdepth 1 -name '*.conf' -printf '%p %P\n' 2>/dev/null |
+	-maxdepth 1 -name '*.conf' -printf '%p %P\n' 2>/dev/null |
 # Load each basename only once.
 	sort -k2 -s | uniq -f1 | cut -d' ' -f1 |
 # Read the files, output all non-empty, non-comment lines.
