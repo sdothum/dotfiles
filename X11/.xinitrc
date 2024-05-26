@@ -13,7 +13,7 @@
 BOOTWM=$SESSION/boot:wm  # see console_login, user_login
 WM=$HOME/.windowmanager
 
-rm -f $BOOTWM                                     # cancel autostart of wm if manually started
+# rm -f $BOOTWM                                   # cancel autostart of wm if manually started
 [ -e $WM ] || { pkill -KILL startx; exit; }
 wm=$(cat $WM)
 [ $wm = shell ] && { pkill -KILL startx; exit; }  # trap autostart wm set as shell
