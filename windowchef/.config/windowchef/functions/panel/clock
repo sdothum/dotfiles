@@ -45,8 +45,7 @@ tape() {
 
 weather() { unset update_weather; conky weather panel | sed "s/\^/$SEP/g" >/tmp/${WEATHER##*/} & }
 
-# initialize (for overlay redraw), see draw root
-[ -e $WEATHER ] && { [ -s /tmp/${WEATHER##*/} ] && current_weather=$(cat /tmp/${WEATHER##*/}); weather; }
+[ -e $WEATHER ] && { weather; [ -s /tmp/${WEATHER##*/} ] && current_weather=$(cat /tmp/${WEATHER##*/}); }
 
 # ...................................................... Clock & weather refresh
 
@@ -69,7 +68,7 @@ currently() {
 		clock="%{F$DEFAULT_FG}$tic%{F-}"
 	fi
 
-	# refresh weather every 10 minutes
+	# update weather every 10 minutes
 	if [ -e $WEATHER ] ;then
 		minute=${line#*:?}    # hh:mm:ss.* -> m:ss.*
 		case ${minute%:*} in  #            -> m
