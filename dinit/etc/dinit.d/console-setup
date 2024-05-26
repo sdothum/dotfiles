@@ -1,4 +1,6 @@
-type       = scripted
-command    = /etc/dinit.d/scripts/console-setup.sh
-restart    = false
-depends-on = udev-settle
+# WARNING: udev-settle started from boot.d instead (experimental)
+
+type         = scripted
+command      = /etc/dinit.d/scripts/console-setup.sh
+restart      = false
+# depends-on = udev-settle
