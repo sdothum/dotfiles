@@ -33,7 +33,7 @@ Mod+5 ^tile 1/3 right
 " | picklist
 }
 
-[ $1 ] && cmd=$(actions | grep "Mod[+]$1 ") || cmd=$(actions | rmenu 'Tile window to' $cmd -no-custom) || exit
+[ $1 ] && cmd=$(actions | grep "Mod[+]$1 ") || cmd=$(actions | rmenu 'Window tile' $cmd -no-custom) || exit
 
 cmd=$(echo "$cmd" | sed "s/.*$SEP //; s|tile ./||; s/extend //")
 case $cmd in

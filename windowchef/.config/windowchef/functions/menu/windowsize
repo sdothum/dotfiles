@@ -7,7 +7,7 @@
 # .................................................................. Window size
 
 actions() {
-	echo "Mod+Shift+w ^tile
+	echo "Mod+Alt+w ^tile
 Mod+0 ^revert
 Mod+1 ^rotate
 Mod+2 ^monocle
