@@ -1,7 +1,10 @@
 #!/bin/sh
 # Code from Void Runit
+
+. /etc/runit/functions
 [ -f /fastboot ] && FASTBOOT=1
 [ -f /forcefsck ] && FORCEFSCK="-f"
+
 for arg in $(cat /proc/cmdline); do
 	case $arg in
 		fastboot) FASTBOOT=1;;

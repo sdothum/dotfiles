@@ -1,6 +1,9 @@
 #!/bin/sh
 # Code from Void Runit
+
+. /etc/runit/functions
 [ -r /etc/rc.conf ] && . /etc/rc.conf
+
 # Detect LXC (and other) containers
 [ -z "${container+x}" ] || export VIRTUALIZATION=1
 [ -n "$VIRTUALIZATION" ] && return 0

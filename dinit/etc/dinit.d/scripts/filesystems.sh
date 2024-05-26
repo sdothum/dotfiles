@@ -1,5 +1,7 @@
 #!/bin/sh
 # Detect LXC (and other) containers
+
+. /etc/runit/functions
 [ -z "${container+x}" ] || export VIRTUALIZATION=1
 [ -n "$VIRTUALIZATION" ] && return 0
 
