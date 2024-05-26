@@ -37,7 +37,7 @@ $(basename $0)  [/ | f** | [-]d | h] [<package> | <file>**]
 }
 
 # list of apps that typically fail package check (due to particular install/customizations)
-IGNORE='caddy|chromium|miniflux|php-fpm|pinentry|preload'
+IGNORE='caddy|chromium|miniflux|php-fpm|pinentry|preload|runit'
 
 CACHE=/var/cache/xbps
 BACKUP=/net/depot/

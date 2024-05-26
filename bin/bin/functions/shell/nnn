@@ -20,7 +20,7 @@ export VISUAL=kak       # detached window editing
 # key:value pairs
 bookmarks="$(eval echo $(cat $(dirname $0)/.nnn:bookmarks))"  # hide server structure
 plugs="d:_jump-dotfiles
-e:_eject
+e:_edit
 f:_foliate
 i:imgview
 j:_jump
@@ -29,6 +29,7 @@ m:_mount
 p:preview-tui
 r:_rox
 u:_umount
+x:_eject
 "
 
 # expand key:value pairs into ";" delimited list

@@ -6,21 +6,23 @@
 
 # ................................................................ Session login
 
-BOOTWM=$SESSION/boot:wm
+BOOTWM="$SESSION/boot:wm"
 HOLD=60  # fortune time
 
 fortune=/usr/bin/fortune
-# see (herbstluftwm) term
-trap "rm -f $FORTUNE:term" EXIT
-
+	
 # console login check
 if console ;then
 	exists syncthing && find $HOME -iname '*sync-conflict*' -exec rm -v {} \;  # purge syncthing conflicts
 	# delayed startup of default wm for remote computers
-	if [ -s $BOOTWM ] ;then   # see console_login
-		exec x $(cat $BOOTWM)  # will not spawn otherwise (alpine requires delay in x)
+	if [ -e "$BOOTWM" ] ;then   # SEE: console_login
+		x $(cat "$BOOTWM")       # will not spawn otherwise (alpine requires delay in x)
 	fi
+	# sleep 1
+	# cbonsai -il
 elif [ -e $FORTUNE:term ] ;then
+	# see (herbstluftwm) term
+	trap "rm -f $FORTUNE:term" EXIT
 	if [ ! -e $FORTUNE ] ;then
 		if exists $fortune ;then
 			# su notify to apply user notification (spec)
