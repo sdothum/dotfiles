@@ -25,5 +25,5 @@ fi
 if [ -n "$HARDWARECLOCK" ]; then
 	echo "Setting up RTC to '${HARDWARECLOCK}'"
 	TZ=$TIMEZONE hwclock --systz \
-		${HARDWARECLOCK:+--$(echo $HARDWARECLOCK |tr A-Z a-z) --noadjfile} || exit 1
+		${HARDWARECLOCK:+--$(echo $HARDWARECLOCK |tr A-Z a-z) --noadjfile} || emergency_shell
 fi

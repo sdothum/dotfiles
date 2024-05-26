@@ -2,8 +2,8 @@
 # Code from Void Runit
 if [ -x /sbin/sysctl -o -x /bin/sysctl ]; then
 	mkdir -p /run/vsysctl.d
-	for i in /run/sysctl.d/*.conf \
-		/etc/sysctl.d/*.conf \
+	for i in /run/sysctl.d/*.conf     \
+		/etc/sysctl.d/*.conf           \
 		/usr/local/lib/sysctl.d/*.conf \
 		/usr/lib/sysctl.d/*.conf; do
 

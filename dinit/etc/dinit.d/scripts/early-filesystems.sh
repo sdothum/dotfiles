@@ -10,21 +10,11 @@ mountpoint -q /dev/pts || mount -o mode=0620,gid=5,nosuid,noexec -n -t devpts de
 mountpoint -q /dev/shm || mount -o mode=1777,nosuid,nodev -n -t tmpfs shm /dev/shm
 mountpoint -q /sys/kernel/security || mount -n -t securityfs securityfs /sys/kernel/security
 
-# Code from Void Runit
-[ -r /etc/rc.conf ] && . /etc/rc.conf
-
-# Attempt to determine whether efivars should be mounted ro from kernel version
 if [ -d /sys/firmware/efi/efivars ]; then
-	release=$(uname -r)
-	kernel="${release%.*}"
-	efiro=$(printf "$kernel" | awk '{if ($1 < 4.5) {print "y";} else {print "n";}}')
-	if [ "$efiro" = "n" ]; then
-		mountpoint -q /sys/firmware/efi/efivars || mount -o rw,nosuid,noexec,nodev,noatime -t efivarfs efivarfs /sys/firmware/efi/efivars
-	else
-		mountpoint -q /sys/firmware/efi/efivars || mount -o ro,nosuid,noexec,nodev,noatime -t efivarfs efivarfs /sys/firmware/efi/efivars
-	fi
+    mountpoint -q /sys/firmware/efi/efivars || mount -o nosuid,noexec,nodev -t efivarfs efivarfs /sys/firmware/efi/efivars
 fi
 
+[ -r /etc/rc.conf ] && . /etc/rc.conf
 # Detect LXC (and other) containers
 [ -z "${container+x}" ] || export VIRTUALIZATION=1
 
