@@ -176,8 +176,8 @@ set -x splito $HOME/stow/splitography/qmk_firmware/keyboards/splitography/keymap
 # ............................................................... Initialization
 
 console_login
-if [ -s $SESSION/boot:wm ] 
-	pgrep -f "sshd: $USER" >/dev/null || user_login &
+if [ -e $SESSION/boot:wm ] 
+	pgrep -f "sshd: $USER" >/dev/null || user_login
 else
 	user_login
 end
