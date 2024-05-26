@@ -11,8 +11,12 @@ Of particular note is the addition of the "udev-settle" service to boot.d removi
 
 With udev as a service dependency, the boot times are identical to Runit -- faster than most other distros, at roughly 12 seconds on my system -- the largest delay consumed by udev settling and its impact to dependent services.
 
-Removing it as a service dependency reduces the boot time on my system to barely over 1 second! i have not experienced any system instability so far but consider this a highly experimental service configuration.
+Removing it as a service dependency reduces the boot time on my system to roughly 2 seconds! i have not experienced any system instability so far but consider this a highly experimental service configuration.
 
-As it stands, even without the above udev configuration, Dinit remains unsupported on Voidlinux. USE AT YOUR OWN RISK.
+As it stands, even without the above udev configuration, Dinit remains unsupported on Voidlinux as a system init. USE AT YOUR OWN RISK.
+
+## TODO
+
+Bring up to date with latest Void Runit core scripts.
 
 
