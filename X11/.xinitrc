@@ -104,6 +104,8 @@ export XDG_CONFIG_HOME=$HOME/.config
 xexec() {
 	pkill -f "$WM/.*panel.*"  # kill all dangling panel processes
 	pkill -f "fifo"
+	pkill -f "pavucontrol"
+	pkill -f "pulseaudio"
 	export ROOT=${ROOT:-/tmp}
 	mv -f $ROOT/$1.log $ROOT/$1.last.log 2>/dev/null
 	rm -f $ROOT/$1:*
