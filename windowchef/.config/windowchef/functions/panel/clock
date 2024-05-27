@@ -45,7 +45,7 @@ tape() {
 
 weather() { unset update_weather; conky weather panel | sed "s/\^/$SEP/g" >/tmp/${WEATHER##*/} & }
 
-[ -e $WEATHER ] && { weather; [ -s /tmp/${WEATHER##*/} ] && current_weather=$(cat /tmp/${WEATHER##*/}); }
+[ -e $WEATHER ] && weather
 
 # ...................................................... Clock & weather refresh
 

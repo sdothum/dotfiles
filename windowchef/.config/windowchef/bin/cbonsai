@@ -1,21 +1,14 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="btop $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# .................................................................... Autostart
+# ............................................................... Ncurses bonsai
 
-# see .xinitrc for 2bwm autostart hack :)
+CBONSAI="$HOME/.local/bin/cbonsai -il -t0.125 -w20"
 
-restore root
-restore panel
-conky clock auto
-restore unclutter
-pulse
-udev
-qk stop  # HACK: need to start in a term session
-[ -e $SESSION/cbonsai ] && cbonsai
-[ -e $SESSION/term    ] && term
+xdotool search --onlyvisible --classname cbonsai windowclose || term cbonsai BLACKBOARD $CBONSAI
 
 # kak: filetype=sh
