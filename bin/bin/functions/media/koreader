@@ -6,7 +6,7 @@
 
 # ....................................................... KOReader metadata edit
 
-usage() { usage: "$(basename $0) [c'learPages] [t'op | b'ottom <margin>] [l'ineSpacing <percent>] [s'yncMargins 0|1] [f'ont | h'eaderFont <font>] [font g'amma <gamma>]"; exit 1; }
+usage() { usage: "$(basename $0) [reset p'ages] [t'op | b'ottom <margin>] [l'ineSpacing <percent>] [s'yncMargins 0|1] [f'ont | h'eaderFont <font>] [font g'amma <gamma>]"; exit 1; }
 
 # update sdr files to match ever changing default settings :)
 
@@ -25,47 +25,48 @@ string() {
 	echo $1
 }
 
-sdr()      { ifno "$1 .. $2" && skip=true || sudo find -regex '.*metadata.epub.lua' -exec sed -i "$2" {} \; ; }
+sdr()      { ifno "${1}: $2" && usage || sudo find -regex '.*metadata.epub.lua' -exec sed -i "$3" {} \; ; }
 gestures() { ditto gestures "$1"; sed -i "$2" ../.adds/koreader/settings/gestures.lua; }
 settings() { ditto settings "$1"; sed -i "$2" ../.adds/koreader/settings.reader.lua; }
 
-clearpages() { sdr 'clearpages' '/\"doc_pages\"/d; /\"pages\"/d'; }  # force page count refresh
+resetpages() { sdr 'reset' 'page calculation' '/\"doc_pages\"/d; /\"pages\"/d'; }  # force page count refresh
 
 [ $1 ] || usage
 
 while [ $1 ] ;do
-	unset skip
+
 	case $1 in
-		c*   ) clearpages; shift; continue ;;
-		t*   ) margin=$(number $2)  && sdr 'topmargin' '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'    || usage ;;
-		b*   ) margin=$(number $2)  && sdr 'bottommargin' '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/' || usage ;;
-		l*   ) percent=$(number $2) && sdr 'linespacing' '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'  || usage; clearpages=true ;;
-		s*   ) sync=$(binary $2)    && sdr 'syncmargins' '/\"copt_sync_t_b_page_margins\"/s/[01]/'${sync}'/'    || usage ;;
-		f*   ) font=$(string $2)    && sdr 'font' '/\"font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'                 || usage; clearpages=true ;;
-		h*   ) font=$(string $2)    && sdr 'headerfont' '/\"header_font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'    || usage ;;
-		g*   ) gamma=$(number $2)   && sdr 'fontgamma' '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'        || usage ;;
+		p*   ) resetpages; shift; continue ;;
+		t*   ) margin=$(number $2)  && sdr 'topmargin' ${margin} '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'    || usage; resetpages=true ;;
+		b*   ) margin=$(number $2)  && sdr 'bottommargin' ${margin} '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/' || usage; resetpages=true ;;
+		l*   ) percent=$(number $2) && sdr 'linespacing' ${percent} '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/' || usage; resetpages=true ;;
+		s*   ) sync=$(binary $2)    && sdr 'syncmargins' ${sync} '/\"copt_sync_t_b_page_margins\"/s/[01]/'${sync}'/'      || usage                  ;;
+		f*   ) font=$(string $2)    && sdr 'font' ${font} '/\"font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'                   || usage; resetpages=true ;;
+		h*   ) font=$(string $2)    && sdr 'headerfont' ${font} '/\"header_font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'      || usage                  ;;
+		g*   ) gamma=$(number $2)   && sdr 'fontgamma' ${gamma} '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'         || usage                  ;;
 		*    ) usage ;;
 	esac
-	[ $skip ] && { shift 2; continue; }
+
 	case $1 in
-		t*   ) margin=$(number $2)  && settings 'topmargin' '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'    ;;
-		b*   ) margin=$(number $2)  && settings 'bottommargin' '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/' ;;
-		l*   ) percent=$(number $2) && settings 'linespacing' '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'  ;;
-		h*   ) font=$(string $2)    && settings 'font' '/\"cre_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                  ;;
-		g*   ) gamma=$(number $2)   && settings 'fontgamma' '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'        ;;
-		*    ) usage ;;
+		t*   ) settings 'topmargin' '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'    ;;
+		b*   ) settings 'bottommargin' '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/' ;;
+		l*   ) settings 'linespacing' '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'  ;;
+		h*   ) settings 'font' '/\"cre_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                  ;;
+		g*   ) settings 'fontgamma' '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'        ;;
 	esac
+
 	case $1 in
-		t*   ) margin=$(number $2)  && gestures 'topmargin' '/\"t_page_margin\"/s/= [0-9]*,/= '${margin}',/'    ;;
-		b*   ) margin=$(number $2)  && gestures 'bottommargin' '/\"b_page_margin\"/s/= [0-9]*,/= '${margin}',/' ;;
-		l*   ) percent=$(number $2) && gestures 'linespacing' '/\"line_spacing\"/s/= [0-9]*,/= '${percent}',/'  ;;
-		f*   ) font=$(string $2)    && gestures 'font' '/\"set_font\"/s/\"[^ ]*\",/\"'${font}'\",/'             ;;
-		g*   ) gamma=$(number $2)   && gestures 'fontgamma' '/\"font_gamma\"/s/= [0-9]*,/= '${gamma}',/'        ;;
-		*    ) usage ;;
+		t*   ) gestures 'topmargin' '/\"t_page_margin\"/s/= [0-9]*,/= '${margin}',/'    ;;
+		b*   ) gestures 'bottommargin' '/\"b_page_margin\"/s/= [0-9]*,/= '${margin}',/' ;;
+		l*   ) gestures 'linespacing' '/\"line_spacing\"/s/= [0-9]*,/= '${percent}',/'  ;;
+		f*   ) gestures 'font' '/\"set_font\"/s/\"[^ ]*\",/\"'${font}'\",/'             ;;
+		g*   ) gestures 'fontgamma' '/\"font_gamma\"/s/= [0-9]*,/= '${gamma}',/'        ;;
 	esac
+
 	shift 2
 done
 
-[ $clearpages ] && clearpages
+[ $resetpages ] && resetpages
+usage
 
 # kak: filetype=sh
