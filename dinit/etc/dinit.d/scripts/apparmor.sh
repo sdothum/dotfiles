@@ -1,5 +1,6 @@
 #!/bin/sh
 # Code from Void Runit
+
 # AppArmor is not enabled in kernel, silently exit
 [ ! -d /sys/kernel/security/apparmor ] && return
 

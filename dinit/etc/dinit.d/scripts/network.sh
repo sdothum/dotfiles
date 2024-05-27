@@ -1,5 +1,7 @@
 #!/bin/sh
+
 . /etc/dinit.d/config/network.conf
+
 if [ -z "$GATEWAY" ]; then
 	set -- $(ip route show | grep default)
 	GATEWAY="$3"

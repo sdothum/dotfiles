@@ -1,6 +1,8 @@
 #!/bin/sh
 # Code from Void Runit
+
 echo "Mounting pseudo-filesystems"
+
 mountpoint -q /proc || mount -o nosuid,noexec,nodev -t proc proc /proc
 mountpoint -q /sys || mount -o nosuid,noexec,nodev -t sysfs sys /sys
 mountpoint -q /run || mount -o mode=0755,nosuid,nodev -t tmpfs run /run
@@ -11,7 +13,7 @@ mountpoint -q /dev/shm || mount -o mode=1777,nosuid,nodev -n -t tmpfs shm /dev/s
 mountpoint -q /sys/kernel/security || mount -n -t securityfs securityfs /sys/kernel/security
 
 if [ -d /sys/firmware/efi/efivars ]; then
-    mountpoint -q /sys/firmware/efi/efivars || mount -o nosuid,noexec,nodev -t efivarfs efivarfs /sys/firmware/efi/efivars
+	mountpoint -q /sys/firmware/efi/efivars || mount -o nosuid,noexec,nodev -t efivarfs efivarfs /sys/firmware/efi/efivars
 fi
 
 [ -r /etc/rc.conf ] && . /etc/rc.conf

@@ -1,9 +1,23 @@
 #!/bin/sh
 # Code from Void Runit
+
 . /etc/dinit.d/config/netmount.conf
 
 case $1 in
-	start )
+	stop )
+		# Don't do anything if ./run didn't exit properly (RUNIT "finish" not applicable here)
+		# [ "$1" -eq 1 ] && exit 0
+
+		# Simply umount network filesystems
+		umount -a -f -t $NETWORK_FS > /dev/null 2>&1
+		ret=$?
+		[ $ret -ne 0 ] && umount -a -f -l -t $NETWORK_FS > /dev/null 2>&1
+
+		umount -a -f -O _netdev > /dev/null 2>&1
+		ret=$?
+		[ $ret -ne 0 ] && umount -a -f -l -O _netdev > /dev/null 2>&1
+		;;
+	*    )
 		# Ensure the network manager is running
 		[ -z "$NETWORK_MANAGER" ] || sv check "$NETWORK_MANAGER" > /dev/null 2>&1 || exit 1
 
@@ -21,20 +35,6 @@ case $1 in
 
 		# Then wait to behave like the service is up
 		exec pause
-		;;
-
-	stop  )
-		# Don't do anything if ./run didn't exit properly (RUNIT "finish" not applicable here)
-		# [ "$1" -eq 1 ] && exit 0
-
-		# Simply umount network filesystems
-		umount -a -f -t $NETWORK_FS > /dev/null 2>&1
-		ret=$?
-		[ $ret -ne 0 ] && umount -a -f -l -t $NETWORK_FS > /dev/null 2>&1
-
-		umount -a -f -O _netdev > /dev/null 2>&1
-		ret=$?
-		[ $ret -ne 0 ] && umount -a -f -l -O _netdev > /dev/null 2>&1
 		;;
 esac
 

@@ -1,4 +1,6 @@
 #!/bin/sh
+# Code from Void Runit
+
 set -e
 # sleep avoids unreliable dbus-send due to race condition
 sleep 0.1s

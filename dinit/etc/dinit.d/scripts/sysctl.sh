@@ -1,6 +1,8 @@
 #!/bin/sh
 # Code from Void Runit
+
 if [ -x /sbin/sysctl -o -x /bin/sysctl ]; then
+	echo "Loading sysctl(8) settings..."
 	mkdir -p /run/vsysctl.d
 	for i in /run/sysctl.d/*.conf     \
 		/etc/sysctl.d/*.conf           \
