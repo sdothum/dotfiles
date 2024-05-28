@@ -19,7 +19,7 @@
 = benchtest
 = ═════════
   hyperfine
-  libaio-devel  # for phoronix-test-suite run fio
+  libaio-devel    # for phoronix-test-suite run fio
   SDL SDL_image SDL_mixer
   phoronix-test-suite
 
@@ -59,6 +59,7 @@ m cbonsai
 = ════════
 # d m amphetype
 # m amphetype2
+! stow amphetype  # for words (W)
 
 
 = productivity
@@ -67,8 +68,8 @@ m cbonsai
 # sc-im
   calc
   gnumeric
-  tk           # tkremind
-  tcllib       # tkremind
+  tk              # tkremind
+  tcllib          # tkremind
   remind
 ! stow remind
   speedcrunch
@@ -77,9 +78,9 @@ m cbonsai
 = viewer
 = ══════
 # fbreader
-  bat          # syntax highlighting for nnn preview-tui
-  catimg       # image viewer for nnn preview-tui
-  nsxiv        # image viewer for nnn imgview
+  bat             # syntax highlighting for nnn preview-tui
+  catimg          # image viewer for nnn preview-tui
+  nsxiv           # image viewer for nnn imgview
   epdfview
   feh
 m foliate
