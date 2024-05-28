@@ -431,8 +431,11 @@ map global normal <c-n> ':<space>yank-ring-next<ret>'
 
 set-option global autoreload yes
 
-# no sudo-write-all so sync root owned files on buffer changes
-define-command sync %{ if %{ $kak_modified } %{ sudo-write } }
+# no sudo-write-all so sync root owned files on buffer switching
+define-command sync %{
+	# if %{ [ -n "$kak_opt_filetype" ] && $kak_modified } %{ sudo-write }  # BUG: $kak_opt_filetype is null for "if" command(?)
+	eval %sh{ [ -n "$kak_opt_filetype" ] && $kak_modified && echo "sudo-write" || echo "nop" }  # skip *scratch* *debug* buffers
+}
 
 # ..................................................................... Filetype
 
@@ -450,11 +453,6 @@ map global normal <a-ret> ': sync<ret>: buffer-next<ret>'           -docstring '
 map global normal <a-backspace> ': sync<ret>: buffer-previous<ret>' -docstring 'previous buffer'
 map global normal <a-space> ': sync<ret>ga'                         -docstring 'last buffer'
 
-# BECAUSE: sync fails on *scratch* and *debug* buffers
-map global normal <a-c-ret> ': buffer-next<ret>'                    -docstring 'next buffer'
-map global normal <a-c-backspace> ': buffer-previous<ret>'          -docstring 'previous buffer'
-map global normal <a-c-space> 'ga'                                  -docstring 'last buffer'
-
 hook global WinDisplay filetype=diff %{
 	map global normal <ret> ': diff-jump<ret>'                       -docstring 'diff-jump new file'
 	map global normal <a-ret> ': diff-jump -<ret>'                   -docstring 'diff-jump old file'
@@ -463,7 +461,7 @@ hook global WinDisplay filetype=diff %{
 map global user   d ': buffer *debug*<ret>'                         -docstring '*debug*'
 map global user   D ': sync<ret>: delete-buffer<ret>'               -docstring 'delete buffer'
 map global user   q ': quit<ret>'                                   -docstring 'quit'
-map global user   w ': sudo-write<ret>'                             -docstring 'save'
+map global user   w ': sync<ret>'                                   -docstring 'save'
 map global user   x ': sync<ret>: write-all-quit<ret>'              -docstring 'save all and quit'
 
 # Terminal
