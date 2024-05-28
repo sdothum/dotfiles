@@ -9,6 +9,7 @@
 delay=5  # reboot delay window
 
 ifno 'reboot kernel' && exit
+ifno "boot into default window manager" && echo $WM >$SESSION/boot:wm
 
 # (sleep $delay; sudo rm -f /tmp/login:console; sudo /sbin/reboot) &  # will not reboot in ssh subshell in alpine
 trap "tput cnorm; exit" INT  # restore cursor
@@ -23,6 +24,6 @@ sudo rm -f /tmp/login:console
 (sleep 0.1; sudo pkill -f "sshd: $USER" 2>/dev/null) &               # close remote ssh session connect
 (sleep 0.1; pkill tmux) &
 (sleep 0.1; pkill $(cat $HOME/.windowmanager)) &
-(sleep 0.1; console && exec sudo /sbin/reboot || touch $WMREBOOT) &  # SEE x (script)
+(sleep 0.2; console && exec sudo /sbin/reboot || touch $WMREBOOT) &  # SEE x (script)
 
 # kak: filetype=sh

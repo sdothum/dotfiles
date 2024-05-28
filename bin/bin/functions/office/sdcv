@@ -6,7 +6,7 @@
 
 # ................................................................... Dictionary
 
-usage() { usage: "$(basename $0) -dict | -et | ud | uk | wn | -th [[-_=][<maxlen>] | +] <word>, '-' (include phrases)"; exit 1; }
+usage() { usage: "$(basename $0) -dict | -et | ud | uk | wn | -th [[-:=][<maxlen>] | +] <word>, '-' (include phrases)"; exit 1; }
 
 SDCV=/usr/bin/sdcv
 WORDNET="$SDCV -c -n -u 'WordNet® 3.0 (En-En)'"
@@ -27,7 +27,7 @@ th() {
 			MAXLEN="$(seq -s. 0 $(length $1 $2) | tr -d '[:digit:]')[^ ]"  # mixed length list
 			shift ;;
 
-		_* )  # underscore
+		:* )  # underscore
 			for i in $(seq 2 $(length $1 $2) | tac) ;do  # iterative length list
 				if [ -n "$(sdcv -th =$i $2)" ] ;then
 	 				ditto $2 "${i} char"
@@ -36,7 +36,7 @@ th() {
 			done
 			exit ;;
 
-		=*  )
+		=* )
 			LENGTH="^$(seq -s. 0 $(length $1 $2) | tr -d '[:digit:]' | sed 's/[.]/[^ ]/g')$"  # exact length list
 			shift ;;
 	esac

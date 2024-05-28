@@ -70,7 +70,7 @@ if [ $USER != root ] ;then
 
 		# wm startup
 		stty size | cut -d' ' -f2 >$SEAT
-		[ $DELAY ] && [ -d $SESSION ] && echo $DELAY >$BOOTWM
+		# [ $DELAY ] && [ -d $SESSION ] && echo $DELAY >$BOOTWM
 	fi
 
 	# reset keyboard layout

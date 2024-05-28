@@ -15,8 +15,10 @@ fortune=/usr/bin/fortune
 if console ;then
 	exists syncthing && find $HOME -iname '*sync-conflict*' -exec rm -v {} \;  # purge syncthing conflicts
 	# delayed startup of default wm for remote computers
-	if [ -e "$BOOTWM" ] ;then   # SEE: console_login
-		x $(cat "$BOOTWM")       # will not spawn otherwise (alpine requires delay in x)
+	if [ -e "$BOOTWM" ] ;then     # SEE: console_login
+		# /usr/bin/udevadm settle  # wait for system init to complete
+		sleep 1
+		x $(cat "$BOOTWM")         # will not spawn otherwise (alpine requires delay in x)
 	fi
 	# sleep 1
 	# cbonsai -il
