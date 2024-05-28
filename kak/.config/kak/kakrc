@@ -434,7 +434,8 @@ set-option global autoreload yes
 # no sudo-write-all so sync root owned files on buffer switching
 define-command sync %{
 	# if %{ [ -n "$kak_opt_filetype" ] && $kak_modified } %{ sudo-write }  # BUG: $kak_opt_filetype is null for "if" command(?)
-	eval %sh{ [ -n "$kak_opt_filetype" ] && $kak_modified && echo "sudo-write" || echo "nop" }  # skip *scratch* *debug* buffers
+	# BUG: $kak_opt_filetype is null for %sh{} and root owned files(?)
+	eval %sh{ [ "$kak_buffname" != '*scratch*' ] && $kak_modified && echo "sudo-write" || echo "nop" }
 }
 
 # ..................................................................... Filetype
