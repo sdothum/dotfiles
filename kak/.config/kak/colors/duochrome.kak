@@ -26,6 +26,7 @@ evaluate-commands %sh{
 	black='rgb:263238'
 	light_black='rgb:304047'
 	dark_grey='rgb:445c65'
+	white='rgb:ffffff'
 	# reds
 	dark_red='rgb:a1462a'
 	soft_red='rgb:fa8c69'
@@ -189,6 +190,7 @@ set-face window MatchingChar                   "${match},${background}+br"
 set-face window Whitespace                     "${space},${background}+f"
 set-face window WrapMarker                     "${wrap}+bf"
 set-face window BufferPadding                  "${background},${background}"  # hide tilde
+set-face window Trailing                       "default,${white}"
 
 # .................................................................. Admonitions
 
