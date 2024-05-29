@@ -6,7 +6,7 @@
 
 # ....................................................... KOReader metadata edit
 
-usage() { usage: "$(basename $0) [reset p'ages] [t'op | b'ottom <margin>] [l'ineSpacing <percent>] [s'yncMargins 0|1] [f'ont | h'eaderFont <font>] [font g'amma <gamma>]"; exit 1; }
+usage() { usage: "$(basename $0) [reset p'ages] [t'op | b'ottom | l'eft | r'ight <margin>] [line s'pacing <percent>] [sync m'argins 0|1] [f'ont | h'eaderFont <font>] [font g'amma <gamma>]"; exit 1; }
 
 # update sdr files to match ever changing default settings :)
 
@@ -37,30 +37,36 @@ while [ $1 ] ;do
 
 	case $1 in
 		p*   ) resetpages; shift; continue ;;
-		t*   ) margin=$(number $2)  && sdr 'topmargin' ${margin} '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'    || usage; resetpages=true ;;
-		b*   ) margin=$(number $2)  && sdr 'bottommargin' ${margin} '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/' || usage; resetpages=true ;;
-		l*   ) percent=$(number $2) && sdr 'linespacing' ${percent} '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/' || usage; resetpages=true ;;
-		s*   ) sync=$(binary $2)    && sdr 'syncmargins' ${sync} '/\"copt_sync_t_b_page_margins\"/s/[01]/'${sync}'/'      || usage                  ;;
-		f*   ) font=$(string $2)    && sdr 'font' ${font} '/\"font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'                   || usage; resetpages=true ;;
-		h*   ) font=$(string $2)    && sdr 'headerfont' ${font} '/\"header_font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'      || usage                  ;;
-		g*   ) gamma=$(number $2)   && sdr 'fontgamma' ${gamma} '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'         || usage                  ;;
+		t*   ) margin=$(number $2)  && sdr 'topmargin' ${margin} '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'             || usage; resetpages=true ;;
+		b*   ) margin=$(number $2)  && sdr 'bottommargin' ${margin} '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'          || usage; resetpages=true ;;
+		l*   ) margin=$(number $2)  && sdr 'leftmargin' ${margin} '/\"copt_h_page_margins\".*=/{n;s/= [0-9]*,/= '${margin}',/}'    || usage; resetpages=true ;;
+		r*   ) margin=$(number $2)  && sdr 'rightmargin' ${margin} '/\"copt_h_page_margins\".*=/{n;n;s/= [0-9]*,/= '${margin}',/}' || usage; resetpages=true ;;
+		s*   ) percent=$(number $2) && sdr 'linespacing' ${percent} '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'          || usage; resetpages=true ;;
+		m*   ) sync=$(binary $2)    && sdr 'syncmargins' ${sync} '/\"copt_sync_t_b_page_margins\"/s/[01]/'${sync}'/'               || usage                  ;;
+		f*   ) font=$(string $2)    && sdr 'font' ${font} '/\"font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'                            || usage; resetpages=true ;;
+		h*   ) font=$(string $2)    && sdr 'headerfont' ${font} '/\"header_font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'               || usage                  ;;
+		g*   ) gamma=$(number $2)   && sdr 'fontgamma' ${gamma} '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                  || usage                  ;;
 		*    ) usage ;;
 	esac
 
 	case $1 in
-		t*   ) settings 'topmargin' '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'    ;;
-		b*   ) settings 'bottommargin' '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/' ;;
-		l*   ) settings 'linespacing' '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'  ;;
-		h*   ) settings 'font' '/\"cre_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                  ;;
-		g*   ) settings 'fontgamma' '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'        ;;
+		t*   ) settings 'topmargin' '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'             ;;
+		b*   ) settings 'bottommargin' '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'          ;;
+		l*   ) settings 'leftmargin' '/\"copt_h_page_margins\".*=/{n;s/= [0-9]*,/= '${margin}',/}'    ;;
+		r*   ) settings 'rightmargin' '/\"copt_h_page_margins\".*=/{n;n;s/= [0-9]*,/= '${margin}',/}' ;;
+		s*   ) settings 'linespacing' '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'           ;;
+		h*   ) settings 'font' '/\"cre_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                           ;;
+		g*   ) settings 'fontgamma' '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                 ;;
 	esac
 
 	case $1 in
-		t*   ) gestures 'topmargin' '/\"t_page_margin\"/s/= [0-9]*,/= '${margin}',/'    ;;
-		b*   ) gestures 'bottommargin' '/\"b_page_margin\"/s/= [0-9]*,/= '${margin}',/' ;;
-		l*   ) gestures 'linespacing' '/\"line_spacing\"/s/= [0-9]*,/= '${percent}',/'  ;;
-		f*   ) gestures 'font' '/\"set_font\"/s/\"[^ ]*\",/\"'${font}'\",/'             ;;
-		g*   ) gestures 'fontgamma' '/\"font_gamma\"/s/= [0-9]*,/= '${gamma}',/'        ;;
+		t*   ) gestures 'topmargin' '/\"t_page_margin\"/s/= [0-9]*,/= '${margin}',/'             ;;
+		b*   ) gestures 'bottommargin' '/\"b_page_margin\"/s/= [0-9]*,/= '${margin}',/'          ;;
+		l*   ) gestures 'leftmargin' '/\"h_page_margins\".*=/{n;s/= [0-9]*,/= '${margin}',/}'    ;;
+		r*   ) gestures 'rightmargin' '/\"h_page_margins\".*=/{n;n;s/= [0-9]*,/= '${margin}',/}' ;;
+		s*   ) gestures 'linespacing' '/\"line_spacing\"/s/= [0-9]*,/= '${percent}',/'           ;;
+		f*   ) gestures 'font' '/\"set_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                      ;;
+		g*   ) gestures 'fontgamma' '/\"font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                 ;;
 	esac
 
 	shift 2
