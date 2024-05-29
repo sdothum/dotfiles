@@ -43,6 +43,7 @@ d m nnn    # with icons
   ack
   expect
   fzf
+  moreutils
   pcre
   ripgrep
 m shell-functools
