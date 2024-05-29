@@ -35,7 +35,7 @@ waitron wm_config sticky_windows false
 # .................................................................... Behaviour
 
 waitron wm_config cursor_position center
-waitron wm_config enable_resize_hints false
+waitron wm_config enable_resize_hints true
 waitron wm_config enable_sloppy_focus true
 waitron wm_config enable_last_window_focusing true
 waitron wm_config apply_settings true

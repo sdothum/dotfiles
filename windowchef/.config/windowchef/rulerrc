@@ -61,7 +61,8 @@ class="Surf"
 	window tile 4 1
 
 class="term"
-	window desktop $(desktop)
+	window desktop $(desktop) ;\
+	window snap center
 
 # kak: filetype=sh
 
