@@ -16,8 +16,8 @@
 # kitty        # need for nnn preview-tui plugin
 # rxvt-unicode [cpu atom]
 # urxvt-perls  [cpu atom]
-# xterm
   alacritty    [! cpu atom]
+  xterm
 
 
 = window manager
