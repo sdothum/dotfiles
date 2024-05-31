@@ -24,6 +24,7 @@ unset name  # for inadvertant env var conflict usage in calling scripts
 exists qk && { pgrep quikey >/dev/null || qk start; }
 
 [ -e /usr/bin/alacritty ] && TERM=alacritty || TERM=urxvt
+
 case $TERM in
 	alacritty )
 		TITLE=--title
@@ -34,8 +35,8 @@ case $TERM in
 	urxvt     )
 		TITLE=-title
 		NAME=-name
-		blackboard="-bg '$blackboard' -fg '$blackboard' -cr '$blackboard'"
-		geometry='-geometry 1024x600+0+0'
+		blackboard=blackboard
+		name="$NAME term"  # default class SEE: rulerrc
 		;;
 esac
 
@@ -54,7 +55,7 @@ while : ;do
 		WAIT          ) wait=true ;;
 		title=*       ) title=${1#*=}; title="$TITLE $title" ;;
 		class=*       ) class=${1#*=}; name="$NAME $class"   ;;
-	
+
 		SHELL         )
 			shift
 			process=$@
