@@ -9,6 +9,6 @@
 
 # Usage: scratchpad [name]
 
-xdotool search --onlyvisible --classname ${1:-scratchpad} windowclose || { tmux_session ${1:-scratchpad}; window snap center; }
+xdotool search --onlyvisible --classname ${1:-scratchpad} windowclose || tmux_session ${1:-scratchpad}
 
 # kak: filetype=sh

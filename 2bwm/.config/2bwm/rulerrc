@@ -50,5 +50,8 @@ class="Surf"
 	window desktop 1 ;\
 	window tile 4 1
 
+class="term"
+	window deskoop $(desktop)
+
 # kak: filetype=sh
 
