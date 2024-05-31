@@ -25,7 +25,7 @@ string() {
 	echo $1
 }
 
-sdr()      { ifno "${1}: $2" && usage || sudo find -regex '.*metadata.epub.lua' -exec sed -i "$3" {} \; ; }
+sdr()      { ifno "sdr: ${1} $2" && usage || sudo find -regex '.*metadata.epub.lua' -exec sed -i "$3" {} \; ; }
 gestures() { ditto gestures "$1"; sed -i "$2" ../.adds/koreader/settings/gestures.lua; }
 settings() { ditto settings "$1"; sed -i "$2" ../.adds/koreader/settings.reader.lua; }
 
@@ -50,23 +50,23 @@ while [ $1 ] ;do
 	esac
 
 	case $1 in
-		t*   ) settings 'topmargin' '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'             ;;
-		b*   ) settings 'bottommargin' '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'          ;;
-		l*   ) settings 'leftmargin' '/\"copt_h_page_margins\".*=/{n;s/= [0-9]*,/= '${margin}',/}'    ;;
-		r*   ) settings 'rightmargin' '/\"copt_h_page_margins\".*=/{n;n;s/= [0-9]*,/= '${margin}',/}' ;;
-		s*   ) settings 'linespacing' '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'           ;;
-		h*   ) settings 'font' '/\"cre_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                           ;;
-		g*   ) settings 'fontgamma' '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                 ;;
+		t*   ) settings "topmargin ${margin}" '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'             ;;
+		b*   ) settings "bottommargin ${margin}" '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'          ;;
+		l*   ) settings "leftmargin ${margin}" '/\"copt_h_page_margins\".*=/{n;s/= [0-9]*,/= '${margin}',/}'    ;;
+		r*   ) settings "rightmargin ${margin}" '/\"copt_h_page_margins\".*=/{n;n;s/= [0-9]*,/= '${margin}',/}' ;;
+		s*   ) settings "linespacing ${percent}" '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'          ;;
+		h*   ) settings "font ${font}" '/\"cre_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                             ;;
+		g*   ) settings "fontgamma ${gamma}" '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                  ;;
 	esac
 
 	case $1 in
-		t*   ) gestures 'topmargin' '/\"t_page_margin\"/s/= [0-9]*,/= '${margin}',/'             ;;
-		b*   ) gestures 'bottommargin' '/\"b_page_margin\"/s/= [0-9]*,/= '${margin}',/'          ;;
-		l*   ) gestures 'leftmargin' '/\"h_page_margins\".*=/{n;s/= [0-9]*,/= '${margin}',/}'    ;;
-		r*   ) gestures 'rightmargin' '/\"h_page_margins\".*=/{n;n;s/= [0-9]*,/= '${margin}',/}' ;;
-		s*   ) gestures 'linespacing' '/\"line_spacing\"/s/= [0-9]*,/= '${percent}',/'           ;;
-		f*   ) gestures 'font' '/\"set_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                      ;;
-		g*   ) gestures 'fontgamma' '/\"font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                 ;;
+		t*   ) gestures "topmargin ${margin}" '/\"t_page_margin\"/s/= [0-9]*,/= '${margin}',/'             ;;
+		b*   ) gestures "bottommargin ${margin}" '/\"b_page_margin\"/s/= [0-9]*,/= '${margin}',/'          ;;
+		l*   ) gestures "leftmargin ${margin}" '/\"h_page_margins\".*=/{n;s/= [0-9]*,/= '${margin}',/}'    ;;
+		r*   ) gestures "rightmargin ${margin}" '/\"h_page_margins\".*=/{n;n;s/= [0-9]*,/= '${margin}',/}' ;;
+		s*   ) gestures "linespacing ${percent}" '/\"line_spacing\"/s/= [0-9]*,/= '${percent}',/'          ;;
+		f*   ) gestures "font ${font}" '/\"set_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                        ;;
+		g*   ) gestures "fontgamma ${gamma}" '/\"font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                  ;;
 	esac
 
 	shift 2
