@@ -24,4 +24,6 @@ else
   [ $device ] && $SUDO eject $device || notify critical "$1" 'not ejected'
 fi
 
+sync
+
 # vim: set ft=sh: #
