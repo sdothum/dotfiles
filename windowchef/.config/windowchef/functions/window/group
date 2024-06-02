@@ -13,17 +13,17 @@ remove() {
 		grep -v $1 $i >$GROUP:swap
 		mv $GROUP:swap $i
 	done
-	rm -f $WINFO:$1  # associated geometry
+	[ $2 ] || rm -f $WINFO:$1  # rm unless add to new group
 }
 
 case $1 in
 	[1-9]    )
 		case $2 in
-			add ) grep -q $3 $GROUP:$1 || { remove $3; echo $3 >>$GROUP:$1; } ;;
+			add ) grep -q $3 $GROUP:$1 || { remove $3 add; echo $3 >>$GROUP:$1; } ;;
 			*   ) cat $GROUP:$1 | wc -l ;;
 		esac
 		;;
-	remove   ) remove ${2:-$winid}  ;;
+	remove   ) remove ${2:-$winid} ;;
 esac
 
 # kak: filetype=sh

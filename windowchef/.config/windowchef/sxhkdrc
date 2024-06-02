@@ -236,6 +236,6 @@ super + shift + Escape
 	pfw >$WME:mouse                                                             ;\
 	chef -- desktop                                                             ;\
 	waitron window_focus $(cat $WME:mouse)
- 
+
 # kak: filetype=sh
 
