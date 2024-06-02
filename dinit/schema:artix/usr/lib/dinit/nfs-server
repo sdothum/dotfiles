@@ -1,0 +1,8 @@
+#!/bin/sh
+modprobe sunrpc
+modprobe nfs
+modprobe nfsd
+mountpoint -q /var/lib/nfs/rpc_pipenfs
+exportfs -ra
+rpc.nfsd -- 4
+exec rpc.mountd --foreground 2>&1

@@ -1,0 +1,4 @@
+type       = scripted
+command    = /usr/lib/dinit/vconsole keyboard
+restart    = false
+depends-on = early-devices.target

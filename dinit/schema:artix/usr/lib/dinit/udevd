@@ -1,0 +1,5 @@
+#!/bin/sh
+# Run after udevd-early so udevd can be properly supervised
+
+/usr/bin/udevadm control --exit >/dev/null 2>&1
+exec /usr/bin/udevd "$@"

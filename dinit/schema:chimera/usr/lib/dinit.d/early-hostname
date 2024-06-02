@@ -1,0 +1,5 @@
+# set up the hostname
+
+type       = scripted
+command    = ./early/scripts/hostname.sh
+depends-on = early-devices.target

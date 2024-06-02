@@ -1,0 +1,8 @@
+type               = process
+command            = /usr/lib/dinit/dbus-wait-for -s -f 4 -n org.freedesktop.login1 /usr/lib/elogind/elogind
+smooth-recovery    = true
+depends-on         = dbus
+depends-on         = local.target
+before             = login.target
+before             = logind
+ready-notification = pipefd:4

@@ -1,0 +1,7 @@
+type         = scripted
+command      = /usr/lib/dinit/hwclock start
+stop-command = /usr/lib/dinit/hwclock stop
+restart      = false
+depends-on   = udevd-early
+depends-on   = early-prepare.target
+depends-on   = early-root-rw.target

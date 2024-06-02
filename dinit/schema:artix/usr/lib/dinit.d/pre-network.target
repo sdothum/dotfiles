@@ -1,0 +1,6 @@
+# Network services should depend on this internal service.
+# Run network services before this service.
+
+type       = internal
+restart    = false
+depends-on = local.target

@@ -1,0 +1,4 @@
+# Reached before network-related daemons are started
+
+type        = internal
+depends-on  = local.target

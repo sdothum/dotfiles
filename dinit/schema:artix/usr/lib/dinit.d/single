@@ -1,0 +1,5 @@
+type     = process
+command  = /bin/sulogin
+restart  = false
+options  = shares-console
+chain-to = boot

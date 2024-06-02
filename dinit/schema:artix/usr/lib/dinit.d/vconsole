@@ -1,0 +1,3 @@
+# deprecated - remove later
+type       = internal
+depends-on = early-console.target

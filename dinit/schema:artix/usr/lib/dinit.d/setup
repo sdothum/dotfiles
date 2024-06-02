@@ -1,0 +1,4 @@
+# deprecated - remove later
+
+type       = internal
+depends-on = pre-local.target

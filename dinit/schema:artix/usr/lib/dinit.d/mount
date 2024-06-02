@@ -1,0 +1,4 @@
+# deprecated - remove later
+
+type       = internal
+depends-on = early-fs-local.target

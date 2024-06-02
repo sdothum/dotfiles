@@ -1,0 +1,28 @@
+#!/bin/sh
+# A wrapper for agetty with config files.
+# Adapted from Chimera Linux
+# Copyright 2023 Daniel "q66" Kolesa
+# License: BSD-2-Clause
+
+GETTY="$1"
+[ -n "$GETTY" ] && shift
+
+[ -z "$GETTY" ] && echo "$0: no tty given"
+
+[ ! -c "/dev/$GETTY" ] && echo "$0: /dev/$GETTY is not a terminal"
+
+# defaults
+GETTY_BAUD="$1"
+[ -n "$GETTY_BAUD" ] && shift
+[ -n "$GETTY_BAUD" ] || GETTY_BAUD=38400
+GETTY_TERM="$1"
+[ -n "$GETTY_TERM" ] && shift
+[ -n "$GETTY_TERM" ] || GETTY_TERM=linux
+GETTY_ARGS=$*
+
+[ "$GETTY" = tty1 ] && GETTY_ARGS="$GETTY_ARGS --noclear"
+
+# read config, which may override the above vars
+[ -r "/etc/dinit.d/config/agetty-$GETTY.conf" ] && . "/etc/dinit.d/config/agetty-$GETTY.conf"
+
+exec /usr/bin/agetty $GETTY_ARGS "$GETTY" "$GETTY_BAUD" "$GETTY_TERM"

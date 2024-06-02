@@ -1,0 +1,3 @@
+# deprecated
+type       = internal
+depends-on = early-fs-fstab.target

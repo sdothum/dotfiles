@@ -1,0 +1,10 @@
+# For services that need network, depend on this.
+# Run network services before this service.
+# Deprecated - remove later
+
+type       = internal
+restart    = false
+depends-on = network-pre
+after      = pseudofs
+after      = net-lo
+after      = mount

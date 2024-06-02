@@ -1,0 +1,4 @@
+type       = scripted
+command    = /usr/bin/udevadm trigger --action=add
+restart    = false
+depends-on = udevd-early

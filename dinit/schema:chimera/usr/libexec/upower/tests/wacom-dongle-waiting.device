@@ -1,0 +1,131 @@
+P: /devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1
+N: bus/usb/001/005
+E: DEVPATH=/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1
+E: SUBSYSTEM=usb
+E: DEVNAME=/dev/bus/usb/001/005
+E: DEVTYPE=usb_device
+E: DRIVER=usb
+E: PRODUCT=56a/84/111
+E: TYPE=0/0/0
+E: BUSNUM=001
+E: DEVNUM=005
+E: MAJOR=189
+E: MINOR=4
+E: USEC_INITIALIZED=796229411781
+E: ID_VENDOR=Wacom_Co._Ltd.
+E: ID_VENDOR_ENC=Wacom\x20Co.\x2cLtd.
+E: ID_VENDOR_ID=056a
+E: ID_MODEL=Wacom_Wireless_Receiver
+E: ID_MODEL_ENC=Wacom\x20Wireless\x20Receiver
+E: ID_MODEL_ID=0084
+E: ID_REVISION=0111
+E: ID_SERIAL=Wacom_Co._Ltd._Wacom_Wireless_Receiver
+E: ID_BUS=usb
+E: ID_USB_INTERFACES=:030000:
+E: ID_VENDOR_FROM_DATABASE=Wacom Co., Ltd
+E: ID_MODEL_FROM_DATABASE=ACK-40401 [Wireless Accessory Kit]
+E: ID_PATH=pci-0000:00:1a.0-usb-0:1.1
+E: ID_PATH_TAG=pci-0000_00_1a_0-usb-0_1_1
+E: ID_FOR_SEAT=usb-pci-0000_00_1a_0-usb-0_1_1
+E: TAGS=:seat:
+E: CURRENT_TAGS=:seat:
+
+P: /devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1:1.0
+E: DEVPATH=/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1:1.0
+E: SUBSYSTEM=usb
+E: DEVTYPE=usb_interface
+E: DRIVER=usbhid
+E: PRODUCT=56a/84/111
+E: TYPE=0/0/0
+E: INTERFACE=3/0/0
+E: MODALIAS=usb:v056Ap0084d0111dc00dsc00dp00ic03isc00ip00in00
+E: USEC_INITIALIZED=796229425004
+E: ID_VENDOR_FROM_DATABASE=Wacom Co., Ltd
+E: ID_MODEL_FROM_DATABASE=ACK-40401 [Wireless Accessory Kit]
+E: ID_PATH=pci-0000:00:1a.0-usb-0:1.1:1.0
+E: ID_PATH_TAG=pci-0000_00_1a_0-usb-0_1_1_1_0
+
+P: /devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1:1.0/0003:056A:0084.001F
+E: DEVPATH=/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1:1.0/0003:056A:0084.001F
+E: SUBSYSTEM=hid
+E: DRIVER=wacom
+E: HID_ID=0003:0000056A:00000084
+E: HID_NAME=Wacom Co.,Ltd. Wacom Wireless Receiver
+E: HID_PHYS=usb-0000:00:1a.0-1.1/input0
+E: HID_UNIQ=
+E: MODALIAS=hid:b0003g0101v0000056Ap00000084
+
+P: /devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1:1.0/0003:056A:0084.001F/hidraw/hidraw0
+N: hidraw0
+E: DEVPATH=/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1:1.0/0003:056A:0084.001F/hidraw/hidraw0
+E: SUBSYSTEM=hidraw
+E: DEVNAME=/dev/hidraw0
+E: MAJOR=239
+E: MINOR=0
+
+P: /devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1:1.1
+E: DEVPATH=/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1:1.1
+E: SUBSYSTEM=usb
+E: DEVTYPE=usb_interface
+E: DRIVER=usbhid
+E: PRODUCT=56a/84/111
+E: TYPE=0/0/0
+E: INTERFACE=3/0/0
+E: MODALIAS=usb:v056Ap0084d0111dc00dsc00dp00ic03isc00ip00in01
+E: USEC_INITIALIZED=796229426617
+E: ID_VENDOR_FROM_DATABASE=Wacom Co., Ltd
+E: ID_MODEL_FROM_DATABASE=ACK-40401 [Wireless Accessory Kit]
+E: ID_PATH=pci-0000:00:1a.0-usb-0:1.1:1.1
+E: ID_PATH_TAG=pci-0000_00_1a_0-usb-0_1_1_1_1
+
+P: /devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1:1.1/0003:056A:0084.0020
+E: DEVPATH=/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1:1.1/0003:056A:0084.0020
+E: SUBSYSTEM=hid
+E: DRIVER=wacom
+E: HID_ID=0003:0000056A:00000084
+E: HID_NAME=Wacom Co.,Ltd. Wacom Wireless Receiver
+E: HID_PHYS=usb-0000:00:1a.0-1.1/input1
+E: HID_UNIQ=
+E: MODALIAS=hid:b0003g0101v0000056Ap00000084
+
+P: /devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1:1.1/0003:056A:0084.0020/hidraw/hidraw1
+N: hidraw1
+E: DEVPATH=/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1:1.1/0003:056A:0084.0020/hidraw/hidraw1
+E: SUBSYSTEM=hidraw
+E: DEVNAME=/dev/hidraw1
+E: MAJOR=239
+E: MINOR=1
+
+P: /devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1:1.2
+E: DEVPATH=/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1:1.2
+E: SUBSYSTEM=usb
+E: DEVTYPE=usb_interface
+E: DRIVER=usbhid
+E: PRODUCT=56a/84/111
+E: TYPE=0/0/0
+E: INTERFACE=3/0/0
+E: MODALIAS=usb:v056Ap0084d0111dc00dsc00dp00ic03isc00ip00in02
+E: USEC_INITIALIZED=796229426512
+E: ID_VENDOR_FROM_DATABASE=Wacom Co., Ltd
+E: ID_MODEL_FROM_DATABASE=ACK-40401 [Wireless Accessory Kit]
+E: ID_PATH=pci-0000:00:1a.0-usb-0:1.1:1.2
+E: ID_PATH_TAG=pci-0000_00_1a_0-usb-0_1_1_1_2
+
+P: /devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1:1.2/0003:056A:0084.0021
+E: DEVPATH=/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1:1.2/0003:056A:0084.0021
+E: SUBSYSTEM=hid
+E: DRIVER=wacom
+E: HID_ID=0003:0000056A:00000084
+E: HID_NAME=Wacom Co.,Ltd. Wacom Wireless Receiver
+E: HID_PHYS=usb-0000:00:1a.0-1.1/input2
+E: HID_UNIQ=
+E: MODALIAS=hid:b0003g0101v0000056Ap00000084
+
+P: /devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1:1.2/0003:056A:0084.0021/hidraw/hidraw2
+N: hidraw2
+E: DEVPATH=/devices/pci0000:00/0000:00:1a.0/usb1/1-1/1-1.1/1-1.1:1.2/0003:056A:0084.0021/hidraw/hidraw2
+E: SUBSYSTEM=hidraw
+E: DEVNAME=/dev/hidraw2
+E: MAJOR=239
+E: MINOR=2
+

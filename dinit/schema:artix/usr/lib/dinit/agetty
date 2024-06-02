@@ -1,0 +1,62 @@
+#!/bin/sh
+# Originally written by Daniel "q66" Kolesa for nyagetty on Chimera Linux
+# nyagetty was licensed under Public Domain or the following terms:
+#
+# Permission to use, copy, modify, and/or distribute this software for
+# any purpose with or without fee is hereby granted.
+
+# THE SOFTWARE IS PROVIDED “AS IS” AND THE AUTHOR DISCLAIMS ALL
+# WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE
+# FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY
+# DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
+# AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
+# OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+[ -r /etc/dinit.d/config/console.conf ] && . /etc/dinit.d/config/console.conf
+
+export PATH=/usr/bin
+
+# the specified active consoles we want
+ACTIVE_CONSOLES=$(
+    for tty in $ACTIVE_CONSOLES; do
+        if [ -e $tty ]; then
+            echo $tty
+        fi
+    done
+)
+
+# possibly already active console list
+PREV_CONSOLES=
+[ -f /run/agetty-active ] && PREV_CONSOLES=$(cat /run/agetty-active)
+
+# add dependency links for all possible requested consoles
+ACTIVE_SERVICES=$(
+    for tty in $ACTIVE_CONSOLES; do
+        tty=${tty##*/}
+        [ -f /etc/dinit.d/$tty ] || continue
+        dinitctl add-dep milestone getty $tty > /dev/null
+        echo $tty
+    done
+)
+
+# clear dependency links for consoles that were active but should not be
+for otty in $PREV_CONSOLES; do
+    for tty in $ACTIVE_SERVICES; do
+        if [ "$tty" = "$otty" ]; then
+            otty=
+            break
+        fi
+    done
+    [ -n "$otty" ] && dinitctl rm-dep milestone getty $otty > /dev/null
+done
+
+rm -f /run/agetty-active
+
+# wake whichever services newly got links and generate a new active list
+for tty in $ACTIVE_SERVICES; do
+    echo $tty >> /run/agetty-active
+    dinitctl wake $tty > /dev/null &
+done
+
+wait || :

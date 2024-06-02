@@ -1,0 +1,28 @@
+#!/bin/sh
+
+export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+# check if cryptsetup is enabled
+[ -x /usr/lib/dinit/cryptsetup ] && CRYPT=1
+
+echo "Disabling swap"
+swapoff -a
+echo "Unmounting filesystems"
+umount -r -a -t nosysfs,noproc,nodevtmpfs,notmpfs
+echo "Remounting root read-only"
+mount -n -o remount,ro /
+echo "Syncing disks"
+sync
+
+export DM_DISABLE_UDEV=1
+
+echo "Locking crypt devices"
+[ -n "$CRYPT" ] && /usr/lib/dinit/cryptsetup remaining stop
+
+echo "Disabling LVM"
+# Suppress FD warnings since we only do this on shutdown
+export LVM_SUPPRESS_FD_WARNINGS=1
+[ -x /usr/bin/vgchange ] && vgchange -an
+
+echo "Locking remaining crypt devices"
+[ -n "$CRYPT" ] && /usr/lib/dinit/cryptsetup early stop

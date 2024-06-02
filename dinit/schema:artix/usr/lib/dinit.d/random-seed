@@ -1,0 +1,7 @@
+type         = scripted
+command      = /usr/lib/dinit/seedrng
+stop-command = /usr/lib/dinit/seedrng
+restart      = false
+waits-for    = early-modules.target
+after        = early-devices.target
+after        = early-root-rw.target

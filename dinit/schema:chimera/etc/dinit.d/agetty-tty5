@@ -1,0 +1,10 @@
+# agetty service for tty5
+type            = process
+command         = /usr/libexec/agetty-default tty5
+restart         = true
+depends-on      = login.target
+termsignal      = HUP
+restart         = true
+smooth-recovery = true
+inittab-id      = 5
+inittab-line    = tty5

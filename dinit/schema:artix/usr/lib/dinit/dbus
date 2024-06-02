@@ -1,0 +1,4 @@
+#!/bin/sh
+# from Chimera Linux:
+# this wrapper exists to prepare the environment ahead of launch if needed
+exec /usr/bin/dbus-daemon --system --nofork --nopidfile "$@"

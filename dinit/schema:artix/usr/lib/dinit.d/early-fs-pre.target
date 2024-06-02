@@ -1,0 +1,4 @@
+# services like cryptsetup and lvm2 will be run *before* this service
+
+type        = internal
+depends-on  = early-devices.target

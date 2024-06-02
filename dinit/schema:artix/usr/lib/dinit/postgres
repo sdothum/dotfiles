@@ -1,0 +1,13 @@
+/bin/sh -x
+. /etc/dinit.d/config/postgres.conf
+
+if [ -z "$(ls -A $PGDATA)" ]; then
+    /usr/bin/initdb $INITOPTS -D $PGDATA
+    [ -f /etc/postgresql/postgresql.conf ] && ln -sf /etc/postgresql/postgresql.conf "$PGDATA/postgresql.conf"
+fi
+
+if [ "$PGOPTS" ]; then
+    exec /usr/bin/postgres -D "$PGDATA" "$PGOPTS"
+else
+    exec /usr/bin/postgres -D "$PGDATA"
+fi

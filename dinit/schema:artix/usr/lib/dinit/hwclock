@@ -1,0 +1,15 @@
+#!/bin/sh
+. /etc/dinit.d/config/hwclock.conf
+
+HARDWARECLOCK=${HARDWARECLOCK:-UTC}
+
+case $HARDWARECLOCK in
+    UTC) HWCLOCK_PARAMS="--utc" ;;
+    localtime) HWCLOCK_PARAMS="--localtime" ;;
+    *) HWCLOCK_PARAMS="" ;;
+esac
+
+case "$1" in
+    start) hwclock --systz "$HWCLOCK_PARAMS" --noadjfile ;;
+    stop) hwclock --systohc "$HWCLOCK_PARAMS" ;;
+esac

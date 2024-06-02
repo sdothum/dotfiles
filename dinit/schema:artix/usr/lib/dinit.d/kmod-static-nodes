@@ -1,0 +1,4 @@
+type       = scripted
+command    = /usr/bin/kmod static-nodes --format=tmpfiles --output=/run/tmpfiles.d/kmod.conf
+restart    = false
+depends-on = early-prepare.target

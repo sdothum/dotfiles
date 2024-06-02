@@ -1,0 +1,6 @@
+type       = scripted
+command    = /usr/bin/etmpfiles --prefix=/dev --create --boot
+restart    = false
+depends-on = pseudofs
+depends-on = kmod-static-nodes
+depends-on = root-ro

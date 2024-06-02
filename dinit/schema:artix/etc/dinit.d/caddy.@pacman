@@ -1,0 +1,6 @@
+type            = process
+run-as          = root
+command         = /usr/bin/caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
+logfile         = /var/log/caddy/caddy.log
+smooth-recovery = true
+depends-on      = network

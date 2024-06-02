@@ -1,0 +1,8 @@
+type            = process
+command         = /usr/lib/dinit/agetty-default tty6
+restart         = true
+depends-on      = login.target
+termsignal      = HUP
+smooth-recovery = true
+inittab-id      = 6
+inittab-line    = tty6

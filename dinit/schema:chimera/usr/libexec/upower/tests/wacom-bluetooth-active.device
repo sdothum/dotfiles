@@ -1,0 +1,255 @@
+P: /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69
+E: DEVPATH=/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69
+E: SUBSYSTEM=bluetooth
+E: DEVTYPE=link
+E: USEC_INITIALIZED=796084718828
+E: SYSTEMD_ALIAS=/sys/subsystem/bluetooth/devices/hci0:69
+E: SYSTEMD_WANTS=bluetooth.target
+E: SYSTEMD_USER_WANTS=bluetooth.target
+E: TAGS=:systemd:
+E: CURRENT_TAGS=:systemd:
+
+P: /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B
+E: DEVPATH=/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B
+E: SUBSYSTEM=hid
+E: DRIVER=wacom
+E: HID_ID=0005:0000056A:00000360
+E: HID_NAME=CL IntuosPro M
+E: HID_PHYS=00:1b:dc:06:6a:57
+E: HID_UNIQ=00:00:00:00:02:06
+E: MODALIAS=hid:b0005g0101v0000056Ap00000360
+
+P: /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/hidraw/hidraw0
+N: hidraw0
+E: DEVPATH=/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/hidraw/hidraw0
+E: SUBSYSTEM=hidraw
+E: DEVNAME=/dev/hidraw0
+E: MAJOR=239
+E: MINOR=0
+
+P: /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input104
+E: DEVPATH=/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input104
+E: SUBSYSTEM=input
+E: PRODUCT=5/56a/360/0
+E: NAME="Wacom Intuos Pro M Pen"
+E: PHYS="00:1b:dc:06:6a:57"
+E: UNIQ="00:00:00:00:02:06"
+E: PROP=1
+E: EV=1f
+E: KEY=1cdf 1f0000 0 0 0 0
+E: REL=100
+E: ABS=1000f000167
+E: MSC=1
+E: MODALIAS=input:b0005v056Ap0360e0000-e0,1,2,3,4,k110,111,112,113,114,140,141,142,143,144,146,147,14A,14B,14C,r8,a0,1,2,5,6,8,18,19,1A,1B,28,m0,lsfw
+E: USEC_INITIALIZED=796085091545
+E: ID_INPUT=1
+E: ID_INPUT_TABLET=1
+E: ID_BUS=bluetooth
+E: ID_PATH=pci-0000:00:1d.0-usb-0:1.3:1.0
+E: ID_PATH_TAG=pci-0000_00_1d_0-usb-0_1_3_1_0
+E: ID_FOR_SEAT=input-pci-0000_00_1d_0-usb-0_1_3_1_0
+E: TAGS=:seat:
+E: CURRENT_TAGS=:seat:
+
+P: /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input104/event27
+N: input/event27
+E: DEVPATH=/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input104/event27
+E: SUBSYSTEM=input
+E: DEVNAME=/dev/input/event27
+E: MAJOR=13
+E: MINOR=91
+E: USEC_INITIALIZED=796085135161
+E: ID_INPUT=1
+E: ID_INPUT_TABLET=1
+E: ID_INPUT_WIDTH_MM=224
+E: ID_INPUT_HEIGHT_MM=148
+E: ID_BUS=bluetooth
+E: LIBINPUT_DEVICE_GROUP=5/56a/360:00:1b:dc:06:6a:57
+
+P: /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input104/mouse3
+N: input/mouse3
+E: DEVPATH=/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input104/mouse3
+E: SUBSYSTEM=input
+E: DEVNAME=/dev/input/mouse3
+E: MAJOR=13
+E: MINOR=35
+E: USEC_INITIALIZED=796085099029
+E: ID_INPUT=1
+E: ID_INPUT_TABLET=1
+E: ID_BUS=bluetooth
+
+P: /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input105
+E: DEVPATH=/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input105
+E: SUBSYSTEM=input
+E: PRODUCT=5/56a/360/0
+E: NAME="Wacom Intuos Pro M Finger"
+E: PHYS="00:1b:dc:06:6a:57"
+E: UNIQ="00:00:00:00:02:06"
+E: PROP=1
+E: EV=2b
+E: KEY=e520 0 0 0 0 0
+E: ABS=263800000000003
+E: SW=4000
+E: MODALIAS=input:b0005v056Ap0360e0000-e0,1,3,5,k145,148,14A,14D,14E,14F,ra0,1,2F,30,31,35,36,39,mlsfwE,
+E: USEC_INITIALIZED=796085094227
+E: ID_INPUT=1
+E: ID_INPUT_TOUCHPAD=1
+E: ID_INPUT_SWITCH=1
+E: ID_BUS=bluetooth
+E: ID_PATH=pci-0000:00:1d.0-usb-0:1.3:1.0
+E: ID_PATH_TAG=pci-0000_00_1d_0-usb-0_1_3_1_0
+E: ID_FOR_SEAT=input-pci-0000_00_1d_0-usb-0_1_3_1_0
+E: ID_INPUT_TABLET=1
+E: TAGS=:seat:
+E: CURRENT_TAGS=:seat:
+
+P: /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input105/event28
+N: input/event28
+E: DEVPATH=/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input105/event28
+E: SUBSYSTEM=input
+E: DEVNAME=/dev/input/event28
+E: MAJOR=13
+E: MINOR=92
+E: USEC_INITIALIZED=796085188983
+E: ID_INPUT=1
+E: ID_INPUT_TOUCHPAD=1
+E: ID_INPUT_SWITCH=1
+E: ID_INPUT_WIDTH_MM=224
+E: ID_INPUT_HEIGHT_MM=148
+E: ID_BUS=bluetooth
+E: ID_INPUT_TABLET=1
+E: ID_INPUT_TOUCHPAD_INTEGRATION=external
+E: LIBINPUT_DEVICE_GROUP=5/56a/360:00:1b:dc:06:6a:57
+E: LIBINPUT_FUZZ_35=4
+E: LIBINPUT_FUZZ_36=4
+E: TAGS=:power-switch:
+E: CURRENT_TAGS=:power-switch:
+
+P: /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input105/mouse4
+N: input/mouse4
+E: DEVPATH=/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input105/mouse4
+E: SUBSYSTEM=input
+E: DEVNAME=/dev/input/mouse4
+E: MAJOR=13
+E: MINOR=36
+E: USEC_INITIALIZED=796085109604
+E: ID_INPUT=1
+E: ID_INPUT_TOUCHPAD=1
+E: ID_INPUT_SWITCH=1
+E: ID_BUS=bluetooth
+
+P: /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input106
+E: DEVPATH=/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input106
+E: SUBSYSTEM=input
+E: PRODUCT=5/56a/360/0
+E: NAME="Wacom Intuos Pro M Pad"
+E: PHYS="00:1b:dc:06:6a:57"
+E: UNIQ="00:00:00:00:02:06"
+E: PROP=0
+E: EV=b
+E: KEY=800 1ff 0 0 0 0
+E: ABS=10000000103
+E: MODALIAS=input:b0005v056Ap0360e0000-e0,1,3,k100,101,102,103,104,105,106,107,108,14B,ra0,1,8,28,mlsfw
+E: USEC_INITIALIZED=796085094226
+E: ID_INPUT=1
+E: ID_INPUT_TABLET=1
+E: ID_INPUT_TABLET_PAD=1
+E: ID_BUS=bluetooth
+E: ID_PATH=pci-0000:00:1d.0-usb-0:1.3:1.0
+E: ID_PATH_TAG=pci-0000_00_1d_0-usb-0_1_3_1_0
+E: ID_FOR_SEAT=input-pci-0000_00_1d_0-usb-0_1_3_1_0
+E: TAGS=:seat:
+E: CURRENT_TAGS=:seat:
+
+P: /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input106/event29
+N: input/event29
+E: DEVPATH=/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input106/event29
+E: SUBSYSTEM=input
+E: DEVNAME=/dev/input/event29
+E: MAJOR=13
+E: MINOR=93
+E: USEC_INITIALIZED=796085137050
+E: ID_INPUT=1
+E: ID_INPUT_TABLET=1
+E: ID_INPUT_TABLET_PAD=1
+E: ID_BUS=bluetooth
+E: LIBINPUT_DEVICE_GROUP=5/56a/360:00:1b:dc:06:6a:57
+
+P: /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input106/input106::wacom-0.0
+E: DEVPATH=/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input106/input106::wacom-0.0
+E: SUBSYSTEM=leds
+E: USEC_INITIALIZED=796085101975
+E: ID_PATH=pci-0000:00:1d.0-usb-0:1.3:1.0
+E: ID_PATH_TAG=pci-0000_00_1d_0-usb-0_1_3_1_0
+E: ID_FOR_SEAT=leds-pci-0000_00_1d_0-usb-0_1_3_1_0
+E: TAGS=:seat:
+E: CURRENT_TAGS=:seat:
+
+P: /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input106/input106::wacom-0.1
+E: DEVPATH=/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input106/input106::wacom-0.1
+E: SUBSYSTEM=leds
+E: USEC_INITIALIZED=796085110250
+E: ID_PATH=pci-0000:00:1d.0-usb-0:1.3:1.0
+E: ID_PATH_TAG=pci-0000_00_1d_0-usb-0_1_3_1_0
+E: ID_FOR_SEAT=leds-pci-0000_00_1d_0-usb-0_1_3_1_0
+E: TAGS=:seat:
+E: CURRENT_TAGS=:seat:
+
+P: /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input106/input106::wacom-0.2
+E: DEVPATH=/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input106/input106::wacom-0.2
+E: SUBSYSTEM=leds
+E: USEC_INITIALIZED=796085109511
+E: ID_PATH=pci-0000:00:1d.0-usb-0:1.3:1.0
+E: ID_PATH_TAG=pci-0000_00_1d_0-usb-0_1_3_1_0
+E: ID_FOR_SEAT=leds-pci-0000_00_1d_0-usb-0_1_3_1_0
+E: TAGS=:seat:
+E: CURRENT_TAGS=:seat:
+
+P: /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input106/input106::wacom-0.3
+E: DEVPATH=/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input106/input106::wacom-0.3
+E: SUBSYSTEM=leds
+E: USEC_INITIALIZED=796085107946
+E: ID_PATH=pci-0000:00:1d.0-usb-0:1.3:1.0
+E: ID_PATH_TAG=pci-0000_00_1d_0-usb-0_1_3_1_0
+E: ID_FOR_SEAT=leds-pci-0000_00_1d_0-usb-0_1_3_1_0
+E: TAGS=:seat:
+E: CURRENT_TAGS=:seat:
+
+P: /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input106/js4
+N: input/js4
+E: DEVPATH=/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/input/input106/js4
+E: SUBSYSTEM=input
+E: DEVNAME=/dev/input/js4
+E: MAJOR=13
+E: MINOR=4
+E: USEC_INITIALIZED=796085107124
+E: ID_INPUT=1
+E: ID_INPUT_TABLET=1
+E: ID_INPUT_TABLET_PAD=1
+E: ID_BUS=bluetooth
+
+P: /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/power_supply/wacom_battery_10
+E: DEVPATH=/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/power_supply/wacom_battery_10
+E: SUBSYSTEM=power_supply
+E: POWER_SUPPLY_NAME=wacom_battery_10
+E: POWER_SUPPLY_TYPE=Battery
+E: POWER_SUPPLY_MODEL_NAME=Wacom Intuos Pro M
+E: POWER_SUPPLY_PRESENT=1
+E: POWER_SUPPLY_STATUS=Discharging
+E: POWER_SUPPLY_SCOPE=Device
+E: POWER_SUPPLY_CAPACITY=100
+A: type=Battery\n
+A: model_name=Wacom Intuos5 touch M (WL)\n
+A: present=1\n
+A: status=Discharging\n
+A: scope=Device\n
+A: capacity=100\n
+
+P: /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/power_supply/wacom_battery_10/hwmon3
+E: DEVPATH=/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/power_supply/wacom_battery_10/hwmon3
+E: SUBSYSTEM=hwmon
+
+P: /devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/power_supply/wacom_battery_10/wakeup22
+E: DEVPATH=/devices/pci0000:00/0000:00:1d.0/usb2/2-1/2-1.3/2-1.3:1.0/bluetooth/hci0/hci0:69/0005:056A:0360.001B/power_supply/wacom_battery_10/wakeup22
+E: SUBSYSTEM=wakeup
+

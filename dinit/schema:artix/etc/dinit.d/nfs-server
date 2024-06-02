@@ -1,0 +1,6 @@
+type            = process
+command         = /usr/lib/dinit/nfs-server
+smooth-recovery = true
+logfile         = /var/log/dinit/nfs-server.log
+depends-on      = statd
+before          = login.target

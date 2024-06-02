@@ -1,0 +1,7 @@
+type         = scripted
+command      = /bin/sh /etc/dinit.d/config/rc.local
+stop-command = /bin/sh /etc/dinit.d/config/rc.shutdown
+restart      = false
+depends-on   = pre-local.target
+depends-on   = tmpfiles-setup
+depends-on   = sysusers

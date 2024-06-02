@@ -1,0 +1,10 @@
+# agetty service for tty7
+type            = process
+command         = /usr/libexec/agetty-default tty7
+restart         = true
+depends-on      = login.target
+termsignal      = HUP
+restart         = true
+smooth-recovery = true
+inittab-id      = 7
+inittab-line    = tty7

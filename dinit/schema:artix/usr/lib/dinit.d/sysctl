@@ -1,0 +1,5 @@
+type      = scripted
+command   = /usr/bin/sysctl --system
+restart   = false
+after     = early-devices.target
+after     = early-fs-local.target

@@ -1,0 +1,18 @@
+#!/bin/sh
+[ -r /etc/vconsole.conf ] && . /etc/vconsole.conf
+
+case "$2" in
+    "keyboard") [ -n "$KEYMAP" ] && loadkeys -q -u "${KEYMAP}" ;;
+    "console")
+        TTYS=${TTYS:-6}
+        _index=0
+        while [ ${_index} -le "$TTYS" ]; do
+            if [ -n "$FONT" ]; then
+               setfont ${FONT_MAP:+-m $FONT_MAP} ${FONT_UNIMAP:+-u $FONT_UNIMAP} \
+                   "$FONT" -C "/dev/tty${_index}"
+            fi
+            printf "\033%s" "%G" >/dev/tty${_index}
+            _index=$((_index + 1))
+        done
+    ;;
+esac
