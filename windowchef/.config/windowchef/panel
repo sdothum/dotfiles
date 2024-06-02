@@ -76,7 +76,7 @@ has_windows()  { [ $(windows $1) -gt 0 ]; }
 has_visible()  { [ $(visible $1) -gt 0 ]; }
 has_hidden()   { [ $(hidden)     -gt 0 ]; }
 has_nilgroup() { [ $(nilgroup)   -gt 0 ]; }
-deactivated()  { [ -e $WME:group:$1:deactivated ]; }
+deactivated()  { [ -e $GROUP:$1:deactivated ]; }
 
 # ................................................................... Draw panel
 

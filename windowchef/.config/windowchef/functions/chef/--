@@ -21,7 +21,8 @@ vacuum() {
 }
 
 desktop_focus() {
-	for i in $(ag --nocolor -l $(pfw) $WME:group:?) ;do
+	winid=$(pfw)
+	for i in $(ag --nocolor -l $winid $GROUP:?) ;do
 		echo $winid >$i:focus
 		desktop ${i##*:}
 	done

@@ -8,6 +8,6 @@
 
 # Usage: window stack <group>
 
-cat $WME:group:$1:focus  # return top of stack
+cat $GROUP:$1:focus  # return top of stack
 
 # kak: filetype=sh

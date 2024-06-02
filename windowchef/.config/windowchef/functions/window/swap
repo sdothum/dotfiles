@@ -1,6 +1,6 @@
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="window/swap $@" . $PARENT
-set -x
+
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 

@@ -6,7 +6,7 @@
 # ...................................................................... Hotkeys
 
 # NOTE: only use groups 1-9 with desktop 0 reserved for special actions (typically, "last")
- 
+
 super + {_,alt} + space
 	waitron {window_ver_maximize, window_hor_maximize}
 
@@ -85,11 +85,23 @@ alt + shift + {0,1,2,3,4,5,6,7,8,9}
 
 alt + ctrl + 0
 	for i in $(seq 1 9) ;do waitron group_activate $i ;done ;\
-	rm $WME:group:?:deactivated 2>/dev/null                 ;\
-	waitron window_focus $(cat $WME:group:$(desktop):focus) ;\
+	rm $GROUP:?:deactivated 2>/dev/null                 ;\
+	waitron window_focus $(cat $GROUP:$(desktop):focus) ;\
 	desktop $(desktop)
 
 alt + ctrl + {1,2,3,4,5,6,7,8,9}
+	window desktop {1, 2, 3, 4, 5, 6, 7, 8, 9}
+
+alt + ctrl + {comma,period}
+	window desktop $(desktop get {-1, +1})
+
+alt + ctrl + super + {1,2,3,4,5,6,7,8,9}
+	window desktop {1, 2, 3, 4, 5, 6, 7, 8, 9} teleport
+
+alt + ctrl + super + {comma,period}
+	window desktop $(desktop get {-1, +1}) teleport
+
+super + ctrl + {1,2,3,4,5,6,7,8,9}
 	desktop {1, 2, 3, 4, 5, 6, 7, 8, 9} close ;\
 	waitron window_focus_last                 ;\
 	chef -- desktop
@@ -123,7 +135,7 @@ super + {shift,ctrl} + d
 
 super + shift + e
 	layout fold 4 kak                                                   ;\
-	waitron window_focus $(cat $WME:group:$(chef desktop "CODE"):focus) ;\
+	waitron window_focus $(cat $GROUP:$(chef desktop "CODE"):focus) ;\
 	desktop $(chef desktop "CODE")
 
 super + ctrl + e
@@ -170,6 +182,9 @@ super + shift + {s,u,v}
 
 super + shift + t
 	layout fold 5 term
+
+super + alt + t
+	for i in $(xdotool search --onlyvisible --classname "term") ;do xdotool windowactivate --sync $i; window desktop $(chef desktop "CODE") teleport ;done
 
 super + u
 	xdotool search --onlyvisible --name btop windowclose || btop
