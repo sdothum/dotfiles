@@ -79,8 +79,10 @@ abbr who 'command w'
 
 # ......................................................................... File
 
-abbr b 'bat'
-abbr ca 'cat'
+function b; bat (find -iname $argv[1]); end
+function ba; bat (al $argv[1]); end
+
+abbr c 'cat'
 abbr cp 'cp -i'
 abbr cpf 'cp -rf'
 abbr cpl 'cp -iLRfv'
@@ -157,6 +159,8 @@ abbr X x
 
 # ......................................................................... Edit
 
+function kf; kak (find -iname $argv[1]); end
+
 abbr d 'diff'
 abbr ddf 'dirdiff'
 abbr ddfn 'dirdiff (nnn -p -)'               # file picker mode
@@ -197,7 +201,10 @@ abbr perli 'perl -de 1'
 
 # ........................................................................ Shell
 
-abbr c 'z'
+abbr fn 'function'  # fish shell shorthand
+for i in (seq 1 9); abbr \$$i "\$argv[$i]" ;end
+
+abbr cd 'z'
 abbr dash 'rlwrap -n dash'
 abbr hdel 'history delete'
 abbr hi 'hist'
