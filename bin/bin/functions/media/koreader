@@ -29,7 +29,7 @@ sdr()      { ifno "sdr: ${1} $2" && usage || sudo find -regex '.*metadata.epub.l
 gestures() { ditto gestures "$1"; sed -i "$2" ../.adds/koreader/settings/gestures.lua; }
 settings() { ditto settings "$1"; sed -i "$2" ../.adds/koreader/settings.reader.lua; }
 
-resetpages() { sdr 'reset' 'page calculation' '/\"doc_pages\"/d; /\"pages\"/d'; }  # force page count refresh
+resetpages() { sdr 'trigger' 'page recalculation' '/\"doc_pages\"/d; /\"pages\"/d'; }  # force page count refresh
 
 [ $1 ] || usage
 
