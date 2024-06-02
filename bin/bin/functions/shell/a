@@ -6,15 +6,21 @@
 
 # ....................................................................... Search
 
-usage() { usage: "$(basename $0) [-w] <regex>"; exit 1; }
+usage() { usage: "$(basename $0) [--] [<options>]* <regex>"; exit 1; }
 
 # have migrated to ripgrep for ack search engine (from ag)
 
 [ "$1"      ] || usage
-[ "$1" = -w ] && { w=-w; shift; }
+while : ;do
+	case $1 in
+		-- ) nocolor=--nocolor ;;
+		*  ) break ;;
+	esac
+	shift
+done
 
 # see .agignore and al
-ag --color --color-path='1;32' --color-line-number='1;37' --color-match='1;33' --nobreak --noheading --smart-case --follow --hidden --skip-vcs-ignores $AG $w "$@"
+ag --color --color-path='1;32' --color-line-number='1;37' --color-match='1;33' --nobreak --noheading --smart-case --follow --hidden --skip-vcs-ignores $AG $nocolor "$@"
 # rg --colors 'path:fg:green' --colors 'path:style:bold' --colors 'line:fg:white' --colors 'line:style:bold' --colors 'match:fg:yellow' --colors 'match:style:bold' --no-heading --smart-case --follow --hidden --no-ignore-vcs $RG $w "$@"
 
 # kak: filetype=sh
