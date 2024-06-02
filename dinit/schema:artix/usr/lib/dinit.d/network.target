@@ -1,6 +1,0 @@
-# For services that need network, depend on this.
-# Run network services before this service.
-
-type       = internal
-restart    = false
-depends-on = pre-network.target

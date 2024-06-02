@@ -1,4 +1,0 @@
-type        = internal
-depends-on  = login.target
-depends-on  = network.target
-waits-for.d = /usr/lib/dinit.d/boot.d

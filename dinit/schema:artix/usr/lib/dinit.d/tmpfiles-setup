@@ -1,5 +1,0 @@
-type       = scripted
-command    = /usr/bin/etmpfiles --exclude-prefix=/dev --create --remove --boot
-restart    = false
-after      = early-fs-local.target
-after      = pre-local.target

@@ -1,9 +1,0 @@
-type         = process
-command      = /etc/dinit.d/scripts/netmount.sh
-stop-command = /etc/dinit.d/scripts/netmount.sh stop
-smooth-recovery = true
-restart-limit-count = 0
-logfile      = /var/log/dinit/netmount.log
-depends-on   = network
-depends-on   = rpcbind
-

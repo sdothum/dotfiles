@@ -1,6 +1,0 @@
-type       = scripted
-command    = /usr/bin/mount -a -t nonfs,nonfs4,nosmbfs,nocifs,nocodafs,noncpfs,noshfs,nofuse,nofuseblk,noglusterfs,nodavfs,nofuse.glusterfs -O no_netdev
-restart    = false
-depends-on = early-fs-pre.target
-depends-ms = fsck
-waits-for  = early-root-rw.target

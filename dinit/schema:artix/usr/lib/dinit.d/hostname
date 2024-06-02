@@ -1,4 +1,0 @@
-type      = scripted
-command   = /usr/lib/dinit/hostname
-restart   = false
-after     = early-devices.target

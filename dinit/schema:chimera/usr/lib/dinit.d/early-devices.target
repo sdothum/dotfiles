@@ -1,6 +1,0 @@
-# Device events have been processed
-# for now hard dependent on udev
-
-type       = internal
-depends-on = early-udevd
-depends-ms = early-udev-settle

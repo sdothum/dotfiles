@@ -1,4 +1,0 @@
-type       = scripted
-command    = /usr/lib/dinit/modules-load
-restart    = false
-depends-ms = kmod-static-nodes

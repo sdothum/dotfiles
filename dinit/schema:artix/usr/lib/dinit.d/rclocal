@@ -1,3 +1,0 @@
-# deprecated - now is local.target
-type       = internal
-depends-on = local.target

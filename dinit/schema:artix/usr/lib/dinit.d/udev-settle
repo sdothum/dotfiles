@@ -1,5 +1,0 @@
-type       = scripted
-command    = /usr/bin/udevadm settle
-restart    = false
-depends-on = udevd-early
-depends-on = udev-trigger

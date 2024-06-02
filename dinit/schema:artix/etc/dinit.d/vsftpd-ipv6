@@ -1,4 +1,0 @@
-type            = process
-command         = /usr/bin/vsftpd -obackground=no -olisten=no -olisten_ipv6=yes
-smooth-recovery = true
-depends-on      = network

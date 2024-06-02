@@ -1,7 +1,0 @@
-type            = scripted
-command         = /usr/bin/udevd --daemon
-stop-command    = /usr/bin/sh -c "/usr/bin/udevadm control -e || :"
-restart         = false
-depends-on      = early-prepare.target
-depends-on      = kmod-static-nodes
-depends-on      = tmpfiles-dev

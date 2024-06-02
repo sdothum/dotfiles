@@ -1,6 +1,0 @@
-type          = scripted
-command       = /usr/lib/dinit/fsck all
-restart       = false
-options       = starts-on-console start-interruptible skippable
-start-timeout = 0
-depends-on    = early-fs-pre.target

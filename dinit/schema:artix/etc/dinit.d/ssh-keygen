@@ -1,3 +1,0 @@
-type       = scripted
-command    = /usr/bin/ssh-keygen -A
-after      = local.target

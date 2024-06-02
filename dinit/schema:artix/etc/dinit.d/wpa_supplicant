@@ -1,7 +1,0 @@
-type            = process
-command         = /usr/bin/wpa_supplicant -i ${WPA_INTERFACE:-wlan0} -c /etc/wpa_supplicant/wpa_supplicant.conf 2>&1
-env-file        = /etc/dinit.d/config/wpa_supplicant.conf
-smooth-recovery = true
-logfile         = /var/log/dinit/wpa_supplicant.log
-depends-on      = pre-network.target
-before          = network.target

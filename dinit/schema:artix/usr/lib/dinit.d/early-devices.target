@@ -1,3 +1,0 @@
-type       = internal
-depends-on = udevd-early
-depends-ms = udev-settle

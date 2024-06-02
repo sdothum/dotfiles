@@ -1,3 +1,0 @@
-type        = scripted
-command     = /usr/lib/dinit/agetty
-depends-on  = login.target

@@ -1,4 +1,0 @@
-type       = internal
-depends-on = local.target
-waits-for  = cleanup
-options    = runs-on-console

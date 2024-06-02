@@ -1,6 +1,0 @@
-# The primary service
-
-type = internal
-
-depends-on  = system
-waits-for.d = /etc/dinit.d/boot.d

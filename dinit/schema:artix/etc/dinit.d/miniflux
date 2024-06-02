@@ -1,8 +1,0 @@
-type            = bgprocess
-run-as          = miniflux
-command         = /usr/bin/miniflux -config-file /etc/miniflux.conf
-pid-file        = /run/miniflux.pid
-logfile         = /var/log/miniflux.log
-smooth-recovery = true
-depends-on      = network
-depends-on      = postgres

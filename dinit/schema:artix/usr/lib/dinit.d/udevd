@@ -1,6 +1,0 @@
-type            = process
-command         = /usr/lib/dinit/udevd
-depends-on      = early-devices.target
-before          = pre-local.target
-restart         = true
-smooth-recovery = true

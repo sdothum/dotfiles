@@ -1,6 +1,0 @@
-type       = scripted
-command    = /usr/lib/dinit/vconsole console
-restart    = false
-depends-on = early-devices.target
-depends-on = early-fs-local.target
-depends-on = early-keyboard.target

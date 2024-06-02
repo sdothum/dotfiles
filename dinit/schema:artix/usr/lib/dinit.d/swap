@@ -1,3 +1,0 @@
-type       = scripted
-command    = /sbin/swapon -a
-depends-on = early-fs-local.target

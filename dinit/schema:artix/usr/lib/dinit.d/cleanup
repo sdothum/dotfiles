@@ -1,4 +1,0 @@
-type      = scripted
-command   = /usr/lib/dinit/cleanup
-restart   = false
-after     = local.target

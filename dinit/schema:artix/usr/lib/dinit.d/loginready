@@ -1,4 +1,0 @@
-# deprecated - remove later
-
-type       = internal
-depends-on = login.target

@@ -1,3 +1,0 @@
-type     = scripted
-command  = /usr/lib/dinit/pseudofs
-restart  = false

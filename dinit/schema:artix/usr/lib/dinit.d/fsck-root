@@ -1,8 +1,0 @@
-type          = scripted
-command       = /usr/lib/dinit/fsck root
-restart       = false
-options       = starts-on-console start-interruptible skippable
-start-timeout = 0
-depends-on    = early-prepare.target
-depends-ms    = udevd-early
-after         = udev-settle

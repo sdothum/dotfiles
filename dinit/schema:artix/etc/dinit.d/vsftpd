@@ -1,5 +1,0 @@
-type            = process
-command         = /usr/bin/vsftpd -obackground=no
-smooth-recovery = true
-depends-on      = network.target
-before          = login.target

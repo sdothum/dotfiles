@@ -1,4 +1,0 @@
-# Kernel modules have been loaded
-
-type       = internal
-depends-ms = early-modules

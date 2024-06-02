@@ -1,6 +1,0 @@
-type            = process
-command         = /usr/bin/dmeventd -f
-smooth-recovery = true
-logfile         = /var/log/dinit/dmeventd.log
-before          = early-fs-pre.target
-after           = early-devices.target
