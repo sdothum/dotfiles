@@ -29,6 +29,7 @@
 = ════════════
   terminus-font
 ! setfont ter-i18b
+! sudo sed -i '/#FONT=/aFONT=teri18b' /etc/rc.conf
 
 
 = linux firmware
