@@ -17,3 +17,5 @@ for tmpfs in /run/systemd /run/user; do
 done
 
 exec /usr/libexec/elogind/elogind
+
+# kak: filetype=sh

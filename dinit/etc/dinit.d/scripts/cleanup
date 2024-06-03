@@ -24,3 +24,5 @@ if [ ! -e /var/log/lastlog ]; then
 fi
 install -dm1777 /tmp/.X11-unix /tmp/.ICE-unix
 rm -f /etc/nologin /forcefsck /forcequotacheck /fastboot
+
+# kak: filetype=sh

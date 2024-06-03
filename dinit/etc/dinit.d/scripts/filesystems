@@ -59,3 +59,5 @@ if [ -x /usr/bin/zpool -a -x /usr/bin/zfs ]; then
 	# dmraid, btrfs, LVM and so on. In practice it's unlikely that
 	# anybody is doing that, so we aren't supporting it for now.
 fi
+
+# kak: filetype=sh

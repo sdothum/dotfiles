@@ -29,3 +29,5 @@ if [ -n "$HARDWARECLOCK" ]; then
 	TZ=$TIMEZONE hwclock --systz \
 		${HARDWARECLOCK:+--$(echo $HARDWARECLOCK |tr A-Z a-z) --noadjfile} || emergency_shell
 fi
+
+# kak: filetype=sh

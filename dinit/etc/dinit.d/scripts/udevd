@@ -27,3 +27,5 @@ case $1 in
 		fi
 		;;
 esac
+
+# kak: filetype=sh

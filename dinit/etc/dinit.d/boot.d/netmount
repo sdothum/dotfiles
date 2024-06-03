@@ -1,1 +1,7 @@
-../netmount
+type                = process
+command             = /etc/dinit.d/scripts/netmount start
+stop-command        = /etc/dinit.d/scripts/netmount stop
+smooth-recovery     = true
+restart-limit-count = 0
+logfile             = /var/log/dinit/netmount.log
+depends-on          = network

@@ -1,1 +1,7 @@
-../postgres
+type            = process
+command         = /etc/dinit.d/scripts/postgres
+run-as          = postgres
+smooth-recovery = true
+term-signal     = INT
+logfile         = /var/log/dinit/postgres.log
+waits-for       = loginready

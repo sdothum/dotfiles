@@ -1,1 +1,6 @@
-../puma
+type            = process
+command         = /etc/dinit.d/scripts/puma
+run-as          = shum
+smooth-recovery = true
+logfile         = /var/log/dinit/puma.log
+waits-for       = loginready

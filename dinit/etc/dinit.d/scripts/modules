@@ -16,3 +16,5 @@ done
 echo "Loading kernel modules..."
 modules-load -v | tr '\n' ' ' | sed 's:insmod [^ ]*/::g; s:\.ko\(\.gz\)\? ::g'
 echo
+
+# kak: filetype=sh

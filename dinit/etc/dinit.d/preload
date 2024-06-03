@@ -1,5 +1,5 @@
 type            = process
-command         = /etc/dinit.d/scripts/preload.sh
+command         = /etc/dinit.d/scripts/preload
 smooth-recovery = true
 logfile         = /var/log/dinit/preload.log
 after           = loginready

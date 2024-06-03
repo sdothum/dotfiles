@@ -12,3 +12,5 @@ sleep 0.1
 done
 echo "Network responding"
 exit 0
+
+# kak: filetype=sh

@@ -19,3 +19,5 @@ if [ -z "$FASTBOOT" ]; then
 		emergency_shell
 	fi
 fi
+
+# kak: filetype=sh

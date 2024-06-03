@@ -24,3 +24,5 @@ if [ -n "$IONICE_OPTS" ]; then
 fi
 
 exec $RUNNER preload $OPTS -f 2>&1
+
+# kak: filetype=sh

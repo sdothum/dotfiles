@@ -19,3 +19,5 @@ if [ -x /sbin/sysctl -o -x /bin/sysctl ]; then
 	rm -rf -- /run/vsysctl.d
 	sysctl -p /etc/sysctl.conf
 fi
+
+# kak: filetype=sh

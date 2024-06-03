@@ -54,3 +54,5 @@ if [ -z "$VIRTUALIZATION" ]; then
 		mountpoint -q "$_cgroupv2" || mount -t cgroup2 -o nsdelegate cgroup2 "$_cgroupv2"
 	fi
 fi
+
+# kak: filetype=sh

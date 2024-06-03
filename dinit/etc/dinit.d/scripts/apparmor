@@ -26,3 +26,5 @@ if [ -n "$APPARMOR" ]; then
 else
 	printf '! AppArmor disabled - ignoring profiles\n'
 fi
+
+# kak: filetype=sh

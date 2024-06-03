@@ -16,3 +16,5 @@ if [ ! -d /run/dbus ]; then
 	chown -R sddm:sddm /var/lib/sddm
 fi
 exec sddm
+
+# kak: filetype=sh
