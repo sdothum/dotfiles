@@ -6,10 +6,32 @@
 
 # .................................................................. Tile layout
 
-usage() { usage: "$(basename $0) fold 3 | 4 | 5 [<classname>]"; exit 1; }
+usage() { usage: "$(basename $0) fold 2 | 3 | 4 | 5 [<classname>]"; exit 1; }
 
 winids=$(chef winids $2)
 instance=0  # window placement sequence
+
+# ........................................................................ Stack
+
+stack() {
+	for i in $winids ;do
+		waitron window_focus $i
+		window size monocle
+	done
+}
+
+# .................................................................... By halves
+
+halves() {
+	for i in $winids ;do
+		waitron window_focus $i
+		case $instance in
+			0 ) window tile 2 1 ;;
+			1 ) window tile 2 2; instance=-1 ;;
+		esac
+		instance=$(( instance + 1 ))
+	done
+}
 
 # .................................................................... By thirds
 
@@ -44,7 +66,7 @@ quarters() {
 
 fifths() {
 	for i in $winids ;do
-		mapw -m $i
+		waitron window_focus $i
 		case $instance in
 			4 ) window tile 5 1; instance=-1 ;;
 			2 ) window tile 5 2 ;;
@@ -57,6 +79,8 @@ fifths() {
 }
 
 case "$@" in
+	1* ) stack    ;;  # monocle
+	2* ) halves   ;;
 	3* ) thirds   ;;
 	4* ) quarters ;;
 	5* ) fifths   ;;
