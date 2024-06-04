@@ -257,9 +257,9 @@ elif [ "$koreader" ] ;then
  	emdash
 	e_ink adrift grote   I-descending t-asymmetric--
 	e_ink drift  grote   I-serifless  t-asymmetric--
-	e_ink pencil grote   I-descending t-asymmetric-- l-serifless a-single
+	# e_ink pencil grote   I-descending t-asymmetric-- l-serifless a-single
 	e_ink chalk  grote   I-serifed    t-asymmetric-- l-serifless a-single
-	# e_ink shadow grote   I-descending t-asymmetric-- l-serifless a-single Y-descending f-extended
+	e_ink pencil grote   I-descending t-asymmetric-- l-serifless a-single T-descending f-extended J-flat
 
 elif [ "$serifed" ] ;then
 	cmdopts quasi-ext space=1.075 Q-straight open+ j-flat serifless serifed
