@@ -24,7 +24,6 @@ waitron wm_config gap_width bottom 39
 # waitron wm_config gap_width right 32
 waitron wm_config gap_width left 36
 waitron wm_config gap_width right 36
-# waitron wm_config grid_gap_width 12
 waitron wm_config grid_gap_width 12
 
 # ....................................................................... Groups
