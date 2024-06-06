@@ -107,6 +107,7 @@ abbr tar 'tar -xvf'
 set -l HUMAN h
 
 abbr dus "/usr/bin/du -hs * | sort -h"
+abbr L 'ls -AL'
 abbr l 'ls -A'
 abbr l1 'ls -1 | print'
 abbr ldot "ls -lAd$HUMAN .* | print"
