@@ -60,7 +60,7 @@ usage() {
 > g-double
 > i-[hooky|serifed[-]|serifless]
 > j-[flat|serifed|serifless]
-> l-[bottom|hooky|serifless]
+> l-[bottom|flat|hooky|serifless]
 > m-[rounded|serifless]
 > p-[eared|serifed]
 > q-[hook|tailed]
@@ -219,9 +219,9 @@ variant() {
 			G-toothless    ) glyph capital_g=toothless-corner-serifless-hooked   ;;
 			I-serifed      ) glyph capital_i=short-serifed;                      unset s_I ;;
 			I-serifless    ) glyph capital_i=serifless;                          s_I='I'   ;;
-			J-descending   ) glyph capital_j=descending-serifless                ;;
-			J-flat         ) glyph capital_j=descending-flat-hook-serifless      ;;
-			J-serifless    ) glyph capital_j=serifless                           ;;
+			J-descending   ) glyph capital_j=descending-serifless;               unset S_J ;;
+			J-flat         ) glyph capital_j=descending-flat-hook-serifless;     S_J='J'   ;;
+			J-serifless    ) glyph capital_j=serifless;                          unset S_J ;;
 			P-open         ) glyph capital_p=open-serifless                      ;;
 			Q-bar          ) glyph capital_q=vertical-crossing                   ;;
 			Q-bend         ) glyph capital_q=detached-bend-tailed                ;;
@@ -252,7 +252,8 @@ variant() {
 			j-flat         ) glyph j=flat-hook-serifless;                        S_j='j'                ;;
 			j-serifed      ) glyph j=flat-hook-serifed;                          unset S_j              ;;
 			j-serifless    ) glyph j=serifless;                                  unset S_j              ;;
-			l-bottom       ) glyph l=hooky-bottom;                               unset s_l S_l          ;;
+			l-bottom       ) glyph l=hooky-bottom;                               T_l='l'; unset s_l S_l ;;
+			l-flat         ) glyph l=flat-tailed;                                T_l='l'; unset s_l S_l ;;
 			l-hooky        ) glyph l=hooky;                                      S_l='l'; unset s_l T_l ;;
 			l-serifless    ) glyph l=serifless;                                  s_l='l'; unset S_l T_l ;;
 			m-rounded      ) glyph m=earless-rounded-double-arch-serifless       ;;
@@ -414,6 +415,7 @@ cmdopts () {
 			j-serifed      ) variant $1 ;;
 			j-serifless    ) variant $1 ;;
 			l-bottom       ) variant $1 ;;
+			l-flat         ) variant $1 ;;
 			l-hooky        ) variant $1 ;;
 			l-serifless    ) variant $1 ;;
 			m-rounded      ) variant $1 ;;
@@ -441,7 +443,7 @@ cmdopts () {
 			paren-flat     ) variant $1 ;;
 			asterisk-high  ) variant $1 ;;
 			at-tall        ) variant $1 ;;
-		
+	
 			# geometry
 			ascender=*     ) ascender ${1#*=} || usage ;;                               # affects descender as well
 			cap=*          ) cap ${1#*=}      || usage ;;                               # H height (capitals)
@@ -777,7 +779,7 @@ if [ $ebook ] ;then
 	if [ $spacing != 'quasi-proportional' ] ;then
 		fforge ligature $width ${shape##* } $family  # ae width character adjustment
 		[ $serifless ] && fforge serifless "$s_I$s_i$s_j$s_l" ${shape##* } $family  # adjust serifless "I i j l" cell width
-		[ $serifed   ] && fforge serifed "$S_i$S_j$S_l" ${shape##* }       $family  # adjust serifed "i j l" cell width
+		[ $serifed   ] && fforge serifed "$S_i$S_J$S_j$S_l" ${shape##* }   $family  # adjust serifed "i J j l" cell width
 		[ $serifed   ] && fforge tailed "$T_l" ${shape##* }                $family  # adjust tailed "l" cell width
 	fi
 	fforge ${regular}weight $adjust                  $family  # rename weight for e-reader (as regular)

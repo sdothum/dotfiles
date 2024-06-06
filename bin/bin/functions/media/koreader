@@ -73,6 +73,7 @@ while [ $1 ] ;do
 done
 
 [ $resetpages ] && resetpages
+sync
 usage
 
 # kak: filetype=sh

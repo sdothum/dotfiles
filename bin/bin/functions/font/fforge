@@ -60,6 +60,7 @@ tighten() {
 	case $1 in
 		I) utf='0u0049' ;;
 		i) utf='0u0069' ;;
+		J) utf='0u004a' ;;
 		j) utf='0u006a' ;;
 		l) utf='0u006c' ;;
 	esac
