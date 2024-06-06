@@ -1,5 +1,5 @@
 type            = process
-command         = /etc/dinit.d/scripts/puma
+command         = /etc/dinit.d/scripts/puma.sh
 run-as          = shum
 smooth-recovery = true
 logfile         = /var/log/dinit/puma.log

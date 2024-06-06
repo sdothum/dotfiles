@@ -1,5 +1,5 @@
 type            = process
-command         = /etc/dinit.d/scripts/postgres
+command         = /etc/dinit.d/scripts/postgres.sh
 run-as          = postgres
 smooth-recovery = true
 term-signal     = INT
