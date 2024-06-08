@@ -7,7 +7,7 @@ The initial service files have been modified were necessary to run on my system.
 
 Of particular note is the change of the "depends-on" udev-settle to "waits-for" udev-trigger for the "console-setup" and "filesystems" services. (The appropriate lines are commented out).
 
-**DO NOT DO THIS** if you require block devices like LVM: change the above services to "depends-on" udev-settle.
+**DO NOT DO THIS** if you use "fake block device storage" like LVM: change the above services to "depends-on" udev-settle.
 
 ## WHY?
 
