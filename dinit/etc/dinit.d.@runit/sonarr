@@ -1,0 +1,6 @@
+type            = process
+command         = mono /usr/lib/sonarr/NzbDrone/NzbDrone.exe -s localhost:8989 -no-browser -data=/srv/http/sonarr >/dev/null
+run-as          = sonarr
+smooth-recovery = yes
+logfile         = /var/log/dinit/sonarr.log
+depends-on      = network
