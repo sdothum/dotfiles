@@ -243,14 +243,14 @@ if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] } %{
 			lsp-inlay-diagnostics-enable global
 			colorscheme %opt{theme}  # WHY: restore Diagnostic faces (overwritten by kak-lsp injection above)
 
-			map global user l ': enter-user-mode lsp<ret>'                                                                              -docstring "LSP mode"
+			map global user l ': enter-user-mode lsp<ret>'                                   -docstring "LSP mode"
+			map global object a '<a-semicolon>lsp-object<ret>'                               -docstring 'LSP any symbol'
+			map global object <a-a> '<a-semicolon>lsp-object<ret>'                           -docstring 'LSP any symbol'
+			map global object e '<a-semicolon>lsp-object Function Method<ret>'               -docstring 'LSP function or method'
+			map global object k '<a-semicolon>lsp-object Class Interface Struct<ret>'        -docstring 'LSP class interface or struct'
+			map global object d '<a-semicolon>lsp-diagnostic-object --include-warnings<ret>' -docstring 'LSP errors and warnings'
+			map global object D '<a-semicolon>lsp-diagnostic-object<ret>'                    -docstring 'LSP errors'
 			map global insert <tab> '<a-;>:try lsp-snippets-select-next-placeholders catch %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
-			map global object a '<a-semicolon>lsp-object<ret>'                                                                          -docstring 'LSP any symbol'
-			map global object <a-a> '<a-semicolon>lsp-object<ret>'                                                                      -docstring 'LSP any symbol'
-			map global object e '<a-semicolon>lsp-object Function Method<ret>'                                                          -docstring 'LSP function or method'
-			map global object k '<a-semicolon>lsp-object Class Interface Struct<ret>'                                                   -docstring 'LSP class interface or struct'
-			map global object d '<a-semicolon>lsp-diagnostic-object --include-warnings<ret>'                                            -docstring 'LSP errors and warnings'
-			map global object D '<a-semicolon>lsp-diagnostic-object<ret>'                                                               -docstring 'LSP errors'
 		}
 		hook global KakEnd .* lsp-exit
 
@@ -447,6 +447,15 @@ hook global BufOpenFile .* %{ modeline-parse }
 
 hook global BufOpenFile .*(.eml|.note) %{ set buffer filetype markdown }
 hook global FocusOut .* sync   # over "write" for system files
+
+# kettelkasten
+hook global WinSetOption filetype=markdown %{
+	define-command zk-index %sh{ zk index --no-input" }
+	map global user Z ': zk-index<ret>' -docstring 'zk index'
+
+	define-command zk-new %sh{ zk new $(dirname "$kak_buffile") --title="$kak_selection" }
+	map global user z ': zk-new<ret>'   -docstring 'zk new'
+}
 
 # ............................................................ Buffer management
 

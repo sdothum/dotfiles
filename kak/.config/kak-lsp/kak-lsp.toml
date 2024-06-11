@@ -249,6 +249,12 @@ settings_section = "Lua"
 # command = "marksman"
 # args = ["server"]
 
+[language_server.markdown]
+filetypes = ["markdown"]
+roots = [".zk"]
+command = "zk"
+args = ["lsp"]
+
 [language_server.nimlsp]
 filetypes = ["nim"]
 roots = ["*.nimble", ".git", ".hg"]
