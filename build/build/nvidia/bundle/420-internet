@@ -25,7 +25,7 @@
 # sabnzbd  [server]
 # qbittorrent
   gftp
-d nzbget
+  nzbget   [server]
 d m sonarr [server]
   transmission-gtk
 

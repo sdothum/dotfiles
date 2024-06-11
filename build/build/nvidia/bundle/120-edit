@@ -35,6 +35,8 @@ d texlive-bin
 # shellcheck
 # bash-language_server
 # python3-language_server
+  kr       # kettlekasten
+! mkdir $HOME/notebook
   lua-language_server
 m language_servers
 
