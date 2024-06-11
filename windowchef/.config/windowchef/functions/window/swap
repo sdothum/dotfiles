@@ -12,7 +12,7 @@ save_geometry  # X Y WIDTH HEIGHT
 
 waitron window_cardinal_focus $1
 wid=$(pfw)
-echo $wid $winid >>/tmp/debug
+# echo $wid $winid >>/tmp/debug
 [ "$wid" = "$winid" ] && exit  # no adjacent window
 
 save_geometry $wid
