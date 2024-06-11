@@ -8,7 +8,16 @@
 
 # Usage: [dropcap=<class>] kconvert [poetry] <epub>*
 
-menu econvert azw3 "$@"  # kindle
-menu econvert epub "$@"  # kobo
+# SEE: econvert
+case "$1" in
+	default  ) option=default;  shift ;;
+	justify  ) option=justify;  shift ;;
+	noindent ) option=noindent; shift ;;  # retain poetry formatting
+	poetry   ) option=noindent; shift ;;  # retain poetry formatting
+	all      ) option=all;      shift ;;
+esac
+
+menu econvert azw3 $option "$@"  # kindle
+menu econvert epub $option "$@"  # kobo
 
 # kak: filetype=sh

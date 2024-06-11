@@ -55,7 +55,7 @@ fi
 console || hgadd $@ &  # don' wait :)
 
 # inject spelling dictionary manually into ltex configuration in lieu of unavailable (helix) ltex-ls dictionary update
-cat $TOML:un-marksman $TOML:add >$TOML:template
+cat $TOML:zk $TOML:add >$TOML:template
 if [ -e $DICTIONARY ] ;then
 	spelling="$(sort -df $DICTIONARY | sed -r '/^ *$/d; s/^ *(.*) *$/\\"\1\\":/' | tr '\n' ':')"  # comma's cause unterminated address regex error
 	sed "/^dictionary/a${spelling%::}" $TOML:template | sed "/^dictionary/{n;s/::/,\n/g}" >$TOML

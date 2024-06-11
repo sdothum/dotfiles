@@ -15,8 +15,8 @@ usage() { usage: "$(basename $0) 'daemon | I'nit | i'ndex | l'og | t'ags | 1'pas
 MAILDIR=$HOME/Mail
 ME=sdothum
 MAILBOX=$MAILDIR/$ME
-echo PATH=$PATH >>/tmp/debug
-echo USER=$USER >>/tmp/debug
+# echo PATH=$PATH >>/tmp/debug
+# echo USER=$USER >>/tmp/debug
 
 # import user path
 . $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
@@ -25,7 +25,7 @@ echo USER=$USER >>/tmp/debug
 # lifted from http://cpbl.wordpress.com/2009/11/07/alpine-offlineimap-and-gmail-under-ubuntu/
 interval=${interval:-15}
 [ -e /tmp/mailsync:new ] || touch /tmp/mailsync:new
-	
+
 logmsg() {
 	trace "$1"  # for mailsync cron log
 	trace "$1" >>$2
