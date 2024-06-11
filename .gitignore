@@ -156,6 +156,7 @@
 **/nvim
 **/nvpy
 **/nzbget
+!**/dinit.d*/nzbget
 !**/office/chromium
 **/openbox
 **/openrc
