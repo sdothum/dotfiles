@@ -62,7 +62,8 @@ class="Surf"
 
 class="term"
 	window desktop $(desktop) ;\
-	window snap center
+	layout spread 3 term      ;\
+	window snap center vertical
 
 # kak: filetype=sh
 

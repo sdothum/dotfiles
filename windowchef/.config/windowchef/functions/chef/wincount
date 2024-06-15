@@ -10,7 +10,8 @@
 
 case $1 in
 	'' ) wmctrl -l | wc -l ;;
-	*  ) wmctrl -l | grep -w "$1" | wc -l ;;  # WARNING: can still be fooled by browser url titles
+#  *  ) wmctrl -l | grep -w "$1" | wc -l ;;  # WARNING: can still be fooled by browser url titles
+	*  ) xdotool search --onlyvisible --classname "$1" | wc -l ;;
 esac
 
 

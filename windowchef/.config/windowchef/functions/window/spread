@@ -1,0 +1,40 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/spread $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Spread window
+
+# Usage: window spread <count> [position]
+set -x
+save_geometry
+set_geometry  # X Y WIDTH HEIGHT
+
+spread() {
+	X=$width
+	width=$(( (width - ($1 - 1) * gap - border * $1 * 2) / $1 ))
+	offset=$(( (width - WIDTH) / 2 + 1 ))
+
+	# visual centering of like window frames
+	if [ $(( $1 / 2 + $(expr $1 % 2) )) -ne $2 ] && [ $(expr $2 % 2) -eq 1 ] ;then  # not center column
+		[ $2 -le $(( $1 / 2 )) ] && offset=$(( offset + (offset / 2) )) || offset=$(( offset - (offset / 2) ))
+	fi
+
+	column=$(expr $2 % $1)   # column position left to right
+	[ $column -eq 0 ] && column=$1
+	column=$(( column - 1 ))  # 0 -> left
+
+	wtp $(( width * column + margin + border * column * 2 + column * gap + offset )) $Y $WIDTH $HEIGHT $(pfw)
+}
+
+case $2 in
+	left   ) spread $1  1 ;;
+	right  ) spread $1 $1 ;;
+	center ) spread $1 $(( $1 / 2 + $(expr $1 % 2) )) ;;  # center or center left
+	*      ) spread $1 $2 ;;
+esac
+
+waitron window_focus $winid
+
+# kak: filetype=sh
