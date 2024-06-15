@@ -7,18 +7,18 @@
 # ................................................................ Spread window
 
 # Usage: window spread <count> [position]
-set -x
+
 save_geometry
 set_geometry  # X Y WIDTH HEIGHT
 
 spread() {
-	X=$width
 	width=$(( (width - ($1 - 1) * gap - border * $1 * 2) / $1 ))
-	offset=$(( (width - WIDTH) / 2 + 1 ))
+	offset=$(( (width - WIDTH) / 2 + 1 ))  # offset from screen division edge
 
-	# visual centering of like window frames
-	if [ $(( $1 / 2 + $(expr $1 % 2) )) -ne $2 ] && [ $(expr $2 % 2) -eq 1 ] ;then  # not center column
-		[ $2 -le $(( $1 / 2 )) ] && offset=$(( offset + (offset / 2) )) || offset=$(( offset - (offset / 2) ))
+	# tweak left/right margins inwards to balance visual spacing across screen :)
+	if [ $(expr $1 % 2) -eq 1 ] && [ $(( $1 / 2 + 1 )) -ne $2 ] || [ $(expr $1 % 2) -eq 0 ] ;then  # not center column
+		tweak=$(( (offset / 2) - border ))
+		[ $2 -le $(( $1 / 2 )) ] && offset=$(( offset + tweak )) || offset=$(( offset - tweak ))
 	fi
 
 	column=$(expr $2 % $1)   # column position left to right
