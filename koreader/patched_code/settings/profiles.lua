@@ -1,26 +1,26 @@
 -- ./settings/profiles.lua
 return {
-    ["lythe"] = {
-        ["b_page_margin"] = 30,
+    ["draft"] = {
+        ["b_page_margin"] = 20,
         ["block_rendering_mode"] = 3,
         ["embedded_css"] = true,
         ["embedded_fonts"] = true,
         ["font_base_weight"] = 1.5,
-        ["font_gamma"] = 30,
+        ["font_gamma"] = 37,
         ["font_hinting"] = 2,
-        ["font_kerning"] = 0,
+        ["font_kerning"] = 3,
         ["font_size"] = 11.5,
         ["h_page_margins"] = {
-            [1] = 65,
-            [2] = 65,
+            [1] = 115,
+            [2] = 115,
         },
-        ["line_spacing"] = 210,
+        ["line_spacing"] = 220,
         ["nightmode_images"] = true,
         ["render_dpi"] = 96,
         ["rotation_mode"] = 2,
-        ["set_font"] = "lythe",
+        ["set_font"] = "proof",
         ["settings"] = {
-            ["name"] = "lythe",
+            ["name"] = "draft",
             ["order"] = {
                 [1] = "rotation_mode",
                 [2] = "set_font",
@@ -49,7 +49,7 @@ return {
         },
         ["smooth_scaling"] = false,
         ["status_line"] = 0,
-        ["sync_t_b_page_margins"] = true,
+        ["sync_t_b_page_margins"] = false,
         ["t_page_margin"] = 30,
         ["view_mode"] = "page",
         ["visible_pages"] = 1,

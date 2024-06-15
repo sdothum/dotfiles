@@ -1,4 +1,4 @@
-- koreader/patches
+-- koreader/patches
 -- sdothum - 2016 (c) wtfpl
 --
 -- frontend/ui/widget/dictquicklookup.lua

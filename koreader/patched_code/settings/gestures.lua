@@ -114,15 +114,10 @@ return {
             ["wifi_off"] = true,
         },
         ["double_tap_bottom_right_corner"] = {
-            ["h_page_margins"] = {
-                [1] = 55,
-                [2] = 55,
-            },
-            ["set_font"] = "drift",
+            ["exit"] = true,
             ["settings"] = {
                 ["order"] = {
-                    [1] = "set_font",
-                    [2] = "h_page_margins",
+                    [1] = "exit",
                 },
             },
         },
@@ -135,28 +130,28 @@ return {
             ["show_vocab_builder"] = true,
         },
         ["double_tap_right_side"] = {
-            ["back"] = true,
+            ["reading_progress"] = true,
             ["settings"] = {
                 ["order"] = {
-                    [1] = "back",
+                    [1] = "reading_progress",
                 },
             },
         },
         ["double_tap_top_left_corner"] = {
+            ["settings"] = {
+                ["order"] = {
+                    [1] = "skim",
+                },
+            },
+            ["skim"] = true,
+        },
+        ["double_tap_top_right_corner"] = {
             ["book_description"] = true,
             ["settings"] = {
                 ["order"] = {
                     [1] = "book_description",
                 },
             },
-        },
-        ["double_tap_top_right_corner"] = {
-            ["settings"] = {
-                ["order"] = {
-                    [1] = "toc",
-                },
-            },
-            ["toc"] = true,
         },
         ["hold_bottom_left_corner"] = {
             ["settings"] = {
@@ -265,12 +260,12 @@ return {
             ["back"] = true,
         },
         ["one_finger_swipe_bottom_edge_left"] = {
+            ["back"] = true,
             ["settings"] = {
                 ["order"] = {
-                    [1] = "toggle_inverse_reading_order",
+                    [1] = "back",
                 },
             },
-            ["toggle_inverse_reading_order"] = true,
         },
         ["one_finger_swipe_bottom_edge_right"] = {
             ["settings"] = {
@@ -303,10 +298,10 @@ return {
         ["one_finger_swipe_top_edge_right"] = {
             ["settings"] = {
                 ["order"] = {
-                    [1] = "skim",
+                    [1] = "toc",
                 },
             },
-            ["skim"] = true,
+            ["toc"] = true,
         },
         ["pinch_gesture"] = {
             ["decrease_font"] = 0,
@@ -326,23 +321,30 @@ return {
             ["toggle_frontlight"] = true,
         },
         ["tap_right_bottom_corner"] = {
-            ["font_gamma"] = 30,
+            ["b_page_margin"] = 18,
+            ["font_gamma"] = 37,
             ["font_size"] = 11.5,
             ["h_page_margins"] = {
-                [1] = 128,
-                [2] = 128,
+                [1] = 70,
+                [2] = 70,
             },
-            ["line_spacing"] = 210,
-            ["set_font"] = "drift",
+            ["line_spacing"] = 220,
+            ["set_font"] = "pencil",
             ["settings"] = {
                 ["order"] = {
                     [1] = "font_size",
                     [2] = "line_spacing",
                     [3] = "font_gamma",
-                    [4] = "set_font",
+                    [4] = "adrift",
                     [5] = "h_page_margins",
+                    [6] = "t_page_margin",
+                    [7] = "b_page_margin",
+                    [8] = "proof",
+                    [9] = "shadow",
+                    [10] = "set_font",
                 },
             },
+            ["t_page_margin"] = 32,
         },
         ["tap_top_left_corner"] = {
             ["night_mode"] = true,
@@ -354,22 +356,6 @@ return {
         },
         ["tap_top_right_corner"] = {
             ["toggle_bookmark"] = true,
-        },
-        ["two_finger_tap_bottom_left_corner"] = {
-            ["reboot"] = true,
-            ["settings"] = {
-                ["order"] = {
-                    [1] = "reboot",
-                },
-            },
-        },
-        ["two_finger_tap_bottom_right_corner"] = {
-            ["exit"] = true,
-            ["settings"] = {
-                ["order"] = {
-                    [1] = "exit",
-                },
-            },
         },
     },
 }
