@@ -5,6 +5,9 @@
 --
 -- lengthen highlight delay for visual word relocation (when hidden behind dictionary popup)
 
+-- my new highlight delay
+local highlight_hold = 1.65  -- seconds
+
 local Event = require("ui/event")
 local UIManager = require("ui/uimanager")
 local DictQuickLookup = require("ui/widget/dictquicklookup")
@@ -27,7 +30,7 @@ DictQuickLookup.onClose = function(self)
 		-- delay unhighlight of selection, so we can see where we stopped when
 		-- back from our journey into dictionary or wikipedia
 		local clear_id = self.highlight:getClearId()
-		UIManager:scheduleIn(1.5, function()  -- from 0.5 seconds delay
+		UIManager:scheduleIn(highlight_hold, function()  -- from 0.5 seconds delay
 			self.highlight:clear(clear_id)
 		end)
 	end
