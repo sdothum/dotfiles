@@ -38,6 +38,7 @@
 **/crontab
 **/default
 **/.deprecated
+**/*\.desktop
 **/description
 **/dmenu/.config
 **/dmenu/.d
@@ -157,6 +158,7 @@
 **/nvpy
 **/nzbget
 !**/dinit.d*/nzbget
+**/*\.o
 !**/office/chromium
 **/openbox
 **/openrc
