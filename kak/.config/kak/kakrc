@@ -481,7 +481,7 @@ map global user   x ': sync<ret>: write-all-quit<ret>'              -docstring '
 # Terminal
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-map global user   t ': terminal fish<ret>'               -docstring 'terminal'
+map global user   t ': %sh{ term }<ret>'                            -docstring 'terminal'
 
 # Highlighting
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
