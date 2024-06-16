@@ -20,3 +20,4 @@ depends-ms  = rclocal
 
 # the boot.d directory will launch user-specified services:
 waits-for.d = boot.d
+waits-for   = udev-trigger
