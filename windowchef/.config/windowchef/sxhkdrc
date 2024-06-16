@@ -7,13 +7,13 @@
 
 # NOTE: only use groups 1-9 with desktop 0 reserved for special actions (typically, "last")
 
-super + {_,alt} + space
+super + {_,ctrl} + space
 	waitron {window_ver_maximize, window_hor_maximize}
 
 super + shift + space
 	menu
 
-super + ctrl + space
+super + alt + space
 	xdotool mousemove $(( $(chef display width) / 2 )) $(( $(chef display height) / 2 ))
 
 super + {_,shift} + Return
