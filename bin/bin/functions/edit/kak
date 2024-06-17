@@ -6,7 +6,9 @@
 
 # ....................................................................... Editor
 
-usage() { usage: "$(basename $0) [-l | -p [<id>] | -v | -h] [-BENCHMARK | -DEBUG | -PLUG | -X11 | -- | ID=<id>] [WAIT] [<row>x<col>] <file>*"; exit 1; }
+usage() { usage: "[kmd=<command>] $(basename $0) [-l | -p [<id>] | -v | -h] [-BENCHMARK | -DEBUG | -PLUG | -X11 | -- | ID=<id>] [WAIT] [<row>x<col>] <file>*"; exit 1; }
+
+# NOTE: $kmd is passed passively to (env) term for subsequent "xdotool type"
 
 headless=${headless:-false}
 

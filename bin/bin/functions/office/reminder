@@ -39,7 +39,7 @@ reminders() {
 	date --date "$day" >/dev/null 2>&1 || day=tomorrow
 	echo $day | grep -E -q ':|[ap]m' && M=%M || M=00
 	sed --follow-symlinks -i "$ aREM $(date "+%b %d %Y AT %H:$M" --date "$day") DURATION 1:00 MSG " $REMINDERS
-	kak +: $REMINDERS  # helix file:row positions cursor at eof (not last line)
+	kmd=': exec ge' kak WAIT $REMINDERS
 }
 
 case "$1" in
