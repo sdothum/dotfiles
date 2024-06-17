@@ -107,14 +107,19 @@ g rack-test
 = ═══
 # openjdk-jre
   php
- 
+
+
+= manpages
+= ════════
+  ruby-ronn
+
 
 = debug
 = ═════
 # gdb
   strace
   time
-  
+
 
 # vim: set ft=conf: #
 
