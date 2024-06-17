@@ -6,7 +6,7 @@
 
 # ................................................................ Spread window
 
-# Usage: window spread <count> [position]
+# Usage: window spread <count> <position>
 
 save_geometry
 set_geometry  # X Y WIDTH HEIGHT

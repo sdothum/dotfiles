@@ -9,7 +9,7 @@ set -x
 # Usage: layout spread <count> <name>
 
 # determine next column position
-column=$(chef wincount $2)
+column=$(chef window count $2)
 
 pos() {
 	column=$(expr $column % $1)   # column position left to right

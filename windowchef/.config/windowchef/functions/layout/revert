@@ -6,7 +6,7 @@
 
 # ................................................................ Revert layout
 
-for i in $(chef winids) ;do
+for i in $(chef window ids) ;do
 	window revert $i
 done
 

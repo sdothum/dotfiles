@@ -7,7 +7,7 @@
 
 # ..................................................................... Terminal
 
-# Usage: term [[title=]<title>] [[class=]<class>] [BLACKBOARD | PAPER | <X>x<Y> | VISIBLE | WAIT | FORTUNE]* [[SHELL] <command>]
+# Usage: [kmd=<string>] term [[title=]<title>] [[class=]<class>] [BLACKBOARD | PAPER | <X>x<Y> | VISIBLE | WAIT | FORTUNE]* [[SHELL] <command>]
 #        title (and default name string)
 #        FORTUNE, login notifier message
 #        BLACKBOARD, cinema background mode for omxplayer
@@ -83,6 +83,10 @@ done
 $TERM $theme $geometry $title $name $cmd
 
 [ $visible ] && [ "$title" ] && xdotool search --sync --onlyvisible --limit 1 --classname "${title#* }"
+# delay.. double return the kak command string to complete the exec command (and command popup dialogue)
+[ "$kmd"   ] && { sleep 0.25; xdotool type "$kmd
+
+"; }
 # window snap center
 [ $wait    ] && pwait "$process"
 

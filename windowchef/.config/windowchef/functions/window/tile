@@ -6,7 +6,7 @@
 
 # .................................................................. Tile window
 
-# Usage: window tile <count> [position]
+# Usage: window tile [<count>] <position>
 
 save_geometry
 set_geometry  # X Y WIDTH HEIGHT

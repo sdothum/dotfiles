@@ -1,0 +1,40 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="chef/wincount $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Window info
+
+# Usage: chef window classname | count [<name>] | ids [<classname>]
+
+classname() { xdotool getactivewindow getwindowclassname; }
+
+# ................................................................. Window count
+
+count() {
+	case $1 in
+		'' ) wmctrl -l | wc -l ;;
+	#  *  ) wmctrl -l | grep -w "$1" | wc -l ;;  # WARNING: can still be fooled by browser url titles
+		*  ) xdotool search --onlyvisible --classname "$1" | wc -l ;;
+	esac
+}
+
+# ................................................................... Window ids
+
+winids() { wmctrl -l | cut -d' ' -f1; }  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
+
+ids() {
+	case $1 in
+		'' ) winids ;;
+		*  ) for i in $(winids) ;do [ "$(xdotool getwindowclassname $i)" = $1 ] && echo $i ;done ;;
+	esac
+}
+
+case $1 in
+	classname ) classname ;;
+	count     ) count $2  ;;
+	ids       ) ids   $2  ;;
+esac
+
+# kak: filetype=sh

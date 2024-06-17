@@ -11,6 +11,8 @@ REMINDERS=${REMINDERS:-$HOME/.reminders}
 ADD='add'
 EDIT='edit'
 
+search() { echo "${appmt#*$SEP }" | sed "s/[ '\"$]/./g"; }  # sidestep escaping string for shell expansion
+
 while appmt=$(reminder 52 | sed  "1i$(X $ADD)\n$(X $EDIT)" | rmenu 'Appointment' -no-custom) || exit ;do
 	unset error
 	case "${appmt#$(X)}" in
@@ -22,8 +24,8 @@ while appmt=$(reminder 52 | sed  "1i$(X $ADD)\n$(X $EDIT)" | rmenu 'Appointment'
 				break
 			done
 			;;
-		"$EDIT" ) kak +: $REMINDERS ;;  # helix file:row positions cursor at eof (not last line)
-		*       ) kak -e "/${appmt#*$SEP }" $REMINDERS ;;
+		"$EDIT" ) kmd=': exec ge' kak WAIT $REMINDERS ;;
+		*       ) kmd=": exec /$(search)" kak WAIT $REMINDERS ;;
 	esac
 done
 

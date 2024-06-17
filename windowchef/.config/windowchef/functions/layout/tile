@@ -9,7 +9,7 @@
 # Usage: layout tile <panes> <name>
 
 # determine next tile position
-tile=$(chef wincount $2)
+tile=$(chef window count $2)
 
 pos() {
 	tile=$(expr $tile % $1)   # tile position left to right

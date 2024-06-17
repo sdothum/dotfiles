@@ -6,7 +6,7 @@
 
 # ................................................................ Level windows
 
-for i in $(chef winids) ;do
+for i in $(chef window ids) ;do
 	save_geometry $i             # for full desktop restore :)
 	waitron window_focus $i
 	window snap center vertical  # NOTE: Super+Shift+g jitter offset occurs when used in a loop

@@ -8,7 +8,7 @@
 
 usage() { usage: "$(basename $0) fold 2 | 3 | 4 | 5 [<classname>]"; exit 1; }
 
-winids=$(chef winids $2)
+winids=$(chef window ids $2)
 instance=0  # window placement sequence
 
 # ........................................................................ Stack

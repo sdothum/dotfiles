@@ -75,8 +75,8 @@ super + {4,8,7,9}
 	window tile 4 {1, 2, 3, 4}
 
 super + shift + {1,2,3,4,5}
-	W=$(pfw)                                                                  ;\
-	layout fold {1, 2, 3, 4, 5} $(xdotool getactivewindow getwindowclassname) ;\
+	W=$(pfw)                                             ;\
+	layout fold {1, 2, 3, 4, 5} $(chef window classname) ;\
 	waitron window_focus $W
 
 alt + {comma,period,0,1,2,3,4,5,6,7,8,9}
@@ -167,14 +167,14 @@ super + {shift,ctrl} + q
 	{menu halt, waitron wm_quit 0}
 
 super + {r,t}
-	window snap {right, left}
+	[ "$(chef window classname)" = "term" ] && window spread 3 {3, 1} || window snap {right, left}
 
 super + ctrl + r
 	waitron group_remove_window ;\
 	chef -- desktop
 
 super + s
-	waitron window_focus $(pfw) ;\
+	waitron window_stack_reverse ;\
 	chef -- desktop
 
 super + shift + {s,u,v}

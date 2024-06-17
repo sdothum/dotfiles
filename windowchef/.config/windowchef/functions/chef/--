@@ -12,8 +12,8 @@
 
 # not all windows necessarily closed via sxhkd
 vacuum() {
-	chef winids | cmp --silent $PANEL:winids && exit  # ignore initial pass file error
-	chef winids >$PANEL:winids
+	chef window ids | cmp --silent $PANEL:winids && exit  # ignore initial pass file error
+	chef window ids >$PANEL:winids
 	for i in $(cat $GROUP:$1) ;do
 		grep -q $i $PANEL:winids || { window group remove $i; removals=true; }
 	done
