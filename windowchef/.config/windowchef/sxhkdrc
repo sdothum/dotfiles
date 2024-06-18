@@ -178,8 +178,8 @@ super + shift + {s,u,v}
 	menu {system, passwords, media}
 
 super + {t,r}
-	left={true, false} ;\
-	[ "$(chef window classname)"  = "term" ] && window spread 3 $([ $left ] && echo 1 || echo 3) || window snap $([ $left ] && echo left || echo right)
+	side="{left, right}" ;\
+	[ "$(chef window classname)"  = "term" ] && window spread 3 $side || window snap $side
 
 super + alt + t
 	for i in $(xdotool search --onlyvisible --classname "term") ;do xdotool windowactivate --sync $i; window desktop $(chef desktop "CODE") teleport ;done
