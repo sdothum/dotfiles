@@ -125,11 +125,11 @@ anything on `stdout`.
 	Focus the closest window in a direction, relative to the currently
 	focused window. Does nothing if there is no window focused.
 
-* `window_stack_reverse`:
+* `window_stack_transpose`:
 	Set the window to either the top (viewable) or bottom of the stack depending on
 	where it is now. Does nothing if there is no window focused.
 
-	**Note**: The current mouse position determines the window set comprising the stack.
+	**Note**: The current mouse position pins the window ids (imagine an assortment of papers) comprising the stack.
 	The active window (border) may not necessarily be the topmost window visible.
 
 * `group_add_window` <group_nr>:

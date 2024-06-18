@@ -12,7 +12,7 @@ save_geometry
 set_geometry  # X Y WIDTH HEIGHT
 
 spread() {
-	width=$(( (width - ($1 - 1) * gap - border * $1 * 2) / $1 ))
+	width=$(( (W - ($1 - 1) * gap - border * $1 * 2) / $1 ))
 	offset=$(( (width - WIDTH) / 2 + 1 ))  # offset from screen division edge
 
 	# tweak left/right margins inwards to balance visual spacing across screen :)
@@ -25,7 +25,9 @@ spread() {
 	[ $column -eq 0 ] && column=$1
 	column=$(( column - 1 ))  # 0 -> left
 
-	wtp $(( width * column + margin + border * column * 2 + column * gap + offset )) $Y $WIDTH $HEIGHT $(pfw)
+	X=$(( width * column + margin + border * column * 2 + column * gap + offset ))
+	[ $(( X + WIDTH )) -ge $W ] && X=$(( W - WIDTH + border ))
+	wtp $X $Y $WIDTH $HEIGHT $(pfw)
 }
 
 case $2 in

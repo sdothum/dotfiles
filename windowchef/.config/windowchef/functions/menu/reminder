@@ -11,7 +11,7 @@ REMINDERS=${REMINDERS:-$HOME/.reminders}
 ADD='add'
 EDIT='edit'
 
-search() { echo "${appmt#*$SEP }" | sed "s/[ '\"$]/./g"; }  # sidestep escaping string for shell expansion
+search() { echo "${appmt#*$SEP }" | sed "s/[ '\"$]/./g"; }  # sidestep necessary string escaping for shell expansion
 
 while appmt=$(reminder 52 | sed  "1i$(X $ADD)\n$(X $EDIT)" | rmenu 'Appointment' -no-custom) || exit ;do
 	unset error

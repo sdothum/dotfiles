@@ -13,10 +13,10 @@ ASPECT=4:3  # (photographic) ratio
 size() {
 	save_geometry
 	set_geometry
-	[ $4 ] && { W=$3; H=$2; } || { W=$2; H=$3; }
-	[ $H -gt $height ] && { swap=$W; W=$H; H=$swap; }
-	wtp $X $margin $W $H $1  # size from top else bottom may be truncated
-	wmv -a $(( X + W / 2 )) $(( height / 2 )) $1
+	[ $4 ] && { width=$3; height=$2; } || { width=$2; height=$3; }
+	[ $height -gt $H ] && { swap=$width; width=$height; height=$swap; }
+	wtp $X $margin $width $height $1  # size from top else bottom may be truncated
+	wmv -a $(( X + width / 2 )) $(( H / 2 )) $1
 }
 
 # ................................................................. Aspect ratio
@@ -25,9 +25,9 @@ aspect() {
 	numerator=$1
 	denominator=$2
 	# an arbitrary aspect ratio calculation
-	X=$(echo "scale=2\n$width * $numerator / $denominator - $margin" | bc | cut -d. -f1)
+	X=$(echo "scale=2\n$W * $numerator / $denominator - $margin" | bc | cut -d. -f1)
 	Y=$(echo "scale=2\n$X * ${ASPECT%:*} / ${ASPECT#*:}" | bc | cut -d. -f1)
-	[ $Y -lt $height ] || Y=$(echo "scale=2\n$X * ${ASPECT#*:} / ${ASPECT%:*}" | bc | cut -d. -f1)  # fit window to screen
+	[ $Y -lt $H ] || Y=$(echo "scale=2\n$X * ${ASPECT#*:} / ${ASPECT%:*}" | bc | cut -d. -f1)  # fit window to screen
 	size $winid $X $Y
 }
 
@@ -58,8 +58,7 @@ case $1 in
 	[AB]* ) paper $1 $2 ;;
 	*/*   ) aspect ${1%/*} ${1#*/} ;;
 	*x*   ) size $winid ${1%x*} ${1#*x} ;;
-	*     ) size $winid ${width:-$X} ${height:-$Y} ;;
+	*     ) size $winid ${W:-$X} ${H:-$Y} ;;
 esac
-
 
 # kak: filetype=sh

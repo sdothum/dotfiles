@@ -74,7 +74,7 @@ static struct Command c[] = {
 	{ "window_cardinal_focus"     , IPCWindowCardinalFocus   ,  1 , fn_direction} ,
 	{ "window_focus"              , IPCWindowFocus           ,  1 , fn_hex      } ,
 	{ "window_focus_last"         , IPCWindowFocusLast       ,  0 , NULL        } ,
-	{ "window_stack_reverse"      , IPCWindowStackReverse    ,  0 , NULL        } ,
+	{ "window_stack_transpose"    , IPCWindowStackTranspose  ,  0 , NULL        } ,
 	{ "group_add_window"          , IPCGroupAddWindow        ,  1 , fn_naturals } ,
 	{ "group_remove_window"       , IPCGroupRemoveWindow     ,  0 , NULL        } ,
 	{ "group_remove_all_windows"  , IPCGroupRemoveAllWindows ,  1 , fn_naturals } ,

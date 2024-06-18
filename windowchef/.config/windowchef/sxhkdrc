@@ -166,22 +166,20 @@ super + {p,l}
 super + {shift,ctrl} + q
 	{menu halt, waitron wm_quit 0}
 
-super + {r,t}
-	[ "$(chef window classname)" = "term" ] && window spread 3 {3, 1} || window snap {right, left}
-
 super + ctrl + r
 	waitron group_remove_window ;\
 	chef -- desktop
 
 super + s
-	waitron window_stack_reverse ;\
+	waitron window_stack_transpose ;\
 	chef -- desktop
 
 super + shift + {s,u,v}
 	menu {system, passwords, media}
 
-super + shift + t
-	layout fold 5 term
+super + {t,r}
+	left={true, false} ;\
+	[ "$(chef window classname)"  = "term" ] && window spread 3 $([ $left ] && echo 1 || echo 3) || window snap $([ $left ] && echo left || echo right)
 
 super + alt + t
 	for i in $(xdotool search --onlyvisible --classname "term") ;do xdotool windowactivate --sync $i; window desktop $(chef desktop "CODE") teleport ;done

@@ -35,8 +35,8 @@ case $TERM in
 	urxvt     )
 		TITLE=-title
 		NAME=-name
-		blackboard=blackboard
-		name="$NAME term"  # default class SEE: rulerrc
+		blackboard="-bg '$blackboard' -fg '$blackboard' -cr '$blackboard'"
+		geometry='-geometry 1024x600+0+0'
 		;;
 esac
 
@@ -83,7 +83,7 @@ done
 $TERM $theme $geometry $title $name $cmd
 
 [ $visible ] && [ "$title" ] && xdotool search --sync --onlyvisible --limit 1 --classname "${title#* }"
-# delay.. double return the kak command string to complete the exec command (and command popup dialogue)
+# delay long enough.. then double return kak startup command input (to close command prompt and any popup dialogue)
 [ "$kmd"   ] && { sleep 0.25; xdotool type "$kmd
 
 "; }

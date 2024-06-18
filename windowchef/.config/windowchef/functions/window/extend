@@ -12,7 +12,7 @@ save_geometry
 set_geometry  # X Y WIDTH HEIGHT
 
 lwidth=$(( X + WIDTH - margin ))
-rwidth=$(( width - X + margin ))
+rwidth=$(( W - X + margin ))
 
 # .......................................................... Extend horizontally
 
@@ -35,7 +35,7 @@ top() {
 # ................................................................ Extend bottom
 
 bottom() {
-	height=$(( height - Y + border ))
+	height=$(( H - Y + border ))
 	case $1 in
 		left  ) wtp $margin $Y $lwidth $height $(pfw) ;;
 		right ) wtp $X $Y $rwidth $height $(pfw) ;;

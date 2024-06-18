@@ -42,6 +42,10 @@ class="krita"
 class="mpv"
 	xdotool key Super+Shift+z
 
+class="pcmanfm"
+	window desktop $(chef desktop "DESK") ;\
+	window tile 3 3
+
 class="pavucontrol"
 	window desktop $(chef desktop "CHEF")                                 ;\
 	window size B6 rotate                                                 ;\

@@ -11,33 +11,32 @@
 save_geometry
 set_geometry  # X Y WIDTH HEIGHT
 
-H=$(( height - border * 2 ))  # tiles are full vertical panes
+height=$(( H - border * 2 ))  # tiles are full vertical panes
 
 # .................................................................... Tile left
 
 left() {
 	width=$(( X + WIDTH - margin ))
-	wtp $margin $top $width $H $(pfw)
+	wtp $margin $top $width $height $(pfw)
 }
 
 # ................................................................... Tile right
 
 right() {
-	width=$(( width - X + margin ))
-	wtp $X $top $width $H $(pfw)
+	width=$(( W - X + margin ))
+	wtp $X $top $width $height $(pfw)
 }
 
 # .................................................................. Tile panels
 
 tile() {
-	X=$width
-	width=$(( (width - ($1 - 1) * gap - border * $1 * 2) / $1 ))
+	width=$(( (W - ($1 - 1) * gap - border * $1 * 2) / $1 ))
 
 	tile=$(expr $2 % $1)   # tile position left to right
 	[ $tile -eq 0 ] && tile=$1
 	tile=$(( tile - 1 ))  # 0 -> left
 
-	wtp $(( width * tile + margin + border * tile * 2 + tile * gap )) $top $width $H $(pfw)
+	wtp $(( width * tile + margin + border * tile * 2 + tile * gap )) $top $width $height $(pfw)
 }
 
 case $1 in

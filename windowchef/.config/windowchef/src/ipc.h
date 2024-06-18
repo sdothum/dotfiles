@@ -31,7 +31,7 @@ enum IPCCommand {
 	IPCWindowCardinalFocus,
 	IPCWindowFocus,
 	IPCWindowFocusLast,
-	IPCWindowStackReverse,
+	IPCWindowStackTranspose,
 	IPCGroupAddWindow,
 	IPCGroupRemoveWindow,
 	IPCGroupRemoveAllWindows,
