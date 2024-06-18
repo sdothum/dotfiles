@@ -57,7 +57,7 @@ if [ $debug ] ;then
 fi
 
 # condense weather for monocle layout
-if [ ! -e $MONOCLE ] ;then
+if [ ! -e ${MONOCLE:-$WME:monocle} ] ;then
 	FEELSLIKE=$(echo $WEATHER | awk '/(Wind Chill|Humidex):/ { gsub(/.*(Wind Chill|Humidex):[^ ]* /, "", $0); gsub(/[ <].*$/, "", $0); print }')
 	if [ $debug ] ;then
 		echo Feels like .. \"$FEELSLIKE\"
