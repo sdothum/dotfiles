@@ -52,7 +52,8 @@ find -L ./ -type f | exclude | grep -E -v $ignore | grep "$regex" >$FILES
 [ -s $FILES ] || usage
 src=${source#$HOME/stow/*/}
 src=\~/${src#$HOME/}
-target=${target%//.}  # cleanup end of massaged target directory
+target=${target%//.}  # trim unnecessary directory placeholders (depending on command line input)
+target=${target%/.}
 
 while read file <&3 ;do
 	[ ${file##*.} = 'log' ] || [ ${file##*.} = 'jpg' ] && continue
