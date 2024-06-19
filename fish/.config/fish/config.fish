@@ -88,7 +88,7 @@ set -x PLAYER mpv
 # less prompt (replaced by wrapper to be able to set prompt colour)
 # set -x LESS '-RX -P ?B %f  %lt-%lb/%L  %Pb\%: [pipe]  %lt-%lb/\.\.'
 set -x PAGER less
-set -x PAGER print  # my smart pager
+set -x PAGER pager  # my smart pager
 
 # ..................................................... Development environments
 
