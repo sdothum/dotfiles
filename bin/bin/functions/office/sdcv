@@ -70,6 +70,6 @@ case $1 in
 	-ud* ) shift; eval $URBAN   $@ | sed '1d' | elinks -dump | sed 's/^.*\[0m //' ;;
 	-et* ) shift; eval $ETYM    $@ | sed "1,3d; s/<dd>/<br><br><dd>/" | elinks -dump ;;
 	*    ) $SDCV -c $@ ;;
-esac | sed "s|<br />[ \t]*|\n |g" | sed -z 's/\n\n\n/\n/g' | print  # null (-z) line terminator to remove '\n\n\n'
+esac | sed "s|<br />[ \t]*|\n |g" | sed -z 's/\n\n\n/\n/g' | pager  # null (-z) line terminator to remove '\n\n\n'
 
 # kak: filetype=sh

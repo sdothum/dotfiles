@@ -86,7 +86,7 @@ if [ $1 ] ;then
 	# list really only makes sense for single inquiry
 	[ $list ] && list $@ | tr '[:upper:]' '[:lower:]'
 else
-	dump | print
+	dump | pager
 fi
 
 # kak: filetype=sh

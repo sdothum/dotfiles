@@ -90,7 +90,7 @@ dinit() {
 		stop    ) sv $1 $2 ;;
 		restart ) sv $1 $2 ;;
 		status  ) sv $1 $2 ;;
-		log     ) sudo cat /var/log/dinit/$2.log | print ;;
+		log     ) sudo cat /var/log/dinit/$2.log | pager ;;
 		*       ) sv status $1; usage ;;
 	esac
 	exit

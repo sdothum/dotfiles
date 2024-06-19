@@ -20,7 +20,7 @@ while : ;do
 done
 
 # see .agignore and al
-ag --color --color-path='1;32' --color-line-number='1;37' --color-match='1;33' --nobreak --noheading --smart-case --follow --hidden --skip-vcs-ignores $AG $nocolor "$@"
+ag --color --color-path='1;32' --color-line-number='1;37' --color-match='1;31' --nobreak --noheading --smart-case --follow --hidden --skip-vcs-ignores $AG $nocolor "$@"
 # rg --colors 'path:fg:green' --colors 'path:style:bold' --colors 'line:fg:white' --colors 'line:style:bold' --colors 'match:fg:yellow' --colors 'match:style:bold' --no-heading --smart-case --follow --hidden --no-ignore-vcs $RG $w "$@"
 
 # kak: filetype=sh

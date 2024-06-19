@@ -16,6 +16,6 @@ ls -1 $1      | sort >/tmp/lsdiff:target
 
 ditto source "< $SOURCE" 
 ditto target "> $1" 
-diff --color /tmp/lsdiff:source /tmp/lsdiff:target | print
+diff --color /tmp/lsdiff:source /tmp/lsdiff:target | pager
 
 # kak: filetype=sh

@@ -46,9 +46,9 @@ case $1 in
 	u  ) sudo apk update ;;
 	U  ) sudo apk update; packages && ifyes 'upgrade packages' && { sudo apk upgrade; [ $LINUX != $(vsn linux-lts) ] && reboot; } ;;
 	UU ) sudo apk update; sudo apk upgrade --available; testing; sync; reboot ;;  # alpine lts release upgrade
-	/* ) apk search ${1#?} | grep "${1#?}"  | sort | columns | print ;;
-	^* ) apk search ${1#?} | grep "^${1#?}" | sort | columns | print ;;
-	*  ) apk search $1                      | sort | columns | print ;;
+	/* ) apk search ${1#?} | grep "${1#?}"  | sort | columns | pager ;;
+	^* ) apk search ${1#?} | grep "^${1#?}" | sort | columns | pager ;;
+	*  ) apk search $1                      | sort | columns | pager ;;
 esac
 
 # kak: filetype=sh

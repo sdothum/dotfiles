@@ -4,9 +4,9 @@
 # Shell
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ........................................................... term print wrapper
+# .................................................................. Smart pager
 
-# Usgae: .. | [env tab=soft] print [<file>], (hard) tab -> soft tab
+# Usgae: .. | [env tab=soft] pager [<file>], (hard) tab -> soft tab
 
 OUTPUT=/tmp/print:output
 dictionary=${ORANGE}  # sdcv word highlight color
