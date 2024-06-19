@@ -6,22 +6,24 @@
 
 # ..................................................... Recursive directory diff
 
-usage() { usage: "$(basename $0) [-[1 | b | E | Z | EZ]] [-d <date>] <source> [<target>] [<regex>]"; exit 1; }
+usage() { usage: "$(basename $0) [-[1 | s | b | E | Z | EZ]] [-d <date>] <source> [<target>] [<regex>]"; exit 1; }
 
 # ignore='backups|debian|\.history|makepkg|nixos|plugged-custom|qmk_firmware|root|snippets|undo|vps'
-ignore='backups|debian|\.history|makepkg|nixos|plugged-custom|root|snippets|undo|vps|diff$'
+ignore='backups|debian|\.history|makepkg|nixos|plugged-custom|root|snippets|undo|vps'
 
 DIRDIFF=/tmp/dirdiff
 FILES=$DIRDIFF:files
 LOG=$DIRDIFF.log
 if exists icdiff ;then
 	IC=ic
-	ICOPT='--line-numbers --no-headers --truncate --color-map=add:red_bold,change:red_bold,subtract:red_bold,line-numbers:black_bold'  # side-by-side
+	ICOPT='--line-numbers --truncate --color-map=add:red_bold,change:red_bold,subtract:red_bold,line-numbers:black_bold'  # side-by-side
 fi
+delay=0.15  # match message viewing interval
 
 while [ "$1" ] ;do
 	case $1 in
 		-1  ) unset IC ICOPT ;;                                        # standard diff (not side-by-side)
+		-s  ) S=true         ;;                                        # stagger match message
 		-b  ) w=-w; diffopt='set diffopt+=iwhite'  ;;                  # ignore whitespace
 		-E  ) w=-E; diffopt='set diffopt+=iwhite'  ;;                  # ignore whitespace
 		-Z  ) w=-Z; diffopt='set diffopt+=iwhite'  ;;                  # ignore whitespace
@@ -50,25 +52,29 @@ find -L ./ -type f | exclude | grep -E -v $ignore | grep "$regex" >$FILES
 [ -s $FILES ] || usage
 src=${source#$HOME/stow/*/}
 src=\~/${src#$HOME/}
+target=${target%//.}  # cleanup end of massaged target directory
 
 while read file <&3 ;do
 	[ ${file##*.} = 'log' ] || [ ${file##*.} = 'jpg' ] && continue
 	file $file | grep -q text || { ditto skipping "$file"; continue; }
 	unset blink
+	targetfile="${target}/${file#./}"
 	while : ;do
 		[ $FILTER ] && [ "$file" -ot $FILTER ] && break
 		clear
+		file="${file#./}"
 		[ $title ] || { ditto -t diff "$src/$regex && $target" >>$LOG; title=true; }
-		[ -e "${target%/}/${file#./}" ] || { ditto ERROR missing "${target%/}/${file#./}" >>$LOG; break; }
-		if ! diff --brief $w "${file#./}" "${target%/}/${file#./}" >/dev/null 2>&1 ;then
-			ditto diff "${file#./}"
-			${IC}diff ${ICOPT} $w "${file#./}" "${target%/}/${file#./}" | colordiff | pager  # SEE: ~/.colordiffrc
-			# ifno "edit ${file#./}" && break || vim -g -d -c "$diffopt" -f --role=gvimdiff "${file#./}" "${target%/}/${file#./}"  # vim deprecated
-			ifno "edit ${file#./}" && break
-			kakdiff "${file#./}" "${target%/}/${file#./}"  # kak diff
+		[ -e "${targetfile}" ] || { ditto ERROR missing "${targetfile}" >>$LOG; break; }
+		if ! diff --brief $w "${file}" "${targetfile}" >/dev/null 2>&1 ;then
+			ditto diff "${file}"
+			${IC}diff ${ICOPT} $w "${file}" "${targetfile}" | colordiff | pager  # SEE: ~/.colordiffrc
+			# ifno "edit ${file}" && break || vim -g -d -c "$diffopt" -f --role=gvimdiff "${file}" "${targetfile}"  # vim deprecated
+			ifno "edit ${file}" && break
+			kakdiff "${file}" "${targetfile}"  # kak diff
 			blink=${BLINK}
 		else
-			ditto match "${file#./}"
+			ditto match "${file}"
+			[ $S ] && sleep $delay
 			break
 		fi
 	done
