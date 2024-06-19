@@ -142,7 +142,7 @@ super + ctrl + e
 	layout level
 
 super + {alt,ctrl,shift} + g
-	window snap center {vertical,left, right}
+	window snap center {vertical, left, right}
 
 super + h
 	xdotool search --onlyvisible --classname "Surf" windowactivate && window tile 4 1 || hangouts
@@ -180,6 +180,9 @@ super + shift + {s,u,v}
 super + {t,r}
 	side="{left, right}" ;\
 	[ "$(chef window classname)"  = "term" ] && window spread 3 $side || window snap $side
+
+super + shift + {t,r}
+	window snap {left, right}
 
 super + alt + t
 	for i in $(xdotool search --onlyvisible --classname "term") ;do xdotool windowactivate --sync $i; window desktop $(chef desktop "CODE") teleport ;done
