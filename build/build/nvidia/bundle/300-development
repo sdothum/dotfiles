@@ -4,13 +4,6 @@
 # see bundle_install
 
 
-= dinit
-= ═════
-# m void_dinit        # prep for post void dinit install 
-#   metalog
-# ! sudo mkdir /var/log/dinit
-
-
 = library
 = ═══════
 # libX11-devel        # herbstluftwm
@@ -67,11 +60,9 @@
 ! stow lua
 
 
-= perl tool
-= ═════════
+= perl
+= ════
   perl
-  colordiff
-! stow colordiff
   cpanminus           # perl-HTML dependency
   perl-Curses
 d s perl-HTML-Strip
@@ -112,6 +103,13 @@ g rack-test
 = manpages
 = ════════
   ruby-ronn
+
+
+= diff
+= ════
+  colordiff
+! stow colordiff
+  icdiff
 
 
 = debug

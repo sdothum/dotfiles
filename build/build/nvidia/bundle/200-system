@@ -4,6 +4,13 @@
 # see bundle_install
 
 
+= dinit
+= ═════
+# m void_dinit        # prep for post void dinit install 
+#   metalog
+# ! sudo mkdir /var/log/dinit
+
+
 = codec
 = ═════
   gst-libav
