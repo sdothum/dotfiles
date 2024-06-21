@@ -21,6 +21,8 @@ if exists icdiff ;then
 fi
 delay=0.15  # match message viewing interval
 
+# Runtime ......................................................................
+
 while [ "$1" ] ;do
 	case $1 in
 		-1  ) unset IC ICOPT ;;                                        # standard diff (not side-by-side)
@@ -35,21 +37,24 @@ while [ "$1" ] ;do
 	shift
 done
 
+[ $IC ] && unset w  # inapplicable option
+
+# Target directory .............................................................
+
 while [ "$1" ] ;do
 	[ -d "$1" ] && { [ "$source" ] && target=${1%/} || source=${1%/}; } || regex=$1
 	shift
 done
 [ "$target" ] && [ "${target%${target#?*}}" != '/' ] && target=$PWD/$target  # target must be full pathname
-[ -d "$target/${source##*/}" ] && target="$target/${source##*/}"
 target=${target%/.}
-
-[ -d "$source" ] && cd "$source" || usage
+[ -d "$source" ] && cd "$source" >/dev/null || usage
 source=$(pwd)
-TARGET=${target:-$DOTFILES}  # unprovided target defaults to git dotfile repo
+
 # find matching source directory in target repo
+TARGET=${target:-$DOTFILES}  # unprovided target defaults to git dotfile repo
 [ -L $TARGET ] && L=-L
 target=$(find $L $TARGET -type d -regex ".*${source#$HOME}" 2>/dev/null | head -1)
-[ -d "$target" ] || target=$(find $L $TARGET -type d -regex ".*${source#$HOME/stow}" 2>/dev/null | head -1)
+[ -d "$target" ] || target=$(find $L $TARGET -type d -regex ".*${source#*/stow}" 2>/dev/null | head -1)
 # distinguish $HOME/bin from all other application bin folders
 case "${source#$HOME/}" in
 	bin          ) target="$TARGET/bin/bin" ;;
@@ -59,11 +64,15 @@ esac
 [ -d "$target" ] || usage
 [ "$regex"     ] || regex='.*'
 
+# File set .....................................................................
+
 # to handle filenames containing spaces
 find -L ./ -type f | exclude | grep -E -v $ignore | grep "$regex" >$FILES
 [ -s $FILES ] || usage
 src=${source#$HOME/stow/*/}
 src=\~/${src#$HOME/}
+
+# Diff .........................................................................
 
 while read file <&3 ;do
 	[ "${file##*.}" = 'log' ] || [ "${file##*.}" = 'jpg' ] && continue
