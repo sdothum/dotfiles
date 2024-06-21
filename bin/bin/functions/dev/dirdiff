@@ -6,18 +6,18 @@
 
 # ..................................................... Recursive directory diff
 
-usage() { usage: "$(basename $0) [-[1 | s | b | E | Z | EZ]] [-d <date>] <source> [<target>] [<regex>]"; exit 1; }
+usage() { usage: "$(basename $0) [-[1 | s | b | E | Z | EZ]] [-d <date>] <.|source> [<repo|target>] [<regex>]"; exit 1; }
 
 # ignore='backups|debian|\.history|makepkg|nixos|plugged-custom|qmk_firmware|root|snippets|undo|vps'
 ignore='backups|debian|\.history|makepkg|nixos|plugged-custom|root|snippets|undo|vps'
 
-DOTFILES=/home/depot/dotfiles  # default target (find matching source path)
+DOTFILES=/home/depot/dotfiles  # last git dotfile repo "pull"
 DIRDIFF=/tmp/dirdiff
 FILES=$DIRDIFF:files
 LOG=$DIRDIFF.log
 if exists icdiff ;then
 	IC=ic
-	ICOPT='--line-numbers --truncate --tabsize=3 --color-map=add:red_bold,change:red_bold,subtract:red_bold,line-numbers:black_bold,separator:yellow'  # side-by-side
+	ICOPT='--line-numbers --truncate --tabsize=3 --color-map=add:red_bold,change:red_bold,subtract:red_bold,description:yellow,line-numbers:black_bold,separator:yellow'  # side-by-side
 fi
 delay=0.15  # match message viewing interval
 
@@ -36,49 +36,48 @@ while [ "$1" ] ;do
 done
 
 while [ "$1" ] ;do
-	[ -d "$1" ] && { [ "$source" ] && target=$1 || source=$1; } || regex=$1
+	[ -d "$1" ] && { [ "$source" ] && target=${1%/} || source=${1%/}; } || regex=$1
 	shift
 done
 [ "$target" ] && [ "${target%${target#?*}}" != '/' ] && target=$PWD/$target  # target must be full pathname
 [ -d "$target/${source##*/}" ] && target="$target/${source##*/}"
+target=${target%/.}
 
 [ -d "$source" ] && cd "$source" || usage
 source=$(pwd)
-# unprovided target defaults to last git dotfile repo "pull"
-if [ -d "$target" ] ;then
-	[ -L $DOTFILES ] && L=-L
-	target=$(find $L $DOTFILES -type d -regex ".*${source#$HOME}" 2>/dev/null | head -1)
-	[ -d "$target" ] || target=$(find $L $DOTFILES -type d -regex ".*${source#$HOME/stow}" 2>/dev/null | head -1)
-	# distinguish $HOME/bin from all other application bin folders
-	case "${source#$HOME/}" in
-		bin          ) target="$DOTFILES/bin/bin" ;;
-		stow/bin     ) target="$DOTFILES/bin"     ;;
-		stow/bin/bin ) target="$DOTFILES/bin/bin" ;;
-	esac
-fi
+TARGET=${target:-$DOTFILES}  # unprovided target defaults to git dotfile repo
+# find matching source directory in target repo
+[ -L $TARGET ] && L=-L
+target=$(find $L $TARGET -type d -regex ".*${source#$HOME}" 2>/dev/null | head -1)
+[ -d "$target" ] || target=$(find $L $TARGET -type d -regex ".*${source#$HOME/stow}" 2>/dev/null | head -1)
+# distinguish $HOME/bin from all other application bin folders
+case "${source#$HOME/}" in
+	bin          ) target="$TARGET/bin/bin" ;;
+	stow/bin     ) target="$TARGET/bin"     ;;
+	stow/bin/bin ) target="$TARGET/bin/bin" ;;
+esac
 [ -d "$target" ] || usage
-[ "$regex"  ] || regex='.*'
+[ "$regex"     ] || regex='.*'
 
 # to handle filenames containing spaces
 find -L ./ -type f | exclude | grep -E -v $ignore | grep "$regex" >$FILES
 [ -s $FILES ] || usage
 src=${source#$HOME/stow/*/}
 src=\~/${src#$HOME/}
-target=${target%//.}  # trim unnecessary directory placeholders (depending on command line input)
-target=${target%/.}
 
 while read file <&3 ;do
-	[ ${file##*.} = 'log' ] || [ ${file##*.} = 'jpg' ] && continue
-	file $file | grep -q text || { ditto skipping "$file"; continue; }
+	[ "${file##*.}" = 'log' ] || [ "${file##*.}" = 'jpg' ] && continue
+	file "$file" | grep -q text || { ditto skipping "$file"; continue; }
 	unset blink
 	targetfile="${target}/${file#./}"
 	while : ;do
 		[ $FILTER ] && [ "$file" -ot $FILTER ] && break
-		clear
+		[ $S ] && clear
 		file="${file#./}"
 		[ $title ] || { ditto -t diff "$src/$regex && $target" >>$LOG; title=true; }
 		[ -e "${targetfile}" ] || { ditto ERROR missing "${targetfile}" >>$LOG; break; }
 		if ! diff --brief $w "${file}" "${targetfile}" >/dev/null 2>&1 ;then
+			[ $S ] || clear
 			ditto diff "${file}"
 			${IC}diff ${ICOPT} $w "${file}" "${targetfile}" | colordiff | pager  # SEE: ~/.colordiffrc
 			# ifno "edit ${file}" && break || vim -g -d -c "$diffopt" -f --role=gvimdiff "${file}" "${targetfile}"  # vim deprecated

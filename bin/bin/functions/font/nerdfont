@@ -11,7 +11,7 @@
 nerdfonts='--fontawesome --fontawesomeextension --octicons --material'  # powerline added below
 
 # see make_install iosevka
-REPO=/home/depot/nerd-fonts
+NERD=/home/depot/nerd-fonts
 MAKE_INSTALL=/tmp/iosevka:make_install
 
 [ $1 = '--mono' ] && { mono=$1; shift; }
@@ -21,31 +21,31 @@ family=${FONT##*/}
 # install nerd-font patcher
 void && xb_check fontforge nodejs otfcc ttfautohint
 ditto warning 'nerd-fonts v2.x may break ligatures'
-if exists -r $REPO ;then
-	cd $REPO
+if exists -r $NERD ;then
+	cd $NERD
 	if [ ! -e $MAKE_INSTALL ] ;then
-		/home/depot/nerd-fonts/font-patcher --version
+		$NERD/font-patcher --version
 		ifno 'sync nerd-fonts repo' || git pull
 	fi
 else
-	cd ${REPO%/*}
+	cd ${NERD%/*}
 	git clone --depth 1 https://github.com/be5invis/Iosevka.git
-	/home/depot/nerd-fonts/font-patcher --version
+	$NERD/font-patcher --version
 fi
 
 [ -e $MAKE_INSTALL ] || { [ -e /tmp/${FONT##*/} ] && { ifyes "replace $FONT" || exit; }; }
 mv -f $FONT /tmp/${FONT##*/} 2>/dev/null
 mkdir -p $FONT
-cd ${REPO%/*}/Iosevka.$IOSEVKA
+cd ${NERD%/*}/Iosevka.$IOSEVKA
 cp -v dist/$family/ttf/* $FONT
 
 # patch font
 REGULAR=$FONT/$family-regular.ttf
-if [ -e /home/depot/nerd-fonts/font-patcher ] ;then
+if [ -e $NERD/font-patcher ] ;then
 	rm -f /tmp/*ttf  # nerd-font creates file by font family name (note case)
-	/home/depot/nerd-fonts/font-patcher --adjust-line-height $mono --powerline -out /tmp $REGULAR
+	$NERD/font-patcher --adjust-line-height $mono --powerline -out /tmp $REGULAR
 	mv -v /tmp/*ttf $REGULAR
-	/home/depot/nerd-fonts/font-patcher $mono $nerdfonts -out /tmp $REGULAR
+	$NERD/font-patcher $mono $nerdfonts -out /tmp $REGULAR
 	mv -v /tmp/*ttf $REGULAR
 fi
 

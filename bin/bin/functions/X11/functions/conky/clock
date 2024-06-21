@@ -33,9 +33,9 @@ case $1 in
 		clock && exit
 		silent=true toggle unclutter on
 		# xdotool search --onlyvisible --limit 1 --maxdepth 1 --name "lemonbar" windowunmap >/dev/null  # disable panel
-		xdotool search --name "lemonbar:chef" windowunmap >/dev/null  # disable panel
+		xdotool search --name "lemonbar:chef" windowunmap >/dev/null    # disable panel
 		xdotool search --name "lemonbar:system" windowunmap >/dev/null  # disable panel
-		xdotool search --name "lemonbar:clock" windowunmap >/dev/null  # disable panel
+		xdotool search --name "lemonbar:clock" windowunmap >/dev/null   # disable panel
 		if [ $WM = 2bwm ] ;then
 			# switch desktops with conkyrc window_type "override" to prevent 2bwm race condition
 			sed -i '/own_window_type =/s/panel/override/' $HOME/.conkyrc.qclocktwo
@@ -53,9 +53,9 @@ case $1 in
 		clock || exit
 		restore unclutter
 		# xdotool search --limit 1 --maxdepth 1 --name "lemonbar" windowmap >/dev/null  # restore panel
-		xdotool search --name "lemonbar:chef" windowmap >/dev/null  # disable panel
+		xdotool search --name "lemonbar:chef" windowmap >/dev/null    # disable panel
 		xdotool search --name "lemonbar:system" windowmap >/dev/null  # disable panel
-		xdotool search --name "lemonbar:clock" windowmap >/dev/null  # disable panel
+		xdotool search --name "lemonbar:clock" windowmap >/dev/null   # disable panel
 		if [ $WM = 2bwm ] ;then
 			[ -e $DESKTOP ] && xdotool set_desktop $(cat $DESKTOP)
 		fi
