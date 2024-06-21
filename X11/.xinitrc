@@ -79,8 +79,10 @@ xsetroot -cursor_name left_ptr
 # utf-8
 xrdb -load $HOME/.Xresources
 
+xclip -in -selection clipboard &
+
 # login manager default
-DEFAULTSESSION=2bwm
+DEFAULTSESSION=windowchef
 #echo $wm >$HOME/.xsession.trace
 
 # ...................................................................... Display
