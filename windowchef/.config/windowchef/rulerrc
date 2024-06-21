@@ -5,8 +5,8 @@
 #
 # ........................................................................ Rules
 #
-# NOTE: there cannot be a blank line before the first rule! (hence, the deviation from standard headers)
-#
+# NOTE: (yacc compiled) parser disallows blank lines at head of file: expecting non-blank token
+#       <- so this comment spacer :)
 class="calibre"
 	window desktop $(chef desktop "BOOK") ;\
 	window @0.1 snap center
