@@ -2,12 +2,10 @@
 # tuple: <object> <package> -> file: .xb_<action>, see xb
 
 hints     chromium
-mail      alot
 imap      dovecot
-ttrss     php-fpm
 gpg       pinentry-gtk
 database  postgresql
-passenger ruby
+framework ruby
 mouse     xorg-server
 
 # vim: set ft=conf: #

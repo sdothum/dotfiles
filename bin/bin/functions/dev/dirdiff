@@ -11,12 +11,13 @@ usage() { usage: "$(basename $0) [-[1 | s | b | E | Z | EZ]] [-d <date>] <source
 # ignore='backups|debian|\.history|makepkg|nixos|plugged-custom|qmk_firmware|root|snippets|undo|vps'
 ignore='backups|debian|\.history|makepkg|nixos|plugged-custom|root|snippets|undo|vps'
 
+DOTFILES=/home/depot/dotfiles  # default target (find matching source path)
 DIRDIFF=/tmp/dirdiff
 FILES=$DIRDIFF:files
 LOG=$DIRDIFF.log
 if exists icdiff ;then
 	IC=ic
-	ICOPT='--line-numbers --truncate --color-map=add:red_bold,change:red_bold,subtract:red_bold,line-numbers:black_bold'  # side-by-side
+	ICOPT='--line-numbers --truncate --tabsize=3 --color-map=add:red_bold,change:red_bold,subtract:red_bold,line-numbers:black_bold,separator:yellow'  # side-by-side
 fi
 delay=0.15  # match message viewing interval
 
@@ -43,7 +44,18 @@ done
 
 [ -d "$source" ] && cd "$source" || usage
 source=$(pwd)
-[ -d "$target" ] || target=/net/depot/dotfiles/${source#$HOME/stow/}         # no target -> depot
+# unprovided target defaults to last git dotfile repo "pull"
+if [ -d "$target" ] ;then
+	[ -L $DOTFILES ] && L=-L
+	target=$(find $L $DOTFILES -type d -regex ".*${source#$HOME}" 2>/dev/null | head -1)
+	[ -d "$target" ] || target=$(find $L $DOTFILES -type d -regex ".*${source#$HOME/stow}" 2>/dev/null | head -1)
+	# distinguish $HOME/bin from all other application bin folders
+	case "${source#$HOME/}" in
+		bin          ) target="$DOTFILES/bin/bin" ;;
+		stow/bin     ) target="$DOTFILES/bin"     ;;
+		stow/bin/bin ) target="$DOTFILES/bin/bin" ;;
+	esac
+fi
 [ -d "$target" ] || usage
 [ "$regex"  ] || regex='.*'
 

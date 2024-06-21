@@ -5,12 +5,14 @@
 gem list
 ditto version "$(ruby --version)"
 ifno 'update gems' && return
+sudo gem update
 
-framework=$HOME/build/void/bundle/220-framework
+framework=$HOME/build/nvidia/bundle/*-framework
 
 # pull gem list from framework bundle install
-gems=$(cat $HOME/build/void/bundle/220-framework | grep -v '^ *#' | grep ' g ' | sed -r 's/.* g ([^ ]*) *.*/\1/')
+gems=$(cat $framework | grep -v '^ *#' | grep ' g ' | sed -r 's/.* g ([^ ]*) *.*/\1/')
 # update failure likely ruby 3.x revision bump requiring full gem install
-for i in $gems ;do gem_update $i 2>/dev/null || exec bundle_install $framework  ;done 
+bundle_install $framework
+for i in $gems ;do gem_update $i 2>/dev/null ;done
 
 # kak: filetype=sh

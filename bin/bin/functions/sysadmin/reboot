@@ -19,7 +19,7 @@ for i in $(seq $delay | tac) ;do
 	sleep 1
 done
 
-tput cnorm  # recover before closing sshd session
+tput cnorm                                                           # recover before closing sshd session
 sudo rm -f /tmp/login:console
 (sleep 0.1; sudo pkill -f "sshd: $USER" 2>/dev/null) &               # close remote ssh session connect
 (sleep 0.1; pkill tmux) &
