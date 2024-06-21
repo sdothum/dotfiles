@@ -33,8 +33,7 @@
 ! stow vimwiki thedarnedestthing
 ! sudo mkdir -p /srv/http
 ! sudo ln -s $HOME/thedarnedestthing.com /srv/http
-! sudo find -L /srv/http/thedarnedestthing.com -type d -exec chmod ug+rwx {} \;
-! sudo find -L /srv/http/thedarnedestthing.com -type f -exec chmod ug+rw {} \;
-
+! find -L /srv/http/thedarnedestthing.com -type d -exec sudo chmod ug+rwx {} \;
+! find -L /srv/http/thedarnedestthing.com -type f -exec sudo chmod ug+rw {} \;
 
 # vim: set ft=conf: #
