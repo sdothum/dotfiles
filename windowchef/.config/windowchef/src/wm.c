@@ -92,7 +92,7 @@ static struct client * setup_window(xcb_window_t);
 static void set_focused_no_raise(struct client *);
 static void set_focused(struct client *);
 static void set_focused_last_best();
-static void window_stack_transpose(struct client *);
+static void window_stack_toggle(struct client *);
 static void raise_window(xcb_window_t);
 static void close_window(struct client *);
 static void delete_window(xcb_window_t);
@@ -189,7 +189,7 @@ static void ipc_window_rev_cycle_in_group(uint32_t *);
 static void ipc_window_cardinal_focus(uint32_t *);
 static void ipc_window_focus(uint32_t *);
 static void ipc_window_focus_last(uint32_t *);
-static void ipc_window_stack_transpose(uint32_t *);
+static void ipc_window_stack_toggle(uint32_t *);
 static void ipc_group_add_window(uint32_t *);
 static void ipc_group_remove_window(uint32_t *);
 static void ipc_group_remove_all_windows(uint32_t *);
@@ -827,7 +827,7 @@ set_focused_last_best()
  */
 
 static void
-window_stack_transpose(struct client *client)
+window_stack_toggle(struct client *client)
 {
 	uint32_t values[1] = { XCB_STACK_MODE_OPPOSITE };
 	// xcb_window_t win = client->window;
@@ -2832,7 +2832,7 @@ register_ipc_handlers(void)
 	ipc_handlers[IPCWindowCardinalFocus]   = ipc_window_cardinal_focus;
 	ipc_handlers[IPCWindowFocus]           = ipc_window_focus;
 	ipc_handlers[IPCWindowFocusLast]       = ipc_window_focus_last;
-	ipc_handlers[IPCWindowStackTranspose]  = ipc_window_stack_transpose;
+	ipc_handlers[IPCWindowStackToggle]     = ipc_window_stack_toggle;
 	ipc_handlers[IPCGroupAddWindow]        = ipc_group_add_window;
 	ipc_handlers[IPCGroupRemoveWindow]     = ipc_group_remove_window;
 	ipc_handlers[IPCGroupRemoveAllWindows] = ipc_group_remove_all_windows;
@@ -3190,13 +3190,13 @@ ipc_window_focus_last(uint32_t *d)
 }
 
 static void
-ipc_window_stack_transpose(uint32_t *d)
+ipc_window_stack_toggle(uint32_t *d)
 {
 	(void)(d);
 	if (focused_win == NULL)
 		return;
 
-	window_stack_transpose(focused_win);
+	window_stack_toggle(focused_win);
 }
 
 static void

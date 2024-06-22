@@ -88,14 +88,14 @@ alt + super + {0,1,2,3,4,5,6,7,8,9}
 alt + shift + {0,1,2,3,4,5,6,7,8,9}
 	desktop {$(desktop), 1, 2, 3, 4, 5, 6, 7, 8, 9} specific
 
+alt + ctrl + {1,2,3,4,5,6,7,8,9}
+	window desktop {1, 2, 3, 4, 5, 6, 7, 8, 9}
+
 alt + ctrl + 0
 	for i in $(seq 1 9) ;do waitron group_activate $i ;done ;\
 	rm $GROUP:?:deactivated 2>/dev/null                 ;\
 	waitron window_focus $(cat $GROUP:$(desktop):focus) ;\
 	desktop $(desktop)
-
-alt + ctrl + {1,2,3,4,5,6,7,8,9}
-	window desktop {1, 2, 3, 4, 5, 6, 7, 8, 9}
 
 alt + ctrl + {comma,period}
 	window desktop $(desktop get {-1, +1})
@@ -171,7 +171,7 @@ super + ctrl + r
 	chef -- desktop
 
 super + s
-	waitron window_stack_transpose ;\
+	waitron window_stack_toggle ;\
 	chef -- desktop
 
 super + shift + {s,u,v}

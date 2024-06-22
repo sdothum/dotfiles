@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "WAITRON" "1" "April 2020" "Windowchef" "Windowchef Manual"
+.TH "WAITRON" "1" "June 2024" "Windowchef" "Windowchef Manual"
 .
 .SH "NAME"
 \fBwaitron\fR \- A client for windowchef(1)
@@ -139,6 +139,13 @@ Focus the window that was focused before the currently focused window\.
 .TP
 \fBwindow_cardinal_focus\fR \fIDIRECTION\fR
 Focus the closest window in a direction, relative to the currently focused window\. Does nothing if there is no window focused\.
+.
+.TP
+\fBwindow_stack_toggle\fR
+Set the window to either the top (viewable) or bottom of the stack depending on where it is now\. Does nothing if there is no window focused\.
+.
+.IP
+\fBNote\fR: The stack is comprised of the overlapping windows pinned by the current mouse position and are cycled first, by the active window (border), then by topmost order\. Otherwise, it is just the active window area and may be toggled above or below its adjacent windows\.
 .
 .TP
 \fBgroup_add_window\fR \fIgroup_nr\fR

@@ -125,12 +125,11 @@ anything on `stdout`.
 	Focus the closest window in a direction, relative to the currently
 	focused window. Does nothing if there is no window focused.
 
-* `window_stack_transpose`:
+* `window_stack_toggle`:
 	Set the window to either the top (viewable) or bottom of the stack depending on
 	where it is now. Does nothing if there is no window focused.
 
-	**Note**: The stack is comprised of the overlapping windows pinned by the current mouse position. Otherwise, it is just the active window area and may be toggled above or below adjacent windows.
-	The active window (border) may not necessarily be the topmost window visible dependent on the pinned window stack set.
+	**Note**: The stack is comprised of the overlapping windows pinned by the current mouse position and are cycled first, by the active window (border), then by topmost order. Otherwise, it is just the active window area and may be toggled above or below its adjacent windows.
 
 * `group_add_window` <group_nr>:
 	Add the focused window to the <group_nr> group.

@@ -152,6 +152,10 @@ anything on <code>stdout</code>.</p>
 <dt><code>window_focus_last</code></dt><dd><p>  Focus the window that was focused before the currently focused window.</p></dd>
 <dt><code>window_cardinal_focus</code> <var>DIRECTION</var></dt><dd><p>  Focus the closest window in a direction, relative to the currently
   focused window. Does nothing if there is no window focused.</p></dd>
+<dt><code>window_stack_toggle</code></dt><dd><p>  Set the window to either the top (viewable) or bottom of the stack depending on
+  where it is now. Does nothing if there is no window focused.</p>
+
+<p>  <strong>Note</strong>: The stack is comprised of the overlapping windows pinned by the current mouse position and are cycled first, by the active window (border), then by topmost order. Otherwise, it is just the active window area and may be toggled above or below its adjacent windows.</p></dd>
 <dt><code>group_add_window</code> <var>group_nr</var></dt><dd><p>  Add the focused window to the <var>group_nr</var> group.</p>
 
 <p>  Group numbers start from 0 and end at <var>GROUPS_NO</var> - 1.</p></dd>
@@ -256,7 +260,7 @@ are:</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Windowchef</li>
-    <li class='tc'>April 2020</li>
+    <li class='tc'>June 2024</li>
     <li class='tr'>waitron(1)</li>
   </ol>
 
