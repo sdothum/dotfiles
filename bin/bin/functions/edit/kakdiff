@@ -12,8 +12,7 @@ KAK=/usr/bin/kak
 [ -e /usr/local/bin/kak ] && KAK=/usr/local/bin/kak
 
 [ -e "$2" ] || usage
-# dirdiff export to suppress bundle (load) kakoune-cd SEE: kakrc
-export DIFF=/tmp/kakdiff:${1##*/}.diff
+export DIFF=/tmp/kakdiff:${1##*/}.diff  # NOTE: export DIFF to nop bundle kakoune-cd SEE: kakrc
 
 diff -u $1 $2 >$DIFF
 [ $? -eq 1 ] && $KAK $DIFF $1 $2
