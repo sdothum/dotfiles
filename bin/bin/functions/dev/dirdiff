@@ -55,7 +55,7 @@ done
 source=${source#$HOME/}
 [ "$target" ] && [ "${target%${target#?*}}" != '/' ] && target=$PWD/$target  # target must be full pathname
 target=${target%/.}
-[ -d "$source" ] && { cd "$source" >/dev/null; source=$(pwd); path="$source"; } || { T=f; path="$(pwd)/${source#$HOME}"; }
+[ -d "$source" ] && { cd "$source" >/dev/null; source=$(pwd); path="$source"; } || { T=f; path="$(pwd)/${source#$HOME}"; unset S; }
 
 # find matching source directory in target repo
 TARGET=${target:-$DOTFILES}  # unprovided target defaults to git dotfile repo
