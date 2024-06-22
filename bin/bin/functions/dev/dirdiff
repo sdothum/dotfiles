@@ -26,7 +26,7 @@ if exists icdiff ;then
 	IC=ic
 	ICOPT='--line-numbers --truncate --tabsize=3 --color-map=add:red_bold,change:red_bold,subtract:red_bold,description:yellow,line-numbers:black_bold,separator:yellow'  # side-by-side
 fi
-delay=0.15  # match message animation
+delay=0.001  # match message animation interval
 
 # Runtime ......................................................................
 
@@ -52,6 +52,7 @@ while [ "$1" ] ;do
 	[ -e "$1" ] && { [ "$source" ] && target=${1%/} || source=${1%/}; } || regex=$1
 	shift
 done
+source=${source#$HOME/}
 [ "$target" ] && [ "${target%${target#?*}}" != '/' ] && target=$PWD/$target  # target must be full pathname
 target=${target%/.}
 [ -d "$source" ] && { cd "$source" >/dev/null; source=$(pwd); path="$source"; } || { T=f; path="$(pwd)/${source#$HOME}"; }
