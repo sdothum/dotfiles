@@ -33,7 +33,7 @@ delay=0.001  # match message animation interval
 while [ "$1" ] ;do
 	case $1 in
 		-1  ) unset IC ICOPT ;;                                        # standard diff (not side-by-side)
-		-s  ) S=true         ;;                                        # stagger match message
+		-s  ) S=true         ;;                                        # flash messages
 		-b  ) w=-w; diffopt='set diffopt+=iwhite'  ;;                  # ignore whitespace
 		-E  ) w=-E; diffopt='set diffopt+=iwhite'  ;;                  # ignore whitespace
 		-Z  ) w=-Z; diffopt='set diffopt+=iwhite'  ;;                  # ignore whitespace
