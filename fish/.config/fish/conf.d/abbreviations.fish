@@ -172,7 +172,7 @@ abbr ds 'dmenu - scripts'
 # abbr h 'helix'
 abbr K '/usr/local/bin/kak'                  # for filename with spaces
 abbr k 'kak'
-abbr kd 'kakdiff'
+abbr kd 'dotdiff'
 abbr kl 'kak -l'
 abbr kp 'kak -p'
 abbr nv 'nvpy'
