@@ -8,23 +8,26 @@
 
 usage() { usage: "$(basename $0) [-[1 | s | b | E | Z | EZ]] [-d <date>] <.|source> [<repo|target>] [<regex>]"; exit 1; }
 
+# NOTE: dirdiff quickly highlights project source code changes against a (separate) snapshot directory
+#       The $var defaults reflect this installation's directory structure..
+#       $HOME/bin             -> symlink to $HOME/stow/bin/bin
+#       $HOME/stow            -> head of directory tree for all projects
+#       /home/depot/dotfiles  -> a dated snapshot of "stow" (default comparison tree)
 # HISTORY: dirdiff has now been updated to handle a single file reference (in addition to a directory tree :)
-# NOTE: ${T} clauses for explicit file type handling gymnastics
-#       dirdiff is especially tailored for this installation with directory structure..
-#       $HOME/bin (symlink to $HOME/stow/bin/bin)
-#       $HOME/stow
-#       /home/depot/dotfiles (repo of "stow" installation configuration files and scripts)
+# SEE: ${T} clauses for explicit source file type handling gymnastics
 
 # ignore='backups|debian|\.history|makepkg|nixos|plugged-custom|qmk_firmware|root|snippets|undo|vps'
 ignore='backups|debian|\.history|makepkg|nixos|plugged-custom|root|snippets|undo|vps'
 
-DOTFILES=/home/depot/dotfiles  # git dotfile repo (pull)
+SNAPSHOT=${SNAPSHOT:-/home/depot/dotfiles}  # default project snapshot
 DIRDIFF=/tmp/dirdiff
+COLORDIFF=colordiff
 FILES=$DIRDIFF:files
 LOG=$DIRDIFF.log
 if exists icdiff ;then
 	IC=ic
 	ICOPT='--line-numbers --truncate --tabsize=3 --color-map=add:red_bold,change:red_bold,subtract:red_bold,description:yellow,line-numbers:black_bold,separator:yellow'  # side-by-side
+	COLORDIFF=cat
 fi
 delay=0.001  # match message animation interval
 
@@ -58,7 +61,7 @@ target=${target%/.}
 [ -d "$source" ] && { cd "$source" >/dev/null; source=$(pwd); path="$source"; } || { T=f; path="$(pwd)/${source#$HOME}"; unset S; }
 
 # find matching source directory in target repo
-TARGET=${target:-$DOTFILES}  # unprovided target defaults to git dotfile repo
+TARGET=${target:-$SNAPSHOT}  # unprovided target defaults to dotfile repo
 [ -L $TARGET ] && L=-L
 target=$(find $L $TARGET -type ${T:-d} -regex ".*${path#$HOME}" 2>/dev/null | head -1)
 [ -${T:-d} "$target" ] || target=$(find $L $TARGET -type ${T:-d} -regex ".*${path#*/stow}" 2>/dev/null | head -1)
@@ -105,7 +108,7 @@ while read file <&3 ;do
 		if ! diff --brief $w "${file}" "${targetfile}" >/dev/null 2>&1 ;then
 			[ $S ] || clear
 			ditto diff "${file}"
-			${IC}diff ${ICOPT} $w "${file}" "${targetfile}" | colordiff | pager  # SEE: ~/.colordiffrc
+			${IC}diff ${ICOPT} $w "${file}" "${targetfile}" | $COLORDIFF | pager  # SEE: ~/.colordiffrc
 			ifno "edit ${file}" && break
 			kakdiff "${file}" "${targetfile}"
 			blink=${BLINK}
