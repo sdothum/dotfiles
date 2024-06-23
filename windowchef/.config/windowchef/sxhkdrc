@@ -193,6 +193,9 @@ super + u
 super + ctrl + u
 	nvidia_fan toggle
 
+# ctrl + shift + {c,v}
+# 	xclip {-in, -out} -selection clipboard
+
 super + {_,ctrl} + v
 	{toggle panel, invert_panel}
 
