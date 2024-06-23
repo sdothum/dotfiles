@@ -161,7 +161,7 @@ abbr X x
 # ......................................................................... Edit
 
 function kf; kak (find -iname $argv[1]); end
-function ndiff; set -l curdir (pwd); cd; dirdiff (/usr/local/bin/nnn -p - $curdir); cd -; end 
+function ndiff; set -l curdir (pwd); cd; for i in (/usr/local/bin/nnn -p - $curdir); dirdiff -s $i; end; cd -; end 
 
 abbr d 'diff'
 abbr nd 'ndiff'                              # file picker mode
