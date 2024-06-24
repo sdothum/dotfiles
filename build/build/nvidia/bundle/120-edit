@@ -12,8 +12,8 @@
 
 = kakoune
 = ═══════
-# kakoune
-m kakoune  # v2024 required for lsp annotations
+  kakoune
+# m kakoune  # v2024 required for lsp annotations
 ! stow kak
 m kak-bundle
 ! stow notes
