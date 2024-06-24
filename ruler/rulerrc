@@ -1,0 +1,12 @@
+# with
+# 		comment #test
+role="browser"
+	wtf "$RULER_WID" && waitron group_add_window 2
+
+# match all
+name=".*"
+	echo "created window with id $RULER_WID"
+
+# only works with ignore case (-i)
+class="urxvt"
+	echo "hello urxvt"

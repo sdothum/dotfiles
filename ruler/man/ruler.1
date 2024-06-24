@@ -1,0 +1,157 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "RULER" "1" "February 2017" "Ruler" "Ruler Manual"
+.
+.SH "NAME"
+\fBruler\fR \- A window rule daemon
+.
+.SH "SYNOPSIS"
+\fBruler\fR [\-himopv] [\-s \fIshell\fR] \fIfilename\fR [\fIfilename\fR\.\.\.]
+.
+.SH "DESCRIPTION"
+\fBruler\fR is an X daemon that executes arbitrary commands for windows with specific windows, called \fIrules\fR\.
+.
+.SH "OPTIONS"
+.
+.TP
+\fB\-h\fR
+Print usage\.
+.
+.TP
+\fB\-i\fR
+Ignore case in rule descriptors\.
+.
+.TP
+\fB\-m\fR
+Apply rules when windows are mapped\.
+.
+.TP
+\fB\-o\fR
+Apply rules on windows with \fIoverride_redirect\fR set, like panels and docks\.
+.
+.TP
+\fB\-p\fR
+Apply rules when windows change their properties\.
+.
+.TP
+\fB\-s\fR \fIshell\fR
+Execute rule commands with \fIshell\fR\.
+.
+.TP
+\fB\-v\fR
+Print version information\.
+.
+.SH "BEHAVIOR"
+\fBruler\fR is a program that listens to X window events and applies a set of rules on windows that match them\. A rule is made from two parts: a list of descriptors and a command, that is piped to an interpreter (\fB$SHELL\fR by default)\.
+.
+.P
+A descriptor is a criterion \- regular expression pair\. The criterion defines the property to be matched\.
+.
+.P
+\fBruler\fR reads its configuration file from \fB$XDG_CONFIG_HOME/ruler/rulerrc\fR by default, or from the command line if specified\. If \fB$XDG_CONFIG_HOME\fR is not defined, \fB$HOME/\.config/ruler/rulerrc\fR is used\.
+.
+.P
+If \fBruler\fR receives \fBSIGUSR1\fR or \fBSIGUSR2\fR, it will reload the specified configuration files or pause rule detection respectively\.
+.
+.P
+Commands are executed by piping them to the interpreter\. (like \fBecho "COMMAND" | $SHELL\fR)\. The chosen shell is by default \fB$SHELL\fR\.
+.
+.P
+Rules are executed after a window is created\. This behavior can be changed with the \fB\-m\fR and \fB\-p\fR flags\.
+.
+.SH "CONFIGURATION"
+Each line of the configuration file is interpreted like so:
+.
+.IP "\(bu" 4
+If it starts with a \fB#\fR, it is ignored\.
+.
+.IP "\(bu" 4
+If it is indented with tabs and/or spaces, it is interpreted as a command\.
+.
+.IP "\(bu" 4
+Else, it\'s a descriptor\.
+.
+.IP "" 0
+.
+.P
+A descriptor list \- command pair is called a \fIrule\fR\. Rules can have newlines between them\.
+.
+.P
+Syntax:
+.
+.IP "" 4
+.
+.nf
+
+DESCRIPTOR
+    [;]COMMAND
+
+DESCRIPTOR := CRITERION_1=STRING_1 CRITERION_2=STRING_2 \.\.\.
+CRITERION_i := class | instance | type | name | role
+.
+.fi
+.
+.IP "" 0
+.
+.P
+\fBSTRING_i\fR is any string enclosed between double quotes (\fB"\fR)\.
+.
+.P
+\fBSTRING_i\fR and \fBCOMMAND\fR can contain escaped characters, preceded by a \fB\e\fR\. You can have multi\-line commands this way\.
+.
+.P
+\fBSTRING_i\fR is a POSIX extended regular expression\.
+.
+.P
+If \fBCOMMAND\fR is preceded by a \fB;\fR, the command will be run synchronously, otherwise it will be run asynchronously\.
+.
+.P
+\fBCOMMAND\fR will be executed by the shell set in the \fBSHELL\fR environment variable\. The window id will be set in the \fBRULER_WID\fR environment variable\.
+.
+.P
+\fBCRITERION\fR can be:
+.
+.IP "\(bu" 4
+\fBclass\fR \- the second part of \fBWM_CLASS\fR window property\.
+.
+.IP "\(bu" 4
+\fBinstance\fR \- the first part of \fBWM_CLASS\fR window property\.
+.
+.IP "\(bu" 4
+\fBtype\fR \- the \fB_NET_WM_WINDOW_TYPE\fR window property\. \fBVALUE\fR can be a combination of \fBdesktop\fR, \fBdock\fR, \fBtoolbar\fR, \fBmenu\fR, \fButility\fR, \fBsplash\fR, \fBdialog\fR, \fBdropdown_menu\fR, \fBpopup_menu\fR, \fBtooltip\fR, \fBnotification\fR, \fBcombo\fR, \fBdnd\fR, \fBnormal\fR, separated by commas\.
+.
+.IP
+Example value: \fBcombo,dnd\fR\.
+.
+.IP "\(bu" 4
+\fBname\fR \- the X11 window title (\fB_NET_WM_NAME\fR and \fBWM_NAME\fR properties, the latter used as a fallback)\.
+.
+.IP "\(bu" 4
+\fBrole\fR \- window role (\fBWM_WINDOW_ROLE\fR property)
+.
+.IP "" 0
+.
+.SH "EXAMPLE"
+.
+.nf
+
+# assign all browsers to group 2
+role="browser"
+    wtf "$RULER_WID" && waitron group_add_window 2
+
+# say hello if a window is created, synchronously
+name="\.*"
+    ;echo "Hello!";\e
+        echo "How are you?"
+.
+.fi
+.
+.SH "ENVIRONMENT"
+\fBruler\fR acts on the X display specified by the \fBDISPLAY\fR variable and executes commands through the shell specified by \fBSHELL\fR\.
+.
+.SH "AUTHOR"
+Tudor Roman \fB<tudurom at gmail dot com>\fR
+.
+.SH "SEE ALSO"
+wmutils(1), regex(7)
