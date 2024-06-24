@@ -45,6 +45,7 @@ planck/qmk_firmware/keyboards/planck
 quikey/.local/share/quikey/*.json
 README.md
 rofi
+ruler
 splitography/qmk_firmware/keyboards/splitography
 sxhkd
 tmux
