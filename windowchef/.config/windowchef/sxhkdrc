@@ -182,7 +182,7 @@ super + {t,r}
 	[ "$(chef window classname)"  = "term" ] && window spread 3 $side || window snap $side
 
 super + shift + {t,r}
-	window snap {left, right}
+	window tile {left, right}
 
 super + alt + t
 	for i in $(xdotool search --onlyvisible --classname "term") ;do xdotool windowactivate --sync $i; window desktop $(chef desktop "CODE") teleport ;done
@@ -230,7 +230,7 @@ super + Escape
 	pkill -USR1 -x ruler
 
 super + shift + Escape
-	kak $HOME/.config/${WM}/*rc
+	kak $(find $HOME/.config/${WM}/ -maxdepth 1 -type f -name '*rc')
 
 # NOTE: restore mouse focus after group_activate (of top of window stack)
 # HACK: bypass QT apps to avoid interference with mouse menus
