@@ -93,8 +93,8 @@ alt + ctrl + {1,2,3,4,5,6,7,8,9}
 
 alt + ctrl + 0
 	for i in $(seq 1 9) ;do waitron group_activate $i ;done ;\
-	rm $GROUP:?:deactivated 2>/dev/null                 ;\
-	waitron window_focus $(cat $GROUP:$(desktop):focus) ;\
+	rm $GROUP:?:deactivated 2>/dev/null                     ;\
+	waitron window_focus $(cat $GROUP:$(desktop):focus)     ;\
 	desktop $(desktop)
 
 alt + ctrl + {comma,period}
