@@ -30,7 +30,7 @@ define-command if -params 2 %{ if-else %arg{1} %arg{2} %{ nop } }
 # ........................................................................ Debug
 
 # *debug* hook trace
-if %{ [ -n "$UNPLUG" ] } %{
+if %{ [ -n "$UNPLUG" ] || [ -n "$TEST"] } %{
 	hook global BufSetOption filetype=.* %{ echo -debug setting %val{hook_param} }
 	hook global WinSetOption filetype=.* %{ echo -debug setting %val{hook_param} }
 	hook global WinCreate .*             %{ echo -debug setting %val{hook_param} }
@@ -42,7 +42,7 @@ if %{ [ -n "$UNPLUG" ] } %{
 # Ncurses plugins
 # ═══════════════
 
-if %{ [ -z "$UNPLUG" ] } %{
+if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 	source "%val{config}/bundle/kak-bundle/rc/kak-bundle.kak"
 	bundle-noload kak-bundle https://github.com/jdugan6240/kak-bundle
 	# WARNING: symlink "ln -s /usr/bin/dash $HOME/bin/sh" to avoid busybox "sh" read hang from cork "env sh"
@@ -188,7 +188,7 @@ if %{ [ -z "$UNPLUG" ] } %{
 		cargo install ktsctl
 	}
 	bundle kak-tree-sitter https://github.com/phaazon/kak-tree-sitter.git %{
-		nop eval %sh{ kak-tree-sitter -dks --session $kak_session }
+		nop eval %sh{ kak-tree-sitter -d -k --init $kak_session -s }
 	}
 
 }
@@ -196,7 +196,7 @@ if %{ [ -z "$UNPLUG" ] } %{
 # Terminal $DISPLAY plugins
 # ═════════════════════════
 
-if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] } %{
+if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] && [ -z "$TEST" ] } %{
 
 	# ...................................................... kakboard (clipboard)
 	bundle kakboard https://github.com/lePerdu/kakboard.git %{
@@ -259,13 +259,20 @@ if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] } %{
 
 	# ..................................................................... popup
 	bundle popup.kak https://github.com/enricozb/popup.kak.git %{
-		evaluate-commands %sh{kak-popup init}
+		evaluate-commands %sh{ kak-popup init }
 	}
 
 	# .................................................................... splash
 	# bundle splash.kak https://github.com/ftonneau/splash.kak.git
 	bundle splash.kak https://github.com/Hjagu09/splash.kak.git
 
+}
+
+# Isolated plugin environment
+# ═══════════════════════════
+
+if %{ [ -n "$TEST" ] } %{
+	eval %sh{ cat "${kak_config}/$TEST.kak" }
 }
 
 # Plugins end ..................................................................
@@ -358,7 +365,8 @@ hook global WinCreate .* %{
 define-command softwrap -params ..1 %{ eval add-highlighter -override global/ wrap -word -indent -marker "'  ↪ '" %arg{@} }  # escape 'quotes' for eval
 
 hook global WinSetOption filetype=markdown %{ softwrap '-width 80' }
-hook global WinSetOption filetype=(sh|c|cpp|go|javascript|latex|lua|perl|python|ruby|rust|toml|typescript) softwrap
+hook global WinSetOption filetype=json %{ softwrap '-width 250' }
+hook global WinSetOption filetype=(sh|c|cpp|fish|go|javascript|latex|lua|perl|python|ruby|rust|toml|typescript) softwrap
 hook global BufOpenFile  .*(conf|config|log|rc|text|txt) softwrap
 
 # ................................................................... Statusline
