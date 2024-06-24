@@ -57,15 +57,15 @@ end
 # ....................................................................... Device
 
 abbr close 'eject -t'
-abbr left_shift_key 'test -f /etc/X11/Xmodmap ;and xmodmap /etc/X11/Xmodmap'
+abbr left_shift_key 'test -f /etc/X11/Xmodmap; and xmodmap /etc/X11/Xmodmap'
 abbr mount 'sudo mount'
 abbr umount 'sudo umount'
 
 # ....................................................................... System
 
 abbr blame 'systemd-analyze blame'
-abbr font-manager 'font-manager ; rm -f ~/.fonts.conf'
-abbr fontmatrix 'fontmatrix ; rm -f ~/.fonts.conf'
+abbr font-manager 'font-manager;  rm -f ~/.fonts.conf'
+abbr fontmatrix 'fontmatrix;  rm -f ~/.fonts.conf'
 abbr gtop 'glances'
 abbr htop 'htop --sort-key PERCENT_CPU'
 abbr ttop 'htop --tree'
@@ -79,8 +79,8 @@ abbr who 'command w'
 
 # ......................................................................... File
 
-function b; bat (find -iname $argv[1]); end
-function ba; bat (al $argv[1]); end
+function b; bat (find -iname $argv[1]) ;end
+function ba; bat (al $argv[1]) ;end
 
 abbr c 'cat'
 abbr cp 'cp -i'
@@ -135,6 +135,8 @@ abbr r '/usr/bin/rsync --info=progress2 -a'
 
 # ....................................................................... Search
 
+function ww; cd (dirname (which $argv 2>/dev/null) 2>/dev/null); test $HOME = (pwd) and ditto "$argv" 'not found' and cd - ;end  # no 755 in $HOME
+
 abbr f 'find'
 abbr fi 'find -iname'
 abbr fr 'find -regex'
@@ -145,11 +147,10 @@ abbr g 'ugrep --ignore-case'
 abbr locate 'sudo locate'
 abbr mgrep 'pcregrep -r -M'
 abbr w 'which'
-function ww; cd (dirname (which $argv 2>/dev/null) 2>/dev/null); test $HOME = (pwd) && begin ditto "$argv" 'not found'; cd -; end; end  # no 755 in $HOME
 
 # ...................................................................... Desktop
 
-abbr cl 'clear ; setterm -cursor on'
+abbr cl 'clear;  setterm -cursor on'
 abbr cursor 'setterm -cursor on'
 abbr gaps 'rlwrap -n gaps'
 abbr h: 'ls -l /tmp/herbstluftwm:*'
@@ -160,8 +161,8 @@ abbr X x
 
 # ......................................................................... Edit
 
-function kf; kak (find -iname $argv[1]); end
-function ndiff; set -l curdir (pwd); cd; for i in (/usr/local/bin/nnn -p - $curdir); dirdiff -s $i; end; cd -; end 
+function kf; kak (find -iname $argv[1]) ;end
+function ndiff; set -l d (pwd); cd; for i in (nnn -p - $d); dirdiff -s $i ;end; cd - ;end 
 
 abbr d 'diff'
 abbr nd 'ndiff'                              # file picker mode
@@ -204,8 +205,10 @@ abbr perli 'perl -de 1'
 
 abbr fn 'function'  # fish shell shorthand
 for i in (seq 1 9); abbr \$$i "\$argv[$i]" ;end
+function ncd; set -l f (nnn -p - $argv[1]); test -d $f and z $f or z (dirname $f) ;end
 
 abbr cd 'z'
+abbr nc 'ncd'
 abbr dash 'rlwrap -n dash'
 abbr hdel 'history delete'
 abbr hi 'hist'
@@ -252,7 +255,7 @@ abbr ma 'man'
 abbr md 'lowdown -tterm'
 abbr mdtxt 'lowdown -tterm --term-no-colour'
 abbr miniflux-migrate 'sudo miniflux -c /etc/miniflux.conf -migrate'
-abbr music '!p ncmpcpp ;and ncmpcpp'
+abbr music '!p ncmpcpp; and ncmpcpp'
 abbr pts 'phoronix-test-suite'
 abbr scrot 'scrot -e "mv \$f /net/photos/batchqueue/"'
 abbr td 'td -i'
