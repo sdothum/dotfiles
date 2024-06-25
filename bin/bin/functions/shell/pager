@@ -6,7 +6,7 @@
 
 # .................................................................. Smart pager
 
-# Usgae: .. | [env tab=soft] pager [<file>], (hard) tab -> soft tab
+# Usage: .. | [env tab=soft] pager [<file>], (hard) tab -> soft tab
 
 OUTPUT=/tmp/print:output
 dictionary=${ORANGE}  # sdcv word highlight color
