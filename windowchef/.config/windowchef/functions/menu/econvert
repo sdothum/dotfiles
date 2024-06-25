@@ -100,7 +100,7 @@ find /tmp -maxdepth 1 -name "*$format" -exec rm {} \;
 # cloudconvert -f azw3 -o /tmp "$file" >/tmp/cloudconvert.log 2>&1
 # use calibre conversion module
 output="/tmp/${file##*/}"
-output=ebook-convert:ebook  # flatpak ebook-convert cannot not output to path(?)
+output=ebook-convert:ebook  # flatpak ebook-convert cannot not output to path (?)
 [ $option ] || option=$(echo -n "default (ragged-right)\nnoindent\njustify\nall" | rmenu 'export options' -no-custom) || break
 justify=left
 em_linespace=${em_linespace%,*}

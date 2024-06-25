@@ -12,7 +12,7 @@
 
 [ $1 ] && panel_offsetY=$1
 
-if [ "$panel_offsetY" = "0" ] ;then   # WHY: use of -eq fails comparison(?)
+if [ "$panel_offsetY" = "0" ] ;then   # ATTN: use of -eq fails comparison (?)
 	SEP="  %{F$INACTIVE_FG}%{F-}  "  # top bar
 else
 	SEP="  %{F$INACTIVE_FG}%{F-}  "  # bottom bar
