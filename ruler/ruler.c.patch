@@ -1,0 +1,11 @@
+--- ruler.c.@xbps	2024-06-21 09:41:10.330759460 -0400
++++ ruler.c	2024-06-24 15:53:43.282728919 -0400
+@@ -902,7 +902,7 @@
+ 	if (parse_file(xdg_cfg_path) == 1 && no_of_configs == 0)
+ 		errx(1, "couldn't open config file '%s' (%s). No other config files supplied, exiting", xdg_cfg_path, strerror(errno));
+ 	free(xdg_cfg_path);
+-	free(xdg_home);
++	// free(xdg_home);
+ 
+ 	for (i = 0; i < no_of_configs; i++) {
+ 		if (parse_file(configs[i]) != 0)
