@@ -1,0 +1,10 @@
+--- ipc.h.@xbps	2024-04-25 10:53:05.877687085 -0400
++++ ipc.h	2024-06-22 16:10:15.872174479 -0400
+@@ -31,6 +31,7 @@
+ 	IPCWindowCardinalFocus,
+ 	IPCWindowFocus,
+ 	IPCWindowFocusLast,
++	IPCWindowStackToggle,
+ 	IPCGroupAddWindow,
+ 	IPCGroupRemoveWindow,
+ 	IPCGroupRemoveAllWindows,
