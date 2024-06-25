@@ -5,6 +5,11 @@
 
 # config for Kakoune
 
+# $UNPLUG   -> nop  all bundles
+# $DISPLAY  -> load gui bundles
+# $DIFF     -> kak diff mode
+# $TEST     -> eval $TEST.kak (nop all bundles)
+
 # Lambda calculus flow control
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -441,7 +446,7 @@ set-option global autoreload yes
 
 # no sudo-write-all so sync root owned files on buffer switching
 define-command sync %{
-	# if %{ [ -n "$kak_opt_filetype" ] && $kak_modified } %{ sudo-write }  # BUG: $kak_opt_filetype is null for "if" command(?)
+	# if %{ [ -n "$kak_opt_filetype" ] && $kak_modified } %{ sudo-write }  # BUG: $kak_opt_filetype is null for "if" command (?)
 	# BUG: $kak_opt_filetype is null for %sh{} and root owned files(?)
 	eval %sh{ [ "$kak_buffname" != '*scratch*' ] && $kak_modified && echo "sudo-write" || echo "nop" }
 }
@@ -503,6 +508,6 @@ add-highlighter global/ show-whitespaces -tab '┊' -tabpad ' ' -spc ' ' -lf ' '
 add-highlighter global/ regex \h+$ 0:Trailing
 
 # admonitions
-declare-option str admonition "\s(?i)(attn|attention|because|bug|deprecated|donot|example|hack|history|note|see|tip|todo|usage|warning|why):\s"
+declare-option str admonition "\s(?i)(attn|attention|because|bug|deprecated|donot|ex|example|hack|history|note|see|tip|todo|usage|warning):\s"
 hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt{admonition} 1:WrapMarker }  # select field 1: (vs 0:) to not hilight the colon :)
 
