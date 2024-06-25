@@ -3,22 +3,17 @@
 # Make_install
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ................................................................... windowchef
+# ........................................................................ ruler
 
 sudo xbps-install -y libxcb-devel xcb-util-keysyms-devel xcb-util-wm-devel xcb-util-xrm-devel
 
 cd /home/depot
-exists -r windowchef || git clone https://github.com/tudorom/windowchef.git
+exists -r ruler || git clone https://github.com/tudorom/ruler.git
 
-cd windowchef
-cp -fv $STOW/windowchef/.config/windowchef/src/*patch .
-cp -fv $STOW/windowchef/.config/windowchef/src/mnn/*patch man/
+cd ruler
+cp -fv $STOW/ruler/*patch .
 for i in *patch ;do patch -p1 < $i ;done
-cd man
-for i in *patch ;do patch -p1 < $i ;done
-cd -
 make
-make man
 sudo make install
 
 # vim: set ft=sh: #
