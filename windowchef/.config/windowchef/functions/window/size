@@ -6,7 +6,7 @@
 
 # .............................................................. Set window size
 
-# Usage: window size <height>x<width> | monocle | rotate|landscape | <numerator>/<denominator> (of screen width)
+# Usage: window size <height>x<width> | monocle | term | rotate|landscape | <numerator>/<denominator> (of screen width)
 
 ASPECT=4:3  # (photographic) ratio
 
@@ -38,6 +38,24 @@ monocle() {
 	waitron window_snap middle
 }
 
+# .............................................................. To default term
+
+TERMSIZE=$WME:term:geometry
+
+reterm() {
+	save_geometry
+	eval $(xdotool getwindowgeometry --shell $winid|grep -E 'X|Y')
+	if [ ! -e $TERMSIZE ] ;then
+		term TRANSPARENT class=ephemeral  # as unobtrusive as possible :)
+		xdotool search --onlyvisible --sync --classname 'ephemeral'
+		xdotool getwindowgeometry --shell $(pfw)|grep -E 'WIDTH|HEIGHT' >$TERMSIZE
+		xdotool search --classname 'ephemeral' windowclose
+	fi
+	eval $(cat $TERMSIZE)
+	wtp $X $Y $WIDTH $HEIGHT $winid
+	waitron window_focus $winid
+}
+
 # ................................................................... Paper size
 
 paper() {
@@ -54,10 +72,11 @@ paper() {
 }
 
 case $1 in
-	mon*  ) monocle  ;;
-	[AB]* ) paper $1 $2 ;;
-	*/*   ) aspect ${1%/*} ${1#*/} ;;
-	*x*   ) size $winid ${1%x*} ${1#*x} ;;
+	mon*  ) monocle ;;
+	term  ) reterm  ;;
+	[AB]* ) paper $1 $2                   ;;
+	*/*   ) aspect ${1%/*} ${1#*/}        ;;
+	*x*   ) size $winid ${1%x*} ${1#*x}   ;;
 	*     ) size $winid ${W:-$X} ${H:-$Y} ;;
 esac
 

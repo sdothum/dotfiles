@@ -13,7 +13,7 @@ super + {_,ctrl} + space
 super + shift + space
 	menu
 
-super + alt + space
+super + ctrl + shift + space
 	xdotool mousemove $(( $(chef display width) / 2 )) $(( $(chef display height) / 2 ))
 
 super + {_,shift} + Return
@@ -21,6 +21,9 @@ super + {_,shift} + Return
 
 super + ctrl + Return
 	term
+
+super + alt + space
+	window size term
 
 ctrl + {_,shift} + space
 	dunstctl {close, close-all}
@@ -79,8 +82,8 @@ super + shift + {1,2,3,4,5}
 	layout fold {1, 2, 3, 4, 5} $(chef window classname) ;\
 	waitron window_focus $W
 
-alt + {comma,period,0,1,2,3,4,5,6,7,8,9}
-	desktop {-1, +1, last, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+alt + {0,1,2,3,4,5,6,7,8,9}
+	desktop {last, 1, 2, 3, 4, 5, 6, 7, 8, 9}
 
 alt + super + {0,1,2,3,4,5,6,7,8,9}
 	desktop {$(desktop), 1, 2, 3, 4, 5, 6, 7, 8, 9} toggle
