@@ -1,0 +1,18 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Dev
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Create patch
+
+usage() { usage: "$(basename 0) [<original>] <new>"; }
+
+[ "$1" ] || usage
+
+original=$1
+[ "$2" ] && new=$2 || original=${original}.@xbps
+diff -Naru $original ${new:-${original%.@xbps}} >${new:-${original%.@xbps}}.patch
+cat $1.patch | colordiff | pager
+
+# kak: filetype=sh
