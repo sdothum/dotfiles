@@ -196,13 +196,6 @@ super + u
 super + ctrl + u
 	nvidia_fan toggle
 
-~ctrl + c
-	S=$(xsel) ;\
-	[ "$S" ] && cb clear && echo -n "$S" | cb add
-
-ctrl + v
-	cb paste
-
 super + {_,ctrl} + v
 	{toggle panel, invert_panel}
 
@@ -238,6 +231,15 @@ super + Escape
 
 super + shift + Escape
 	kak $(find $HOME/.config/${WM}/ -maxdepth 1 -type f -name '*rc')
+
+# BUG: manual keybinds circumvent (random) X session clipboard loss (cause unknown)
+# HISTORY: cb replaces "xclip {-in, -out} -selection clipboard"
+
+~ctrl + {c,x}
+	S=$(xsel) && [ "$S" ] && echo -n "$S" | cb {copy, cut}
+
+~ctrl + v
+	cb paste
 
 # NOTE: restore mouse focus after group_activate (of top of window stack)
 # HACK: bypass QT apps to avoid interference with mouse menus
