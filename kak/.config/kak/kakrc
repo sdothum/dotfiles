@@ -205,8 +205,7 @@ if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] && [ -z "$TEST" ] } %{
 
 	# ...................................................... kakboard (clipboard)
 	bundle kakboard https://github.com/lePerdu/kakboard.git %{
-		# set global kakboard_copy_cmd 'xclip -in -selection clipboard'
-		# set global kakboard_paste_cmd 'xclip -out -selection clipboard'
+		# HISTORY: cb replaces "xclip {-in, -out} -selection clipboard"
 		set global kakboard_copy_cmd 'cb copy'
 		set global kakboard_paste_cmd 'cb paste'
 		hook global WinCreate .* %{ kakboard-enable }
