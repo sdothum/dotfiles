@@ -6,9 +6,10 @@
 
 # ..................................................... Recursive directory diff
 
-usage() { usage: "$(basename $0) [-[1 | s | b | E | Z | EZ]] [-d <date>] <.|source> [<repo|target>] [<regex>]"; exit 1; }
+usage() { usage: "$(basename $0) [-[1 | s | b | E | Z | EZ]] [-d <date>] <.[/]|[./]source> [<repo|target>] [<regex>]"; exit 1; }
 
 # NOTE: dirdiff quickly highlights project source code changes against a (separate) snapshot directory
+#       ./                    -> do not match source path against target
 #       The $var defaults reflect this installation's directory structure..
 #       $HOME/bin             -> symlink to $HOME/stow/bin/bin
 #       $HOME/stow            -> head of directory tree for all projects
@@ -56,23 +57,23 @@ while [ "$1" ] ;do
 	shift
 done
 source=${source#$HOME/}
-[ "$target" ] && [ "${target%${target#?*}}" != '/' ] && target=$PWD/$target  # target must be full pathname
+[ "$target" ] && [ "${target%${target#?*}}" != '/' ] && target=${PWD}/$target  # target must be full pathname
 target=${target%/.}
-[ -d "$source" ] && { cd "$source" >/dev/null; source=$(pwd); path="$source"; } || { T=f; path="$(pwd)/${source#$HOME}"; unset S; }
+[ "${source#./}" = "${source}" ] || { P=${PWD}; P=${P#$HOME/}; }             # ./ ignore source path
+[ -d "$source" ] && { cd "$source" >/dev/null; source=${PWD}; path="$source"; } || { T=f; path="${PWD}/${source#$HOME}"; [ "$P" ] && path="${path#*./}"; unset S; }
 
 # find matching source directory in target repo
 TARGET=${target:-$SNAPSHOT}  # unprovided target defaults to dotfile repo
 [ -L $TARGET ] && L=-L
-P=${path#$HOME}  # for sandbox handling
-target=$(find $L $TARGET -type ${T:-d} -regex ".*${P#/sandbox}" 2>/dev/null | head -1)
-[ -${T:-d} "$target" ] || target=$(find $L $TARGET -type ${T:-d} -regex ".*${P#*/stow}" 2>/dev/null | head -1)
+target=$(find $L $TARGET -type ${T:-d} -regex ".*${path#*$P}" 2>/dev/null | head -1)
+[ -${T:-d} "$target" ] || target=$(find $L $TARGET -type ${T:-d} -regex ".*${path#*/stow}" 2>/dev/null | head -1)
 
 # $HOME/bin ....................................................................
 
 # distinguish $HOME/bin from all other application bin folders
 if [ $T ] ;then
 	[ $(dirname "$source") = '.' ] && unset path || path=/$(dirname "$source")
-	path="$(pwd)$path"
+	path="${PWD}$path"
 else
 	path="$source"
 fi

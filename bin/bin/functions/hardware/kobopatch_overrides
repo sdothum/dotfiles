@@ -56,12 +56,12 @@ ditto yaml $RULES
 ditto diff $RULES.new ../kobopatch/kobopatch.yaml.new
 diff $RULES.new ../kobopatch/kobopatch.yaml.new
 
-ifyes "vimdiff $(pwd)" || exit
+ifyes "vimdiff ${PWD}" || exit
 vim -g -d --role=gvimdiff -f $RULES ../kobopatch/kobopatch.yaml
 for i in src/*.yaml ;do vim -g -d --role=gvimdiff -f $i ../kobopatch/$i ;done
-DIR=$(pwd)
+DIR=${PWD}
 cd ..
-ifyes "ln $(pwd)" || exit
+ifyes "ln ${PWD}" || exit
 rm -f kobopatch
 ln -svf $DIR kobopatch
 

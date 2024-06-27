@@ -9,7 +9,7 @@
 [ -d ../bundle ] || { ditto ERROR build "no bundle specification found"; exit 1; }
 
 # remove unreferenced package scripts (deprecated or otherwise replicated from other distros)
-if echo "$(basename $(pwd))" | grep -q -E '(make|post|user)_install' ;then
+if echo "$(basename ${PWD})" | grep -q -E '(make|post|user)_install' ;then
 	for i in $(find -maxdepth 1 -type f) ;do
 		ag --no-color --no-filename --no-numbers -w ${i#*/} ../bundle/[0-6]* | grep -q '^[ dm]' && continue
 		ditto notfound "$i"

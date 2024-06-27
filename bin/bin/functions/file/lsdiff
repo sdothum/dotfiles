@@ -8,7 +8,7 @@
 
 usage() { usage: "$(basename $0) [<source>] <target>"; exit 1; }
 
-[ $# -eq 2 ] && { SOURCE=$1; shift; } || SOURCE=$(pwd)
+[ $# -eq 2 ] && { SOURCE=$1; shift; } || SOURCE=${PWD}
 [ "$1" ] || usage
 
 ls -1 $SOURCE | sort >/tmp/lsdiff:source

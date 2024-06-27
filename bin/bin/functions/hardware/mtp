@@ -25,7 +25,7 @@ case $1 in
 	u*mount )
 		if mounted ;then
 			name=$(name)
-			echo $(pwd) | grep -q "$MTP/$name" && { notify critical "$name" "$MTP busy"; exit 1; }
+			echo ${PWD} | grep -q "$MTP/$name" && { notify critical "$name" "$MTP busy"; exit 1; }
 			fusermount -u $MTP && notify "$name" "$MTP unmounted" || notify critical "$name" "$MTP umount failed"
 		fi ;;
 
