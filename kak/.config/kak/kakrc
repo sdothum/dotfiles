@@ -170,17 +170,17 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 
 		hook -once global BufSetOption filetype=sh %{
 			user-snippets
-			set -add buffer snippets 'usage:' 'us^'     %{ snippets-insert %{usage() { usage: "$(basename $0) ${1:options}"; exit 1; } }}
-			set -add buffer snippets 'usage:pipe' 'up^' %{ snippets-insert %{usage() { usage: "$(basename $0) ${1:options}" | usage:pipe
+			set -add buffer snippets 'usage:' '%us'     %{ snippets-insert %{usage() { usage: "$(basename $0) ${1:options}"; exit 1; } }}
+			set -add buffer snippets 'usage:pipe' '%up' %{ snippets-insert %{usage() { usage: "$(basename $0) ${1:options}" | usage:pipe
 			exit 1
 		} }}
 		}
 
 		hook -once global BufSetOption filetype=markdown %{
 			user-snippets
-			set -add buffer snippets 'date' 'da^'       %{ snippets-insert %sh{ date '+## %A, %d %B %Y' | tr '[:upper:]' '[:lower:]' }}
-			set -add buffer snippets 'img' 'im^'        %{ snippets-insert %{![${1:img}](/images/${1:img}.jpg) }}
-			set -add buffer snippets 'search' 'se^'     %{ snippets-insert %{[${1:search}](http://thedarnedestthing.com/search?query=${1:search}) }}
+			set -add buffer snippets 'date' '%da'       %{ snippets-insert %sh{ date '+## %A, %d %B %Y' | tr '[:upper:]' '[:lower:]' }}
+			set -add buffer snippets 'img' '%im'        %{ snippets-insert %{![${1:heading}](/images/${2:file}.jpg) }}
+			set -add buffer snippets 'search' '%se'     %{ snippets-insert %{[${1:description}](http://thedarnedestthing.com/search?query=${2:query}) }}
 		}
 	}
 
@@ -205,8 +205,10 @@ if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] && [ -z "$TEST" ] } %{
 
 	# ...................................................... kakboard (clipboard)
 	bundle kakboard https://github.com/lePerdu/kakboard.git %{
-		set global kakboard_copy_cmd 'xclip -in -selection clipboard'
-		set global kakboard_paste_cmd 'xclip -out -selection clipboard'
+		# set global kakboard_copy_cmd 'xclip -in -selection clipboard'
+		# set global kakboard_paste_cmd 'xclip -out -selection clipboard'
+		set global kakboard_copy_cmd 'cb copy'
+		set global kakboard_paste_cmd 'cb paste'
 		hook global WinCreate .* %{ kakboard-enable }
 
 		map global user y ': kakboard-with-push-clipboard y<ret>' -docstring 'yank to clipboard'
@@ -379,7 +381,7 @@ hook global BufOpenFile  .*(conf|config|log|rc|text|txt) softwrap
 # a minimalist statusline of "mode - column [utf-8] - filename [context]"
 declare-option str spacer ' '
 # display utf-8 value for non-latin characters
-set-option global modelinefmt '%sh{capslock && echo "—CAPS— "}{{mode_info}} %opt{spacer} %val{buf_line_count}%opt{ruler} %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname}{{context_info}} [%sh{[ -z "$kak_opt_filetype" ] && echo "--" || echo "$kak_opt_filetype"}] %opt{spacer} %val{session}(%sh{echo "$kak_client" | sed -r "s/[^0-9]*(.*)/\1/"})'
+set-option global modelinefmt '%sh{capslock && echo "—CAPS— "}{{mode_info}} %opt{spacer} %val{buf_line_count}%opt{ruler} %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -lt 32 ] || [ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname}{{context_info}} [%sh{[ -z "$kak_opt_filetype" ] && echo "--" || echo "$kak_opt_filetype"}] %opt{spacer} %val{session}(%sh{echo "$kak_client" | sed -r "s/[^0-9]*(.*)/\1/"})'
 
 # set-option global ui_options terminal_assistant=cat
 
