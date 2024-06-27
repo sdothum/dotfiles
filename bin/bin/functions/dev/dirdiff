@@ -63,8 +63,9 @@ target=${target%/.}
 # find matching source directory in target repo
 TARGET=${target:-$SNAPSHOT}  # unprovided target defaults to dotfile repo
 [ -L $TARGET ] && L=-L
-target=$(find $L $TARGET -type ${T:-d} -regex ".*${path#$HOME}" 2>/dev/null | head -1)
-[ -${T:-d} "$target" ] || target=$(find $L $TARGET -type ${T:-d} -regex ".*${path#*/stow}" 2>/dev/null | head -1)
+P=${path#$HOME}  # for sandbox handling
+target=$(find $L $TARGET -type ${T:-d} -regex ".*${P#/sandbox}" 2>/dev/null | head -1)
+[ -${T:-d} "$target" ] || target=$(find $L $TARGET -type ${T:-d} -regex ".*${P#*/stow}" 2>/dev/null | head -1)
 
 # $HOME/bin ....................................................................
 

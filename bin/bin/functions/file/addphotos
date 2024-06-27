@@ -6,7 +6,7 @@
 
 # ......................................................... Update photo library
 
-LIBRARY=/net/photos
+LIBRARY=/home/photos
 # udiskie automount point
 MEDIA=$(find /run/media/$USER/*/DCIM/* -maxdepth 0 -type d)
 
