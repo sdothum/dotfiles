@@ -5,8 +5,8 @@
 #
 # ........................................................................ Rules
 #
-# WARNING: blank lines before first rule requires patched git ruler SEE: dotfiles
-
+# WARNING: blank lines before first rule requires patched ruler SEE: dotfiles
+#
 class="calibre"
 	window desktop $(chef desktop "BOOK") ;\
 	window @0.1 snap center
@@ -23,6 +23,10 @@ class="feh"
 	window size monocle
 
 class="Firefox"
+	window size monocle
+
+class="foliate"
+	window desktop $(chef desktop "BOOK") ;\
 	window size monocle
 
 class="gimp"

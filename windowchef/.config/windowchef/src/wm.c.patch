@@ -1,5 +1,5 @@
---- wm.c.@xbps	2024-05-17 10:27:07.711295787 -0400
-+++ wm.c	2024-06-22 16:11:26.078173244 -0400
+--- wm.c	2024-05-17 10:27:07.711295787 -0400
++++ wm.c.update	2024-06-22 16:11:26.078173244 -0400
 @@ -92,6 +92,7 @@
  static void set_focused_no_raise(struct client *);
  static void set_focused(struct client *);

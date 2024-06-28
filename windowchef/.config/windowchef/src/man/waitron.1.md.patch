@@ -1,5 +1,5 @@
---- waitron.1.md.@xbps	2024-04-25 10:53:05.877687085 -0400
-+++ waitron.1.md	2024-06-22 16:07:36.942177276 -0400
+--- waitron.1.md	2024-04-25 10:53:05.877687085 -0400
++++ waitron.1.md.update	2024-06-22 16:07:36.942177276 -0400
 @@ -125,6 +125,12 @@
  	Focus the closest window in a direction, relative to the currently
  	focused window. Does nothing if there is no window focused.
