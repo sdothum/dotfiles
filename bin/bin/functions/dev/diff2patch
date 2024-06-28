@@ -16,14 +16,13 @@ diff2patch() {
 	diff -u $original ${new:-${original%.@xbps}} >${new:-${original%.@xbps}}.patch
 
 	# swacp filenames if ${original}.@xbps
-	# [ "$2" ] || sed -i -r '/^--- /s/.@xbps//; /^\+\+\+ /s/^([^ ]*) ([^ ]*)/\1 \2.update /' ${new:-${original%.@xbps}}.patch  # BUG: sed regex not respecting second ([^ ]*) !!!
-	[ "$2" ] || sed -i -r '/^--- /s/.@xbps//; /^\+\+\+ /s/^([^ ]*) ([a-zA-Z0-9.-]*)/\1 \2.update/' ${new:-${original%.@xbps}}.patch
+	[ "$2" ] || sed -i -r '/^--- /s/.@xbps//; /^\+\+\+ /s/^([^ ]* [^ ]*)\t/\1.update\t/' ${new:-${original%.@xbps}}.patch
 	cat $1.patch | colordiff | $PAGER
 }
 
 case $1 in
 	@xbps ) PAGER=less; for i in *.@xbps ;do ditto diff2patch "${i%.@xbps}"; diff2patch ${i%.@xbps} ;done ;;
-	*     ) diff2patch $@ ;;
+	*     ) PAGER=${PAGER:-pager}; diff2patch $@ ;;
 esac
 
 # kak: filetype=sh
