@@ -5,14 +5,14 @@
 
 # ........................................................................ ruler
 
-sudo xbps-install -y libxcb-devel xcb-util-keysyms-devel xcb-util-wm-devel xcb-util-xrm-devel
+sudo xbps-install -y libxcb-devel xcb-util-keysyms-devel xcb-util-wm-devel xcb-util-xrm-devel libwm
 
 cd /home/depot
 exists -r ruler || git clone https://github.com/tudorom/ruler.git
 
 cd ruler
 cp -fv $STOW/ruler/*patch .
-for i in *patch ;do patch -p1 < $i ;done
+for i in *patch ;do patch ${i%.patch} $i ;done
 make
 sudo make install
 

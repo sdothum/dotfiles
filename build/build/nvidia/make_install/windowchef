@@ -13,9 +13,9 @@ exists -r windowchef || git clone https://github.com/tudorom/windowchef.git
 cd windowchef
 cp -fv $STOW/windowchef/.config/windowchef/src/*patch .
 cp -fv $STOW/windowchef/.config/windowchef/src/mnn/*patch man/
-for i in *patch ;do patch -p1 < $i ;done
+for i in *patch ;do patch ${i%.patch} $i ;done
 cd man
-for i in *patch ;do patch -p1 < $i ;done
+for i in *patch ;do patch ${i%.patch} $i ;done
 cd -
 make
 make man

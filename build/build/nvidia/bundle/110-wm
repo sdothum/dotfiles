@@ -34,6 +34,7 @@
   wmctrl
 m wmutils
 m windowchef  # xbps version is broken
+  ruler
 m ruler       # xbps version is out-of-date
   sxhkd
 
