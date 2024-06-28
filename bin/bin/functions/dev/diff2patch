@@ -6,13 +6,24 @@
 
 # ................................................................. Create patch
 
-usage() { usage: "$(basename 0) [<original>] <new>"; }
+usage() { usage: "$(basename 0) @xbps | [<original>] <new>"; }
 
 [ "$1" ] || usage
 
-original=$1
-[ "$2" ] && new=$2 || original=${original}.@xbps
-diff -Naru $original ${new:-${original%.@xbps}} >${new:-${original%.@xbps}}.patch
-cat $1.patch | colordiff | pager
+diff2patch() {
+	original=$1
+	[ "$2" ] && new=$2 || original=${original}.@xbps
+	diff -u $original ${new:-${original%.@xbps}} >${new:-${original%.@xbps}}.patch
+
+	# swacp filenames if ${original}.@xbps
+	# [ "$2" ] || sed -i -r '/^--- /s/.@xbps//; /^\+\+\+ /s/^([^ ]*) ([^ ]*)/\1 \2.update /' ${new:-${original%.@xbps}}.patch  # BUG: sed regex not respecting second ([^ ]*) !!!
+	[ "$2" ] || sed -i -r '/^--- /s/.@xbps//; /^\+\+\+ /s/^([^ ]*) ([a-zA-Z0-9.-]*)/\1 \2.update/' ${new:-${original%.@xbps}}.patch
+	cat $1.patch | colordiff | $PAGER
+}
+
+case $1 in
+	@xbps ) PAGER=less; for i in *.@xbps ;do ditto diff2patch "${i%.@xbps}"; diff2patch ${i%.@xbps} ;done ;;
+	*     ) diff2patch $@ ;;
+esac
 
 # kak: filetype=sh

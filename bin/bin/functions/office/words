@@ -57,6 +57,7 @@ corpus() {
 	unset words
 	for i in $@ ;do words="$words $(iterate "$i")" ;done
 	for i in $words ;do
+		[ "${i#*?}" = '$' ] && i="${i%?}\t"  # words ending in
 		[ $(ugrep -i "$i" $WORDS | wc -l) -gt $GT ] && echo "$i" $(ugrep -i "$i" $WORDS | wc -l) $(frequency "$i")
 	done | sort -nr -k3 \
 	| awk '{ cnt += $2; freq += $3; printf("%s %d %'"'"'d\n", $1, $2, $3); gsub(/./, "-", $1); hdg = length($1) > length(hdg) ? $1 : hdg } END { printf("%s %d %'"'"'d\n", hdg, cnt, freq) }' \
