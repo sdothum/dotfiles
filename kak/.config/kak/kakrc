@@ -41,6 +41,23 @@ if %{ [ -n "$UNPLUG" ] || [ -n "$TEST"] } %{
 	hook global WinCreate .*             %{ echo -debug setting %val{hook_param} }
 }
 
+# User modes
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+declare-option str usermodes ''
+declare-option str s         ''
+
+# arg{} may not contain backslash '\' escape strings
+define-command add-usermodes -params 1 %{
+	set-option global s         "%arg{1}"
+	set-option global usermodes "%sh{ echo ""$kak_opt_usermodes\n$kak_opt_s"" }"
+}
+
+# convert '↩' to '\n'
+define-command set-usermodes %{
+	eval %sh{ echo "$kak_opt_usermodes" | sed 's/y↩/\\n/g' | sort }
+}
+
 # Plugins
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -72,7 +89,7 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 	# ................................................................ crosshairs
 	bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
 		# map global user + ': crosshairs<ret>'   -docstring "toggle crosshairs"  # BUG: occasional hidden underline
-		map global user I ': cursorcolumn<ret>' -docstring "toggle column"
+		add-usermodes %{ map global user I ': cursorcolumn<ret>' -docstring "toggle column" }
 	}
 
 	# ..................................................................... fandt
@@ -82,12 +99,12 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 
 	# .......................................................... find and replace
 	bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
-		map global user f ': find ' -docstring "find and replace"
+		add-usermodes %{ map global user f ': find ' -docstring "find and replace" }
 	}
 
 	# .......................................................... focus selections
 	bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
-		map global user <space> ': focus-toggle<ret>' -docstring "toggle selections focus"
+		add-usermodes %{ map global user <space> ': focus-toggle<ret>' -docstring "toggle selections focus" }
 	}
 
 	# ......................................................... forth interpreter
@@ -101,8 +118,8 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 
 	# ...................................................................... mark
 	bundle kakoune-mark https://gitlab.com/fsub/kakoune-mark.git %{
-		map global user m ': mark-word<ret>'  -docstring "(un)mark word / clear marks"
-		map global user M ': mark-clear<ret>' -docstring "(un)mark word / clear marks"
+		add-usermodes %{ map global user m ': mark-word<ret>'  -docstring "(un)mark word / clear marks" }
+		add-usermodes %{ map global user M ': mark-clear<ret>' -docstring "(un)mark word / clear marks" }
 	}
 
 	# ................................................................ move lines
@@ -136,9 +153,9 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 			peneira-files -hide-opened
 		}
 
-		map global user b ': buffers<ret>'         -docstring 'buffers'
-		map global user e ': files<ret>'           -docstring 'edit file'
-		map global user c ': peneira-symbols<ret>' -docstring 'ctag symbols'
+		add-usermodes %{ map global user b ': buffers<ret>'         -docstring 'buffers' }
+		add-usermodes %{ map global user e ': files<ret>'           -docstring 'edit file' }
+		add-usermodes %{ map global user c ': peneira-symbols<ret>' -docstring 'ctag symbols' }
 	}
 
 	# ......................................................... phantom selection
@@ -165,7 +182,7 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 
 		define-command user-snippets %{
 			set buffer snippets %opt{snippets}  # keep any global snippets
-			map global user S ': snippets-info<ret>' -docstring 'Snippets'
+			add-usermodes %{ map global user S ': snippets-info<ret>' -docstring 'Snippets' }
 		}
 
 		hook -once global BufSetOption filetype=sh %{
@@ -210,19 +227,19 @@ if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] && [ -z "$TEST" ] } %{
 		set global kakboard_paste_cmd 'cb paste'
 		hook global WinCreate .* %{ kakboard-enable }
 
-		map global user y ': kakboard-with-push-clipboard y<ret>' -docstring 'yank to clipboard'
-		# map global user c ': kakboard-with-push-clipboard c<ret>'
-		# map global user d ': kakboard-with-push-clipboard d<ret>'
-		map global user p ': kakboard-with-pull-clipboard p<ret>' -docstring 'put from clipboard'
-		map global user P ': kakboard-with-pull-clipboard P<ret>' -docstring 'put from clipboard'
-		map global user R ': kakboard-with-pull-clipboard R<ret>' -docstring 'replace with clipboard'
+		add-usermodes %{ map global user y ': kakboard-with-push-clipboard y<ret>' -docstring 'yank to clipboard' }
+		# add-usermodes %{ map global user c ': kakboard-with-push-clipboard c<ret>' }
+		# add-usermodes %{ map global user d ': kakboard-with-push-clipboard d<ret>' }
+		add-usermodes %{ map global user p ': kakboard-with-pull-clipboard p<ret>' -docstring 'put from clipboard' }
+		add-usermodes %{ map global user P ': kakboard-with-pull-clipboard P<ret>' -docstring 'put from clipboard' }
+		add-usermodes %{ map global user R ': kakboard-with-pull-clipboard R<ret>' -docstring 'replace with clipboard' }
 	}
 
 	# ................................................................... kakpipe
 	bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 		# NOTE: manually install binary from git folder with: cargo install --path . --root ~/.local
 		require-module kakpipe
-		map global user | ': kakpipe ' -docstring "kakpipe FIFO buffer"
+		add-usermodes %{ map global user | ': kakpipe ' -docstring "kakpipe FIFO buffer" }
 	}
 
 	# ................................................................... kak-lsp
@@ -249,7 +266,7 @@ if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] && [ -z "$TEST" ] } %{
 			lsp-inlay-diagnostics-enable global
 			colorscheme %opt{theme}  # WHY: restore Diagnostic faces (overwritten by kak-lsp injection above)
 
-			map global user l ': enter-user-mode lsp<ret>'                                   -docstring "LSP mode"
+			add-usermodes %{ map global user l ': enter-user-mode lsp<ret>'                                   -docstring "LSP mode" }
 			map global object a '<a-semicolon>lsp-object<ret>'                               -docstring 'LSP any symbol'
 			map global object <a-a> '<a-semicolon>lsp-object<ret>'                           -docstring 'LSP any symbol'
 			map global object e '<a-semicolon>lsp-object Function Method<ret>'               -docstring 'LSP function or method'
@@ -343,7 +360,7 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 	colorscheme %opt{theme}
 }
 
-# map global user <space> ': normal-mode-colorscheme<ret>' -docstring "%opt{theme}"
+# add-usermodes %{ map global user <space> ': normal-mode-colorscheme<ret>' -docstring "%opt{theme}" }
 
 # ....................................................................... Screen
 
@@ -393,7 +410,7 @@ set-option global tabstop 3
 set-option global indentwidth 3
 
 map global normal <c-l> ': comment-line<ret>' -docstring '(un)comment'  # beakl key position for "#" NOTE: <c-c> unmappable
-# map global user   '#' 'x|comment \#<ret>'   -docstring '^# comment'   # BUG: patched comment.kak to explicitly handle filetype sh
+# add-usermodes %{ map global user   '#' 'x|comment \#<ret>'   -docstring '^# comment'   # BUG: patched comment.kak to explicitly handle filetype sh }
 
 declare-user-mode format
 map global format c ': comment-line<ret>'     -docstring '(un)comment'
@@ -417,14 +434,15 @@ map global normal '#' ': enter-user-mode format<ret>'
 
 # .................................................................... Selection
 
-map global user   s 'xS\n<ret>s'    -docstring 'split:select:'
-map global user   / '/(?i)'         -docstring 'case insensitive search'
-map global user   <a-/> '<a-/>(?i)' -docstring 'case insensitive search'
-map global user   ? '?(?i)'         -docstring 'case insensitive extend search'
-map global user   <a-?> '<a-?>(?i)' -docstring 'case insensitive extend search'
+# add-usermodes %{ map global user s 'xS\n<ret>s'    -docstring 'split:select:' }  # HACK: add-usermodes cannot process backslash '\' escape strings
+add-usermodes %{ map global user   s 'xS↩<ret>s'     -docstring 'split:select:' }  # SEE:  set-usermodes
+add-usermodes %{ map global user   / '/(?i)'         -docstring 'case insensitive search' }
+add-usermodes %{ map global user   <a-/> '<a-/>(?i)' -docstring 'case insensitive search' }
+add-usermodes %{ map global user   ? '?(?i)'         -docstring 'case insensitive extend search' }
+add-usermodes %{ map global user   <a-?> '<a-?>(?i)' -docstring 'case insensitive extend search' }
 
-map global normal } ']p'            -docstring 'next paragraph'
-map global normal { '[p'            -docstring 'previous paragraph'
+map global normal } ']p'      -docstring 'next paragraph'
+map global normal { '[p'      -docstring 'previous paragraph'
 
 # .............................................................. Line operations
 
@@ -465,10 +483,10 @@ hook global FocusOut .* sync   # over "write" for system files
 # kettelkasten
 hook global WinSetOption filetype=markdown %{
 	define-command zk-index %sh{ zk index --no-input" }
-	map global user Z ': zk-index<ret>' -docstring 'zk index'
+	add-usermodes %{ map global user Z ': zk-index<ret>' -docstring 'zk index' }
 
 	define-command zk-new %sh{ zk new $(dirname "$kak_buffile") --title="$kak_selection" }
-	map global user z ': zk-new<ret>'   -docstring 'zk new'
+	add-usermodes %{ map global user z ': zk-new<ret>'   -docstring 'zk new' }
 }
 
 # ............................................................ Buffer management
@@ -486,16 +504,16 @@ hook global WinDisplay filetype=diff %{
 hook global WinSetOption filetype=(diff) %{
 	add-highlighter buffer/diff-allow-one-trailing-space regex '^ ' 0:Default
 }
-map global user   d ': buffer *debug*<ret>'                         -docstring '*debug*'
-map global user   D ': sync<ret>: delete-buffer<ret>'               -docstring 'delete buffer'
-map global user   q ': quit<ret>'                                   -docstring 'quit'
-map global user   w ': sync<ret>'                                   -docstring 'save'
-map global user   x ': sync<ret>: write-all-quit<ret>'              -docstring 'save all and quit'
+add-usermodes %{ map global user   d ': buffer *debug*<ret>'                         -docstring '*debug*' }
+add-usermodes %{ map global user   D ': sync<ret>: delete-buffer<ret>'               -docstring 'delete buffer' }
+add-usermodes %{ map global user   q ': quit<ret>'                                   -docstring 'quit' }
+add-usermodes %{ map global user   w ': sync<ret>'                                   -docstring 'save' }
+add-usermodes %{ map global user   x ': sync<ret>: write-all-quit<ret>'              -docstring 'save all and quit' }
 
 # Terminal
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-map global user   t ': %sh{ term }<ret>'                            -docstring 'terminal'
+add-usermodes %{ map global user   t ': %sh{ term }<ret>'                            -docstring 'terminal' }
 
 # Highlighting
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -512,3 +530,7 @@ add-highlighter global/ regex \h+$ 0:Trailing
 declare-option str admonition "\s(?i)(attn|attention|because|bug|deprecated|donot|ex|example|hack|history|note|see|tip|todo|usage|warning):\s"
 hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt{admonition} 1:WrapMarker }  # select field 1: (vs 0:) to not hilight the colon :)
 
+# Global user modes
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+set-usermodes
