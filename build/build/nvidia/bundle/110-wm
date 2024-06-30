@@ -20,33 +20,40 @@
   xterm
 
 
-= window manager
-= ══════════════
-# herbstluftwm
-# windowchef
-! stow herbstluftwm
-
-
 = window utilities
 = ════════════════
   libxcb-devel
   xcb-util-cursor-devel
+  xcb-util-keysyms-devel
+  xcb-util-wm-devel
+  xcb-util-xrm-devel
   wmctrl
-m wmutils
-m windowchef  # xbps version is broken
   ruler
-m ruler       # xbps version is out-of-date
+m ruler        # patch NEWLINE handling
   sxhkd
 
 
 = 2bwm
 = ════
-  libxcb-devel
-  xcb-util-keysyms-devel
-  xcb-util-wm-devel
-  xcb-util-xrm-devel
 m 2bwm
 ! stow 2bwm
+
+
+= herbstluftwm
+= ══════════════
+# herbstluftwm
+! stow herbstluftwm
+
+
+= windowchef
+= ══════════
+# windowchef   # xbps version is broken
+m windowchef   # waitron window_stack_toggle
+
+
+= wmutils
+= ═══════
+m wmutils
 
 
 = x11 configurations
