@@ -71,9 +71,8 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 
 	# ................................................................ crosshairs
 	bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
-		# map global user | ': cursorcolumn<ret>' -docstring "toggle column"
 		# map global user + ': crosshairs<ret>'   -docstring "toggle crosshairs"  # BUG: occasional hidden underline
-		map global user c ': cursorcolumn<ret>' -docstring "toggle column"
+		map global user I ': cursorcolumn<ret>' -docstring "toggle column"
 	}
 
 	# ..................................................................... fandt
@@ -137,8 +136,9 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 			peneira-files -hide-opened
 		}
 
-		map global user b ': buffers<ret>' -docstring 'buffers'
-		map global user e ': files<ret>'   -docstring 'edit file'
+		map global user b ': buffers<ret>'         -docstring 'buffers'
+		map global user e ': files<ret>'           -docstring 'edit file'
+		map global user c ': peneira-symbols<ret>' -docstring 'ctag symbols'
 	}
 
 	# ......................................................... phantom selection
