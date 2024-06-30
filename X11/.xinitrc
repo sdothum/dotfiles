@@ -18,6 +18,8 @@ WM=$HOME/.windowmanager
 wm=$(cat $WM)
 [ $wm = shell ] && { pkill -KILL startx; exit; }  # trap autostart wm set as shell
 
+sudo dinitctl start udev-settle >/dev/null
+
 # ................................................................... User setup
 
 # build installed terminal
