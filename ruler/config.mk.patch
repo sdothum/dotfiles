@@ -1,0 +1,8 @@
+--- config.mk	2024-06-29 16:57:35.649805977 -0400
++++ config.mk.update	2024-06-29 16:57:50.195804632 -0400
+@@ -3,4 +3,4 @@
+ MANDIR = $(MANPREFIX)/man1
+ 
+ CFLAGS += -std=c99 -Wall -g -D_POSIX_C_SOURCE=200112L -D_XOPEN_SOURCE=500
+-LDFLAGS += -lxcb -lxcb-ewmh -lxcb-icccm -lwm
++LDFLAGS += -lxcb -lxcb-ewmh -lxcb-icccm -lxcb-randr -lxcb-cursor -lwm

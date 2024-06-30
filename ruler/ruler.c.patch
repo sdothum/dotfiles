@@ -1,6 +1,19 @@
---- ruler.c	2024-06-21 09:41:10.330759460 -0400
-+++ ruler.c.update	2024-06-24 15:53:43.282728919 -0400
-@@ -902,7 +902,7 @@
+--- ruler.c	2024-06-29 09:12:15.765360217 -0400
++++ ruler.c.update	2024-06-29 15:37:16.925155723 -0400
+@@ -388,8 +388,10 @@
+ 			if (atom_name != NULL) {
+ 				if (i == 0)
+ 					sprintf(str, "%s", atom_name);
+-				else
+-					sprintf(str, "%s,%s", str, atom_name);
++				else {
++					size_t slen = strlen(str);
++					sprintf(str + slen, ",%s", atom_name);
++				}
+ 			}
+ 
+ 			free(atom_name);
+@@ -902,7 +904,7 @@
  	if (parse_file(xdg_cfg_path) == 1 && no_of_configs == 0)
  		errx(1, "couldn't open config file '%s' (%s). No other config files supplied, exiting", xdg_cfg_path, strerror(errno));
  	free(xdg_cfg_path);

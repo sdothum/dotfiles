@@ -1,69 +1,11 @@
---- parser.y	2024-06-21 09:41:10.330759460 -0400
-+++ parser.y.update	2024-06-24 16:03:43.231511129 -0400
-@@ -8,40 +8,45 @@
- %}
- 
- %token CRITERION EQUALS STRING NEWLINE COMMAND END
--%start block_list
-+%start input
- %defines
+--- parser.y	2024-06-29 09:12:15.765360217 -0400
++++ parser.y.update	2024-06-29 09:13:08.892469977 -0400
+@@ -13,7 +13,7 @@
  %error-verbose
  
  %%
-+input: /* this allows blank line before first rulerrc token */
-+	| input NEWLINE
-+	| input block_list
-+	;
-+
- block_list: block
--		  | block_list NEWLINE
--		  | block_list block
--		  | block_list END
--		  { return 0; }
--		  ;
-+	| block_list NEWLINE
-+	| block_list block
-+	| block_list END
-+	{ return 0; }
-+	;
- 
- block: descriptor_list command
--	 {
--	 	block();
--	 }
--	 ;
-+	{
-+		block();
-+	}
-+	;
- 
- descriptor_list: descriptor
--			   | descriptor_list descriptor
--			   | descriptor_list NEWLINE
--			   ;
-+	| descriptor_list descriptor
-+	| descriptor_list NEWLINE
-+	;
- 
- command: COMMAND
--	   {
--	   	comm($1);
--	   }
--	   ;
-+	{
-+		comm($1);
-+	}
-+	;
- 
- descriptor: CRITERION EQUALS STRING
--		  {
--		  	desc($1, $3);
--		  }
--		  ;
-+	{
-+		desc($1, $3);
-+	}
-+	;
- %%
- 
- void
+-block_list: block
++block_list:
+ 		  | block_list NEWLINE
+ 		  | block_list block
+ 		  | block_list END
