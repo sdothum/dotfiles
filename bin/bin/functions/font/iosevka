@@ -255,10 +255,12 @@ elif [ "$quad" ] ;then
 elif [ "$koreader" ] ;then
 	cmdopts quasi-ext space=1.075 Q-straight open+ j-flat serifless serifed
  	emdash
-	e_ink adrift grote   I-descending t-asymmetric--
-	e_ink drift  grote   I-serifless  t-asymmetric--
-	e_ink chalk  grote   I-serifless  t-asymmetric-- l-flat      a-single
-	e_ink pencil grote   I-descending t-asymmetric-- l-flat      a-single f-extended J-flat T-descending
+	# e_ink adrift grote   I-descending t-asymmetric--
+	# e_ink drift  grote   I-serifless  t-asymmetric--
+	# e_ink chalk  grote   I-serifed    t-asymmetric-- l-serifless a-single
+	e_ink pencil grote   I-descending t-asymmetric-- l-ascending a-single f-extended J-flat T-descending
+	# e_ink chalk  grote   I-serifless  t-asymmetric-- l-flat      a-single
+	# e_ink pencil grote   I-descending t-asymmetric-- l-flat      a-single f-extended J-flat T-descending
 	# e_ink theta  grote   I-serifed    t-asymmetric-- l-serifless a-single
 	# e_ink lambda grote   I-descending t-asymmetric-- l-serifless a-single f-extended
 

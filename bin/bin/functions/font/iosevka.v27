@@ -60,7 +60,7 @@ usage() {
 > g-double
 > i-[hooky|serifed[-]|serifless]
 > j-[flat|serifed|serifless]
-> l-[bottom|flat|hooky|serifless]
+> l-[ascending|bottom|flat|hooky|serifless]
 > m-[rounded|serifless]
 > p-[eared|serifed]
 > q-[hook|tailed]
@@ -252,6 +252,7 @@ variant() {
 			j-flat         ) glyph j=flat-hook-serifless;                        S_j='j'                ;;
 			j-serifed      ) glyph j=flat-hook-serifed;                          unset S_j              ;;
 			j-serifless    ) glyph j=serifless;                                  unset S_j              ;;
+			l-ascending    ) glyph l=serifless;                                  s_l='l'; unset S_l T_l ;;
 			l-bottom       ) glyph l=hooky-bottom;                               T_l='l'; unset s_l S_l ;;
 			l-flat         ) glyph l=flat-tailed;                                T_l='l'; unset s_l S_l ;;
 			l-hooky        ) glyph l=hooky;                                      S_l='l'; unset s_l T_l ;;
@@ -414,6 +415,7 @@ cmdopts () {
 			j-flat         ) variant $1 ;;
 			j-serifed      ) variant $1 ;;
 			j-serifless    ) variant $1 ;;
+			l-ascending    ) variant $1 'ASCENDING'; l_ascending=true ;;
 			l-bottom       ) variant $1 ;;
 			l-flat         ) variant $1 ;;
 			l-hooky        ) variant $1 ;;
@@ -767,6 +769,7 @@ fi
 
 [ $I_descending  ] && fforge I_descending  ${shape##* } $family  # font mod for descending serifless capital I
 [ $i_flipped     ] && fforge i_flipped     ${shape##* } $family  # font mod for flipped serifed i
+[ $l_ascending   ] && fforge l_ascending   ${shape##* } $family  # font mod for ascending serifless l
 [ $T_descending  ] && fforge T_descending  ${shape##* } $family  # font mod for descending capital T
 [ $t_descending  ] && fforge t_descending  ${shape##* } $family  # font mod for descending t
 [ $t_flipped     ] && fforge t_flipped     ${shape##* } $family  # font mod for flipped asymmetric t

@@ -468,6 +468,32 @@ FP_descending() {
 	descender P_descending '0u0050' -176 $Yshift
 }
 
+l_ascending() {
+	# create regular descender
+	confirm "l_ascending"
+	echo "
+Open(\$1);
+Select(0u007c);
+CopyReference();
+Select(0u0001);  # temporary cell to avoid modifying original glyph
+Paste();
+Select(0u0001);
+CopyReference();
+Transform(100,0,0,95,0,0);
+Move(0,135);
+Select(0u006c);
+Paste();
+Select(0u0001);
+Clear();
+Generate(\$1);
+" >/tmp/fontforge:descender.script
+
+	for i in *.ttf ;do
+		ditto l_ascending $i
+		fontforge -quiet --script /tmp/fontforge:descender.script $i
+	done
+}
+
 Q_horizontal() {
 	confirm 'extend horizontal Q'
 	echo "
@@ -623,15 +649,16 @@ Generate(\$1);
 # main, see iosevka
 fforge=$1
 case $1 in
-	baseline      |\
-	I_descending  |\
-	i_flipped     |\
-	T_descending  |\
-	t_descending  |\
-	t_flipped     |\
-	Y_descending  |\
-	FP_descending |\
-	Q_horizontal  |\
+	baseline      ) shape=$2; shift ;;
+	I_descending  ) shape=$2; shift ;;
+	i_flipped     ) shape=$2; shift ;;
+	l_ascending   ) shape=$2; shift ;;
+	T_descending  ) shape=$2; shift ;;
+	t_descending  ) shape=$2; shift ;;
+	t_flipped     ) shape=$2; shift ;;
+	Y_descending  ) shape=$2; shift ;;
+	FP_descending ) shape=$2; shift ;;
+	Q_horizontal  ) shape=$2; shift ;;
 	Q_custom      ) shape=$2; shift ;;
 	q_hook        ) ;;
 	Q_hook        ) ;;
