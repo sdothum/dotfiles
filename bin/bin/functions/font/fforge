@@ -56,6 +56,44 @@ Paste();
 "
 }
 
+capmove() {
+	case $1 in
+		C) utf='0u0043' ;;
+		G) utf='0u0047' ;;
+		O) utf='0u004f' ;;
+		Q) utf='0u0051' ;;
+		S) utf='0u0053' ;;
+		U) utf='0u0055' ;;
+	esac
+
+	echo "
+Select($utf);
+Move(0,10);  # shift bottom curvature to x base
+"
+}
+
+# shift "C G O Q S U" to x base
+capadjust() {
+	echo "
+Open(\$1);
+" >/tmp/fontforge:capadjust.script
+
+	set -- $(echo $letters | sed -r "s/(.)/\1 /g")
+	while [ $1 ] ;do
+		capmove $1 >>/tmp/fontforge:capadjust.script
+		shift
+	done
+
+	echo "
+Generate(\$1);
+" >>/tmp/fontforge:capadjust.script
+
+	for i in *.ttf ;do
+		ditto capadjust $i
+		fontforge -quiet --script /tmp/fontforge:capadjust.script $i
+	done
+}
+
 tighten() {
 	case $1 in
 		I) utf='0u0049' ;;
@@ -479,18 +517,18 @@ Select(0u0001);  # temporary cell to avoid modifying original glyph
 Paste();
 Select(0u0001);
 CopyReference();
-Transform(100,0,0,95,0,0);
-Move(0,135);
+Transform(100,0,0,93,0,0);
+Move(0,133);
 Select(0u006c);
 Paste();
 Select(0u0001);
 Clear();
 Generate(\$1);
-" >/tmp/fontforge:descender.script
+" >/tmp/fontforge:l_ascending.script
 
 	for i in *.ttf ;do
 		ditto l_ascending $i
-		fontforge -quiet --script /tmp/fontforge:descender.script $i
+		fontforge -quiet --script /tmp/fontforge:l_ascending.script $i
 	done
 }
 
@@ -664,7 +702,8 @@ case $1 in
 	Q_hook        ) ;;
 	ligature      ) [ $4 ] && { width=$2; shift 2; } || { shape=$2; shift; } ;;  # see iosevka for tricky bits
 	punctuation   ) emdash=$2; shape=$3; shift 2 ;;
-	serifless     ) letters=$2; width=$(( $3 * 85 / 100 )); shift 2 ;;           # percent of "I i l" (serifless)
+	capadjust     ) letters=$2; shift ;;                                         # align "C G O Q S U" to x base
+	serifless     ) letters=$2; width=$(( $3 * 85 / 100 ));   shift 2 ;;         # percent of "I i l" (serifless)
 	serifed       ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "i j l" (serifed)
 	tailed        ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "l" (tailed)
 	space         ) space=$2; shift ;;
