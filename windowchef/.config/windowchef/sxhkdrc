@@ -6,7 +6,7 @@
 # ...................................................................... Hotkeys
 
 # NOTE: only use groups 1-9 with desktop 0 reserved for special actions (typically, "last")
-#
+ 
 super + {_,ctrl} + space
 	waitron {window_ver_maximize, window_hor_maximize}
 
