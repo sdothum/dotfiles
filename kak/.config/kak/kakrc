@@ -153,9 +153,14 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 			peneira-files -hide-opened
 		}
 
-		add-usermodes %{ map global user b ': buffers<ret>'         -docstring 'buffers' }
-		add-usermodes %{ map global user e ': files<ret>'           -docstring 'edit file' }
-		add-usermodes %{ map global user c ': peneira-symbols<ret>' -docstring 'ctag symbols' }
+		define-command symbols %{
+			peneira-resync
+			peneira-symbols
+		}
+
+		add-usermodes %{ map global user b ': buffers<ret>' -docstring 'buffers' }
+		add-usermodes %{ map global user e ': files<ret>'   -docstring 'edit file' }
+		add-usermodes %{ map global user c ': symbols<ret>' -docstring 'ctag symbols' }
 	}
 
 	# ......................................................... phantom selection
