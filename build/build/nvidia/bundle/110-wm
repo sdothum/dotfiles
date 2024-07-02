@@ -22,13 +22,13 @@
 
 = window utilities
 = ════════════════
+# ruler        # not current git version
   libxcb-devel
   xcb-util-cursor-devel
   xcb-util-keysyms-devel
   xcb-util-wm-devel
   xcb-util-xrm-devel
   wmctrl
-  ruler
 m ruler        # patch NEWLINE handling
   sxhkd
 
