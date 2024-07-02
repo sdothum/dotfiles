@@ -9,7 +9,8 @@
 
 class="aerc"
 	window desktop $(chef desktop "MAIL") ;\
-	window size monocle
+	window size monocle                   ;\
+	xdotool search --sync --onlyvisible --classname "aerc" type ":vsplit" && xdotool key Return
 
 class="compose"
 	window desktop $(chef desktop "MAIL") ;\

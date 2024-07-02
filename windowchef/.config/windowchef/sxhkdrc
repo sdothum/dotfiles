@@ -173,12 +173,12 @@ super + ctrl + r
 	waitron group_remove_window ;\
 	chef -- desktop
 
-super + s
-	waitron window_stack_toggle ;\
+super + {_,shift} + s
+	waitron {window_stack_toggle, window_focus $(pfw)} ;\
 	chef -- desktop
 
-super + shift + {s,u,v}
-	menu {system, passwords, media}
+super + shift + {u,v,z}
+	menu {passwords, media, system}
 
 super + {t,r}
 	side="{left, right}" ;\
