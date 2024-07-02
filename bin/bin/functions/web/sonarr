@@ -12,7 +12,6 @@
 SONARR=http://$SERVER:8989
 export NO_PROXY="*"
 
-
 [ $1 ] && page=$(dirname $1 | tr '[:upper:]' '[:lower:]' | sed -r 's/.*(anime|series)/series/; s/[.]/-/g') || page=calendar
 $BROWSER $SONARR/$page
 

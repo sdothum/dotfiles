@@ -11,15 +11,10 @@ export TMPDIR=~/drafts  # override /tmp (because dir is not persistent in alpine
 MAILDIR=$HOME/Mail
 AERC=/usr/bin/aerc
 group=$(cat $MAILDIR/.mailsync:group)
-DELAY=0.5  # long enough to not trigger 2bwm actions while launching via modkey (down) bindings
 
 # push out any flag and trash changes when finished
 trap "mailsync $group" EXIT
 
-# in lieu of :vsplit crash from command line (known problem)
-(keyboard off; window @$DELAY size monocle; xdotool search --sync --onlyvisible --name "aerc" type ":vsplit"; xdotool key Return; keyboard on) &
-
-# offsetY=4 term mail WAIT 250x45 PAPER $AERC
 offsetY=4 term email class=aerc WAIT PAPER $AERC
 
 # kak: filetype=sh

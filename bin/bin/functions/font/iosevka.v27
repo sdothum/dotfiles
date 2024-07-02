@@ -777,7 +777,6 @@ fi
 [ $t_flipped     ] && fforge t_flipped          ${shape##* } $family  # font mod for flipped asymmetric t
 [ $Y_descending  ] && fforge Y_descending       ${shape##* } $family  # font mod for descending capital Y
 [ $FP_descending ] && fforge FP_descending      ${shape##* } $family  # decending caps (experimental)
-[ $baseline      ] && fforge baseline           ${shape##* } $family 2>/dev/null  # force baseline adjustment for descending caps and q-hook
 [ $capadjust     ] && fforge capadjust          "CGOQSU"     $family  # shift up bottom of glyphs to x base
 
 if [ $ebook ] ;then
@@ -788,9 +787,11 @@ if [ $ebook ] ;then
 		[ $serifed   ] && fforge serifed "$S_i$S_J$S_j$S_l" ${shape##* }   $family  # adjust serifed "i J j l" cell width
 		[ $serifed   ] && fforge tailed "$T_l" ${shape##* }                $family  # adjust tailed "l" cell width
 	fi
-	fforge ${regular}weight $adjust                  $family  # rename weight for e-reader (as regular)
-	[ $space ] && fforge space $space                              $family  # lengthen space character cell width
+	fforge ${regular}weight $adjust   $family  # rename weight for e-reader (as regular)
+	[ $space ] && fforge space $space $family  # lengthen space character cell width
 fi
+
+[ $baseline ] && fforge baseline ${shape##* } $family 2>/dev/null  # force baseline adjustment for descending caps and q-hook
 
 # udev  # reinitialize udev for attached ereaders
 

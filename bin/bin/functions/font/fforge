@@ -68,7 +68,7 @@ capmove() {
 
 	echo "
 Select($utf);
-Move(0,10);  # shift bottom curvature to x base
+Move(0,8);  # shift bottom curvature to x base
 "
 }
 

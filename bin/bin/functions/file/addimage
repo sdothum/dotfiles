@@ -15,7 +15,7 @@ GALLERY=/srv/http/thedarnedestthing.com/application/public/images
 for i in $@ ;do
 	[ "$i" ] && jpeg=$i
 	[ "${i##*.}" = jpg ] && name=$jpeg || name="${i%.*}.jpg"
-	ditto add "$GALLERY$name"
+	ditto add "$GALLERY/$name"
 	convert $jpeg -resize ${size:-1600} -quality $quality $GALLERY/$name
 done
 
