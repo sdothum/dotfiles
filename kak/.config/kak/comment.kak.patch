@@ -1,0 +1,11 @@
+--- comment.kak	2024-05-20 18:59:33.000000000 -0400
++++ comment.kak.update	2024-07-03 18:26:53.100099835 -0400
+@@ -45,7 +45,7 @@
+     set-option buffer comment_block_end '###'
+ }
+ 
+-hook global BufSetOption filetype=conf %{
++hook global BufSetOption filetype=(conf|sh) %{
+     set-option buffer comment_line '#'
+ }
+ 

@@ -17,13 +17,13 @@
 # where %arg{1} is "%sh{ test .. && echo .. || echo .. }"
 # further refactored to "%{ test .. }" by the define-command with %arg{1} as $1 SEE: ATTENTION
 
-# ATTENTION: refactored syntactic sugar requires $1 $kak_opt_<names> listed in the define-command for %sh{} env variable export
-# SEE: the comment (#) list of kak_opt_<names> in the define-command "%sh{ .. # .. }" block
+# ATTENTION: the eval $1 "$kak_opt_<names>" must be explicitly provided for %sh{} env variable export
+# SEE: the comment (#) list of "$kak_opt_<names>" in the define-command "%sh{ .. # .. }" block
 
 # ................................................................. if-then-else
 
 # if-else %{ condition } %{ then } %{ else }
-define-command if-else -params 3 %{ eval -verbatim %sh{ eval $1 && echo then || echo else # kak_opt_colormode kak_opt_mode } %arg{2} %arg{3} }
+define-command if-else -params 3 %{ eval -verbatim %sh{ eval $1 && echo then || echo else # kak_opt_colormode kak_opt_mode kak_opt_toggle_focus } %arg{2} %arg{3} }  # SEE: ATTENTION
 define-command then -params 2 %{ eval %arg{1} }
 define-command else -params 2 %{ eval %arg{2} }
 
@@ -51,7 +51,7 @@ define-command record-usermode -params 1 %{
 }
 
 define-command play-usermodes %{
-	eval %sh{ echo "$kak_opt_usermodes" | sort }
+	eval %sh{ echo "$kak_opt_usermodes" | sort -d }
 }
 
 # Plugins
@@ -100,11 +100,21 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 
 	# .......................................................... focus selections
 	bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
-		record-usermode %{ map global user <space> ': focus-toggle<ret>' -docstring "toggle selections focus" }
-	}
+		declare-option str toggle_focus "off"
 
-	# ......................................................... forth interpreter
-	bundle kak-stkmach https://gitlab.com/kstr0k/kak-stkmach
+		define-command toggle-focus %{
+			if-else %{ [ "$kak_opt_toggle_focus" = "on" ] } %{
+				set-option global toggle_focus "off"
+				softwrap
+			} %{
+				set-option global toggle_focus "on"
+				nowrap  # focus-toggle does not behave well with softwrap enabled
+			}
+			focus-toggle
+		}
+
+		record-usermode %{ map global user <space> ': toggle-focus<ret>' -docstring "(un)fold selections" }
+	}
 
 	# ........................................................... lua interpreter
 	bundle luar https://github.com/gustavo-hms/luar.git %{
@@ -221,6 +231,26 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 
 if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] && [ -z "$TEST" ] } %{
 
+	# ....................................................................... hop
+	bundle-install-hook hop.kak %{
+		cargo install hop-kak
+	}
+	bundle hop.kak https://github.com/hadronized/hop.kak.git %{
+		nop eval %sh{ hop-kak --init }
+		declare-option str hop_kak_keyset 'heatrskplfyoudnm'
+
+		define-command -override hop-kak %{
+			exec ': eval -no-hooks -- %sh{ hop-kak --keyset "$kak_opt_hop_kak_keyset" --sels "$kak_selections_desc" }<ret>'
+		}
+
+		define-command -override hop-kak-words %{
+			exec 'gtGbxs\w+<ret>:eval -no-hooks -- %sh{ hop-kak --keyset "$kak_opt_hop_kak_keyset" --sels "$kak_selections_desc" }<ret>'
+		}
+
+		record-usermode %{ map global user h ': hop-kak<ret>' -docstring 'hop to selection/word' }
+		record-usermode %{ map global user H ': hop-kak-words<ret>' -docstring 'hop to selection/word' }
+	}
+
 	# ...................................................... kakboard (clipboard)
 	bundle kakboard https://github.com/lePerdu/kakboard.git %{
 		# HISTORY: cb replaces "xclip {-in, -out} -selection clipboard"
@@ -244,8 +274,9 @@ if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] && [ -z "$TEST" ] } %{
 	}
 
 	# ................................................................... kak-lsp
-	bundle-install-hook kak-lsp %{
-		cargo install --locked --force --path .
+	bundle-install-hook kakoune-lsp %{
+		# cargo install --locked --force --path .
+		cargo install kak-lsp
 	}
 	bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 		# currently running commit 36f99810bdcc060617479d6c5405e868584ef0ff BUG: lsp-inlay-diagnostics-enable command option
@@ -386,7 +417,8 @@ hook global WinCreate .* %{
 
 # .................................................................... Soft wrap
 
-define-command softwrap -params ..1 %{ eval add-highlighter -override global/ wrap -word -indent -marker "'  ↪ '" %arg{@} }  # escape 'quotes' for eval
+define-command softwrap -params ..1 %{ eval add-highlighter -override global/wrap wrap -word -indent -marker "'  ↪ '" %arg{@} }  # escape 'quotes' for eval
+define-command nowrap %{ remove-highlighter global/wrap }
 
 hook global WinSetOption filetype=markdown %{ softwrap '-width 80' }
 hook global WinSetOption filetype=json %{ softwrap '-width 250' }
@@ -433,25 +465,31 @@ map global format ',' 'x|align \;\\<ret>'     -docstring 'align ;\ continuation'
 map global format '`' 'x|comment c<ret>'      -docstring 'css <code></code> block'
 map global normal '#' ': enter-user-mode format<ret>'
 
+# .................................................................... Searching
+
+record-usermode %{ map global user / '/(?i)'         -docstring 'case insensitive search' }
+record-usermode %{ map global user <a-/> '<a-/>(?i)' -docstring 'case insensitive search' }
+record-usermode %{ map global user ? '?(?i)'         -docstring 'case insensitive search extend' }
+record-usermode %{ map global user <a-?> '<a-?>(?i)' -docstring 'case insensitive search extend' }
+
 # .................................................................... Selection
 
-record-usermode %{ map global user   s 'x<a-s>s'       -docstring 'split:select:' }
-record-usermode %{ map global user   / '/(?i)'         -docstring 'case insensitive search' }
-record-usermode %{ map global user   <a-/> '<a-/>(?i)' -docstring 'case insensitive search' }
-record-usermode %{ map global user   ? '?(?i)'         -docstring 'case insensitive extend search' }
-record-usermode %{ map global user   <a-?> '<a-?>(?i)' -docstring 'case insensitive extend search' }
+record-usermode %{ map global user s 'x<a-s>s'       -docstring 'split:select:' }
+record-usermode %{ map global user S 'x<a-s>s(?i)'   -docstring 'split:select:' }
 
-map global normal } ']p'      -docstring 'next paragraph'
-map global normal { '[p'      -docstring 'previous paragraph'
+map global normal S 's(?i)'          -docstring 'case insensitive split:select:'
+map global normal } ']p'             -docstring 'next paragraph'
+map global normal { '[p'             -docstring 'previous paragraph'
+map global normal <percent> '%<a-;>' -docstring 'select all top:down'  # for maximal focus-toggle selections
 
 # .............................................................. Line operations
 
-map global normal G 'ge'      -docstring 'goto buffer end'
-map global normal ^ 'gh'      -docstring 'goto line begin'
-map global normal $ 'gl'      -docstring 'goto line end'
-map global normal C '<a-l>di' -docstring 'replace to end of line'
-map global normal D '<a-l>d'  -docstring 'delete to end of line'
-map global normal Y '<a-l>'   -docstring 'yank to end of line'
+map global normal G 'ge'             -docstring 'goto buffer end'
+map global normal ^ 'gh'             -docstring 'goto line begin'
+map global normal $ 'gl'             -docstring 'goto line end'
+map global normal C '<a-l>di'        -docstring 'replace to end of line'
+map global normal D '<a-l>d'         -docstring 'delete to end of line'
+map global normal Y '<a-l>'          -docstring 'yank to end of line'
 
 # ........................................................................ Paste
 
@@ -504,16 +542,16 @@ hook global WinDisplay filetype=diff %{
 hook global WinSetOption filetype=(diff) %{
 	add-highlighter buffer/diff-allow-one-trailing-space regex '^ ' 0:Default
 }
-record-usermode %{ map global user   d ': buffer *debug*<ret>'                         -docstring '*debug*' }
-record-usermode %{ map global user   D ': sync<ret>: delete-buffer<ret>'               -docstring 'delete buffer' }
-record-usermode %{ map global user   q ': quit<ret>'                                   -docstring 'quit' }
-record-usermode %{ map global user   w ': sync<ret>'                                   -docstring 'save' }
-record-usermode %{ map global user   x ': sync<ret>: write-all-quit<ret>'              -docstring 'save all and quit' }
+record-usermode %{ map global user   d ': buffer *debug*<ret>'            -docstring '*debug*' }
+record-usermode %{ map global user   D ': sync<ret>: delete-buffer<ret>'  -docstring 'delete buffer' }
+record-usermode %{ map global user   q ': quit<ret>'                      -docstring 'quit' }
+record-usermode %{ map global user   w ': sync<ret>'                      -docstring 'save' }
+record-usermode %{ map global user   x ': sync<ret>: write-all-quit<ret>' -docstring 'save all and quit' }
 
 # Terminal
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-record-usermode %{ map global user   t ': %sh{ term }<ret>'                            -docstring 'terminal' }
+record-usermode %{ map global user   t ': nop %sh{ term >/dev/null 2>&1 }<ret>' -docstring 'terminal' }
 
 # Highlighting
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -522,8 +560,10 @@ add-highlighter global/ show-matching
 add-highlighter global/ dynregex '%reg{/}' 0:+u
 add-highlighter global/ show-whitespaces -tab '┊' -tabpad ' ' -spc ' ' -lf ' '
 
+# search matches
+# add-highlighter global/ dynregex '%reg{/}' 0:SecondarySelection  # SEE: duochrome
+
 # highlight trailing whitespace
-# add-highlighter global/ regex \h+$ 0:Error
 add-highlighter global/ regex \h+$ 0:Trailing
 
 # admonitions

@@ -192,9 +192,11 @@ set-face window WrapMarker                     "${wrap}+bf"
 set-face window BufferPadding                  "${background},${background}"  # hide tilde
 set-face window Trailing                       "default,${white}"
 
-# .................................................................. Admonitions
+# ................................................................. Highlighting
 
 set-face window Admonitions                    "+bf@Error"
+
+add-highlighter window/ dynregex '%reg{/}' 0:SecondarySelection
 
 # Plugins
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
