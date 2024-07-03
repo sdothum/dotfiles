@@ -703,7 +703,8 @@ case $1 in
 	ligature      ) [ $4 ] && { width=$2; shift 2; } || { shape=$2; shift; } ;;  # see iosevka for tricky bits
 	punctuation   ) emdash=$2; shape=$3; shift 2 ;;
 	capadjust     ) letters=$2; shift ;;                                         # align "C G O Q S U" to x base
-	serifless     ) letters=$2; width=$(( $3 * 85 / 100 ));   shift 2 ;;         # percent of "I i l" (serifless)
+	# serifless   ) letters=$2; width=$(( $3 * 850 / 1000 )); shift 2 ;;         # percent of "I i j l" (serifless)
+	serifless     ) letters=$2; width=$(( $3 * 835 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
 	serifed       ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "i j l" (serifed)
 	tailed        ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "l" (tailed)
 	space         ) space=$2; shift ;;

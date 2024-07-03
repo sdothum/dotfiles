@@ -13,7 +13,7 @@ usage() { usage: "[kmd=<command>] $(basename $0) [-l | -p [<id>] | -v | -h] [-BE
 headless=${headless:-false}
 
 # share all instances (clients) with a single kak server session
-ID=$USER  # default session id
+ID=${ID:-$USER}  # default session id
 KAK=/usr/bin/kak
 [ -e /usr/local/bin/kak ] && KAK=/usr/local/bin/kak
 
