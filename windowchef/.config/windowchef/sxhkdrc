@@ -227,7 +227,8 @@ super + {shift,ctrl} + apostrophe
 super + Escape
 	notify reloading "sxhkd & ruler" ;\
 	pkill -USR1 -x sxhkd             ;\
-	pkill -USR1 -x ruler
+	pkill -KILL -x ruler             ;\
+	ruler -i -c $HOME/.config/$WM/rulerrc &
 
 super + shift + Escape
 	kak $(find $HOME/.config/${WM}/ -maxdepth 1 -type f -name '*rc')
