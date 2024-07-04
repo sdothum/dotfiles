@@ -19,6 +19,10 @@
 
 # ATTENTION: the eval $1 "$kak_opt_<names>" must be explicitly provided for %sh{} env variable export
 # SEE: the comment (#) list of "$kak_opt_<names>" in the define-command "%sh{ .. # .. }" block
+#      variables passed to if(-else) within this kakrc:
+#         - %opt{colormode}
+#         - %opt{mode}
+#         - %opt{toggle_focus}
 
 # ................................................................. if-then-else
 
@@ -47,11 +51,11 @@ if %{ [ -n "$UNPLUG" ] || [ -n "$TEST"] } %{
 declare-option str usermodes ''
 
 define-command record-usermode -params 1 %{
-	set-option global usermodes "%sh{ echo ""$1\n$kak_opt_usermodes"" }"
+	set-option global usermodes "%sh{ echo ""$kak_opt_usermodes\n$1"" }"
 }
 
-define-command play-usermodes %{
-	eval %sh{ echo "$kak_opt_usermodes" | sort -d }
+define-command play-usermodes -params ..1 %{
+	eval %sh{ echo "$kak_opt_usermodes" | ${1:-cat} }
 }
 
 # Plugins
@@ -267,8 +271,11 @@ if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] && [ -z "$TEST" ] } %{
 	}
 
 	# ................................................................... kakpipe
+	bundle-install-hook kakpipe %{
+		# cargo install --path . --root ~/.local
+		cargo install kakpipe
+	}
 	bundle kakpipe https://github.com/eburghar/kakpipe.git %{
-		# NOTE: manually install binary from git folder with: cargo install --path . --root ~/.local
 		require-module kakpipe
 		record-usermode %{ map global user | ': kakpipe ' -docstring "kakpipe FIFO buffer" }
 	}
@@ -446,23 +453,23 @@ map global normal <c-l> ': comment-line<ret>' -docstring '(un)comment'  # beakl 
 # record-usermode %{ map global user   '#' 'x|comment \#<ret>'   -docstring '^# comment'   # BUG: patched comment.kak to explicitly handle filetype sh }
 
 declare-user-mode format
-map global format c ': comment-line<ret>'     -docstring '(un)comment'
-map global format l 'x|comment l .<ret>'      -docstring 'leader ... comment'
-map global format t 'x|comment t .<ret>'      -docstring 'trailer comment ...'
-map global format R 'x|comment r =<ret>'      -docstring 'ruler ═══'
-map global format r 'x|comment r --<ret>'     -docstring 'ruler ━━━'
-map global format U 'x|comment u =<ret>'      -docstring 'underline ═══ comment'
-map global format u 'x|comment u --<ret>'     -docstring 'underline ━━━ comment'
-map global format '#' 'x|align \#<ret>'       -docstring 'align #  comment'
-map global format / 'x|align //<ret>'         -docstring 'align // comment'
-map global format <minus> 'x|align --<ret>'   -docstring 'align -- comment'
-map global format = 'x|align =<ret>'          -docstring 'align  = statement'
-map global format { 'x|align \{<ret>'         -docstring 'align  { block'
-map global format ) 'x|align \)<ret>'         -docstring 'align  ) case'
-map global format ';' 'x|align \;\;<ret>'     -docstring 'align ;; endcase'
-map global format '\' 'x|align \\<ret>'       -docstring 'align  \ continuation'
-map global format ',' 'x|align \;\\<ret>'     -docstring 'align ;\ continuation'
-map global format '`' 'x|comment c<ret>'      -docstring 'css <code></code> block'
+map global format c ': comment-line<ret>'   -docstring '(un)comment'
+map global format l 'x|comment l .<ret>'    -docstring 'leader ... comment'
+map global format t 'x|comment t .<ret>'    -docstring 'trailer comment ...'
+map global format R 'x|comment r =<ret>'    -docstring 'ruler ═══'
+map global format r 'x|comment r --<ret>'   -docstring 'ruler ━━━'
+map global format U 'x|comment u =<ret>'    -docstring 'underline ═══ comment'
+map global format u 'x|comment u --<ret>'   -docstring 'underline ━━━ comment'
+map global format '#' 'x|align \#<ret>'     -docstring 'align #  comment'
+map global format / 'x|align //<ret>'       -docstring 'align // comment'
+map global format <minus> 'x|align --<ret>' -docstring 'align -- comment'
+map global format = 'x|align =<ret>'        -docstring 'align  = statement'
+map global format { 'x|align \{<ret>'       -docstring 'align  { block'
+map global format ) 'x|align \)<ret>'       -docstring 'align  ) case'
+map global format ';' 'x|align \;\;<ret>'   -docstring 'align ;; endcase'
+map global format '\' 'x|align \\<ret>'     -docstring 'align  \ continuation'
+map global format ',' 'x|align \;\\<ret>'   -docstring 'align ;\ continuation'
+map global format '`' 'x|comment c<ret>'    -docstring 'css <code></code> block'
 map global normal '#' ': enter-user-mode format<ret>'
 
 # .................................................................... Searching
@@ -474,8 +481,8 @@ record-usermode %{ map global user <a-?> '<a-?>(?i)' -docstring 'case insensitiv
 
 # .................................................................... Selection
 
-record-usermode %{ map global user s 'x<a-s>s'       -docstring 'split:select:' }
-record-usermode %{ map global user S 'x<a-s>s(?i)'   -docstring 'split:select:' }
+record-usermode %{ map global user s 'x<a-s>s'     -docstring 'split:select:' }
+record-usermode %{ map global user S 'x<a-s>s(?i)' -docstring 'split:select:' }
 
 map global normal S 's(?i)'          -docstring 'case insensitive split:select:'
 map global normal } ']p'             -docstring 'next paragraph'
@@ -557,11 +564,11 @@ record-usermode %{ map global user   t ': nop %sh{ term >/dev/null 2>&1 }<ret>' 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 add-highlighter global/ show-matching
-add-highlighter global/ dynregex '%reg{/}' 0:+u
 add-highlighter global/ show-whitespaces -tab '┊' -tabpad ' ' -spc ' ' -lf ' '
 
 # search matches
-# add-highlighter global/ dynregex '%reg{/}' 0:SecondarySelection  # SEE: duochrome
+# add-highlighter global/ dynregex '%reg{/}' 0:+u
+# add-highlighter global/ dynregex '%reg{/}' 0:SecondarySelection  # SEE: duochrome add-highlighter window/
 
 # highlight trailing whitespace
 add-highlighter global/ regex \h+$ 0:Trailing
@@ -573,4 +580,5 @@ hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt
 # Global user modes
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-play-usermodes
+# play-usermodes
+play-usermodes %{ sort -d }
