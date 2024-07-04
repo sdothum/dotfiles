@@ -165,6 +165,7 @@ function kf; kak (find -iname $argv[1]) ;end
 function ndiff; set -l d (pwd); cd; for i in (nnn -p - $d); dirdiff -s $i ;end; cd - ;end 
 
 abbr d 'diff'
+abbr dd 'dirdiff -s'                         # flash messages
 abbr nd 'ndiff'                              # file picker mode
 abbr de 'dmenu - edit'
 abbr dp 'dmenu - projects'
@@ -173,7 +174,7 @@ abbr ds 'dmenu - scripts'
 # abbr h 'helix'
 abbr K '/usr/local/bin/kak'                  # for filename with spaces
 abbr k 'kak'
-abbr kd 'dirdiff -s'                         # flash messages
+abbr kd 'kakdiff'
 abbr kl 'kak -l'
 abbr kp 'kak -p'
 abbr nv 'nvpy'
