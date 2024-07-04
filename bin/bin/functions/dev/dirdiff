@@ -25,11 +25,6 @@ DIRDIFF=/tmp/dirdiff
 COLORDIFF=colordiff
 FILES=$DIRDIFF:files
 LOG=$DIRDIFF.log
-if exists icdiff ;then
-	IC=ic
-	ICOPT='--line-numbers --truncate --tabsize=3 --color-map=add:red_bold,change:red_bold,subtract:red_bold,description:yellow,line-numbers:black_bold,separator:yellow'  # side-by-side
-	COLORDIFF=cat
-fi
 delay=0.001  # match message animation interval
 
 # Runtime ......................................................................
@@ -59,7 +54,7 @@ done
 source=${source#$HOME/}
 [ "$target" ] && [ "${target%${target#?*}}" != '/' ] && target=${PWD}/$target  # target must be full pathname
 target=${target%/.}
-[ "${source#./}" = "${source}" ] || { P=${PWD}; P=${P#$HOME/}; }             # ./ ignore source path
+[ "${source#./}" = "${source}" ] && P=$HOME || { P=${PWD}; P=${P#$HOME/}; }    # ./ ignore source path
 [ -d "$source" ] && { cd "$source" >/dev/null; source=${PWD}; path="$source"; } || { T=f; path="${PWD}/${source#$HOME}"; [ "$P" ] && path="${path#*./}"; unset S; }
 
 # find matching source directory in target repo
@@ -110,10 +105,8 @@ while read file <&3 ;do
 		if ! diff --brief $w "${file}" "${targetfile}" >/dev/null 2>&1 ;then
 			[ $S ] || clear
 			ditto diff "${file}"
-			${IC}diff ${ICOPT} $w "${file}" "${targetfile}" | $COLORDIFF | pager  # SEE: ~/.colordiffrc
-			ifno "edit ${file}" && break
 			kakdiff "${file}" "${targetfile}"
-			blink=${BLINK}
+			[ $? -eq 1 ] && blink=${BLINK} || break
 		else
 			ditto match "${file}"
 			[ $S ] && sleep $delay

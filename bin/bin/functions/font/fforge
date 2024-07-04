@@ -47,6 +47,37 @@ regular()  { ls -1 | grep -Ev 'italic|oblique|extended'; }
 italic()   { ls -1 | grep -E  'italic'; }
 basefont() { echo $1 | grep -q '[-]italic.ttf' && echo "${1%italic*}regular.ttf" || echo "${1%italic*}.ttf"; }
 
+utf() {
+	case $1 in
+		' ' ) echo '0u0020' ;;  # space
+		A   ) echo '0u0041' ;;
+		a   ) echo '0u0061' ;;
+		C   ) echo '0u0043' ;;
+		E   ) echo '0u0045' ;;
+		e   ) echo '0u0065' ;;
+		G   ) echo '0u0047' ;;
+		I   ) echo '0u0049' ;;
+		i   ) echo '0u0069' ;;
+		J   ) echo '0u004a' ;;
+		j   ) echo '0u006a' ;;
+		l   ) echo '0u006c' ;;
+		M   ) echo '0u004d' ;;
+		m   ) echo '0u006d' ;;
+		O   ) echo '0u004f' ;;
+		o   ) echo '0u006f' ;;
+		Q   ) echo '0u0051' ;;
+		q   ) echo '0u0071' ;;
+		S   ) echo '0u0053' ;;
+		t   ) echo '0u0074' ;;
+		U   ) echo '0u0055' ;;
+		W   ) echo '0u0057' ;;
+		w   ) echo '0u0077' ;;
+		'|' ) echo '0u007c' ;;  # bar
+		'—' ) echo '0u2014' ;;  # emdash
+		'…' ) echo '0u2026' ;;  # ellipsis
+	esac
+}
+
 replace() {
 	echo "
 Select($2);
@@ -57,17 +88,8 @@ Paste();
 }
 
 capmove() {
-	case $1 in
-		C) utf='0u0043' ;;
-		G) utf='0u0047' ;;
-		O) utf='0u004f' ;;
-		Q) utf='0u0051' ;;
-		S) utf='0u0053' ;;
-		U) utf='0u0055' ;;
-	esac
-
 	echo "
-Select($utf);
+Select($(utf $1));
 Move(0,8);  # shift bottom curvature to x base
 "
 }
@@ -95,16 +117,8 @@ Generate(\$1);
 }
 
 tighten() {
-	case $1 in
-		I) utf='0u0049' ;;
-		i) utf='0u0069' ;;
-		J) utf='0u004a' ;;
-		j) utf='0u006a' ;;
-		l) utf='0u006c' ;;
-	esac
-
 	echo "
-Select($utf);
+Select($(utf $1));
 Move($XSHIFT,0);  # tweak side bearing towards left
 SetWidth($width);
 "
@@ -183,7 +197,7 @@ i_flipped() {
 	Xright=$(( ${XSHIFT#-} * 2 ))
 	echo "
 Open(\$1);
-Select(0u0069);
+Select($(utf 'i'));
 HFlip();
 Move($Xright,0);  # tweak side bearing towards right
 SetWidth($shape);
@@ -198,11 +212,11 @@ Generate(\$1);
 	# italicize flipped from regular glyph and shift to left of cell
 	echo "
 Open(\$2);
-Select(0u0069);
+Select($(utf 'i'));
 Italic($ANGLE);
 Copy();
 Open(\$1);
-Select(0u0069);
+Select($(utf 'i'));
 Paste();
 Move($Xright,0);  # adjust for italic side bearing shift towards right 
 SetWidth($shape);
@@ -219,7 +233,7 @@ Generate(\$1);
 t_flipped() {
 	echo "
 Open(\$1);
-Select(0u0074);
+Select($(utf 't'));
 HFlip();
 Move($XSHIFT,0);  # tweak side bearing towards left
 SetWidth($shape);
@@ -234,11 +248,11 @@ Generate(\$1);
 	# italicize flipped from regular glyph and shift to left of cell
 	echo "
 Open(\$2);
-Select(0u0074);
+Select($(utf 't'));
 Italic($ANGLE);
 Copy();
 Open(\$1);
-Select(0u0074);
+Select($(utf 't'));
 Paste();
 Move($XSHIFT,0);  # adjust for italic side bearing shift towards left 
 SetWidth($shape);
@@ -257,7 +271,7 @@ q_hook() {
 	# confirm 'atkinson q-hook'  # see iosevka
 	echo "
 Open(\$1);
-$(replace 0u0071 0u024b)
+$(replace $(utf 'q') 0u024b)
 Generate(\$1);
 " >/tmp/fontforge:q_hook.script
 
@@ -272,7 +286,7 @@ Q_hook() {
 	# confirm 'Q-hook'  # see iosevka
 	echo "
 Open(\$1);
-$(replace 0u0051 0u024a)
+$(replace $(utf 'Q') 0u024a)
 Generate(\$1);
 " >/tmp/fontforge:Q_hook.script
 
@@ -300,8 +314,8 @@ Q_custom() {
 	Q_offset() {
 		echo "
 Open(\$1);
-$(replace 0u0051 0u004f)
-$(overlay 0u0051 0u2035 $x -650)
+$(replace $(utf 'Q') $(utf 'O'))
+$(overlay $(utf 'Q') 0u2035 $x -650)
 Generate(\$1);
 " >/tmp/fontforge:Q_offset.script
 }
@@ -321,9 +335,9 @@ punctuation() {
 	
 	echo "
 Open(\$1);
-Select(0u2014);
+Select($(utf '—'));  # emdash
 Transform($width,0,0,100,0,0);
-Select(0u2026);
+Select($(utf '…'));  # ellipsis
 Transform($width,0,0,$width,0,0);
 ChangeWeight(-40);
 Move(0,-18);
@@ -372,11 +386,11 @@ ligature() {
 	grep -q '^cap =' $REPO/private-build-plans.toml && adjust=21 || adjust=0  # cap extended adjustment
 	echo "
 Open(\$1);
-$(explode 0u00e6 0u0061 0u0065 0u0335 $(( ${shape:-0} / 2 * 3 + 10 )) 0)
-$(explode 0u0152 0u004f 0u0045 0u0335 $(( ${shape:-0} / 2 * 3 + 10 )) $(( 118 + $adjust )) )
-$(explode 0u0153 0u006f 0u0065 0u0335 $(( ${shape:-0} / 2 * 3 + 10 )) 0)
-$(explode 0u01fc 0u0041 0u0045 0u0301 $(( ${shape:-0} / 2 * 3 )) $(( 208 + $adjust )) )
-$(explode 0u01fd 0u0061 0u0065 0u0301 $(( ${shape:-0} / 2 * 3 )) 0)
+$(explode 0u00e6 $(utf 'a') $(utf 'e') 0u0335 $(( ${shape:-0} / 2 * 3 + 10 )) 0)
+$(explode 0u0152 $(utf 'O') $(utf 'E') 0u0335 $(( ${shape:-0} / 2 * 3 + 10 )) $(( 118 + $adjust )) )
+$(explode 0u0153 $(utf 'o') $(utf 'e') 0u0335 $(( ${shape:-0} / 2 * 3 + 10 )) 0)
+$(explode 0u01fc $(utf 'A') $(utf 'E') 0u0301 $(( ${shape:-0} / 2 * 3 )) $(( 208 + $adjust )) )
+$(explode 0u01fd $(utf 'a') $(utf 'e') 0u0301 $(( ${shape:-0} / 2 * 3 )) 0)
 Generate(\$1);
 " >/tmp/fontforge:ligature.script
 
@@ -394,7 +408,7 @@ baseline() {
 	[ $shape -eq 600 ] && xshift=-2 || xshift=-1
 	echo "
 Open(\$1);
-Select(0u007c);             # bar symbol to be transformed into point
+Select($(utf '|'));         # bar symbol to be transformed into point
 CopyReference();
 Select(0u0001);             # temporary cell to avoid modifying original glyph
 Paste();
@@ -419,9 +433,9 @@ Generate(\$1);
 	xshift=$(( $xshift + $XSHIFT ))
 	echo "
 Open(\$1);
-Select(0u007c);
+Select($(utf '|'));
 CopyReference();
-Select(0u0001);             # temporary cell to avoid modifying original glyph
+Select(0u0001);  # temporary cell to avoid modifying original glyph
 Paste();
 Select(0u0001);
 Transform(0.0001,0,0,0.0001,0,0);
@@ -445,7 +459,7 @@ descender() {
 	confirm "$1"
 	echo "
 Open(\$1);
-Select(0u007c);
+Select($(utf '|'));
 CopyReference();
 Select(0u0001);  # temporary cell to avoid modifying original glyph
 Paste();
@@ -511,7 +525,7 @@ l_ascending() {
 	confirm "l_ascending"
 	echo "
 Open(\$1);
-Select(0u007c);
+Select($(utf '|'));
 CopyReference();
 Select(0u0001);  # temporary cell to avoid modifying original glyph
 Paste();
@@ -519,7 +533,7 @@ Select(0u0001);
 CopyReference();
 Transform(100,0,0,93,0,0);
 Move(0,133);
-Select(0u006c);
+Select($(utf 'l'));
 Paste();
 Select(0u0001);
 Clear();
@@ -536,7 +550,7 @@ Q_horizontal() {
 	confirm 'extend horizontal Q'
 	echo "
 Open(\$1);
-$(overlay 0u0051 0u0335 $(( $shape / 4 * 5 )) -225)
+$(overlay $(utf 'Q') 0u0335 $(( $shape / 4 * 5 )) -225)
 Generate(\$1);
 " >/tmp/fontforge:Q_horizontal.script
 
@@ -597,9 +611,9 @@ weight() {
 	if [ $adjust ] ;then
 	# optically adjust M W w (to regular weight to narrow stroke width for better small font contrast match)
 		echo "
-$(regularweight 0u004d)
-$(regularweight 0u0057)
-$(reglarweight 0u0077)
+$(regularweight $(utf 'M'))
+$(regularweight $(utf 'W'))
+$(regularweight $(utf 'w'))
 " >/tmp/fontforge:weight.script
 
 		echo
@@ -622,9 +636,9 @@ space() {
 		confirm '"M" width space character'
 		echo "
 Open(\$1);
-Select(0u004d);
+Select($(utf 'M'));
 w = GlyphInfo('Width');
-Select(0u0020);
+Select($(utf ' '));
 SetWidth(w);
 Generate(\$1);
 " >/tmp/fontforge:space.script
@@ -633,7 +647,7 @@ Generate(\$1);
 		confirm "${space}x width space character"
 		echo "
 Open(\$1);
-Select(0u0020);
+Select($(utf ' '));
 Transform($width,0,0,100,0,0);
 Generate(\$1);
 " >/tmp/fontforge:space.script
@@ -703,8 +717,7 @@ case $1 in
 	ligature      ) [ $4 ] && { width=$2; shift 2; } || { shape=$2; shift; } ;;  # see iosevka for tricky bits
 	punctuation   ) emdash=$2; shape=$3; shift 2 ;;
 	capadjust     ) letters=$2; shift ;;                                         # align "C G O Q S U" to x base
-	# serifless   ) letters=$2; width=$(( $3 * 850 / 1000 )); shift 2 ;;         # percent of "I i j l" (serifless)
-	serifless     ) letters=$2; width=$(( $3 * 835 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
+	serifless     ) letters=$2; width=$(( $3 * 845 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
 	serifed       ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "i j l" (serifed)
 	tailed        ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "l" (tailed)
 	space         ) space=$2; shift ;;
