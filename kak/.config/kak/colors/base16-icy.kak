@@ -1,4 +1,4 @@
-# base16-icy 
+# base16-icy
 #
 # Commentary:
 # Tinted Theming: (https://github.com/tinted-theming)

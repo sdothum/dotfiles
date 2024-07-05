@@ -27,9 +27,9 @@
 # ................................................................. if-then-else
 
 # if-else %{ condition } %{ then } %{ else }
-define-command if-else -params 3 %{ eval -verbatim %sh{ eval $1 && echo then || echo else # kak_opt_colormode kak_opt_mode kak_opt_toggle_focus } %arg{2} %arg{3} }  # SEE: ATTENTION
-define-command then -params 2 %{ eval %arg{1} }
-define-command else -params 2 %{ eval %arg{2} }
+define-command if-else -params 3 %{ evaluate-commands -verbatim %sh{ eval $1 && echo then || echo else # kak_opt_colormode kak_opt_mode kak_opt_toggle_focus } %arg{2} %arg{3} }  # SEE: ATTENTION
+define-command then -params 2 %{ evaluate-commands %arg{1} }
+define-command else -params 2 %{ evaluate-commands %arg{2} }
 
 # ...................................................................... if-then
 
@@ -55,7 +55,7 @@ define-command record-usermode -params 1 %{
 }
 
 define-command play-usermodes -params ..1 %{
-	eval %sh{ echo "$kak_opt_usermodes" | ${1:-cat} }
+	evaluate-commands %sh{ echo "$kak_opt_usermodes" | ${1:-cat} }
 }
 
 # Plugins
@@ -225,7 +225,7 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 		cargo install ktsctl
 	}
 	bundle kak-tree-sitter https://github.com/phaazon/kak-tree-sitter.git %{
-		nop eval %sh{ kak-tree-sitter -d -k --init $kak_session -s }
+		nop evaluate-commands %sh{ kak-tree-sitter -d -k --init $kak_session -s }
 	}
 
 }
@@ -240,15 +240,15 @@ if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] && [ -z "$TEST" ] } %{
 		cargo install hop-kak
 	}
 	bundle hop.kak https://github.com/hadronized/hop.kak.git %{
-		nop eval %sh{ hop-kak --init }
+		nop evaluate-commands %sh{ hop-kak --init }
 		declare-option str hop_kak_keyset 'heatrskplfyoudnm'
 
 		define-command -override hop-kak %{
-			exec ': eval -no-hooks -- %sh{ hop-kak --keyset "$kak_opt_hop_kak_keyset" --sels "$kak_selections_desc" }<ret>'
+			exec ': evaluate-commands -no-hooks -- %sh{ hop-kak --keyset "$kak_opt_hop_kak_keyset" --sels "$kak_selections_desc" }<ret>'
 		}
 
 		define-command -override hop-kak-words %{
-			exec 'gtGbxs\w+<ret>:eval -no-hooks -- %sh{ hop-kak --keyset "$kak_opt_hop_kak_keyset" --sels "$kak_selections_desc" }<ret>'
+			exec 'gtGbxs\w+<ret>: evaluate-commands -no-hooks -- %sh{ hop-kak --keyset "$kak_opt_hop_kak_keyset" --sels "$kak_selections_desc" }<ret>'
 		}
 
 		record-usermode %{ map global user h ': hop-kak<ret>' -docstring 'hop to selection/word' }
@@ -289,7 +289,7 @@ if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] && [ -z "$TEST" ] } %{
 		# currently running commit 36f99810bdcc060617479d6c5405e868584ef0ff BUG: lsp-inlay-diagnostics-enable command option
 		# cargo install --locked --force --path .
 		# diff kak-lsp.toml $HOME/.config/kak/kak-lsp/kak-lsp.toml.unmarksman
-		nop eval %sh{ kak-lsp -s $kak_session --kakoune }
+		nop evaluate-commands %sh{ kak-lsp -s $kak_session --kakoune }
 
 		set-option global lsp_cmd "kak-lsp -v -c $HOME/.config/kak-lsp/kak-lsp.toml -s %val{session} --log /tmp/kak-lsp.log"  # debug lsp with -vvv
 		declare-option str linemark '►'                                    # diagnostic line marker
@@ -334,7 +334,7 @@ if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] && [ -z "$TEST" ] } %{
 # ═══════════════════════════
 
 if %{ [ -n "$TEST" ] } %{
-	eval %sh{ cat "${kak_config}/$TEST.kak" }
+	evaluate-commands %sh{ cat "${kak_config}/$TEST.kak" }
 }
 
 # Plugins end ..................................................................
@@ -414,7 +414,7 @@ set-option global scrolloff 4,4
 # modal line numbers
 declare-option str ruler '│'  # SEE: statusline
 
-define-command margin -params ..1 %{ eval add-highlighter -override window/linenr number-lines -hlcursor -separator "'%opt{ruler}   '" %arg{@} }  # escape 'quotes' for eval
+define-command margin -params ..1 %{ evaluate-commands add-highlighter -override window/linenr number-lines -hlcursor -separator "'%opt{ruler}   '" %arg{@} }  # escape 'quotes' for eval
 
 hook global WinCreate .* %{
 	margin '-relative'  # on normal mode open
@@ -424,7 +424,7 @@ hook global WinCreate .* %{
 
 # .................................................................... Soft wrap
 
-define-command softwrap -params ..1 %{ eval add-highlighter -override global/wrap wrap -word -indent -marker "'  ↪ '" %arg{@} }  # escape 'quotes' for eval
+define-command softwrap -params ..1 %{ evaluate-commands add-highlighter -override global/wrap wrap -word -indent -marker "'  ↪ '" %arg{@} }  # escape 'quotes' for eval
 define-command nowrap %{ remove-highlighter global/wrap }
 
 hook global WinSetOption filetype=markdown %{ softwrap '-width 80' }
@@ -487,7 +487,6 @@ record-usermode %{ map global user S 'x<a-s>s(?i)' -docstring 'split:select:' }
 map global normal S 's(?i)'          -docstring 'case insensitive split:select:'
 map global normal } ']p'             -docstring 'next paragraph'
 map global normal { '[p'             -docstring 'previous paragraph'
-map global normal <percent> '%<a-;>' -docstring 'select all top:down'  # for maximal focus-toggle selections
 
 # .............................................................. Line operations
 
@@ -512,7 +511,7 @@ set-option global autoreload yes
 define-command sync %{
 	# if %{ [ -n "$kak_opt_filetype" ] && $kak_modified } %{ sudo-write }  # BUG: $kak_opt_filetype is null for "if" command (?)
 	# BUG: $kak_opt_filetype is null for %sh{} and root owned files(?)
-	eval %sh{ [ "$kak_buffname" != '*scratch*' ] && $kak_modified && echo "sudo-write" || echo "nop" }
+	evaluate-commands %sh{ [ "$kak_buffname" != '*scratch*' ] && $kak_modified && echo "sudo-write" || echo "nop" }
 }
 
 # ..................................................................... Filetype
@@ -580,5 +579,5 @@ hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt
 # Global user modes
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# play-usermodes
+# user mode order :)
 play-usermodes %{ sort -d }

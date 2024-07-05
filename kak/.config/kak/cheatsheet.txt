@@ -1,0 +1,2016 @@
+Coleman's Unofficial Kakoune Docs
+
+Around May 2024 I concatenated all the asciidoc files into one, and tried
+to make it shorter by inventing an ad-hoc keybinding doc format, removing
+extra words, and generally trying to craft a document narrowly focused on
+modes and keybinds first. I have a few notes to myself scattered here and
+there. It's 2000 lines and 26 pages printed.
+
+-----
+
+Look up *prompt*, *info*, and *on-key* commands
+
+A word is a sequence of alphanumeric characters or underscore, a WORD is a
+sequence of non whitespace characters.
+
+Shift usually extend selection of movement commands. wWW selects 3 consecutive
+words: first `w` selects a word, then `WW` extends the selection two words
+further. f/F/ selects up to and including the second `/` character forward.
+
+See also 3W
+
+---------------------------------------
+map [switches] <scope> <mode> <key> <keys>
+unmap <scope> <mode> <key> [<expected>]
+---------------------------------------
+
+The *map* command makes *key* behave as if the *keys* sequence was typed.
+
+mode dictates in what context the mapping will be available.
+
+Available modes:
+
+insert : insert mode
+normal : normal mode
+prompt : prompts, such as when entering a command through *:*, or a regex through */*
+user   : mode entered when the user prefix is hit (default: '<space>')
+goto   : mode entered when the goto key is hit (default: 'g')
+view   : mode entered when the view key is hit (default: 'v')
+object : mode entered when an object selection is triggered (e.g. '<a-i>')
+
+The context of execution of the above modes is always the current one at the
+time of execution of the mapping, except for *user* mode (always executed
+in a 'normal' context). Refer to <<modes#,`:doc modes`>> for more details.
+
+If you make a normal-mode mapping, you can prefix it with a count or a register
+name like any other normal-mode key. You can forward this information to the
+command you invoke with the `%val{count}` and `%val{register}` expansions
+(See <<expansions#,`:doc expansions`>>). For example:
+
+----
+map global normal = ':echo Got count %val{count} and reg %val{register}<ret>'
+----
+
+NORMAL
+
+h  : select the character on the left of selection end
+j  : select the character below the selection end
+k  : select the character above the selection end
+l  : select the character on the right of selection end
+
+w     : select the word and following whitespaces on the right of selection end
+<a-w> : same as w, but select WORD instead of word
+b     : select preceding whitespaces and the word on the left of selection end
+<a-b> : same as b, but select WORD instead of word
+e     : select preceding whitespaces and the word on the right of selection end
+<a-e> : same as e, but select WORD instead of word
+
+f     : select to (including) the next occurrence of the given character
+<a-f> : same as f but in the other direction
+t     : select until (excluding) the next occurrence of the given character
+<a-t> : same as t but in the other direction
+
+m : select to matching character
+M : extend selection to matching character
+
+<a-m> : select to the previous sequence enclosed by matching characters, see the
+        `matching_pairs` option in <<options#,`:doc options`>>
+<a-M> : extend the current selection to the previous sequence enclosed by matching
+        characters, see the `matching_pairs` option in <<options#,`:doc options`>>
+
+x     : expand selections to contain full lines (including end-of-lines)
+<a-x> : trim selections to only contain full lines (not including last end-of-line)
+
+% : select whole buffer
+
+<a-h>, <home> : select to line begin
+<a-l>, <end>  : select to line end
+
+/     : search (select next match)
+<a-/> : search (select previous match)
+?     : search (extend to next match)
+<a-?> : search (extend to previous match)
+n     : select next match
+N     : add a new selection with next match
+<a-n> : select previous match
+<a-N> : add a new selection with previous match
+
+pageup, <c-b>   : scroll one page up
+pagedown, <c-f> : scroll one page down
+<c-u>           : scroll half a page up
+<c-d>           : scroll half a page down
+
+) : rotate selections (the main selection becomes the next one)
+( : rotate selections backwards
+
+;     : reduce selections to their cursor
+<a-;> : flip the selections' direction
+<a-:> : ensure selections are in forward direction (cursor after anchor)
+
+<a-.> : repeat last object or `f`/`t` selection command.
+
+_ : unselect whitespace surrounding each selection, drop those that only
+    contain whitespace
+
+\ : Prefix any normal mode command with \ to disable hooks. \i disables hooks
+    for entire insertion session
+
+CHANGES/SELECTION
+
+i : enter insert mode before each selection
+a : enter insert mode after each selection
+d : yank and delete each selection
+c : yank and delete each selection and enter insert mode
+. : repeat last insert mode change (`i`, `a`, or `c`, including
+        the inserted text)
+
+<a-d> : delete each selection
+<a-c> : delete each selection and enter insert mode
+
+I : enter insert mode at each selection begin line start
+A : enter insert mode at each selection end line end
+o : enter insert mode in one (or given count) new lines below
+     each selection end
+O : enter insert mode in one (or given count)  new lines above
+     each selection begin
+
+<a-o> : add an empty line below each cursor
+<a-O> : add an empty line above each cursor
+
+y     : yank selections
+p     : paste after each selection end
+P     : paste before each selection begin
+<a-p> : paste all after each selection end
+<a-P> : paste all before each selection begin
+R     : replace each selection with yanked text
+<a-R> : replace each selection with every yanked text
+
+r     : replace each character with the next entered one
+
+<a-j> : join selected lines
+<a-J> : join selected lines and select spaces inserted
+          in place of line breaks
+<a-_> : merge contiguous selections together (works across lines as well)
+
+<plus>   : duplicate each selection (generating overlapping selections)
+<a-plus> : merge overlapping selections
+
+<gt> (>)        : indent selected lines
+<a-gt>, <a-\>   : indent selected lines, including empty lines
+<lt> (<)        : deindent selected lines
+<a-lt>          : deindent selected lines, do not remove incomplete
+                  indent (3 leading spaces when indent is 4)
+
+|     : pipe each selection through the given external filter program
+        and replace the selection with its output.
+<a-|> : pipe each selection through the given external filter program
+        and ignore its output
+
+!     : insert and select command output before each selection
+<a-!> : append and select command output after each selection
+
+u     : undo last change
+<c-k> : move backward in history
+<a-u> : undo last selection change
+U     : redo last change
+<c-j> : move forward in history
+<a-U> : redo last selection change
+
+&     : align selections, align the cursor of selections by inserting
+        spaces before the first character of the selection
+<a-&> : copy indent, copy the indentation of the main selection
+        (or the count one if a count is given) to all other ones
+
+`     : to lower case
+~     : to upper case
+<a-`> : swap case
+
+@     : convert selected tabs to spaces, uses the buffer tabstop option or
+        the count parameter for tabstop.
+<a-@> : convert selected spaces to tabs, uses the buffer tabstop option
+        or the count parameter for tabstop.
+
+<a-)> : rotate selections content, if specified, the count groups
+        selections, so `3<a-)>` rotate (1, 2, 3) and (4, 5, 6)
+        independently.
+<a-(> : rotate selections content backwards
+
+
+Goto commands. Commands beginning with `g` are used to goto certain position 
+and or buffer. If a count is given prior to hitting `g`, `g` will jump to 
+the given line. Using `G` will extend the selection rather than jump.
+
+View commands. Commands beginning with `v` permit to center or scroll the current
+view. Using `V` will lock view mode until `<esc>` is hit
+
+Marks. Current selections position can be saved in a register and restored later on.
+These are "marks".
+
+Jump list. Some commands, like the goto commands, buffer switch or search commands,
+push the previous selections to the client's jump list.
+
+
+INSERT
+
+<esc>    : leave insert mode
+<backspace> : delete characters before cursors
+<del>    : delete characters under cursors
+<left>   : move cursors in given direction 
+<right>  : move cursors in given direction
+<up>     : move cursors in given direction     
+<down>   : move cursors in given direction
+<home>   : move cursors to line beginning
+<end>    : move cursors to line ending
+<c-n>    : select next completion candidate
+<c-p>    : select previous completion candidate
+<c-x, f> : explicit insert completion query, followed by explicit file completion
+<c-x, w> : explicit insert completion query, followed by explicit word completion
+           in the current buffer
+<c-x, W> : explicit insert completion query, followed by explicit word completion
+           from all buffers
+<c-x, l> : explicit insert completion query, followed by explicit line completion
+           from the curren buffer
+<c-x, L> : explicit insert completion query, followed by explicit line completion
+           from the all buffers
+<c-o>    : disable automatic completion for this insert session
+<c-r>    : insert contents of the register given by next key
+<c-v>    : insert next keystroke directly into the buffer, without interpreting it
+<c-u>    : commit changes up to now as a single undo group
+<a-;>    : escape to normal mode for a single command; selections not modified,
+           other modes can be entered (nested into) and you're returned to the
+           original insert mode. Prefer this for scripting to <esc>
+
+
+SEARCHING/SELECTION
+
+Searches use the `/` register by default
+
+/     : select next match after each selection
+<a-/> : select previous match before each selection
+?     : extend to next match after each selection
+<a-?> : extend to previous match before each selection
+s     : multi-select search pattern (pattern shared with `/`)
+S     : split selection on search pattern; try splitting on ,-sep lists
+<a-s> : split selection on line boundaries
+<a-S> : select first and last characters of each selection
+n     : select next match after main selection
+N     : add a new selection with next match after the main selection
+<a-n> : select previous match before the main selection
+<a-N> : add a new selection with previous match before the main selection
+*     : set search pattern to the main selection (detects word boundaries)
+<a-*> : set search pattern to the main selection (verbatim)
+
+C     : duplicate selections on the lines that follow them
+<a-C> : duplicate selections on the lines that precede them
+,     : clear selections to only keep the main one
+<a-,> : clear the main selection
+<a-k> : keep selections that match the given regex
+<a-K> : clear selections that match the given regex
+
+$ : pipe each selection to the given shell command and keep the ones
+        for which the shell returned 0. Shell expansions are available,
+
+To clear multiple selections, use `,`. To keep only the nth selection
+use `n` followed by `,`, in order to remove a selection, use `<a-,>`.
+
+
+GOTO MODE
+
+count, G : When a `count` is specified, *G* only extends the selection to the given line
+count, g : sends the anchor to the given line 
+
+g, h : go to line begin
+g, l : go to line end
+g, i : go to non blank line start
+
+g, g : go to the first line
+G, g : extend selection to the first line
+g, k : go to the first line
+G, k : extend selection to the first line
+g, j : go to the last line
+G, j : extend selection to the last line
+g, e : go to last char of last line
+G, e : extend selection to last char of last line
+
+g, t : go to the first displayed line
+G, t : extend selection to the first displayed line
+g, c : go to the middle displayed line
+G, c : extend selection to the middle displayed line
+g, b : go to the last displayed line
+G, b : extend selection to the last displayed line
+
+g, . : go to last buffer modification position
+G, . : extend selection to last buffer modification position
+
+g, a : go to the previous (alternate) buffer
+g, f : open the file whose name is selected
+
+
+VIEW MODE
+
+V : enters lock view mode (which will be left when the <esc> is hit)
+v : v modifies the current view; a menu is then displayed which waits
+    for one of the following additional keys:
+
+v, v : center the main selection in the window (vertically)
+v, c : center the main selection in the window (vertically)
+v, m : center the main selection in the window (horizontally)
+
+v, t : scroll to put the main selection on the top line of the window
+v, b : scroll to put the main selection on the bottom line of the window
+v, h : scroll the window `count` columns left
+v, j : scroll the window `count` line downward
+v, k : scroll the window `count` line upward
+v, l : scroll the window `count` columns right
+
+
+MARKS
+
+Current selections position can be saved in a register and restored later on.
+Marks use the `^` register by default.
+
+Z : save selections to the register
+z : restore selections from the register
+
+<a-z> : combines selections from the register with the current ones, whereas
+<a-Z> : combines current selections with the ones in the register; a menu
+        is then displayed which waits for one of the additional keys
+
+<a-z>, a : append selections
+<a-Z>, a : append selections
+<a-z>, u : keep a union of selections
+<a-Z>, u : keep a union of selections
+<a-z>, i : keep an intersection of selections
+<a-Z>, i : keep an intersection of selections
+<a-z>, < : select the selection with the leftmost cursor for each pair
+<a-Z>, < : select the selection with the leftmost cursor for each pair
+<a-z>, > : select the selection with the rightmost cursor for each pair
+<a-Z>, > : select the selection with the rightmost cursor for each pair
+<a-z>, + : select the longest selection
+<a-Z>, + : select the longest selection
+<a-z>, - : select the shortest selection
+<a-Z>, - : select the shortest selection
+
+
+MACROS
+
+Macros use the @ register by default
+
+Q     : start or end macro recording
+q     : play a recorded macro
+<esc> : end macro recording
+
+
+JUMP LIST
+
+Some commands, like the goto commands, buffer switch or search commands,
+push the previous selections to the client's jump list. It is possible
+to skim through the jump list using:
+
+<c-i> : jump forward
+<c-o> : jump backward
+<c-s> : create a jump step, but also save the current selection to have it be
+        restored when the step is subsequently cycled through
+
+
+OBJECT SELECTION
+
+For nestable objects, a `count` can be used in order to specify which surrounding
+level to select. Object selections are repeatable using <a-.>
+
+A 'whole object' is an object *including* its surrounding characters.
+For example, for a quoted string this will select the quotes, and
+for a word this will select trailing spaces.
+
+<a-a> : select the whole object
+
+[ ... : select to the whole object start
+] ... : select to the whole object end
+{ ... : extend selections to the whole object start
+} ... : extend selections to the whole object end
+
+An 'inner object' is an object *excluding* its surrounding characters.
+For example, for a quoted string this will *not* select the quotes, and
+for a word this will *not* select trailing spaces.
+
+<a-i> ... : select the inner object
+<a-[> ... : select to the inner object start
+<a-]> ... : select to the inner object end
+<a-{> ... : extend selections to the inner object start
+<a-}> ... : extend selections to the inner object end
+
+After the keys described above, a second key needs to be entered
+in order to specify the wanted object (the ..., previously):
+
+b ( )   : select the enclosing parenthesis
+B { }   : select the enclosing {} block
+r [ ]   : select the enclosing [] block
+a < >   : select the enclosing <> block
+Q "     : select the enclosing double quoted string
+q '     : select the enclosing single quoted string
+g `     : select the enclosing grave quoted string
+w       : select the whole word
+<a-w>   : select the whole WORD
+s       : select the sentence
+p       : select the paragraph
+<space> : select the whitespaces
+i       : select the current indentation block
+n       : select the number
+u       : select the argument
+c       : select user defined object, will prompt for open and close text
+<a-;>   : run a command with additional expansions describing 
+          the selection context (See `:doc expansions`)
+
+If any other punctuation character is entered, it will act as 
+the delimiter. For instance, if the cursor is on the `o` of `/home/bar`, 
+typing `<a-a>/` will select `/home/`.
+
+PROMPT COMMANDS
+
+When pressing `:` in normal mode, Kakoune will open a prompt to enter
+a command.  The executed command line is stored in the *:* register
+(See `:doc registers`).
+
+During editing, a transient *clipboard* is available, its content is
+empty at the start of prompt edition, and is not preserved afterwards.
+
+The following keys are usable in prompt mode. Many are emacs/readline-esque.
+
+<ret>              : submit prompt
+<esc>              : abandon without submitting prompt
+<left>, <c-b>      : move cursor to previous character
+<right>, <c-f>     : move cursor to next character
+<home>, <c-a>      : move cursor to first character
+<end>, <c-e>       : move cursor past the last character
+<backspace>, <c-h> : erase character before cursor
+<del>, <c-d>       : erase character under cursor
+<a-f>              : advance to next word begin
+
+<a-F> : advance to next WORD begin
+<a-b> : go back to previous word begin
+<a-B> : go back to previous WORD begin
+<a-e> : advance to next word end
+<a-E> : advance to next WORD end
+<c-w> : erase to previous word begin, save erased content to *clipboard*
+<c-W> : erase to previous WORD begin, save erased content to *clipboard*
+<a-d> : erase to next word begin, save erased content to *clipboard*
+<a-D> : erase to next WORD begin, save erased content to *clipboard*
+<c-k> : erase to end of line, save erased content to *clipboard*
+<c-u> : erase to begin of line, save erased content to *clipboard*
+<c-y> : insert *clipboard* content before cursor
+
+<up>, <c-p>   : select previous entry in history
+<down>, <c-n> : select next entry in history
+
+<tab>   : select next completion candidate
+<s-tab> : select previous completion candidate
+<c-r>   : insert then content of the register given by next key, if next key
+          has the Alt modifier, it will insert all values in the register
+          joined with spaces, else it will insert the main one
+<c-v>   : insert next keystroke without interpreting it
+
+<c-x>, f : explicit filename completion
+<c-x>, w : explicit word completion (from current buffer)
+
+<c-o> : toggle automatic completion
+<a-!> : expand the typed expansions in currently entered text 
+        (See `:doc expansions`)
+<a-;> : escape to normal mode for a single command (why would you want this
+        in prompt mode?)
+
+USER MODE
+
+<space> : enter user mode (See `:doc mode user-mode`)
+
+CANCELING OPERATIONS
+
+These cannot be remapped.
+
+<c-c> : Stop any external processes; causes Kakoune to send the SIGINT signal
+        to its entire process group.
+
+<c-g> : Cancel a long-running Kakoune operation, such as a regex search on a
+        very large file. Clears Kakoune's input buffer, so any commands that 
+        were waiting on the operation are also cancelled.
+
+
+USING THE DOCUMENTATION BROWSER
+
+Documentation buffers are regular buffers. They can also
+contain links: <<doc#demonstration-target,like this>>. If a link takes you to
+a different documentation topic, return to the original with `:buffer`.
+
+EXPANSIONS
+
+While parsing a command, Kakoune supports expansions. 
+
+Every expansion consists of a `%`, followed by the expansion type, a quoting 
+character, and then all the text up to the next quoting character. It doesn't 
+matter which character is used, but `{}` are most common.
+
+Expansions are processed when unquoted and anywhere inside double-quoted
+strings, but not inside unquoted words, inside single-quoted strings, or
+inside %-strings or other expansions.  For example:
+
+* `echo %val{session}` echoes the current session ID
+* `echo x%val{session}x` echoes the literal text `x%val{session}x`
+* `echo '%val{session}'` echoes the literal text `%val{session}`
+* `echo "x%val{session}x"` echoes the current session ID, surrounded by `x`
+* `echo %{%val{session}}` echoes the the literal text `%val{session}`
+* `echo %sh{ echo %val{session} }` echoes the literal text `%val{session}`
+
+See `:doc command-parsing typed-expansions` for details
+
+== Argument expansions
+
+Expansions with the type `arg` can only be used inside the "commands" parameter
+of the `define-command` command (See <<commands#declaring-new-commands,`:doc
+commands declaring-new-commands`>>).
+
+The following expansions are available:
+
+*%arg{n}*::
+     (where _n_ is a decimal number) +
+     expands to argument number _n_ of the current command
+
+*%arg{@}*::
+    expands to all the arguments of the current command, as individual words
+
+== Option expansions
+
+Expansions with the type `opt` expand to the value associated with the named
+option in the current scope (See <<options#,`:doc options`>>).
+
+For example, `%opt{BOM}` expands to `utf8` or to `none`, according to the
+current state of the `BOM` option.
+
+== Register expansions
+
+Expansions with the type `reg` expand to the contents of the named
+register. For registers named after symbols (like the search register
+`/`), the expansion can use either the symbol or the alphabetic name (See
+<<registers#,`:doc registers`>>).
+
+For example, `%reg{/}` expands to the content of the `/` register, and so does
+`%reg{slash}`.
+
+== Shell expansions
+
+Expansions with the type `sh` are executed as shell-scripts, and whatever
+the script prints to standard output replaces the expansion. For example,
+the command `echo %sh{date}` will echo the output of the `date` command.
+
+TIP: If a shell expansion writes to standard error, that output is appended to
+Kakoune's `\*debug*` buffer. If you're trying to debug a shell expansion,
+check the debug buffer with `:buffer \*debug*` to see if anything shows up.
+
+Because Kakoune does not expand expansions inside the text of an expansion,
+you can't use normal expansions inside `%sh{}`. Instead, Kakoune can export
+expansions as environment variables to make them available to the shell.
+Here's how expansion patterns map to variable names:
+
+*%arg{n}*::
+    (where _n_ is a decimal number) +
+    becomes `$_n_`. For example, `%arg{3}` becomes `$3`.
+
+*%arg{@}*::
+    becomes `$@`
+
+*%opt{x}*::
+    becomes `$kak_opt_x`
+
+*%reg{x}*::
+    (where _x_ is the alphabetic name of a register) +
+    `$kak_reg_x` contains all the selections in register _x_ +
+    `$kak_main_reg_x` contains only the main selection
+
+*%val{x}*::
+    becomes `$kak_x`
+
+Values can be quoted with a shell compatible quoting by using `$kak_quoted_`
+as a prefix, this is mostly useful for list-type options and registers, as
+it allows to correctly work with lists where elements might contains
+whitespaces:
+
+----
+eval set -- "$kak_quoted_selections"
+while [ $# -gt 0 ]; do
+    # ... do a thing with $1 ...
+    shift
+done
+----
+
+The `eval` command will take the expanded `$kak_quoted_selections`
+and unquote them, then execute the resulting `set` command, which sets
+the shell's argument variables to the items from `$kak_selections`. The
+`while` loop with `shift` iterates through the arguments one by one.
+
+Only variables actually mentioned in the body of the shell expansion will
+be exported into the shell's environment. For example:
+
+----
+echo %sh{ env | grep ^kak_ }
+----
+
+... will find none of Kakoune's special environment variables, but:
+
+----
+echo %sh{ env | grep ^kak_ # kak_session }
+----
+
+... will find the `$kak_session` variable because it was mentioned by name
+in a comment, even though it wasn't directly used.
+
+TIP: These environment variables are also available in other contexts where
+Kakoune uses a shell command, such as the `|`, `!` or `$` normal mode commands
+(See <<keys#,`:doc keys`>>).
+
+=== Command and Response fifo
+
+Inside shell expansions, `$kak_command_fifo` refers to a named pipe that
+accepts Kakoune commands to be executed as soon as the fifo is closed. This
+named pipe can be opened and closed multiple times which makes it possible
+to interleave shell and Kakoune commands. `$kak_response_fifo` refers to
+a named pipe that can be used to return data from Kakoune.
+
+----
+%sh{
+    echo "write $kak_response_fifo" > $kak_command_fifo
+    content="$(cat $kak_response_fifo)"
+}
+----
+
+This also makes it possible to pass data bigger than the system environment
+size limit.
+
+== File expansions
+
+Expansions with the type `file` will expand to the content of the filename
+given in argument as read from the host filesystem.
+
+For example, this command stores the entire content of `/etc/passwd` into the
+`a` register.
+
+----
+set-register a %file{/etc/passwd}
+----
+
+== Value expansions
+
+Expansions with the type `val` give access to Kakoune internal data that is
+not stored in an option or a register. Some value expansions can only be used
+in certain contexts, like `%val{hook_param}` that expands to the parameter
+string of the currently-executing hook, and is not available outside a hook.
+
+The following expansions are supported (with required context _in italics_):
+
+*%val{buffile}*::
+    _in buffer, window scope_ +
+    full path of the file or same as `%val{bufname}` when there’s no
+    associated file
+
+*%val{buf_line_count}*::
+    _in buffer, window scope_ +
+    number of lines in the current buffer
+
+*%val{buflist}*::
+    quoted list of the names of currently-open buffers (as seen in
+    `%val{bufname}`)
+
+*%val{bufname}*::
+    _in buffer, window scope_ +
+    name of the current buffer
+
+*%val{client_env_X}*::
+    _in window scope_ +
+    value of the `$X` environment variable in the client displaying the current
+    window (e.g. `%val{client_env_SHELL}` is `$SHELL` in the client's
+    environment)
+
+*%val{client_list}*::
+    unquoted list of the names of clients (as seen in `%val{client}`)
+    connected to the current session
+
+*%val{client}*::
+    _in window scope_ +
+    name of the client displaying the current window
+
+*%val{client_pid}*::
+    _in window scope_ +
+    process id of the client displaying the current window
+
+*%val{config}*::
+    directory containing the user configuration
+
+*%val{count}*::
+    _in `map` command <keys> parameter and `<a-;>` from object menu_ +
+    current count when the mapping was triggered, defaults to 0 if no
+    count given
+
+*%val{cursor_byte_offset}*::
+    _in window scope_ +
+    offset of the main cursor from the beginning of the buffer (in bytes)
+
+*%val{cursor_char_column}*::
+    _in window scope_ +
+    1-based offset from the start of the line to the cursor position in
+    Unicode codepoints, which may differ from visible columns if the document
+    contains full-width codepoints (which occupy two columns) or zero-width
+    codepoints
+
+*%val{cursor_display_column}*::
+    _in window scope_ +
+    1-based offset from the start of the line to the cursor position in
+    display column, taking into account tabs and character width.
+
+*%val{cursor_char_value}*::
+    _in window scope_ +
+    unicode value of the codepoint under the main cursor
+
+*%val{cursor_column}*::
+    _in window scope_ +
+    1-based offset from the start of the line to the first byte of the
+    character under the main cursor (in bytes), the fourth component of
+    `%val{selection_desc}`
+
+*%val{cursor_line}*::
+    _in window scope_ +
+    line of the main cursor, the third component of `%val{selection_desc}`
+
+*%val{error}*::
+    _in `try` command's <on_error_commands> parameter_ +
+    the text of the error that cancelled execution of the <commands> parameter
+    (or the previous <on_error_commands> parameter)
+
+*%val{history}*::
+    _in buffer, window scope_ +
+    the full change history of the buffer, including undo forks, in terms
+    of `parent committed redo_child modification0 modification1 ...`
+    entries, where _parent_ is the index of the entry's predecessor (entry
+    0, which is the root of the history tree, will always have `-` here),
+    _committed_ is a count in seconds from Kakoune's steady clock's epoch
+    of the  creation of the history entry, _redo_child_ is the index of the
+    child which will be visited for `U` (always `-` at the leaves of the
+    history), and each _modification_ is presented as in
+    `%val{uncommitted_modifications}`.
+
+*%val{history_id}*::
+    _in buffer, window scope_ +
+    history id of the current buffer, an integer value which refers to a
+    specific buffer version in the undo tree (see also `%val{timestamp}`)
+
+*%val{hook_param_capture_n}*::
+    _in `hook` command <command> parameter_ +
+    text captured by capture group _n_, if the executing hook's filter regex
+    used capture groups
+
+*%val{hook_param}*::
+    _in `hook` command <command> parameter_ +
+    the complete parameter string of the executing hook
+
+*%val{modified}*::
+    _in buffer, window scope_ +
+    `true` if the buffer has modifications not saved, otherwise `false`
+
+*%val{object_flags}*::
+    _for commands executed from the object menu's `<a-;>` only_ +
+    a pipe-separted list of words including `inner` if the user wants
+    an inner selection, `to_begin` if the user wants to select to the
+    beginning, and `to_end` if the user wants to select to the end
+
+*%val{register}*::
+    _in `map` command <keys> parameter and `<a-;>` from the object menu_ +
+    current register when the mapping was triggered
+
+*%val{runtime}*::
+    the directory containing the kak support files, which is determined from
+    Kakoune's binary location if `$KAKOUNE_RUNTIME` is not set
+
+*%val{select_mode}*::
+    _for commands executed from the object menu's `<a-;>` only_ +
+    `replace` if the new selection should replace the existing, `extend`
+    otherwise
+
+*%val{selection}*::
+    _in window scope_ +
+    content of the main selection
+
+*%val{selections}*::
+    _in window scope_ +
+    quoted list of the contents of all selections
+
+*%val{selection_desc}*::
+    _in window scope_ +
+    range of the main selection, represented as `a.b,c.d` where _a_ is the
+    anchor line, _b_ is the number of bytes from the start of the line to the
+    anchor, _c_ is the cursor line (like `%val{cursor_line}`), _d_ is
+    the number of bytes from the start of the line to the cursor (like
+    `%val{cursor_column}`), and all are 1-based decimal integers
+
+*%val{selections_char_desc}*::
+    _in window scope_ +
+    unquoted list of the ranges of all selections, in the same format as
+    `%val{selection_desc}`, except that the columns are in codepoints rather
+    than bytes
+
+*%val{selections_display_column_desc}*::
+    _in window scope_ +
+    unquoted list of the ranges of all selections, in the same format as
+    `%val{selection_desc}`, except that the columns are in display columns rather
+    than bytes
+
+*%val{selections_desc}*::
+    _in window scope_ +
+    unquoted list of the ranges of all selections, in the same format as
+    `%val{selection_desc}`
+
+*%val{selection_length}*::
+    _in window scope_ +
+    length (in codepoints) of the main selection
+
+*%val{selections_length}*::
+    _in window scope_ +
+    unquoted list of the lengths (in codepoints) of the selections
+
+*%val{selection_count}*::
+    _in window scope_ +
+    the number of selections
+
+*%val{session}*::
+    name of the current session
+
+*%val{source}*::
+    _in `.kak` file_ +
+    path of the file currently getting executed (through the source command)
+
+*%val{text}*::
+    _in `prompt` command <command> parameter_ +
+    the text entered by the user in response to the `prompt` command
+
+*%val{timestamp}*::
+    _in buffer, window scope_ +
+    timestamp of the current buffer, an integer that increments each time the
+    buffer is modified, including undoing and redoing previous modifications
+    (see also `%val{history_id}`)
+
+*%val{uncommitted_modifications}*::
+    _in buffer, window scope_ +
+    a list of quoted insertions (in the format `+line.column|text`) and
+    deletions (`-line.column|text`) not yet saved to the history (e.g. typing
+    in insert mode before pressing `<esc>`), where _line_ is the 1-based line
+    of the change, _column_ is the 1-based _byte_ of the change start (see
+    `%val{cursor_column}`), and _text_ is the content of the insertion or
+    deletion (see also `%val{history}`)
+
+*%val{user_modes}*::
+    unquoted list of user modes.
+
+*%val{version}*::
+    version of the current Kakoune server (git hash or release name)
+
+*%val{window_height}*::
+    _in window scope_ +
+    height of the current Kakoune window
+
+*%val{window_width}*::
+    _in window scope_ +
+    width of the current Kakoune window
+
+*%val{window_range}*::
+    _in window scope_ +
+    list of coordinates and dimensions of the buffer-space
+    available on the current window, in the following format:
+    `<coord_y> <coord_x> <height> <width>`
+
+Values in the above list that do not mention a context are available
+everywhere.
+
+A value described as a "quoted list" will follow the rules of Kakoune string
+quoting (See <<command-parsing#,`:doc command-parsing`>>). An "unquoted list"
+cannot contain any special characters that would require quoting.
+
+== Recursive Expansions
+
+Expansions with the type `exp` expand their content, the same way doubly
+quoted strings do.
+
+
+
+
+
+
+= Options
+
+== Description
+
+Kakoune can store named and typed values that can be used both to
+customize the core editor behaviour, and to store data used by extension
+scripts.
+
+[[set-option]]
+Options can be modified using the `set-option` command:
+
+--------------------------------------------
+set-option [-add|-remove] <scope> <name> <values>...
+--------------------------------------------
+
+<scope> can be *global*, *buffer*, *window* or *current* (See
+<<scopes#,`:doc scopes`>>). *current* relates to the narrowest scope in
+which the option is already set.
+
+When the option is a list or a map, multiple <values> can be given as
+separate arguments, or can be omitted altogether in order to empty the
+option.
+
+If `-add` or `-remove` is specified, the new value is respectively *added*
+to or *removed* from the current one instead of replacing it (the exact
+outcome depends on the type, see below).
+
+[[unset-option]]
+Option values can be unset in a specific scope with the `unset-option`
+command:
+
+---------------------------
+unset-option <scope> <name>
+---------------------------
+
+Unsetting an option will make it fallback to the value of its parent scope,
+hence options cannot be unset from the *global* scope.
+
+[[declare-option]]
+New options can be declared using the `declare-option` command:
+
+---------------------------------------------------
+declare-option [-hidden] <type> <name> [<value>...]
+---------------------------------------------------
+
+If `-hidden` is specified, the option will not be displayed in completion
+suggestions.
+
+[[update-option]]
+Certain option type can be *updated*, usually to match potential changes
+in the buffer they relate to. This can be triggered by the `update-option`
+command:
+
+----------------------------
+update-option <scope> <name>
+----------------------------
+
+== Types
+
+All options have a type, which defines how they are translated to/from
+text and their set of valid values.
+
+Some types are usable for user defined options while some other types
+are exclusively available to built-in options.
+
+*int*::
+    an integer number.
+
+    `set -add` performs a math addition. +
+    `set -remove` performs a math substraction. +
+
+*bool*::
+    a boolean value, yes/true or no/false
+
+*str*::
+    a string, some freeform text
+
+*regex*::
+    as a string but the set commands will complain if the entered text
+    is not a valid regex
+
+*coord*::
+    a line, column pair (separated by a comma)
+    Cannot be used with `declare-option`
+
+*<type>-list*::
+    a list, elements are specified as separate arguments to the command.
+
+    `set -add` appends the new element to the list. +
+    `set -remove` removes each given element from the list. +
+
+    Only `int-list` and `str-list` options can be created with
+    `declare-option`.
+
+*range-specs*::
+    a timestamp (like `%val{timestamp}`,
+    see <<expansions#value-expansions,`:doc expansions value-expansions`>>)
+    followed by a list of range descriptors.
+
+    Each range descriptor must use the syntax `a.b,c.d|string` or
+    `a.b+length|string`, with:
+
+        * _a_ is the line containing the first character
+
+        * _b_ is the number of bytes from the start of the line to the
+        first byte of the first character
+
+        * _c_ is the line containing the last character
+
+        * _d_ is the number of bytes from the start of the line to the
+          first byte of the last character
+
+        * _length_ is the length of the range in bytes, if 0 the range
+          is empty, but still valid.
+
+        * _string_ is an arbitrary string which is associated with
+          the range. Any `|` or `\` characters must be escaped as `\|` or `\\`.
+
+    All numeric fields are 1-based.
+
+    When the command `update-option` is used on an option of this type,
+    its ranges get updated according to all the buffer modifications
+    that happened since its timestamp.
+
+    `set -add` appends the new pairs to the list. +
+    `set -remove` removes the given pairs from the list. +
+
+    See <<highlighters#specs-highlighters,`:doc highlighters specs-highlighters`>>)
+
+*line-specs*::
+    a list of a line number and a corresponding flag (`<line>|<flag
+    text>`), except for the first element which is just the timestamp
+    of the buffer. When `update-option` is used on an option of this
+    type, its lines get updated according to all the buffer modifications
+    that happened since its timestamp.
+    See <<highlighters#specs-highlighters,`:doc highlighters specs-highlighters`>>)
+
+    `set -add` appends the new specs to the list. +
+    `set -remove` removes the given specs from the list. +
+
+    Any `|` or `\` characters that occur within `<flag text>` must be
+    escaped as `\|` or `\\`.
+
+*completions*::
+    a list of `<text>|<select cmd>|<menu text>` candidates,
+    except for the first element which follows the
+    `<line>.<column>[+<length>]@<timestamp>` format to define where the
+    completion apply in the buffer.
+    Any `|` or `\` characters that occur within the `<text>`,
+    `<select cmd>`, or `<menu text>` fields should be escaped as `\|`
+    or `\\`.
+
+    Options of this type are are meant to be added to the `completers`
+    option to provide insert mode completion. Candidates are shown if the
+    text typed by the user (between `<line>.<column>` and the cursor) is a
+    subsequence of `<text>`.
+
+    For each remaining candidate, the completion menu displays
+    `<text>`, followed by `<menu text>`, which is a Markup string (see
+    <<faces#markup-strings,`:doc faces markup-strings`>>).
+
+    As the user selects items from the completion menu, the text they typed
+    will be replaced with `<text>`, and the Kakoune command in
+    `<select cmd>` is executed. The common use case is to display element
+    specific documentation.
+
+    `set -add` adds given completions to the list. +
+    `set -remove` removes given completions from the list. +
+
+*enum(value1|value2|...)*::
+    an enum, taking one of the given values
+    Cannot be used with `declare-option`
+
+*flags(value1|value2|...)*::
+    a set of flags, taking a combination of the given values joined by a
+    '|' character.
+
+    `set -add` adds the given flags to the combination. +
+    `set -remove` removes the given flags to the combination. +
+
+    Cannot be used with `declare-option`
+
+*<type>-to-<type>-map*::
+    a list of `key=value` pairs.
+
+    `set -add` adds the given pair to the hashmap or replace an already
+    existing key. +
+    `set -remove` removes the given pair from the hashmap, if only the
+    key is provided it removes that entry regardless of the associated
+    value. +
+
+    Only `str-to-str-map` options can be created with `declare-option`.
+
+== Builtin options
+
+*tabstop* `int`::
+    _default_ 8 +
+    width of a tab character
+
+*indentwidth* `int`::
+    _default_ 4 +
+    width (in spaces) used for indentation, 0 means a tab character
+
+*scrolloff* `coord`::
+    _default_ 0,0 +
+    number of lines, columns to keep visible around the cursor when
+    scrolling
+
+*eolformat* `enum(lf|crlf)`::
+    _default_ lf +
+    the format of end of lines when writing a buffer, this is autodetected
+    on load; values of this option assigned to the `window` scope are
+    ignored
+
+*BOM* `enum(none|utf8)`::
+    _default_ none +
+    define if the file should be written with a unicode byte order mark;
+    values of this option assigned to the `window` scope are ignored
+
+*readonly* `bool`::
+    _default_ false +
+    prevent modifications from being saved to disk, all buffers if set
+    to `true` in the `global` scope, or current buffer if set in the
+    `buffer` scope; values of this option assigned to the `window`
+    scope are ignored
+
+*incsearch* `bool`::
+    _default_ true +
+    execute search as it is typed
+
+*aligntab* `bool`::
+    _default_ false +
+    use tabs for alignment command
+
+*autoinfo* `flags(command|onkey|normal)`::
+    _default_ command|onkey +
+    display automatic information box in the enabled contexts
+
+*autocomplete* `flags(insert|prompt)`::
+    _default_ insert|prompt +
+    automatically display possible completions in the enabled modes.
+
+*ignored_files* `regex`::
+    filenames matching this regex won't be considered as candidates
+    on filename completion (except if the text being completed already
+    matches it)
+
+*disabled_hooks* `regex`::
+    hooks whose group matches this regex won't be executed. For example
+    indentation hooks can be disabled with `.*-indent`.
+    (See <<hooks#disabling-hooks,`:doc hooks`>>)
+
+*filetype* `str`::
+    arbitrary string defining the type of the file. Filetype dependent
+    actions should hook on this option changing for activation/deactivation
+
+*path* `str-list`::
+    _default_ ./ %/ /usr/include +
+    directories to search for *gf* command and filenames completion
+    `%/` represents the current buffer directory
+
+*completers* `completer-list`::
+    _default_ filename word=all +
+    completion engines to use for insert mode completion (they are tried
+    in order until one generates candidates). Existing completers are:
+
+    *word=all*, *word=buffer*:::
+        which complete using words in all buffers (*word=all*)
+        or only the current one (*word=buffer*)
+
+    *filename*:::
+        which tries to detect when a filename is being entered and
+        provides completion based on local filesystem
+
+    *line=all*, *line=buffer*:::
+        which complete using lines in all buffers (*line=all*)
+        or only the current one (*line=buffer*)
+
+    *option=<opt-name>*:::
+        where *opt-name* is an option of type 'completions' whose
+        contents will be used
+
+*static_words* `str-list`::
+    list of words that are always added to completion candidates
+    when completing words in insert mode
+
+*extra_word_chars* `codepoint-list`::
+    a list of all additional codepoints that should be considered
+    part of a word, for the purposes of the `w`, `b`, and `e` commands
+    (See <<keys#movement,`:doc keys movement`>>).
+    If this option is empty, Kakoune pretends it contains an
+    underscore, otherwise the value is used as-is.
+    This must be set on the buffer, not the window,
+    for word completion to offer words containing these codepoints.
+
+*matching_pairs* `codepoint-list`::
+    _default_ ( ) { } [ ] < > +
+    a list of codepoints that are to be treated as matching pairs
+    for the *m* command.
+
+*autoreload* `enum(yes|no|ask)`::
+    _default_ ask +
+    auto reload the buffers when an external modification is detected
+
+*writemethod* `enum(overwrite|replace)`::
+    _default_ overwrite +
+    method used to write buffers to file, `overwrite` will open the
+    existing file and write on top of the previous data, `replace`
+    will open a temporary file next to the target file, write it and
+    then rename it to the target file.
+
+*debug* `flags(hooks|shell|profile|keys|commands)`::
+    dump various debug information in the '\*debug*' buffer
+
+*idle_timeout* `int`::
+    _default_ 50 +
+    timeout, in milliseconds, with no user input that will trigger the
+    *PromptIdle*, *InsertIdle* and *NormalIdle* hooks, and autocompletion.
+
+*fs_check_timeout* `int`::
+    _default_ 500 +
+    timeout, in milliseconds, between checks in normal mode of modifications
+    of the file associated with the current buffer on the filesystem.
+
+*modelinefmt* `string`::
+    A format string used to generate the mode line, that string is
+    first expanded as a command line would be (expanding '%...{...}'
+    strings), then markup tags are applied (see
+    <<faces#markup-strings,`:doc faces markup-strings`>>)
+    Two special atoms are available as markup:
+
+        *`{{mode_info}}`*:::
+            Information about the current mode, such as `insert 3 sel` or
+            `prompt`. The faces used are StatusLineMode, StatusLineInfo,
+            and StatusLineValue.
+
+        *`{{context_info}}`*:::
+            Information such as `[+][recording (@)][no-hooks][new file][fifo]`,
+            in face Information.
+
+    The default value is '%val{bufname} %val{cursor_line}:%val{cursor_char_column} {{context_info}} {{mode_info}} - %val{client}@[%val{session}]'
+
+*ui_options* `str-to-str-map`::
+    a list of `key=value` pairs that are forwarded to the user
+    interface implementation. The NCurses UI supports the following options:
+
+        *terminal_set_title*:::
+            if *yes* or *true*, the terminal emulator title will
+            be changed
+
+        *terminal_status_on_top*:::
+            if *yes*, or *true* the status line will be placed
+            at the top of the terminal rather than at the bottom
+
+        *terminal_assistant*:::
+            specify the nice assistant displayed in info boxes,
+            can be *clippy* (the default), *cat*, *dilbert* or *none*
+
+        *terminal_enable_mouse*:::
+            boolean option that enables mouse support
+
+        *terminal_shift_function_key*:::
+            Function key from which shifted function key start, if the
+            terminal sends F13 for <s-F1>, this should be set to 12.
+
+        *terminal_padding_char*:::
+            character used to indicate the area out of the displayed buffer
+            (defaults to '~')
+
+        *terminal_padding_fill*:::
+            if *yes* or *true*, fill the padding area with the padding character
+            instead of displaying a single character at the beginning of the
+            padding line (defaults to *false*)
+
+        *terminal_synchronized*:::
+            if *yes* or *true*, emit synchronized output escape sequences and
+            reduce terminal output with sequences that could trigger flickering
+            if unsynchronized (defaults to *false*)
+
+        *terminal_info_max_width*:::
+            set the maximum allowable width of an info box. set to zero for
+            no limit.
+
+[[startup-info]]
+*startup_info_version* `int`::
+    _default_ 0 +
+    Controls which messages will be displayed in the startup info box, only messages
+    relating to a Kakoune version greater than this value will be displayed. Versions
+    are written as a single number: Like `20180413` for version `2018.04.13`
+
+== Current values
+
+The current value for an option can be viewed using
+<<expansions#option-expansions, `:doc expansions option-expansions`>>.
+
+For example, the current value of the `BOM` option can be displayed in the
+status line using the `echo` command:
+
+--------------
+echo %opt{BOM}
+--------------
+
+The current values for all options can be dumped to the *\*debug*\* buffer using
+the following command:
+
+-------------
+debug options
+-------------
+
+
+= Command Parsing
+
+Kakoune commands, either loaded from a script or written in the command
+prompt, are parsed according to the following rules:
+
+== Basic parsing
+
+- Commands are terminated by a `;` or an end of line.
+
+- Words (command names and parameters) are delimited by whitespaces.
+
+== Quoted Strings
+
+If a word starts with `'`, `"`, or `%X` with `X` a _non-nestable_ punctuation
+character (see <<command-parsing#balanced-strings,Balanced Strings>> below for
+nestable characters), it is parsed as a quoted string whose delimiter is,
+respectively, `'`, `"`, or `X`.
+
+A quoted string contains every character (including whitespaces).  Doubling
+a closing delimiter escapes it.  Thus, for example, entering two closing
+delimiters at the end of a quoted string will render one of the characters
+literally; that is, it will be considered as part of the quoted string's
+content.
+
+Inside double quotes, `%`-strings are processed unless the `%` is escaped by
+doubling it.  Double quotes inside these nested strings must also be escaped.
+
+No other escaping takes place in quoted strings.
+
+=== Quoted Strings Examples
+
+- `'foo'` contains *foo*.
+
+- `foo'bar'` is read verbatim, so it contains *foo'bar'*.
+
+- `foo%|bar|` is read verbatim, so it contains *foo%|bar|*.
+
+- `'foo''bar'` is a single word whose content is *foo'bar*.
+
+- `"baz"""` is a single word whose content is *baz"*.
+
+- `%|foo||bar|` is a single word whose content is *foo|bar*.
+
+- `"foo %|""bar| %%,baz,"` is a single word whose content is *foo "bar %,baz,*.
+
+== Balanced Strings
+
+If a word starts with `%X` with `X` a _nestable_ punctuation character (one
+of `(`, `[`, `{` and `<`), it is parsed as a balanced string whose closing
+delimiter matches that of its opening delimiter (respectively, `)`, `]`,
+`}`, and `>`).
+
+There is no way to escape the opening and closing characters, even if they
+are nested inside some other kind of string.
+
+=== Balanced Strings Examples
+
+- `%{foo}` contains *foo*.
+
+- `%{foo\{bar}}` contains *foo\{bar}*.
+
+- `foo%{bar}` contains *foo%{bar}*.
+
+- `"foo %{bar}"` is a single word whose content is *foo bar*.
+
+- `%{foo\{}` is a parse error, since the `{}` delimiters are not balanced.
+
+- `%[foo\{]` contains *foo\{*, since it uses different delimiters.
+
+== Non-Quoted words
+
+Other words are non-quoted.  Non-quoted words are terminated by either a
+whitespace or a `;`.
+
+If they start with a `\` followed by a `%`, `'`, or `"`, then that leading
+`\` escapes those characters and is discarded.
+
+If a whitespace or `;` is preceded by a `\`, then the `\` is discarded, and
+the whitespace or `;` becomes part of the word.  Any other `\` is treated
+as a literal `\`.
+
+== Typed Expansions
+
+Quoted and Balanced strings starting with `%` might have an optional
+alphabetic *expansion type* between the `%` and their delimiter (which is
+always a punctuation character).  This *expansion type* defines how the
+string's content is going to be expanded.  Rules for expanding and escaping
+expansion types are the same as for `%`-strings.
+
+- If the *expansion type* is empty, the string content is used verbatim.
+
+- If the *expansion type* is one of `sh`, `reg`, `opt`, `val` or `arg`,
+  the string is expanded as described in <<expansions#,`:doc expansions`>>.
+
+- For any other *expansion type*, a parsing error is raised.
+
+
+
+= Registers
+
+== Description
+
+Registers are named lists of text -instead of simply text- in order to interact
+well with multiselection. They are used for various purposes, like storing
+yanked text, the locations of selections in a buffer, or groups captured by a
+regular expression.
+
+== Interacting
+
+*<c-r><c>*::
+    when in insert mode or in a prompt, insert the value stored in the
+    *c* register (single character)
+
+*"<c>*::
+    in normal mode, select the *<c>* register (single character)
+
+== Alternate names
+
+Non alphanumeric registers have an alternative name that can be used
+in contexts where only alphanumeric identifiers are possible.
+
+== Default registers
+
+All normal-mode commands using a register default to a specific one if not specified:
+
+*"* (dquote)::
+    default delete / copy / paste / replace register, used by:
+    *c*, *d*, *y*, *p*, *<a-p>*, *<P>*, *<a-P>*, *R* and *<a-R>*
+    (see <<keys#changes, `:doc keys changes`>>)
+
+*/* (slash)::
+    default search / regex register, used by:
+    */*, *<a-/>*, *?*, *<a-?>*, *n*, *<a-n>*, *N*, *<a-N>*, ***, *<a-***>*,
+    *s*, *S*, *<a-k>* and *<a-K>*
+    (see <<keys#searching, `:doc keys searching`>>).
+    This is a prompt history register, holding the last 100 commands entered
+    at an interactive regex prompt.
+
+*@* (arobase)::
+    default macro register, used by:
+    *q* and *Q*
+    (see <<keys#macros, `:doc keys macros`>>)
+
+*^* (caret)::
+    default mark register, used by:
+    *z*, *<a-z>*, *Z* and *<a-Z>*
+    (see <<keys#marks, `:doc keys marks`>>
+    and <<registers#marks, `:doc registers marks`>>)
+
+*|* (pipe)::
+    default shell command register, used by commands that spawn a subshell:
+    *|*, *<a-|>*, *!* and *<a-!>*
+    (see <<keys#changes-through-external-programs, `:doc keys changes-through-external-programs`>>).
+    This is a prompt history register, holding the last 100 commands entered
+    at interactive shell command prompts, except for commands starting with
+    a space.
+
+== Special registers
+
+Some registers are not general purposes, they cannot be written to, but they
+contain some special data
+
+*%* (percent)::
+    current buffer name
+
+*.* (dot)::
+    current selection contents
+
+*#* (hash)::
+    selection indices (first selection has 1, second has 2, ...)
+
+*_* (underscore)::
+    null register, always empty
+
+*:* (colon)::
+    prompt history register holding the last 100 commands entered at the
+    interactive prompt, except for commands starting with a space.
+
+== Integer registers
+
+Registers *1* to *9* hold the grouped sub-matches of the regular
+expression used to make the last selection. Example: applying the
+following regular expression to the date of the day would put the day of
+the week in register *1*, the month in register *2*, and the day of the
+month in register *3*, but select the entire date:
+
+--------------------
+(\w+) (\w+) (\d+) .+
+--------------------
+
+== Marks
+
+When a register is used to store a set of selections with the *Z* key (see
+<<keys#marks, `:doc keys marks`>>), the selections are stored as a list of
+spans, in a format similar to `%val{selections_desc}` (see
+<<expansions#value-expansions, `:doc expansions value-expansions`>>). However,
+the very first item of the list is of the form:
+
+------------------------------------------
+<buffer name>@<timestamp>@<main sel index>
+------------------------------------------
+
+with:
+
+*buffer name*::
+    `%val{buffile}` of the buffer selections relate to
+
+*timestamp*::
+    `%val{timestamp}` at which the selection applies to
+
+*main sel index*::
+    0-based index of the main selection
+
+
+= Buffers
+
+== Commands
+
+To open buffers or navigate through the buffers list see
+<<commands#files-and-buffers,`:doc commands files-and-buffers`>>.
+
+== Scratch Buffers
+
+Scratch buffers are useful for volatile data and quick prototyping.
+They are not linked to files, so Kakoune does not warn about unsaved
+changes at exit, and the `:write` command requires an explicit filename.
+
+One particular scratch buffer, named *\*scratch*\*, is automatically created
+when there are no other buffers left in the current session, which is also
+the case when Kakoune starts up without any files to open.
+
+A scratch buffer can be created by passing the `-scratch` switch to the
+`:edit` command.
+
+== Debug Buffers
+
+Debug buffers are used to gather diagnostics. They have a number of
+restrictions compared to regular buffers:
+
+- They are skipped when cycling over the buffers list.
+- Their content is not considered for word completions with `word=all`
+  completers.
+- Hooks are not always run (like the `BufCreate`/`BufClose` hooks).
+- Display profiling is disabled.
+
+A specific *\*debug*\* buffer is used by Kakoune to write errors or
+warnings.  This is also where the ouput of the `:debug` and the `:echo
+-debug` commands will land.
+
+A debug buffer can be created by passing the `-debug` switch to the
+`:edit` command.
+
+== FIFO Buffers
+
+The `:edit` command can take a `-fifo` switch:
+
+---------------------------------------------
+:edit -fifo <filename> [-scroll] <buffername>
+---------------------------------------------
+
+In this case, a buffer named `<buffername>` is created which reads
+its content from the FIFO (also called "named pipe") `<filename>`.
+When the FIFO is written to, the buffer is automatically updated.
+
+If the `-scroll` switch is specified, the window displaying the buffer
+will scroll so that the newest data is always visible.
+
+This is very useful for running some commands asynchronously while
+displaying their result in a buffer. See `rc/make.kak` and `rc/grep.kak`
+for examples.
+
+When the write end of the FIFO is closed, the buffer becomes an ordinary
+<<buffers#scratch-buffers,scratch buffer>>. When the buffer is deleted,
+Kakoune closes the read end of the FIFO. Any program writing to the FIFO
+will receive `SIGPIPE`, which will terminate the program by default.
+
+
+= Regex
+
+== Regex syntax
+
+Kakoune's regex syntax is inspired by ECMAScript, as defined by the
+ECMA-262 standard (see <<regex#compatibility,:doc regex compatibility>>).
+
+Kakoune's regex always runs on Unicode codepoint sequences, not on bytes.
+
+== Literals
+
+Every character except the syntax characters `\^$.*+?[]{}|().` match
+themselves. Syntax characters can be escaped with a backslash so that
+`\$` will match a literal `$`, and `\\` will match a literal `\`.
+
+Some literals are available as escape sequences:
+
+* `\f` matches the form feed character.
+* `\n` matches the newline character.
+* `\r` matches the carriage return character.
+* `\t` matches the tabulation character.
+* `\v` matches the vertical tabulation character.
+* `\0` matches the null character.
+* `\cX` matches the control-`X` character (`X` can be in `[A-Za-z]`).
+* `\xXX` matches the character whose codepoint is `XX` (in hexadecimal).
+* `\uXXXXXX` matches the character whose codepoint is `XXXXXX` (in hexadecimal).
+
+== Character classes
+
+The `[` character introduces a character class, matching one character
+from a set of characters.
+
+A character class contains a list of literals, character ranges,
+and character class escapes surrounded by `[` and `]`.
+
+If the first character inside a character class is `^`, then the character
+class is negated, meaning that it matches every character not specified
+in the character class.
+
+Literals match themselves, including syntax characters, so `^`
+does not need to be escaped in a character class. `[\*+]` matches both
+the `\*` character and the `+` character. Literal escape sequences are
+supported, so `[\n\r]` matches both the newline and carriage return
+characters.
+
+The `]` character needs to be escaped for it to match a literal `]`
+instead of closing the character class.
+
+Character ranges are written as `<start character>-<end character>`, so
+`[A-Z]` matches all uppercase basic letters. `[A-Z0-9]` will match all
+uppercase basic letters and all basic digits.
+
+The `-` characters in a character class that are not specifying a
+range are treated as literal `-`, so `[A-Z-+]` matches all upper case
+characters, the `-` character, and the `+` character.
+
+Supported character class escapes are:
+
+* `\d` which matches digits 0-9.
+* `\w` which matches word characters A-Z, a-z, 0-9 and underscore
+    (ignoring the `extra_word_chars` option).
+* `\s` which matches all Unicode whitespace characters.
+* `\h` which matches whitespace except Vertical Tab and line-breaks.
+
+Using an upper case letter instead of a lower case one will negate
+the character class. For example, `\D` will match every non-digit
+character.
+
+Character class escapes can be used outside of a character class, `\d`
+is equivalent to `[\d]`.
+
+== Any character
+
+`.` matches any character, including newlines, by default.
+(see <<regex#modifiers,:doc regex modifiers>> on how to change it)
+
+== Groups
+
+Regex atoms can be grouped using `(` and `)` or `(?:` and `)`. If `(` is
+used, the group will be a capturing group, which means the positions from
+the subject strings that matched between `(` and `)` will be recorded.
+
+Capture groups are numbered starting at 1. They are numbered in the
+order of appearance of their `(` in the regex. A special capture group
+0 is for the whole sequence that matched.
+
+* `(?:` introduces a non capturing group, which will not record the
+matching positions.
+
+* `(?<name>` introduces a named capturing group, which, in addition to
+being referred by number, can be, in certain contexts, referred by the
+given name.
+
+== Alternations
+
+The `|` character introduces an alternation, which will either match
+its left-hand side, or its right-hand side (preferring the left-hand side)
+
+For example, `foo|bar` matches either `foo` or `bar`, `foo(bar|baz|qux)`
+matches `foo` followed by either `bar`, `baz` or `qux`.
+
+== Quantifier
+
+Literals, character classes, any characters, and groups can be followed
+by a quantifier, which specifies the number of times they can match.
+
+* `?` matches zero, or one time.
+* `*` matches zero or more times.
+* `+` matches one or more times.
+* `{n}` matches exactly `n` times.
+* `{n,}` matches `n` or more times.
+* `{n,m}` matches `n` to `m` times.
+* `{,m}` matches zero to `m` times.
+
+By default, quantifiers are *greedy*, which means they will prefer to
+match more characters if possible. Suffixing a quantifier with `?` will
+make it non-greedy, meaning it will prefer to match as few characters
+as possible.
+
+== Zero width assertions
+
+Assertions do not consume any character, but they will prevent the regex
+from matching if not fulfilled.
+
+* `^` matches at the start of a line; that is, just after a newline
+      character, or at the subject's beginning (unless it is specified
+      that the subject's beginning is not a start of line).
+* `$` matches at the end of a line; that is, just before a newline, or
+      at the subject end (unless it is specified that the subject's end
+      is not an end of line).
+* `\b` matches at a word boundary; which is to say that between the
+       previous character and the current character, one is a word
+       character, and the other is not.
+* `\B` matches at a non-word boundary; meaning, when both the previous
+       character and the current character are word characters, or both
+       are not.
+* `\A` matches at the subject string's beginning.
+* `\z` matches at the subject string's end.
+* `\K` matches anything, and resets the start position of capture group
+       0 to the current position.
+
+More complex assertions can be expressed with lookarounds:
+
+* `(?=...)` is a lookahead; it will match if its content matches the
+            text following the current position.
+* `(?!...)` is a negative lookahead; it will match if its content does
+            not match the text following the current position.
+* `(?<=...)` is a lookbehind; it will match if its content matches
+             the text preceding the current position.
+* `(?<!...)` is a negative lookbehind; it will match if its content does
+             not match the text preceding the current position.
+
+For performance reasons, lookaround contents must be a sequence of
+literals, character classes, or any character (`.`); quantifiers are not
+supported.
+
+For example, `(?<!bar)(?=foo).` will match any character which is not
+preceded by `bar` and where `foo` matches from the current position
+(which means the character has to be an `f`).
+
+== Modifiers
+
+Some modifiers can control the matching behavior of the atoms following
+them:
+
+* `(?i)` starts case-insensitive matching.
+* `(?I)` starts case-sensitive matching (default).
+* `(?s)` allows `.` to match newlines (default).
+* `(?S)` prevents `.` from matching newlines.
+
+== Quoting
+
+`\Q` will start a quoted sequence, where every character is treated as
+a literal. That quoted sequence will continue until either the end of
+the regex, or the appearance of `\E`.
+
+For example, `.\Q.^$\E$` will match any character followed by the
+literal string `.^$`, followed by an end of line.
+
+== Compatibility
+
+Kakoune's syntax tries to follow the ECMAScript regex syntax, as defined
+by <https://www.ecma-international.org/ecma-262/8.0/>; some divergence
+exists for ease of use, or performance reasons:
+
+* Lookarounds are not arbitrary, but lookbehind is supported.
+* `\K`, `\Q..\E`, `\A`, `\h` and `\z` are added.
+* Stricter handling of escaping, as we introduce additional escapes;
+  identity escapes like `\X` with `X` being a non-special character
+  are not accepted, to avoid confusions between `\h` meaning literal
+  `h` in ECMAScript, and horizontal blank in Kakoune.
+* `\uXXXXXX` uses 6 digits to cover all of Unicode, instead of relying
+  on ECMAScript UTF-16 surrogate pairs with 4 digits.
+
+
+
+Edition auto insertion in Kakoune
+=================================
+
+It is a quite common feature for a code editor to help the programmer
+by automatically inserting some text in certain contexts. This document
+goal is to explain how this is done in Kakoune.
+
+There is no special support in Kakoune for this task, hooks are
+expected to be used in order to manage that, and the normal Kakoune
+editing command are expected to be expressive enough so that relatively
+complex indentation can be written concisely.
+
+The main hook is *InsertChar*, which gets called immediately _after_ a
+character has been inserted in insertion mode due to the user pressing
+the corresponding key.
+
+Previous line indentation
+-------------------------
+
+Let's see a simple indent hook: preserving the previous line indentation.
+
+Here is the Kakoune normal mode key list in order to do that: 
+
+----------------------------------------------------------------
+k<a-x>      # 1. go to previous line and select it
+s^\h+<ret>y # 2. select the leading spaces and copy them
+j<a-h>P     # 3. go back to next line start and paste the spaces
+----------------------------------------------------------------
+
+Note that if nothing gets selected on phase *2.*, an error will be raised.
+
+We want to do that each time the user jumps a line, just after the new line
+is inserted. So the hook would be:
+
+--------------------------------------------------------
+:hook InsertChar \n %{ exec k<a-x> s^\h+<ret>y j<a-h>P }
+--------------------------------------------------------
+
+(exec concatenates the keys for all argument, so the spaces will be ignored,
+allowing for clearer separation. either use <space> or quote the argument to
+use a space key)
+
+That works, however if the phase *2.* raises an error, the +:exec+ will stop
+and the user will get its selections on the previous line. The solution
+is to use a *draft* context, instead of the one the user is interacting with.
+
+---------------------------------------------------------------
+:hook InsertChar \n %{ exec -draft k<a-x> s^\h+<ret>y j<a-h>P }
+---------------------------------------------------------------
+
+That way, exec is executed in a *copy* of the user's context, which means it
+manipulates a *copy* of the user's selections.
+
+Increasing indentation
+----------------------
+
+A little bit more complicated is to increase indentation whenever we insert a 
+new line after a +{+ or a +(+.
+
+The complexity arises from the presence of a condition. We want to increase 
+the indentation *only* if the previous line ends with +{+ or +(+.
+
+Fortunately, Kakoune provides us with a command for that: the +<a-k>+ command,
+which keeps selections where a certain regex can be found.
+
+Here is how we can do that:
+
+-------------------------------------------------------------------------------
+k<a-x>             # 1. select the previous line
+<a-k>[{(]\h*$<ret> # 2. keep selections that end with { or ( followed by blanks
+j<a-gt>            # 3. go back to next line and indent it even if it is empty
+-------------------------------------------------------------------------------
+
+Note that if no previous line ends with a +{+ or +(+, the +<a-k>+ command will
+raise an error, and stop the execution. This is what we want: it is similar to
+what would happen if we would continue with no selections; the following 
+commands would have no effects.
+
+However, the error would end up being caught by the hook execution code, and
+it will write information about it in the debug buffer, which we do not want,
+as this is actually expected. In order to prevent that, the exec should be
+wrapped in a try command. So we would have:
+
+-------------------------------------------------------------------------------
+:hook InsertChar \n %[ try %[ exec -draft k<a-x> <a-k>[{(]\h*$<ret> j<a-gt> ] ]
+-------------------------------------------------------------------------------
+
+
+Interfacing Kakoune with external programs
+==========================================
+
+In order to interact with the external world, Kakoune uses the shell, mainly
+through the +%sh{ ... }+ string type, and its control socket.
+
+Basic interaction
+-----------------
+
+For synchronous operations, +%sh{ ... }+ blocks are easy to use, they behave
+similarly to +$( ... )+ shell construct.
+
+For example, one can echo the current time in Kakoune's status line using:
+
+[source,bash]
+----
+:echo %sh{ date }
+----
+
+For asynchronous operations, the Kakoune Unix stream socket can be used. This
+is the same socket that Kakoune clients connect to. It is available through the
++kak_session+ environment variable: the socket is
++/tmp/kakoune/${username}/${kak_session}+
+
+For example, we can echo a message in Kakoune in 10 seconds with:
+
+[source,bash]
+----
+:nop %sh{ {
+    sleep 10
+    echo "eval -client '$kak_client' 'echo sleep ended'" |
+        kak -p ${kak_session}
+} > /dev/null 2>&1 < /dev/null & }
+----
+
+ * The +nop+ command is used so that any eventual output from the
+   +%sh{ ... }+ is not interpreted by Kakoune
+ * When writing to the socket, Kakoune has no way to guess in which
+   client's context the command should be evaluated. A temporary
+   context is used, which does not have any user interface, so if we want
+   to interact with the user, we need to use the +eval+ command, with
+   its +-client+ option to send commands to a specific client.
+ * For the command to run asynchronously, we wrap it in a sub shell
+   with braces, redirect its +std{in,err,out}+ to +/dev/null+, and
+   run it in background with +&+. Using this pattern, the shell does
+   not wait for this sub shell to finish before quitting.
+
+Interactive output
+------------------
+
+It is a frequent interaction mode to run a program and display its output
+in a Kakoune buffer.
+
+The common pattern to do that is to use a fifo buffer:
+
+[source,bash]
+-----
+evaluate-commands %sh{
+     # Create a temporary fifo for communication
+     output=$(mktemp -d -t kak-temp-XXXXXXXX)/fifo
+     mkfifo ${output}
+     # run command detached from the shell
+     { run command here > ${output} } > /dev/null 2>&1 < /dev/null &
+     # Open the file in Kakoune and add a hook to remove the fifo
+     echo "edit! -fifo ${output} *buffer-name*
+           hook buffer BufClose .* %{ nop %sh{ rm -r $(dirname ${output})} }"
+}
+-----
+
+This is a very simple example, most of the time, the echo command will as
+well contain
+
+-----
+set buffer filetype <...>
+-----
+
+and some hooks for this filetype will have been written
+
+Completion candidates
+---------------------
+
+Filetype specific completion should be provided by external programs.
+
+External completions are provided using an option to store completion, which
+have the following format.
+
+----
+line.column[+len]@timestamp candidate1|select1|menu1 candidate2|select2|menu2 ...
+----
+
+the first element of this string list specify where and when this completion
+applies, the others are a triplet `<completion text>|<select cmd>|<menu text>`
+
+The select command is executed whenever this menu item gets selected, and
+is usually used to display an item specific documentation with
+`info -placement menu '<menu item description>'`
+
+The menu text is a markup string (see <<faces#markup-strings,`:doc faces
+markup-strings`>>), so it can contain `{face}` directives.
+
+To effectively use that completion option, it should get added to the completers
+option.
+
+---
+set -add buffer completers option=my_option_name
+---
+
+As a completion program may take some time to compute the candidates, it should
+run asynchronously. In order to do that, the following pattern may be used:
+
+[source,bash]
+-----
+# Declare the option which will store the temporary filename
+decl str plugin_filename
+# Declare the completion option
+decl completions plugin_completions
+# Add plugin_completions to completers for files of good filetype
+hook global BufSetOption filetype=my_filetype %{
+    set -add buffer completers option=plugin_completions
+}
+evaluate-commands %sh{
+    # ask Kakoune to write current buffer to temporary file
+    filename=$(mktemp -t kak-temp.XXXXXXXX)
+    echo "set buffer plugin_filename '$filename'
+          write '$filename'"
+}
+# End the %sh{} so that its output gets executed by Kakoune.
+# Use a nop so that any eventual output of this %sh does not get interpreted.
+nop %sh{ { # launch a detached shell
+    buffer="${kak_opt_plugin_filename}"
+    line="${kak_cursor_line}"
+    column="${kak_cursor_column}"
+    # run completer program and format the output in a list of completions
+    candidates=$(completer $buffer $line $column | completer_filter)
+    # remove temporary file
+    rm $buffer
+    # generate completion option value
+    completions="$line.$column@$kak_timestamp $candidates"
+    # write to Kakoune socket for the buffer that triggered the completion
+    echo "set buffer=${kak_bufname} plugin_completions $completions" |
+        kak -p ${kak_session}
+} > /dev/null 2>&1 < /dev/null & }
+-----
+
