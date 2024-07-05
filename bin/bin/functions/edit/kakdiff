@@ -10,6 +10,7 @@ usage() { usage: "$(basename $0) <file> <reference>"; exit 1; }
 
 KAK=/usr/bin/kak
 [ -e /usr/local/bin/kak ] && KAK=/usr/local/bin/kak
+COLORDIFF=colordiff  # SEE: ~/.colordiffrc
 
 if exists icdiff ;then
 	IC=ic
@@ -23,9 +24,10 @@ trap "rm $DIFF" EXIT
 diff -u $1 $2 >$DIFF
 
 [ $? -eq 0 ] && exit 0  # SEE: dirdiff
+ditto diff "$1"
 
-${IC}diff ${ICOPT} $w "$1" "$2" | $COLORDIFF | pager  # SEE: ~/.colordiffrc
-ifno "edit ${file}" && exit 0 || $KAK $DIFF $1 $2
-exit 1                  # SEE: dirdiff cycle control
+${IC}diff ${ICOPT} $w "$1" "$2" | $COLORDIFF | pager
+ifno "edit ${file}" && exit 1 || $KAK $DIFF $1 $2
+exit 2                  # SEE: dirdiff cycle control
 
 # kak: filetype=sh

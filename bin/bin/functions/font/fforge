@@ -8,21 +8,26 @@
 # see make_install iosevka
 
 usage() { 
-	echo "$(basename $0) Q_hook | q_hook | baseline <shape>
-$(basename $0) I_descending <shape>
-$(basename $0) i_flipped <shape>, experimental
-$(basename $0) Q_custom <shape>
-$(basename $0) Q_horizontal <shape>
-$(basename $0) T_descending <shape>
-$(basename $0) t_descending <shape>
-$(basename $0) t_flipped <shape>
-$(basename $0) Y_descending <shape>
+	echo "$(basename $0) Q_hook | q_hook
+$(basename $0) I_descending  <shape>
+$(basename $0) i_flipped     <shape>, experimental
+$(basename $0) l_ascending   <shape>
+$(basename $0) Q_custom      <shape>
+$(basename $0) Q_horizontal  <shape>
+$(basename $0) T_descending  <shape>
+$(basename $0) t_descending  <shape>
+$(basename $0) t_flipped     <shape>
+$(basename $0) Y_descending  <shape>
 $(basename $0) FP_descending <shape>
-$(basename $0) punctuation <emdash> <shape>
-$(basename $0) ligature <width> <shape>
-$(basename $0) space <space>
-$(basename $0) bookweight [book+regular]
-$(basename $0) serifless <letters> <shape>
+$(basename $0) baseline      <shape>
+$(basename $0) space         <space>
+$(basename $0) punctuation   <emdash>  <shape>
+$(basename $0) ligature      <width>   <shape>
+$(basename $0) capadjust     <letters>
+$(basename $0) serifed       <letters> <shape>
+$(basename $0) serifless     <letters> <shape>
+$(basename $0) tailed        <letters> <shape>
+$(basename $0) bookweight    [book+regular]
 $(basename $0) copy <family> <name>, font alias via commandline only
 $(basename $0) map  <family> <glyph> <glyph>, map U+<glyph> via commandline only" | usage:
 	exit 1
@@ -714,13 +719,13 @@ case $1 in
 	Q_custom      ) shape=$2; shift ;;
 	q_hook        ) ;;
 	Q_hook        ) ;;
-	ligature      ) [ $4 ] && { width=$2; shift 2; } || { shape=$2; shift; } ;;  # see iosevka for tricky bits
-	punctuation   ) emdash=$2; shape=$3; shift 2 ;;
-	capadjust     ) letters=$2; shift ;;                                         # align "C G O Q S U" to x base
-	serifless     ) letters=$2; width=$(( $3 * 845 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
-	serifed       ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "i j l" (serifed)
-	tailed        ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "l" (tailed)
 	space         ) space=$2; shift ;;
+	punctuation   ) emdash=$2; shape=$3; shift 2 ;;
+	ligature      ) [ $4 ] && { width=$2; shift 2; } || { shape=$2; shift; } ;;  # see iosevka for tricky bits
+	capadjust     ) letters=$2; shift ;;                                         # align "C G O Q S U" to x base
+	serifed       ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "i j l" (serifed)
+	serifless     ) letters=$2; width=$(( $3 * 845 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
+	tailed        ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "l" (tailed)
 	*weight       ) regular=${1%weight}; fforge=weight; [ "$2" = 'book+regular' ] && { adjust=true; shift; } ;;
 	copy          ) [ $3 ] && { family=$2; alias=$3; shift 2; copy; exit; }      || usage ;;  # pwd commandline only!
 	map           ) [ $4 ] && { family=$2; from=$3; to=$4; shift 3; map; exit; } || usage ;;  # pwd commandline only!

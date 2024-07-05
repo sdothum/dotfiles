@@ -25,8 +25,8 @@ MSGCOLOR=${TURQUOISE}
 while [ "$1" ] ;do
 	case $1 in
 		CRI* |\
-		ERR* ) ATTCOLOR=${RED}; MSGCOLOR=${WHITE}  ;;
-		WAR* ) ATTCOLOR=${YELLOW} MSGCOLOR=${ORANGE} ;;
+		ERR* ) ATTCOLOR=${RED}; MSGCOLOR=${YELLOW}  ;;
+		WAR* ) ATTCOLOR=${YELLOW} MSGCOLOR=${GREEN} ;;
 		INF* ) ATTCOLOR=${WHITE} MSGCOLOR=${GREY}    ;;
 		@    ) [ "$2" ] || usage; desc=$2; message=' ';     shift ;;
 		@*   ) [ "$2" ] && usage; desc=${1#@}; message=' ' ;;

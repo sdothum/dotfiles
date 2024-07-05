@@ -304,9 +304,8 @@ else                                      # desktop fonts
 	unset space
 	cmdopts t-asymmetric-- j-flat 1-nobase
 	dfont $leading
-	dfont proof    I-descending Q-straight
+	dfont proof    I-descending Q-straight l-ascending f-extended J-flat T-descending
 	dfont menu     I-serifed    Q-straight
-	# dfont dyslexic            Q-straight      space=2     family=qclocktwo leading=1.40
 	dfont dyslexic I-serifed    Q-straight      space=2.2   family=qclocktwo              # conky qclocktwo font
 	dfont dyslexic I-serifed    quasi-extension space=1.125 family=monograffic serifless  # panel/dunst font
 fi
