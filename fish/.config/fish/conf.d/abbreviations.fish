@@ -165,7 +165,7 @@ function kf; kak (find -iname $argv[1]) ;end
 function ndiff; set -l d (pwd); cd; for i in (nnn -p - $d); dirdiff -s $i ;end; cd - ;end 
 
 abbr d 'diff'
-abbr dd 'dirdiff -s'                         # flash messages
+abbr dd 'dirdiff -s'                         # sudo dd still does file copy
 abbr nd 'ndiff'                              # file picker mode
 abbr de 'dmenu - edit'
 abbr dp 'dmenu - projects'
