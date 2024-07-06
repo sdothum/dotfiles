@@ -104,9 +104,6 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 	bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
 		declare-option str toggle_focus "off"
 		declare-option int focus_line 0
-		# set-option global focus_separator '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
-		# set-option global focus_separator '════════════════════════════════════════════════════════════════════════════════'
-
 		set-option global focus_context_lines 1
 
 		define-command toggle-focus %{
