@@ -195,6 +195,7 @@
 **/scratchpad*
 !**/scratchpad
 **/screen
+!**/chef/screen
 !**/query/screen
 **/.session*
 **/slrn
