@@ -1,0 +1,48 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="chef/screen $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Screen layout
+
+# Usage: chef screen margin | panel | indent | top | window_border
+
+
+CONFIG=$HOME/.config/$WM/windowchefrc
+SPANEL=$SESSION/panel  # toggle state
+VOFFSET=6              # vertical (visual monitor angle) offset for panel:top SEE: draw panel
+
+[ -e $SPANEL:indent ] && indent=$(cat $SPANEL:indent)  # indent margin ratio
+
+chefrc() {
+	[ "${1#* }" = "$1" ] && word=4 || word=5
+	grep "^waitron wm_config $1" $CONFIG | sed 's/  */ /g' | cut -d' ' -f$word
+}
+
+# replicating 2bwm window geometry :)
+parse() {
+	PANEL_HEIGHT=$(chefrc 'gap_width bottom')
+	MARGIN=$(chefrc 'gap_width left')
+	PANEL_INDENT=$(( MARGIN * ${indent:-4 / 3} ))
+	BORDER=$(chefrc 'border_width')
+	TOP=$(chefrc 'gap_width top')
+	GAP=$(chefrc 'grid_gap_width')
+	# if [ -e $SESSION/panel:top ] ;then
+	# 	PANEL_HEIGHT=$(( PANEL_HEIGHT + VOFFSET ))
+	# 	TOP=$(( TOP - VOFFSET ))
+	# fi
+ }
+
+parse
+case $1 in
+	panel   ) echo $PANEL_HEIGHT ;;
+	indent  ) echo $PANEL_INDENT ;;
+	margin  ) echo $MARGIN ;;
+	top     ) echo $TOP    ;;
+	gap     ) echo $GAP    ;;
+	*border ) echo $BORDER ;;
+	*       ) echo "PANEL_HEIGHT=$PANEL_HEIGHT\nPANEL_INDENT=$PANEL_INDENT\nMARGIN=$MARGIN\nBORDER=$BORDER\nTOP=$TOP\nGAP=$GAP" ;;
+esac
+
+# kak: filetype=sh
