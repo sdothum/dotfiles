@@ -196,7 +196,7 @@ set-face window Trailing                       "default,${white}"
 
 set-face window Admonitions                    "+bf@Error"
 
-add-highlighter window/ dynregex '%reg{/}' 0:SecondarySelection
+add-highlighter -override window/ dynregex '%reg{/}' 0:SecondarySelection
 
 # Plugins
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
