@@ -1,0 +1,16 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/revert $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .......................................................... Manage window group
+
+# Usage: window group [group]
+
+if [ $1 ] ;then
+	cat $WME:group:$1:focus
+else
+	group=$(ag --nocolor -l $winid $WME:group:?)
+
+# kak: filetype=sh

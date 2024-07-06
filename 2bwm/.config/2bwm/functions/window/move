@@ -1,0 +1,15 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/move $@" . $PARENT
+
+# 2bwm
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Move window
+
+# Usage: window move <desktop>, desktop = 1..6
+
+xdotool windowmap $winid  # ruler windowmap delay
+xdotool key Super+Control+$1
+xdotool key Super+Shift+$1
+
+# kak: filetype=sh
