@@ -203,9 +203,9 @@ add-highlighter -override window/ dynregex '%reg{/}' 0:SecondarySelection
 
 # ...................................................................... Peneira
 
-set-face window PeneiraSelected                "${foreground},${faint_blue}"
+set-face window PeneiraSelected                "${foreground},${multi}"
 set-face window PeneiraFlag                    LineNumberCursor
-set-face window PeneiraMatches                 "${background},${selection}+b"
+set-face window PeneiraMatches                 "${foreground},${secondary}+b"
 set-face window PeneiraFileName                "${attribute}"
 
 # ............................................................... kak-crosshairs
