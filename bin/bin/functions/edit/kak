@@ -48,7 +48,7 @@ while : ;do
 done
 
 if $headless ;then
-	$KAK -l | grep $ID || setsid $KAK -d -s $ID &
+	$KAK -l | grep -q $ID || setsid $KAK -d -s $ID &
 else
 	$KAK -l | grep -q $ID || session='-s'
 fi

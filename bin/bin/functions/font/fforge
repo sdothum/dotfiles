@@ -53,7 +53,7 @@ italic()   { ls -1 | grep -E  'italic'; }
 basefont() { echo $1 | grep -q '[-]italic.ttf' && echo "${1%italic*}regular.ttf" || echo "${1%italic*}.ttf"; }
 
 utf() {
-	case $1 in
+	case "$1" in
 		' ' ) echo '0u0020' ;;  # space
 		A   ) echo '0u0041' ;;
 		a   ) echo '0u0061' ;;

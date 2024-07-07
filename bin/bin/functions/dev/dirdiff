@@ -103,7 +103,7 @@ while read file <&3 ;do
 		[ $FILTER ] && [ "$file" -ot $FILTER ] && break
 		[ $S ] && clear
 		file="${file#./}"
-		[ $title ] || { ditto -t $(basename $0) "$src/$regex  ✔  $target" >>$LOG; title=true; }
+		[ $title ] || { ditto -t $(basename $0) "$src/$regex    $target" >>$LOG; title=true; }
 		[ -e "${targetfile}" ] || { ditto ERROR notfound "${targetfile}"; ditto ERROR notfound "${targetfile}" >>$LOG; break; }
 		kakdiff "${file}" "${targetfile}"
 		case $? in
