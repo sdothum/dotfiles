@@ -188,6 +188,7 @@ set-face window Prompt                         "${foreground},${statusbar}"
 
 set-face window MatchingChar                   "${match},${background}+br"
 set-face window Whitespace                     "${space},${background}+f"
+set-face window Separator                      "${soft_red},${background}+F"
 set-face window WrapMarker                     "${wrap}+bf"
 set-face window BufferPadding                  "${background},${background}"  # hide tilde
 set-face window Trailing                       "default,${white}"

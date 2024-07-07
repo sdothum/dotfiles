@@ -103,7 +103,8 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 	# .......................................................... focus selections
 	bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
 		set-option global focus_context_lines 1
-		set-option global focus_separator '┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄'
+		# force uniform separator highlighting
+		set-option global focus_separator '{Separator}┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄'
 		declare-option str toggle_focus "off"
 		declare-option int focus_line 0
 
@@ -431,13 +432,13 @@ hook global WinCreate .* %{
 
 # .................................................................... Soft wrap
 
-define-command softwrap -params ..1 %{ evaluate-commands add-highlighter -override global/wrap wrap -word -indent -marker "'  ↪ '" %arg{@} }  # escape 'quotes' for eval
-define-command nowrap %{ remove-highlighter global/wrap }
+define-command softwrap -params ..1 %{ evaluate-commands add-highlighter -override window/wrap wrap -word -indent -marker "'  ↪ '" %arg{@} }  # escape 'quotes' for eval
+define-command nowrap %{ remove-highlighter window/wrap }
 
 hook global WinSetOption filetype=markdown %{ softwrap '-width 80' }
 hook global WinSetOption filetype=json %{ softwrap '-width 250' }
 hook global WinSetOption filetype=(sh|c|cpp|fish|go|javascript|latex|lua|perl|python|ruby|rust|toml|typescript) softwrap
-hook global BufOpenFile  .*(conf|config|log|rc|text|txt) softwrap
+hook global WinSetOption .*(conf|config|log|rc|text|txt) softwrap
 
 # ................................................................... Statusline
 
