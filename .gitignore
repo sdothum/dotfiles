@@ -39,6 +39,7 @@
 **/.deprecated
 **/*\.desktop
 **/description
+**/dinit.@summrun
 **/dmenu/.config
 **/dmenu/.d
 !**/dmenu/notes
@@ -188,6 +189,7 @@
 **/rslsync
 **/rtorrent
 **/rubyroom
+**/runit
 **/runtime
 **/sakura
 **/sandbox
@@ -279,3 +281,4 @@
 **/xscreensaver
 **/yaourt
 **/*.zip
+**/zk
