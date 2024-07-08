@@ -35,7 +35,9 @@ evaluate-commands %sh{
 	strong_orange='rgb:bf450c'
 	light_orange='rgb:ffe5b4'
 	desaturated_orange='rgb:d5b875'
-	pale_orange='rgb:f7f3ee'
+	# desaturated_orange='rgb:d5b075'
+	# pale_orange='rgb:f7f3ee'
+	pale_orange='rgb:f6f3ef'
 	# blues
 	dark_blue='rgb:0069af'
 	faint_blue='rgb:add8e6'
@@ -188,7 +190,6 @@ set-face window Prompt                         "${foreground},${statusbar}"
 
 set-face window MatchingChar                   "${match},${background}+br"
 set-face window Whitespace                     "${space},${background}+f"
-set-face window Separator                      "${soft_red},${background}+F"
 set-face window WrapMarker                     "${wrap}+bf"
 set-face window BufferPadding                  "${background},${background}"  # hide tilde
 set-face window Trailing                       "default,${white}"
@@ -202,7 +203,11 @@ add-highlighter -override window/ dynregex '%reg{/}' 0:SecondarySelection
 # Plugins
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# ...................................................................... Peneira
+# ................................................................ kakoune-focus
+
+set-face window FocusSeparator                 "${soft_red},${background}+F"
+
+# ...................................................................... peneira
 
 set-face window PeneiraSelected                "${foreground},${multi}"
 set-face window PeneiraFlag                    LineNumberCursor

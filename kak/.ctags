@@ -1,0 +1,8 @@
+--langdef=kakoune
+--langmap=kakoune:.kak
+--regex-kakoune=/^.*define-command[ \t]+([^ ]*)/\1/c,command/
+--regex-kakoune=/^.*bundle[ \t]+([^ ]*)/\1/b,bundle/
+--regex-kakoune=/^.*declare-option[ \t]+([^ ]*)/\1/o,option/
+--regex-kakoune=/^.*add-highlighter[ \t]+(-overrides)*[ \t]+([^ ]*)/\2/h,highlighter/
+--regex-kakoune=/^.*set-face[ \t]+(global|window)*[ \t]+([^ ]*)/\2/f,face/
+
