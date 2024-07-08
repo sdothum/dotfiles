@@ -124,7 +124,8 @@ abbr treed 'sudo tree -aCdF'
 
 # ................................................................. File manager
 
-abbr hgc 'hg cat -r'
+function hgc; hg cat -r $argv | bat; end
+
 abbr hgr 'hg revert -r'
 abbr N 'nnn -p -'  # cmd .. (N) file picker mode
 abbr n 'nnn'
