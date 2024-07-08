@@ -1,28 +1,28 @@
 
 @font-face {
-	font-family: "asymmetric";
+	font-family: "charcoal";
 	font-weight: 400;
-	src: url("/fonts/adrift-book.ttf") format("truetype");
+	src: url("/fonts/charcoal-book.ttf") format("truetype");
 }
 
 @font-face {
-	font-family: "asymmetric";
+	font-family: "charcoal";
 	font-weight: 400;
 	font-style: italic;
-	src: url("/fonts/adrift-bookitalic.ttf") format("truetype");
+	src: url("/fonts/charcoal-bookitalic.ttf") format("truetype");
 }
 
 @font-face {
-	font-family: "asymmetric";
+	font-family: "charcoal";
 	font-weight: 600;
-	src: url("/fonts/adrift-bold.ttf") format("truetype");
+	src: url("/fonts/charcoal-bold.ttf") format("truetype");
 }
 
 @font-face {
-	font-family: "asymmetric";
+	font-family: "charcoal";
 	font-weight: 600;
 	font-style: italic;
-	src: url("/fonts/adrift-bolditalic.ttf") format("truetype");
+	src: url("/fonts/charcoal-bolditalic.ttf") format("truetype");
 }
 
 :root {
@@ -121,7 +121,7 @@
 	--title-color: var(--color-default);
 	--title-focus-color: var(--color-red);
 
-	--font-family: "asymmetric", system-ui, -apple-system, "Segoe UI", roboto,
+	--font-family: "charcoal", system-ui, -apple-system, "Segoe UI", roboto,
 		"Helvetica Neue", arial, "Noto Sans", sans-serif, "Apple Color Emoji",
 		"Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
@@ -159,7 +159,7 @@
 
 .logo {
 	color: var(--color-default);
-	/* font-family: "asymmetric", sans-serif; */
+	/* font-family: "charcoal", sans-serif; */
 	font-weight: 900;
 	margin-left: 0;
 	position: relative;
@@ -171,7 +171,7 @@
 .logo a,
 .logo a span {
 	color: var(--color-default);
-	/* font-family: "asymmetric", sans-serif; */
+	/* font-family: "charcoal", sans-serif; */
 	font-weight: 900;
 	letter-spacing: 0;
 	transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1),
@@ -365,7 +365,7 @@ body .item {
 }
 
 .entry-content {
-	font-family: "asymmetric", sans-serif;
+	font-family: "charcoal", sans-serif;
 	line-height: var(--entry-content-line-height);
 }
 
