@@ -15,6 +15,7 @@ restore unclutter
 pulse
 udev
 qk stop  # HACK: need to start in a term session
+brightness
 [ -e $SESSION/cbonsai ] && cbonsai
 [ -e $SESSION/term    ] && term
 
