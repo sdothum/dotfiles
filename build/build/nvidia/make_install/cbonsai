@@ -8,7 +8,7 @@
 sudo xbps-install -y ncurses-devel
 
 cd /home/depot
-exists -r cbonsai || git clone https://gitlab.com/jallbrit/cbonsai.git
+exists --repo cbonsai || git clone https://gitlab.com/jallbrit/cbonsai.git
 
 cd cbonsai
 make install PREFIX=~/.local

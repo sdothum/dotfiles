@@ -6,7 +6,7 @@
 # ................................................................. dinit system
 
 cd /home/depot
-exists -r void_dinit && { cd void_dinit; git pull; cd ..; } || git clone https://github.com/summrum/void_dinit.git
+exists --repo void_dinit && { cd void_dinit; git pull; cd ..; } || git clone https://github.com/summrum/void_dinit.git
 
 cd  /home/depot/void-packages
 ./xbps-src binary-bootstrap

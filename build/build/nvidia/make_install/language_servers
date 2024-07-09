@@ -40,7 +40,7 @@ sudo ln -sf /opt/ltex-ls-$LTEXVSN /opt/ltex-ls
 sudo npm install -g vim-language-server
 # scls snippets only (see languages.toml)
 cd /home/depot
-exists -r simple-completion-language-server && { cd simple-completion-language-server; git pull; } || {  git clone https://github.com/estin/simple-completion-language-server.git;  cd simple-completion-language-server; }
+exists --repo simple-completion-language-server && { cd simple-completion-language-server; git pull; } || {  git clone https://github.com/estin/simple-completion-language-server.git;  cd simple-completion-language-server; }
 cargo install --path .
 
 # kak: filetype=sh

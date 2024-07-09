@@ -8,8 +8,8 @@
 sudo xbps-install -y readline-devel
 
 cd /home/depot
-exists -r nnn && { cd nnn; git pull; cd ..; } || git clone https://github.com/jarun/nnn.git
-exists -r icons-in-terminal && { cd icons-in-terminal; git pull; cd ..; } || git clone https://github.com/sebastiencs/icons-in-terminal.git
+exists --repo nnn && { cd nnn; git pull; cd ..; } || git clone https://github.com/jarun/nnn.git
+exists --repo icons-in-terminal && { cd icons-in-terminal; git pull; cd ..; } || git clone https://github.com/sebastiencs/icons-in-terminal.git
 
 cd nnn
 make clean

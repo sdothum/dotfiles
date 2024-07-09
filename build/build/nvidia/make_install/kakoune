@@ -14,7 +14,7 @@ mkdir -p $KAKLSP
 
 sudo xbps-install -y kakoune cargo git lua LuaJIT
 cd /home/depot
-exists -r kakoune && { cd kakoune; git pull; cd ..; } || git clone --depth 1 https://github.com/mawww/kakoune.git
+exists --repo kakoune && { cd kakoune; git pull; cd ..; } || git clone --depth 1 https://github.com/mawww/kakoune.git
 cd kakoune
 make
 make man
