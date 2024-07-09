@@ -6,17 +6,14 @@
 
 # ........................................................................ which
 
-usage() { usage: "$(basename $0) <executable> | -r <repo>"; exit 1; }
+usage() { usage: "$(basename $0) <executable> | --repo <repo>"; exit 1; }
 
 DEPOT=/home/depot
 
-[ $1 = '-r' ] && { repo=true; shift; }
-[ "$1" ] || usage
-
-if [ $repo ] ;then
-	[ -d $DEPOT/$1 ] || [ -L $DEPOT/$1 ]
-else
-	which "$1" >/dev/null 2>&1
-fi
+case $1 in
+	''     ) usage ;;
+	--repo ) [ -d $DEPOT/$2 ] || [ -L $DEPOT/$2 ] ;;
+	*      ) which "$1" >/dev/null 2>&1 ;;
+esac
 
 # kak: filetype=sh

@@ -12,28 +12,29 @@ nerdfonts='--fontawesome --fontawesomeextension --octicons --material'  # powerl
 
 # see make_install iosevka
 NERD=/home/depot/nerd-fonts
-MAKE_INSTALL=/tmp/iosevka:make_install
+MAKE_NERD=/tmp/iosevka:nerdfont
 
 [ $1 = '--mono' ] && { mono=$1; shift; }
 FONT=$HOME/.fonts/${1:-iosevka}
 family=${FONT##*/}
 
 # install nerd-font patcher
-void && xb_check fontforge nodejs otfcc ttfautohint
 ditto warning 'nerd-fonts v2.x may break ligatures'
-if exists -r $NERD ;then
+if exists --repo ${NERD##*/} ;then
 	cd $NERD
-	if [ ! -e $MAKE_INSTALL ] ;then
+	if [ ! -e $MAKE_NERD ] ;then
 		$NERD/font-patcher --version
 		ifno 'sync nerd-fonts repo' || git pull
+		touch $MAKE_NERD
 	fi
 else
+	void && xb_check fontforge nodejs otfcc ttfautohint
 	cd ${NERD%/*}
 	git clone --depth 1 https://github.com/be5invis/Iosevka.git
 	$NERD/font-patcher --version
 fi
 
-[ -e $MAKE_INSTALL ] || { [ -e /tmp/${FONT##*/} ] && { ifyes "replace $FONT" || exit; }; }
+[ -e $MAKE_NERD ] && { [ -e /tmp/${FONT##*/} ] && { ifyes "replace $FONT" || exit; }; }
 mv -f $FONT /tmp/${FONT##*/} 2>/dev/null
 mkdir -p $FONT
 cd ${NERD%/*}/Iosevka.$IOSEVKA
@@ -50,9 +51,5 @@ if [ -e $NERD/font-patcher ] ;then
 fi
 
 fc-cache -fv >/dev/null
-# update local network
-# for i in $(remotehosts) ;do
-# 	/usr/bin/ssh $USER:$i "touch $HOME/.session/.fc-cache" 2>/dev/null &
-# done
 
 # kak: filetype=sh
