@@ -45,7 +45,7 @@ top()    {
 }
 
 bottom() {
-	B=$(( height - HEIGHT + border + 1 ))
+	B=$(( H - HEIGHT + border + 1 ))
 	case $1 in
 		left  ) move $L $B ;;
 		right ) move $R $B ;;
