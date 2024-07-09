@@ -223,7 +223,6 @@ e_ink() {
 }
 
 dfont()   { iosevka.$IOSEVKA extended cap=extended G-hookless+ y-straight t-asymmetric+ 1-base 4-open+ q-hook Q-bar $(options $@) at-tall $cap; }
-# wfont() { iosevka.$IOSEVKA english  j-serifed G-hookless+ Q-bar $(options $@) asterisk-high; }  # override dyslexic "asterisk-low"
 efont()   { iosevka.$IOSEVKA $language $(options $@); }
 emdash()  { [ "$ereader" = kobo ] && emdash="emdash=$emkobo" || emdash="emdash=$emkindle"; }  # == M + space width
 family()  { for i in $@ ;do case $i in family=*) echo ${i#*=}; break ;; esac ;done }
@@ -296,10 +295,10 @@ elif [ $family ] ;then                    # custom e-ink font (non-published)
 
 elif [ $web ] ;then                       # www fonts
 	unset cap; emdash; cmdopts t-asymmetric--
-	# wfont heading  quasi-ext           space=1.100 webfont family=wMonolegible serifless serifed
+	wfont heading  quasi-ext           space=1.100 webfont family=wMonolegible serifless serifed
 	wfont dyslexic quasi-ext           space=1     webfont family=wMonolexic   serifless serifed I-descending t-asymmetric-- l-ascending f-extended J-flat T-descending
-	# wfont dyslexic quasi-ext I-serifed space=1.125 webfont family=wCaps
-	# wfont expanded quasi-pro I-serifed space=1     webfont family=wQuasilexic sb=1 l-serifless
+	wfont dyslexic quasi-ext I-serifed space=1.125 webfont family=wCaps
+	wfont expanded quasi-pro I-serifed space=1     webfont family=wQuasilexic sb=1 l-serifless
 
 elif [ $coding ] ;then                    # classic coding font
 	unset space
