@@ -228,7 +228,7 @@ emdash()  { [ "$ereader" = kobo ] && emdash="emdash=$emkobo" || emdash="emdash=$
 family()  { for i in $@ ;do case $i in family=*) echo ${i#*=}; break ;; esac ;done }
 
 wfont()   {
-	iosevka.$IOSEVKA english G-hookless+ y-straight t-asymmetric+ 4-open+ Q-bar $(options $@) i-hooky asterisk-high $emdash 4-open+
+	iosevka.$IOSEVKA english G-hookless+ y-straight t-asymmetric+ 4-open+ Q-bar $(options $@) i-hooky asterisk-high $emdash
 	cp -fv $HOME/.fonts/$(family $@)/*ttf /srv/http/thedarnedestthing.com/application/public/fonts/
 }
 

@@ -1,4 +1,4 @@
-#!/usr/bin/dash
+	#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
 # Web
@@ -15,7 +15,7 @@ export NO_PROXY="*"
 [ $1 ] && page=$(dirname $1 | tr '[:upper:]' '[:lower:]' | sed -r 's/.*(anime|series)/series/; s/[.]/-/g') || page=calendar
 $BROWSER $SONARR/$page
 
-xdotool search --sync --onlyvisible --name '.*Sonarr.*'
+xdotool search --sync --onlyvisible --name '.*Sonarr.*' windowfocus
 window size monocle
 
 # kak: filetype=sh
