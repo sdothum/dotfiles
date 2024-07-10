@@ -39,8 +39,8 @@
 # courier-unicode
 # font-symbola
 # msttcorefonts
+# noto-fonts-ttf
   font-adobe-100dpi
-  noto-fonts-ttf
   dejavu-fonts-ttf
   fonts-roboto-ttf
 
