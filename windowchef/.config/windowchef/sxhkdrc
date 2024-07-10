@@ -224,6 +224,9 @@ super + {_,shift} + z
 super + {shift,ctrl} + apostrophe
 	menu {wikis, notes}
 
+super + {F6,F5}
+	brightness {-5, +5}
+
 super + Escape
 	notify reloading "sxhkd & ruler" ;\
 	pkill -USR1 -x sxhkd             ;\
