@@ -588,7 +588,7 @@ hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt
 # Global user modes
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# EXAMPLE: record-usermode structure %{ <key> : ... } for subsequent playback ordering
+# EXAMPLE: record-usermode format %{ <key> : ... } for subsequent playback ordering
 play-usermodes %{ sort -n | cut -d: -f2- }
 
 # kak: filetype=kak

@@ -30,14 +30,13 @@ evaluate-commands %sh{
 	# reds
 	dark_red='rgb:a1462a'
 	soft_red='rgb:fa8c69'
-	pale_pink='rgb:fadadd'
+	pale_pink="rgb:${CAPS:-fadadd}"
 	# oranges
 	strong_orange='rgb:bf450c'
 	light_orange='rgb:ffe5b4'
 	desaturated_orange='rgb:d5b875'
 	# desaturated_orange='rgb:d5b075'
-	# pale_orange='rgb:f7f3ee'
-	pale_orange='rgb:f6f3ef'
+	pale_orange="rgb:${INSERT:-f6f3ef}"
 	# blues
 	dark_blue='rgb:0069af'
 	faint_blue='rgb:add8e6'
@@ -46,7 +45,7 @@ evaluate-commands %sh{
 	dark_cyan='rgb:0087af'
 	soft_cyan='rgb:a3d5e4'
 	vivid_cyan='rgb:20fccf'
-	pale_cyan='rgb:baf8f8'
+	pale_cyan="rgb:${NORMAL:-96f8f8}"
 
 	# one-light colors for testing.. ltex-ls highlighter overwritten(?)
 	lightred='rgb:e45649'
