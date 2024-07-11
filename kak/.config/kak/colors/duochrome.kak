@@ -19,6 +19,14 @@ evaluate-commands %sh{
 		done | xargs printf 'rgb:%s'
 	}
 
+	# runtime background color BG=<normal>,<insert>,<capslock>
+	if [ "$BG" ] ;then
+		NORMAL=$(echo $BG | cut -s -d, -f1)
+		INSERT=$(echo $BG | cut -s -d, -f2)
+		CAPSLOCK=$(echo $BG | cut -s -d, -f3)
+	fi
+
+
 	# ............................................................. Color palette
 
 	# dark to lighter shades
@@ -30,7 +38,7 @@ evaluate-commands %sh{
 	# reds
 	dark_red='rgb:a1462a'
 	soft_red='rgb:fa8c69'
-	pale_pink="rgb:${CAPS:-fadadd}"
+	pale_pink="rgb:${CAPSLOCK:-fadadd}"
 	# oranges
 	strong_orange='rgb:bf450c'
 	light_orange='rgb:ffe5b4'
@@ -66,7 +74,7 @@ evaluate-commands %sh{
 	# ............................................................. Color objects
 
 	# modal highlights
-	case "${kak_opt_colormode}" in
+	case "${kak_opt_color}" in
 		normal   )
 			background="${pale_cyan}"
 			menu="${pale_orange}"
@@ -215,7 +223,8 @@ set-face window PeneiraFileName                "${attribute}"
 
 # ............................................................... kak-crosshairs
 
-set-face window crosshairs_line                "default,default+u"
+# set-face window crosshairs_line              "default,default+u"
+set-face window crosshairs_line                "default,${ruler}"
 set-face window crosshairs_column              "default,${ruler}"
 
 # ...................................................................... kak-lsp
