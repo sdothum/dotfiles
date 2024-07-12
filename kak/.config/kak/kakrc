@@ -34,9 +34,12 @@ define-command else    -params 2 %{ evaluate-commands %arg{2} }
 # ...................................................................... if-then
 
 # if %{ condition } %{ then }
-define-command if -params 2 %{ if-else %arg{1} %arg{2} %{ nop } }
+define-command if      -params 2 %{ if-else %arg{1} %arg{2} %{ nop } }
 
 # ........................................................................ Debug
+
+# trace %{ message }
+define-command trace   -params 1 %{ nop %sh{ echo "${1# }" >>/tmp/kak:trace } }
 
 # *debug* hook trace
 if %{ [ -n "$UNPLUG" ] || [ -n "$TEST"] } %{
@@ -360,6 +363,7 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 	define-command normal-mode-colorscheme %{
 		set-option window mode "normal"
 		if %{ [ "$kak_opt_color" != "normal" ] } %{
+			trace %{ normal-mode-colorscheme }
 			set-option window color "normal"
 			colorscheme %opt{theme}
 		}
@@ -368,6 +372,7 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 	define-command insert-mode-colorscheme %{
 		set-option window mode "insert"
 		if %{ [ "$kak_opt_color" != "insert" ] } %{
+			trace %{ insert-mode-colorscheme }
 			set-option window color "insert"
 			colorscheme %opt{theme}
 		}
@@ -375,6 +380,7 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 
 	define-command capslock-colorscheme %{
 		if %{ [ "$kak_opt_color" != "capslock" ] } %{
+			trace %{ capslock-colorscheme }
 			set-option window color "capslock"
 			colorscheme %opt{theme}
 		}
@@ -382,6 +388,7 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 
 	# BUG: capslock colorscheme switching defers until the first keystroke (vs the realtime statusline reporting)
 	define-command capslock-check %{
+		trace %{ capslock-check }
 		if-else %{ capslock } %{
 			capslock-colorscheme
 		} %{
@@ -577,7 +584,7 @@ record-usermode %{ 1 : map global user x ': sync<ret>: write-all-quit<ret>' -doc
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 record-usermode %{  1 : map global user t   ': nop %sh{ term >/dev/null 2>&1 }<ret>' -docstring 'terminal' }
-record-usermode %[ -3 : map global user '{' ': eval %sh{  }<left><left>' -docstring 'shell' ]  # ATTENTION: %[] to escape '{' :)
+record-usermode %[ -3 : map global user '{' ': echo %sh{  }<left><left>'             -docstring 'shell' ]  # ATTENTION: %[] to escape '{}' :)
 
 # Highlighting
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
