@@ -536,8 +536,10 @@ Select(0u0001);  # temporary cell to avoid modifying original glyph
 Paste();
 Select(0u0001);
 CopyReference();
-Transform(100,0,0,93,0,0);
-Move(0,133);
+# Transform(100,0,0,93,0,0);
+# Move(0,133);
+Transform(100,0,0,92,0,0);
+Move(0,132);
 Select($(utf 'l'));
 Paste();
 Select(0u0001);
