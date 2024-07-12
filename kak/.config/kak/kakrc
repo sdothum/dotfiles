@@ -363,7 +363,7 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 	define-command normal-mode-colorscheme %{
 		set-option window mode "normal"
 		if %{ [ "$kak_opt_color" != "normal" ] } %{
-			trace %{ normal-mode-colorscheme }
+			# trace %{ normal-mode-colorscheme }
 			set-option window color "normal"
 			colorscheme %opt{theme}
 		}
@@ -372,7 +372,7 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 	define-command insert-mode-colorscheme %{
 		set-option window mode "insert"
 		if %{ [ "$kak_opt_color" != "insert" ] } %{
-			trace %{ insert-mode-colorscheme }
+			# trace %{ insert-mode-colorscheme }
 			set-option window color "insert"
 			colorscheme %opt{theme}
 		}
@@ -380,7 +380,7 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 
 	define-command capslock-colorscheme %{
 		if %{ [ "$kak_opt_color" != "capslock" ] } %{
-			trace %{ capslock-colorscheme }
+			# trace %{ capslock-colorscheme }
 			set-option window color "capslock"
 			colorscheme %opt{theme}
 		}
@@ -388,7 +388,7 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 
 	# BUG: capslock colorscheme switching defers until the first keystroke (vs the realtime statusline reporting)
 	define-command capslock-check %{
-		trace %{ capslock-check }
+		# trace %{ capslock-check }
 		if-else %{ capslock } %{
 			capslock-colorscheme
 		} %{
@@ -400,7 +400,7 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 		}
 	}
 
-	# window modal/capslock "duo"chrome
+	# window modal/capslock "duo"chrome HACK: see sxhkdrc for Caps_Lock trigger SEE: BUG above
 	hook global WinCreate .* %{
 		normal-mode-colorscheme
 		hook window ModeChange (push|pop):.*:insert insert-mode-colorscheme

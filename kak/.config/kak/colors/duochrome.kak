@@ -38,7 +38,7 @@ evaluate-commands %sh{
 	# reds
 	dark_red='rgb:a1462a'
 	soft_red='rgb:fa8c69'
-	pale_pink="rgb:${CAPSLOCK:-fadadd}"
+	pale_pink="rgb:${CAPSLOCK:-ffc0cb}"
 	# oranges
 	strong_orange='rgb:bf450c'
 	light_orange='rgb:ffe5b4'
