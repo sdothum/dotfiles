@@ -245,6 +245,12 @@ super + shift + Escape
 ~ctrl + v
 	cb paste
 
+# HACK: kak hook *Idle only triggers on keypress SEE: kakrc
+# ATTENTION: use {shift,alt,ctrl,super} + Caps_Lock to bypass keypress trigger event
+
+~Caps_Lock
+	xdotool key Right Left
+
 # NOTE: restore mouse focus after group_activate (of top of window stack)
 # HACK: bypass QT apps to avoid interference with mouse menus
 
