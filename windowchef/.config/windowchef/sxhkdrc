@@ -240,7 +240,7 @@ super + shift + Escape
 # HISTORY: cb replaces "xclip {-in, -out} -selection clipboard"
 
 ~ctrl + {c,x}
-	S=$(xsel) && [ "$S" ] && echo -n "$S" | cb {copy, cut}
+	S=$(xsel -p) && [ "$S" ] && echo -n "$S" | cb {copy, cut}
 
 ~ctrl + v
 	cb paste
