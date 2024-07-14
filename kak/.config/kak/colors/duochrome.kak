@@ -43,7 +43,6 @@ evaluate-commands %sh{
 	strong_orange='rgb:bf450c'
 	light_orange='rgb:ffe5b4'
 	desaturated_orange='rgb:d5b875'
-	# desaturated_orange='rgb:d5b075'
 	pale_orange="rgb:${INSERT:-f6f3ef}"
 	# blues
 	dark_blue='rgb:0069af'
