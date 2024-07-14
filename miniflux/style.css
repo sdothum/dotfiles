@@ -2,27 +2,27 @@
 @font-face {
 	font-family: "charcoal";
 	font-weight: 400;
-	src: url("/fonts/charcoal-book.ttf") format("truetype");
+	src: url("/fonts/charcoal-normalbookupright.ttf") format("truetype");
 }
 
 @font-face {
 	font-family: "charcoal";
 	font-weight: 400;
 	font-style: italic;
-	src: url("/fonts/charcoal-bookitalic.ttf") format("truetype");
+	src: url("/fonts/charcoal-normalbookitalic.ttf") format("truetype");
 }
 
 @font-face {
 	font-family: "charcoal";
 	font-weight: 600;
-	src: url("/fonts/charcoal-bold.ttf") format("truetype");
+	src: url("/fonts/charcoal-normalboldupright.ttf") format("truetype");
 }
 
 @font-face {
 	font-family: "charcoal";
 	font-weight: 600;
 	font-style: italic;
-	src: url("/fonts/charcoal-bolditalic.ttf") format("truetype");
+	src: url("/fonts/charcoal-normalbolditalic.ttf") format("truetype");
 }
 
 :root {
