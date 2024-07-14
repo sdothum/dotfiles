@@ -85,7 +85,7 @@ $TERM $theme $geometry $title $name $cmd
 
 [ $visible ] && [ "$title" ] && xdotool search --sync --onlyvisible --limit 1 --classname "${title#* }"
 # delay long enough.. then double return kak startup command input (to close command prompt and any popup dialogue)
-[ "$kmd"   ] && { sleep 0.25; xdotool type "$kmd
+[ "$kmd"   ] && { sleep 0.5; xdotool type "$kmd
 
 "; }
 # window snap center

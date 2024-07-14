@@ -24,8 +24,8 @@ while appmt=$(reminder 52 | sed  "1i$(X $ADD)\n$(X $EDIT)" | rmenu 'Appointment'
 				break
 			done
 			;;
-		"$EDIT" ) kmd=': execute-keys "ge"'         kak WAIT $REMINDERS ;;
-		*       ) kmd=": execute-keys '/$(search)'" kak WAIT $REMINDERS ;;
+		"$EDIT" ) kmd='ge'         kak WAIT $REMINDERS ;;
+		*       ) kmd="/$(search)" kak WAIT $REMINDERS ;;
 	esac
 done
 

@@ -8,8 +8,9 @@
 # WARNING: blank lines before first rule requires patched ruler SEE: dotfiles
 
 class="aerc"
-	window desktop $(chef desktop "MAIL") ;\
-	window size monocle                   ;\
+	window desktop $(chef desktop "MAIL")                                 ;\
+	xdotool search --sync --onlyvisible --classname "aerc" windowactivate ;\
+	window size monocle                                                   ;\
 	xdotool search --sync --onlyvisible --classname "aerc" type ":vsplit" && xdotool key Return
 
 class="compose"
