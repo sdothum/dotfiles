@@ -5,7 +5,10 @@
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ................................................. monolegible font adjustments
-# see make_install iosevka
+
+# SEE: font/iosevka
+#
+# HISTORY: Iosevka directory and file (naming conventions) changed with v30
 
 usage() { 
 	echo "$(basename $0) Q_hook | q_hook
@@ -50,7 +53,15 @@ confirm()  { [ -e $MAKE_INSTALL ] && ditto "$(basename $0)" "$1" || { ifyes "$1"
 percent()  { echo "$1 * 100" | bc | cut -d. -f1; }
 regular()  { ls -1 | grep -Ev 'italic|oblique|extended'; }
 italic()   { ls -1 | grep -E  'italic'; }
-basefont() { echo $1 | grep -q '[-]italic.ttf' && echo "${1%italic*}regular.ttf" || echo "${1%italic*}.ttf"; }
+
+basefont() {
+	case $1 in
+		*normal*italic* ) echo "${1%italic*}upright.ttf" ;;  # v30
+		*normal*        ) echo "${1}.ttf" ;;
+		*italic*        ) echo "${1%italic*}upright.ttf" ;;  # v27
+		*               ) echo "${1}.ttf" ;;
+	esac
+}
 
 utf() {
 	case "$1" in
@@ -584,9 +595,14 @@ weight() {
 	confirm "set $regular weights as regular"
 	rm -f *\#1.ttf
 	rm -f *.ttx
+	regular="normal${regular}"
 
 	# bold **must** be converted too
-	fonts="*-$regular *-${regular}italic *-bold *-bolditalic"
+	if [ -e $FONT/${FONT##*/}-normalregularupright.ttf ] ;then
+		fonts="*-${regular}upright *-${regular}italic *-normalboldupright *-normalbolditalic"; upright=upright  # v30
+	else
+		fonts="*-$regular *-${regular}italic *-bold *-bolditalic"  # v27
+	fi
 
 	# dump to ttx
 	for i in $fonts ;do
@@ -600,7 +616,7 @@ weight() {
 	sed -i -e "s/$family ${regular} Version/$family Regular Version/i"       \
 		-e "s/$family[ -]${regular}/$family/i"                                \
 		-e "s/${regular}/Regular/i"                                           \
-		*-${regular}.ttx 
+		*-${regular}${upright}.ttx
 
 	sed -i -e "s/$family ${regular} Italic Version/$family Italic Version/i" \
 		-e "s/$family[ -]${regular}/$family/i"                                \
@@ -613,7 +629,6 @@ weight() {
 		ditto ttf $file
 		ttx -q $file
 	done
-	rm -f *.ttx
 
 	if [ $adjust ] ;then
 	# optically adjust M W w (to regular weight to narrow stroke width for better small font contrast match)
@@ -627,8 +642,10 @@ $(regularweight $(utf 'w'))
 		for i in *${regular}*\#1.ttf ;do
 			ditto tweak_MWw $i
 			case $i in
-				*italic* ) file=*-italic.ttf ;;
-				*        ) file=*regular.ttf ;;
+				*normal*italic* ) file=*-normalregularitalic.ttf; unset upright    ;; # v30
+				*normal*        ) file=*-normalregularupright.ttf; upright=upright ;;
+				*italic*        ) file=*-italic.ttf  ;; # v27
+				*               ) file=*-regular.ttf ;;
 			esac
 			fontforge -quiet --script /tmp/fontforge:weight.script $i $file
 		done
@@ -726,7 +743,8 @@ case $1 in
 	ligature      ) [ $4 ] && { width=$2; shift 2; } || { shape=$2; shift; } ;;  # see iosevka for tricky bits
 	capadjust     ) letters=$2; shift ;;                                         # align "C G O Q S U" to x base
 	serifed       ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "i j l" (serifed)
-	serifless     ) letters=$2; width=$(( $3 * 845 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
+	# serifless   ) letters=$2; width=$(( $3 * 845 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
+	serifless     ) letters=$2; width=$(( $3 * 825 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
 	tailed        ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "l" (tailed)
 	*weight       ) regular=${1%weight}; fforge=weight; [ "$2" = 'book+regular' ] && { adjust=true; shift; } ;;
 	copy          ) [ $3 ] && { family=$2; alias=$3; shift 2; copy; exit; }      || usage ;;  # pwd commandline only!

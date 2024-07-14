@@ -6,6 +6,8 @@
 
 # ...................................................................... iosevka
 
+# HISTORY: Iosevka directory and file (naming conventions) changed with v30
+
 ditto "major refactoring untested !!"
 ditto "see font/iosevka"
 
@@ -70,7 +72,8 @@ usage() {
 #        make_install iosevka web m-rounded
 #        make_install iosevka m-rounded
 
-export IOSEVKA=${version:-v27}
+# export IOSEVKA=${version:-v27}
+export IOSEVKA=${version:-v30}
 
 [ $clean ] && rm -r /home/depot/fonts/Iosevka.${IOSEVKA}/.build
 
@@ -194,8 +197,12 @@ cmdopts $@  # set commandline options
 ifno "build iosevka.$IOSEVKA font suite" && exit
 
 update() {
-	fonts='*-book *-bookitalic *-bold *-bolditalic'
 	cd $HOME/.fonts/$2
+	if [ -e ${2}-normalregularupright.ttf ] ;then
+		fonts='*-normalbookupright *-normalbookitalic *-normalboldupright *-normalbolditalic'  # v30
+	else
+		fonts='*-book *-bookitalic *-bold *-bolditalic'  # v27
+	fi
 
 	for z in $fonts ;do  # i is a glyph var
 		# supplementary glyphs (as uncovered from ebooks)
@@ -246,9 +253,9 @@ elif [ "$mu" ] ;then
 	e_ink tundra Y-descending a-single
 
 elif [ "$test" ] ;then
-	cmdopts quasi-ext${space:-space=M} open+ j-flat serifless serifed capadjust
+	cmdopts quasi-ext ${space:-space=M} open+ j-flat serifless serifed capadjust
  	emdash
-	e_ink charcoal grote   I-descending t-asymmetric-- l-ascending f-extended J-flat T-descending
+	e_ink charcoal grote   I-descending t-asymmetric-- l-ascending f-extended J-flat T-descending Q-bar
 
 elif [ "$quad" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+
@@ -259,7 +266,7 @@ elif [ "$quad" ] ;then
 	e_ink lythe grote   I-descending t-asymmetric-
 
 elif [ "$koreader" ] ;then
-	cmdopts quasi-ext${space:-space=M} Q-straight open+ j-flat serifless serifed
+	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat serifless serifed
  	emdash
 	e_ink chalk  grote   I-serifed    t-asymmetric-- l-serifless a-single
 	e_ink pencil grote   I-descending t-asymmetric-- l-ascending a-single f-extended J-flat T-descending
@@ -311,8 +318,12 @@ else                                      # desktop fonts
 	dfont $leading
 	dfont proof    I-descending l-ascending f-extended J-flat T-descending
 	dfont menu     I-serifed    Q-straight
-	dfont dyslexic I-serifed    Q-straight      space=2.2   family=qclocktwo              # conky qclocktwo font
-	dfont dyslexic I-serifed    quasi-extension space=1.125 family=monograffic serifless  # panel/dunst font
+	dfont dyslexic I-serifed    Q-straight      space=2.2   family=qclocktwo                      # conky qclocktwo font
+	dfont dyslexic I-serifed    quasi-extension space=1.125 family=monograffic serifless serifed  # panel/dunst font
+
+	cmdopts quasi-ext open+ j-flat serifless serifed capadjust
+ 	emdash
+	e_ink charcoal grote space=1 I-descending t-asymmetric-- l-ascending f-extended J-flat T-descending Q-bar
 fi
 
 # kak: filetype=sh
