@@ -8,7 +8,7 @@
 
 # SEE: font/iosevka
 #
-# HISTORY: Iosevka directory and file (naming conventions) changed with v30
+# HISTORY: Iosevka directory and file (naming conventions) changed with version 3x
 
 usage() { 
 	echo "$(basename $0) Q_hook | q_hook
@@ -56,9 +56,9 @@ italic()   { ls -1 | grep -E  'italic'; }
 
 basefont() {
 	case $1 in
-		*normal*italic* ) echo "${1%italic*}upright.ttf" ;;  # v30
+		*normal*italic* ) echo "${1%italic*}upright.ttf" ;;  # version 3x
 		*normal*        ) echo "${1}.ttf" ;;
-		*italic*        ) echo "${1%italic*}upright.ttf" ;;  # v27
+		*italic*        ) echo "${1%italic*}upright.ttf" ;;  # version 1x/2x
 		*               ) echo "${1}.ttf" ;;
 	esac
 }
@@ -595,40 +595,39 @@ weight() {
 	confirm "set $regular weights as regular"
 	rm -f *\#1.ttf
 	rm -f *.ttx
-	regular="normal${regular}"
 
-	# bold **must** be converted too
-	if [ -e $FONT/${FONT##*/}-normalregularupright.ttf ] ;then
-		fonts="*-${regular}upright *-${regular}italic *-normalboldupright *-normalbolditalic"; upright=upright  # v30
+	# version 1x/2x font weight renaming
+	if [ -e "$(find . -name '*-regular.ttf')" ] ;then
+      fonts="*-$regular *-${regular}italic *-bold *-bolditalic"
+
+		# dump to ttx
+		for i in $fonts ;do
+			file=$i.ttf
+			ditto ttx $file
+			ttx -q $file
+		done
+
+		# assign book weights as regular (normal)
+		family=${FONT##*/}
+		sed -i -e "s/$family ${regular} Version/$family Regular Version/i"       \
+			-e "s/$family[ -]${regular}/$family/i"                                \
+			-e "s/${regular}/Regular/i"                                           \
+			*-${regular}${upright}.ttx
+
+		sed -i -e "s/$family ${regular} Italic Version/$family Italic Version/i" \
+			-e "s/$family[ -]${regular}/$family/i"                                \
+			-e "s/${regular} Italic/Italic/i"                                     \
+			*-${regular}italic.ttx 
+
+		# generate new ttf
+		for i in $fonts ;do
+			file=$i.ttx
+			ditto ttf $file
+			ttx -q $file
+		done
 	else
-		fonts="*-$regular *-${regular}italic *-bold *-bolditalic"  # v27
+		regular="normal${regular}"
 	fi
-
-	# dump to ttx
-	for i in $fonts ;do
-		file=$i.ttf
-		ditto ttx $file
-		ttx -q $file
-	done
-
-	# assign book weights as regular (normal)
-	family=${FONT##*/}
-	sed -i -e "s/$family ${regular} Version/$family Regular Version/i"       \
-		-e "s/$family[ -]${regular}/$family/i"                                \
-		-e "s/${regular}/Regular/i"                                           \
-		*-${regular}${upright}.ttx
-
-	sed -i -e "s/$family ${regular} Italic Version/$family Italic Version/i" \
-		-e "s/$family[ -]${regular}/$family/i"                                \
-		-e "s/${regular} Italic/Italic/i"                                     \
-		*-${regular}italic.ttx 
-
-	# generate new ttf
-	for i in $fonts ;do
-		file=$i.ttx
-		ditto ttf $file
-		ttx -q $file
-	done
 
 	if [ $adjust ] ;then
 	# optically adjust M W w (to regular weight to narrow stroke width for better small font contrast match)
@@ -642,9 +641,9 @@ $(regularweight $(utf 'w'))
 		for i in *${regular}*\#1.ttf ;do
 			ditto tweak_MWw $i
 			case $i in
-				*normal*italic* ) file=*-normalregularitalic.ttf; unset upright    ;; # v30
+				*normal*italic* ) file=*-normalregularitalic.ttf; unset upright    ;; # version 3x
 				*normal*        ) file=*-normalregularupright.ttf; upright=upright ;;
-				*italic*        ) file=*-italic.ttf  ;; # v27
+		 		*italic*        ) file=*-italic.ttf  ;; # version 1x/2x
 				*               ) file=*-regular.ttf ;;
 			esac
 			fontforge -quiet --script /tmp/fontforge:weight.script $i $file

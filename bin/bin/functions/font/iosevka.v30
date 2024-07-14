@@ -771,7 +771,7 @@ done
 
 # suppress spurious fontforge errors/warnings
 
-unset baseline capadjust  # no longer applying for koreader
+unset adjust baseline capadjust  # no longer applying for koreader and version 3x
 
 [ $q_hook        ] && fforge q_hook                          $family 2>/dev/null  # hyperlegible font mod for better q
 [ $Q_hook        ] && fforge Q_hook                          $family  # hooked capital Q
@@ -796,8 +796,8 @@ if [ $ebook ] ;then
 		[ $serifed   ] && fforge serifed "$S_i$S_J$S_j$S_l" ${shape##* }   $family  # adjust serifed "i J j l" cell width
 		[ $serifed   ] && fforge tailed "$T_l" ${shape##* }                $family  # adjust tailed "l" cell width
 	fi
-	fforge ${regular}weight $adjust   $family  # rename weight for e-reader (as regular)
-	[ $space ] && fforge space $space $family  # lengthen space character cell width
+	[ $adjust ] && fforge ${regular}weight $adjust $family  # rename weight for e-reader (as regular)
+	[ $space  ] && fforge space $space             $family  # lengthen space character cell width
 fi
 
 [ $baseline ] && fforge baseline ${shape##* } $family 2>/dev/null  # force baseline adjustment for descending caps and q-hook

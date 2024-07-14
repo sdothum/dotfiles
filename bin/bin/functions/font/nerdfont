@@ -8,7 +8,7 @@
 
 # Usage: nerdfont [--mono] [family]
 #
-# HISTORY: Iosevka directory and file (naming conventions) changed with v30
+# HISTORY: Iosevka directory and file (naming conventions) changed with version 3x
 
 nerdfonts='--fontawesome --fontawesomeextension --octicons --material'  # powerline added below
 
@@ -40,11 +40,10 @@ fi
 mv -f $FONT /tmp/${FONT##*/} 2>/dev/null
 mkdir -p $FONT
 cd ${NERD%/*}/Iosevka.$IOSEVKA
-[ -d dist/$family/TTF ] && TTF=dist/$family/TTF || TTF=dist/$family/ttf  # v30 || v27
-cp -v $TTF/* $FONT
+cp -v $(find dist/$family -maxdepth 1 -type d -iregex '.*/ttf')/* $FONT
 
 # patch font
-[ -e $FONT/$family-normalregularupright.ttf ] && REGULAR=$FONT/$family-normalregularupright.ttf || REGULAR=$FONT/$family-regular.ttf  # v30 || v27
+REGULAR=$(find . -regextype posix-extended -regex '.*-(normal)*regular(upright)*.ttf')
 if [ -e $NERD/font-patcher ] ;then
 	rm -f /tmp/*ttf  # nerd-font creates file by font family name (note case)
 	$NERD/font-patcher --adjust-line-height $mono --powerline -out /tmp $REGULAR
