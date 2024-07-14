@@ -41,6 +41,7 @@ alpine && /usr/libexec/pipewire-launcher
 # pulse &
 # pipewire &
 # pipewire-pulse &
+clipit -d &  # for webkit selections
 
 # ........................................................................ D-Bus
 
