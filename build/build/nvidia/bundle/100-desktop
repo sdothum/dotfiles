@@ -73,13 +73,14 @@
 
 = user interface
 = ══════════════
+# xclip
   autocutsel
   Clipboard
+  clipit
   dmenu
   GPaste
   rofi
 ! stow rofi
-  xclip
   xdotool
   xsel
   xvkbd
