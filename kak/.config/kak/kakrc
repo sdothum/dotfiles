@@ -23,11 +23,12 @@
 #         - %opt{color}
 #         - %opt{mode}
 #         - %opt{focus}
+#         - %opt{livedown}
 
 # ................................................................. if-then-else
 
 # if-else %{ condition } %{ then } %{ else }
-define-command if-else -params 3 %{ evaluate-commands -verbatim %sh{ eval $1 && echo then || echo else # kak_opt_color kak_opt_mode kak_opt_focus } %arg{2} %arg{3} }  # SEE: ATTENTION
+define-command if-else -params 3 %{ evaluate-commands -verbatim %sh{ eval $1 && echo then || echo else # kak_opt_color kak_opt_mode kak_opt_focus kak_opt_livedown } %arg{2} %arg{3} }  # SEE: ATTENTION
 define-command then    -params 2 %{ evaluate-commands %arg{1} }
 define-command else    -params 2 %{ evaluate-commands %arg{2} }
 
@@ -204,14 +205,13 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 	# .................................................................. snippets
 	bundle kakoune-snippets https://github.com/occivink/kakoune-snippets.git %{
 		set-option global snippets_auto_expand true
+		record-usermode %{ -8 : map global user '%' ': snippets ' -docstring 'snippets' }
 
-		define-command user-snippets %{
+		hook -once global BufSetOption .* %{
 			set buffer snippets %opt{snippets}  # keep any global snippets
-			record-usermode %{ 1 : map global user S ': snippets-info<ret>' -docstring 'Snippets' }
 		}
 
 		hook -once global BufSetOption filetype=sh %{
-			user-snippets
 			set -add buffer snippets 'usage:'     '%us' %{ snippets-insert %{usage() { usage: "$(basename $0) ${1:options}"; exit 1; } }}
 			set -add buffer snippets 'usage:pipe' '%up' %{ snippets-insert %{usage() { usage: "$(basename $0) ${1:options}" | usage:pipe
 			exit 1
@@ -219,7 +219,6 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 		}
 
 		hook -once global BufSetOption filetype=markdown %{
-			user-snippets
 			set -add buffer snippets 'date'   '%da' %{ snippets-insert %sh{ date '+## %A, %d %B %Y' | tr '[:upper:]' '[:lower:]' }}
 			set -add buffer snippets 'img'    '%im' %{ snippets-insert %{![${1:heading}](/images/${2:file}.jpg) }}
 			set -add buffer snippets 'search' '%se' %{ snippets-insert %{[${1:description}](http://thedarnedestthing.com/search?query=${2:query}) }}
@@ -279,17 +278,6 @@ if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] && [ -z "$TEST" ] } %{
 		record-usermode %{ 1 : map global user R ': kakboard-with-pull-clipboard R<ret>' -docstring 'cb replace' }
 	}
 
-	# ................................................................... kakpipe
-	bundle-install-hook kakpipe %{
-		# cargo install --path . --root ~/.local
-		cargo install kakpipe
-	}
-	bundle kakpipe https://github.com/eburghar/kakpipe.git %{
-		require-module kakpipe
-		record-usermode %{ -5 : map global user | 'x: kakpipe ' -docstring "kakpipe FIFO buffer" }
-		map global normal | 'x|' -docstring "pipe FIFO buffer"
-	}
-
 	# ................................................................... kak-lsp
 	bundle-install-hook kakoune-lsp %{
 		# cargo install --locked --force --path .
@@ -328,6 +316,42 @@ if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] && [ -z "$TEST" ] } %{
 		hook global KakEnd .* lsp-exit
 
 		define-command lsp-restart %{ lsp-stop; lsp-start } -docstring 'restart lsp server'
+	}
+
+	# .......................................................... kakoune-livedown
+	bundle-install-hook kakoune-livedown %{
+		sudo npm install -g livedown
+	}
+	bundle kakoune-livedown https://github.com/Delapouite/kakoune-livedown.git %{
+		declare-option str livedown ''
+		# set-option global livedown_browser "%sh{ echo $BROWSER }"
+		set-option global livedown_browser "livedown_browser"
+
+		define-command enable-livedown %{
+			set-option global livedown "%val{bufname}"
+			livedown-start-with-write-on-idle
+		}
+
+		define-command disable-livedown %{
+			if %{ [ -n "$kak_opt_livedown" ] } %{
+				set-option global livedown ''
+				livedown-stop  # close unique browser instance SEE: livedown_browser
+			}
+		}
+
+		hook -once global BufSetOption filetype=markdown enable-livedown
+		hook       global BufClose     .*                disable-livedown
+	}
+
+	# ................................................................... kakpipe
+	bundle-install-hook kakpipe %{
+		# cargo install --path . --root ~/.local
+		cargo install kakpipe
+	}
+	bundle kakpipe https://github.com/eburghar/kakpipe.git %{
+		require-module kakpipe
+		record-usermode %{ -5 : map global user | 'x: kakpipe ' -docstring "kakpipe FIFO buffer" }
+		map global normal | 'x|' -docstring "pipe FIFO buffer"
 	}
 
 	# ..................................................................... popup
