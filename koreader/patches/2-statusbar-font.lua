@@ -24,7 +24,7 @@ CreDocument.header_font = fontface  -- see frontend/apps/reader/modules/readerfo
 -- set statusbar font source
 local Font = require("ui/font")
 
-names = { "-book.ttf", "-book.otf", "-regular.ttf", "-regular.otf" }  -- selection order of user ttf and otf font files
+names = { "-normalbookupright.ttf", "-book.ttf", "-book.otf", "-regular.ttf", "-regular.otf" }  -- selection order of user ttf and otf font files
 
 for _, n in pairs(names) do
 	local f = io.open(DataStorage:getDataDir() .. "/fonts/" .. fontface .. n, "r")
