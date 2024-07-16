@@ -1,0 +1,47 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Web
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ...................................................................... Browser
+
+# Usage: livedown_browser <url>  # SEE: kakrc livedown
+#
+# NOTE: --temp-basedir to create separate instance of qutebrowser
+#       -s tabs.last_close 'close' to close window on livedown-stop
+
+QUTEBROWSER='/usr/bin/qutebrowser --target private-window --override-restore --temp-basedir'
+FONT=${FONT:-charcoal}
+
+size="$(fontsize)pt $FONT"
+startpage="$@"
+startpage=$(escape $startpage)  # must \escape '&' in url
+
+settings="
+	-s fonts.completion.category '$size'
+	-s fonts.completion.entry '$size'
+	-s fonts.contextmenu '$size'
+	-s fonts.debug_console '$size'
+	-s fonts.default_family '$size'
+	-s fonts.downloads '$size'
+	-s fonts.hints '$size'
+	-s fonts.keyhint '$size'
+	-s fonts.messages.error '$size'
+	-s fonts.messages.info '$size'
+	-s fonts.messages.warning '$size'
+	-s fonts.prompts '$size'
+	-s fonts.statusbar '$size'
+	-s fonts.tabs.selected '$size'
+	-s fonts.tabs.unselected '$size'
+	-s fonts.web.family.fixed 'Iosevka'
+	-s fonts.web.family.sans_serif '$FONT'
+	-s fonts.web.family.serif '$FONT'
+	-s fonts.web.family.standard '$FONT'
+	-s scrolling.bar 'when-searching'
+	-s tabs.last_close 'close'
+"
+
+eval $QUTEBROWSER $RUNOPT $settings $startpage 2>/dev/null &
+
+# kak: filetype=sh

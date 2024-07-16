@@ -54,7 +54,7 @@ usage() {
 > W-asymmetric
 > Y-descending (includes I-descending T-descending)
 
-> a-[double|earless|single|toothless]
+> a-[double|earless|rounded|single|toothless]
 > b-corner
 > d-[tailed|toothless]
 > f-[extended|serifless]
@@ -237,7 +237,7 @@ variant() {
 			a-double       ) glyph a=double-storey-serifless                     ;;
 			a-single       ) glyph a=single-storey-serifless                     ;;
 			a-earless      ) glyph a=single-storey-earless-corner-serifless      ;;
-			a-rounded      ) glyph a=single-storey-earless-rounded-serifless     ;;
+			a-rounded      ) glyph a=double-storey-toothless-rounded             ;;
 			a-toothless    ) glyph a=double-storey-toothless-corner              ;;
 			b-corner       ) glyph b=toothless-corner-serifless                  ;;
 			b-toothed      ) glyph b=toothed-serifless                           ;;
