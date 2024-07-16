@@ -65,8 +65,8 @@ panel_width=$(( width - PANEL_INDENT * 2 ))
 tagcount=$(chef desktop count)
 DESKTOPS=$(seq 1 $tagcount)
 
-# desktop (group) windows
-for i in $(seq 1 9) ;do touch $GROUP:$i ;done  # preserve if switching panels within startx session
+# desktop (group) windows NOTE: -1 is undefined group
+for i in -1 $(seq 1 9) ;do touch $GROUP:$i ;done  # preserve if switching panels within startx session
 
 windows()      { cat $GROUP:$1 | wc -l; }
 visible()      { cat $GROUP:$1 | wc -l; }

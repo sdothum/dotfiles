@@ -6,7 +6,7 @@
 
 # .................................................................. Tile layout
 
-usage() { usage: "$(basename $0) fold 2 | 3 | 4 | 5 [<classname>]"; exit 1; }
+usage() { usage: "$(basename $0) fold 0 | 1 | 2 | 3 | 4 | 5 [<classname>]"; exit 1; }
 
 winids=$(chef window ids $2)
 instance=0  # window placement sequence
@@ -78,13 +78,14 @@ fifths() {
 	done
 }
 
-case "$@" in
-	1* ) stack    ;;  # monocle
-	2* ) halves   ;;
-	3* ) thirds   ;;
-	4* ) quarters ;;
-	5* ) fifths   ;;
-	*  ) usage ;;
+case "$1" in
+	0 ) layout fold $(min $(echo "$winids" | wc -l) 5) $2 ;;
+	1 ) stack    ;;  # monocle
+	2 ) halves   ;;
+	3 ) thirds   ;;
+	4 ) quarters ;;
+	5 ) fifths   ;;
+	* ) usage ;;
 esac
 
 waitron window_focus ${i:-$winid}

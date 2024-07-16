@@ -20,7 +20,7 @@ chefrc() {
 	grep "^waitron wm_config $1" $CONFIG | sed 's/  */ /g' | cut -d' ' -f$word
 }
 
-# replicating 2bwm window geometry :)
+# replicating windowchef window geometry :)
 parse() {
 	PANEL_HEIGHT=$(chefrc 'gap_width bottom')
 	MARGIN=$(chefrc 'gap_width left')

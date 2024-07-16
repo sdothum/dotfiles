@@ -6,8 +6,6 @@
 
 # .................................................................... Autostart
 
-# see .xinitrc for 2bwm autostart hack :)
-
 restore root
 restore panel
 conky clock auto

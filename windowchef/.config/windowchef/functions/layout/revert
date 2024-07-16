@@ -11,6 +11,6 @@ for i in $(chef window ids) ;do
 done
 
 waitron window_focus $winid
-notify 2bwm "layout revert <b>ALL</b>"
+notify $WM "layout revert <b>ALL</b>"
 
 # kak: filetype=sh

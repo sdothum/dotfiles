@@ -18,13 +18,12 @@ disconnect() {
 	quit
 }
 
-actions() { echo "2bwm exit\nx11 kill\nlock\nlogout\nsuspend\nreboot\nshutdown"; }
+actions() { echo "x11 kill\nlock\nlogout\nsuspend\nreboot\nshutdown"; }
 
 # quit!
 cmd=$default
 cmd=$(actions | rmenu 'Session' $cmd -no-custom) || exit
 case $cmd in
-	2bwm*    ) xdotool key --delay 200 Super+Control+q ;;
 	x11*     ) killall Xorg ;;
 	lock     ) lock_screen ;;
 	logout   ) sudo kill -TERM X ;;
