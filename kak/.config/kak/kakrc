@@ -325,7 +325,7 @@ if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] && [ -z "$TEST" ] } %{
 	bundle kakoune-livedown https://github.com/Delapouite/kakoune-livedown.git %{
 		declare-option str livedown ''
 		# set-option global livedown_browser "%sh{ echo $BROWSER }"
-		set-option global livedown_browser "livedown_browser"
+		set-option global livedown_browser "qutebrowser-instance"
 
 		define-command enable-livedown %{
 			set-option global livedown "%val{bufname}"
@@ -335,7 +335,7 @@ if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] && [ -z "$TEST" ] } %{
 		define-command disable-livedown %{
 			if %{ [ -n "$kak_opt_livedown" ] } %{
 				set-option global livedown ''
-				livedown-stop  # close unique browser instance SEE: livedown_browser
+				livedown-stop  # close browser instance
 			}
 		}
 
