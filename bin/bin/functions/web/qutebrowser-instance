@@ -6,12 +6,13 @@
 
 # ...................................................................... Browser
 
-# Usage: livedown_browser <url>  # SEE: kakrc livedown
+# Usage: qutebrowser-instance <url>  # SEE: kakrc livedown
 #
 # NOTE: --temp-basedir to create separate instance of qutebrowser
 #       -s tabs.last_close 'close' to close window on livedown-stop
+# SEE: qutebrowser wrapper template
 
-QUTEBROWSER='/usr/bin/qutebrowser --target private-window --override-restore --temp-basedir'
+QUTEBROWSER='/usr/bin/qutebrowser --target private-window --override-restore --temp-basedir --qt-arg name ${name:-livedown}'
 FONT=${FONT:-charcoal}
 
 size="$(fontsize)pt $FONT"
@@ -43,5 +44,11 @@ settings="
 "
 
 eval $QUTEBROWSER $RUNOPT $settings $startpage 2>/dev/null &
+
+# "qutebrowser" rule preempts "livedown" class
+if [ ${name:-livedown} = 'livedown' ] ;then
+	xdotool search --sync --onlyvisible --classname "livedown" windowactivate
+	window @0.15 tile 3 3  # wait for ruler to complete "qutebrowser" rule
+fi
 
 # kak: filetype=sh
