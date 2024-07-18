@@ -40,9 +40,9 @@ tile() {
 }
 
 case $1 in
-	left  ) left       ;;
-	right ) right      ;;
-	*     ) tile $1 $2 ;;
+	left  ) left  ;;
+	right ) right ;;
+	*     ) tile $1 ${2:-$1} ;;
 esac
 
 waitron window_focus $winid

@@ -50,7 +50,7 @@ class="mpv"
 
 class="pcmanfm"
 	window desktop $(chef desktop "DESK") ;\
-	window tile 3 3
+	window tile 3
 
 class="pavucontrol"
 	window desktop $(chef desktop "CHEF")                                 ;\
