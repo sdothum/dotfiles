@@ -63,7 +63,7 @@ define-command record-usermode -params 1 %{
 # set-usermode %{ user-mode } [ %{ key } ]
 define-command set-usermode -params ..2 %{
 	# trace %sh{ echo "$kak_opt_usermodes" | grep "^$(echo $1) $(echo $2)" }
-	evaluate-commands %sh{ echo "$kak_opt_usermodes" | grep "^$(echo $1) $(echo $2)" | sort -n -k2 | cut -d: -f2- }
+	evaluate-commands %sh{ echo "$kak_opt_usermodes" | grep "^$(echo $1) $(echo $2)" | sort -k2 | cut -d: -f2- }
 }
 
 # Plugins
@@ -501,17 +501,17 @@ map global normal '#'   ': enter-user-mode format<ret>'
 # ................................................................... Commenting
 
 record-usermode %{ comment : map global format c       ': comment-line<ret>' -docstring 'comment' }
-record-usermode %{ comment : map global format l       'x|comment l .<ret>'  -docstring 'leader    ... comment' }
-record-usermode %{ comment : map global format t       'x|comment t .<ret>'  -docstring 'trailer   comment ...' }
+record-usermode %{ comment : map global format l       'x|comment l .<ret>'  -docstring 'leader    ... xxx' }
+record-usermode %{ comment : map global format t       'x|comment t .<ret>'  -docstring 'trailer   xxx ...' }
 record-usermode %{ comment : map global format R       'x|comment r =<ret>'  -docstring 'ruler     ═══' }
 record-usermode %{ comment : map global format r       'x|comment r --<ret>' -docstring 'ruler     ━━━' }
-record-usermode %{ comment : map global format U       'x|comment u =<ret>'  -docstring 'underline ═══ comment' }
-record-usermode %{ comment : map global format u       'x|comment u --<ret>' -docstring 'underline ━━━ comment' }
+record-usermode %{ comment : map global format U       'x|comment u =<ret>'  -docstring 'underline ═══' }
+record-usermode %{ comment : map global format u       'x|comment u --<ret>' -docstring 'underline ━━━' }
 record-usermode %{ comment : map global format '`'     'x|comment c<ret>'    -docstring 'css       <code></code> block' }
 
 # ..................................................................... Aligning
 
-record-usermode %{ align a : map global format <space> 'x|align '            -docstring 'align     '' '' nth-1 word' }
+record-usermode %{ align a : map global format <space> 'x|align '            -docstring 'align     '' '' nth+1 word' }
 record-usermode %{ align b : map global format <minus> 'x|align --<ret>'     -docstring 'align     --  comment' }
 record-usermode %{ align c : map global format '#'     'x|align \#<ret>'     -docstring 'align     #   comment' }
 record-usermode %{ align d : map global format /       'x|align //<ret>'     -docstring 'align     //  comment' }
