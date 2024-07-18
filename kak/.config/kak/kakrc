@@ -46,22 +46,23 @@ define-command trace   -params 1 %{ nop %sh{ echo "${1# }" >>/tmp/kak:trace } }
 if %{ [ -n "$UNPLUG" ] || [ -n "$TEST"] } %{
 	hook global BufSetOption filetype=.* %{ echo -debug setting %val{hook_param} }
 	hook global WinSetOption filetype=.* %{ echo -debug setting %val{hook_param} }
-	hook global WinCreate .*             %{ echo -debug setting %val{hook_param} }
+	hook global WinCreate    .*          %{ echo -debug setting %val{hook_param} }
 }
 
-# User mode declaration control
+# User mode management
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 declare-option str usermodes ''
 
-# record user mode declarations by user mode name NOTE: format %{ <sort key> : <map statement> } with field 5: usermode
+# record-usermode %{ key [sort] : map .. }
 define-command record-usermode -params 1 %{
- 	set-option global usermodes "%sh{ echo ""$kak_opt_usermodes\n$(echo $1 | cut -d' ' -f5 )$1"" }"
+	# trace %arg{1}
+ 	set-option global usermodes "%sh{ echo ""$kak_opt_usermodes\n$(echo $1 | cut -d: -f2- | cut -d' ' -f4 )$1"" }"
 }
 
-# filter and set user mode declarations by user mode name and key*
-define-command play-usermodes -params ..2 %{
-	# nop %sh{ echo "$kak_opt_usermodes" | grep "^$(echo $1)" >>/tmp/kak:usermodes:$(echo $1) }
+# set-usermode %{ user-mode } [ %{ key } ]
+define-command set-usermode -params ..2 %{
+	# trace %sh{ echo "$kak_opt_usermodes" | grep "^$(echo $1) $(echo $2)" }
 	evaluate-commands %sh{ echo "$kak_opt_usermodes" | grep "^$(echo $1) $(echo $2)" | sort -n -k2 | cut -d: -f2- }
 }
 
@@ -93,8 +94,8 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 
 	# ................................................................ crosshairs
 	bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
-		record-usermode %{ focush : map global user + ': crosshairs<ret>'   -docstring "crosshairs" }
-		record-usermode %{ focush : map global user ^ ': cursorcolumn<ret>' -docstring "cursor column" }
+		record-usermode %{ focus h : map global user + ': crosshairs<ret>'   -docstring "crosshairs" }
+		record-usermode %{ focus h : map global user ^ ': cursorcolumn<ret>' -docstring "cursor column" }
 	}
 
 	# ..................................................................... fandt
@@ -133,7 +134,7 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 			}
 		}
 
-		record-usermode %{ focusf : map global user <space> ': toggle-focus<ret>' -docstring "focus selections" }
+		record-usermode %{ focus f : map global user <space> ': toggle-focus<ret>' -docstring "focus selections" }
 	}
 
 	# ........................................................... lua interpreter
@@ -349,7 +350,7 @@ if %{ [ -z "$UNPLUG" ] && [ -n "$DISPLAY" ] && [ -z "$TEST" ] } %{
 	}
 	bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 		require-module kakpipe
-		record-usermode %{ shellp : map global user | 'x: kakpipe ' -docstring "kakpipe FIFO buffer" }
+		record-usermode %{ shell p : map global user | 'x: kakpipe ' -docstring "kakpipe FIFO buffer" }
 		map global normal | 'x|' -docstring "pipe FIFO buffer"
 	}
 
@@ -510,23 +511,23 @@ record-usermode %{ comment : map global format '`'     'x|comment c<ret>'    -do
 
 # ..................................................................... Aligning
 
-record-usermode %{ aligna : map global format <space> 'x|align '            -docstring 'align     '' '' column' }
-record-usermode %{ alignb : map global format <minus> 'x|align --<ret>'     -docstring 'align     --  comment' }
-record-usermode %{ alignc : map global format '#'     'x|align \#<ret>'     -docstring 'align     #   comment' }
-record-usermode %{ alignd : map global format /       'x|align //<ret>'     -docstring 'align     //  comment' }
-record-usermode %{ aligne : map global format =       'x|align =<ret>'      -docstring 'align     =   statement' }
-record-usermode %[ aligns : map global format {       'x|align \{<ret>'     -docstring 'align     {   block' ]  # ATTENTION: %[] to escape '{' :)
-record-usermode %{ aligns : map global format )       'x|align \)<ret>'     -docstring 'align     )   case' }
-record-usermode %{ aligns : map global format ';'     'x|align \;\;<ret>'   -docstring 'align     ;;  endcase' }
-record-usermode %{ alignx : map global format '\'     'x|align \\<ret>'     -docstring 'align     \   continuation' }
-record-usermode %{ alignx : map global format ','     'x|align \;\\<ret>'   -docstring 'align     ;\  continuation' }
+record-usermode %{ align a : map global format <space> 'x|align '            -docstring 'align     '' '' nth-1 word' }
+record-usermode %{ align b : map global format <minus> 'x|align --<ret>'     -docstring 'align     --  comment' }
+record-usermode %{ align c : map global format '#'     'x|align \#<ret>'     -docstring 'align     #   comment' }
+record-usermode %{ align d : map global format /       'x|align //<ret>'     -docstring 'align     //  comment' }
+record-usermode %{ align e : map global format =       'x|align =<ret>'      -docstring 'align     =   statement' }
+record-usermode %[ align s : map global format {       'x|align \{<ret>'     -docstring 'align     {   block' ]  # ATTENTION: %[] to escape '{' :)
+record-usermode %{ align s : map global format )       'x|align \)<ret>'     -docstring 'align     )   case' }
+record-usermode %{ align s : map global format ';'     'x|align \;\;<ret>'   -docstring 'align     ;;  endcase' }
+record-usermode %{ align x : map global format '\'     'x|align \\<ret>'     -docstring 'align     \   continuation' }
+record-usermode %{ align x : map global format ','     'x|align \;\\<ret>'   -docstring 'align     ;\  continuation' }
 
 # .................................................................... Searching
 
-record-usermode %{ focuss : map global user /   '/(?i)'     -docstring 'isearch prev,next' }
-record-usermode %{ focuss : map global user '\' '<a-/>(?i)' -docstring 'isearch prev,next' }
-record-usermode %{ focusx : map global user ?   '?(?i)'     -docstring 'iextend prev,next' }
-record-usermode %{ focusx : map global user !   '<a-?>(?i)' -docstring 'iextend prev,next' }
+record-usermode %{ focus s : map global user /   '/(?i)'     -docstring 'isearch prev,next' }
+record-usermode %{ focus s : map global user '\' '<a-/>(?i)' -docstring 'isearch prev,next' }
+record-usermode %{ focus x : map global user ?   '?(?i)'     -docstring 'iextend prev,next' }
+record-usermode %{ focus x : map global user !   '<a-?>(?i)' -docstring 'iextend prev,next' }
 
 # .................................................................... Selection
 
@@ -606,8 +607,8 @@ record-usermode %{ alpha : map global user x ': sync<ret>: write-all-quit<ret>' 
 # Terminal
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-record-usermode %{ alpha : map global user t   ': nop %sh{ term >/dev/null 2>&1 }<ret>' -docstring 'terminal' }
-record-usermode %[ shellc : map global user '{' ': echo %sh{  }<left><left>'             -docstring 'shell' ]  # ATTENTION: %[] to escape '{}' :)
+record-usermode %{ alpha   : map global user t   ': nop %sh{ term >/dev/null 2>&1 }<ret>' -docstring 'terminal' }
+record-usermode %[ shell c : map global user '{' ': echo %sh{  }<left><left>'             -docstring 'shell' ]  # ATTENTION: %[] to escape '{}' :)
 
 # Highlighting
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -629,12 +630,11 @@ hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt
 # Global user modes
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# set (order) user mode declarations
-play-usermodes %{ user } %{ snippet }
-play-usermodes %{ user } %{ focus }
-play-usermodes %{ user } %{ shell }
-play-usermodes %{ user } %{ alpha }
-play-usermodes %{ format } %{ align }
-play-usermodes %{ format } %{ comment }
+set-usermode %{ user } %{ snippet }
+set-usermode %{ user } %{ focus }
+set-usermode %{ user } %{ shell }
+set-usermode %{ user } %{ alpha }
+set-usermode %{ format } %{ align }
+set-usermode %{ format } %{ comment }
 
 # kak: filetype=kak
