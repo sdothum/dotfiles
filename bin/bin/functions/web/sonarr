@@ -8,14 +8,14 @@
 
 # Usage: sonarr [video], of 'anime' or 'series'
 
-# BROWSER=surf
+BROWSER=qutebrowser-instance
 SONARR=http://$SERVER:8989
 export NO_PROXY="*"
 
 [ $1 ] && page=$(dirname $1 | tr '[:upper:]' '[:lower:]' | sed -r 's/.*(anime|series)/series/; s/[.]/-/g') || page=calendar
-$BROWSER $SONARR/$page
 
-xdotool search --sync --onlyvisible --name '.*Sonarr.*' windowfocus
-window size monocle
+name=sonarr $BROWSER $SONARR/$page  # SEE: qutebrowser-instance
+
+pwait "$SONARR/$page"
 
 # kak: filetype=sh

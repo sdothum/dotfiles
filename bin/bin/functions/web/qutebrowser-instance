@@ -45,10 +45,16 @@ settings="
 
 eval $QUTEBROWSER $RUNOPT $settings $startpage 2>/dev/null &
 
-# "qutebrowser" rule preempts "livedown" class
-if [ ${name:-livedown} = 'livedown' ] ;then
-	xdotool search --sync --onlyvisible --classname "livedown" windowactivate
-	window @0.15 tile 3  # wait for ruler to complete "qutebrowser" rule
-fi
+# "qutebrowser" rule preempts other class rules
+case ${name:-livedown} in
+	livedown )
+		xdotool search --sync --onlyvisible --classname "livedown" windowactivate
+		window @0.15 tile 3  # wait for ruler to complete "qutebrowser" rule
+		;;
+	sonarr   )
+		xdotool search --sync --onlyvisible --classname 'sonarr' windowactivate
+		window size monocle
+		;;
+esac
 
 # kak: filetype=sh
