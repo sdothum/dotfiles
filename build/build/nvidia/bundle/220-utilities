@@ -26,6 +26,7 @@
 # convmv
 # gparted
   gptfdisk
+  parted
 
 
 = sync
