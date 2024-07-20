@@ -35,7 +35,7 @@ usage() {
 >> m-rounded
 >> p-[eared|serifed]
 >> q-hook
->> t-asymmetric[+|-[-]]
+>> t-[asymmetric[+|-[-]]|cross|flat]
 >> y-straight
 
 >> 0-split
@@ -163,6 +163,8 @@ cmdopts() {
 			t-asymmetric   ) t=$1 ;;
 			t-asymmetric+  ) t=$1 ;;
 			t-asymmetric-* ) t=$1 ;;
+			t-cross        ) t=$1 ;;
+			t-flat         ) t=$1 ;;
 			y-straight     ) y=$1 ;;
 
 			0-split        ) zero=$1  ;;
@@ -233,7 +235,8 @@ e_ink() {
 	update $GLYPH $name
 }
 
-dfont()   { iosevka.$IOSEVKA extended cap=extended G-hookless+ y-straight t-asymmetric+ 1-base 4-open+ q-hook Q-bar $(options $@) at-tall $cap; }
+cfont()   { iosevka.$IOSEVKA extended cap=extended 1-base q-hook Q-bar $(options $@) $cap; }
+dfont()   { iosevka.$IOSEVKA extended cap=extended G-hookless+ y-straight t-asymmetric+ 1-base 4-open+ q-hook Q-bar $(options $@) $cap; }
 efont()   { iosevka.$IOSEVKA $language $(options $@); }
 emdash()  { [ "$ereader" = kobo ] && emdash="emdash=$emkobo" || emdash="emdash=$emkindle"; }  # == M + space width
 family()  { for i in $@ ;do case $i in family=*) echo ${i#*=}; break ;; esac ;done }
@@ -314,12 +317,12 @@ elif [ $web ] ;then                       # www fonts
 
 elif [ $coding ] ;then                    # classic coding font
 	unset space
-	cmdopts cap=extended
-	dfont $leading G-toothed a-double family=monodyslexic
+	cfont $leading family=monodyslexic j-flat at-tall l-hooky
+	cfont $leading G-toothed a-double family=hyperlegible b-toothed j-serifless p-eared J-serifless 1-nobase
 
 else                                      # desktop fonts
 	unset space
-	cmdopts t-asymmetric-- j-flat 1-nobase
+	cmdopts t-asymmetric-- j-flat 1-nobase at-tall l-hooky
 	dfont $leading
 	dfont proof    I-descending l-ascending f-extended J-flat T-descending
 	dfont menu     I-serifed    Q-straight

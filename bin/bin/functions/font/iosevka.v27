@@ -754,14 +754,14 @@ npm install  # ignore npm funding and audit messages
 
 npm run build -- ttf::$family  # post Verda commits
 
-if [ $ebook ] ;then
-	mkdir -p $HOME/.fonts/$family
-	cp -v dist/$family/ttf/* $HOME/.fonts/$family
-	export ANGLE=-11        # sight adjusted italics angle
-else
-	nerdfont $mono $family  # insert glyphs
-	unset serifless         # monospace charset
+if [ -z "$ebook" ] ;then
+	nerdfont $mono $family                      # insert glyphs
+	unset serifless                             # monospace charset
 fi
+
+mkdir -p $HOME/.fonts/$family
+cp -v dist/$family/ttf/* $HOME/.fonts/$family
+export ANGLE=-11                               # sight adjusted italics angle
 
 # suppress spurious fontforge errors/warnings
 

@@ -145,7 +145,7 @@ monolexic() {
 	y=straight-turn-serifless
 	zero=reverse-slashed
 	one=no-base-flat-top-serif
-	four=closed
+	four=closed-serifless
 	six=closed-contour
 	symbols
 	cyrl_ka=symmetric-touching-serifless
@@ -182,7 +182,7 @@ geometric() {
 	y=straight-serifless
 	zero=unslashed-oval
 	one=no-base
-	four=closed
+	four=closed-serifless
 	six=straight-bar
 	symbols
 	cyrl_ka=symmetric-connected-serifless
@@ -202,8 +202,8 @@ variant() {
 			ampersand      ) glyph ampersand=closed                              ;;
 			asterisk-high  ) glyph asterisk=penta-high                           ;;  # webfont restoration
 			asterisk-low   ) glyph asterisk=penta-low                            ;;  # paragraph separator (ebook) glyph
-			at             ) glyph at=fourfold                                   ;;
-			at-tall        ) glyph at=fourfold-solid-inner-tall                  ;;
+			at             ) glyph at=threefold                                  ;;
+			at-tall        ) glyph at=threefold-solid-inner-tall                 ;;
 			dollar         ) glyph dollar=open                                   ;;
 			number_sign    ) glyph number_sign=slanted                           ;;
 			paren-flat     ) glyph paren=flat-arc                                ;;
@@ -404,6 +404,7 @@ cmdopts () {
 			a-single       ) variant $1 ;;
 			a-toothless    ) variant $1 ;;
 			b-corner       ) variant $1 p-serifed ;;         # alternate b p dyslexic glyphs
+			b-toothed      ) variant $1 ;;
 			d-tailed       ) variant $1 b-corner p-eared ;;  # alternate b d p dyslexic glyphs
 			d-toothless    ) variant $1 p-eared ;;
 			f-extended     ) variant $1 ;;                   # unolexic (homage to universal grotesk)
@@ -423,7 +424,7 @@ cmdopts () {
 			l-serifless    ) variant $1 ;;
 			m-rounded      ) variant $1 ;;
 			m-serifless    ) variant $1 ;;
-			p-eared        ) variant $1 d-toothless ;;
+			p-eared        ) variant $1 ;;
 			p-serifed      ) variant $1 sb 0.7650 ;;         # add air for serif corner
 			q-hook         ) variant 'q=HOOK-TAILED'; q_hook=true; baseline=true ;;
 			q-tailed       ) variant $1; unset q_hook ;;
@@ -755,14 +756,14 @@ npm install  # ignore npm funding and audit messages
 
 npm run build -- ttf::$family  # post Verda commits
 
-if [ $ebook ] ;then
-	mkdir -p $HOME/.fonts/$family
-	cp -v dist/$family/TTF/* $HOME/.fonts/$family  # v30 directory name change
-	export ANGLE=-11                               # sight adjusted italics angle
-else
-	nerdfont $mono $family                         # insert glyphs
-	unset serifless                                # monospace charset
+if [ -z "$ebook" ] ;then
+	nerdfont $mono $family                      # insert glyphs
+	unset serifless                             # monospace charset
 fi
+
+mkdir -p $HOME/.fonts/$family
+cp -v dist/$family/TTF/* $HOME/.fonts/$family  # v30 directory name change
+export ANGLE=-11                               # sight adjusted italics angle
 
 # remove old v27 Iosevka font files
 for i in $HOME/.fonts/$family/*ttf ;do

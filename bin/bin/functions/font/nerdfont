@@ -43,7 +43,7 @@ cd ${NERD%/*}/Iosevka.$IOSEVKA
 cp -v $(find dist/$family -maxdepth 1 -type d -iregex '.*/ttf')/* $FONT
 
 # patch font
-REGULAR=$(find . -regextype posix-extended -regex '.*-(normal)*regular(upright)*.ttf')
+REGULAR=$(find dist/$family -regextype posix-extended -iregex '.*/ttf/.*-(normal)*regular(upright)*.ttf')
 if [ -e $NERD/font-patcher ] ;then
 	rm -f /tmp/*ttf  # nerd-font creates file by font family name (note case)
 	$NERD/font-patcher --adjust-line-height $mono --powerline -out /tmp $REGULAR
