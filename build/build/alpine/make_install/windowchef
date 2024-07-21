@@ -1,0 +1,24 @@
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................... windowchef
+
+sudo apk add libxcb-dev xcb-util-keysyms-dev xcb-util-wm-dev xcb-util-xrm-dev
+
+cd /net/depot
+exists --repo windowchef || git clone https://github.com/tudurom/windowchef.git
+
+cd windowchef
+cp -fv $STOW/windowchef/.config/windowchef/src/*patch .
+cp -fv $STOW/windowchef/.config/windowchef/src/man/*patch man/
+for i in *patch ;do patch ${i%.patch} $i ;done
+cd man
+for i in *patch ;do patch ${i%.patch} $i ;done
+cd -
+make
+make man
+sudo make install
+
+# vim: set ft=sh: #
