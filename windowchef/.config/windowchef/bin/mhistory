@@ -31,7 +31,7 @@ inject() {
 		mkdir -p "${2%/*}" || exit 1
 		touch "$2"
 	fi
-	
+
 	# remove duplicate and empty history entries
 	# NOTE: cannot prevent $(find -regex) expression duplication
 	echo "$1\n$(grep -iv "^$(echo "$1" | sed -r 's/([.*?$])/\\\1/g')" "$2")" | sed '/^$/d' >$update

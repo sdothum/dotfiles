@@ -7,6 +7,9 @@
 # ............................................................ Television series
 
 # Usage: menu series [cache | <series>]
+#
+# ATTENTION: the "sonarr" group id must match the id of the "sonarr" group on the nfs server
+# NOTE: $USER must be added to the "sonarr" group
 
 # Library structure:
 # ../videos
@@ -36,11 +39,11 @@ cd $library
 # exclude directory kludge of .anime links in main series folder
 permissions() {
 	if server && [ $(hostname) != motu ] || $usb ;then
-		find "$library" -maxdepth 2 -type d ! -user sonarr -exec sudo chown -R sonarr:users {} \; 2>/dev/null
+		find "$library" -maxdepth 2 -type d ! -user sonarr -exec sudo chown -R sonarr:sonarr {} \; 2>/dev/null
 		find "$library" -maxdepth 2 -type d -user sonarr -exec sudo chmod -R ug+rwx {} \; 2>/dev/null
 		find "$library" -maxdepth 3 -type f -user sonarr -exec sudo chmod -R ug+rw {} \; 2>/dev/null
 	else
-		ssh $SERVER "find '$library' -maxdepth 2 -type d ! -user sonarr -exec sudo chown -R sonarr:users {} \\;"
+		ssh $SERVER "find '$library' -maxdepth 2 -type d ! -user sonarr -exec sudo chown -R sonarr:sonarr {} \\;"
 		ssh $SERVER "find '$library' -maxdepth 2 -type d -user sonarr -exec sudo chmod ug+rwx {} \\;"
 		ssh $SERVER "find '$library' -maxdepth 3 -type f -user sonarr -exec sudo chmod ug+rw {} \\;"
 	fi
@@ -101,11 +104,11 @@ while : ;do
 		"$SONARR"    ) sonarr; unset show; continue ;;
 		"$FILE"      ) killall 'nnn' 2>/dev/null; term 'series' WAIT nnn "$library"; cache; continue ;;
 		"$CATALOGUE" ) catalogue; cache; continue ;;
-	
+
 		*            )
 			series=""$library"/$(echo $show | sed 's/ /./g')"
 			playlist="$series/.playlist"
-			[ -e "$playlist" ] || echo >"$playlist" ;;
+			[ -e "$playlist" ] || touch "$playlist" ;;
 	esac
 
 	while : ;do
@@ -124,6 +127,7 @@ while : ;do
 		fi
 
 		mhistory "$playlist" "$episode"
+		ditto playlist "playlist=$playlist episode=$episode"
 		play "$video" "$show $episode"
 		cache --  # update deletes
 	done
