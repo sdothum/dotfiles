@@ -18,8 +18,6 @@ WM=$HOME/.windowmanager
 wm=$(cat $WM)
 [ $wm = shell ] && { pkill -KILL startx; exit; }  # trap autostart wm set as shell
 
-sudo dinitctl start udev-settle >/dev/null
-
 # ................................................................... User setup
 
 # build installed terminal
@@ -92,9 +90,9 @@ tv_over() { xrandr --output $1 --off --output HDMI1 --primary --mode $2 --rate 6
 
 case $(hostname) in
 	# luna ) xrandr --output DVI-D-1 --mode 1680x1050 --output HDMI-1 --primary --mode 1920x1080 --rate 60 --left-of DVI-D-1 --dpi 96 ;;
-	luna ) xrandr --output HDMI-1 --mode 3440x1440  --rate 60 --dpi 96 ;;
+	luna ) xrandr --output HDMI-1 --mode 1920x1080  --rate 60 --dpi 96 ;;
 	lumen) hdmi && tv_over LVDS1 1920x1080 ;;
-	motu ) hdmi && tv_over eDP1 1920x1080 ;;
+	motu ) hdmi && tv_over eDP1 3440x1440 ;;
 esac
 # pulseeffects --gapplication-service &
 
