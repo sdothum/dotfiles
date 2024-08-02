@@ -106,6 +106,7 @@
 **/kobopatch
 !**/kobopatch*/*.yaml
 !**/kobopatch*/src/*.yaml
+**/koreader/koreader*
 **/koreader/**/dict
 **/.local/bin
 **/*.log
