@@ -13,9 +13,12 @@ KAK=/usr/bin/kak
 COLORDIFF=colordiff  # SEE: ~/.colordiffrc
 
 if exists icdiff ;then
-	IC=ic
-	ICOPT='--line-numbers --truncate --tabsize=3 --color-map=add:red_bold,change:red_bold,subtract:red_bold,description:yellow,line-numbers:black_bold,separator:yellow'  # side-by-side
-	COLORDIFF=cat
+	if [ $(wc -L "$1" | cut -d' ' -f1) -le 1024 ] ;then  # BUG: icdiff line width limit
+		IC=ic
+		# ICOPT='--line-numbers --truncate --tabsize=3 --color-map=add:red_bold,change:red_bold,subtract:red_bold,description:yellow,line-numbers:black_bold,separator:yellow'  # side-by-side
+		ICOPT='--line-numbers --truncate --tabsize=3 --color-map=add:yellow_bold,change:yellow_bold,subtract:yellow_bold,description:blue_bold,line-numbers:black_bold,separator:yellow_bold'  # side-by-side
+		COLORDIFF=cat
+	fi
 fi
 [ -e "$2" ] || usage
 

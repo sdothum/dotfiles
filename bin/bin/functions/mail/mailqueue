@@ -16,13 +16,14 @@
 
 # send mail poller with error notifier
 queue=$HOME/.msmtpqueue
+mkdir -p $queue
 if [ "$1" = purge ] ;then
 	rm -rfv $queue/*
 	exit
 fi
 
 # import user path
-. $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
+[ $CRONCOLORS ] || . $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
 
 # mailqueue daemon (cron task)
 # trace 'Starting mailqueue..'

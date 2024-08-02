@@ -6,7 +6,7 @@
 
 # ....................................................................... Editor
 
-usage() { usage: "[kmd=<command>] $(basename $0) [-l | -p [<id>] | -v | -h] [-BENCHMARK | -DEBUG | -PLUG | -X11 | -- | ID=<id>] [WAIT] [<row>x<col>] <file>*"; exit 1; }
+usage() { usage: "[kmd=<command>] $(basename $0) [-l | -p [<id>] | -v | -h] [-BENCHMARK | -DEBUG | -PLUG | -TRACE | -X11 | -- | ID=<id>] [WAIT] [<row>x<col>] <file>*"; exit 1; }
 
 # NOTE: $kmd is passed passively to (env) term for subsequent "xdotool type"
 
@@ -34,8 +34,9 @@ while : ;do
 		-v*           ) $KAK -version; exit ;;
 		-h*           ) $KAK -help; ditto '-debug' "hooks | shell | profile | keys | commands"; ditto 'kak' "-l | -p [<id>] | -v | -DEBUG (commands) | -P (no plugins) | -X (non-modal colorscheme)"; usage ;;
 		-B*           ) hyperfine -warmup 10 "$KAK -ui dummy -e quit"; exit ;;
-		-D*           ) debug='-debug commands'  ;;  # debug trace
-		-P*           ) export UNPLUG=true       ;;  # kakrc plugins exclusions
+		-D*           ) export TRACE=/tmp/kak:trace; debug='-debug commands' ;;  # debug trace
+		-P*           ) export UNPLUG=true ;;           # kakrc plugins exclusions
+		-T*           ) export TRACE=/tmp/kak:trace ;;  # trace messages
 		-X*           ) unset DISPLAY; export COLORSCHEME=${COLORSCHEME:-dabruin} ;;
 		--            ) ID=$(rand)    ;;  # force new instance
 		id=*          ) ID="${1#*=}"  ;;

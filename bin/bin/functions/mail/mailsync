@@ -19,7 +19,7 @@ MAILBOX=$MAILDIR/$ME
 # echo USER=$USER >>/tmp/debug
 
 # import user path
-. $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
+[ $CRONCOLORS ] || . $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
 
 # mail poller (see offlineimap and imapfilter)
 # lifted from http://cpbl.wordpress.com/2009/11/07/alpine-offlineimap-and-gmail-under-ubuntu/

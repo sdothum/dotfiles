@@ -10,7 +10,7 @@
 #
 # HISTORY: Iosevka directory and file (naming conventions) changed with version 3x
 
-nerdfonts='--fontawesome --fontawesomeextension --octicons --material'  # powerline added below
+nerdfonts='--fontawesome --fontawesomeext --octicons --material'  # powerline added below
 
 # see make_install iosevka
 NERD=/home/depot/nerd-fonts
@@ -24,15 +24,16 @@ family=${FONT##*/}
 ditto warning 'nerd-fonts v2.x may break ligatures'
 if exists --repo ${NERD##*/} ;then
 	cd $NERD
-	if [ ! -e $MAKE_NERD ] ;then
-		$NERD/font-patcher --version
-		ifno 'sync nerd-fonts repo' || git pull
-		touch $MAKE_NERD
-	fi
+	$NERD/font-patcher --version
+	# if [ ! -e $MAKE_NERD ] ;then
+	# 	$NERD/font-patcher --version
+	# 	ifno 'sync nerd-fonts repo' || git pull  # full repo is over 30GB
+	# 	touch $MAKE_NERD
+	# fi
 else
 	void && xb_check fontforge nodejs otfcc ttfautohint
 	cd ${NERD%/*}
-	git clone --depth 1 https://github.com/be5invis/Iosevka.git
+	git clone --depth 1 https://github.com/ryanoasis/nerd-fonts.git
 	$NERD/font-patcher --version
 fi
 

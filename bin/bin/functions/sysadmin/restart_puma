@@ -9,7 +9,7 @@
 delay=1.5  # restart delay window
 
 # import user path
-. $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
+[ $CRONCOLORS ] || . $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
 
 sv stop puma
 sleep $delay

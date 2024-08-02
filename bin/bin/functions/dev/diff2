@@ -13,6 +13,6 @@ while [ $1 ] ;do
 done
 
 # 2 column ouptut if any diff..
-[ $2 ] && cmp $1 $2 || /usr/bin/diff -y --color $opts $1 $2 | less -R
+[ $2 ] && cmp $1 $2 || /usr/bin/diff --side-by-side --width=$(tput cols) --color $opts $1 $2 | less -R
 
 # kak: filetype=sh

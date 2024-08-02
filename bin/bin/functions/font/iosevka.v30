@@ -32,10 +32,10 @@ echo $@
 
 usage() {
 	echo "$(basename $0) normal (default) | dyslexic | ebook | expanded | extended  (shapes)
-> heading | kindle | kobo | menu | proof | webfont             (special)
-> english | latin+greek | cyrillic | fluent | ligature <name>  (utf-8)
+> utf-8 | english | latin+greek | cyrillic | fluent | ligature <name>  (utf-8)
+> heading | kindle | kobo | menu | proof | webfont   (special)
 > monolexic (default) | atkinson | geometric | jost  (typefaces)
-> altmono | elementary | grote | grotesk             (glyph sets)
+> altmono | elementary | grote | grotesk | nerdfont  (glyph sets)
 > capadjust (C G O Q S U)
 
 > book+regular | descenders | double | open[+]
@@ -71,7 +71,7 @@ usage() {
 > y-straight
 
 > 0-split
-> 1-[no]base
+> 1-[[no]base|flat]
 > 4-open[+]
 > asterisk-high
 > at-tall
@@ -197,6 +197,7 @@ variant() {
 			0-split        ) glyph zero=reverse-slashed-split                    ;;
 			1-base         ) glyph one=base                                      ;;
 			1-nobase       ) glyph one=no-base                                   ;;
+			1-flat         ) glyph one=no-base-flat-top-serif                    ;;
 			4-open+        ) glyph four=semi-open-non-crossing-serifless         ;;
 			4-open         ) glyph four=semi-open                                ;;
 			ampersand      ) glyph ampersand=closed                              ;;
@@ -348,6 +349,7 @@ cmdopts () {
 			fluent         ) fluent; ditto char_set "$1" ;;
 			latin+greek    ) latin_greek;  ditto char_set "$1" ;;
 			ligature       ) ligature $2  || usage; shift ;;
+			utf*           ) unset exclude_chars ;;
 
 			# typefaces
 			altmono        ) cmdopts t-asymmetric G-hookless+ ;;
@@ -358,6 +360,7 @@ cmdopts () {
 			grotesk        ) variant I-serifless f-extended ;;
 			jost           ) geometric; cap extended; build=-jost; variant a-double J-descending j-serifless Q-crossing u-toothed ampersand at dollar number_sign percent question ;;
 			monolexic      ) monolexic ;;
+			nerdfont       ) nerdfont=true ;;
 
 			# styles
 			book+regular   ) adjust="book+regular" ;;    # see fforge bookweight
@@ -442,12 +445,13 @@ cmdopts () {
 			0-split        ) variant $1 ;;
 			1-base         ) variant $1 ;;
 			1-nobase       ) variant $1 ;;
+			1-flat         ) variant $1 ;;
 			4-open         ) variant $1 ;;
 			4-open+        ) variant $1 ;;
 			paren-flat     ) variant $1 ;;
 			asterisk-high  ) variant $1 ;;
 			at-tall        ) variant $1 ;;
-	
+
 			# geometry
 			ascender=*     ) ascender ${1#*=} || usage ;;                               # affects descender as well
 			capadjust      ) capadjust=true ;;
@@ -490,7 +494,7 @@ cmdopts $@
 
 ditto spacing "$spacing"
 ditto override "$leading"
-ditto override "$shape" 
+ditto override "$shape"
 ditto override "$sb"
 [ $space     ] && ditto override "space ${space}$([ $space = 'M' ] || echo x)"
 [ $emdash    ] && ditto override "emdash ${emdash}x"
@@ -756,7 +760,8 @@ npm install  # ignore npm funding and audit messages
 
 npm run build -- ttf::$family  # post Verda commits
 
-if [ -z "$ebook" ] ;then
+if [ -z "$ebook" ] || [ $nerdfont ] ;then
+	ditto mono $mono
 	nerdfont $mono $family                      # insert glyphs
 	unset serifless                             # monospace charset
 fi

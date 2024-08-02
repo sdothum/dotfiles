@@ -11,7 +11,7 @@ usage() { usage: "$(basename $0) $(ls -1 ${0%/rsync}/functions/rsync | tr '\n' '
 EXCLUDE=$(dirname $0)/.rsync_exclude
 
 # import user path
-. $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
+[ $CRONCOLORS ] || . $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
 
 laptop=${laptop:-lumen}
 netbook=${netboot:-monad}

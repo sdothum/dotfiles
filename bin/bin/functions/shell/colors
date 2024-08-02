@@ -9,6 +9,7 @@
 # NOTE: cron process must be bash shell (dash does not show ansi colors)
 # see user_path
 # see colors.fish
+export CRONCOLORS=true
 
 # for posix shell scripts
 export BLINK=$(printf "\e[5m")

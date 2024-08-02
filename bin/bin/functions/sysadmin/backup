@@ -18,7 +18,7 @@ trace -- "backup $1"
 SUDO=sudo  # as root SEE: rsync wrapper
 case $1 in
 	''   ) usage ;;
-	root ) subvol '@'     && rsync $DRYRUN -a --delete $EXCLUDE / /mnt ;;
+	root ) subvol '@'     && sudo rsync $DRYRUN -a --delete $EXCLUDE / /mnt ;;
 	home ) subvol '@home' && rsync $DRYRUN -a --delete /home/ /mnt ;;
 	all  ) noprompt=true backup root; noprompt=true backup home ;;
 	*    ) usage ;;

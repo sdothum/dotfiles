@@ -33,7 +33,7 @@ delay=0.001  # match message animation interval
 while [ "$1" ] ;do
 	case $1 in
 		-1     ) unset IC ICOPT ;;                                        # standard diff (not side-by-side)
-		-s     ) S=true         ;;                                        # flash messages
+		-s     ) S=true         ;;                                        # splash messages
 		-b     ) w=-w; diffopt='set diffopt+=iwhite'  ;;                  # ignore whitespace
 		-E     ) w=-E; diffopt='set diffopt+=iwhite'  ;;                  # ignore whitespace
 		-Z     ) w=-Z; diffopt='set diffopt+=iwhite'  ;;                  # ignore whitespace
@@ -64,6 +64,8 @@ TARGET=${target:-$SNAPSHOT}  # unprovided target defaults to dotfile repo
 [ -L $TARGET ] && L=-L       # WARNING: find will fail on errant recursive links
 target=$(find $L $TARGET -type ${T:-d} -regex ".*${path#*$P}" | head -1)
 [ -${T:-d} "$target" ] || target=$(find $L $TARGET -type ${T:-d} -regex ".*${path#*/stow}" | head -1)
+# for explicit directory references not pertaining to usual project directories
+[ "$target" ] || target=$(find $L $TARGET -type ${T:-d} | head -1)
 
 # Source bin ...................................................................
 
@@ -91,13 +93,13 @@ esac
 src=${source#$HOME/stow/*/}
 src=\~/${src#$HOME/}
 
-[ $debug ] && { ditto debug "T=$T target=$target"; exit; }
+[ $debug ] && { ditto debug "source=$source src=$src T=$T target=$target"; exit; }
 
 # Diff .........................................................................
 
 while read file <&3 ;do
 	[ "${file##*.}" = 'log' ] || [ "${file##*.}" = 'jpg' ] && continue
-	file "$file" | grep -q text || { ditto skipping "${file#./}"; continue; }
+	file "$file" | grep -q text || { ditto WARNING skipping "${file#./}"; continue; }
 	[ $T ] && targetfile=$target || targetfile="${target}/${file#./}"
 	while : ;do
 		[ $FILTER ] && [ "$file" -ot $FILTER ] && break

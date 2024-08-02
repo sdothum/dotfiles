@@ -16,7 +16,7 @@ ditto "see font/iosevka"
 
 usage() {
 	echo "$(basename $0) iosevka ebook | kindle | kobo | koreader
->> cyrillic | fluent | latin+greek
+>> cyrillic | fluent | latin+greek | utf-8
 >> classic | coding | quad | mu | serifless | serifed | trio | web
 >> altmono | book+regular | expanded | grote | open[+]
 
@@ -110,6 +110,7 @@ cmdopts() {
 			cyrillic       ) language=$1 ;;
 			fluent         ) language=$1 ;;
 			latin+greek    ) language=$1 ;;
+			utf*           ) language=$1 ;;
 
 			# typefaces
 			classic        ) classic=true ;;
@@ -275,10 +276,10 @@ elif [ "$quad" ] ;then
 elif [ "$koreader" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat serifless serifed
  	emdash
-	e_ink chalk  grote   I-serifed    t-asymmetric-- l-serifless a-single
-	e_ink draft  grote   I-serifed    t-asymmetric-- l-serifless
+	# e_ink chalk  grote   I-serifed    t-asymmetric-- l-serifless a-single
+	# e_ink draft  grote   I-serifed    t-asymmetric-- l-serifless
 	e_ink pencil grote   I-descending t-asymmetric-- l-ascending a-single f-extended J-flat T-descending
-	e_ink proof  grote   I-descending t-asymmetric-- l-ascending          f-extended J-flat T-descending
+	# e_ink proof  grote   I-descending t-asymmetric-- l-ascending          f-extended J-flat T-descending
 
 elif [ "$serifed" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat serifless serifed
@@ -324,14 +325,15 @@ else                                      # desktop fonts
 	unset space
 	cmdopts t-asymmetric-- j-flat 1-nobase at-tall l-hooky
 	dfont $leading
-	dfont proof    I-descending l-ascending f-extended J-flat T-descending
-	dfont menu     I-serifed    Q-straight
-	dfont dyslexic I-serifed    Q-straight      space=2.2   family=qclocktwo                      # conky qclocktwo font
-	dfont dyslexic I-serifed    quasi-extension space=1.125 family=monograffic serifless serifed  # panel/dunst font
+	dfont $leading I-descending l-ascending f-extended J-flat T-descending family=Iosevka-serifless
+	# dfont proof    I-descending l-ascending f-extended J-flat T-descending
+	# dfont menu     I-serifed    Q-straight
+	# dfont dyslexic I-serifed    Q-straight      space=2.2   family=qclocktwo                      # conky qclocktwo font
+	# dfont dyslexic I-serifed    quasi-extension space=1.125 family=monograffic serifless serifed  # panel/dunst font
 
-	cmdopts quasi-ext open+ j-flat serifless serifed capadjust
- 	emdash
-	e_ink charcoal grote space=1 I-descending t-asymmetric-- l-ascending f-extended J-flat T-descending Q-bar
+	# cmdopts quasi-ext open+ j-flat serifless serifed
+ # 	emdash
+	# e_ink charcoal grote space=1 I-descending t-asymmetric-- l-ascending f-extended J-flat T-descending Q-bar 1-flat
 fi
 
 # kak: filetype=sh

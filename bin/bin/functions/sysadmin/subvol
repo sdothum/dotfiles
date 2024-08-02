@@ -6,7 +6,7 @@
 
 # ................................................................. Mount subvol
 
-usage() { usage: "$(basename $0) @ | root | [@]home"; exit 1; }
+usage() { usage: "$(basename $0) @ | root | [@]home | -u"; exit 1; }
 
 NVME=${NVME:-/dev/nvme1n1p3}
 
@@ -16,8 +16,11 @@ subvol() {
 	ditto btrfs "/mnt/$1"
 }
 
+mounted() { mount | grep '/mnt .*,subvol='; }
+
 case $1 in
-	''           ) usage          ;;
+	''           ) mounted; usage ;;
+	-u           ) mounted >/dev/null && ditto umount "/mnt/$(mounted | sed 's|.*subvol=/||; s/)//')" && sudo umount /mnt ;;
 	root | @     ) subvol '@'     ;;
 	home | @home ) subvol '@home' ;;
 	*            ) usage          ;;

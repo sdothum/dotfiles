@@ -16,7 +16,7 @@ dns=8.8.8.8
 delay=5
 
 # import user path
-. $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
+[ $CRONCOLORS ] || . $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
 
 while [ $1 ] ;do
 	case $1 in
