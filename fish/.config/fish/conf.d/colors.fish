@@ -5,6 +5,8 @@
 
 # ........................................................ ANSI terminal colours
 
+set -x CRONCOLORS    'true'
+
 # for posix shell scripts
 set -x BLINK         (printf "\e[5m")
 set -x FAINT         (printf "\e[2m")
