@@ -12,7 +12,7 @@ local Event = require("ui/event")
 local UIManager = require("ui/uimanager")
 local DictQuickLookup = require("ui/widget/dictquicklookup")
 
-DictQuickLookup.onClose = function(self)
+DictQuickLookup.onClose = function(self, no_clear)
 	for menu, _ in pairs(self.menu_opened) do
 		UIManager:close(menu)
 	end
@@ -26,13 +26,19 @@ DictQuickLookup.onClose = function(self)
 			self.ui:handleEvent(Event:new("UpdateWikiLanguages", self.wiki_languages))
 		end
 	end
-	if self.highlight and not no_clear then
-		-- delay unhighlight of selection, so we can see where we stopped when
-		-- back from our journey into dictionary or wikipedia
-		local clear_id = self.highlight:getClearId()
-		UIManager:scheduleIn(highlight_hold, function()  -- from 0.5 seconds delay
-			self.highlight:clear(clear_id)
-		end)
+
+	if self.save_highlight then
+		self.highlight:saveHighlight()
+		self.highlight:clear()
+	else
+		if self.highlight and not no_clear then
+			-- delay unhighlight of selection, so we can see where we stopped when
+			-- back from our journey into dictionary or wikipedia
+			local clear_id = self.highlight:getClearId()
+			UIManager:scheduleIn(highlight_hold, function()
+				self.highlight:clear(clear_id)
+			end)
+		end
 	end
 	return true
 end

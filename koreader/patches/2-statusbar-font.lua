@@ -6,9 +6,10 @@
 -- frontend/ui/font.lua
 --
 -- match alt-/statusbar font to document font set as "default"
-
+--
 -- ATTENTION: KOReader must be restarted to apply "default" font change and the document settings reinitialized with..
 -- top msenu -> document -> document settings -> reset document settings to default -> reset
+-- WARNING: a load error will occur if a default font has not been set to properly initialize "settings.reader.lua"
 
 -- default document font family
 local DataStorage = require("datastorage")
