@@ -7,7 +7,7 @@
 # ....................................................... KOReader metadata edit
 
 usage() { echo "$(basename $0) [reset p'ages | soft-'hyphenation ]
-> [t'op | b'ottom | l'eft | r'ight <margin>]
+> [t'op | b'ottom | l'eft/right <margin>]
 > [sync m'argins <0|1>]
 > [line s'pacing <percent>]
 > [f'ont | h'eader/footer <font>]
@@ -32,11 +32,9 @@ string() {
 	echo $1
 }
 
-sdr()      { ifno "sdr: ${1} $2" && usage || sudo find -regex '.*metadata.epub.lua' -exec sed -i "$3" {} \; ; }
-gestures() { ditto gestures "$1"; sed -i "$2" ../.adds/koreader/settings/gestures.lua; }
-settings() { ditto settings "$1"; sed -i "$2" ../.adds/koreader/settings.reader.lua; }
-
-resetpages() { sdr 'trigger' 'page recalculation' '/\"doc_pages\"/d; /\"pages\"/d'; }  # force page count refresh
+sdr()      { ditto sdr "${1} $2"; SDR="$SDR; $3"; }
+gestures() { ditto gestures "$1"; GESTURES="$GESTURES; $2"; }
+settings() { ditto settings "$1"; SETTINGS="$SETTINGS; $2"; }
 
 [ $1 ] || usage
 
@@ -45,44 +43,44 @@ while [ $1 ] ;do
 	case $1 in
 		-*   ) sdr 'hyphenation' 'soft' '/\"hyph_soft_hyphens_only\"/s/= false,/= true,/'; resetpages=true ;;
 		p*   ) resetpages=true; shift; continue ;;
-		t*   ) margin=$(number $2)  && sdr 'topmargin' ${margin} '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'             || usage; resetpages=true ;;
-		b*   ) margin=$(number $2)  && sdr 'bottommargin' ${margin} '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'          || usage; resetpages=true ;;
-		l*   ) margin=$(number $2)  && sdr 'leftmargin' ${margin} '/\"copt_h_page_margins\".*=/{n;s/= [0-9]*,/= '${margin}',/}'    || usage; resetpages=true ;;
-		r*   ) margin=$(number $2)  && sdr 'rightmargin' ${margin} '/\"copt_h_page_margins\".*=/{n;n;s/= [0-9]*,/= '${margin}',/}' || usage; resetpages=true ;;
-		s*   ) percent=$(number $2) && sdr 'linespacing' ${percent} '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'          || usage; resetpages=true ;;
-		m*   ) sync=$(binary $2)    && sdr 'syncmargins' ${sync} '/\"copt_sync_t_b_page_margins\"/s/[01]/'${sync}'/'               || usage                  ;;
-		f*   ) font=$(string $2)    && sdr 'font' ${font} '/\"font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'                            || usage; resetpages=true ;;
-		h*   ) font=$(string $2)    && sdr 'headerfont' ${font} '/\"header_font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'               || usage                  ;;
-		g*   ) gamma=$(number $2)   && sdr 'fontgamma' ${gamma} '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                  || usage                  ;;
+		l*   ) margin=$(number $2)  && sdr 'left/right margin' ${margin} '/\"copt_h_page_margins\".*=/,+2s/= [0-9]*,/= '${margin}',/' || usage; resetpages=true ;;
+		t*   ) margin=$(number $2)  && sdr 'top margin' ${margin} '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'               || usage; resetpages=true ;;
+		b*   ) margin=$(number $2)  && sdr 'bottom margin' ${margin} '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'            || usage; resetpages=true ;;
+		s*   ) percent=$(number $2) && sdr 'line spacing' ${percent} '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'            || usage; resetpages=true ;;
+		m*   ) sync=$(binary $2)    && sdr 'sync margins' ${sync} '/\"copt_sync_t_b_page_margins\"/s/[01]/'${sync}'/'                 || usage                  ;;
+		f*   ) font=$(string $2)    && sdr 'font' ${font} '/\"font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'                               || usage; resetpages=true ;;
+		h*   ) font=$(string $2)    && sdr 'header font' ${font} '/\"header_font_face\"/s/\"[^ ]*\",/\"'${font}'\",/'                 || usage                  ;;
+		g*   ) gamma=$(number $2)   && sdr 'font gamma' ${gamma} '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                    || usage                  ;;
 		*    ) usage ;;
 	esac
 
 	case $1 in
-		-*   ) settings 'hyphenation soft' '/\"hyph_soft_hyphens_only\"/s/= false,/= true,/'; shift; continue   ;;
-		t*   ) settings "topmargin ${margin}" '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'             ;;
-		b*   ) settings "bottommargin ${margin}" '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'          ;;
-		l*   ) settings "leftmargin ${margin}" '/\"copt_h_page_margins\".*=/{n;s/= [0-9]*,/= '${margin}',/}'    ;;
-		r*   ) settings "rightmargin ${margin}" '/\"copt_h_page_margins\".*=/{n;n;s/= [0-9]*,/= '${margin}',/}' ;;
-		s*   ) settings "linespacing ${percent}" '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'          ;;
-		h*   ) settings "font ${font}" '/\"cre_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                             ;;
-		g*   ) settings "fontgamma ${gamma}" '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                  ;;
+		l*   ) settings "left/right margin ${margin}" '/\"copt_h_page_margins\".*=/,+2s/= [0-9]*,/= '${margin}',/' ;;
+		-*   ) settings 'hyphenation soft' '/\"hyph_soft_hyphens_only\"/s/= false,/= true,/'; shift; continue      ;;
+		t*   ) settings "top margin ${margin}" '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'               ;;
+		b*   ) settings "bottom margin ${margin}" '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'            ;;
+		s*   ) settings "line spacing ${percent}" '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'            ;;
+		h*   ) settings "font ${font}" '/\"cre_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                                ;;
+		g*   ) settings "font gamma ${gamma}" '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                    ;;
 	esac
 
 	case $1 in
-		t*   ) gestures "topmargin ${margin}" '/\"t_page_margin\"/s/= [0-9]*,/= '${margin}',/'             ;;
-		b*   ) gestures "bottommargin ${margin}" '/\"b_page_margin\"/s/= [0-9]*,/= '${margin}',/'          ;;
-		l*   ) gestures "leftmargin ${margin}" '/\"h_page_margins\".*=/{n;s/= [0-9]*,/= '${margin}',/}'    ;;
-		r*   ) gestures "rightmargin ${margin}" '/\"h_page_margins\".*=/{n;n;s/= [0-9]*,/= '${margin}',/}' ;;
-		s*   ) gestures "linespacing ${percent}" '/\"line_spacing\"/s/= [0-9]*,/= '${percent}',/'          ;;
-		f*   ) gestures "font ${font}" '/\"set_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                        ;;
-		g*   ) gestures "fontgamma ${gamma}" '/\"font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                  ;;
+		l*   ) gestures "left/right margin ${margin}" '/\"h_page_margins\".*=/,+2s/= [0-9]*,/= '${margin}',/' ;;
+		t*   ) gestures "top margin ${margin}" '/\"t_page_margin\"/s/= [0-9]*,/= '${margin}',/'               ;;
+		b*   ) gestures "bottom margin ${margin}" '/\"b_page_margin\"/s/= [0-9]*,/= '${margin}',/'            ;;
+		s*   ) gestures "line spacing ${percent}" '/\"line_spacing\"/s/= [0-9]*,/= '${percent}',/'            ;;
+		f*   ) gestures "font ${font}" '/\"set_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                           ;;
+		g*   ) gestures "font gamma ${gamma}" '/\"font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                    ;;
 	esac
 
 	shift 2
 done
+[ $resetpages ] && sdr 'trigger' 'page recalculation' '/\"doc_pages\"/d; /\"pages\"/d'
+ifno "apply changes to catalogue" && usage
 
-[ $resetpages ] && resetpages
+ditto updating "metadata.epub.lua"   && sudo find -regex '.*/metadata.epub.lua'   -exec sed -i "$SDR" {} \;
+ditto updating "gestures.lua"        && sudo find -regex '.*/gestures.lua'        -exec sed -i "$GESTURES" {} \;
+ditto updating "settings.reader.lua" && sudo find -regex '.*/settings.reader.lua' -exec sed -i "$SETTINGS" {} \;
 sync
-usage
 
 # kak: filetype=sh
