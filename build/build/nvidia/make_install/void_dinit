@@ -6,18 +6,21 @@
 # ................................................................. dinit system
 
 cd /home/depot
-exists --repo void_dinit && { cd void_dinit; git pull; cd ..; } || git clone https://github.com/summrum/void_dinit.git
-
-cd  /home/depot/void-packages
-./xbps-src binary-bootstrap
-ditto dinit update /home/depot/void-packages/dinit/template using void_dinit template
-ditto dinit ./xbps-src pkg dinit
-ditto dinit sudo xi dinit-x.xx.x_x 
-ditto dinit update /etc/dinit.d with $HOME/build scripts
+exists --repo void_dinit || {
+	ditto reference "git clone 'summrum/void_dinit' for template reference"
+	git clone https://github.com/summrum/void_dinit.git
+}
 
 # for "ln -s runit-init init" recovery sessions
-original /sbin/halt
-original /sbin/runit-init
-original /sbin/shutdown
+original -f /sbin/halt
+original -f /sbin/runit-init
+original -f /sbin/shutdown
+
+cd /home/depot/void-packages
+./xbps-src binary-bootstrap
+ditto build "$(grep version= srcpkgs/dinit/template)"
+./xbps-src pkg dinit
+sudo xi --force dinit
+[ -e /etc/dinit.d ] || ditto dinit "update /etc/dinit.d with stow/dinit config"
 
 # vim: set ft=sh: #
