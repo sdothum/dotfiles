@@ -5,6 +5,7 @@ hints     chromium
 imap      dovecot
 gpg       pinentry-gtk
 database  postgresql
+dinit     runit-void
 framework ruby
 mouse     xorg-server
 
