@@ -65,12 +65,12 @@ while [ $1 ] ;do
 	esac
 
 	case $1 in
-		l*   ) gestures "left/right margin ${margin}" '/\"h_page_margins\".*=/,+2s/= [0-9]*,/= '${margin}',/' ;;
-		t*   ) gestures "top margin ${margin}" '/\"t_page_margin\"/s/= [0-9]*,/= '${margin}',/'               ;;
-		b*   ) gestures "bottom margin ${margin}" '/\"b_page_margin\"/s/= [0-9]*,/= '${margin}',/'            ;;
-		s*   ) gestures "line spacing ${percent}" '/\"line_spacing\"/s/= [0-9]*,/= '${percent}',/'            ;;
-		f*   ) gestures "font ${font}" '/\"set_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                           ;;
-		g*   ) gestures "font gamma ${gamma}" '/\"font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                    ;;
+		l*   ) gestures "left/right margin ${margin}" '/\"h_page_margins\".*=/,+2s/= [0-9]*,/= '${margin}',/'      ;;
+		t*   ) gestures "top margin ${margin}" '/\"t_page_margin\"/s/= [0-9]*,/= '${margin}',/'                    ;;
+		b*   ) gestures "bottom margin ${margin}" '/\"b_page_margin\"/s/= [0-9]*,/= '${margin}',/'                 ;;
+		s*   ) gestures "line spacing ${percent}" '/\"line_spacing\"/s/= [0-9]*,/= '${percent}',/'                 ;;
+		f*   ) gestures "font ${font}" '/\"set_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                                ;;
+		g*   ) gestures "font gamma ${gamma}" '/\"font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                         ;;
 	esac
 
 	shift 2

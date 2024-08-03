@@ -20,7 +20,7 @@ V=-v
 while : ;do
 	case "$1" in
 		-f ) eval sudo rm -rf "\$$#.$EXTENSION"; shift; continue ;;
-		-q ) unset V;                          shift; continue ;;
+		-q ) unset V;                            shift; continue ;;
 		'' ) usage ;;
 		*  ) break ;;
 	esac
