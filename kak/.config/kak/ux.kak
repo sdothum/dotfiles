@@ -51,9 +51,13 @@ defer %{ focus x : map global user !   '<a-?>(?i)' -docstring 'iextend prev,next
 defer %{ alpha : map global user s 'x<a-s>s'     -docstring 'split:select,iselect' }
 defer %{ alpha : map global user S 'x<a-s>s(?i)' -docstring 'split:select,iselect' }
 
-map global normal S 's(?i)'   -docstring 'case insensitive split:select:'
-map global normal } ']p'      -docstring 'next paragraph'
-map global normal { '[p'      -docstring 'previous paragraph'
+map global normal S         's(?i)'  -docstring 'split:iselect:'
+
+map global normal '<minus>' '{p'     -docstring 'extend to previous paragraph'
+map global normal {         '[p'     -docstring 'select to paragraph begin'
+map global normal '='       '<a-a>p' -docstring 'select surrounding paragraph'
+map global normal }         ']p'     -docstring 'select to paragraph end'
+map global normal '<plus>'  '}p'     -docstring 'extend to next paragraph'
 
 # .............................................................. Line operations
 
