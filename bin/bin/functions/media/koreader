@@ -78,9 +78,9 @@ done
 [ $resetpages ] && sdr 'trigger' 'page recalculation' '/\"doc_pages\"/d; /\"pages\"/d'
 ifno "apply changes to catalogue" && usage
 
-ditto updating "metadata.epub.lua"   && sudo find -regex '.*/metadata.epub.lua'   -exec sed -i "$SDR" {} \;
-ditto updating "gestures.lua"        && sudo find -regex '.*/gestures.lua'        -exec sed -i "$GESTURES" {} \;
-ditto updating "settings.reader.lua" && sudo find -regex '.*/settings.reader.lua' -exec sed -i "$SETTINGS" {} \;
+ditto updating "*sdr/metadata.epub.lua" && sudo find -regex '.*/metadata.epub.lua'   -exec sed -i "$SDR" {} \;
+ditto updating "gestures.lua"           && sudo find -regex '.*/gestures.lua'        -exec sed -i "$GESTURES" {} \;
+ditto updating "settings.reader.lua"    && sudo find -regex '.*/settings.reader.lua' -exec sed -i "$SETTINGS" {} \;
 sync
 
 # kak: filetype=sh
