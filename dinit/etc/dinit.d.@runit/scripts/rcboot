@@ -1,6 +1,6 @@
 #!/bin/sh
 # Code from Void Runit
- 
+
 # Detect LXC (and other) containers
 [ -z "${container+x}" ] || export VIRTUALIZATION=1
 
@@ -8,7 +8,7 @@ case $1 in
 	stop )
 		# The system is being shut down
 		if [ -z "$VIRTUALIZATION" ]; then
-			echo "Saving random number seed.."
+			echo "Saving random number seed..."
 			seedrng
 		fi
 		;;
