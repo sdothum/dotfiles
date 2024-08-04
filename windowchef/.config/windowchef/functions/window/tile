@@ -23,7 +23,7 @@ left() {
 # ................................................................... Tile right
 
 right() {
-	width=$(( W - X + margin ))
+	width=$(( W - X + margin - border * 2 ))
 	wtp $X $top $width $height $(pfw)
 }
 
