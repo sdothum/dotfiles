@@ -62,16 +62,16 @@ if %{ [ -n "$UNPLUG" ] || [ -n "$TEST"] } %{
 
 declare-option str usermodes ''
 
-# defer %{ group sortkey* : map global user-mode .. }
-define-command defer -params 1 %{
+# push %{ group sortkey* : map global user-mode .. }
+define-command push -params 1 %{
 	trace %arg{1}
  	set-option global usermodes "%sh{ echo ""$kak_opt_usermodes\n$(echo $1 | cut -d: -f2- | cut -d' ' -f4 )$1"" }"
 }
 
-# collate %{ user-mode } [ %{ group } ]
-define-command collate -params ..2 %{
+# pull %{ user-mode } [ %{ group } ]
+define-command pull -params ..2 %{
 	trace %sh{ echo "$kak_opt_usermodes" | grep "^$(echo $1) $(echo $2)" }
-	evaluate-commands %sh{ echo "$kak_opt_usermodes" | grep "^$(echo $1) $(echo $2)" | sort -k2 | cut -d: -f2- }
+	evaluate-commands %sh{ echo "$kak_opt_usermodes" | grep "^$(echo $1) $(echo $2)" | sort | cut -d: -f2- }
 }
 
 # Plugins
@@ -106,11 +106,15 @@ declare-option str admonition "\s(?i)(att(n|ention)|(be)*cause|bu[gt]|deprecated
 hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt{admonition} 1:WrapMarker }  # select field 1: (vs 0:) to not hilight the colon :)
 
 # arrange user-mode lists
-collate %{ user   } %{ snippet }
-collate %{ user   } %{ focus   }
-collate %{ user   } %{ shell   }
-collate %{ user   } %{ alpha   }
-collate %{ format } %{ align   }
-collate %{ format } %{ comment }
+pull %{ user   } %{ snippet }
+pull %{ user   } %{ focus   }
+pull %{ user   } %{ shell   }
+pull %{ user   } %{ alpha   }
+pull %{ buffer } %{ buffer  }
+pull %{ buffer } %{ alpha   }
+pull %{ format } %{ align   }
+pull %{ format } %{ comment }
+
+nop %sh{ notify 10 user-modes "space   user\nreturn  buffer\n#      format" }
 
 # kak: filetype=kak

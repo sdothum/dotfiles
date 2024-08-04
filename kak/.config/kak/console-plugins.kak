@@ -27,8 +27,8 @@ if-else %{ [ -z "$DIFF" ] } %{
 # ................................................................... crosshairs
 
 bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
-	defer %{ focus h : map global user + ': crosshairs<ret>'   -docstring "crosshairs" }
-	defer %{ focus h : map global user ^ ': cursorcolumn<ret>' -docstring "cursor column" }
+	push %{ focus h : map global user + ': crosshairs<ret>'   -docstring "crosshairs" }
+	push %{ focus h : map global user ^ ': cursorcolumn<ret>' -docstring "cursor column" }
 }
 
 # ........................................................................ fandt
@@ -40,7 +40,7 @@ bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
 # ............................................................. find and replace
 
 bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
-	defer %{ alpha : map global user f ': find ' -docstring "find and replace" }
+	push %{ alpha : map global user f ': find ' -docstring "find and replace" }
 }
 
 # ............................................................. focus selections
@@ -70,7 +70,7 @@ bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
 		}
 	}
 
-	defer %{ focus f : map global user <space> ': toggle-focus<ret>' -docstring "focus selections" }
+	push %{ focus f : map global user <space> ': toggle-focus<ret>' -docstring "focus selections" }
 }
 
 # .............................................................. lua interpreter
@@ -118,9 +118,9 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 		peneira-symbols
 	}
 
-	defer %{ alpha : map global user b ': buffers<ret>' -docstring 'buffers' }
-	defer %{ alpha : map global user e ': files<ret>'   -docstring 'edit file' }
-	defer %{ alpha : map global user C ': symbols<ret>' -docstring 'ctag symbols' }
+	push %{ buffer : map global buffer <ret> ': buffers<ret>' -docstring 'buffers' }
+	push %{ alpha  : map global buffer f     ': files<ret>'   -docstring 'files' }
+	push %{ alpha  : map global user   C     ': symbols<ret>' -docstring 'ctag symbols' }
 }
 
 # ............................................................ phantom selection
@@ -166,7 +166,7 @@ bundle kakoune-snippets https://github.com/occivink/kakoune-snippets.git %{
 		set -add buffer snippets 'search' '%se' %{ snippets-insert %{[${1:description}](http://thedarnedestthing.com/search?query=${2:query}) }}
 	}
 
-	defer %{ snippet : map global user '%' ': snippets ' -docstring 'snippets' }
+	push %{ snippet : map global user '%' ': snippets ' -docstring 'snippets' }
 }
 
 # ................................................................... sudo-write

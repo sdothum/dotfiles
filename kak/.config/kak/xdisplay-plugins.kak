@@ -23,8 +23,8 @@ bundle hop.kak https://github.com/hadronized/hop.kak.git %{
 		exec 'gtGbxs\w+<ret>: evaluate-commands -no-hooks -- %sh{ hop-kak --keyset "$kak_opt_keyset" --sels "$kak_selections_desc" }<ret>'
 	}
 
-	defer %{ alpha : map global user h ': hop-kak<ret>'       -docstring 'hop selection,word' }
-	defer %{ alpha : map global user H ': hop-kak-words<ret>' -docstring 'hop selection,word' }
+	push %{ alpha : map global user h ': hop-kak<ret>'       -docstring 'hop selection,word' }
+	push %{ alpha : map global user H ': hop-kak-words<ret>' -docstring 'hop selection,word' }
 }
 
 # ......................................................... kakboard (clipboard)
@@ -35,11 +35,11 @@ bundle kakboard https://github.com/lePerdu/kakboard.git %{
 	set global kakboard_paste_cmd 'cb paste'
 	hook global WinCreate .* %{ kakboard-enable }
 
-	defer %{ alpha : map global user y ': kakboard-with-push-clipboard y<ret>' -docstring 'cb yank' }
-	defer %{ alpha : map global user c ': kakboard-with-push-clipboard d<ret>' -docstring 'cb cut' }
-	defer %{ alpha : map global user p ': kakboard-with-pull-clipboard p<ret>' -docstring 'cb put after,before' }
-	defer %{ alpha : map global user P ': kakboard-with-pull-clipboard P<ret>' -docstring 'cb put after,before' }
-	defer %{ alpha : map global user R ': kakboard-with-pull-clipboard R<ret>' -docstring 'cb replace' }
+	push %{ alpha : map global user y ': kakboard-with-push-clipboard y<ret>' -docstring 'cb yank' }
+	push %{ alpha : map global user c ': kakboard-with-push-clipboard d<ret>' -docstring 'cb cut' }
+	push %{ alpha : map global user p ': kakboard-with-pull-clipboard p<ret>' -docstring 'cb put after,before' }
+	push %{ alpha : map global user P ': kakboard-with-pull-clipboard P<ret>' -docstring 'cb put after,before' }
+	push %{ alpha : map global user R ': kakboard-with-pull-clipboard R<ret>' -docstring 'cb replace' }
 }
 
 # ...................................................................... kak-lsp
@@ -82,7 +82,7 @@ bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 
 	}
 
-	defer %{ alpha : map global user l ': enter-user-mode lsp<ret>' -docstring "LSP mode" }
+	push %{ alpha : map global user l ': enter-user-mode lsp<ret>' -docstring "LSP mode" }
 }
 
 # ............................................................. kakoune-livedown
@@ -119,8 +119,7 @@ bundle-install-hook kakpipe %{
 bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 	require-module kakpipe
 
-	# defer %{ shell p : map global user | 'x: kakpipe ' -docstring "kakpipe FIFO buffer" }
-	map global normal | 'x|' -docstring "pipe FIFO buffer"
+	push %{ alpha : map global buffer p ': kakpipe '    -docstring "kakpipe FIFO" }
 }
 
 # ........................................................................ popup
