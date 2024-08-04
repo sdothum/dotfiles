@@ -43,11 +43,11 @@ CACHE=/var/cache/xbps
 BACKUP=/net/depot/
 ITERATE=/tmp/xb:iterate
 XBDIR=$(dirname $0)
-ACTIONS=$XBDIR/.xb_actions  # tuple: <action> <package> -> file: .xb_<action>, see upgrade_check and upgrade_actions 
+ACTIONS=$XBDIR/functioNS/rules  # tuple: <action> <package> -> file: function/<action>, see upgrade_check and upgrade_actions
 
 [ $1 ] || usage
 
-# kernel must be last of ordered action tuples, see file .xb_kernel
+# kernel must be last of ordered action tuples, see file function/kernel
 [ -e $ACTIONS ] && upgrade_actions=$(cat $ACTIONS | sed 's/#.*//')  # prune comments
 upgrade_actions="$upgrade_actions
 	kernel  linux[0-9]
@@ -119,7 +119,7 @@ options=${options% *}
 upgrade_actions() {
 	set -- $upgrade_actions
 	while [ $2 ] ;do 
-		eval [ \$$1 ] && { [ -e $XBDIR/.xb_$1 ] && . $XBDIR/.xb_$1 || post_install $2; }
+		eval [ \$$1 ] && { [ -e ${ACTIONS%/*}/$1 ] && . ${ACTIONS%/*}/$1 || post_install $2; }
 		shift 2
 	done
 }

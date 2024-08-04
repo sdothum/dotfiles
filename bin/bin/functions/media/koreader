@@ -5,6 +5,8 @@
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ....................................................... KOReader metadata edit
+#
+# NOTE: current directory should be root of kobo device to update book sdr's AND koreader settings
 
 usage() { echo "$(basename $0) [reset p'ages | soft-'hyphenation ]
 > [t'op | b'ottom | l'eft/right <margin>]

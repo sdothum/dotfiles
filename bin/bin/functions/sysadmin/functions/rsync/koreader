@@ -1,0 +1,16 @@
+# sdothum - 2016 (c) wtfpl
+
+# Sysadmin
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Rsync wrapper
+
+KOBO=/run/media/shum/KOBOeReader
+
+[ -e $KOBO ] || { echo "connect Kobo to usb"; exit 1; }
+ifno "sync KOBOeReader" && exit
+
+ditto kobo "syncing kobo, library (sdr's) and koreader"
+rsync -av --delete $KOBO /home/
+
+# kak: filetype=sh
