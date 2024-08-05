@@ -103,10 +103,10 @@ hook global FocusOut .* sync   # over "write" for system files
 # kettelkasten
 hook global WinSetOption filetype=markdown %{
 	define-command zk-index %sh{ zk index --no-input" }
-	push %{ alpha : map global buffer Z ': zk-index<ret>' -docstring 'zk index' }
+	push %{ alpha 9 : map global buffer Z ': zk-index<ret>' -docstring 'zk index' }
 
 	define-command zk-new %sh{ zk new $(dirname "$kak_buffile") --title="$kak_selection" }
-	push %{ alpha : map global buffer z ': zk-new<ret>'   -docstring 'zk new' }
+	push %{ alpha 9 : map global buffer z ': zk-new<ret>'   -docstring 'zk new' }
 }
 
 # ............................................................ Buffer management
@@ -124,17 +124,18 @@ hook global WinDisplay filetype=diff %{
 hook global WinSetOption filetype=diff %{
 	add-highlighter buffer/diff-allow-one-trailing-space regex '^ ' 0:Default
 }
-push %{ alpha : map global buffer d ': buffer *debug*<ret>'            -docstring '*debug*' }
-push %{ alpha : map global buffer D ': sync<ret>: delete-buffer<ret>'  -docstring 'save and delete' }
-push %{ alpha : map global buffer q ': quit!<ret>'                     -docstring 'quit' }
-push %{ alpha : map global buffer w ': sync<ret>'                      -docstring 'save / quit' }
-push %{ alpha : map global buffer W ': sync<ret>: quit!'               -docstring 'save / quit' }
-push %{ alpha : map global buffer x ': sync<ret>: write-all-quit<ret>' -docstring 'save all and quit' }
+push %{ alpha 1 : map global buffer d ': buffer *debug*<ret>'            -docstring '*debug*' }
+push %{ alpha 1 : map global buffer D ': sync<ret>: delete-buffer<ret>'  -docstring 'save and delete' }
+# SEE: kakpipe alpha subsort in xdisplay-plugins
+push %{ alpha 9 : map global buffer q ': quit!<ret>'                     -docstring 'quit' }
+push %{ alpha 9 : map global buffer w ': sync<ret>'                      -docstring 'save / quit' }
+push %{ alpha 9 : map global buffer W ': sync<ret>: quit!'               -docstring 'save / quit' }
+push %{ alpha 9 : map global buffer x ': sync<ret>: write-all-quit<ret>' -docstring 'save all and quit' }
 
 # Terminal / shell
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-push %{ alpha : map global buffer t ': nop %sh{ term >/dev/null 2>&1 }<ret>' -docstring 'terminal' }
-push %[ alpha : map global buffer s ': echo %sh{  }<left><left>'             -docstring 'shell' ]  # ATTENTION: %[] to escape '{}' :)
+push %{ alpha 9 : map global buffer t ': nop %sh{ term >/dev/null 2>&1 }<ret>' -docstring 'terminal' }
+push %[ alpha 9 : map global buffer s ': echo %sh{  }<left><left>'             -docstring 'shell' ]  # ATTENTION: %[] to escape '{}' :)
 
 # kak: filetype=kak

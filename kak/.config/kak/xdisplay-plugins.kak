@@ -119,9 +119,9 @@ bundle-install-hook kakpipe %{
 bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 	require-module kakpipe
 
-	# BUG: reverse sort order "P,p"(?) with HACK: using backspaces in string :-o 
-	push %{ alpha : map global buffer p ': kakpipe-bg<backspace><backspace><backspace> ' -docstring "kakpipe FIFO / bg" }
-	push %{ alpha : map global buffer P ': kakpipe-bg '                                  -docstring "kakpipe FIFO / bg" }
+	# HACK: using alpha subsort to overcome "P,p" sort order (cause unknown)
+	push %{ alpha 5 : map global buffer p ': kakpipe '    -docstring "kakpipe FIFO / bg" }
+	push %{ alpha 6 : map global buffer P ': kakpipe-bg ' -docstring "kakpipe FIFO / bg" }
 }
 
 # ........................................................................ popup

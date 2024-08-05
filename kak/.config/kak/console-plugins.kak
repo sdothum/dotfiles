@@ -118,9 +118,9 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 		peneira-symbols
 	}
 
-	push %{ buffer : map global buffer <ret> ': buffers<ret>' -docstring 'buffers' }
-	push %{ alpha  : map global buffer f     ': files<ret>'   -docstring 'files' }
-	push %{ alpha  : map global user   C     ': symbols<ret>' -docstring 'ctag symbols' }
+	push %{ buffer  : map global buffer <ret> ': buffers<ret>' -docstring 'buffers' }
+	push %{ alpha 1 : map global buffer f     ': files<ret>'   -docstring 'files' }
+	push %{ alpha   : map global user   C     ': symbols<ret>' -docstring 'ctag symbols' }
 }
 
 # ............................................................ phantom selection
