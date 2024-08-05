@@ -70,7 +70,7 @@ define-command push -params 1 %{
 
 # pull %{ user-mode } [ %{ group } ]
 define-command pull -params ..2 %{
-	trace %sh{ echo "$kak_opt_usermodes" | grep "^$(echo $1) $(echo $2)" }
+	trace %sh{ echo "$kak_opt_usermodes" | grep "^$(echo $1) $(echo $2) | sort" }
 	evaluate-commands %sh{ echo "$kak_opt_usermodes" | grep "^$(echo $1) $(echo $2)" | sort | cut -d: -f2- }
 }
 
