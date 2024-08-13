@@ -7,9 +7,6 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # .......................................................................... hop
-bundle-install-hook hop.kak %{
-	cargo install hop-kak
-}
 
 bundle hop.kak https://github.com/hadronized/hop.kak.git %{
 	nop evaluate-commands %sh{ hop-kak --init }
@@ -25,6 +22,8 @@ bundle hop.kak https://github.com/hadronized/hop.kak.git %{
 
 	push %{ alpha : map global user h ': hop-kak<ret>'       -docstring 'hop selection,word' }
 	push %{ alpha : map global user H ': hop-kak-words<ret>' -docstring 'hop selection,word' }
+} %{
+	cargo install hop-kak
 }
 
 # ......................................................... kakboard (clipboard)
@@ -43,14 +42,8 @@ bundle kakboard https://github.com/lePerdu/kakboard.git %{
 }
 
 # ...................................................................... kak-lsp
-bundle-install-hook kakoune-lsp %{
-	# cargo install --locked --force --path .
-	cargo install kak-lsp
-}
 
 bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
-	# currently running commit 36f99810bdcc060617479d6c5405e868584ef0ff BUG: lsp-inlay-diagnostics-enable command option
-	# cargo install --locked --force --path .
 	# diff kak-lsp.toml $HOME/.config/kak/kak-lsp/kak-lsp.toml.unmarksman
 	nop evaluate-commands %sh{ kak-lsp -s $kak_session --kakoune }
 
@@ -83,20 +76,22 @@ bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 	}
 
 	push %{ alpha : map global user l ': enter-user-mode lsp<ret>' -docstring "LSP mode" }
+} %{
+	# cargo install --locked --force --path .
+	cargo install kak-lsp
 }
 
 # ............................................................. kakoune-livedown
-bundle-install-hook kakoune-livedown %{
-	sudo npm install -g livedown
-}
 
 bundle kakoune-livedown https://github.com/Delapouite/kakoune-livedown.git %{
 	declare-option str livedown ''
 	set-option global livedown_browser "qutebrowser-instance"
 
 	define-command enable-livedown %{
-		set-option global livedown "%val{bufname}"
-		livedown-start-with-write-on-idle
+		if %{ [ ${kak_bufname##*.} != 'eml' ] } %{  # exclude mail compose
+			set-option global livedown "%val{bufname}"
+			livedown-start-with-write-on-idle
+		}
 	}
 
 	define-command disable-livedown %{
@@ -108,13 +103,11 @@ bundle kakoune-livedown https://github.com/Delapouite/kakoune-livedown.git %{
 
 	hook -once global BufSetOption filetype=markdown enable-livedown
 	hook       global BufClose     .*                disable-livedown
+} %{
+	sudo npm install -g livedown
 }
 
 # ...................................................................... kakpipe
-bundle-install-hook kakpipe %{
-	# cargo install --path . --root ~/.local
-	cargo install kakpipe
-}
 
 bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 	require-module kakpipe
@@ -122,6 +115,8 @@ bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 	# HACK: using alpha subsort to overcome "P,p" sort order (cause unknown)
 	push %{ alpha 5 : map global buffer p ': kakpipe '    -docstring "kakpipe FIFO / bg" }
 	push %{ alpha 6 : map global buffer P ': kakpipe-bg ' -docstring "kakpipe FIFO / bg" }
+} %{
+	cargo install --path . --root ~/.local
 }
 
 # ........................................................................ popup

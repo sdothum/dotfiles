@@ -106,12 +106,13 @@ declare-option str admonition "\s(?i)(att(n|ention)|(be)*cause|bu[gt]|deprecated
 hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt{admonition} 1:WrapMarker }  # select field 1: (vs 0:) to not hilight the colon :)
 
 # arrange user-mode lists
-pull %{ user   } %{ snippet }
 pull %{ user   } %{ focus   }
+pull %{ user   } %{ snippet }
 pull %{ user   } %{ shell   }
 pull %{ user   } %{ alpha   }
 pull %{ buffer } %{ buffer  }
 pull %{ buffer } %{ alpha   }
+pull %{ format } %{ snippet }
 pull %{ format } %{ align   }
 pull %{ format } %{ comment }
 

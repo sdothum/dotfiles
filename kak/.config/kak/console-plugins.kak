@@ -40,7 +40,8 @@ bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
 # ............................................................. find and replace
 
 bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
-	push %{ alpha : map global user f ': find ' -docstring "find and replace" }
+	push %{ alpha 1 : map global buffer f ': find '                   -docstring "find THEN replace" }
+	push %{ alpha 1 : map global buffer R ': find-apply-changes<ret>' -docstring "find THEN replace" }
 }
 
 # ............................................................. focus selections
@@ -118,14 +119,27 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 		peneira-symbols
 	}
 
-	push %{ buffer  : map global buffer <ret> ': buffers<ret>' -docstring 'buffers' }
-	push %{ alpha 1 : map global buffer f     ': files<ret>'   -docstring 'files' }
-	push %{ alpha   : map global user   C     ': symbols<ret>' -docstring 'ctag symbols' }
+	push %{ buffer  : map global buffer b ': buffers<ret>' -docstring 'buffers' }
+	push %{ alpha 1 : map global buffer e ': files<ret>'   -docstring 'edit file' }
+	push %{ alpha   : map global user   C ': symbols<ret>' -docstring 'ctag symbols' }
 }
 
 # ............................................................ phantom selection
 
-bundle kakoune-phantom-selection https://github.com/occivink/kakoune-phantom-selection.git
+bundle kakoune-phantom-selection https://github.com/occivink/kakoune-phantom-selection.git %{
+	push %{ alpha : map global user f     ": phantom-selection-add-selection<ret>"                       -docstring 'phantom add,clear' }
+	push %{ alpha : map global user F     ": phantom-selection-select-all; phantom-selection-clear<ret>" -docstring 'phantom add,clear' }
+	map global normal <a-f> ": phantom-selection-iterate-next<ret>"                        -docstring 'phantom next'
+	map global normal <a-F> ": phantom-selection-iterate-prev<ret>"                        -docstring 'phantom previous'
+
+	# this would be nice, but currrently doesn't work
+	# see https://github.com/mawww/kakoune/issues/1916
+	#map global insert <a-f> "<a-;>: phantom-selection-iterate-next<ret>"
+	#map global insert <a-F> "<a-;>: phantom-selection-iterate-prev<ret>"
+	# so instead, have an approximate version that uses 'i'
+	map global insert <a-f> "<esc>: phantom-selection-iterate-next<ret>i"                  -docstring 'phantom next'
+	map global insert <a-F> "<esc>: phantom-selection-iterate-prev<ret>i"                  -docstring 'phantom previous'
+}
 
 # .................................................................. search docs
 
@@ -166,7 +180,7 @@ bundle kakoune-snippets https://github.com/occivink/kakoune-snippets.git %{
 		set -add buffer snippets 'search' '%se' %{ snippets-insert %{[${1:description}](http://thedarnedestthing.com/search?query=${2:query}) }}
 	}
 
-	push %{ snippet : map global user '%' ': snippets ' -docstring 'snippets' }
+	push %{ snippet : map global format '%' ': snippets ' -docstring 'snippets' }
 }
 
 # ................................................................... sudo-write
@@ -174,13 +188,12 @@ bundle kakoune-snippets https://github.com/occivink/kakoune-snippets.git %{
 bundle kakoune-sudo-write https://github.com/occivink/kakoune-sudo-write.git
 
 # .................................................................. tree-sitter
-bundle-install-hook kak-tree-sitter %{
-	cargo install kak-tree-sitter
-	cargo install ktsctl
-}
 
 bundle kak-tree-sitter https://github.com/phaazon/kak-tree-sitter.git %{
 	nop evaluate-commands %sh{ kak-tree-sitter -d -k --init $kak_session -s }
+} %{
+	cargo install kak-tree-sitter
+	cargo install ktsctl
 }
 
 # kak: filetype=kak

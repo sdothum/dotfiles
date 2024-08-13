@@ -209,6 +209,12 @@ add-highlighter -override window/ dynregex '%reg{/}' 0:SecondarySelection
 # Plugins
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+# ............................................................... kak-crosshairs
+
+# set-face window crosshairs_line              "default,default+u"
+set-face window crosshairs_line                "default,${ruler}"
+set-face window crosshairs_column              "default,${ruler}"
+
 # ................................................................ kakoune-focus
 
 set-face window FocusSeparator                 "${soft_red},${background}+F"
@@ -220,11 +226,9 @@ set-face window PeneiraFlag                    LineNumberCursor
 set-face window PeneiraMatches                 "${foreground},${secondary}+b"
 set-face window PeneiraFileName                "${attribute}"
 
-# ............................................................... kak-crosshairs
+# ............................................................ phantom selection
 
-# set-face window crosshairs_line              "default,default+u"
-set-face window crosshairs_line                "default,${ruler}"
-set-face window crosshairs_column              "default,${ruler}"
+set-face window PhantomSelection               "${white},${wrap}+F"
 
 # ...................................................................... kak-lsp
 
