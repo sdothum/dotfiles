@@ -158,31 +158,6 @@ bundle smarttab.kak https://github.com/andreyorst/smarttab.kak.git %{
 	hook global BufNewFile  .* smarttab
 }
 
-# ..................................................................... snippets
-
-bundle kakoune-snippets https://github.com/occivink/kakoune-snippets.git %{
-	set-option global snippets_auto_expand true
-
-	hook -once global BufSetOption .* %{
-		set buffer snippets %opt{snippets}  # keep any global snippets
-	}
-
-	hook -once global BufSetOption filetype=sh %{
-		set -add buffer snippets 'usage:'     '%us' %{ snippets-insert %{usage() { usage: "$(basename $0) ${1:options}"; exit 1; } }}
-		set -add buffer snippets 'usage:pipe' '%up' %{ snippets-insert %{usage() { usage: "$(basename $0) ${1:options}" | usage:pipe
-		exit 1
-	} }}
-	}
-
-	hook -once global BufSetOption filetype=markdown %{
-		set -add buffer snippets 'date'   '%da' %{ snippets-insert %sh{ date '+## %A, %d %B %Y' | tr '[:upper:]' '[:lower:]' }}
-		set -add buffer snippets 'img'    '%im' %{ snippets-insert %{![${1:heading}](/images/${2:file}.jpg) }}
-		set -add buffer snippets 'search' '%se' %{ snippets-insert %{[${1:description}](http://thedarnedestthing.com/search?query=${2:query}) }}
-	}
-
-	push %{ snippet : map global format '%' ': snippets ' -docstring 'snippets' }
-}
-
 # ................................................................... sudo-write
 
 bundle kakoune-sudo-write https://github.com/occivink/kakoune-sudo-write.git

@@ -83,6 +83,7 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 	bundle-noload kak-bundle https://github.com/jdugan6240/kak-bundle
 
 	source "%val{config}/console-plugins.kak"
+	source "%val{config}/snippets.kak"
 }
 
 # terminal $DISPLAY plugins
