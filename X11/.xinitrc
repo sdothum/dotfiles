@@ -32,7 +32,8 @@ killall bash
 # ...................................................................... Daemons
 
 # # cut and paste (leaves small visible square icon on desktop if started here, see autostart)
-# autocutsel -selection PRIMARY -fork &
+autocutsel -selection CLIPBOARD -fork &
+autocutsel -selection PRIMARY -fork &
 # Enable automounting removable devices
 exists udiskie && udiskie --automount --notify --no-tray &
 alpine && /usr/libexec/pipewire-launcher
