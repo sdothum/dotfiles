@@ -10,7 +10,7 @@
 class="aerc"
 	window desktop $(chef desktop "MAIL")                                 ;\
 	xdotool search --sync --onlyvisible --classname "aerc" windowactivate ;\
-	window @0.15 size monocle                                             ;\
+	window @0.25 size monocle                                             ;\
 	xdotool search --sync --onlyvisible --classname "aerc" key colon v s p l i t Return
 
 class="compose"
