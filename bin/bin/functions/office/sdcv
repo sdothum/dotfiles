@@ -9,9 +9,9 @@
 usage() { usage: "$(basename $0) -dict | -et | ud | uk | wn | -th [[-:=][<maxlen>] | +] <word>, '-' (include phrases)"; exit 1; }
 
 SDCV=/usr/bin/sdcv
-WORDNET="$SDCV -c -n -u 'WordNet® 3.0 (En-En)'"
+WORDNET="$SDCV -c -n -u 'WordNet'"
 TH="$SDCV -n -u 'Moby Thesaurus II'"
-OXFORD="$SDCV -c -n -u 'Concise Oxford English Dictionary (En-En)' -u 'Concise Oxford Thesaurus 2nd Ed. (Eng-Eng)'"
+OXFORD="$SDCV -c -n -u 'Concise Oxford English Dictionary' -u 'Concise Oxford Thesaurus'"
 DICT="$SDCV -c -n -u 'dictd_www.dict.org_gcide'"
 ETYM="$SDCV -c -n -u 'Online Etymology Dictionary'"
 URBAN="$SDCV -c -n -u 'Urban Dictionary'"
