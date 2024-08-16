@@ -318,7 +318,7 @@ elif [ $web ] ;then                       # www fonts
 
 elif [ $coding ] ;then                    # classic coding font
 	unset space
-	cfont $leading family=monodyslexic j-flat at-tall l-hooky
+	cfont $leading family=monodyslexic j-flat at-tall
 	cfont $leading G-toothed a-double family=hyperlegible b-toothed j-serifless p-eared J-serifless 1-nobase
 
 else                                      # desktop fonts
@@ -326,14 +326,14 @@ else                                      # desktop fonts
 	cmdopts t-asymmetric-- j-flat 1-nobase at-tall l-hooky
 	dfont $leading
 	dfont $leading I-descending l-ascending f-extended J-flat T-descending family=Iosevka-serifless
-	# dfont proof    I-descending l-ascending f-extended J-flat T-descending
-	# dfont menu     I-serifed    Q-straight
-	# dfont dyslexic I-serifed    Q-straight      space=2.2   family=qclocktwo                      # conky qclocktwo font
-	# dfont dyslexic I-serifed    quasi-extension space=1.125 family=monograffic serifless serifed  # panel/dunst font
+	dfont proof    I-descending l-ascending f-extended J-flat T-descending
+	dfont menu     I-serifed    Q-straight
+	dfont dyslexic I-serifed    Q-straight      space=2.2   family=qclocktwo                      # conky qclocktwo font
+	dfont dyslexic I-serifed    quasi-extension space=1.125 family=monograffic serifless serifed  # panel/dunst font
 
-	# cmdopts quasi-ext open+ j-flat serifless serifed
- # 	emdash
-	# e_ink charcoal grote space=1 I-descending t-asymmetric-- l-ascending f-extended J-flat T-descending Q-bar 1-flat
+	cmdopts quasi-ext open+ j-flat serifless serifed
+ 	emdash
+	e_ink charcoal grote space=1 I-descending t-asymmetric-- l-ascending f-extended J-flat T-descending Q-bar 1-flat
 fi
 
 # kak: filetype=sh

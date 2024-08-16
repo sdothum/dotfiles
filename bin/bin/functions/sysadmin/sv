@@ -70,13 +70,14 @@ runit() {
 }
 
 dinit() {
-	usage() { usage: "$(basename $0) list | [disable | enable | start | stop | restart | status | log] <service>"; exit 1; }
+	usage() { usage: "$(basename $0) list | [disable | enable | start | stop | restart | status | check | log] <service>"; exit 1; }
 
 	sv() { eval sudo dinitctl $1 $2; }
 
 	ls() {
 		services=$(sv list)
-		for i in $(find /etc/dinit.d -maxdepth 1 -type f -exec basename {} \; | sort) ;do
+		[ -L /etc/dinit.d ] && L=-L
+		for i in $(find $L /etc/dinit.d -maxdepth 1 -type f -exec basename {} \; | sort) ;do
 			echo "$services" | grep -q $i || echo $i
 		done | columns
 	}
@@ -90,6 +91,7 @@ dinit() {
 		stop    ) sv $1 $2 ;;
 		restart ) sv $1 $2 ;;
 		status  ) sv $1 $2 ;;
+		check   ) sv status $2 | grep -q 'State: STARTED' ;;
 		log     ) sudo cat /var/log/dinit/$2.log | pager ;;
 		*       ) sv status $1; usage ;;
 	esac
