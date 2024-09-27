@@ -209,7 +209,7 @@ abbr fn 'function'  # fish shell shorthand
 for i in (seq 1 9); abbr \$$i "\$argv[$i]" ;end
 function ncd; set -l f (nnn -p - $argv[1]); test -d $f and z $f or z (dirname $f) ;end
 
-abbr cd 'z'
+# abbr cd 'z'
 abbr nc 'ncd'
 abbr dash 'rlwrap -n dash'
 abbr hdel 'history delete'
