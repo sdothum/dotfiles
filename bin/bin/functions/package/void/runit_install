@@ -12,9 +12,11 @@ usage() { usage: "$(basename $0) <service>"; exit 1; }
 
 SERVICE=/etc/sv/$1
 
-sudo mkdir -pv /run/runit/supervise.$1
 cfg_install $SERVICE
 sudo sed -i "s/[$]USER *$/$USER/" $SERVICE/run  # username daemon
-sudo ln -sfv /run/runit/supervise.$1 $SERVICE/supervise
+sudo rm -rf $SERVICE/supervise
+# copy runtime runit structure
+sudo cp -r /run/runit/supervise.sshd /run/runit/supervise.$1
+sudo ln -sv /run/runit/supervise.$1 $SERVICE/supervise
 
 # kak: filetype=sh

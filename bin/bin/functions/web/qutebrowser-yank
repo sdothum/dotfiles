@@ -1,12 +1,15 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
-# Sysadmin
+# Web
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ..................................................................... Password
+# ...................................................................... Browser
 
-# shell pass bypases notification and returns password only
-/bin/pass "$@"
+# macro to yank url to clipboard -- for when clipboard dies unexpectedly
+xdotool type ':edit-url'
+xdotool key Return
+sleep 0.5
+xdotool key x space y Return x
 
 # kak: filetype=sh

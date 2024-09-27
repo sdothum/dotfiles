@@ -39,7 +39,7 @@ runit() {
 
 	service=$2
 	case $1 in
-		''      ) ls /etc/sv; exit ;;
+		''      ) sudo vsv; ditto disabled ' '; ls -1 /etc/sv | grep -Ev $(sudo vsv | cut -d' ' -f3 | tr '\n' '|' | sed 's/^[|]*//; s/[|]*$//') | column; exit ;;
 		UP      ) ls /var/service; sudo find /etc/sv -name down; exit ;;  # running services
 		disable ) check ;;
 		down    ) check ;;
@@ -70,9 +70,9 @@ runit() {
 }
 
 dinit() {
-	usage() { usage: "$(basename $0) list | [disable | enable | start | stop | restart | status | check | log] <service>"; exit 1; }
+	usage() { usage: "$(basename $0) list | [disable | enable | start | stop [--force] | restart | status | check | log] <service>"; exit 1; }
 
-	sv() { eval sudo dinitctl $1 $2; }
+	sv() { eval sudo dinitctl $@; }
 
 	ls() {
 		services=$(sv list)
@@ -85,12 +85,12 @@ dinit() {
 	# configure dinit daemon
 	case $1 in
 		''      ) sv list; ls; usage ;;
-		disable ) sv $1 $2 ;;
-		enable  ) sv $1 $2 ;;
-		start   ) sv $1 $2 ;;
-		stop    ) sv $1 $2 ;;
-		restart ) sv $1 $2 ;;
-		status  ) sv $1 $2 ;;
+		disable ) sv $1 $2    ;;
+		enable  ) sv $1 $2    ;;
+		start   ) sv $1 $2    ;;
+		stop    ) sv $1 $2 $3 ;;  # [$2] == --force
+		restart ) sv $1 $2    ;;
+		status  ) sv $1 $2    ;;
 		check   ) sv status $2 | grep -q 'State: STARTED' ;;
 		log     ) sudo cat /var/log/dinit/$2.log | pager ;;
 		*       ) sv status $1; usage ;;

@@ -63,36 +63,43 @@ basefont() {
 	esac
 }
 
-utf() {
-	case "$1" in
-		' ' ) echo '0u0020' ;;  # space
-		A   ) echo '0u0041' ;;
-		a   ) echo '0u0061' ;;
-		C   ) echo '0u0043' ;;
-		E   ) echo '0u0045' ;;
-		e   ) echo '0u0065' ;;
-		G   ) echo '0u0047' ;;
-		I   ) echo '0u0049' ;;
-		i   ) echo '0u0069' ;;
-		J   ) echo '0u004a' ;;
-		j   ) echo '0u006a' ;;
-		l   ) echo '0u006c' ;;
-		M   ) echo '0u004d' ;;
-		m   ) echo '0u006d' ;;
-		O   ) echo '0u004f' ;;
-		o   ) echo '0u006f' ;;
-		Q   ) echo '0u0051' ;;
-		q   ) echo '0u0071' ;;
-		S   ) echo '0u0053' ;;
-		t   ) echo '0u0074' ;;
-		U   ) echo '0u0055' ;;
-		W   ) echo '0u0057' ;;
-		w   ) echo '0u0077' ;;
-		'|' ) echo '0u007c' ;;  # bar
-		'—' ) echo '0u2014' ;;  # emdash
-		'…' ) echo '0u2026' ;;  # ellipsis
-	esac
-}
+# utf() {
+# 	case "$1" in
+# 		' ' ) echo '0u0020' ;;  # space
+# 		A   ) echo '0u0041' ;;
+# 		a   ) echo '0u0061' ;;
+# 		C   ) echo '0u0043' ;;
+# 		E   ) echo '0u0045' ;;
+# 		e   ) echo '0u0065' ;;
+# 		G   ) echo '0u0047' ;;
+# 		I   ) echo '0u0049' ;;
+# 		i   ) echo '0u0069' ;;
+# 		J   ) echo '0u004a' ;;
+# 		j   ) echo '0u006a' ;;
+# 		l   ) echo '0u006c' ;;
+# 		M   ) echo '0u004d' ;;
+# 		m   ) echo '0u006d' ;;
+# 		O   ) echo '0u004f' ;;
+# 		o   ) echo '0u006f' ;;
+# 		Q   ) echo '0u0051' ;;
+# 		q   ) echo '0u0071' ;;
+# 		S   ) echo '0u0053' ;;
+# 		t   ) echo '0u0074' ;;
+# 		U   ) echo '0u0055' ;;
+# 		W   ) echo '0u0057' ;;
+# 		w   ) echo '0u0077' ;;
+# 		'|' ) echo '0u007c' ;;  # bar
+# 		'—' ) echo '0u2014' ;;  # emdash
+# 		'…' ) echo '0u2026' ;;  # ellipsis
+# 		"'" ) echo '0u0027' ;;  # single quote
+# 		'‘' ) echo '0u2018' ;;  # quoteleft
+# 		'’' ) echo '0u2019' ;;  # quoteright
+# 		'‚' ) echo '0u201a' ;;  # quotesinglebase
+# 		'‛' ) echo '0u201b' ;;  # quotereversed
+# 	esac
+# }
+
+utf() { printf "$1" | iconv -t UTF16LE | od -t x2 -An -v | sed 's/ /\u/g; s/^/0u/'; }
 
 replace() {
 	echo "
@@ -205,6 +212,29 @@ Generate(\$1);
 	for i in *.ttf ;do
 		ditto tailed $i
 		fontforge -quiet --script /tmp/fontforge:tailed.script $i
+	done
+}
+
+# scale apostrophe cell width
+apostrophe() {
+	XSHIFT=-25
+	echo "
+Open(\$1);
+" >/tmp/fontforge:apostrophe.script
+
+	set -- $(echo $letters | sed -r "s/(.)/\1 /g")
+	while [ $1 ] ;do
+		tighten $1 >>/tmp/fontforge:apostrophe.script
+		shift
+	done
+
+	echo "
+Generate(\$1);
+" >>/tmp/fontforge:apostrophe.script
+
+	for i in *.ttf ;do
+		ditto apostrophe $i
+		fontforge -quiet --script /tmp/fontforge:apostrophe.script $i
 	done
 }
 
@@ -745,6 +775,7 @@ case $1 in
 	# serifless   ) letters=$2; width=$(( $3 * 845 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
 	serifless     ) letters=$2; width=$(( $3 * 825 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
 	tailed        ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "l" (tailed)
+	apostrophe    ) letters=$2; width=$(( $3 * 825 / 1000));  shift 2 ;;         # percent of apostrophe
 	*weight       ) regular=${1%weight}; fforge=weight; [ "$2" = 'book+regular' ] && { adjust=true; shift; } ;;
 	copy          ) [ $3 ] && { family=$2; alias=$3; shift 2; copy; exit; }      || usage ;;  # pwd commandline only!
 	map           ) [ $4 ] && { family=$2; from=$3; to=$4; shift 3; map; exit; } || usage ;;  # pwd commandline only!

@@ -49,7 +49,7 @@ usage() {
 > G-[corner|hookless[+]|rounded|toothed|toothless]
 > I-[serifed|serifless|descending]
 > J-[descending|flat|serifless]
-> Q-[bar|bend|crossing|detached|hook|horizontal|open|straight|custom]
+> Q-[bar|bend|crossing|detached|hook|horizontal|open|straight|tailed|custom]
 > T-descending (includes I-descending)
 > W-asymmetric
 > Y-descending (includes I-descending T-descending)
@@ -57,7 +57,7 @@ usage() {
 > a-[double|earless|rounded|single|toothless]
 > b-corner
 > d-[tailed|toothless]
-> f-[extended|serifless]
+> f-[extended[+]|flat[+]]
 > g-double
 > i-[hooky|serifed[-]|serifless]
 > j-[flat|serifed|serifless]
@@ -70,7 +70,7 @@ usage() {
 > w-asymmetric
 > y-straight
 
-> 0-split
+> 0-[split|cutout]
 > 1-[[no]base|flat]
 > 4-open[+]
 > asterisk-high
@@ -194,6 +194,7 @@ glyph() { eval $1; variant="$variant $1"; }
 variant() {
 	for o in $@ ;do  # "o"nly non-variant character ($i in use for variant :) ..since rectified with long variant names
 		case $o in
+			0-cutout       ) glyph zero=reverse-slashed-cutout                   ;;
 			0-split        ) glyph zero=reverse-slashed-split                    ;;
 			1-base         ) glyph one=base                                      ;;
 			1-nobase       ) glyph one=no-base                                   ;;
@@ -232,6 +233,7 @@ variant() {
 			Q-horizontal   ) glyph capital_q=horizontal-tailed                   ;;
 			Q-open         ) glyph capital_q=open-swash                          ;;
 			Q-straight     ) glyph capital_q=straight                            ;;
+			Q-tailed       ) glyph capital_q=crossing-curly-tailed               ;;
 			R-open         ) glyph capital_r=straight-open-serifless             ;;
 			W-asymmetric   ) glyph capital_w=straight-asymmetric-serifless       ;;
 
@@ -245,7 +247,9 @@ variant() {
 			d-tailed       ) glyph d=tailed-serifless                            ;;
 			d-toothless    ) glyph d=toothless-corner-serifless                  ;;
 			f-extended     ) glyph f=flat-hook-extended-crossbar-at-x-height     ;;
-			f-serifless    ) glyph f=flat-hook-serifless-crossbar-at-x-height    ;;
+			f-extended+    ) glyph f=flat-hook-extended                          ;;
+			f-flat         ) glyph f=flat-hook-serifless-crossbar-at-x-height    ;;
+			f-flat+        ) glyph f=flat-hook-serifless                         ;;
 			g-double       ) glyph g=double-storey                               ;;
 			i-hooky        ) glyph i=hooky;                                      S_i='i'; unset s_i     ;;
 			i-serifed      ) glyph i=serifed;                                    unset s_i S_i          ;;
@@ -397,6 +401,7 @@ cmdopts () {
 			Q-horizontal   ) variant $1;              Q_horizontal=true ;;
 			Q-open         ) variant $1 ;;
 			Q-straight     ) variant $1 ;;
+			Q-tailed       ) variant $1 ;;
 			T-descending   ) variant 'T=DESCENDING I=DESCENDING'; T_descending=true; I_descending=true; baseline=true ;;
 			W-asymmetric   ) variant $1 w-asymmetric ;;
 			Y-descending   ) variant I-serifless 'DESCENDING T=DESCENDING Y=DESCENDING'; I_descending=true; T_descending=true; Y_descending=true; baseline=true ;;
@@ -411,7 +416,9 @@ cmdopts () {
 			d-tailed       ) variant $1 b-corner p-eared ;;  # alternate b d p dyslexic glyphs
 			d-toothless    ) variant $1 p-eared ;;
 			f-extended     ) variant $1 ;;                   # unolexic (homage to universal grotesk)
-			f-serifless    ) variant $1 ;;
+			f-extended+    ) variant $1 ;;                   # unolexic (homage to universal grotesk)
+			f-flat         ) variant $1 ;;
+			f-flat+        ) variant $1 ;;
 			g-double       ) variant $1 ;;
 			i-hooky        ) variant $1 ;;
 			i-serifed      ) variant $1 ;;
@@ -442,6 +449,7 @@ cmdopts () {
 			w-asymmetric   ) variant $1 W-asymmetric ;;
 			y-straight     ) variant $1 ;;
 
+			0-cutout       ) variant $1 ;;
 			0-split        ) variant $1 ;;
 			1-base         ) variant $1 ;;
 			1-nobase       ) variant $1 ;;
@@ -795,12 +803,14 @@ unset adjust baseline capadjust  # no longer applying for koreader and version 3
 [ $capadjust     ] && fforge capadjust          "CGOQSU"     $family  # shift up bottom of glyphs to x base
 
 if [ $ebook ] ;then
-	fforge punctuation ${emdash:-2} ${shape##* } $family 2>/dev/null; unset width
+	(( $(echo "$space >= 1.0" | bc -l) )) && fforge punctuation ${emdash:-2} ${shape##* } $family 2>/dev/null; unset width
 	if [ $spacing != 'quasi-proportional' ] ;then
 		fforge ligature $width ${shape##* } $family  # ae width character adjustment
-		[ $serifless ] && fforge serifless "$s_I$s_i$s_j$s_l" ${shape##* } $family  # adjust serifless "I i j l" cell width
-		[ $serifed   ] && fforge serifed "$S_i$S_J$S_j$S_l" ${shape##* }   $family  # adjust serifed "i J j l" cell width
-		[ $serifed   ] && fforge tailed "$T_l" ${shape##* }                $family  # adjust tailed "l" cell width
+		[ $serifless ] && fforge serifless "$s_I$s_i$s_j$s_l" ${shape##* }   $family  # adjust serifless "I i j l" cell width
+		[ $serifed   ] && fforge serifed "$S_i$S_J$S_j$S_l" ${shape##* }     $family  # adjust serifed "i J j l" cell width
+		[ $serifed   ] && fforge tailed "$T_l" ${shape##* }                  $family  # adjust tailed "l" cell width
+		[ $serifless ] || [ $serifed ] && fforge apostrophe "’" ${shape##* } $family  # adjust apostrophe cell width
+		[ $serifless ] || [ $serifed ] && fforge serifless  "'" ${shape##* } $family  # adjust single quote cell width
 	fi
 	[ $adjust ] && fforge ${regular}weight $adjust $family  # rename weight for e-reader (as regular)
 	[ $space  ] && fforge space $space             $family  # lengthen space character cell width

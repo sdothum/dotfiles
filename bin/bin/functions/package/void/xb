@@ -43,7 +43,7 @@ CACHE=/var/cache/xbps
 BACKUP=/net/depot/
 ITERATE=/tmp/xb:iterate
 XBDIR=$(dirname $0)
-ACTIONS=$XBDIR/functioNS/rules  # tuple: <action> <package> -> file: function/<action>, see upgrade_check and upgrade_actions
+ACTIONS=$XBDIR/functions/rules  # tuple: <action> <package> -> file: function/<action>, see upgrade_check and upgrade_actions
 
 [ $1 ] || usage
 

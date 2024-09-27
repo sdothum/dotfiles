@@ -21,17 +21,17 @@ color2=${BLUE}
 while : ;do
 	case $1 in
 		# long form required for handling numeric summary field
-		time=* ) expire="--expire-time=$(( ${1#time=} * 1000 ))" ;;
-		:*     ) expire="--expire-time=$(( ${1#:} * 1000 ))" ;;
-		cons*  ) console=true ;;
-		X      ) X=true ;;
+		time=*  ) expire="--expire-time=$(( ${1#time=} * 1000 ))" ;;
+		:*      ) expire="--expire-time=$(( ${1#:} * 1000 ))" ;;
+		cons*   ) console=true ;;
+		X       ) X=true ;;
 		low    |\
 		norm*  |\
-		crit*  ) urgency="-u $1"  ;;
-		warn*  ) urgency="-u low" ;;
-		blac*  ) urgency="-h string:bgcolor:#000000" ;;
-		[0-9]* ) [ $expire ] || echo "$1" | grep -q '[^0-9]' && break || expire="--expire-time=$(( $1 * 1000 ))" ;;
-		*      ) break ;;
+		crit*   ) urgency="-u $1"  ;;
+		warn*   ) urgency="-u low" ;;
+		blac*   ) urgency="-h string:bgcolor:#000000" ;;
+		[0-9.]* ) [ $expire ] || echo "$1" | grep -q '[^0-9]' && break || expire="--expire-time=$(( $1 * 1000 ))" ;;
+		*       ) break ;;
 	esac
 	shift
 done

@@ -49,7 +49,8 @@ eval $QUTEBROWSER $RUNOPT $settings $startpage 2>/dev/null &
 case ${name:-livedown} in
 	livedown )
 		xdotool search --sync --onlyvisible --classname "livedown" windowactivate
-		window @0.25 tile 3  # wait for ruler to complete "qutebrowser" rule
+		window @0.25 tile 3            # wait for ruler to complete "qutebrowser" rule
+		waitron window_cycle_in_group  # focus editor
 		;;
 	sonarr   )
 		xdotool search --sync --onlyvisible --classname 'sonarr' windowactivate

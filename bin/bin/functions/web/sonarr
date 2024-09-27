@@ -8,6 +8,8 @@
 
 # Usage: sonarr [video], of 'anime' or 'series'
 
+SERVER=motu
+
 BROWSER=qutebrowser-instance
 SONARR=http://$SERVER:8989
 export NO_PROXY="*"
