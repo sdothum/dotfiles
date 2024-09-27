@@ -1,4 +1,4 @@
-# sdothum - 2016 (c) wtfpl
+sdothum - 2016 (c) wtfpl
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
@@ -182,7 +182,7 @@ super + {_,shift} + s
 	waitron {window_stack_toggle, window_focus $(pfw)} ;\
 	chef -- desktop
 
-super + shift + {u,v,z}
+super + shift + {u,v,minus}
 	menu {passwords, media, system}
 
 super + {t,r}

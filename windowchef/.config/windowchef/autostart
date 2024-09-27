@@ -17,4 +17,8 @@ brightness
 [ -e $SESSION/cbonsai ] && cbonsai
 [ -e $SESSION/term    ] && term
 
+# issue running as runit service
+!p nzbget && nzbget --daemon
+!p sonarr && sudo /bin/su - sonarr -c '/usr/lib/sonarr/Sonarr/Sonarr -s localhost:8989 -no-browser -data=/var/lib/sonarr' >/dev/null 2>&1 &
+
 # kak: filetype=sh

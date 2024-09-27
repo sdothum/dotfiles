@@ -40,7 +40,7 @@ draw() {
 }
 
 # do we need to wait longer for window creation?
-[ $1 ] && { [ "${1%%@*}" ] || { notify Waiting "${1#@}.."; sleep ${1#@}; winid=$(pfw); shift; } }
+[ $1 ] && { [ "${1%%@*}" ] || { notify ${1#@} Waiting "${1#@}.."; sleep ${1#@}; winid=$(pfw); shift; } }
 
 msg=$1
 [ $msg ] && shift || usage: $0

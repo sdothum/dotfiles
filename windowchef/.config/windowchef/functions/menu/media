@@ -7,7 +7,7 @@
 # ........................................................................ Media
 
 CLEAR='clear'
-MEDIA="$(X $CLEAR)\nblackboard\nanimation\nanime\nmovies\nseries\nsonarr\ndust\niai\nnetflix\nkodi\nprime\nnzbgeek\nusenet-crawler\nnzbget\ntorrent\npulse\ncalibre\nebooks\nreferences\nzlibrary\npatricia\nthought of you\nfamily\ hum"
+MEDIA="$(X $CLEAR)\nblackboard\nanimation\nanime\nmovies\nseries\nsonarr\ndust\niai\nnetflix\nkodi\nprime\nnzbgeek\nusenet-crawler\nnzbget\ntorrent\npulse\ncalibre\nebooks\nreferences\nzlibrary\npatricia\nthought of you\nfamily hum"
 
 video='play kodi vstream'
 USENET_CRAWLER=https://www.usenet-crawler.com/movies?t=2040
