@@ -7,19 +7,19 @@
 
 # network share dotfile, email and media databases
 if server && [ $(hostname) != motu ] ;then
-   sudo mkdir -pv /srv/nfs4/Maildir
+   # sudo mkdir -pv /srv/nfs4/Maildir
    sudo mkdir -pv /srv/nfs4/net
 
-   ifnsed /etc/fstab 'Maildir.*bind' "\$a\\
-$HOME/Maildir /srv/nfs4/Maildir none bind 0 0\\
-/net /srv/nfs4/net none bind 0 0\\
-"
+#    ifnsed /etc/fstab 'Maildir.*bind' "\$a\\
+# $HOME/Maildir /srv/nfs4/Maildir none bind 0 0\\
+# /net /srv/nfs4/net none bind 0 0\\
+# "
 
    ifnsed /etc/exports '/srv/nfs4.*no_wdelay' '\|/srv/nfs4|s/,sync,/,sync,no_wdelay,/'
-   ifnsed /etc/exports 'Maildir' '\$a\\
-/srv/nfs4/Maildir *(rw,sync,no_wdelay,no_subtree_check,nohide)\\
-/srv/nfs4/net *(rw,sync,no_wdelay,no_subtree_check,nohide)\\
-'
+#    ifnsed /etc/exports 'Maildir' '\$a\\
+# /srv/nfs4/Maildir *(rw,sync,no_wdelay,no_subtree_check,nohide)\\
+# /srv/nfs4/net *(rw,sync,no_wdelay,no_subtree_check,nohide)\\
+# '
    sudo exportfs -rav
 else
    ifnsed /etc/fstab 'net.*nfs4' "\$a\\

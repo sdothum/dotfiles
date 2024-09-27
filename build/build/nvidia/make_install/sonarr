@@ -5,26 +5,22 @@
 
 # ....................................................................... sonarr
 
-version=2
 DEPOT=/home/depot/sonarr
 LIB=/usr/lib/sonarr
 SONARR=/srv/http/sonarr
 
-if [ ! -d $DEPOT ] ;then
+sudo xbps-install -y mono
+
+if [ ! -f $DEPOT/Sonarr*.tar.gz ] ;then
   mkdir -p $DEPOT
   cd $DEPOT
-  wget http://update.sonarr.tv/v$version/master/mono/NzbDrone.master.tar.gz
+  wget --content-disposition "https://services.sonarr.tv/v1/download/main/latest?version=4&os=linux&arch=x64"
 fi
 
 sudo mkdir -p $LIB
-sudo tar xvfz $DEPOT/NzbDrone.master.tar.gz --directory $LIB
+sudo tar xvfz ${DEPOT}/Sonarr*.tar.gz --directory $LIB
 
-runit_install sonarr
-
-[ -e $SONARR/nzbdrone.db ] && exit
-sudo mkdir -p $SONARR
-[ -e /home/archive$SONARR ] && sudo rsync /home/archive$SONARR/ $SONARR
-sudo chown -R sonarr:sonarr $SONARR
-sudo rm $SONARR/*pid
+ditto backup "existing sonarr configuration and database"
+ditto restore "new sonarr instance from backup zip file"
 
 # vim: set ft=sh: #
