@@ -82,6 +82,7 @@ set-option global autoreload yes
 declare-user-mode buffer
 
 map global normal <ret> ': enter-user-mode buffer<ret>'
+push %{ focus 0 : map global user <ret> ': enter-user-mode buffer<ret>' -docstring 'buffer menu' }
 
 # no sudo-write-all so sync root owned files on buffer switching
 define-command sync %{
@@ -115,7 +116,8 @@ map global normal <a-ret>       ': sync<ret>: buffer-next<ret>'     -docstring '
 map global normal <a-backspace> ': sync<ret>: buffer-previous<ret>' -docstring 'previous buffer'
 map global normal <a-space>     ': sync<ret>ga'                     -docstring 'last buffer'
 
-hook global WinDisplay filetype=diff %{
+# USE: .*diff BECAUSE: rc/filetype/mail.kak also maps <ret> causing unexpected *.eml plug error(?)
+hook global WinDisplay .*diff %{
 	map global normal <ret>      ': diff-jump<ret>'                  -docstring 'diff-jump new file'
 	map global normal <a-ret>    ': diff-jump -<ret>'                -docstring 'diff-jump old file'
 }

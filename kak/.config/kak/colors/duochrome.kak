@@ -228,7 +228,8 @@ set-face window PeneiraFileName                "${attribute}"
 
 # ............................................................ phantom selection
 
-set-face window PhantomSelection               "${white},${wrap}+F"
+# set-face window PhantomSelection             "${white},${wrap}+F"
+set-face window PhantomSelection               "default,${soft_red}+g"
 
 # ...................................................................... kak-lsp
 

@@ -5,7 +5,7 @@
 
 # Config for Kakoune
 
-# runtime env control variables
+# runtime env control variables SEE: kak shell script wrapper
 # $UNPLUG   -> nop all bundles
 # $DISPLAY  -> load $DISPLAY (server) dependent bundles
 # $DIFF     -> kak diff mode
@@ -111,8 +111,7 @@ pull %{ user   } %{ focus   }
 pull %{ user   } %{ snippet }
 pull %{ user   } %{ shell   }
 pull %{ user   } %{ alpha   }
-pull %{ buffer } %{ buffer  }
-pull %{ buffer } %{ alpha   }
+pull %{ buffer }
 pull %{ format } %{ snippet }
 pull %{ format } %{ align   }
 pull %{ format } %{ comment }

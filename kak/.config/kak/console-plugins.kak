@@ -114,13 +114,19 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 		peneira-files -hide-opened
 	}
 
+	define-command lines %{
+		peneira-resync
+		peneira-lines
+	}
+
 	define-command symbols %{
 		peneira-resync
 		peneira-symbols
 	}
 
-	push %{ buffer  : map global buffer b ': buffers<ret>' -docstring 'buffers' }
+	push %{ alpha 1 : map global buffer b ': buffers<ret>' -docstring 'buffers' }
 	push %{ alpha 1 : map global buffer e ': files<ret>'   -docstring 'edit file' }
+	push %{ alpha 1 : map global buffer l ': lines<ret>'   -docstring 'lines' }
 	push %{ alpha   : map global user   C ': symbols<ret>' -docstring 'ctag symbols' }
 }
 

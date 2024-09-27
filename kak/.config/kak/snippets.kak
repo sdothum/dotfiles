@@ -38,6 +38,7 @@ hook -once global BufSetOption filetype=markdown %{
 # ......................................................................... mail
 
 hook -once global BufSetOption filetype=mail %{
+	set -add buffer snippets 'dad'     '%da' %{ snippets-insert %{:D(A):D }}
 	set -add buffer snippets 'regards' '%re' %{ snippets-insert %{Regards,
 Steven & Daisy }}
 }
