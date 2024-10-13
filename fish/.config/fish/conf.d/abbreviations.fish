@@ -126,7 +126,7 @@ abbr treed 'sudo tree -aCdF'
 
 function hgc; hg cat -r $argv | bat; end
 
-abbr hgr 'hg revert -r'
+# abbr hgr 'hg revert -r'
 abbr N 'nnn -p -'  # cmd .. (N) file picker mode
 abbr n 'nnn'
 abbr nb 'nnn -s ebooks'
