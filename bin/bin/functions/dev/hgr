@@ -1,0 +1,18 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Dev
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................. Restore revision
+
+usage() { usage: "$(basename $0) <revision> <path>"; exit 1; }
+
+REPO=${REPO:-$STOW}
+
+cd $REPO
+[ -f $2 ] || { hgl "${2##*/}"; echo; usage; }
+
+hg revert -r $1 $2
+
+# kak: filetype=sh

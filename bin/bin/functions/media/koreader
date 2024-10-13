@@ -7,6 +7,7 @@
 # ....................................................... KOReader metadata edit
 #
 # NOTE: current directory should be root of kobo device to update book sdr's AND koreader settings
+#       will only modify existing settings NOT add them (to gestures.lua)
 #
 # ATTENTION: tap/double_tap sed "/match/,+count" ranges must include update search items SEE: gestures.lua file
 
@@ -46,6 +47,7 @@ settings() { ditto settings "$1"; SETTINGS="$SETTINGS; $2"; }
 
 font()     { sdr "font ${1}" '/\"font_face\"/s/\"[^ ]*\",/\"'${1}'\",/'; }
 header()   { sdr "header font ${1}" '/\"header_font_face\"/s/\"[^ ]*\",/\"'${1}'\",/'; }
+portrait() { sdr "portrait orientation" '/\"copt_rotation_mode\"/s/= [0-9]*,/= 0,/; /\"copt_visible_pages\"/s/= [0-9]*,/= 1,/'; }
 
 backup()   { ifno "backup KOBOeReader" || /usr/bin/rsync --info=progress2 -a --delete $KOBO /home/; }
 
@@ -57,15 +59,15 @@ while [ $1 ] ;do
 		u     ) backup; shift; [ $1 ] && continue || exit ;;
 		-     ) sdr 'hyphenation soft' '/\"hyph_soft_hyphens_only\"/s/= false,/= true,/'; resetpages=true ;;
 		p     ) resetpages=true; shift; continue ;;
-		l     ) margin=$(number $2)  && sdr "left/right margin ${margin}" '/\"copt_h_page_margins\".*=/,+2s/= [0-9]*,/= '${margin}',/' || usage; resetpages=true ;;
-		t     ) margin=$(number $2)  && sdr "top margin ${margin}" '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'               || usage; resetpages=true ;;
-		b     ) margin=$(number $2)  && sdr "bottom margin ${margin}" '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'            || usage; resetpages=true ;;
-		s     ) percent=$(number $2) && sdr "line spacing ${percent}"% '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'           || usage; resetpages=true ;;
-		m     ) sync=$(binary $2)    && sdr "sync margins ${sync}" '/\"copt_sync_t_b_page_margins\"/s/[01]/'${sync}'/'                 || usage                  ;;
-		d     ) font=$(string $2)    && font ${font} && header ${font}                                                                 || usage; resetpages=true ;;
-		f     ) font=$(string $2)    && font ${font}                                                                                   || usage; resetpages=true ;;
-		h     ) font=$(string $2)    && header ${font}                                                                                 || usage                  ;;
-		g     ) gamma=$(number $2)   && sdr "font gamma ${gamma}" '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                    || usage                  ;;
+		l     ) margin=$(number $2)  && sdr "left/right margin ${margin}" '/\"copt_h_page_margins\".*=/,+2s/= [0-9]*,/= '${margin}',/'     || usage; resetpages=true ;;
+		t     ) margin=$(number $2)  && { sdr "top margin ${margin}" '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'; portrait; }    || usage; resetpages=true ;;
+		b     ) margin=$(number $2)  && { sdr "bottom margin ${margin}" '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'; portrait; } || usage; resetpages=true ;;
+		s     ) percent=$(number $2) && sdr "line spacing ${percent}"% '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'               || usage; resetpages=true ;;
+		m     ) sync=$(binary $2)    && sdr "sync margins ${sync}" '/\"copt_sync_t_b_page_margins\"/s/[01]/'${sync}'/'                     || usage                  ;;
+		d     ) font=$(string $2)    && font ${font} && header ${font}                                                                     || usage; resetpages=true ;;
+		f     ) font=$(string $2)    && font ${font}                                                                                       || usage; resetpages=true ;;
+		h     ) font=$(string $2)    && header ${font}                                                                                     || usage                  ;;
+		g     ) gamma=$(number $2)   && sdr "font gamma ${gamma}" '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                        || usage                  ;;
 		w     ) sdr 'word spacing 100' '/\"copt_word_spacing\".*=/,+2s/= [0-9]*,/= '100',/'; shift; continue ;;
 		T     ) margin=$(number $2)  ;;
 		B     ) margin=$(number $2)  ;;

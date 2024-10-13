@@ -1,0 +1,24 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Network
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ...................................................................... dnsmasq
+
+NAMESERVER=$SESSION/nameserver
+[ -e $NAMESERVER ] && NAMESERVER=$(cat $NAMESERVER) || NAMESERVER=127.0.0.1
+
+sv status dnsmasq | grep -q run: || exit
+
+sudo chattr -i /etc/resolv.conf
+original /etc/resolv.conf
+echo "options timeout:1
+nameserver=$NAMESERVER" | sudo tee /etc/resolv.conf
+
+# prevent overwriting by other dnsproxy agents
+sudo chattr +i /etc/resolv.conf
+
+ifnsed /etc/dhcpcd.conf 'nohook resolv.conf'
+
+# kak: filetype=sh

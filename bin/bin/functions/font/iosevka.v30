@@ -57,7 +57,7 @@ usage() {
 > a-[double|earless|rounded|single|toothless]
 > b-corner
 > d-[tailed|toothless]
-> f-[extended[+]|flat[+]]
+> f-[asymmetric|extended[+]|flat[+]]
 > g-double
 > i-[hooky|serifed[-]|serifless]
 > j-[flat|serifed|serifless]
@@ -415,6 +415,7 @@ cmdopts () {
 			b-toothed      ) variant $1 ;;
 			d-tailed       ) variant $1 b-corner p-eared ;;  # alternate b d p dyslexic glyphs
 			d-toothless    ) variant $1 p-eared ;;
+			f-asymmetric   ) variant $1 'ASYMMETRIC'; f_asymmetric=true ;;
 			f-extended     ) variant $1 ;;                   # unolexic (homage to universal grotesk)
 			f-extended+    ) variant $1 ;;                   # unolexic (homage to universal grotesk)
 			f-flat         ) variant $1 ;;
@@ -792,6 +793,7 @@ unset adjust baseline capadjust  # no longer applying for koreader and version 3
 [ $Q_horizontal  ] && fforge Q_horizontal       ${shape##* } $family  # open horizontal capital Q
 [ $Q_custom      ] && fforge Q_custom           ${shape##* } $family  # custom capital Q
 
+[ $f_asymmetric  ] && fforge f_asymmetric       ${shape##* } $family  # font mod for asymmetric f
 [ $I_descending  ] && fforge I_descending       ${shape##* } $family  # font mod for descending serifless capital I
 [ $i_flipped     ] && fforge i_flipped          ${shape##* } $family  # font mod for flipped serifed i
 [ $l_ascending   ] && fforge l_ascending        ${shape##* } $family  # font mod for ascending serifless l
