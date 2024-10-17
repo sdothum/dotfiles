@@ -22,7 +22,10 @@ bundle kakoune-snippets https://github.com/occivink/kakoune-snippets.git %{
 
 hook -once global BufSetOption filetype=sh %{
 	set -add buffer snippets 'usage:'     '%us' %{ snippets-insert %{usage() { usage: "$(basename $0) ${1:options}"; exit 1; } }}
-	set -add buffer snippets 'usage:pipe' '%up' %{ snippets-insert %{usage() { usage: "$(basename $0) ${1:options}" | usage:pipe
+	set -add buffer snippets 'usage:'     '%US' %{ snippets-insert %{usage() { echo "$(basename $0) ${1:options}" | usage:
+	exit 1
+} }}
+	set -add buffer snippets 'usage:pipe' '%up' %{ snippets-insert %{usage() { echo "$(basename $0) ${1:options}" | usage:pipe
 	exit 1
 } }}
 }
