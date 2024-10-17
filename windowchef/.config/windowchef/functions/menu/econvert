@@ -104,9 +104,10 @@ output=ebook-convert:ebook  # flatpak ebook-convert cannot not output to path (?
 [ $option ] || option=$(echo -n "default (ragged-right)\nnoindent\njustify\nall" | rmenu 'export options' -no-custom) || break
 justify=left
 em_linespace=${em_linespace%,*}
+em_indent="--remove-paragraph-spacing --remove-paragraph-spacing-indent-size=$em_indent"
 case $option in
 	default  ) ;;
-	noindent ) em_indent=0; em_linespace=${em_linespace#*,} ;;
+	noindent ) unset em_indent; em_linespace=${em_linespace#*,} ;;
 	justify  ) justify=justify ;;
 	all      ) unset indent; em_linespace=${em_linespace#*,}; justify=justify ;;
 esac
@@ -117,12 +118,12 @@ ditto $format "$file"
 # ebook-convert "$file" "${output%.*}.epub"  # test image
 # convert even .azw3 to inject folder title and author
 alpine && EBOOK_CONVERT='flatpak run --command="ebook-convert" --user com.calibre_ebook.calibre' || EBOOK_CONVERT=/usr/bin/ebook-convert
-eval $EBOOK_CONVERT \"$file\" \"${output%.*}.$format\"                          \
-	$([ $reformat ] && echo || echo "--title=\"$title\" --authors=\"$author\"")  \
-	--change-justification=\"$justify\"                                          \
-	--remove-paragraph-spacing --remove-paragraph-spacing-indent-size=$em_indent \
-	--insert-blank-line --insert-blank-line-size=$em_linespace                   \
-	--filter-css=\'font-family, float\'                                          \
+eval $EBOOK_CONVERT \"$file\" \"${output%.*}.$format\"                         \
+	$([ $reformat ] && echo || echo "--title=\"$title\" --authors=\"$author\"") \
+	--change-justification=\"$justify\"                                         \
+	$em_indent                                                                  \
+	--insert-blank-line --insert-blank-line-size=$em_linespace                  \
+	--filter-css=\'font-family, float\'                                         \
 	>/tmp/ebook-convert.log 2>/dev/null || exit  # suppress plugin initialization warnings
 
 # ........................................................................ Write
