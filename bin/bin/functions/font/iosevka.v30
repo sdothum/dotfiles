@@ -811,7 +811,7 @@ if [ $ebook ] ;then
 		[ $serifless ] && fforge serifless "$s_I$s_i$s_j$s_l" ${shape##* }   $family  # adjust serifless "I i j l" cell width
 		[ $serifed   ] && fforge serifed "$S_i$S_J$S_j$S_l" ${shape##* }     $family  # adjust serifed "i J j l" cell width
 		[ $serifed   ] && fforge tailed "$T_l" ${shape##* }                  $family  # adjust tailed "l" cell width
-		[ $serifless ] || [ $serifed ] && fforge apostrophe "’" ${shape##* } $family  # adjust apostrophe cell width
+		[ $serifless ] || [ $serifed ] && fforge quote "‘’‛" ${shape##* }    $family  # adjust quote (left,right,reversed) cell width
 		[ $serifless ] || [ $serifed ] && fforge serifless  "'" ${shape##* } $family  # adjust single quote cell width
 	fi
 	[ $adjust ] && fforge ${regular}weight $adjust $family  # rename weight for e-reader (as regular)

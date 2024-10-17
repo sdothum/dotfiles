@@ -6,7 +6,12 @@
 
 # ............................................................... Word frequency
 
-usage() { usage: "[GT=<count>] $(basename $0) [list | ls | <[-|=]length>] [<regex>]"; }
+usage() { echo "$(basename $0) [list | ls | <[-|=]length>] [<regex>]
+> regex  ^.    - beginning with character
+> regex  .\\$   - ending with character
+> env    GT    - with word count more than (default 0)" | usage:
+	exit 1
+}
 
 # WORDS=${WORDS:-$HOME/.config/Amphetype/100K-word.database}
 WORDS=${WORDS:-$HOME/.config/Amphetype/google-books-common-words.txt}

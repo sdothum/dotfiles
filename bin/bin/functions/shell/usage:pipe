@@ -9,7 +9,7 @@
 # Usage: .. | usage:pipe, where pipe input is "<text> | <command> <option>*"
 
 # special usage: output massage to highlight command of pipe input process
-usage: | sed -r "s/.\[1;97m(.*) .\[0;36m\| ([^ ]*)/${cyan}\1 | ${WHITE}\2${cyan}/"
+usage: | sed -r "s/\x1B\[1;97m(.*) \x1B\[0;36m\| ([^ ]*)/${cyan}\1 | ${WHITE}\2${cyan}/"
 
 exit 1  # parent process must still exercise "exit"
 

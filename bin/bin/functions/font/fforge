@@ -182,26 +182,30 @@ Generate(\$1);
 	done
 }
 
-# scale apostrophe cell width
-apostrophe() {
-	XSHIFT=-25
+# scale single quote (apostrophe glyph) cell width
+quote() {
 	echo "
 Open(\$1);
-" >${LOG}:apostrophe.script
+" >${LOG}:quote.script
 
 	set -- $(echo $letters | sed -r "s/(.)/\1 /g")
 	while [ $1 ] ;do
-		tighten $1 >>${LOG}:apostrophe.script
+		case $1 in
+			‘ ) XSHIFT=-60 ;;  # quote left
+			’ ) XSHIFT=-30 ;;  # quote right
+			‛ ) XSHIFT=-60 ;;  # quote reversed
+		esac
+		tighten $1 >>${LOG}:quote.script
 		shift
 	done
 
 	echo "
 Generate(\$1);
-" >>${LOG}:apostrophe.script
+" >>${LOG}:quote.script
 
 	for i in *.ttf ;do
-		ditto apostrophe $i
-		fontforge -quiet --script ${LOG}:apostrophe.script $i
+		ditto quote $i
+		fontforge -quiet --script ${LOG}:quote.script $i
 	done
 }
 
@@ -771,7 +775,7 @@ case $1 in
 	# serifless   ) letters=$2; width=$(( $3 * 845 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
 	serifless     ) letters=$2; width=$(( $3 * 825 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
 	tailed        ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "l" (tailed)
-	apostrophe    ) letters=$2; width=$(( $3 * 825 / 1000));  shift 2 ;;         # percent of apostrophe
+	quote         ) letters=$2; width=$(( $3 * 825 / 1000));  shift 2 ;;         # percent of quote (left,right,reversed)
 	*weight       ) regular=${1%weight}; fforge=weight; [ "$2" = 'book+regular' ] && { adjust=true; shift; } ;;
 	copy          ) [ $3 ] && { family=$2; alias=$3; shift 2; copy; exit; }      || usage ;;  # pwd commandline only!
 	map           ) [ $4 ] && { family=$2; from=$3; to=$4; shift 3; map; exit; } || usage ;;  # pwd commandline only!
