@@ -7,7 +7,7 @@
 -- extend font size and line spacing ranges
 
 -- my new ranges
-local min_fontsize = 10      -- point size
+local min_fontsize = 8       -- point size
 local max_linespacing = 300  -- percent
 
 local CreOptions = require("ui/data/creoptions")
