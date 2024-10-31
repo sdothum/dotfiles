@@ -12,7 +12,8 @@ EDIT='file manager'
 SWITCH='switch library'
 
 EXCLUDE='dictionary|kobo*|textbook|menu*'''
-LIBRARY=${LIBRARY:-/net/media/ebooks/books}
+# LIBRARY=${LIBRARY:-/net/media/ebooks/books}
+LIBRARY=${LIBRARY:-/home/library/calibre}
 CATLGS=$(ls -1 $LIBRARY | grep -E -v "$EXCLUDE" | sed -r 's/(.*)/\1\\\\n/')
 CATLG=$LIBRARY/${CATLG:-science-fiction}
 
