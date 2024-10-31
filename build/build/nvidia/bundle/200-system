@@ -53,28 +53,28 @@ m powerpanel
   gnome-keyring
   gnupg2
 d pass
-d pinentry-qt   # for x11 desktop passphrase
+d pinentry-qt  # for x11 desktop passphrase
 
 
 = sound
 = ════
+# alsa-pipewire
 # alsa-plugins
-# alsaequal
-# alsa-ucm-conf
-# ConsoleKit2
-# mpg123
-# pulseaudio
 # alsa-plugins-pulseaudio
+# alsa-ucm-conf
+# alsaequal
+# ConsoleKit2
+# easyeffects
+# mpg123
+# pipewire
 # pulseaudio-equalizer-ladspa
+# sof-firmware   # alsa-ucm-conf dependency
+# wireplumber
   alsa-utils
-  alsa-plugins-pulseaudio
-  alsa-pipewire
-  libpulseaudio
-  pipewire
-  wireplumber
-  pulseeffects
-  rtkit         # pipewire run dependency, in addition to dbus
+  libpulseaudio  # general sound libraries
+  rtkit          # pipewire/pulseaudio run dependency, in addition to dbus
   pavucontrol
+  pulseaudio
 
 
 = system utility
