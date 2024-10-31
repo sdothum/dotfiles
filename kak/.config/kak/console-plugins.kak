@@ -28,7 +28,7 @@ if-else %{ [ -z "$DIFF" ] } %{
 
 bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
 	push %{ focus h : map global user + ': crosshairs<ret>'   -docstring "crosshairs" }
-	push %{ focus h : map global user ^ ': cursorcolumn<ret>' -docstring "cursor column" }
+	push %{ focus h : map global user | ': cursorcolumn<ret>' -docstring "cursor column" }
 }
 
 # ........................................................................ fandt
@@ -72,6 +72,34 @@ bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
 	}
 
 	push %{ focus f : map global user <space> ': toggle-focus<ret>' -docstring "focus selections" }
+}
+
+# .......................................................................... hop
+
+bundle hop.kak https://github.com/hadronized/hop.kak.git %{
+	evaluate-commands %sh{ hop-kak --init }
+	declare-option str hop_keyset 'heatrsiyoudnmkplf'  # beakl wi layout
+
+	define-command hop-kak %{
+		evaluate-commands -no-hooks -- %sh{ hop-kak --keyset "$kak_opt_hop_keyset" --sels "$kak_selections_desc" }
+	}
+
+	define-command hop-kak-sel %{
+		execute-keys 'gtGbxs<ret>'
+		hop-kak
+	}
+
+	define-command hop-kak-words %{
+		execute-keys 'gtGbxs\w+<ret>'
+		hop-kak
+	}
+
+	push %{ alpha : map global user f ': hop-kak-sel<ret>'   -docstring 'find selection,word (on page)' }
+	push %{ alpha : map global user F ': hop-kak-words<ret>' -docstring 'find selection,word (on page)' }
+	map global normal <a-h> ': hop-kak-sel<ret>'   -docstring 'find selection (on page)'
+	map global normal <a-H> ': hop-kak-words<ret>' -docstring 'find word (on page)'
+} %{
+	cargo install hop-kak
 }
 
 # .............................................................. lua interpreter
@@ -127,24 +155,24 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 	push %{ alpha 1 : map global buffer b ': buffers<ret>' -docstring 'buffers' }
 	push %{ alpha 1 : map global buffer e ': files<ret>'   -docstring 'edit file' }
 	push %{ alpha 1 : map global buffer l ': lines<ret>'   -docstring 'lines' }
-	push %{ alpha   : map global user   C ': symbols<ret>' -docstring 'ctag symbols' }
+	push %{ alpha   : map global user   t ': symbols<ret>' -docstring 'ctag symbols' }
 }
 
 # ............................................................ phantom selection
 
 bundle kakoune-phantom-selection https://github.com/occivink/kakoune-phantom-selection.git %{
-	push %{ alpha : map global user f     ": phantom-selection-add-selection<ret>"                       -docstring 'phantom add,clear' }
-	push %{ alpha : map global user F     ": phantom-selection-select-all; phantom-selection-clear<ret>" -docstring 'phantom add,clear' }
-	map global normal <a-f> ": phantom-selection-iterate-next<ret>"                        -docstring 'phantom next'
-	map global normal <a-F> ": phantom-selection-iterate-prev<ret>"                        -docstring 'phantom previous'
+	push %{ alpha : map global user m       ": phantom-selection-add-selection<ret>"                       -docstring 'mselect add,clear' }
+	push %{ alpha : map global user M ": phantom-selection-select-all; phantom-selection-clear<ret>" -docstring 'mselect add,clear' }
 
 	# this would be nice, but currrently doesn't work
 	# see https://github.com/mawww/kakoune/issues/1916
 	#map global insert <a-f> "<a-;>: phantom-selection-iterate-next<ret>"
 	#map global insert <a-F> "<a-;>: phantom-selection-iterate-prev<ret>"
 	# so instead, have an approximate version that uses 'i'
-	map global insert <a-f> "<esc>: phantom-selection-iterate-next<ret>i"                  -docstring 'phantom next'
-	map global insert <a-F> "<esc>: phantom-selection-iterate-prev<ret>i"                  -docstring 'phantom previous'
+	map global insert <a-f> "<esc>: phantom-selection-iterate-next<ret>i" -docstring 'mselect next'
+	map global insert <a-F> "<esc>: phantom-selection-iterate-prev<ret>i" -docstring 'mselect previous'
+	map global normal <a-f> ": phantom-selection-iterate-next<ret>"       -docstring 'mselect next'
+	map global normal <a-F> ": phantom-selection-iterate-prev<ret>"       -docstring 'mselect previous'
 }
 
 # .................................................................. search docs

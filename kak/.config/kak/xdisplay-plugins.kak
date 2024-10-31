@@ -6,26 +6,6 @@
 # Terminal $DISPLAY plugins
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# .......................................................................... hop
-
-bundle hop.kak https://github.com/hadronized/hop.kak.git %{
-	nop evaluate-commands %sh{ hop-kak --init }
-	declare-option str keyset 'heatrskplfyoudnm'
-
-	define-command -override hop-kak %{
-		exec ': evaluate-commands -no-hooks -- %sh{ hop-kak --keyset "$kak_opt_keyset" --sels "$kak_selections_desc" }<ret>'
-	}
-
-	define-command -override hop-kak-words %{
-		exec 'gtGbxs\w+<ret>: evaluate-commands -no-hooks -- %sh{ hop-kak --keyset "$kak_opt_keyset" --sels "$kak_selections_desc" }<ret>'
-	}
-
-	push %{ alpha : map global user h ': hop-kak<ret>'       -docstring 'hop selection,word' }
-	push %{ alpha : map global user H ': hop-kak-words<ret>' -docstring 'hop selection,word' }
-} %{
-	cargo install hop-kak
-}
-
 # ......................................................... kakboard (clipboard)
 
 bundle kakboard https://github.com/lePerdu/kakboard.git %{

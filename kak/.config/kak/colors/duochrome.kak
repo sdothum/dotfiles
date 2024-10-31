@@ -209,6 +209,10 @@ add-highlighter -override window/ dynregex '%reg{/}' 0:SecondarySelection
 # Plugins
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+# .......................................................................... hop
+set-face window hop_label_head                 "${white},${dark_blue}+bF"
+set-face window hop_label_tail                 hop_label_head
+
 # ............................................................... kak-crosshairs
 
 # set-face window crosshairs_line              "default,default+u"

@@ -12,9 +12,10 @@ set-option global tabstop 3
 set-option global indentwidth 3
 declare-user-mode format
 
-map global normal <c-l> ': comment-line<ret>' -docstring 'comment'  # beakl key position for "#" NOTE: <c-c> unmappable
-map global normal |     'x| '                 -docstring "pipe FIFO buffer"
-map global normal '#'   ': enter-user-mode format<ret>'
+map global normal <c-l>   ': comment-line<ret>' -docstring 'comment'  # beakl key position for "#" NOTE: <c-c> unmappable
+map global normal |       'x| '                 -docstring "pipe FIFO buffer"
+map global normal '#'     ': enter-user-mode format<ret>'
+map global insert <a-ret> '<esc><a-o>ji'        -docstring 'insert non-comment line below cursor'
 
 
 # ................................................................... Commenting
@@ -45,8 +46,8 @@ push %{ align x : map global format ','     'x|align \;\\<ret>'   -docstring 'al
 
 push %{ focus s : map global user /   '/(?i)'     -docstring 'isearch prev,next' }
 push %{ focus s : map global user '\' '<a-/>(?i)' -docstring 'isearch prev,next' }
-push %{ focus x : map global user ?   '?(?i)'     -docstring 'iextend prev,next' }
-push %{ focus x : map global user !   '<a-?>(?i)' -docstring 'iextend prev,next' }
+push %{ focus x : map global user >   '?(?i)'     -docstring 'iextend prev,next' }
+push %{ focus x : map global user <   '<a-?>(?i)' -docstring 'iextend prev,next' }
 
 # .................................................................... Selection
 
