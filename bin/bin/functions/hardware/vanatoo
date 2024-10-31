@@ -1,0 +1,22 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Hardware
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................................ Audio
+
+# Usage: vanatoo [analog]
+
+exists pacmd  || exit
+pacmd list-cards | grep -q 'Vanatoo' || exit
+
+VANATOO=$(pacmd list-cards | tr '\n' ' ' | sed -r 's/\t/ /g; s/  */ /g; s/.* index: ([0-9]+) name: [^ ]*Vanatoo.*/\1/')
+
+# HACK: toggle output profile to trigger maximum audible level
+pacmd set-card-profile $VANATOO output:iec958-stereo
+pacmd set-card-profile $VANATOO output:analog-stereo
+[ $1 ] && exit  # sound level comparison test
+pacmd set-card-profile $VANATOO output:iec958-stereo
+
+# kak: filetype=sh

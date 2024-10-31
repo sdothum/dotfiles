@@ -9,7 +9,7 @@
 # sudo adb kill-server
 # sudo adb start-server
 
-sudo adb devices | grep -q 'device$' || { notify 5 critical 'Connect phone to USB-C'; exit; }
+sudo adb devices | grep -q 'device$' || { notify 5 critical 'Android Developer Options' 'Enable USB debugging\n..connect phone to USB-C'; exit; }
 term 'android' scrcpy -K -M
 
 # kak: filetype=sh

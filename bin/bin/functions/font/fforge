@@ -116,6 +116,7 @@ SetWidth($width);
 
 # scale serifless "I i j l" cell width
 serifless() {
+	XSHIFT=-50
 	echo "
 Open(\$1);
 " >${LOG}:serifless.script
@@ -192,7 +193,7 @@ Open(\$1);
 	while [ $1 ] ;do
 		case $1 in
 			‘ ) XSHIFT=-60 ;;  # quote left
-			’ ) XSHIFT=-30 ;;  # quote right
+			’ ) XSHIFT=-50 ;;  # quote right
 			‛ ) XSHIFT=-60 ;;  # quote reversed
 		esac
 		tighten $1 >>${LOG}:quote.script
