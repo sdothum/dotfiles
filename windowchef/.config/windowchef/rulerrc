@@ -13,6 +13,18 @@ class="aerc"
 	window @0.25 size monocle                                             ;\
 	xdotool search --sync --onlyvisible --classname "aerc" key colon v s p l i t Return
 
+class="audacious"
+	window desktop $(chef desktop "DESK") ;\
+	window snap center
+
+class="asunder"
+	window desktop $(chef desktop "DESK") ;\
+	window @0.5 snap center
+
+class="cmus"
+	window desktop $(chef desktop "DESK") ;\
+	window snap center
+
 class="compose"
 	window desktop $(chef desktop "MAIL") ;\
 	window tile 3 2
@@ -52,15 +64,17 @@ class="pcmanfm"
 	window desktop $(chef desktop "DESK") ;\
 	window tile 3
 
+# delay for pavucontrol/pipewire sync SEE: pulse
+
 class="pavucontrol"
 	window desktop $(chef desktop "CHEF")                                 ;\
 	window size B6 rotate                                                 ;\
 	window snap center                                                    ;\
 	[ -e $WME:pavucontrol ] && exit                                       ;\
 	touch $WME:pavucontrol                                                ;\
+	sleep 0.85                                                            ;\
 	xdotool search --onlyvisible --classname "pavucontrol" windowactivate ;\
-	desktop $(chef desktop "CHEF") toggle                                 ;\
-	desktop $(chef desktop "DESK")
+	window hide
 
 class="qutebrowser"
 	window desktop $(desktop) ;\

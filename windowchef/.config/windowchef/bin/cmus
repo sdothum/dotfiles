@@ -1,0 +1,14 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="cmus $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................................... cmus
+
+CMUS=/usr/bin/cmus
+
+xdotool search --onlyvisible --classname cmus windowclose || term cmus class=cmus $CMUS
+
+# kak: filetype=sh

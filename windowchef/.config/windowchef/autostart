@@ -10,10 +10,12 @@ restore root
 restore panel
 conky clock auto
 restore unclutter
+rm $WME:pavucontrol  # hide pavucontrol SEE: rulerrc
 pulse
 udev
-qk stop  # HACK: need to start in a term session
+qk stop              # HACK: need to start in a term session
 brightness
+desktop $(chef desktop "DESK")
 [ -e $SESSION/cbonsai ] && cbonsai
 [ -e $SESSION/term    ] && term
 

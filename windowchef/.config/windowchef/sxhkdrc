@@ -159,6 +159,15 @@ super + {_,shift} + i
 	{window hide, menu unhide} ;\
 	chef -- hidden
 
+super + j
+	xdotool search --name "cmus" windowkill || cmus
+
+super + shift + j
+	xdotool search --classname "Asunder" windowkill || asunder
+
+super + ctrl + j
+	eject -T
+
 super + m
 	xdotool search --onlyvisible --classname aerc windowclose || aerc
 
@@ -182,7 +191,7 @@ super + {_,shift} + s
 	waitron {window_stack_toggle, window_focus $(pfw)} ;\
 	chef -- desktop
 
-super + shift + {u,v,minus}
+super + shift + {u,v,colon}
 	menu {passwords, media, system}
 
 super + {t,r}
@@ -196,8 +205,7 @@ super + alt + t
 	for i in $(xdotool search --onlyvisible --classname "term") ;do xdotool windowactivate --sync $i; window desktop $(chef desktop "CODE") teleport ;done
 
 super + u
-	xdotool search --onlyvisible --name btop windowclose || btop
-
+	xdotool search --name btop windowkill || btop 
 super + ctrl + u
 	nvidia_fan toggle
 
