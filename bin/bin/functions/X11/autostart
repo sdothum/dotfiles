@@ -46,15 +46,6 @@ if xinput list --name-only | grep -E -q 'Georgi|Splitography' ;then
 	fi
 fi
 
-# force hdmi audio functionality
-if [ -e $PULSEAUDIO ] ;then
-	pavucontrol 2>/dev/null &               # suppress gtk warnings
-	exists pulseaudio-equalizer-gtk && {
-		pulseaudio-equalizer enable
-		pulseaudio-equalizer-gtk 2>/dev/null &  # suppress config file access errors
-	}
-fi
-
 # ........................................................... Daemons and caches
 
 # pstat dunst || dunst 2>/dev/null &

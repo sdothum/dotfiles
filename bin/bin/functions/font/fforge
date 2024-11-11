@@ -192,9 +192,12 @@ Open(\$1);
 	set -- $(echo $letters | sed -r "s/(.)/\1 /g")
 	while [ $1 ] ;do
 		case $1 in
-			‘ ) XSHIFT=-60 ;;  # quote left
-			’ ) XSHIFT=-50 ;;  # quote right
-			‛ ) XSHIFT=-60 ;;  # quote reversed
+			# ‘ ) XSHIFT=-60 ;;  # quote left
+			# ’ ) XSHIFT=-50 ;;  # quote right
+			# ‛ ) XSHIFT=-60 ;;  # quote reversed
+			‘ ) XSHIFT=-70 ;;  # quote left
+			’ ) XSHIFT=-20 ;;  # quote right
+			‛ ) XSHIFT=-70 ;;  # quote reversed
 		esac
 		tighten $1 >>${LOG}:quote.script
 		shift
