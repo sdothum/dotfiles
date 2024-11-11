@@ -37,9 +37,7 @@ autocutsel -selection PRIMARY -fork &
 # Enable automounting removable devices
 exists udiskie && udiskie --automount --notify --no-tray &
 alpine && /usr/libexec/pipewire-launcher
-# pipewire &
-# pipewire-pulse &
-# wireplumber &
+pipewire &
 clipit -d &  # for webkit selections
 
 # ........................................................................ D-Bus
