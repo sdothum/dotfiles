@@ -66,15 +66,15 @@ d pinentry-qt  # for x11 desktop passphrase
 # ConsoleKit2
 # easyeffects
 # mpg123
-# pipewire
+# pulseaudio
 # pulseaudio-equalizer-ladspa
 # sof-firmware   # alsa-ucm-conf dependency
-# wireplumber
   alsa-utils
   libpulseaudio  # general sound libraries
   rtkit          # pipewire/pulseaudio run dependency, in addition to dbus
   pavucontrol
-  pulseaudio
+  pipewire
+  wireplumber
 
 
 = system utility

@@ -1,0 +1,1 @@
+KERNEL=="sr0", SYMLINK+="cdrom", RUN+="chmod -R g+r /dev/sr0"

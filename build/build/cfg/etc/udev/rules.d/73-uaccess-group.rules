@@ -1,0 +1,1 @@
+TAG=="uaccess", ENV{MAJOR}!="", MODE="0660", GROUP="plugdev"

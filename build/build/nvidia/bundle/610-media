@@ -12,10 +12,16 @@
 = music
 = ═════
 # beets
-# deadbeef      [server]
+# deadbeef
 # mpc
 # mpd
 # ncmpcpp
+  audacious
+  cmus
+  cmus-cdio
+  cmus-flac
+  cmus-pulseaudio
+! sudo usermod -aG cdrom $USER
 
 
 = drawing
@@ -43,7 +49,6 @@
 
 = ripping
 = ═══════
-# asunder       [server]
 # audacity      [server]
 # cdrdao        [server]
 # ffmpeg        [server]
@@ -51,6 +56,7 @@
 # mkvtoolnix    [server]
 # transcode     [server]
 # xfburn        [server]
+  asunder
 
 
 = video
