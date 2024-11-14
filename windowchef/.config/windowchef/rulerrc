@@ -72,7 +72,7 @@ class="pavucontrol"
 	window snap center                                                    ;\
 	[ -e $WME:pavucontrol ] && exit                                       ;\
 	touch $WME:pavucontrol                                                ;\
-	sleep 0.85                                                            ;\
+	sleep 1.5                                                             ;\
 	xdotool search --onlyvisible --classname "pavucontrol" windowactivate ;\
 	window hide
 

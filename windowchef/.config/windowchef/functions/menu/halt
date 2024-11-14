@@ -8,28 +8,21 @@
 
 default=reboot
 
-# disconnect nfs to prevent shutdown wait..
-disconnect() {
-	if ! server ;then
-		pstat rsync && notify 3 critical 'Rsync in progress' 'Waiting..'
-		pwait rsync
-	fi
-	rm -f /tmp/login:console
-	quit
-}
-
-actions() { echo "x11 kill\nlock\nlogout\nsuspend\nreboot\nshutdown"; }
+actions() { echo "x11 kill\nlock\nlogout\nsuspend\nhalt\nreboot\npoweroff\nshutdown\nsoft-reboot"; }
 
 # quit!
 cmd=$default
 cmd=$(actions | rmenu 'Session' $cmd -no-custom) || exit
 case $cmd in
-	x11*     ) killall Xorg ;;
-	lock     ) lock_screen ;;
-	logout   ) sudo kill -TERM X ;;
-	suspend  ) [ -e /sbin/systemctl ] && sudo systemctl suspend || sudo pm-suspend ;;
-	reboot   ) disconnect; [ -e /sbin/systemctl ] && sudo systemctl reboot || sudo /bin/reboot ;;
-	shutdown ) disconnect; [ -e /sbin/systemctl ] && sudo systemctl poweroff || { [ -e /sbin/poweroff ] && sudo poweroff || sudo shutdown -h now; } ;;
+	x11*        ) killall Xorg ;;
+	lock        ) lock_screen ;;
+	logout      ) sudo kill -TERM X ;;
+	suspend     ) [ -e /sbin/systemctl ] && sudo systemctl suspend ;;
+	halt        ) supervisor halt ;;
+	reboot      ) supervisor reboot ;;
+	poweroff    ) supervisor poweroff ;;
+	shutdown    ) supervisor shutdown ;;
+	soft-reboot ) supervisor soft-reboot ;;
 esac
 
 # kak: filetype=sh
