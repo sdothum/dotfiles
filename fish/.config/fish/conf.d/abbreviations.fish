@@ -11,7 +11,15 @@ if arch
 	abbr pq 'pacman -Qii'
 end
 
-# ...................................................................... Process
+# ................................................................... Supervisor
+
+abbr halt 'supervisor halt'
+abbr poweroff 'supervisor poweroff'
+# abbr reboot 'supervisor reboot'
+abbr shutdown 'supervisor shutdown'
+abbr soft-reboot 'supervisor soft-reboot'
+
+# ...................................................................... Service
 
 abbr K 'env sig=-KILL k'
 abbr KK 'env sig=-KILL kk'
@@ -138,8 +146,8 @@ abbr r '/usr/bin/rsync --info=progress2 -a'
 
 function ww; cd (dirname (which $argv 2>/dev/null) 2>/dev/null); test $HOME = (pwd) and ditto "$argv" 'not found' and cd - ;end  # no 755 in $HOME
 
-abbr f 'find'
-abbr fi 'find -iname'
+abbr f 'find -iname'
+abbr fi 'find'
 abbr fr 'find -regex'
 abbr ft 'find -type'
 abbr f1 'find -maxdepth 1'
