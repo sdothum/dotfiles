@@ -161,7 +161,7 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 # ............................................................ phantom selection
 
 bundle kakoune-phantom-selection https://github.com/occivink/kakoune-phantom-selection.git %{
-	push %{ alpha : map global user m       ": phantom-selection-add-selection<ret>"                       -docstring 'mselect add,clear' }
+	push %{ alpha : map global user m ": phantom-selection-add-selection<ret>"                       -docstring 'mselect add,clear' }
 	push %{ alpha : map global user M ": phantom-selection-select-all; phantom-selection-clear<ret>" -docstring 'mselect add,clear' }
 
 	# this would be nice, but currrently doesn't work
