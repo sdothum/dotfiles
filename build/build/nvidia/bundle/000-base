@@ -76,12 +76,12 @@
 # mbuffer
 # mtpfs     # for supernote
 # gvfs-mtp  # for supernote
-# ntfs-3g
   dosfstools
   exfatprogs
   fuse
   fuse-exfat
   jmtpfs    # for supernote
+  ntfs-3g
 
 
 = file transfer

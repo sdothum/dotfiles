@@ -6,9 +6,14 @@
 
 = dinit
 = ═════
-# m void_dinit        # prep for post void dinit install 
-#   metalog
-# ! sudo mkdir /var/log/dinit
+  dinit
+! original -f /sbin/halt
+! original -f /sbin/runit-init
+! original -f /sbin/shutdown
+  metalog
+! sudo mkdir /var/log/dinit
+" symlink /etc/dinit.d with stow/dinit services
+" symlink /sbin/init to dinit
 
 
 = runit
