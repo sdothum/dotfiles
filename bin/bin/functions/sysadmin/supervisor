@@ -1,0 +1,17 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# dinit/runit supervisor
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................ reboot / shutdown
+
+usage() { usage: "$(basename $0) halt | poweroff | reboot | shutdown | soft-reboot"; exit 1; }
+
+if void 'dinit' ;then
+	sudo dinit-$1 2>/dev/null || usage
+else
+	sudo $1 2>/dev/null       || usage  # runit
+fi
+
+# kak: filetype=sh

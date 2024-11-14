@@ -157,6 +157,6 @@ fi
 echo
 echo
 sleep 3
-exec sudo /sbin/reboot
+exec supervisor reboot
 
 # kak: filetype=sh

@@ -1,11 +1,12 @@
 # sdothum - 2016 (c) wtfpl
-# tuple: <object> <package> -> file: functios/<action>, see xb
+# tuple: <object> <package> -> file: functions/<action>, see xb
 
 hints     chromium
 imap      dovecot
 gpg       pinentry-gtk
 database  postgresql
-dinit     runit-void
+runit     dinit
+runit     runit-void
 framework ruby
 mouse     xorg-server
 

@@ -23,8 +23,8 @@ if [ -d $1 ] ;then
 		ditto copy "$(sudo cp -rvf --preserve=mode --no-preserve=ownership $1/* $ROOT$1$host)"
 else
 	mkdir -p $ROOT$DIR || exit 1
-	alpine && ditto copy "$(sudo cp -vf -p $1 $ROOT$DIR/$FILE$host)" ||
-		ditto copy "$(sudo cp -vf --preserve=mode --no-preserve=ownership $1 $ROOT$DIR/$FILE$host)"
+	alpine && ditto copy "$(sudo cp -vf -p $1 $ROOT${DIR%/}/$FILE$host)" ||
+		ditto copy "$(sudo cp -vf --preserve=mode --no-preserve=ownership $1 $ROOT${DIR%/}/$FILE$host)"
 fi
 
 # avoid unnecessary dotfile updates
