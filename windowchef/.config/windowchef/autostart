@@ -15,6 +15,7 @@ pulse
 udev
 qk stop              # HACK: need to start in a term session
 brightness
+sleep 1
 desktop $(chef desktop "DESK")
 [ -e $SESSION/cbonsai ] && cbonsai
 [ -e $SESSION/term    ] && term

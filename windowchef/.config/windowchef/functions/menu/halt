@@ -6,7 +6,7 @@
 
 # ...................................................................... Session
 
-default=reboot
+void 'dinit' && default=soft-reboot || default=reboot
 
 actions() { echo "x11 kill\nlock\nlogout\nsuspend\nhalt\nreboot\npoweroff\nshutdown\nsoft-reboot"; }
 

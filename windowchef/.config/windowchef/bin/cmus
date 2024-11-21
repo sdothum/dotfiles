@@ -9,6 +9,8 @@
 
 CMUS=/usr/bin/cmus
 
-xdotool search --onlyvisible --classname cmus windowclose || term cmus class=cmus $CMUS
+xdotool search --onlyvisible --classname cmus windowunmap ||
+	xdotool search --classname cmus windowmap ||
+	term cmus class=cmus $CMUS
 
 # kak: filetype=sh

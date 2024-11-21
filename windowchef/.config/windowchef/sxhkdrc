@@ -1,4 +1,4 @@
-sdothum - 2016 (c) wtfpl
+# sdothum - 2016 (c) wtfpl
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
@@ -160,10 +160,10 @@ super + {_,shift} + i
 	chef -- hidden
 
 super + j
-	xdotool search --name "cmus" windowkill || cmus
+	xdotool search --onlyvisible --name "cmus" windowunmap || cmus
 
 super + shift + j
-	xdotool search --classname "Asunder" windowkill || asunder
+	xdotool search --classname "Asunder" windowkill && rm -f /tmp/rulerrc:asunder || asunder
 
 super + ctrl + j
 	eject -T
