@@ -1,0 +1,7 @@
+#!/bin/sh
+# sdothum - 2016 (c) wtfpl
+
+[ ! -d /run/uuidd ] && mkdir -p /run/uuidd
+chown _uuidd:_uuidd /run/uuidd
+
+# kak: filetype=sh

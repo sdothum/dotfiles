@@ -1,0 +1,8 @@
+# WARNING: udev-settle started from boot.d instead (experimental)
+
+type         = scripted
+command      = /etc/dinit.d/scripts/filesystems
+restart      = false
+# depends-on = udev-settle
+waits-for    = udev-trigger
+options      = shares-console

@@ -1,0 +1,8 @@
+#!/bin/sh
+# sdothum - 2016 (c) wtfpl
+# SEE: /etc/runit/core-services/02-udev.sh
+
+udevadm trigger --action=add --type=subsystems
+udevadm trigger --action=add --type=devices
+
+# kak: filetype=sh

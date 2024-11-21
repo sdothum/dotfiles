@@ -1,0 +1,24 @@
+#!/bin/sh
+# sdothum - 2016 (c) wtfpl
+# SEE: /etc/runit/core-services/03-filesystems.sh
+. /etc/runit/functions
+
+[ -f /fastboot  ] && FASTBOOT=1
+[ -f /forcefsck ] && FORCEFSCK="-f"
+
+for arg in $(cat /proc/cmdline); do
+	case $arg in
+		fastboot  ) FASTBOOT=1     ;;
+		forcefsck ) FORCEFSCK="-f" ;;
+	esac
+done
+
+if [ -z "$FASTBOOT" ]; then
+	msg "Checking filesystems:"
+	fsck -A -T -a -t noopts=_netdev $FORCEFSCK
+	if [ $? -gt 1 ]; then
+		emergency_shell
+	fi
+fi
+
+# kak: filetype=sh

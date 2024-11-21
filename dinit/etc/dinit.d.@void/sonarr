@@ -1,0 +1,6 @@
+type            = process
+command         = /usr/lib/sonarr/Sonarr/Sonarr -s localhost:8989 -no-browser -data=/var/lib/sonarr >/dev/null
+run-as          = sonarr
+smooth-recovery = yes
+logfile         = /var/log/dinit/sonarr.log
+depends-on      = network

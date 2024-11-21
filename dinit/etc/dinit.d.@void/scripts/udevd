@@ -1,0 +1,33 @@
+#!/bin/sh
+# sdothum - 2016 (c) wtfpl
+# SEE: /etc/runit/shutdown.d/60-udev.sh
+# SEE: /etc/runit/core-services/02-udev.sh
+. /etc/runit/functions
+[ -z "${container+x}" ] || export VIRTUALIZATION=1
+
+[ -n "$VIRTUALIZATION" ] && return 0
+
+case $1 in
+	stop )
+		if [ -z "$VIRTUALIZATION" ]; then
+			msg "Stopping udev..."
+			udevadm control --exit
+		fi
+		;;
+	*    )
+		if [ -x /usr/lib/systemd/systemd-udevd ]; then
+			_udevd=/usr/lib/systemd/systemd-udevd
+		elif [ -x /sbin/udevd -o -x /bin/udevd ]; then
+			_udevd=udevd
+		else
+			msg "cannot find udevd!"
+		fi
+
+		if [ -n "${_udevd}" ]; then
+			msg "Starting udev and waiting for devices to settle..."
+			${_udevd} --daemon
+		fi
+		;;
+esac
+
+# kak: filetype=sh
