@@ -74,12 +74,14 @@ d pinentry-qt  # for x11 desktop passphrase
 # pulseaudio
 # pulseaudio-equalizer-ladspa
 # sof-firmware   # alsa-ucm-conf dependency
+  alsa-pipewire  # required for optical toslink
   alsa-utils
   libpulseaudio  # general sound libraries
   rtkit          # pipewire/pulseaudio run dependency, in addition to dbus
   pavucontrol
   pipewire
   wireplumber
+" see .asoundrc for setting correct usb audio card
 
 
 = system utility

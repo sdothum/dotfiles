@@ -11,12 +11,12 @@
 
 = music
 = ═════
-# beets
 # deadbeef
 # mpc
 # mpd
 # ncmpcpp
   audacious
+  beets
   cmus
   cmus-cdio
   cmus-flac
