@@ -329,15 +329,15 @@ elif [ $coding ] ;then                    # classic coding font
 else                                      # desktop fonts
 	unset space
 	cmdopts t-asymmetric-- j-flat 1-nobase at-tall l-hooky
-	dfont $leading 1-base
-	dfont proof    l-ascending I-serifless
-	dfont menu     I-serifed l-ascending
-	dfont dyslexic I-serifed space=2.2 family=qclocktwo l-ascending  # conky qclocktwo font
-	dfont dyslexic I-serifed quasi-extension space=1.125 family=monograffic serifless serifed l-ascending  # panel/dunst font
+	dfont $leading 1-base  # l-flat
+	# dfont proof    l-ascending I-serifless
+	# dfont menu     I-serifed l-ascending
+	# dfont dyslexic I-serifed space=2.2 family=qclocktwo l-ascending  # conky qclocktwo font
+	# dfont dyslexic I-serifed quasi-extension space=1.125 family=monograffic serifless serifed l-ascending  # panel/dunst font
 
-	cmdopts quasi-ext open+ j-flat serifless serifed
- 	emdash
-	e_ink charcoal grote space=0.875 I-serifless t-asymmetric-- l-ascending Q-open 1-nobase
+	# cmdopts quasi-ext open+ j-flat serifless serifed
+ # 	emdash
+	# e_ink charcoal grote space=0.875 I-serifless t-asymmetric-- l-ascending Q-open 1-nobase
 fi
 
 # kak: filetype=sh

@@ -1,0 +1,90 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Media
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. FLAC editing
+
+usage() { echo "$(basename $0) ls
+> [-d] [album | albumartist | artist | date | genre] <string> | /<regex>
+> [-d] title /<regex>, against all tracks
+> [-d] [<name>.flac | <track>] <title> | /<regex>
+>          where, /regex -> \"/from/to/\" (search/replace)
+>                 -d or \$debug envar to list set-tag only
+>                 -q for no confirmation prompt" | usage:\pipe
+	exit 1
+} 
+
+METAFLAC=/usr/bin/metaflac
+
+# default flac tag names
+ALBUM=${album:-ALBUM}
+ALBUMARTIST=${albumartist:-ALBUMARTIST}
+ARTIST=${artist:-ARTIST}
+DATE=${date:-DATE}
+GENRE=${genre:-GENRE}
+TITLE=${title:-TITLE}
+
+[ "$1" = '-d' ] && { debug=true; shift; }
+[ "$1" = '-q' ] && { quiet=true; shift; }
+
+case $1 in
+	ls          ) for i in *flac; do echo $i; $METAFLAC --export-tags-to=- "$i"; done; exit ;;
+	album       ) ;;
+	albumartist ) ;;
+	artist      ) ;;
+	date        ) ;;
+	genre       ) ;;
+	title       ) [ "${2}" = "/${2#?}" ] || usage ;;
+	*.flac      ) file=$1 ;;
+	[0-9]*      ) file="$(find ./ -maxdepth 1 -name "${1}*.flac")" ;;
+	*           ) usage ;;
+esac
+
+settag() {
+	if [ $debug ] ;then
+		# echo $METAFLAC --remove-tag=$1 "$file"
+		echo $METAFLAC --set-tag=$1="$2" "$file"
+	else
+		$METAFLAC --remove-tag=$1 "$file"
+		$METAFLAC --set-tag=$1="$2" "$file"
+	fi
+}
+
+regextag() {
+	echo | sed -r "s$2" >/dev/null 2>&1 || { ditto syntax "sed "s$2""; exit; }  # sed sanity check
+	if [ $debug ] ;then
+		# $METAFLAC --show-tag=$1 "$file"
+		ditto $1 "$($METAFLAC --show-tag=$1 "$file" | cut -d= --complement -f1)"
+		ditto regex "$($METAFLAC --show-tag=$1 "$file" | cut -d= --complement -f1 | sed -r "s$2")"
+	fi
+	tag=$($METAFLAC --show-tag=$1 "$file" | cut -d= --complement -f1 | sed -r "s$2")  # NOTE: --complement for LAST field :)
+	settag $1 "$tag"
+}
+
+metaflac() {
+	[ $debug ] || [ $quiet ] || { ifno 'apply changes' && exit; }
+	[ "$file" ] && { ${1}tag $TITLE "$3"; exit; }  # cannot "for.. ${file:-*.flac}.." (spaces chop filename)
+	for file in *.flac ;do
+		case $2 in
+			album       ) ${1}tag $ALBUM       "$3" ;;
+			albumartist ) ${1}tag $ALBUMARTIST "$3" ;;
+			artist      ) ${1}tag $ARTIST      "$3" ;;
+			date        ) ${1}tag $DATE        "$3" ;;
+			genre       ) ${1}tag $GENRE       "$3" ;;
+			title       ) ${1}tag $TITLE       "$3" ;;
+		esac
+	done
+}
+
+tag=$1
+shift
+case "$@" in
+	''     ) usage ;;
+	/*/*/* ) metaflac regex "$tag" "$@";;
+	/*     ) usage ;;
+	*      ) metaflac set "$tag" "$@";;
+esac
+
+# kak: filetype=sh

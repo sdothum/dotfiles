@@ -12,6 +12,8 @@
 
 nerdfonts='--fontawesome --fontawesomeext --octicons --material'  # powerline added below
 
+NAMELIMIT=222  # arbitrarily long name limt
+
 # see make_install iosevka
 NERD=/home/depot/nerd-fonts
 MAKE_NERD=/tmp/iosevka:nerdfont
@@ -35,6 +37,8 @@ else
 	cd ${NERD%/*}
 	git clone --depth 1 https://github.com/ryanoasis/nerd-fonts.git
 	$NERD/font-patcher --version
+	# BUG: 31 character name limit
+	sed -i "s/limit = 31 /limit = $NAMELIMIT /; s/checklen(31, /checklen(${NAMELIMIT}, /" $(find $NERD -name 'FontnameParser.py')
 fi
 
 [ -e $MAKE_NERD ] && { [ -e /tmp/${FONT##*/} ] && { ifyes "replace $FONT" || exit; }; }
