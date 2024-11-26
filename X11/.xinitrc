@@ -24,7 +24,7 @@ wm=$(cat $WM)
 cpu atom && TERM=xterm || TERM=alacritty
 
 # kill any dangling shell sessions from prior xsessions
-killall bash
+killall bash 2>/dev/null
 
 # Where the default home folders have not already been created, generate them
 [ -x /usr/bin/xdg-user-dirs-update ] && /usr/bin/xdg-user-dirs-update
@@ -85,13 +85,14 @@ DEFAULTSESSION=windowchef
 
 # ...................................................................... Display
 
-tv_over() { xrandr --output $1 --off --output HDMI1 --primary --mode $2 --rate 60 --dpi 96; }
+# tv_over() { xrandr --output $1 --off --output HDMI1 --primary --mode $2 --rate 60 --dpi 96; }
+tv_over() { xrandr --output $1 --mode $2 --rate 60 --dpi 96; }
 
 case $(hostname) in
 	# luna ) xrandr --output DVI-D-1 --mode 1680x1050 --output HDMI-1 --primary --mode 1920x1080 --rate 60 --left-of DVI-D-1 --dpi 96 ;;
 	luna ) xrandr --output HDMI-1 --mode 1920x1080  --rate 60 --dpi 96 ;;
 	lumen) hdmi && tv_over LVDS1 1920x1080 ;;
-	motu ) hdmi && tv_over eDP1 3440x1440 ;;
+	motu ) hdmi && tv_over HDMI-0 3440x1440 ;;
 esac
 # pulseeffects --gapplication-service &
 
