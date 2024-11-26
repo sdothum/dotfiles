@@ -17,7 +17,7 @@ if console ;then
 	# delayed startup of default wm for remote computers
 	if [ -e "$BOOTWM" ] ;then     # SEE: console_login
 		# /usr/bin/udevadm settle  # wait for system init to complete
-		sleep 1
+		# sleep 1
 		x $(cat "$BOOTWM")         # will not spawn otherwise (alpine requires delay in x)
 	fi
 	# sleep 1

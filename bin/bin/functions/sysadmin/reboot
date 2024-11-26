@@ -9,7 +9,7 @@
 delay=5  # reboot delay window
 
 ifno 'reboot kernel' && exit
-ifno "boot into default window manager" && echo $WM >$SESSION/boot:wm
+ifno "boot into default window manager" || echo $WM >$SESSION/boot:wm
 
 # (sleep $delay; sudo rm -f /tmp/login:console; sudo /sbin/reboot) &  # will not reboot in ssh subshell in alpine
 trap "tput cnorm; exit" INT  # restore cursor

@@ -48,12 +48,6 @@ while : ;do
 	shift
 done
 
-if $headless ;then
-	$KAK -l | grep -q $ID || setsid $KAK -d -s $ID &
-else
-	$KAK -l | grep -q $ID || session='-s'
-fi
-
 # snapshot sources (in lieu of persistent undo avalability)
 console || hgadd $@ &  # don' wait :)
 
@@ -67,10 +61,19 @@ fi
 # escape filenames containing spaces
 count=0
 for i in $@ ;do
+	grep -q '^#.*filetype=sh' "$i"         && ID=script
+	echo "$i" | grep -Eq '(^kakrc|\.kak)$' && ID=kakoune
 	file="$file $(escape $i)"
 	count=$(( $count + 1 ))
 done
 [ $count -gt 1 ] && notify low 'Kakoune' "$count files to edit"
+
+# client/server
+if $headless ;then
+	$KAK -l | grep -q $ID || setsid $KAK -d -s $ID &
+else
+	$KAK -l | grep -q $ID || session='-s'
+fi
 
 # term call doesn't handle "space" names
 # console && { $KAK $file >>$LOG 2>&1; exit; }

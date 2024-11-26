@@ -1,0 +1,20 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Edit
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. kak filetype
+
+# SEE: snippets.kak
+
+case $1 in
+	''       ) printf '# kak: filetype= '             ;;
+	c        ) printf "// kak: filetype=$1"           ;;
+	cpp      ) printf "// kak: filetype=$1"           ;;
+	lua      ) printf "-- kak: filetype=$1"           ;;
+	markdown ) printf '[ kak: filetype=markdown ]: #' ;;
+	*        ) printf "# kak: filetype=$1"            ;;
+esac
+
+# kak: filetype=sh
