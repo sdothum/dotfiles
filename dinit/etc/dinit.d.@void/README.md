@@ -24,3 +24,25 @@ Other than the official [Dinit](https://davmac.org/projects/dinit/) project page
 Even with the udev-settle time, Runit (and by virtue of this dinit cloning of the service structure) is plenty fast (and faster than most other distros).
 
 Again, **USE AT YOUR OWN RISK**.
+
+## Setup
+
+Migrating to dinit with the provided base initialization services (based on runit) is quite simple.
+
+`xbps-install dinit`
+
+`ln -s /sbin/dinit /sbin/init`
+
+Reboot!
+
+The xbps dinit package does not overwrite the runit reboot and shutdown/halt binaries. Instead, to do so once booted with dinit, use **dinit-reboot, dinit-shutdown, dinit-halt**. In addition dinit provides **dinit-poweroff** and **dinit-soft-reboot**.
+
+To restore runit as the init system, simply..
+
+`ln -s /sbin/runit /sbin/init`
+
+(and dinit-reboot to boot with runit).
+
+## TODO
+
+Consider a more granular service structure configuration such as implemented by Artix (dinit) and Chimera-Linux.
