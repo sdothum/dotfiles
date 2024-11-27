@@ -1,5 +1,0 @@
-type       = scripted
-command    = /etc/dinit.d/scripts/dbus-setup
-restart    = false
-logfile    = /var/log/dinit/dbus-daemon.log
-depends-on = cleanup

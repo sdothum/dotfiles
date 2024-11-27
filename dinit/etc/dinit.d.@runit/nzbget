@@ -1,6 +1,0 @@
-type            = process
-command         = /usr/bin/nzbget --server --option OutputMode=loggable -c /home/shum/.nzbget
-run-as          = shum
-smooth-recovery = yes
-logfile         = /var/log/dinit/nzbget.log
-depends-on      = network

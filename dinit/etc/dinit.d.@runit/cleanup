@@ -1,5 +1,0 @@
-type      = scripted
-command   = /etc/dinit.d/scripts/cleanup
-restart   = false
-waits-for = rcboot
-options   = shares-console

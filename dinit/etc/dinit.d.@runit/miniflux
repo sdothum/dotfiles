@@ -1,6 +1,0 @@
-type            = process
-command         = /usr/bin/miniflux.app -c /etc/miniflux.conf
-run-as          = _miniflux
-smooth-recovery = yes
-logfile         = /var/log/dinit/miniflux.log
-depends-on      = caddy

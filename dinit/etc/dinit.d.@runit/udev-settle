@@ -1,8 +1,0 @@
-# WARNING: udev-settle explictly started from boot.d instead of as "depends-on" (experimental)
-# SEE: console-setup and filesystems
-
-type       = scripted
-command    = /usr/bin/udevadm settle
-restart    = false
-depends-on = udev-trigger
-options    = shares-console

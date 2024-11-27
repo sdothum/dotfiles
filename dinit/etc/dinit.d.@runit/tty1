@@ -1,9 +1,0 @@
-type            = process
-command         = /sbin/agetty --noclear tty1 38400 linux --autologin shum
-restart         = true
-depends-on      = loginready
-depends-on      = udev-settle
-termsignal      = HUP
-smooth-recovery = true
-inittab-id      = 1
-inittab-line    = tty1

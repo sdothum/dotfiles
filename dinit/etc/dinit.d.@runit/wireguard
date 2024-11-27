@@ -1,5 +1,0 @@
-type         = scripted
-command      = /etc/dinit.d/scripts/wireguard start
-stop-command = /etc/dinit.d/scripts/wireguard stop
-restart      = false
-depends-on   = network

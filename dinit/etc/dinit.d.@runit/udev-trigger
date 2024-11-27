@@ -1,7 +1,0 @@
-# Trigger udev events for already-present devices.
-
-type       = scripted
-command    = /etc/dinit.d/scripts/udev-trigger
-restart    = false
-depends-on = udevd
-options    = shares-console
