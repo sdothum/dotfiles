@@ -6,8 +6,6 @@
 # Snippets
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# SEE: bin/functions/edit/kaktype script
-
 # ....................................................................... plugin
 
 bundle kakoune-snippets https://github.com/occivink/kakoune-snippets.git %{
@@ -18,6 +16,7 @@ bundle kakoune-snippets https://github.com/occivink/kakoune-snippets.git %{
 	}
 
 	set-option -add global snippets 'wtfpl' '%wt' %{ snippets-insert %sh{ printf "# sdothum - $(date '+%Y') (c) wtfpl\n\${}" }}
+	# SEE: bin/functions/edit/kaktype script
 	set-option -add global snippets 'kak:'  '%ka' %{ snippets-insert %sh{ kaktype "$kak_opt_filetype" }}
 
 	catch %{ snippet : map global format '%' ': snippets ' -docstring 'snippets' }
