@@ -5,7 +5,7 @@
 
 # Config for Kakoune
 
-# runtime env control variables SEE: kak shell script wrapper
+# runtime env control variables SEE: bin/functions/edit/kak shell script wrapper
 # $UNPLUG   -> nop all bundles
 # $DISPLAY  -> load $DISPLAY (server) dependent bundles
 # $DIFF     -> kak diff mode
