@@ -9,12 +9,12 @@
 # SEE: snippets.kak
 
 case $1 in
-	''       ) printf '# kak: filetype= '             ;;
-	c        ) printf "// kak: filetype=$1"           ;;
-	cpp      ) printf "// kak: filetype=$1"           ;;
-	lua      ) printf "-- kak: filetype=$1"           ;;
-	markdown ) printf '[ kak: filetype=markdown ]: #' ;;
-	*        ) printf "# kak: filetype=$1"            ;;
+	''       ) printf '# kak: filetype=${}'           ;;
+	c        ) printf "// kak: filetype=$1\n\${}"     ;;
+	cpp      ) printf "// kak: filetype=$1\n\${}"     ;;
+	lua      ) printf "-- kak: filetype=$1\n\${}"     ;;
+	markdown ) printf "[ kak: filetype=$1 ]: #\n\${}" ;;
+	*        ) printf "# kak: filetype=$1\n\${}"      ;;
 esac
 
 # kak: filetype=sh
