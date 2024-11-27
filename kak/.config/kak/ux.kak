@@ -20,39 +20,39 @@ map global insert <a-ret> '<esc><a-o>ji'        -docstring 'insert non-comment l
 
 # ................................................................... Commenting
 
-push %{ comment : map global format c       ': comment-line<ret>' -docstring 'comment' }
-push %{ comment : map global format l       'x|comment l .<ret>'  -docstring 'leader    ... xxx' }
-push %{ comment : map global format t       'x|comment t .<ret>'  -docstring 'trailer   xxx ...' }
-push %{ comment : map global format R       'x|comment r =<ret>'  -docstring 'ruler     ═══' }
-push %{ comment : map global format r       'x|comment r --<ret>' -docstring 'ruler     ━━━' }
-push %{ comment : map global format U       'x|comment u =<ret>'  -docstring 'underline ═══' }
-push %{ comment : map global format u       'x|comment u --<ret>' -docstring 'underline ━━━' }
-push %{ comment : map global format '`'     'x|comment c<ret>'    -docstring 'css       <code></code> block' }
+catch %{ comment : map global format c       ': comment-line<ret>' -docstring 'comment' }
+catch %{ comment : map global format l       'x|comment l .<ret>'  -docstring 'leader    ... xxx' }
+catch %{ comment : map global format t       'x|comment t .<ret>'  -docstring 'trailer   xxx ...' }
+catch %{ comment : map global format R       'x|comment r =<ret>'  -docstring 'ruler     ═══' }
+catch %{ comment : map global format r       'x|comment r --<ret>' -docstring 'ruler     ━━━' }
+catch %{ comment : map global format U       'x|comment u =<ret>'  -docstring 'underline ═══' }
+catch %{ comment : map global format u       'x|comment u --<ret>' -docstring 'underline ━━━' }
+catch %{ comment : map global format '`'     'x|comment c<ret>'    -docstring 'css       <code></code> block' }
 
 # ..................................................................... Aligning
 
-push %{ align a : map global format <space> 'x|align '            -docstring 'align     '' '' nth+1 word' }
-push %{ align b : map global format <minus> 'x|align --<ret>'     -docstring 'align     --  comment' }
-push %{ align c : map global format '#'     'x|align \#<ret>'     -docstring 'align     #   comment' }
-push %{ align d : map global format /       'x|align //<ret>'     -docstring 'align     //  comment' }
-push %{ align e : map global format =       'x|align =<ret>'      -docstring 'align     =   statement' }
-push %[ align s : map global format {       'x|align \{<ret>'     -docstring 'align     {   block' ]  # ATTENTION: %[] to escape '{' :)
-push %{ align s : map global format )       'x|align \)<ret>'     -docstring 'align     )   case' }
-push %{ align s : map global format ';'     'x|align \;\;<ret>'   -docstring 'align     ;;  endcase' }
-push %{ align x : map global format '\'     'x|align \\<ret>'     -docstring 'align     \   continuation' }
-push %{ align x : map global format ','     'x|align \;\\<ret>'   -docstring 'align     ;\  continuation' }
+catch %{ align a : map global format <space> 'x|align '            -docstring 'align     '' '' nth+1 word' }
+catch %{ align b : map global format <minus> 'x|align --<ret>'     -docstring 'align     --  comment' }
+catch %{ align c : map global format '#'     'x|align \#<ret>'     -docstring 'align     #   comment' }
+catch %{ align d : map global format /       'x|align //<ret>'     -docstring 'align     //  comment' }
+catch %{ align e : map global format =       'x|align =<ret>'      -docstring 'align     =   statement' }
+catch %[ align s : map global format {       'x|align \{<ret>'     -docstring 'align     {   block' ]  # ATTENTION: %[] to escape '{' :)
+catch %{ align s : map global format )       'x|align \)<ret>'     -docstring 'align     )   case' }
+catch %{ align s : map global format ';'     'x|align \;\;<ret>'   -docstring 'align     ;;  endcase' }
+catch %{ align x : map global format '\'     'x|align \\<ret>'     -docstring 'align     \   continuation' }
+catch %{ align x : map global format ','     'x|align \;\\<ret>'   -docstring 'align     ;\  continuation' }
 
 # .................................................................... Searching
 
-push %{ focus s : map global user /   '/(?i)'     -docstring 'isearch prev,next' }
-push %{ focus s : map global user '\' '<a-/>(?i)' -docstring 'isearch prev,next' }
-push %{ focus x : map global user >   '?(?i)'     -docstring 'iextend prev,next' }
-push %{ focus x : map global user <   '<a-?>(?i)' -docstring 'iextend prev,next' }
+catch %{ focus s : map global user /   '/(?i)'     -docstring 'isearch prev,next' }
+catch %{ focus s : map global user '\' '<a-/>(?i)' -docstring 'isearch prev,next' }
+catch %{ focus x : map global user >   '?(?i)'     -docstring 'iextend prev,next' }
+catch %{ focus x : map global user <   '<a-?>(?i)' -docstring 'iextend prev,next' }
 
 # .................................................................... Selection
 
-push %{ alpha : map global user s 'x<a-s>s'     -docstring 'split: select,iselect' }
-push %{ alpha : map global user S 'x<a-s>s(?i)' -docstring 'split: select,iselect' }
+catch %{ alpha : map global user s 'x<a-s>s'     -docstring 'split: select,iselect' }
+catch %{ alpha : map global user S 'x<a-s>s(?i)' -docstring 'split: select,iselect' }
 
 map global normal S         's(?i)'  -docstring 'split: iselect:'
 
@@ -83,7 +83,7 @@ set-option global autoreload yes
 declare-user-mode buffer
 
 map global normal <ret> ': enter-user-mode buffer<ret>'
-push %{ focus 0 : map global user <ret> ': enter-user-mode buffer<ret>' -docstring 'buffer menu' }
+catch %{ focus 0 : map global user <ret> ': enter-user-mode buffer<ret>' -docstring 'buffer menu' }
 
 # no sudo-write-all so sync root owned files on buffer switching
 define-command sync %{
@@ -105,10 +105,10 @@ hook global FocusOut .* sync   # over "write" for system files
 # kettelkasten
 hook global WinSetOption filetype=markdown %{
 	define-command zk-index %sh{ zk index --no-input" }
-	push %{ alpha 9 : map global buffer Z ': zk-index<ret>' -docstring 'zk index' }
+	catch %{ alpha 9 : map global buffer Z ': zk-index<ret>' -docstring 'zk index' }
 
 	define-command zk-new %sh{ zk new $(dirname "$kak_buffile") --title="$kak_selection" }
-	push %{ alpha 9 : map global buffer z ': zk-new<ret>'   -docstring 'zk new' }
+	catch %{ alpha 9 : map global buffer z ': zk-new<ret>'   -docstring 'zk new' }
 }
 
 # ............................................................ Buffer management
@@ -127,18 +127,18 @@ hook global WinDisplay .*diff %{
 hook global WinSetOption filetype=diff %{
 	add-highlighter buffer/diff-allow-one-trailing-space regex '^ ' 0:Default
 }
-push %{ alpha 1 : map global buffer d ': buffer *debug*<ret>'            -docstring '*debug*' }
-push %{ alpha 1 : map global buffer D ': sync<ret>: delete-buffer<ret>'  -docstring 'save and delete' }
+catch %{ alpha 1 : map global buffer d ': buffer *debug*<ret>'            -docstring '*debug*' }
+catch %{ alpha 1 : map global buffer D ': sync<ret>: delete-buffer<ret>'  -docstring 'save and delete' }
 # SEE: kakpipe alpha subsort in xdisplay-plugins
-push %{ alpha 9 : map global buffer q ': quit!<ret>'                     -docstring 'quit' }
-push %{ alpha 9 : map global buffer w ': sync<ret>'                      -docstring 'save / quit' }
-push %{ alpha 9 : map global buffer W ': sync<ret>: quit!'               -docstring 'save / quit' }
-push %{ alpha 9 : map global buffer x ': sync<ret>: write-all-quit<ret>' -docstring 'save all and quit' }
+catch %{ alpha 9 : map global buffer q ': quit!<ret>'                     -docstring 'quit' }
+catch %{ alpha 9 : map global buffer w ': sync<ret>'                      -docstring 'save / quit' }
+catch %{ alpha 9 : map global buffer W ': sync<ret>: quit!'               -docstring 'save / quit' }
+catch %{ alpha 9 : map global buffer x ': sync<ret>: write-all-quit<ret>' -docstring 'save all and quit' }
 
 # Terminal / shell
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-push %{ alpha 9 : map global buffer t ': nop %sh{ term >/dev/null 2>&1 }<ret>' -docstring 'terminal' }
-push %[ alpha 9 : map global buffer s ': echo %sh{  }<left><left>'             -docstring 'shell' ]  # ATTENTION: %[] to escape '{}' :)
+catch %{ alpha 9 : map global buffer t ': nop %sh{ term >/dev/null 2>&1 }<ret>' -docstring 'terminal' }
+catch %[ alpha 9 : map global buffer s ': echo %sh{  }<left><left>'             -docstring 'shell' ]  # ATTENTION: %[] to escape '{}' :)
 
 # kak: filetype=kak

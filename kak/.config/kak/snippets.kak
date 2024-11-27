@@ -17,10 +17,10 @@ bundle kakoune-snippets https://github.com/occivink/kakoune-snippets.git %{
 		set-option buffer snippets %opt{snippets}  # keep any global snippets
 	}
 
-	set-option global snippets 'wtfpl' '%wt' %{ snippets-insert %sh{ printf '# sdothum - 2016 (c) wtfpl' }}
-	set-option global snippets 'kak:'  '%ka' %{ snippets-insert %sh{ kaktype "$kak_opt_filetype" }}
+	set-option -add global snippets 'wtfpl' '%wt' %{ snippets-insert %sh{ printf "# sdothum - $(date '+%Y') (c) wtfpl\n\${}" }}
+	set-option -add global snippets 'kak:'  '%ka' %{ snippets-insert %sh{ kaktype "$kak_opt_filetype" }}
 
-	push %{ snippet : map global format '%' ': snippets ' -docstring 'snippets' }
+	catch %{ snippet : map global format '%' ': snippets ' -docstring 'snippets' }
 }
 
 # ........................................................................ shell
@@ -40,7 +40,7 @@ hook global BufSetOption filetype=sh %{
 hook global BufSetOption filetype=markdown %{
 	set-option -add buffer snippets 'date'   '%da' %{ snippets-insert %sh{ date '+## %A, %d %B %Y' | tr '[:upper:]' '[:lower:]' }}
 	set-option -add buffer snippets 'img'    '%im' %{ snippets-insert %{![${title}](/images/${file}.jpg) }}
-	set-option -add buffer snippets 'search' '%se' %{ snippets-insert %{[${description}](http://thedarnedestthing.com/search?query=${query}) }}
+	set-option -add buffer snippets 'search' '%se' %{ snippets-insert %{[${text}](http://thedarnedestthing.com/search?query=${query}) }}
 }
 
 # ......................................................................... mail

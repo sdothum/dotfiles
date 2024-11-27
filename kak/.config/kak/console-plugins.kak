@@ -27,8 +27,8 @@ if-else %{ [ -z "$DIFF" ] } %{
 # ................................................................... crosshairs
 
 bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
-	push %{ focus h : map global user + ': crosshairs<ret>'   -docstring "crosshairs" }
-	push %{ focus h : map global user | ': cursorcolumn<ret>' -docstring "cursor column" }
+	catch %{ focus h : map global user + ': crosshairs<ret>'   -docstring "crosshairs" }
+	catch %{ focus h : map global user | ': cursorcolumn<ret>' -docstring "cursor column" }
 }
 
 # ........................................................................ fandt
@@ -40,8 +40,8 @@ bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
 # ............................................................. find and replace
 
 bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
-	push %{ alpha 1 : map global buffer f ': find '                   -docstring "find THEN replace" }
-	push %{ alpha 1 : map global buffer R ': find-apply-changes<ret>' -docstring "find THEN replace" }
+	catch %{ alpha 1 : map global buffer f ': find '                   -docstring "find THEN replace" }
+	catch %{ alpha 1 : map global buffer R ': find-apply-changes<ret>' -docstring "find THEN replace" }
 }
 
 # ............................................................. focus selections
@@ -71,7 +71,7 @@ bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
 		}
 	}
 
-	push %{ focus f : map global user <space> ': toggle-focus<ret>' -docstring "focus selections" }
+	catch %{ focus f : map global user <space> ': toggle-focus<ret>' -docstring "focus selections" }
 }
 
 # .......................................................................... hop
@@ -94,8 +94,8 @@ bundle hop.kak https://github.com/hadronized/hop.kak.git %{
 		hop-kak
 	}
 
-	push %{ alpha : map global user f ': hop-kak-sel<ret>'   -docstring 'find selection,word (on page)' }
-	push %{ alpha : map global user F ': hop-kak-words<ret>' -docstring 'find selection,word (on page)' }
+	catch %{ alpha : map global user f ': hop-kak-sel<ret>'   -docstring 'find selection,word (on page)' }
+	catch %{ alpha : map global user F ': hop-kak-words<ret>' -docstring 'find selection,word (on page)' }
 	map global normal <a-h> ': hop-kak-sel<ret>'   -docstring 'find selection (on page)'
 	map global normal <a-H> ': hop-kak-words<ret>' -docstring 'find word (on page)'
 } %{
@@ -152,17 +152,17 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 		peneira-symbols
 	}
 
-	push %{ alpha 1 : map global buffer b ': buffers<ret>' -docstring 'buffers' }
-	push %{ alpha 1 : map global buffer e ': files<ret>'   -docstring 'edit file' }
-	push %{ alpha 1 : map global buffer l ': lines<ret>'   -docstring 'lines' }
-	push %{ alpha   : map global user   t ': symbols<ret>' -docstring 'ctag symbols' }
+	catch %{ alpha 1 : map global buffer b ': buffers<ret>' -docstring 'buffers' }
+	catch %{ alpha 1 : map global buffer e ': files<ret>'   -docstring 'edit file' }
+	catch %{ alpha 1 : map global buffer l ': lines<ret>'   -docstring 'lines' }
+	catch %{ alpha   : map global user   t ': symbols<ret>' -docstring 'ctag symbols' }
 }
 
 # ............................................................ phantom selection
 
 bundle kakoune-phantom-selection https://github.com/occivink/kakoune-phantom-selection.git %{
-	push %{ alpha : map global user m ": phantom-selection-add-selection<ret>"                       -docstring 'mselect add,clear' }
-	push %{ alpha : map global user M ": phantom-selection-select-all; phantom-selection-clear<ret>" -docstring 'mselect add,clear' }
+	catch %{ alpha : map global user m ": phantom-selection-add-selection<ret>"                       -docstring 'mselect add,clear' }
+	catch %{ alpha : map global user M ": phantom-selection-select-all; phantom-selection-clear<ret>" -docstring 'mselect add,clear' }
 
 	# this would be nice, but currrently doesn't work
 	# see https://github.com/mawww/kakoune/issues/1916

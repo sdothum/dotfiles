@@ -14,11 +14,11 @@ bundle kakboard https://github.com/lePerdu/kakboard.git %{
 	set global kakboard_paste_cmd 'cb paste'
 	hook global WinCreate .* %{ kakboard-enable }
 
-	push %{ alpha : map global user y ': kakboard-with-push-clipboard y<ret>' -docstring 'cb yank' }
-	push %{ alpha : map global user c ': kakboard-with-push-clipboard d<ret>' -docstring 'cb cut' }
-	push %{ alpha : map global user p ': kakboard-with-pull-clipboard p<ret>' -docstring 'cb put after,before' }
-	push %{ alpha : map global user P ': kakboard-with-pull-clipboard P<ret>' -docstring 'cb put after,before' }
-	push %{ alpha : map global user R ': kakboard-with-pull-clipboard R<ret>' -docstring 'cb replace' }
+	catch %{ alpha : map global user y ': kakboard-with-push-clipboard y<ret>' -docstring 'cb yank' }
+	catch %{ alpha : map global user c ': kakboard-with-push-clipboard d<ret>' -docstring 'cb cut' }
+	catch %{ alpha : map global user p ': kakboard-with-pull-clipboard p<ret>' -docstring 'cb put after,before' }
+	catch %{ alpha : map global user P ': kakboard-with-pull-clipboard P<ret>' -docstring 'cb put after,before' }
+	catch %{ alpha : map global user R ': kakboard-with-pull-clipboard R<ret>' -docstring 'cb replace' }
 }
 
 # ...................................................................... kak-lsp
@@ -55,7 +55,7 @@ bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 
 	}
 
-	push %{ alpha : map global user l ': enter-user-mode lsp<ret>' -docstring "LSP mode" }
+	catch %{ alpha : map global user l ': enter-user-mode lsp<ret>' -docstring "LSP mode" }
 } %{
 	# cargo install --locked --force --path .
 	cargo install kak-lsp
@@ -93,8 +93,8 @@ bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 	require-module kakpipe
 
 	# HACK: using alpha subsort to overcome "P,p" sort order (cause unknown)
-	push %{ alpha 5 : map global buffer p ': kakpipe '    -docstring "kakpipe FIFO / bg" }
-	push %{ alpha 6 : map global buffer P ': kakpipe-bg ' -docstring "kakpipe FIFO / bg" }
+	catch %{ alpha 5 : map global buffer p ': kakpipe '    -docstring "kakpipe FIFO / bg" }
+	catch %{ alpha 6 : map global buffer P ': kakpipe-bg ' -docstring "kakpipe FIFO / bg" }
 } %{
 	cargo install --path . --root ~/.local
 }
