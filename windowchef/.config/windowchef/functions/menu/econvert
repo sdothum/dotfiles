@@ -31,12 +31,12 @@ esac
 # override left justification
 case "$1" in
 	''       ) ;;
-	default  ) option=default;  shift ;;
-	justify  ) option=justify;  shift ;;
-	noindent ) option=noindent; shift ;;  # retain poetry formatting
-	poetry   ) option=noindent; shift ;;  # retain poetry formatting
-	all      ) option=all;      shift ;;
-	*        ) [ -e "$1" ] || { find . -iname "$1" | grep -q '[.]' || usage; } ;;
+	default ) option=default;  shift ;;
+	justify ) option=justify;  shift ;;
+	no*dent ) option=noindent; shift ;;  # retain original formatting
+	poetry  ) option=noindent; shift ;;  # retain poetry formatting
+	all     ) option=all;      shift ;;
+	*       ) [ -e "$1" ] || { find . -iname "$1" | grep -q '[.]' || usage; } ;;
 esac
 
 # <regex> autoconvert epubs to awz3

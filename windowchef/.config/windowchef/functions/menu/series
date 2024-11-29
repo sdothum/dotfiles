@@ -118,8 +118,8 @@ while : ;do
 		[ "$episode" ] || break
 
 		episode=$(echo "$episode" | sed "s/^$SEP //")
-		video=$(find "$series" -maxdepth 1 -type d -regex ".*$episode.*")
-		[ -z "$video" ] && video=$(find "$series" -maxdepth 1 -type f -regex ".*$episode.*")
+		video=$(find "$series" -maxdepth 1 -type d -iregex ".*$episode.*")
+		[ -z "$video" ] && video=$(find "$series" -maxdepth 1 -type f -iregex ".*$episode.*")
 		if [ $(echo "$video" | wc -l) -gt 1 ] ;then
 			notify 3 critical "$show" "Duplicate episodes found"
 			sleep 3

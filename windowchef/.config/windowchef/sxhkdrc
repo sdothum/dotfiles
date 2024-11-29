@@ -234,6 +234,9 @@ super + {shift,ctrl,alt} + w
 super + shift + ctrl + w
 	menu layout
 
+super + {_,ctrl}+ y
+	xdotool search --onlyvisible --name "∏ano - qutebrowser" {windowunmap, windowkill} || piano
+
 super + {_,shift} + z
 	waitron {window_monocle, window_maximize}
 
