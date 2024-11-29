@@ -3,6 +3,7 @@
 
 hints     chromium
 imap      dovecot
+comment   kak
 gpg       pinentry-gtk
 database  postgresql
 runit     dinit

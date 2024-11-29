@@ -1,0 +1,12 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# see xb, .xb_actions
+
+KAK=$HOME/.config/kak
+PATCH=$KAK/comment.patch
+
+patch $KAK/autoload/rc/comment.kak $PATCH
+ditto INFO kak 'verify changes to autoload/rc/comment.kak'
+cat $PATCH
+
+# kak: filetype=sh

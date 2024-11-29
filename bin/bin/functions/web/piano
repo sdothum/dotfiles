@@ -1,0 +1,17 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Web
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. piano stream
+
+# SEE: rulerrc for window management
+
+qutebrowser https://p-node.org/piano/
+xdotool search -sync -onlyvisible -name '∏ano - qutebrowser' windowactivate
+xdotool type ':zoom 50'
+# complete  zoom command and execute play button :)
+xdotool key Return Return
+
+# kak: filetype=sh
