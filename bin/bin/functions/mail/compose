@@ -6,7 +6,7 @@
 
 # ................................................................. Compose mail
 
-# focus management between aerc and compose windows
+# focus management between aerc and compose windows SEE: rulerrc
 trap "xdotool search --onlyvisible --classname mail windowactivate; window size monocle" EXIT
 
 # provide aerc an compose mode with custom linespacing 
@@ -15,6 +15,6 @@ export MONOFONT="Iosevka-proof"
 # (keyboard off; window @$DELAY tile 4 left; xdotool search --onlyvisible --classname mail windowraise; keyboard on) &  # see rulerrc
 
 notify 60 Compose "Complete <b>Recipients:</b> and <b>Subject:</b> before composing email"
-class=compose offsetY=1 kak ID=draft
+class=compose offsetY=1 kak ID=draft WAIT $@
 
 # kak: filetype=sh
