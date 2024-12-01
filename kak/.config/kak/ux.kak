@@ -44,10 +44,11 @@ catch %{ align x : map global format ','     'x|align \;\\<ret>'   -docstring 'a
 
 # .................................................................... Searching
 
-catch %{ focus s : map global user /   '/(?i)'     -docstring 'isearch prev,next' }
-catch %{ focus s : map global user '\' '<a-/>(?i)' -docstring 'isearch prev,next' }
-catch %{ focus x : map global user >   '?(?i)'     -docstring 'iextend prev,next' }
-catch %{ focus x : map global user <   '<a-?>(?i)' -docstring 'iextend prev,next' }
+catch %{ focus 0 : map global user <ret> ': execute-keys /$<ret><ret>' -docstring 'clear search' }
+catch %{ focus s : map global user /   '/(?i)'                         -docstring 'isearch prev,next' }
+catch %{ focus s : map global user '\' '<a-/>(?i)'                     -docstring 'isearch prev,next' }
+catch %{ focus x : map global user >   '?(?i)'                         -docstring 'iextend prev,next' }
+catch %{ focus x : map global user <   '<a-?>(?i)'                     -docstring 'iextend prev,next' }
 
 # .................................................................... Selection
 
@@ -83,7 +84,7 @@ set-option global autoreload yes
 declare-user-mode buffer
 
 map global normal <ret> ': enter-user-mode buffer<ret>'
-catch %{ focus 0 : map global user <ret> ': enter-user-mode buffer<ret>' -docstring 'buffer menu' }
+catch %{ alpha : map global user b ': enter-user-mode buffer<ret>' -docstring 'buffer user-mode' }
 
 # no sudo-write-all so sync root owned files on buffer switching
 define-command sync %{
