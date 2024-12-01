@@ -155,7 +155,7 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 	catch %{ alpha 1 : map global buffer b ': buffers<ret>' -docstring 'buffers' }
 	catch %{ alpha 1 : map global buffer e ': files<ret>'   -docstring 'edit file' }
 	catch %{ alpha 1 : map global buffer l ': lines<ret>'   -docstring 'lines' }
-	catch %{ alpha   : map global user   t ': symbols<ret>' -docstring 'ctag symbols' }
+	catch %{ alpha   : map global user   c ': symbols<ret>' -docstring 'ctag symbols' }
 }
 
 # ............................................................ phantom selection

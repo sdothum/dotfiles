@@ -97,9 +97,11 @@ define-command sync %{
 # modeline inline context: "# kak: filetype=.." (comment delimiter by filetype)
 # NOTE: markdown statement '#[ kak: ... ]: #' issues *debug* "Unsupported kakoune variable:" message for trailing ']'
 set-option global modelines 2  # BUG: avoid "otherwords:" error (not kak: or vim:) within modeline scan range (default 5)
-hook global BufOpenFile .* %{ modeline-parse }
+# hook global BufOpenFile .* %{ modeline-parse }
+hook global BufCreate .* %{ modeline-parse }
 
-hook global BufOpenFile .*(.eml|.note) %{ set buffer filetype markdown }
+# hook global BufOpenFile .*[.](eml|note) %{ set-option buffer filetype markdown }
+hook global BufCreate .*[.](eml|note) %{ set-option buffer filetype markdown }
 hook global FocusOut .* sync   # over "write" for system files
 
 # kettelkasten
