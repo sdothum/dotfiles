@@ -42,7 +42,7 @@ draw() {
 
 # do we need to wait longer for window creation?
 if [ "$1" ] && [ -z "${1%%@*}" ] ;then
-	notify window "$1"
+	notify trace "window $1"
 	case $1 in
 		@[0-9.]* ) sleep ${1#@} ;;
 		*        )

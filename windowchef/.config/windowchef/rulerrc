@@ -18,17 +18,19 @@ class="audacious"
 	window snap center
 
 class="asunder"
-	window desktop $(chef desktop "DESK")                                                                         ;\
-	[ -e /tmp/rulerrc:asunder ] && waitron window_stack_toggle || { window @asunder size 1/3 && window snap center; } ;\
+	window desktop $(chef desktop "DESK")                                                                    ;\
+	[ -e /tmp/rulerrc:asunder ] && waitron window_stack_toggle || { window size 1/3 && window snap center; } ;\
 	touch /tmp/rulerrc:asunder
 
 class="cmus"
 	window desktop $(chef desktop "DESK") ;\
-	window size 1/3 ;\
-	window snap center
+	window size 1/3 && window snap center
+
+# open compuse window but raise aerc to complete to/subject fields
 
 class="compose"
-	window @compose tile 3 2 && window desktop $(chef desktop "MAIL")
+	window @compose tile 3 2 && window desktop $(chef desktop "MAIL") ;\
+	waitron window_stack_toggle
 
 class="calibre"
 	window desktop $(chef desktop "BOOK") ;\
@@ -73,7 +75,6 @@ class="pavucontrol"
 	window snap center                                                    ;\
 	[ -e $WME:pavucontrol ] && exit                                       ;\
 	touch $WME:pavucontrol                                                ;\
-	sleep 0.85                                                            ;\
 	xdotool search --onlyvisible --classname "pavucontrol" windowactivate ;\
 	desktop $(chef desktop "CHEF") toggle                                 ;\
 	desktop $(chef desktop "DESK")
