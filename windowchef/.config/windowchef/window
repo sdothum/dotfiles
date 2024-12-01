@@ -7,7 +7,7 @@
 
 # ............................................................ Window operations
 
-# Usage: window [@[<delay> | <class> | <name>]] <msg>, SEE: functions/window
+# Usage: window [@[<delay> | <class> | <name>] WAIT] <msg>, SEE: functions/window
 #               where, <name> is window name (containing spaces)
 
 # usable screen dimensions
@@ -46,11 +46,12 @@ if [ "$1" ] && [ -z "${1%%@*}" ] ;then
 	case $1 in
 		@[0-9.]* ) sleep ${1#@} ;;
 		*        )
-			if xdotool getwindowname $(pfw) | grep -q "${1#@}" ;then
+			if [ $2 = 'WAIT' ] || xdotool getwindowname $(pfw) | grep -q "${1#@}" ;then
 				case $1 in
 					@*\ *    ) xdotool search -sync -onlyvisible -name      "${1#@}" ;;
 					@*       ) xdotool search -sync -onlyvisible -classname "${1#@}" ;;
 				esac
+				[ $2 = 'WAIT' ] && shift
 			else
 				return 1  # not expected window
 			fi

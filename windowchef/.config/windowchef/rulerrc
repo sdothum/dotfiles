@@ -83,9 +83,10 @@ class="qutebrowser"
 	window desktop $(desktop) ;\
 	window '@∏ano - qutebrowser' size B6 rotate && window snap center || layout tile 3 qutebrowser
 
+# single purpose hangouts browser (for zoom and custom font control) SEE: hangouts script
+
 class="Surf"
-	sleep 1 ;\
-	window '@@cgDIS:T | Gmail' tile 4 1 && window desktop $(chef desktop "CHAT")
+	window '@@cgDIS:T | Gmail' WAIT tile 4 1 && window desktop $(chef desktop "CHAT")
 
 class="term"
 	window desktop $(desktop) ;\
