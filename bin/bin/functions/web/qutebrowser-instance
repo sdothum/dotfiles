@@ -45,17 +45,9 @@ settings="
 
 eval $QUTEBROWSER $RUNOPT $settings $startpage 2>/dev/null &
 
-# "qutebrowser" rule preempts other class rules
 case ${name:-livedown} in
-	livedown )                        # SEE: kakrc livedown sync
-		xdotool search --sync --onlyvisible --classname "livedown" windowactivate
-		window @0.25 tile 3            # wait for ruler(rc) to complete "qutebrowser" rule
-		waitron window_cycle_in_group  # focus editor
-		;;
-	sonarr   )
-		xdotool search --sync --onlyvisible --classname 'sonarr' windowactivate
-		window size monocle
-		;;
+	livedown ) window @livedown WAIT tile 3 && waitron window_cycle_in_group ;;  # focus editor
+	sonarr   ) window @sonarr WAIT size monocle ;;
 esac
 
 # kak: filetype=sh
