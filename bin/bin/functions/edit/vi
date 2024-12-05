@@ -52,7 +52,7 @@ fi
 count=0
 [ "$file" ] || while : ;do 
 file="$file $(escape $1)"
-	count=$(( $count + 1 ))
+	count=$(( count + 1 ))
 	shift
 	[ $# -gt 0 ] || break 
 done

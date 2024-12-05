@@ -1,4 +1,4 @@
-#!/usr/bin/dash
+#!/usr/bin/bash
 # sdothum - 2016 (c) wtfpl
 
 # Media
@@ -6,41 +6,38 @@
 
 # ................................................................. FLAC editing
 
-usage() { echo "$(basename $0) ls
+usage() { echo "$(basename $0) [ls | rm <tag>*]
 > [-d] [album | albumartist | artist | date | genre] <string> | /<regex>
 > [-d] title /<regex>, against all tracks
+> [-d] tracknumber <from>, increment all tracks starting <from>
 > [-d] [<name>.flac | <track>] <title> | /<regex>
->          where, /regex -> \"/from/to/\" (search/replace)
+>          where, track  -> ## of flac filename
+>                 /regex -> (sed s) /from/to/[<flag>*]
 >                 -d or \$debug envar to list set-tag only
 >                 -q for no confirmation prompt" | usage:\pipe
 	exit 1
 } 
 
 METAFLAC=/usr/bin/metaflac
-
-# default flac tag names
-ALBUM=${album:-ALBUM}
-ALBUMARTIST=${albumartist:-ALBUMARTIST}
-ARTIST=${artist:-ARTIST}
-DATE=${date:-DATE}
-GENRE=${genre:-GENRE}
-TITLE=${title:-TITLE}
+TAGS='@(album|albumartist|artist|date|genre|title)'  # extglob pattern list
 
 [ "$1" = '-d' ] && { debug=true; shift; }
 [ "$1" = '-q' ] && { quiet=true; shift; }
 
+confirm() { [ $debug ] || [ $quiet ] || { ifno 'apply changes' && usage; } }
+
+shopt -s extglob  # SEE: $TAGS
 case $1 in
-	ls          ) for i in *flac; do echo $i; $METAFLAC --export-tags-to=- "$i"; done; exit ;;
-	album       ) ;;
-	albumartist ) ;;
-	artist      ) ;;
-	date        ) ;;
-	genre       ) ;;
-	title       ) [ "${2}" = "/${2#?}" ] || usage ;;
+	'' | ls     ) for i in *flac; do ditto track "$i"; $METAFLAC --export-tags-to=- "$i"; done; exit ;;
+	rm          ) confirm; while [ $2 ] ;do ditto remove "$2"; for i in *flac; do $METAFLAC --remove-tag=$2 "$i"; done; shift; done; exit ;;
 	*.flac      ) file=$1 ;;
 	[0-9]*      ) file="$(find ./ -maxdepth 1 -name "${1}*.flac")" ;;
+	title       ) [ "${2}" = "/${2#?}" ]   || usage ;;
+	tracknumber ) TRACK=$(token number $2) || usage ;;  # TRACK unset otherwise SEE: metaflac()
+	$TAGS       ) ;;
 	*           ) usage ;;
 esac
+shopt -u extglob
 
 settag() {
 	if [ $debug ] ;then
@@ -64,27 +61,24 @@ regextag() {
 }
 
 metaflac() {
-	[ $debug ] || [ $quiet ] || { ifno 'apply changes' && exit; }
-	[ "$file" ] && { ${1}tag $TITLE "$3"; exit; }  # cannot "for.. ${file:-*.flac}.." (spaces chop filename)
-	for file in *.flac ;do
-		case $2 in
-			album       ) ${1}tag $ALBUM       "$3" ;;
-			albumartist ) ${1}tag $ALBUMARTIST "$3" ;;
-			artist      ) ${1}tag $ARTIST      "$3" ;;
-			date        ) ${1}tag $DATE        "$3" ;;
-			genre       ) ${1}tag $GENRE       "$3" ;;
-			title       ) ${1}tag $TITLE       "$3" ;;
-		esac
-	done
+	confirm
+	if [ "$file" ] ;then
+		${1}tag TITLE "${TRACK:-$3}"    # track specific action
+	else
+		for file in *.flac ;do
+			${1}tag "$2" "${TRACK:-$3}"
+			[ $TRACK ] && (( TRACK++ ))  # tracknumbers must be unique
+		done
+	fi
 }
 
-tag=$1
+TAG=$(echo $1 | tr '[:lower:]' '[:upper:]')
 shift
 case "$@" in
 	''     ) usage ;;
-	/*/*/* ) metaflac regex "$tag" "$@";;
+	/*/*/* ) metaflac regex "$TAG" "$@";;
 	/*     ) usage ;;
-	*      ) metaflac set "$tag" "$@";;
+	*      ) metaflac set "$TAG" "$@";;
 esac
 
 # kak: filetype=sh

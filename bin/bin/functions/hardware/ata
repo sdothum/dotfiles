@@ -20,7 +20,7 @@ for i in /sys/block/s* ;do
 		count=0
 		IFS=:
 		for i in $HostFull ;do
-			count=$(( $count + 1 ))
+			count=$(( count + 1 ))
 			eval host$count=$i
 		done
 

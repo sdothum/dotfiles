@@ -26,21 +26,6 @@ KOBO=/run/media/$USER/KOBOeReader  # USB mount point
 
 # update sdr files to match ever changing default settings :)
 
-number() {
-	[[ "$1" =~ ^[0-9]+$ ]] || return 1
-	echo $1
-}
-
-binary() {
-	[[ "$1" =~ ^[01]$ ]] || return 1
-	echo $1
-}
-
-string() {
-	[[ "$1" =~ ^[A-Za-z0-9]+$ ]] || return 1
-	echo $1
-}
-
 sdr()      { ditto sdr "$1"; SDR="$SDR; $2"; }
 gestures() { ditto gestures "$1"; GESTURES="$GESTURES; $2"; }
 settings() { ditto settings "$1"; SETTINGS="$SETTINGS; $2"; }
@@ -59,20 +44,20 @@ while [ $1 ] ;do
 		u     ) backup; shift; [ $1 ] && continue || exit ;;
 		-     ) sdr 'hyphenation soft' '/\"hyph_soft_hyphens_only\"/s/= false,/= true,/'; resetpages=true ;;
 		p     ) resetpages=true; shift; continue ;;
-		l     ) margin=$(number $2)  && sdr "left/right margin ${margin}" '/\"copt_h_page_margins\".*=/,+2s/= [0-9]*,/= '${margin}',/'     || usage; resetpages=true ;;
-		t     ) margin=$(number $2)  && { sdr "top margin ${margin}" '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'; portrait; }    || usage; resetpages=true ;;
-		b     ) margin=$(number $2)  && { sdr "bottom margin ${margin}" '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'; portrait; } || usage; resetpages=true ;;
-		s     ) percent=$(number $2) && sdr "line spacing ${percent}"% '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'               || usage; resetpages=true ;;
-		m     ) sync=$(binary $2)    && sdr "sync margins ${sync}" '/\"copt_sync_t_b_page_margins\"/s/[01]/'${sync}'/'                     || usage                  ;;
-		d     ) font=$(string $2)    && font ${font} && header ${font}                                                                     || usage; resetpages=true ;;
-		f     ) font=$(string $2)    && font ${font}                                                                                       || usage; resetpages=true ;;
-		h     ) font=$(string $2)    && header ${font}                                                                                     || usage                  ;;
-		g     ) gamma=$(number $2)   && sdr "font gamma ${gamma}" '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                        || usage                  ;;
+		l     ) margin=$(token number $2)  && sdr "left/right margin ${margin}" '/\"copt_h_page_margins\".*=/,+2s/= [0-9]*,/= '${margin}',/'     || usage; resetpages=true ;;
+		t     ) margin=$(token number $2)  && { sdr "top margin ${margin}" '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'; portrait; }    || usage; resetpages=true ;;
+		b     ) margin=$(token number $2)  && { sdr "bottom margin ${margin}" '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'; portrait; } || usage; resetpages=true ;;
+		s     ) percent=$(token number $2) && sdr "line spacing ${percent}"% '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'               || usage; resetpages=true ;;
+		m     ) sync=$(token binary $2)    && sdr "sync margins ${sync}" '/\"copt_sync_t_b_page_margins\"/s/[01]/'${sync}'/'                     || usage                  ;;
+		d     ) font=$(token word $2)      && font ${font} && header ${font}                                                                     || usage; resetpages=true ;;
+		f     ) font=$(token word $2)      && font ${font}                                                                                       || usage; resetpages=true ;;
+		h     ) font=$(token word $2)      && header ${font}                                                                                     || usage                  ;;
+		g     ) gamma=$(token number $2)   && sdr "font gamma ${gamma}" '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                        || usage                  ;;
 		w     ) sdr 'word spacing 100' '/\"copt_word_spacing\".*=/,+2s/= [0-9]*,/= '100',/'; shift; continue ;;
-		T     ) margin=$(number $2)  ;;
-		B     ) margin=$(number $2)  ;;
-		L     ) margin=$(number $2)  ;;
-		S     ) percent=$(number $2) ;;
+		T     ) margin=$(token number $2)  ;;
+		B     ) margin=$(token number $2)  ;;
+		L     ) margin=$(token number $2)  ;;
+		S     ) percent=$(token number $2) ;;
 		*     ) usage ;;
 	esac
 

@@ -15,7 +15,7 @@ timeout=5
 count=0
 while ! pong $site ;do
 	sleep 1
-	count=$(( $count + 1 ))
+	count=$(( count + 1 ))
 	if [ $count -gt $timeout ] ;then
 		[ $1 ] && notify critical 'Internet Access' 'Connection failed'
 		return 1
