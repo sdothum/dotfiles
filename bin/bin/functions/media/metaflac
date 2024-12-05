@@ -19,19 +19,22 @@ usage() { echo "$(basename $0) [ls | rm <tag>*]
 } 
 
 METAFLAC=/usr/bin/metaflac
-TAGS='@(album|albumartist|artist|date|genre|title)'  # extglob pattern list
+TAGS='@(album|albumartist|artist|date|genre|title|tracknumber)'  # extglob pattern list
 
 [ "$1" = '-d' ] && { debug=true; shift; }
 [ "$1" = '-q' ] && { quiet=true; shift; }
 
-confirm() { [ $debug ] || [ $quiet ] || { ifno 'apply changes' && usage; } }
+confirm()  { [ $debug ] || [ $quiet ] || { ifno 'apply changes' && usage; } }
+metadata() { for f in *flac; do ditto track "$f"; $METAFLAC --export-tags-to=- "$f"; done; }
+tagcheck() { for i in $@; do metadata | grep -iq "^$i=" || { ditto tag "$i not found"; rcode=1; } ;done; return ${rcode:-0}; }
 
 shopt -s extglob  # SEE: $TAGS
 case $1 in
-	'' | ls     ) for i in *flac; do ditto track "$i"; $METAFLAC --export-tags-to=- "$i"; done; exit ;;
-	rm          ) confirm; while [ $2 ] ;do ditto remove "$2"; for i in *flac; do $METAFLAC --remove-tag=$2 "$i"; done; shift; done; exit ;;
+	''          ) quiet=true; set -- 'ls' ;;
+	ls          ) quiet=true ;;
+	rm          ) tagcheck ${@:2} || usage ;;
 	*.flac      ) file=$1 ;;
-	[0-9]*      ) file="$(find ./ -maxdepth 1 -name "${1}*.flac")" ;;
+	[0-9]*      ) file="$(find ./ -maxdepth 1 -name "${1}*.flac")"; [ "$file" ] || usage ;;
 	title       ) [ "${2}" = "/${2#?}" ]   || usage ;;
 	tracknumber ) TRACK=$(token number $2) || usage ;;  # TRACK unset otherwise SEE: metaflac()
 	$TAGS       ) ;;
@@ -41,7 +44,6 @@ shopt -u extglob
 
 settag() {
 	if [ $debug ] ;then
-		# echo $METAFLAC --remove-tag=$1 "$file"
 		echo $METAFLAC --set-tag=$1="$2" "$file"
 	else
 		$METAFLAC --remove-tag=$1 "$file"
@@ -67,18 +69,24 @@ metaflac() {
 	else
 		for file in *.flac ;do
 			${1}tag "$2" "${TRACK:-$3}"
-			[ $TRACK ] && (( TRACK++ ))  # tracknumbers must be unique
+			[ $TRACK ] && (( TRACK++ ))  # tracknumbers must increment
 		done
 	fi
 }
 
-TAG=$(echo $1 | tr '[:lower:]' '[:upper:]')
-shift
-case "$@" in
-	''     ) usage ;;
-	/*/*/* ) metaflac regex "$TAG" "$@";;
-	/*     ) usage ;;
-	*      ) metaflac set "$TAG" "$@";;
+case $1 in
+	ls ) metadata ;;
+	rm ) while [ $2 ] ;do ditto tag "remove $2"; confirm; for i in *flac; do $METAFLAC --remove-tag=$2 "$i"; done; shift; done;;
+	*  )
+		TAG=$(echo $1 | tr '[:lower:]' '[:upper:]')
+		shift
+		case "$@" in
+			''     ) usage ;;
+			/*/*/* ) metaflac regex "$TAG" "$@";;
+			/*     ) usage ;;
+			*      ) metaflac set "$TAG" "$@";;
+		esac
+		;;
 esac
 
 # kak: filetype=sh
