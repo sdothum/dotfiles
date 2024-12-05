@@ -114,6 +114,8 @@ abbr tar 'tar -xvf'
 
 set -l HUMAN h
 
+abbr df "df -$HUMAN"
+abbr du "du -$HUMAN -d1"
 abbr dus "/usr/bin/du -hs * | sort -h"
 abbr L 'ls -AL'
 abbr l 'ls -A'
