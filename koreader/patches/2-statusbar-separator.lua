@@ -7,6 +7,12 @@
 
 local ReaderFooter = require("apps/reader/modules/readerfooter")
 
-ReaderFooter.get_separator_symbol = function(self)
-	return " "  -- from "" to 1 space for drift font
+ReaderFooter.genSeparator = function(self)
+	local strings = {  -- blank out glyph symbols
+		bar    = "   ",
+		bullet = "   ",
+		dot    = "   ",
+	}
+	return strings[self.settings.items_separator]
+		or (self.settings.item_prefix == "compact_items" and " " or "  ")
 end
