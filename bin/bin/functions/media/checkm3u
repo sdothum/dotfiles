@@ -1,0 +1,38 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Media
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................... check m3u references
+
+CATLG=/tmp/checkm3u:catlg
+FAILED=/tmp/checkm3u:failed
+
+rm -f $FAILED
+
+m3ucheck() {
+	grep '^[0-9].*flac' "$1" | dos2unix | while read flac ;do
+		[ -e "${directory:-.}/$flac" ] || { ditto ERROR missing "$flac"; touch $FAILED; }
+	done
+}
+
+m3u() {
+	file=$(find "$1" -maxdepth 1 -type f -name '*m3u')
+	[ "$file" ]
+}
+
+if m3u ./ ;then
+	m3ucheck "$file"
+else
+	find . -type d >$CATLG
+	while read directory <&3 ;do
+		if m3u "$directory" ;then
+			ditto album "$directory"
+			m3ucheck "$file"
+		fi
+	done 3< $CATLG
+	[ -e $FAILED ] && ditto ERROR m3u "check failed"
+fi
+
+# kak: filetype=sh
