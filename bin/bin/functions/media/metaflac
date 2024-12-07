@@ -14,7 +14,7 @@ usage() { echo "$(basename $0) [ls | rm <tag>*]
 >          where, track  -> ## of flac filename
 >                 /regex -> (sed s) /from/to/[<flag>*]
 >                 -d or \$debug envar to list set-tag only
->                 -q for no confirmation prompt" | usage:\pipe
+>                 -q for no confirmation prompt" | usage:pipe
 	exit 1
 } 
 
@@ -26,7 +26,7 @@ TAGS='@(album|albumartist|artist|date|genre|title|tracknumber)'  # extglob patte
 
 confirm()  { [ $debug ] || [ $quiet ] || { ifno 'apply changes' && usage; } }
 metadata() { for f in *flac; do ditto track "$f"; $METAFLAC --export-tags-to=- "$f"; done; }
-tagcheck() { for i in $@; do metadata | grep -iq "^$i=" || { ditto tag "$i not found"; rcode=1; } ;done; return ${rcode:-0}; }
+tagcheck() { for i in $@; do metadata | grep -iq "^$i=" && ditto tag "$i" || { ditto CRITICAL tag "$i"; rcode=1; } ;done; return ${rcode:-0}; }
 
 shopt -s extglob  # SEE: $TAGS
 case $1 in
@@ -49,6 +49,7 @@ settag() {
 		$METAFLAC --remove-tag=$1 "$file"
 		$METAFLAC --set-tag=$1="$2" "$file"
 	fi
+	ditto="ditto $1 \"$2\""
 }
 
 regextag() {
@@ -66,16 +67,19 @@ metaflac() {
 	confirm
 	if [ "$file" ] ;then
 		${1}tag TITLE "${TRACK:-$3}"    # track specific action
+		eval $ditto
 	else
 		for file in *.flac ;do
 			${1}tag "$2" "${TRACK:-$3}"
 			[ $TRACK ] && (( TRACK++ ))  # tracknumbers must increment
+			[ $TRACK ] || [ $2 = TITLE ] && eval $ditto
 		done
+		[ $TRACK ] || [ $2 = TITLE ] || eval $ditto
 	fi
 }
 
 case $1 in
-	ls ) metadata ;;
+	ls ) metadata | pager ;;
 	rm ) while [ $2 ] ;do ditto tag "remove $2"; confirm; for i in *flac; do $METAFLAC --remove-tag=$2 "$i"; done; shift; done;;
 	*  )
 		TAG=$(echo $1 | tr '[:lower:]' '[:upper:]')
