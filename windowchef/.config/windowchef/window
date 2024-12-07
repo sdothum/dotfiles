@@ -48,8 +48,8 @@ if [ "$1" ] && [ -z "${1%%@*}" ] ;then
 		*        )
 			if [ $2 = 'WAIT' ] || xdotool getwindowname $(pfw) | grep -q "${1#@}" ;then
 				case $1 in
-					@*\ *    ) xdotool search -sync -onlyvisible -name      "${1#@}" ;;
-					@*       ) xdotool search -sync -onlyvisible -classname "${1#@}" ;;
+					@*\ *    ) xdotool search -sync -onlyvisible -name      "${1#@}" windowfocus ;;
+					@*       ) xdotool search -sync -onlyvisible -classname "${1#@}" windowfocus ;;
 				esac
 				[ $2 = 'WAIT' ] && shift
 			else

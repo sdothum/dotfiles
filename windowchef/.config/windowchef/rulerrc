@@ -14,16 +14,16 @@ class="aerc"
 	xdotool type ':vsplit' && xdotool key Return
 
 class="audacious"
-	window desktop $(chef desktop "DESK") ;\
+	window desktop $(chef desktop "MUSE") ;\
 	window snap center
 
 class="asunder"
-	window desktop $(chef desktop "DESK")                                                                    ;\
+	window desktop $(chef desktop "MUSE")                                                                    ;\
 	[ -e /tmp/rulerrc:asunder ] && waitron window_stack_toggle || { window size 1/3 && window snap center; } ;\
 	touch /tmp/rulerrc:asunder
 
 class="cmus"
-	window desktop $(chef desktop "DESK") ;\
+	window desktop $(chef desktop "MUSE") ;\
 	window size 1/3 && window snap center
 
 # open compuse window but raise aerc to complete to/subject fields
@@ -33,7 +33,7 @@ class="compose"
 	waitron window_stack_toggle
 
 class="calibre"
-	window desktop $(chef desktop "BOOK") ;\
+	window desktop $(chef desktop "DESK") ;\
 	window @calibre snap center
 
 class="feh"
@@ -43,7 +43,7 @@ class="Firefox"
 	window size monocle
 
 class="foliate"
-	window desktop $(chef desktop "BOOK") ;\
+	window desktop $(chef desktop "DESK") ;\
 	window size monocle
 
 class="gimp"
@@ -81,7 +81,7 @@ class="pavucontrol"
 
 class="qutebrowser"
 	window desktop $(desktop) ;\
-	window '@∏ano - qutebrowser' size B6 rotate && window snap center || layout tile 3 qutebrowser
+	window '@∏ano - qutebrowser' size B6 rotate || layout tile 3 qutebrowser
 
 # single purpose hangouts browser (for zoom and custom font control) SEE: hangouts script
 
@@ -94,7 +94,7 @@ class="term"
 	window snap center vertical
 
 class="zathura"
-	window desktop $(chef desktop "BOOK") ;\
+	window desktop $(chef desktop "DESK") ;\
 	window tile 3 2
 
 # kak: filetype=sh
