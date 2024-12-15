@@ -8,10 +8,10 @@
 local ReaderFooter = require("apps/reader/modules/readerfooter")
 
 ReaderFooter.genSeparator = function(self)
-	local strings = {  -- blank out glyph symbols
-		bar    = "   ",
-		bullet = "   ",
-		dot    = "   ",
+	local strings = {
+		bar    = "   ",  -- was " | ",
+		bullet = " • ",
+		dot    = " · ",
 	}
 	return strings[self.settings.items_separator]
 		or (self.settings.item_prefix == "compact_items" and " " or "  ")
