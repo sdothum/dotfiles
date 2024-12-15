@@ -172,6 +172,7 @@ abbr X x
 
 # ......................................................................... Edit
 
+function flirt:kak; test (count $argv) -gt 0 && z $argv; set -l f (flirt); test -z "$f" || kak $f ;end
 function kf; kak (find -iname $argv[1]) ;end
 function ndiff; set -l d (pwd); cd; for i in (nnn -p - $d); dirdiff -s $i ;end; cd - ;end 
 
@@ -183,6 +184,7 @@ abbr dp 'dmenu - projects'
 abbr dr 'dmenu - run'
 abbr ds 'dmenu - scripts'
 # abbr h 'helix'
+abbr fk 'flirt:kak'
 abbr K '/usr/local/bin/kak'                  # for filename with spaces
 abbr k 'kak'
 abbr kd 'kakdiff'
@@ -217,11 +219,15 @@ abbr perli 'perl -de 1'
 
 abbr fn 'function'  # fish shell shorthand
 for i in (seq 1 9); abbr \$$i "\$argv[$i]" ;end
-function ncd; set -l f (nnn -p - $argv[1]); test -d $f and z $f or z (dirname $f) ;end
+# function ncd; set -l f (/usr/bin/nnn -p - $argv[1]); test -d $f && z $f || z (dirname $f) ;end
+function flirt:cd; test (count $argv) -gt 0 && z $argv; set -l f (flirt); test -d "$f" && z $f || z (dirname $f) ;end
+function flirt:sh; test (count $argv) -gt 0 && z $argv; set -l IFS; set -l f (flirt); test -z "$f" || echo "$f" | vipe | sh ;end
 
 # abbr cd 'z'
-abbr nc 'ncd'
+# abbr nd 'ncd'
 abbr dash 'rlwrap -n dash'
+abbr fd 'flirt:cd'
+abbr fh 'flirt:sh'
 abbr hdel 'history delete'
 abbr hi 'hist'
 abbr hk "kak $HOME/.local/share/fish/fish_history"
@@ -232,6 +238,7 @@ abbr sh 'bash -norc'
 abbr ss 'sudo su -c fish'  # su otherwise just invokes sh
 
 # .................................................................. Application
+
 
 abbr \? 'chatgpt'
 abbr \?\? 'chatgpt -n'  # new conversation
@@ -267,17 +274,20 @@ abbr ma 'man'
 abbr md 'lowdown -tterm'
 abbr mf 'metaflac'
 abbr mfq 'metaflac -q'
+abbr mfA 'metaflac -q album'
 abbr mfa 'metaflac -q artist'
 abbr mfaa 'metaflac -q albumartist'
 abbr mfd 'metaflac -q date'
 abbr mfg 'metaflac -q genre'
+abbr mfT "metaflac -q tracknumber"
 abbr mft "metaflac -q title '/"
 abbr mdtxt 'lowdown -tterm --term-no-colour'
 abbr miniflux-migrate 'sudo miniflux -c /etc/miniflux.conf -migrate'
-abbr music '!p ncmpcpp; and ncmpcpp'
+# abbr music '!p ncmpcpp; and ncmpcpp'
 abbr pts 'phoronix-test-suite'
 abbr scrot 'scrot -e "mv \$f /net/photos/batchqueue/"'
 abbr td 'td -i'
+abbr termhex "window size 1/3; $HOME/bin/functions/shell/termcolors hex"
 # abbr todo 'rlwrap -n todo-screen'
 abbr uterm 'urxvt -sh 1'
 abbr W 'words'
