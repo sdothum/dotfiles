@@ -37,10 +37,10 @@ autocutsel -selection PRIMARY -fork &
 # Enable automounting removable devices
 exists udiskie && udiskie --automount --notify --no-tray &
 alpine && /usr/libexec/pipewire-launcher
-pipewire &
-clipit -d &  # for webkit selections
+pipewire >/dev/null 2>&1 &  # see windowschef autostart for mpd server
+clipit -d &                 # for webkit selections
 
-# ........................................................................ D-Bus
+# # ........................................................................ D-Bus
 
 # d-bus for file management, authentication, and other essential system processes
 if exists dbus-launch && test -z "$DBUS_SESSION_BUS_ADDRESS"; then
