@@ -6,19 +6,26 @@
 
 # ....................................................................... Colors
 
-# show ncurses colors
-# template from http://stackoverflow.com/questions/18551558/how-to-use-terminal-color-palette-with-curses
+# show ncurses colors (update)
+# SEE: http://stackoverflow.com/questions/18551558/how-to-use-terminal-color-palette-with-curses
 
 import curses
 import sys
 
 def main(window):
+	# try:
+	# 	columns=int(sys.argv[1])
+	# except:
+	# 	columns=16
+	# if columns == 0:
+	# 	columns=256
+	columns=16
 	try:
-		columns=int(sys.argv[1])
+		HEX=sys.argv[1]
+		SPACES='  '
 	except:
-		columns=16
-	if columns == 0:
-		columns=256
+		HEX="dec"
+		SPACES='   '
 	curses.start_color()
 	curses.use_default_colors()
 	for i in range(0, curses.COLORS):
@@ -26,15 +33,18 @@ def main(window):
 	try:
 		j=0
 		for i in range(0, 255):
-			window.addstr(' %03i' % i, curses.color_pair(i+1))
-			window.addstr('%s ' % hex(i)[1:], curses.color_pair(i+1))
+			window.addstr(f'{SPACES}%03i' % i, curses.color_pair(i+1))
+			if HEX == "hex":
+				# window.addstr('%s ' % hex(i)[1:], curses.color_pair(i+1))
+				window.addstr('x%s ' % "{:03x}".format(i)[1:], curses.color_pair(i+1))  # zero pad hex values 1 to f
 			j+=1
 			if j == columns:
 				window.addstr('\n')
 				j=0
 		# 255 (#eeeeee) most closely matches 015 (#ffffff) if .Xresourses set as such, otherwise..
-		window.addstr(' %03i' % 255, curses.color_pair(255))
-		window.addstr('%s ' % hex(255)[1:], curses.color_pair(255))
+		window.addstr(f'{SPACES}%03i' % 255, curses.color_pair(255))
+		if HEX == "hex":
+			window.addstr('%s ' % hex(255)[1:], curses.color_pair(255))
 	except curses.ERR:
 		# End of screen reached
 		pass

@@ -6,8 +6,9 @@
 
 # ......................................................... check m3u references
 
-CATLG=/tmp/checkm3u:catlg
-FAILED=/tmp/checkm3u:failed
+WORKING=/tmp/$(basename $0)
+CATLG=$WORKING:catlg
+FAILED=$WORKING:failed
 
 rm -f $FAILED
 

@@ -288,7 +288,7 @@ shape()   { shape="shape = $(token number $1)"; }
 leading()  { leading="leading = '$default_leading * $(token decimal $1)'"; }
 sb()       { sb="sb = 'default_sb * $(token decimal $1)'"; }
 ascender() { ascender="ascender = '$default_ascender + $(token integer $1)'" && ditto override "$ascender"; }
-cap()      { [ $1 = extended ] && unset cap || cap=$1; cap="cap = 'default_cap + $(token integer ${cap:-$capextended})'" && ditto override "$cap"; }
+cap()      { [ "$1" = extended ] && cap=$capextended || cap="$1"; cap="cap = 'default_cap + $(token integer ${cap:-$capextended})'" && ditto override "$cap"; }
 xheight()  { xheight="xHeight = '$default_xheight + $(token integer $1)'" && ditto override "$xheight"; }
 
 weight() {
@@ -314,6 +314,7 @@ spacing()  { spacing=$1; }
 
 cmdopts () {
 	while [ $1 ] ;do
+		ditto cmdopts "$1"
 		case "$1" in
 			# shapes
 			dyslexic       ) shape $expanded; sb 0.7150; leading 1.5000; space 2; emdash 2; width=135; ebook monolexic ;;

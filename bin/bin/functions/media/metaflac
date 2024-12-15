@@ -6,8 +6,8 @@
 
 # ................................................................. FLAC editing
 
-usage() { echo "$(basename $0) [ls | rm <tag>*]
-> [-d] [album | albumartist | artist | date | genre] <string> | /<regex>
+usage() { echo "$(basename $0) [ls | rm <tag>* | retrack]
+> [-d] [album | albumartist | artist | date | discnumber | genre] <string> | /<regex>
 > [-d] title /<regex>, against all tracks
 > [-d] tracknumber <from>, increment all tracks starting <from>
 > [-d] [<name>.flac | <track>] <title> | /<regex>
@@ -19,7 +19,7 @@ usage() { echo "$(basename $0) [ls | rm <tag>*]
 } 
 
 METAFLAC=/usr/bin/metaflac
-TAGS='@(album|albumartist|artist|date|genre|title|tracknumber)'  # extglob pattern list
+TAGS='@(album|albumartist|artist|date|discnumber|genre|title|tracknumber)'  # extglob pattern list
 
 [ "$1" = '-d' ] && { debug=true; shift; }
 [ "$1" = '-q' ] && { quiet=true; shift; }
@@ -33,6 +33,7 @@ case $1 in
 	''          ) quiet=true; set -- 'ls' ;;
 	ls          ) quiet=true ;;
 	rm          ) tagcheck ${@:2} || usage ;;
+	retrack     ) ;;
 	*.flac      ) file=$1 ;;
 	[0-9]*      ) file="$(find ./ -maxdepth 1 -name "${1}*.flac")"; [ "$file" ] || usage ;;
 	title       ) [ "${2}" = "/${2#?}" ]   || usage ;;
@@ -78,10 +79,39 @@ metaflac() {
 	fi
 }
 
+retrack() {
+	[ "$track" ] || return
+	TRACK="$tracknumber - $artist - $title.flac"
+	mv "$track" "$TRACK"
+	sed -i "s/$track/$TRACK/" *.m3u
+}
+
 case $1 in
-	ls ) metadata | pager ;;
-	rm ) while [ $2 ] ;do ditto tag "remove $2"; confirm; for i in *flac; do $METAFLAC --remove-tag=$2 "$i"; done; shift; done;;
-	*  )
+	ls      ) metadata | pager ;;
+	rm      )
+		while [ $2 ] ;do
+			ditto tag "remove $2"
+			confirm
+			for i in *flac; do $METAFLAC --remove-tag=$2 "$i"; done
+			shift
+		done
+		;;
+	retrack )
+		ls -1 *.flac
+		echo '---'
+		metadata | grep '^TITLE='
+		ditto track 'sync to metadata titles'
+		confirm
+		# cannot ".. | while" BECAUSE: spawned subshell localizes vars in "do" block
+		while read line <&3 ;do
+			[ "${line#@track }"       != "$line" ] && { retrack ; track="${line#@track }"; }
+			[ "${line#ARTIST=}"       != "$line" ] && artist="${line#ARTIST=}"
+			[ "${line#TITLE=}"        != "$line" ] && title="${line#TITLE=}"
+			[ "${line#TRACKNUMBER=}"  != "$line" ] && tracknumber=$(printf "%02d" "${line#TRACKNUMBER=}")
+		done 3< <(metadata | nocolor | grep -E '^(@track |ARTIST=|TITLE=|TRACKNUMBER=)')  # process substitition
+		retrack  # last track
+		;;
+	*       )
 		TAG=$(echo $1 | tr '[:lower:]' '[:upper:]')
 		shift
 		case "$@" in

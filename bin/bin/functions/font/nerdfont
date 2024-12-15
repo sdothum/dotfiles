@@ -47,6 +47,28 @@ mkdir -p $FONT
 cd ${NERD%/*}/Iosevka.$IOSEVKA
 cp -v $(find dist/$family -maxdepth 1 -type d -iregex '.*/ttf')/* $FONT
 
+# restore font family name (prior to NerdFont injection)
+nerdless() {
+	rm -f *.ttx
+	font=*.ttf
+
+	# dump to ttx
+	ditto ttx $font
+	ttx -q $font
+	rm -f *.ttf
+
+	# strip NerdFont naming extensions
+	sed -i -r '/NerdFont.*[0-9]$/s/NerdFont.* / Regular /; s/(NFM)*NerdFont.*//' ${font%.ttf}.ttx
+	# HACK: for menu and proof fonts
+	sed -i 's/IosevkaMenu/Iosevka-menu/; s/IosevkaProof/Iosevka-proof/' ${font%.ttf}.ttx
+
+	# generate new ttf
+	ditto ttf ${font%.ttf}.ttx
+	ttx -q ${font%.ttf}.ttx
+
+	# rm -f *.ttx
+}
+
 # patch font
 REGULAR=$(find dist/$family -regextype posix-extended -iregex '.*/ttf/.*-(normal)*regular(upright)*.ttf')
 if [ -e $NERD/font-patcher ] ;then
@@ -54,6 +76,10 @@ if [ -e $NERD/font-patcher ] ;then
 	$NERD/font-patcher --adjust-line-height $mono --powerline -out /tmp $REGULAR
 	mv -v /tmp/*ttf $REGULAR
 	$NERD/font-patcher $mono $nerdfonts -out /tmp $REGULAR
+
+	cd /tmp
+	nerdless  # restore font name (remove NerdFont naming extensions)
+	cd -
 	mv -v /tmp/*ttf $REGULAR
 fi
 
