@@ -15,16 +15,16 @@ class="aerc"
 
 class="audacious"
 	window desktop $(chef desktop "MUSE") ;\
-	window snap center
+	window @audacious snap center
 
 class="asunder"
 	window desktop $(chef desktop "MUSE")                                                                    ;\
 	[ -e /tmp/rulerrc:asunder ] && waitron window_stack_toggle || { window size 1/3 && window snap center; } ;\
 	touch /tmp/rulerrc:asunder
 
-class="cmus"
+class="music"
 	window desktop $(chef desktop "MUSE") ;\
-	window size 1/3 && window snap center
+	window size 1/3 && window @music snap center
 
 # open compuse window but raise aerc to complete to/subject fields
 

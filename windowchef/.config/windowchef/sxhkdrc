@@ -160,13 +160,13 @@ super + {_,shift} + i
 	chef -- hidden
 
 super + j
-	xdotool search --onlyvisible --name "cmus" windowunmap || cmus
+	xdotool search --onlyvisible --name "music" windowunmap || music
 
 super + shift + j
 	xdotool search --classname "Asunder" windowkill && rm -f /tmp/rulerrc:asunder || asunder
 
-super + ctrl + j
-	eject -T
+super + {_,shift} + ctrl + j
+	{mpc toggle, eject -T}
 
 super + m
 	xdotool search --onlyvisible --classname aerc windowclose || aerc
@@ -205,7 +205,8 @@ super + alt + t
 	for i in $(xdotool search --onlyvisible --classname "term") ;do xdotool windowactivate --sync $i; window desktop $(chef desktop "CODE") teleport ;done
 
 super + u
-	xdotool search --name btop windowkill || btop 
+	xdotool search --name btop windowkill || btop
+
 super + ctrl + u
 	nvidia_fan toggle
 
