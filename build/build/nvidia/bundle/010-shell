@@ -42,6 +42,7 @@ d m nnn    # with icons
 # shellcheck
   ack
   expect
+! cargo install flirt
   fzf
   moreutils
   pcre

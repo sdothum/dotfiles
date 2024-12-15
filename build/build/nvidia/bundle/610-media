@@ -7,14 +7,14 @@
 = media server
 = ════════════
 # kodi
+  mpd
+! mkdir -p $HOME/.local/state/mpd
+! mkdir -p $HOME/.config/mpd/playlists
 
 
 = music
 = ═════
 # deadbeef
-# mpc
-# mpd
-# ncmpcpp
   audacious
   beets
   cmus
@@ -22,6 +22,8 @@
   cmus-flac
   cmus-pulseaudio
 ! sudo usermod -aG cdrom $USER
+  mpc
+  ncmpcppc
 
 
 = drawing
