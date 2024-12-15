@@ -35,7 +35,7 @@ bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 	set-option global lsp_diagnostic_line_warning_sign "%opt{linemark}"
 	set-option global lsp_inlay_diagnostic_sign        ''               # diagnostic fence meter (visual ticks replace ■'s)
 
-	# define-command lsp-restart %{ lsp-stop; lsp-start } -docstring 'restart lsp server'
+	define-command lsp-restart %{ lsp-stop; lsp-start } -docstring 'restart lsp server'
 
 	hook global KakEnd .* lsp-exit
 
