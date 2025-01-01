@@ -12,7 +12,7 @@ usage() { echo "$(basename $0) [ls | rm <tag>* | retrack]
 > [-d] tracknumber <from>, increment all tracks starting <from>
 > [-d] [<name>.flac | <track>] <title> | /<regex>
 >          where, track  -> ## of flac filename
->                 /regex -> (sed s) /from/to/[<flag>*]
+>                 /regex -> (sed s) [//match/s]/from/to/[<flag>*]
 >                 -d or \$debug envar to list set-tag only
 >                 -q for no confirmation prompt" | usage:pipe
 	exit 1
@@ -54,13 +54,13 @@ settag() {
 }
 
 regextag() {
-	echo | sed -r "s$2" >/dev/null 2>&1 || { ditto syntax "sed "s$2""; exit; }  # sed sanity check
+	echo | sed -r "$2" >/dev/null 2>&1 || { ditto syntax "sed "$2""; exit; }  # sed sanity check
 	if [ $debug ] ;then
 		# $METAFLAC --show-tag=$1 "$file"
 		ditto $1 "$($METAFLAC --show-tag=$1 "$file" | cut -d= --complement -f1)"
-		ditto regex "$($METAFLAC --show-tag=$1 "$file" | cut -d= --complement -f1 | sed -r "s$2")"
+		ditto regex "$($METAFLAC --show-tag=$1 "$file" | cut -d= --complement -f1 | sed -r "$2")"
 	fi
-	tag=$($METAFLAC --show-tag=$1 "$file" | cut -d= --complement -f1 | sed -r "s$2")  # NOTE: --complement for LAST field :)
+	tag=$($METAFLAC --show-tag=$1 "$file" | cut -d= --complement -f1 | sed -r "$2")  # NOTE: --complement for LAST field :)
 	settag $1 "$tag"
 }
 
@@ -115,10 +115,11 @@ case $1 in
 		TAG=$(echo $1 | tr '[:lower:]' '[:upper:]')
 		shift
 		case "$@" in
-			''     ) usage ;;
-			/*/*/* ) metaflac regex "$TAG" "$@";;
-			/*     ) usage ;;
-			*      ) metaflac set "$TAG" "$@";;
+			''          ) usage ;;
+			//*/s/*/*/* ) metaflac regex "$TAG" "${@#?}";;  # /match/ search and replace
+			/*/*/*      ) metaflac regex "$TAG" "s$@"   ;;  # search and replace
+			/*          ) usage ;;
+			*           ) metaflac set "$TAG" "$@";;
 		esac
 		;;
 esac

@@ -1,0 +1,15 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Regex
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. ribbon shift
+
+# BECAUSE: cut does not handle multibyte utf-8 characters, using grep -o
+
+# wrap first character to end
+# echo "$(echo "$1" | grep -Po '(?<=^.{1}).*')$(echo "$1" | grep -o '^.')"
+echo "$(echo "$1" | grep -Po '(?<=^.).*')$(echo "$1" | grep -o '^.')"
+
+# kak: filetype=sh

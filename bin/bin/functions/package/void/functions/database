@@ -2,6 +2,6 @@
 # sdothum - 2016 (c) wtfpl
 # see xb, .xb_actions
 
-ditto INFO tt-rss 'database migration possibly required'
+ditto INFO miniflux 'database migration possibly required'
 
 # kak: filetype=sh
