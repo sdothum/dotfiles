@@ -26,8 +26,11 @@ bundle kakboard https://github.com/lePerdu/kakboard.git %{
 bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 	# diff kak-lsp.toml $HOME/.config/kak/kak-lsp/kak-lsp.toml.unmarksman
 	nop evaluate-commands %sh{ kak-lsp -s $kak_session --kakoune }
+	# set global lsp_debug true  # FOR: kak-lsp v18.x
 
-	set-option global lsp_cmd "kak-lsp -v -c $HOME/.config/kak-lsp/kak-lsp.toml -s %val{session} --log /tmp/kak-lsp.log"  # debug lsp with -vvv
+	# set-option global lsp_cmd "kak-lsp -v -c $HOME/.config/kak-lsp/kak-lsp.toml -s %val{session} --log /tmp/kak-lsp.log"  # debug lsp with -vvv FOR: kak-lsp v17.x
+	# set-option global lsp_cmd "kak-lsp --debug -c $HOME/.config/kak-lsp/kak-lsp.toml -s %val{session} --log /tmp/kak-lsp.log"  # FOR: kak-lsp v18.x
+	set-option global lsp_cmd "kak-lsp -c $HOME/.config/kak-lsp/kak-lsp.toml -s %val{session} --log /tmp/kak-lsp.log"
 	declare-option str linemark '►'                                      # diagnostic line marker
 	set-option global lsp_diagnostic_line_error_sign   "%opt{linemark}"  # lsp glyph overrides
 	set-option global lsp_diagnostic_line_hint_sign    "%opt{linemark}"
@@ -35,14 +38,14 @@ bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 	set-option global lsp_diagnostic_line_warning_sign "%opt{linemark}"
 	set-option global lsp_inlay_diagnostic_sign        ''               # diagnostic fence meter (visual ticks replace ■'s)
 
-	define-command lsp-restart %{ lsp-stop; lsp-start } -docstring 'restart lsp server'
+	# define-command lsp-restart %{ lsp-stop; lsp-start } -docstring 'restart lsp server'  # NOTE: for kak-lsp v17.2.1
 
 	hook global KakEnd .* lsp-exit
 
 	hook global WinSetOption filetype=(sh|c|cpp|go|javascript|latex|lua|markdown|perl|python|ruby|rust|toml|typescript) %{
 		lsp-enable-window
 		lsp-auto-hover-enable
-		lsp-inlay-diagnostics-enable global
+		# lsp-inlay-diagnostics-enable global
 		colorscheme %opt{theme}  # WHY: restore Diagnostic faces (overwritten by kak-lsp injection above)
 
 		map global object a     '<a-semicolon>lsp-object<ret>'                               -docstring 'LSP any symbol'
@@ -52,13 +55,13 @@ bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 		map global object d     '<a-semicolon>lsp-diagnostic-object --include-warnings<ret>' -docstring 'LSP errors and warnings'
 		map global object D     '<a-semicolon>lsp-diagnostic-object<ret>'                    -docstring 'LSP errors'
 		map global insert <tab> '<a-;>:try lsp-snippets-select-next-placeholders catch %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
-
 	}
 
 	catch %{ alpha : map global user l ': enter-user-mode lsp<ret>' -docstring "LSP mode" }
 } %{
-	# cargo install --locked --force --path .
-	cargo install kak-lsp
+	# nop # NOTE: freezing kak-lsp at v17.2.1 for now due to change from TOML file for kak-lsp configuraton
+	cargo install --locked --force --path .
+	# cargo install kak-lsp
 }
 
 # ............................................................. kakoune-livedown
