@@ -10,6 +10,7 @@
 -- ATTENTION: KOReader must be restarted to apply "default" font change and the document settings reinitialized with..
 -- top msenu -> document -> document settings -> reset document settings to default -> reset
 -- WARNING: a load error will occur if a default font has not been set to properly initialize "settings.reader.lua"
+-- NOTE: fontface expected to be in fontface folder
 
 -- default document font family
 local DataStorage = require("datastorage")
@@ -28,7 +29,7 @@ local Font = require("ui/font")
 names = { "-normalbookupright.ttf", "-book.ttf", "-book.otf", "-regular.ttf", "-regular.otf" }  -- selection order of user ttf and otf font files
 
 for _, n in pairs(names) do
-	local f = io.open(DataStorage:getDataDir() .. "/fonts/" .. fontface .. n, "r")
+	local f = io.open(DataStorage:getDataDir() .. "/fonts/" .. fontface .. "/" .. fontface .. n, "r")
 	if f ~= nil then  -- font source exists
 		io.close(f)
 		local fontsource = fontface .. n
