@@ -1,5 +1,5 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="panel/statusbar $@" . $PARENT
+[ $TRACE ] && CHILD="panel/system $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
@@ -63,10 +63,6 @@ desktops() {
 
 # .................................................................... Animation
 
-# initialize (for overlay redraw), see draw root
-# $STARTREK == ['', #<color>, $ACTIVE_FG, ..] 
-[ -s $STARTREK ] && eval VIEWSCREEN="%{F$(cat $STARTREK)}"
-
 beacon="▶"
 counter=0   # desktops
 
@@ -81,7 +77,7 @@ currently() {
 		set -- ${viewscreen}
 		unset desktops
 		for j in $DESKTOPS ;do
-			[ $j = $counter ] && { deactivated $j && icon="${VIEWSCREEN}$OCCUPIED" || { ! has_windows $j && icon="${VIEWSCREEN}$beacon" || icon="${VIEWSCREEN}$2"; } } || icon=$2
+			[ $j = $counter ] && { deactivated $j && icon="%{F$ICANDY}$OCCUPIED" || { ! has_windows $j && icon="%{F$ICANDY}$beacon" || icon="%{F$ICANDY}$2"; } } || icon=$2
 			desktops="${desktops}${TAG_PAD}$1${icon}%{-u}%{U-}%{B-}%{F-}"
 			shift 2
 		done

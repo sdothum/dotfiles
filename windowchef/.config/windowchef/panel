@@ -32,8 +32,14 @@ INACTIVE_FG="#$(rice color inactive)"
 FREE_FG="#$(rice color free)"
 OCCUPIED_FG=$FREE_FG
 
+# initialize (for overlay redraw), see draw root
+# $STARTREK == ['', #<color>, $ACTIVE_FG, ..] 
+[ -s $STARTREK ] && ICANDY="$(cat $STARTREK)" || ICANDY="$DEFAULT_FG"
+
+transparency() { echo "#$1${2#\#}"; }  # Usage: transparency <amount> #<rrggbb>
+
 # panel font
-PANEL_FONT=monograffic  # NOTE: this font for glyphs!
+PANEL_FONT=monograffic  # NOTE: this font does not have NerdFont glyphs (not a pure monospaced font)
 PANEL_UNDERLINE=2       # thickness
 
 # panel symbols (tag numbers option dropped to simplify colour assignments)

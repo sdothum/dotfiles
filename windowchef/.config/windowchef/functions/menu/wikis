@@ -42,9 +42,9 @@ filename_check() {
 add() {
 	wiki=$(echo | mhistory wiki$1 | head -1 | sed "s/.*^$SEP *//")  # last folder
 	wiki=$(dirs | rmenu "$prompt" $wiki -no-custom) || exit
-	[ $1 ] || { [ $prompt = Diary ] && title=$(date '+%Y-%m-%d'); } || title=$(echo | rmenu 'Title') || exit
+	[ "$1" ] || { [ $prompt = Diary ] && title=$(date '+%Y-%m-%d'); } || title=$(echo | rmenu 'Title') || exit
 	mhistory wiki$1 "$title^$SEP $wiki"
-	file=$WIKIS/$wiki/$title.wiki
+	file="$WIKIS/$wiki/$title.wiki"
 	# prepend h1 title
 	echo "# $title\n\n[ kak: filetype=markdown ]: #" >"$file"
 	# HACK: link gets written over as regular file so loop back to menu to edit as old (?)
@@ -55,7 +55,7 @@ add() {
 
 wiki() {
 	mhistory wiki$1 "$(echo $file | sed "s/ *$SEP/^$SEP/")"
-	file=$(echo $file | sed -r "s,(.*)  *$SEP  *(.*),\2/\1,")
+	file="$(echo $file | sed -r "s,(.*)  *$SEP  *(.*),\2/\1,")"
 	if expand "$file" >/dev/null ;then
 		file="$(expand "$file")"
 		filename_check
@@ -67,15 +67,15 @@ wiki() {
 	else
 		error=": ${file##*/} ∉ ${file%/*}"
 		sed -i "\|${file##*/}.$SEP ${file%/*}$|d" $HISTORY/wiki
-		file=${file##*/}
+		file="${file##*/}"
 		return 1
 	fi
 }
 
 while : ;do
-	file=$(files | sed "s,$WIKIS/,," | sed -r "s,(.*)/([^/]*)$,\2^$SEP \1," \
+	file="$(files | sed "s,$WIKIS/,," | sed -r "s,(.*)/([^/]*)$,\2^$SEP \1," \
 		| sort | mhistory wiki$1 | column -s^ -t | sed  "2i$(X $EDIT)$menu"  \
-		| rmenu "Edit $prompt$error" -no-custom) || exit
+		| rmenu "Edit $prompt$error" -no-custom)" || exit
 
 	case ${file#$(X)} in
 		"$DIARY" ) exec menu wikis diary ;;

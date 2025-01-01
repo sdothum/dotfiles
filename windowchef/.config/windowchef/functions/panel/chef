@@ -1,5 +1,5 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="panel/infobar $@" . $PARENT
+[ $TRACE ] && CHILD="panel/chef $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
@@ -11,6 +11,7 @@
 # NOTE: this script is executed via "draw panel" SEE: also restore panel
 
 [ $1 ] && panel_offsetY=$1
+panel_len=${panel_len:-275}  # HACK: arbitrary display length (for wide screen monitor)
 
 if [ "$panel_offsetY" = "0" ] ;then   # ATTN: use of -eq fails comparison (?)
 	SEP="  %{F$INACTIVE_FG}%{F-}  "  # top bar
@@ -58,7 +59,7 @@ active_window() {
 panel() {
 	while read -r line ;do
 		active_window
-		printf "%s\n" "%{l}${title}"
+		printf "%s\n" "$(echo "%{l}${title}" | cut -c1-$panel_len)"
 	done
 }
 

@@ -15,7 +15,7 @@ pulse
 udev
 qk stop              # HACK: need to start in a term session
 brightness
-sleep 5              # delay needed to settle audio for mpd server connection
+sleep 1              # settle pipewire for mpd server connection
 desktop $(chef desktop "DESK")
 [ -e $SESSION/cbonsai ] && cbonsai
 [ -e $SESSION/term    ] && term
@@ -26,6 +26,10 @@ if void 'runit' ;then
 	!p sonarr && sudo /bin/su - sonarr -c '/usr/lib/sonarr/Sonarr/Sonarr -s localhost:8989 -no-browser -data=/var/lib/sonarr' >/dev/null 2>&1 &
 fi
 
-exists mpd && dbus-run-session mpd /home/shum/.config/mpd/mpd.conf  # NOTE: needs explicit dbus run (?)
+exists mpd || exit
+dbus-run-session mpd /home/shum/.config/mpd/mpd.conf  # NOTE: needs explicit dbus run (?)
+mpc play    # resume playback
+mpc toggle  # wm restarts require mpd tickling to connect to pipewire
+mpc toggle
 
 # kak: filetype=sh

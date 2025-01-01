@@ -35,9 +35,9 @@ opposite_side() { echo $(( width + margin * 2 - (X + WIDTH + border * 2) )); }  
 # draw <winid> <width> <height> [rotate]
 draw() {
 	save_geometry
-	[ $4 ] && { W=$3; H=$2; } || { W=$2; H=$3; }
-	[ $H -gt $height ] && { swap=$W; W=$H; H=$swap; }
-	wtp $X $Y $W $H $1
+	[ $4 ] && { WID=$3; HGT=$2; } || { WID=$2; HGT=$3; }
+	[ $HGT -gt $HEIGHT ] && { swap=$WID; WID=$HGT; HGT=$swap; }
+	wtp $X $Y $WID $HGT $1
 }
 
 # do we need to wait longer for window creation?
