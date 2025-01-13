@@ -158,23 +158,6 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 	catch %{ alpha   : map global user   c ': symbols<ret>' -docstring 'ctag symbols' }
 }
 
-# ............................................................ phantom selection
-
-bundle kakoune-phantom-selection https://github.com/occivink/kakoune-phantom-selection.git %{
-	catch %{ alpha : map global user m ": phantom-selection-add-selection<ret>"                       -docstring 'mselect add,clear' }
-	catch %{ alpha : map global user M ": phantom-selection-select-all; phantom-selection-clear<ret>" -docstring 'mselect add,clear' }
-
-	# this would be nice, but currrently doesn't work
-	# see https://github.com/mawww/kakoune/issues/1916
-	#map global insert <a-f> "<a-;>: phantom-selection-iterate-next<ret>"
-	#map global insert <a-F> "<a-;>: phantom-selection-iterate-prev<ret>"
-	# so instead, have an approximate version that uses 'i'
-	map global insert <a-f> "<esc>: phantom-selection-iterate-next<ret>i" -docstring 'mselect next'
-	map global insert <a-F> "<esc>: phantom-selection-iterate-prev<ret>i" -docstring 'mselect previous'
-	map global normal <a-f> ": phantom-selection-iterate-next<ret>"       -docstring 'mselect next'
-	map global normal <a-F> ": phantom-selection-iterate-prev<ret>"       -docstring 'mselect previous'
-}
-
 # .................................................................. search docs
 
 bundle search-doc.kak https://github.com/jbomanson/search-doc.kak.git %{
