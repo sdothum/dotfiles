@@ -23,6 +23,7 @@ case $1 in
 			*   ) cat $GROUP:$1 | wc -l ;;
 		esac
 		;;
+
 	remove   ) remove ${2:-$winid} ;;
 esac
 

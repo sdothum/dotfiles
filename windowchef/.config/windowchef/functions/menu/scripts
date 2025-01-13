@@ -63,8 +63,6 @@ while : ;do
 
 	if expand $file >/dev/null ;then
 		$EDITOR $(expand $file)
-		# history file cleanup usually precedes impending edit
-		# expand $file | grep -q 'menu/\.history' && { pwait "vim.*$(expand $file)"; menu edit; }
 	else
 		error=": ${file##*/} ∉ ${file%/*}"
 		sed -i "\|${file##*/}.$SEP ${file%/*}$|d" $HISTORY/scripts

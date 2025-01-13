@@ -32,6 +32,7 @@ case $TERM in
 		blackboard=blackboard
 		name="$NAME term"  # default class SEE: rulerrc
 		;;
+
 	urxvt     )
 		TITLE=-title
 		NAME=-name
@@ -61,7 +62,8 @@ while : ;do
 			shift
 			process=$@
 			[ "$1" ] && cmd="-e $SHELL -c '$@'"
-			break ;;
+			break
+			;;
 
 		*          )
 			# first parameter may be title
@@ -71,10 +73,11 @@ while : ;do
 					title="$TITLE '$1'"
 				fi
 			else
-				process="$@"
+				process=$@
 				cmd="-e $@"
 				break
-			fi ;;
+			fi
+			;;
 	esac
 	shift
 done
@@ -89,6 +92,6 @@ $TERM $theme $geometry $title $name $cmd
 
 "; }
 # window snap center
-[ $wait    ] && pwait "$process"
+[ $wait    ] && pidwait -f "$process"
 
 # kak: filetype=sh

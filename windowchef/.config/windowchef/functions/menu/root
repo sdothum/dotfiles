@@ -78,13 +78,15 @@ while color=$(colors | column -s^ -t | rmenu 'Setroot') || exit ;do
 			ln -sf $WALLCOLOR $BACKGROUND
 			mhistory root "$(echo $color | sed "s/ *$SEP */^$SEP /")"
 			draw conky
-			break ;;
-	
+			break
+			;;
+
 		*          )
 			color=${color#\'}
 			hex $color || { hue=$color; color=$(pastel format hex $color 2>/dev/null) && color=${color#?}; } || continue
 			setroot
-			sleep $delay ;;
+			sleep $delay
+			;;
 	esac
 done
 

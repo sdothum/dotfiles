@@ -28,7 +28,8 @@ while files=$(projects | rmenu 'Edit Project' -no-custom) || exit ;do
 		*       )
 			mhistory projects "$(echo $files | sed "s/ *$SEP/^$SEP/")"
 			eval echo ${files#*$SEP} | tr ' ' '\n' | exclude | sort | xargs -r $EDITOR
-			break ;;  # required to prevent duplicate eval execution
+			break  # required to prevent duplicate eval execution
+			;;
 	esac
 done
 

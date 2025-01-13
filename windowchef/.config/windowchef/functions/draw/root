@@ -91,12 +91,14 @@ case $1 in
 		rm -f $SHUFFLE
 		select_wallpaper
 		echo wallpaper >$SETROOT
-		invert_panel notify ;;  # keybind message
+		invert_panel notify  # keybind message
+		;;
 
 	shuffle   )
 		touch $SHUFFLE
 		shuffle
-		echo wallpaper >$SETROOT ;;
+		echo wallpaper >$SETROOT
+		;;
 
 	*         ) [ -e $SHUFFLE ] && one_in $modulo && shuffle ;;  # increase modulo to reduce frequency of shuffle
 esac

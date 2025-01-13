@@ -43,16 +43,19 @@ esac
 case "$format" in
 	azw3     )
 		[ "$1"    ] || { find . -iname '*epub'             -exec menu econvert azw3 $option {} \; ; exit; }
-		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert azw3 $option {} \; ; exit; } ;;
+		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert azw3 $option {} \; ; exit; }
+		;;
 
 	epub     )
 		[ "$1"    ] || { find . -iname '*azw3'             -exec menu econvert epub $option {} \; ; exit; }
-		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert epub $option {} \; ; exit; } ;;
+		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert epub $option {} \; ; exit; }
+		;;
 
 	reformat )
 		[ "$1"    ] || { find . -iregex '.*\(azw3\|epub\)' -exec menu econvert reformat $option {} \; ; exit; }
 		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert reformat $option {} \; ; exit; }
-		format=${1##*\.}; reformat=true ;;  # for re-tweaking converted ebooks
+		format=${1##*\.}; reformat=true
+		;;  # for re-tweaking converted ebooks
 esac
 
 file=$1

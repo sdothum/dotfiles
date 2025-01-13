@@ -45,6 +45,7 @@ if [ "$1" ] && [ -z "${1%%@*}" ] ;then
 	notify trace "window $1"
 	case $1 in
 		@[0-9.]* ) sleep ${1#@} ;;
+
 		*        )
 			if [ $2 = 'WAIT' ] || xdotool getwindowname $(pfw) | grep -q "${1#@}" ;then
 				case $1 in

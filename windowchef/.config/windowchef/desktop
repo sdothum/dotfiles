@@ -51,10 +51,12 @@ desktop() {
 			waitron group_activate_specific $1
 			rm -f $GROUP:$1:deactivated
 			;;
+
 		toggle   )
 			[ $desktop -eq $1 ] || current $1
 			toggle $1
 			;;
+
 		close    )
 			for i in $(cat $GROUP:$1) ;do
 				waitron window_focus $i
@@ -66,6 +68,7 @@ desktop() {
 			rm $GROUP:$1:focus
 			rm -f $GROUP:$1:deactivated
 			;;
+
 		*        )
 			[ $desktop -eq $1 ] && { echo $(pfw) >$GROUP:$1:focus; return; }
 			current $1

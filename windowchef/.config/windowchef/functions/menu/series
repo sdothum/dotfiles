@@ -108,7 +108,8 @@ while : ;do
 		*            )
 			series=""$library"/$(echo $show | sed 's/ /./g')"
 			playlist="$series/.playlist"
-			[ -e "$playlist" ] || touch "$playlist" ;;
+			[ -e "$playlist" ] || touch "$playlist"
+			;;
 	esac
 
 	while : ;do

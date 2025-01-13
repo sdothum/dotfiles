@@ -101,16 +101,18 @@ while : ;do
 			clipboard "$addresses"
 			cpu arm && sleep 2  # allow application to regain focus
 			xdotool type --delay 0 "$addresses"
-			break ;;
-	
+			break
+			;;
+
 		"$ADD"       )
 			[ "$addresses" ] || continue
 			tag=$(echo | rmenu 'Tags') || continue
 			[ $tag ] || tag=Contacts
 			echo "\n$tag :: $addresses" >>$contacts
 			unset addresses
-			vim -g -f $contacts ;;
-	
+			vim -g -f $contacts
+			;;
+
 		"$EDIT"      ) vim -g -f $contacts ;;
 		"$REBUILD"   ) abook; unset addresses ;;
 		"$CLIPBOARD" ) clipboard "$addresses"; notify 'Ctrl-Alt-V' "$(echo $addresses | sed 's/ <\S*>//g')"; break ;;

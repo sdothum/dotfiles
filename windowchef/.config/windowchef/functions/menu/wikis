@@ -31,9 +31,9 @@ expand() {
 
 linkname() {  echo "$file" | tr ' ' '_'; }
 
-# apostrophes in filename cannot be handled by duochrome statusline..
+# NOTE: symlink files removed post SEE: rsync vps
 filename_check() {
-	# so substitute a linked file with carets
+	# apostrophes in filename cannot be handled by duochrome statusline.. so substitute carets
 	[ "${file%\'*}" = "$file" ] || { link=/tmp/$(echo "${file##*/}" | tr \' ^); ln -sf "$file" "$link"; file=$link; }
 	# simplify file name handling of spaces by adding '_' symbolic link (to spare escape horror)
 	[ "${file%\ *}" = "$file" ] || { linkname=$(linkname); ln -sf "$file" $linkname; file=$linkname; }
@@ -48,9 +48,6 @@ add() {
 	# prepend h1 title
 	echo "# $title\n\n[ kak: filetype=markdown ]: #" >"$file"
 	# HACK: link gets written over as regular file so loop back to menu to edit as old (?)
-	# filename_check
-	# name=wiki $EDITOR "$file" $DICTIONARY
-	# [ $linkname ] && rm -f $linkname
 }
 
 wiki() {
@@ -59,11 +56,7 @@ wiki() {
 	if expand "$file" >/dev/null ;then
 		file="$(expand "$file")"
 		filename_check
-		# name=wiki $EDITOR "$file" "$DICTIONARY"
-		class=wiki $EDITOR WAIT "$file" $DICTIONARY
-		[ $linkname ] && rm -f $linkname
-		# history file cleanup usually precedes impending edit
-		# expand "$file" | grep -q menu/.history && { pwait "vim.*"$(expand "$file")""; menu edit; }
+		class=wiki $EDITOR "$file" $DICTIONARY
 	else
 		error=": ${file##*/} ∉ ${file%/*}"
 		sed -i "\|${file##*/}.$SEP ${file%/*}$|d" $HISTORY/wiki
@@ -79,11 +72,14 @@ while : ;do
 
 	case ${file#$(X)} in
 		"$DIARY" ) exec menu wikis diary ;;
+
 		"$EDIT"  )
-			add  # only creates stub
-			(sleep 0.1; xdotool key Return) &
-			continue ;;
-		*        ) wiki || continue ;;
+			add                                # only creates stub
+			(sleep 0.1; xdotool key Return) &  # loop back to menu to acutally open file!
+			continue
+			;;
+
+		*        ) wiki ;;
 	esac
 	break
 done
