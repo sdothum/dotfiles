@@ -6,7 +6,7 @@
 -- lengthen highlight delay for visual word relocation (when hidden behind dictionary popup)
 
 -- my new highlight delay
-local highlight_hold = 2.5  -- seconds
+local highlight_hold = 5  -- seconds
 
 local Event = require("ui/event")
 local UIManager = require("ui/uimanager")
