@@ -16,7 +16,7 @@ for i in (al "$query")
 	set url http://thedarnedestthing:8000/(basename $i | sed 's/ /%20/g; s/.wiki//')
 	ditto url $url
 	qutebrowser $url
-	pwait qutebrowser
+	pidwait qutebrowser
 end
 
 #  vim: set ft=sh: #

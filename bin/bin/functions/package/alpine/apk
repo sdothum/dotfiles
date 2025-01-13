@@ -30,7 +30,8 @@ case $1 in
 			v*      ) branch=${1#-} ;;
 		esac
 		shift
-		sudo /sbin/apk add -U --upgrade --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/${branch:-edge}/${repo:-community} $@ ;;
+		sudo /sbin/apk add -U --upgrade --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/${branch:-edge}/${repo:-community} $@
+		;;
 
 	# set default repo
 	repo     )
@@ -44,7 +45,8 @@ case $1 in
 			v[3-9]* ) sudo sed -i "s/v[0-9][^/]*/$1/; s/lastest-stable/$1/"                    $REPOS; exec apk repo lts ;; 
 			*       ) usage ;;
 		esac
-		cat $REPOS ;;
+		cat $REPOS
+		;;
 
 	# do command
 	*        ) sudo /sbin/apk $@ ;;

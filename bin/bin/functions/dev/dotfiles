@@ -118,12 +118,14 @@ case $1 in
 
 	add     )
 		shift; [ "$1" = '-f' ] && { force=-f; shift; }
-		while [ "$1" ] ;do add "$1"; shift ;done ;;  # handle filename spaces
+		while [ "$1" ] ;do add "$1"; shift ;done
+		;;  # handle filename spaces
 
 	amend   |\
 	comment )
 		shift; DESC=$@
-		[ "$DESC" ] && git commit --amend --no-edit --message="$DESC" || git commit --amend ;;
+		[ "$DESC" ] && git commit --amend --no-edit --message="$DESC" || git commit --amend
+		;;
 
 	dry*    ) git commit --dry-run >$MESSAGES; cat $MESSAGES ;;  # | pager ;;
 	folder* ) vim -g $DOTFILES .gitignore $(messages) ;;
@@ -137,7 +139,8 @@ case $1 in
 	redo    |\
 	undo    )
 		git reset --soft HEAD~
-		dotfiles ;;
+		dotfiles
+		;;
 
 	reset   ) git reset ;;
 	rm      ) shift; rm $@ ;;

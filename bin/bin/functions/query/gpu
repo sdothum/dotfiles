@@ -23,8 +23,9 @@ case $1 in
 		vga 'GeForce 8600M GT'
 		vga 'GeForce GT 650M'
 		# lspci fails on raspberry pi
-		[ $card ] || echo arm ;;
-	
+		[ $card ] || echo arm
+		;;
+
 	display  ) xrandr 2>/dev/null | grep '*' | awk '{ print $1 }' ;;
 	ati      |\
 	intel    |\

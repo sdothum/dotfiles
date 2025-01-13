@@ -76,11 +76,13 @@ return ## TODO
 				ditto nfs 'mount..' 
 				sudo mount.nfs -v $SERVER:/net /net 
 				trap "sudo umount.nfs -v $SERVER:/net" EXIT
-			fi ;;
+			fi
+			;;
 
 		umount )
 			ditto nfs 'umount..' 
 			sudo umount -v $SERVER:/net 
+			;;
 	esac
 }
 

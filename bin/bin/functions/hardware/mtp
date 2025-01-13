@@ -20,18 +20,22 @@ case $1 in
 		if $(device) ;then
 			[ "$(name)" = '' ] && { jmtpfs $MTP >/dev/null && notify "$(name)" "$MTP mounted" || notify critical "$MTP" "mount failed"; } || notify "$(name)" 'already mounted'
 		else exit 1
-		fi ;;
+		fi
+		;;
 
 	u*mount )
 		if mounted ;then
 			name=$(name)
 			echo ${PWD} | grep -q "$MTP/$name" && { notify critical "$name" "$MTP busy"; exit 1; }
 			fusermount -u $MTP && notify "$name" "$MTP unmounted" || notify critical "$name" "$MTP umount failed"
-		fi ;;
+		fi
+		;;
 
 	mounted )	mounted ;;
 	ls      )	$(device) && jmtpfs -l ;;
 	*       )	echo $MTP ;;
 esac
+
+[ "$(ls -A $MTP/)" ] && ditto mtp "$(ls -1 $MTP)"
 
 # kak: filetype=sh

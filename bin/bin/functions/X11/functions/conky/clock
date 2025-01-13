@@ -19,13 +19,15 @@ case $1 in
 		xset s off -dpms
 		pstat xautolock && exit
 		xautolock -time 10 -locker 'conky clock on' &
-		notify low 'Que Clock Two' 'Auto' ;;
-	
+		notify low 'Que Clock Two' 'Auto'
+		;;
+
 	stop   )
 		xset s on -dpms
 		pstat xautolock || exit
 		killall xautolock
-		notify low 'Que Clock Two' 'Stopped' ;;
+		notify low 'Que Clock Two' 'Stopped'
+		;;
 
 	toggle ) pstat xautolock && conky clock stop || conky clock auto ;;
 	
@@ -48,7 +50,7 @@ case $1 in
 		rm -rf /tmp/qclocktwo  # clear qclock buffers
 		/usr/bin/conky -c $CONKYRC 2>/dev/null &
 		;;
-	
+
 	off    )
 		clock || exit
 		restore unclutter
@@ -62,8 +64,9 @@ case $1 in
 		pkill -KILL -f "conky -c $CONKYRC"
 		# restart 2bwm to kill race condition avoided with above window_type change and desktop switching
 		# xdotool key Super+Control+r
-		[ -e $SPANEL ] || weather ;;
-	
+		[ -e $SPANEL ] || weather
+		;;
+
 	''     ) clock && conky clock off || conky clock on ;;
 	*      ) usage ;;
 esac

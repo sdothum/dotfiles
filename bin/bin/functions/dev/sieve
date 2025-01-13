@@ -28,7 +28,8 @@ while [ "$1" ] ;do
 
 		*    )
 			[ -e $1 ] && { file=$1; break; }
-			[ "$begin" ] && { type=blk; end="$1"; } || { type=stmt; begin="$1"; } ;;
+			[ "$begin" ] && { type=blk; end="$1"; } || { type=stmt; begin="$1"; }
+			;;
 	esac
 	shift
 done

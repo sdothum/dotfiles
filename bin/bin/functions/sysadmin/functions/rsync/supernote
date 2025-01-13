@@ -1,0 +1,19 @@
+# sdothum - 2016 (c) wtfpl
+
+# Sysadmin
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Rsync wrapper
+
+SUPERNOTE=$HOME/mtp/SSD/Calibre
+
+[ -e $SUPERNOTE ] || { echo "connect supernote to usb (mtp)"; exit 1; }
+ifno "sync SUPERNOTE" && exit
+
+ditto supernote "syncing supernote files and epubs (sdr's)"
+mkdir -p /home/SUPERNOTE/SSD
+rsync -av --delete $SUPERNOTE /home/SUPERNOTE/SSD
+# wrapper does not handle filename spaces
+/usr/bin/rsync -av --info=progress2 --ignore-errors --exclude='lost+found' --delete "$HOME/mtp/Internal shared storage" /home/SUPERNOTE/
+
+# kak: filetype=sh

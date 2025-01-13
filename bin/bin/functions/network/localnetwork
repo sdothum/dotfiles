@@ -18,8 +18,9 @@ case $1 in
 		sudo systemctl enable php-fpm
 		# sudo systemctl enable postgresql
 		sudo systemctl enable tt-rss
-		sudo systemctl enable znc ;;
-	
+		sudo systemctl enable znc
+		;;
+
 	on  )  # use local network server services
 		sudo systemctl enable connman
 		sudo systemctl disable dhcpcd
@@ -29,8 +30,9 @@ case $1 in
 		sudo systemctl disable php-fpm
 		# sudo systemctl disable postgresql
 		sudo systemctl disable tt-rss
-		sudo systemctl disable znc ;;
-	
+		sudo systemctl disable znc
+		;;
+
 	*   ) usage ;;
 esac
 

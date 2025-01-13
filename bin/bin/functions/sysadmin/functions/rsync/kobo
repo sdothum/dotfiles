@@ -6,19 +6,11 @@
 # ................................................................ Rsync wrapper
 
 KOBO=/run/media/shum/KOBOeReader
-KINDLE=/run/media/shum/Kindle
 
-[ -e $KINDLE ] && [ -e $KOBO ] || { echo "connect Kobo and Kindle to usb"; exit 1; }
-ifno "sync Kindle -> Kobo" && exit
-ifno "sync Kobo history" && exit
-cd $KINDLE
+[ -e $KOBO ] || { echo "connect Kobo to usb"; exit 1; }
+ifno "sync KOBOeReader" && exit
 
-ditto kindle "syncing library (sdr) and history to kobo master"
-rsync -av --update documents/books $KOBO/
-
-HISTORY=$KOBO/.adds/koreader/history.lua
-ditto update "$HISTORY"
-mv -v $HISTORY $HISTORY.last
-sed 's|/us/documents/|/onboard/|' koreader/history.lua >$HISTORY
+ditto kobo "syncing kobo, library (sdr's) and koreader"
+rsync -av --delete $KOBO /home/
 
 # kak: filetype=sh

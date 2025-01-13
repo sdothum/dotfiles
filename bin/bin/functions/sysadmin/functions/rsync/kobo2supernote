@@ -5,12 +5,14 @@
 
 # ................................................................ Rsync wrapper
 
-KOBO=/run/media/shum/KOBOeReader
+KOBO=/home/KOBOeReader/books
+SUPERNOTE=$HOME/mtp/SSD/Calibre
 
-[ -e $KOBO ] || { echo "connect Kobo to usb"; exit 1; }
-ifno "sync KOBOeReader" && exit
+mtp mount
+[ -e $SUPERNOTE ] || { ditto ERROR 'mtp' "attach Supernote to USB after koreader update"; exit; }
+cd $SUPERNOTE
 
-ditto kobo "syncing kobo, library (sdr's) and koreader"
-rsync -av --delete $KOBO /home/
+ditto kobo "syncing Kobo library (backup) to Supernote"
+rsync -av --update --exclude='*.sdr' $KOBO $SUPERNOTE
 
 # kak: filetype=sh

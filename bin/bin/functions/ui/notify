@@ -58,8 +58,9 @@ else
 				heading=$(echo "$ONE" | sed '2,$d')
 				body=$(echo "$ONE" | sed '1d')
 				DISPLAY=${DISPLAY:-:0} notify-send $expire $urgency --icon=help-info "$heading" "$body" &
-			fi ;;
-	
+			fi
+			;;
+
 		2 )	DISPLAY=${DISPLAY:-:0} notify-send $expire $urgency --icon=help-info "$ONE" "$TWO" & ;;
 		* )	usage ;;
 	esac

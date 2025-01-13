@@ -45,7 +45,7 @@ elif [ $BROWSER = firefox ] ;then
 	switch layout max
 fi
 herbstclient shift_edge right
-pwait "$SERVICE"
+pidwait -f "$SERVICE"
 
 videomode off
 

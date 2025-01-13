@@ -96,6 +96,7 @@ case $1 in
 			shift
 		done
 		;;
+
 	retrack )
 		ls -1 *.flac
 		echo '---'
@@ -111,6 +112,7 @@ case $1 in
 		done 3< <(metadata | nocolor | grep -E '^(@track |ARTIST=|TITLE=|TRACKNUMBER=)')  # process substitition
 		retrack  # last track
 		;;
+
 	*       )
 		TAG=$(echo $1 | tr '[:lower:]' '[:upper:]')
 		shift

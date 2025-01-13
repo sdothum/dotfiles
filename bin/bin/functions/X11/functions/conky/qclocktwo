@@ -145,7 +145,8 @@ qclock3() {
 		*  )
 			if [ $M -ge 35 ] ;then qclock=$(halftenTO)
 			else qclock=$(halftento)
-			fi ;;
+			fi
+			;;
 	esac
 }
 

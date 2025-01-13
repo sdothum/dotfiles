@@ -16,8 +16,9 @@ case "$@" in
 	*epub )
 		author=$(echo "$@" | sed -r 's/.* - (.*)\.(mobi|epub)/\1/')
 		mkdir -pv "$author" || exit 1
-		mv -v "$@" "$author" ;;
-	
+		mv -v "$@" "$author"
+		;;
+
 	*     ) usage ;;
 esac
 

@@ -33,8 +33,9 @@ case $1 in
 			cd $(dir $2) 2>/dev/null || usage
 			/usr/bin/stow -v -t $HOME -d $STOW -$1 $(pkg $2) 2>&1 | grep -v BUG
 		else usage 
-		fi ;;             # suppress stow path bugs
-	
+		fi
+		;;             # suppress stow path bugs
+
 	*     )
 		while [ $1 ] ;do  # link a list
 			cd $(dir $1) 2>/dev/null || usage
@@ -42,7 +43,8 @@ case $1 in
 			ls -1 $(pkg $1) | grep -E -q 'etc|opt|root|usr|var' && { target=/; super=sudo; } || target=$HOME
 			$super /usr/bin/stow -v -t $target -S --ignore=.deprecated $(pkg $1)
 			shift
-		done ;;
+		done
+		;;
 esac
 
 # kak: filetype=sh

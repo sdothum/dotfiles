@@ -55,7 +55,7 @@ init() {
 log() {
 	ditto "tail -f /tmp/$1.log"
 	tail -f /tmp/$1.log &
-	pwait "$1 .* $2"
+	pidwait -f "$1 .* $2"
 	pkill -TERM -f "tail -f /tmp/$1.log"
 }
 
@@ -66,16 +66,18 @@ case $1 in
 			nohup offlineimap -c $OFFLINEIMAPRC -u basic >>/tmp/offlineimap.log 2>&1 &
 			ditto 'offlineimap running'
 		fi
-		ifyes '.. watch offlineimap log' && imap l ;;
-	
+		ifyes '.. watch offlineimap log' && imap l
+		;;
+
 	1* )
 		if [ $2 ] ;then
 			nohup offlineimap -c $OFFLINEIMAPRC.$2 -o -u basic >>/tmp/offlineimap.log 2>&1 &
 		else
 			nohup offlineimap -c $OFFLINEIMAPRC -o -u basic >>/tmp/offlineimap.log 2>&1 &
 		fi
-		imap l ;;
-	
+		imap l
+		;;
+
 	C* ) rm -f $IMAPFILTER/certificates; imap f ;;
 	f* ) filter ${2:-dovecot} ;;
 	I* ) init $2 ;;
@@ -84,12 +86,14 @@ case $1 in
 	
 	Q* )
 		!p 'python.*offlineimap.*offlineimaprc' || exit
-		nohup offlineimap -c $OFFLINEIMAPRC -u quiet >>/tmp/imapfilter.log 2>&1 & ;;
-	
+		nohup offlineimap -c $OFFLINEIMAPRC -u quiet >>/tmp/imapfilter.log 2>&1 &
+		;;
+
 	q* )
 		killall imapfilter 2>/dev/null
-		kill -TERM $(p 'python.*offlineimap.*offlineimaprc' | awk '{ print $2 }') 2>/dev/null ;;
-	
+		kill -TERM $(p 'python.*offlineimap.*offlineimaprc' | awk '{ print $2 }') 2>/dev/null
+		;;
+
 	r* ) imap q; imap ;;
 	
 	t* )
@@ -97,8 +101,9 @@ case $1 in
 			sudo rm -r $OFFLINEIMAPFILTER; ditto 'imapfilter processing off'
 		else
 			touch $OFFLINEIMAPFILTER; ditto 'imapfilter processing on'
-		fi ;;
-	
+		fi
+		;;
+
 	*  ) usage ;;
 esac
 

@@ -74,7 +74,8 @@ case $1 in
 		nohup btrfs scrub start -Bd $(volume $1) >$CRON.log &
 		log=$CRON:$1.log
 		show $1 >$log &
-		pstat Xorg && alacritty --title "$1" -e "tail -f $log" || tail -f $log ;;
+		pstat Xorg && alacritty --title "$1" -e "tail -f $log" || tail -f $log
+		;;
 esac
 
 # kak: filetype=sh

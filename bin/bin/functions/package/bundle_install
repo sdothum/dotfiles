@@ -118,6 +118,7 @@ check() {
 			ditto ERROR "${RED}missing" $package || ditto alpine $package
 			return
 			;;
+
 		artix  )
 			package=$(echo $package | sed 's/^python3-/python-/')  # prefix/suffix name mapping
 			curl --silent "https://packages.artixlinux.org/?repo=World&repo=Galaxy&repo=System&repo=Universe&search_criteria=$package&limit=1" 2>/dev/null | grep -q "Page Not Found!" &&
@@ -125,6 +126,7 @@ check() {
 			ditto ERROR "${RED}missing" $package || ditto artix $package
 			return
 			;;
+
 		*      ) usage ;;
 	esac
 

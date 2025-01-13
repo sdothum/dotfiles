@@ -16,7 +16,7 @@ for i in $@ ;do
 	[ "$i" ] && jpeg=$i
 	[ "${i##*.}" = jpg ] && name=$jpeg || name="${i%.*}.jpg"
 	ditto add "$GALLERY/$name"
-	convert $jpeg -resize ${size:-1600} -quality $quality $GALLERY/$name
+	magick $jpeg -resize ${size:-1600} -quality $quality $GALLERY/$name
 done
 
 # kak: filetype=sh

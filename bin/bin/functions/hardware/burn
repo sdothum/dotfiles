@@ -19,19 +19,22 @@ case $@ in
 		dvdbackup -i /dev/dvd -o /net/downloads/dvd/ -M
 		title=$(basename /net/downloads/dvd/*)
 		genisoimage -dvd-video -udf -V "$title" -o /net/downloads/dvd/dvd.iso "$title"
-		ifyes 'burn iso to dvd' && burn iso ;;
-	
+		ifyes 'burn iso to dvd' && burn iso
+		;;
+
 	iso )
 		[ -e /net/downloads/dvd/dvd.iso ] || exit
-		growisofs -dvd-compat -Z /dev/dvd=/net/downloads/dvd/dvd.iso ;;
-	
+		growisofs -dvd-compat -Z /dev/dvd=/net/downloads/dvd/dvd.iso
+		;;
+
 	*   )
 		if [ $(ls -l /media/cdrom0/ | wc -l) -eq 1 ] ;then
 			ifyes 'new session (initialize)' && growisofs -Z /dev/dvd -R -J $@
 		else
 			ifyes 'merge session (append)' && growisofs -M /dev/dvd -R -J $@
 		fi
-		ditto INFO 'eject and select cdrom in thunar before next merge' ;;
+		ditto INFO 'eject and select cdrom in thunar before next merge'
+		;;
 esac
 
 # kak: filetype=sh

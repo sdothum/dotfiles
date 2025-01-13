@@ -25,7 +25,8 @@ th() {
 
 		-* )  # hyphen
 			MAXLEN="$(seq -s. 0 $(length $1 $2) | tr -d '[:digit:]')[^ ]"  # mixed length list
-			shift ;;
+			shift
+			;;
 
 		:* )  # underscore
 			for i in $(seq 2 $(length $1 $2) | tac) ;do  # iterative length list
@@ -34,11 +35,13 @@ th() {
 					sdcv -th =$i $2
 				fi
 			done
-			exit ;;
+			exit
+			;;
 
 		=* )
 			LENGTH="^$(seq -s. 0 $(length $1 $2) | tr -d '[:digit:]' | sed 's/[.]/[^ ]/g')$"  # exact length list
-			shift ;;
+			shift
+			;;
 	esac
 	[ $1 ] || usage
 	[ $2 ] && usage

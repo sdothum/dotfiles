@@ -1,0 +1,13 @@
+#!/usr/bin/bash
+# sdothum - 2016 (c) wtfpl
+
+# Media
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ....................................................... KOReader metadata edit
+
+# SEE: koreader
+ditto sdr "$(dirname "$2" | cut -d/ -f3 | sed 's/.sdr$//')"
+sed "$1" "$2" | sponge "$2"  # sed -i fails on fuse mtp
+
+# kak: filetype=sh

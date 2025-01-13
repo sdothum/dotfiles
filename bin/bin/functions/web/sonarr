@@ -1,4 +1,4 @@
-	#!/usr/bin/dash
+#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
 # Web
@@ -18,6 +18,6 @@ export NO_PROXY="*"
 
 name=sonarr $BROWSER $SONARR/$page  # SEE: qutebrowser-instance
 
-pwait "$SONARR/$page"
+pidwait -f "$SONARR/$page"
 
 # kak: filetype=sh

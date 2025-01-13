@@ -192,19 +192,22 @@ case $1 in
 		# hexdump log for inspecting unprintable punctuation characters
 		[ $proof ] && { cat >$proof; cat $proof | hexdump -C >$proof:hexdump; }
 		# contract excessive blank lines
-		cat $proof | filter | paragraphs ;;
-	
+		cat $proof | filter | paragraphs
+		;;
+
 	note  )
 		fontsize=9  # stdin formatting
 		spacing='\onehalfspacing'
 		unset linenumbers
-		cat $proof | paragraphs ;;
-	
+		cat $proof | paragraphs
+		;;
+
 	text  )
 		fontsize=9
 		spacing='\singlespacing'
-		linenumbers='\linenumbers' ;;
-	
+		linenumbers='\linenumbers'
+		;;
+
 	wiki  )
 		fontsize=10
 		spacing='\doublespacing'
@@ -212,8 +215,9 @@ case $1 in
 		shift
 		title=${@##/}
 		title=${title%.wiki}
-		cat "$@" | stdin ;;
-	
+		cat "$@" | stdin
+		;;
+
 	wps   )
 		fontsize=9  # word document saved as text file
 		spacing='\doublespacing'
@@ -225,13 +229,15 @@ case $1 in
 		perl -pe 'BEGIN{undef $/;}s/\[[^]]*\]//smg' "$1" \
 		| sed -r 's/^(\xe3\x80\x80)*/\n/' | punctuation  \                                 \
 		| sed 's/^\.*  *//; s/  */ /g'                   \
-		| stdin ;;
-	
+		| stdin
+		;;
+
 	*     )
 		fontsize=8
 		spacing='\onehalfspacing'
 		linenumbers='\linenumbers'
-		[ "$1" = code ] || noshift=true ;;
+		[ "$1" = code ] || noshift=true
+		;;
 esac
 [ $noshift ] || shift
 

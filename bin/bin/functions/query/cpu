@@ -23,6 +23,7 @@ case $1 in
 		processor Atom      '2'   '('
 		processor ARM       '1'   'v'
 		;;
+
 	'ryzen 9' |\
 	i7        |\
 	arm       |\

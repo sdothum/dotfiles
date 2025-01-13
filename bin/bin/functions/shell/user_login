@@ -18,7 +18,7 @@ if console ;then
 	if [ -e "$BOOTWM" ] ;then     # SEE: console_login
 		# /usr/bin/udevadm settle  # wait for system init to complete
 		# sleep 1
-		x $(cat "$BOOTWM")         # will not spawn otherwise (alpine requires delay in x)
+		(sleep 300; x $(cat "$BOOTWM")) &         # will not spawn otherwise (alpine requires delay in x)
 	fi
 	# sleep 1
 	# cbonsai -il

@@ -20,8 +20,9 @@ while : ;do
 			git pull
 			git checkout $2
 			shift 2
-			nosync=true ;;
-	
+			nosync=true
+			;;
+
 		-b       ) w=$1; shift ;;
 		*        ) break ;;
 	esac

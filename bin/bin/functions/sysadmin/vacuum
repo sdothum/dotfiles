@@ -121,7 +121,8 @@ while read action file package <&3 ;do
 	
 		*   )
 			file=$(echo $action $file $package | sed 's/ *$//') 
-			[ -e "$file" ] || [ -L "$file" ] && unset package || { package=$file; file=$action; } ;;
+			[ -e "$file" ] || [ -L "$file" ] && unset package || { package=$file; file=$action; }
+			;;
 	esac
 
 	[ -e "$file" ] || [ -L "$file" ] || continue
