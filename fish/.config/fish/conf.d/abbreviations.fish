@@ -272,15 +272,6 @@ abbr eformat 'dmenu econvert reformat'
 abbr kobo 'dmenu econvert epub'
 abbr ma 'man'
 abbr md 'lowdown -tterm'
-abbr mf 'metaflac'
-abbr mfq 'metaflac -q'
-abbr mfA 'metaflac -q album'
-abbr mfa 'metaflac -q artist'
-abbr mfaa 'metaflac -q albumartist'
-abbr mfd 'metaflac -q date'
-abbr mfg 'metaflac -q genre'
-abbr mfT "metaflac -q tracknumber"
-abbr mft "metaflac -q title '/"
 abbr mdtxt 'lowdown -tterm --term-no-colour'
 abbr miniflux-migrate 'sudo miniflux -c /etc/miniflux.conf -migrate'
 # abbr music '!p ncmpcpp; and ncmpcpp'
@@ -292,3 +283,18 @@ abbr termhex "window size 1/3; $HOME/bin/functions/shell/termcolors hex"
 abbr uterm 'urxvt -sh 1'
 abbr W 'words'
 abbr wl 'wc -l'
+
+# ..................................................................... metaflac
+
+abbr mf 'metaflac'
+abbr mfq 'metaflac -q'
+abbr mfal 'metaflac -q album'
+abbr mfa 'metaflac -q artist'
+abbr mfaa 'metaflac -q albumartist'
+abbr mfdn 'metaflac -q discnumber'
+abbr mfd 'metaflac -q date'
+abbr mfg 'metaflac -q genre'
+abbr mfr 'metaflac -q rm'
+abbr mfrt 'metaflac -q retrack'
+abbr mftn "metaflac -q tracknumber"
+abbr mft --set-cursor "metaflac -q title '/%"
