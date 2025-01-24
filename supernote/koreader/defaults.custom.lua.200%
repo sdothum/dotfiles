@@ -1,7 +1,7 @@
 		-- /storage/emulated/0/koreader/defaults.custom.lua
 return {
 
--- line spacing:  215%
+-- line spacing:  200%
 -- top margin:    30
 -- bottom margin: 24
 

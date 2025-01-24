@@ -1,9 +1,11 @@
 		-- /storage/emulated/0/koreader/defaults.custom.lua
 return {
 
--- line spacing:  215%
--- top margin:    30
--- bottom margin: 24
+-- screen dpi:    320  -- from 300 to reduce system UI
+
+-- line spacing:  205%
+-- top margin:    32
+-- bottom margin: 27
 
 DTAP_ZONE_MENU         = { x = 0,     y = 0,      h = 0.06,   w = 1    },  -- top menu bar
 DTAP_ZONE_MENU_EXT     = { x = 0.25,  y = 0,      h = 0.09,   w = 0.5  },
