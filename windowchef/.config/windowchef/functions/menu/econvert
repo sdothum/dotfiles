@@ -30,13 +30,13 @@ esac
 
 # override left justification
 case "$1" in
-	''       ) ;;
+	''      ) ;;
 	default ) option=default;  shift ;;
 	justify ) option=justify;  shift ;;
 	no*dent ) option=noindent; shift ;;  # retain original formatting
 	poetry  ) option=noindent; shift ;;  # retain poetry formatting
 	all     ) option=all;      shift ;;
-	*       ) [ -e "$1" ] || { find . -iname "$1" | grep -q '[.]' || usage; } ;;
+	*       ) [ -e "$1" ] || { find . -iname "$1" | grep -q '/' || usage; } ;;
 esac
 
 # <regex> autoconvert epubs to awz3
@@ -54,8 +54,9 @@ case "$format" in
 	reformat )
 		[ "$1"    ] || { find . -iregex '.*\(azw3\|epub\)' -exec menu econvert reformat $option {} \; ; exit; }
 		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert reformat $option {} \; ; exit; }
-		format=${1##*\.}; reformat=true
-		;;  # for re-tweaking converted ebooks
+		format=${1##*\.}
+		reformat=true  # for re-tweaking converted ebooks
+		;;
 esac
 
 file=$1

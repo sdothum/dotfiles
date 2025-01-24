@@ -163,10 +163,13 @@ super + j
 	xdotool search --onlyvisible --name "music" windowunmap || music
 
 super + shift + j
-	xdotool search --classname "Asunder" windowkill && rm -f /tmp/rulerrc:asunder || asunder
+	xdotool search --onlyvisible --name "Nicotine+" windowunmap || nicotine+
 
-super + {_,shift} + ctrl + j
-	{mpc toggle, eject -T}
+super + ctrl + j
+	mpc toggle
+
+super + shift + ctrl + j
+	xdotool search --classname "Asunder" windowkill && rm -f /tmp/rulerrc:asunder || asunder
 
 super + m
 	xdotool search --onlyvisible --classname aerc windowclose || aerc
