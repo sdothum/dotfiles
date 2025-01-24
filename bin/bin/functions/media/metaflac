@@ -6,7 +6,7 @@
 
 # ................................................................. FLAC editing
 
-usage() { echo "$(basename $0) [ls | rm <tag>* | retrack]
+usage() { echo "[\$prefix] $(basename $0) [ls | rm <tag>* | retrack]
 > [-d] [album | albumartist | artist | date | discnumber | genre] <string> | /<regex>
 > [-d] title /<regex>, against all tracks
 > [-d] tracknumber <from>, increment all tracks starting <from>
@@ -14,15 +14,22 @@ usage() { echo "$(basename $0) [ls | rm <tag>* | retrack]
 >          where, track  -> ## of flac filename
 >                 /regex -> (sed s) [//match/s]/from/to/[<flag>*]
 >                 -d or \$debug envar to list set-tag only
->                 -q for no confirmation prompt" | usage:pipe
+>                 -q for no confirmation prompt
+>          \$prefix is find*pattern before filename track ##" | usage:pipe
 	exit 1
-} 
+}
 
 METAFLAC=/usr/bin/metaflac
 TAGS='@(album|albumartist|artist|date|discnumber|genre|title|tracknumber)'  # extglob pattern list
 
-[ "$1" = '-d' ] && { debug=true; shift; }
-[ "$1" = '-q' ] && { quiet=true; shift; }
+while [ $1 ] ;do
+	case $1 in
+		-d ) debug=true ;;
+		-q ) quiet=true ;;
+		*  ) break      ;;
+	esac
+	shift
+done
 
 confirm()  { [ $debug ] || [ $quiet ] || { ifno 'apply changes' && usage; } }
 metadata() { for f in *flac; do ditto track "$f"; $METAFLAC --export-tags-to=- "$f"; done; }
@@ -35,7 +42,7 @@ case $1 in
 	rm          ) tagcheck ${@:2} || usage ;;
 	retrack     ) ;;
 	*.flac      ) file=$1 ;;
-	[0-9]*      ) file="$(find ./ -maxdepth 1 -name "${1}*.flac")"; [ "$file" ] || usage ;;
+	[0-9]*      ) file="$(find ./ -maxdepth 1 -name "${prefix}${1}*.flac")"; [ "$file" ] || usage ;;
 	title       ) [ "${2}" = "/${2#?}" ]   || usage ;;
 	tracknumber ) TRACK=$(token number $2) || usage ;;  # TRACK unset otherwise SEE: metaflac()
 	$TAGS       ) ;;
@@ -58,7 +65,7 @@ regextag() {
 	if [ $debug ] ;then
 		# $METAFLAC --show-tag=$1 "$file"
 		ditto $1 "$($METAFLAC --show-tag=$1 "$file" | cut -d= --complement -f1)"
-		ditto regex "$($METAFLAC --show-tag=$1 "$file" | cut -d= --complement -f1 | sed -r "$2")"
+		ditto regex= "$($METAFLAC --show-tag=$1 "$file" | cut -d= --complement -f1 | sed -r "$2")"
 	fi
 	tag=$($METAFLAC --show-tag=$1 "$file" | cut -d= --complement -f1 | sed -r "$2")  # NOTE: --complement for LAST field :)
 	settag $1 "$tag"

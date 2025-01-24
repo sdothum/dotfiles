@@ -10,24 +10,25 @@
 #       will only modify existing settings NOT add them (to gestures.lua)
 #
 # ATTENTION: tap/double_tap sed "/match/,+count" ranges must include update search items SEE: gestures.lua file
-#
-# BUG: while supernote is recognized, current sed limitations over mtp prevent direct updates
 
 usage() { echo "[\$TEST] $(basename $0) [back'up KOBOeReader]
 > [reset p'ages]
 > [soft/'hyphenation | -'hyphenation]
 > [1|2' columns]
-> [t'op | b'ottom | l'eft/right] <margin>
+> [P'ortrait | L'andscape]
+> [t'op | b'ottom | ='left/right] <margin>
 > [sync m'argins] <0|1>
-> [line s'pacing] <percent>
+> [l'ine spacing] <percent>
+> [font s'ize] <size>
 > [d'efault | body f'ont | h'eader/footer] <font>
-> [font g'amma] <gamma>
+> [font g'amma] <gamma>, { contrast:gamma, 1.0:15, 1.45:25, 1.9:30, 2.5:36 }
 > [w'ord spacing 100]" | usage:
 	exit 1
 }
 
 KOBO=/run/media/$USER/KOBOeReader  # USB mount point
 SUPERNOTE=$HOME/mtp/SSD/Calibre
+mkdir -p /home/SUPERNOTE/SSD       # backup
 
 # update sdr files to match ever changing default settings :)
 
@@ -37,68 +38,64 @@ settings() { ditto settings "$1"; SETTINGS="$SETTINGS; $2"; }
 
 font()     { sdr "font ${1}" '/\"font_face\"/s/\"[^ ]*\",/\"'${1}'\",/'; }
 header()   { sdr "header font ${1}" '/\"header_font_face\"/s/\"[^ ]*\",/\"'${1}'\",/'; }
-portrait() { sdr "portrait orientation" '/\"copt_rotation_mode\"/s/= [0-9]*,/= 0,/'; }
 
 backup()   {
 	[ -e $KOBO ]      && { ifno "backup kobo"      || /usr/bin/rsync -av --info=progress2 --delete $KOBO      /home/; }
-	mkdir -p /home/SUPERNOTE/SSD
 	[ -e $SUPERNOTE ] && { ifno "backup supernote" || /usr/bin/rsync -av --info=progress2 --ignore-errors --exclude='lost+found' --delete $SUPERNOTE /home/SUPERNOTE/SSD/; }
 }
 
-if [ -z $TEST ] ;then
+if [ -z $TEST ] && [ -z $test ] ;then
 	[ -e $KOBO ] || [ -e $SUPERNOTE ] && [ $1 ] || usage
-	echo $@ | grep -q 'u'  || backup  # keep sdr's up to date (for KOBOeReader/KOReader recovery
+	[ -e $KOBO ] && cd $KOBO || cd $SUPERNOTE  # assumed device mount points
+	echo $@ | grep -q 'u'  || backup           # keep sdr's up to date (for KOBOeReader/KOReader recovery
 fi
 
 while [ $1 ] ;do
 	case $1 in
 		u     ) backup; shift; [ $1 ] && continue || exit ;;
-		/     ) sdr 'hyphenation soft' '/\"hyph_soft_hyphens_only\"/s/= false,/= true,/'; resetpages=true; shift; continue ;;
-		-     ) sdr 'hyphenation'      '/\"hyph_soft_hyphens_only\"/s/= true,/= false,/'; resetpages=true; shift; continue ;;
-		1     ) sdr "1 column"         '/\"copt_visible_pages\"/s/= [0-9]*,/= 1,/';       resetpages=true; shift; continue ;;
-		2     ) sdr "2 columns"        '/\"copt_visible_pages\"/s/= [0-9]*,/= 2,/';       resetpages=true; shift; continue ;;
+		/     ) sdr 'hyphenation soft'      '/\"hyph_soft_hyphens_only\"/s/= false,/= true,/'; resetpages=true ;;
+		-     ) sdr 'hyphenation'           '/\"hyph_soft_hyphens_only\"/s/= true,/= false,/'; resetpages=true ;;
+		1     ) sdr "1 column"              '/\"copt_visible_pages\"/s/= [0-9]*,/= 1,/';       resetpages=true ;;
+		2     ) sdr "2 columns"             '/\"copt_visible_pages\"/s/= [0-9]*,/= 2,/';       resetpages=true ;;
+		P     ) sdr "portrait orientation"  '/\"copt_rotation_mode\"/s/= [0-9]*,/= 0,/';       resetpages=true; shift; continue ;;
+		L     ) sdr "landscape orientation" '/\"copt_rotation_mode\"/s/= [0-9]*,/= 1,/';       resetpages=true; shift; continue ;;
 		p     ) resetpages=true; shift; continue ;;
-		l | r ) margin=$(token number $2)  && sdr "left/right margin ${margin}" '/\"copt_h_page_margins\".*=/,+2s/= [0-9]*,/= '${margin}',/'     || usage; resetpages=true ;;
-		t     ) margin=$(token number $2)  && { sdr "top margin ${margin}" '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'; portrait; }    || usage; resetpages=true ;;
-		b     ) margin=$(token number $2)  && { sdr "bottom margin ${margin}" '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'; portrait; } || usage; resetpages=true ;;
-		s     ) percent=$(token number $2) && sdr "line spacing ${percent}"% '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'               || usage; resetpages=true ;;
-		m     ) sync=$(token binary $2)    && sdr "sync margins ${sync}" '/\"copt_sync_t_b_page_margins\"/s/[01]/'${sync}'/'                     || usage                  ;;
-		d     ) font=$(token word $2)      && font ${font} && header ${font}                                                                     || usage; resetpages=true ;;
-		f     ) font=$(token word $2)      && font ${font}                                                                                       || usage; resetpages=true ;;
-		h     ) font=$(token word $2)      && header ${font}                                                                                     || usage                  ;;
-		g     ) gamma=$(token number $2)   && sdr "font gamma ${gamma}" '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                        || usage                  ;;
+		=     ) margin=$(token number $2)  && sdr "left/right margin ${margin}" '/\"copt_h_page_margins\".*=/,+2s/= [0-9]*,/= '${margin}',/' || usage; resetpages=true ;;
+		t     ) margin=$(token number $2)  && { sdr "top margin ${margin}" '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'; }          || usage; resetpages=true ;;
+		b     ) margin=$(token number $2)  && { sdr "bottom margin ${margin}" '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'; }       || usage; resetpages=true ;;
+		l     ) percent=$(token number $2) && sdr "line spacing ${percent}"% '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'           || usage; resetpages=true ;;
+		m     ) sync=$(token binary $2)    && sdr "sync margins ${sync}" '/\"copt_sync_t_b_page_margins\"/s/[01]/'${sync}'/'                 || usage                  ;;
+		d     ) font=$(token word $2)      && font ${font} && header ${font}                                                                 || usage; resetpages=true ;;
+		f     ) font=$(token word $2)      && font ${font}                                                                                   || usage; resetpages=true ;;
+		h     ) font=$(token word $2)      && header ${font}                                                                                 || usage                  ;;
+		s     ) size=$(token decimal $2)   && sdr "font size ${size}" '/\"copt_font_size\"/s/= [0-9.]*,/= '${size}',/'                       || usage                  ;;
+		g     ) gamma=$(token number $2)   && sdr "font gamma ${gamma}" '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                    || usage                  ;;
 		w     ) sdr 'word spacing 100' '/\"copt_word_spacing\".*=/,+2s/= [0-9]*,/= '100',/'; shift; continue ;;
-		T     ) margin=$(token number $2)  ;;
-		B     ) margin=$(token number $2)  ;;
-		L     ) margin=$(token number $2)  ;;
-		S     ) percent=$(token number $2) ;;
 		*     ) usage ;;
 	esac
 
 	case $1 in
 		/     ) settings 'hyphenation soft' '/\"hyph_soft_hyphens_only\"/s/= false,/= true,/'; shift; continue      ;;
-		-     ) settings 'hyphenationt'     '/\"hyph_soft_hyphens_only\"/s/= true,/= false,/'; shift; continue      ;;
+		-     ) settings 'hyphenation'      '/\"hyph_soft_hyphens_only\"/s/= true,/= false,/'; shift; continue      ;;
 		1     ) settings "1 column"         '/\"copt_visible_pages\"/s/= [0-9]*,/= 1,/';       shift; continue      ;;
 		2     ) settings "2 columns"        '/\"copt_visible_pages\"/s/= [0-9]*,/= 2,/';       shift; continue      ;;
 		t     ) settings "top margin ${margin}" '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'               ;;
 		b     ) settings "bottom margin ${margin}" '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'            ;;
-		l | r ) settings "left/right margin ${margin}" '/\"copt_h_page_margins\".*=/,+2s/= [0-9]*,/= '${margin}',/' ;;
-		s     ) settings "line spacing ${percent}"% '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'           ;;
+		=     ) settings "left/right margin ${margin}" '/\"copt_h_page_margins\".*=/,+2s/= [0-9]*,/= '${margin}',/' ;;
+		l     ) settings "line spacing ${percent}"% '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'           ;;
 		d | h ) settings "font ${font}" '/\"cre_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                                ;;
+		s     ) settings "font size ${size}" '/\"copt_font_size\"/s/= [0-9.]*,/= '${size}',/'                       ;;
 		g     ) settings "font gamma ${gamma}" '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                    ;;
 	esac
 
 	case $1 in
-		t     ) gestures "top margin ${margin}" '/\"tap_right_bottom_corner\".*=/,+28s/(\"t_page_margin\".*=) [0-9]*,/\1 '${margin}',/'            ;;
-		b     ) gestures "bottom margin ${margin}" '/\"tap_right_bottom_corner\".*=/,+28s/(\"b_page_margin\".*=) [0-9]*,/\1 '${margin}',/'         ;;
-		l | r ) gestures "left/right margin ${margin}" '/\"tap_right_bottom_corner\".*=/,+28s/(\[[12]\] =) [0-9]*,/\1 '${margin}',/'               ;;
-		s     ) gestures "line spacing ${percent}"% '/\"tap_right_bottom_corner\".*=/,+28s/(\"line_spacing\".*=) [0-9]*,/\1 '${percent}',/'        ;;
-		T     ) gestures "top margin ${margin}" '/\"double_tap_bottom_right_corner\".*=/,+19s/(\"t_page_margin\".*=) [0-9]*,/\1 '${margin}',/'     ;;
-		B     ) gestures "bottom margin ${margin}" '/\"double_tap_bottom_right_corner\".*=/,+19s/(\"b_page_margin\".*=) [0-9]*,/\1 '${margin}',/'  ;;
-		L     ) gestures "left/right margin ${margin}" '/\"double_tap_bottom_right_corner\".*=/,+19s/(\[[12]\] =) [0-9]*,/\1 '${margin}',/'        ;;
-		S     ) gestures "line spacing ${percent}"% '/\"double_tap_bottom_right_corner\".*=/,+19s/(\"line_spacing\".*=) [0-9]*,/\1 '${percent}',/' ;;
-		d | f ) gestures "font ${font}" '/\"set_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                                                               ;;
-		g     ) gestures "font gamma ${gamma}" '/\"font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                                                        ;;
+		t     ) gestures "top margin ${margin}" '/\"tap_right_bottom_corner\".*=/,+28s/(\"t_page_margin\".*=) [0-9]*,/\1 '${margin}',/'     ;;
+		b     ) gestures "bottom margin ${margin}" '/\"tap_right_bottom_corner\".*=/,+28s/(\"b_page_margin\".*=) [0-9]*,/\1 '${margin}',/'  ;;
+		=     ) gestures "left/right margin ${margin}" '/\"tap_right_bottom_corner\".*=/,+28s/(\[[12]\] =) [0-9]*,/\1 '${margin}',/'        ;;
+		l     ) gestures "line spacing ${percent}"% '/\"tap_right_bottom_corner\".*=/,+28s/(\"line_spacing\".*=) [0-9]*,/\1 '${percent}',/' ;;
+		d | f ) gestures "font ${font}" '/\"set_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                                                        ;;
+		s     ) gestures "font size ${size}" '/\"copt_font_size\"/s/= [0-9.]*,/= '${size}',/'                                               ;;
+		g     ) gestures "font gamma ${gamma}" '/\"font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                                                 ;;
 	esac
 
 	shift 2
@@ -107,8 +104,9 @@ done
 [ $resetpages ] && sdr 'page recalculation' '/\"doc_pages\"/d; /\"pages\"/d'
 ifno "apply changes to catalogue" && usage
 
-[ "$SDR"        ] && ditto updating "*sdr/metadata.epub.lua" && find ./ -regex '.*/metadata.epub.lua'   -exec koreader:sdr "$SDR"   {} \;  # sed -i fails on fuse mtp
+[ "$SDR"        ] && ditto updating "*sdr/metadata.epub.lua" && find ./ -regex '.*/metadata.epub.lua'   -exec koreader:sdr "$SDR"   {} \;  # sed -i fails on fuse mtp (script has better progress anyway :)
 [ -e $SUPERNOTE ] && exit  # no access to Internal shared storage koreader
+# deprecated as have moved to profile gestures
 [ "$GESTURES"   ] && ditto updating "gestures.lua"           && find ./ -regex '.*/gestures.lua'        -exec sed -i -r "$GESTURES" {} \;
 [ "$SETTINGS"   ] && ditto updating "settings.reader.lua"    && find ./ -regex '.*/settings.reader.lua' -exec sed -i    "$SETTINGS" {} \;
 sync
