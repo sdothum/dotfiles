@@ -17,13 +17,13 @@
 # deadbeef
   audacious
   beets
-  cmus
-  cmus-cdio
-  cmus-flac
-  cmus-pulseaudio
-! sudo usermod -aG cdrom $USER
+# cmus
+# cmus-cdio
+# cmus-flac
+# cmus-pulseaudio
   mpc
   ncmpcppc
+! sudo usermod -aG cdrom $USER
 
 
 = drawing
