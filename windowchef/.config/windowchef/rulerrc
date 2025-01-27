@@ -46,6 +46,9 @@ class="foliate"
 	window desktop $(chef desktop "DESK") ;\
 	window size monocle
 
+class="fontmatrix"
+	window desktop $(chef desktop "CODE")
+
 class="gimp"
 	window desktop $(chef desktop "DRAW")
 
