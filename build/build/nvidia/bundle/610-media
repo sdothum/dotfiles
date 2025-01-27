@@ -59,7 +59,8 @@
 # transcode     [server]
 # xfburn        [server]
   asunder
-
+  flac
+  mediainfo
 
 = video
 = ═════
