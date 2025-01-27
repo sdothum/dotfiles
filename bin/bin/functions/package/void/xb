@@ -19,7 +19,7 @@ usage() {
 > -R .. remove non-recursive
 >  H .. hold
 > -H .. unhold
-$(basename $0)  B | C | H | S | U
+$(basename $0)  B | C | H | I | U
 >  B    backup cache
 >  C    check database
 >  H    held (list)
@@ -30,7 +30,7 @@ $(basename $0)  [/ | f** | [-]d | h] [<package> | <file>**]
 >  f .. find (file)
 >  d .. dependencies
 >  h .. history
->  I .. installed
+>  I .. installed (package)
 >  r .. required by
 >    .. query" | usage:
 	exit 1

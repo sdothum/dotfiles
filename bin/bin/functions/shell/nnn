@@ -56,7 +56,9 @@ mtp mount && NDIR=$(mtp)
 [ "$1" != TMUX ] && trap 'mtp umount' EXIT  # must manually eject if mounted during toggle tmux session, see herbstluftwm appbinds
 udev                                        # reload udev rules
 
-# sude for sonarr catalogue management
+# BECAUSE: tmux Home End keys echo H L in nnn input..
+export TMUXCONF=$HOME/.tmux.conf.nnn  # SEE: tmux_session
+grep -Ev '^bind-key.*(Home|End)' $HOME/.tmux.conf >$TMUXCONF
 case $1 in
 	ROOT ) tmux_session 'root' sudo -E $NNN $TDIR 2>/tmp/nnn.log ;;
 	TMUX ) tmux_session 'nnn'          $NNN $TDIR 2>/tmp/nnn.log ;;

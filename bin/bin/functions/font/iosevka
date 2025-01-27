@@ -155,6 +155,7 @@ cmdopts() {
 			d-tailed       ) glyph d $1 ;;  # ebook variant
 			d-toothless    ) glyph d $1 ;;  # with p-eared
 			f-extended     ) f=$1 ;;        # unolexic (homage to universal grotesk)
+			f-flat++       ) f=$1 ;;
 			i-serifless    ) i=$1 ;;
 			j-flat         ) j=$1 ;;
 			j-serifed      ) j=$1 ;;
@@ -267,7 +268,7 @@ elif [ "$mu" ] ;then
 elif [ "$test" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat serifless serifed
  	emdash
-	e_ink galley grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase utf-8
+	e_ink lufte   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8
 	# e_ink galileo grote   I-serifed  t-asymmetric-- l-ascending Q-open 1-nobase
 
 elif [ "$quad" ] ;then
@@ -281,7 +282,7 @@ elif [ "$quad" ] ;then
 elif [ "$koreader" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat serifless serifed
  	emdash
-	e_ink luft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase utf-8
+	e_ink luft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8
 	# e_ink galley grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase
 	# e_ink chalk  grote   I-serifed    t-asymmetric-- l-serifless a-single
 	# e_ink draft  grote   I-serifed    t-asymmetric-- l-serifless
@@ -319,8 +320,7 @@ elif [ $family ] ;then                    # custom e-ink font (non-published)
 elif [ $web ] ;then                       # www fonts
 	unset cap; emdash; cmdopts t-asymmetric--
 	wfont heading  quasi-ext space=1.100 webfont serifless serifed family=wMonolegible
-	# wfont dyslexic quasi-ext space=1     webfont serifless serifed I-serifless t-asymmetric-- l-ascending family=wMonolexic
-	wfont dyslexic quasi-ext space=0.875 webfont serifless serifed I-serifless t-asymmetric-- l-ascending family=wMonolexic
+	wfont dyslexic quasi-ext space=0.875 webfont serifless serifed I-serifless t-asymmetric-- l-ascending f-flat++ family=wMonolexic
 	wfont dyslexic quasi-ext space=1.125 webfont I-serifless family=wCaps
 	wfont expanded quasi-pro space=1     webfont I-serifed sb=1 l-serifless family=wQuasilexic
 
@@ -331,7 +331,7 @@ elif [ $coding ] ;then                    # classic coding font
 
 else                                      # desktop fonts
 	unset space
-	cmdopts t-asymmetric-- j-flat 1-nobase at-tall l-hooky
+	cmdopts t-asymmetric-- j-flat 1-nobase at-tall l-hooky f-flat++
 	dfont $leading 1-base  # l-flat
 	dfont proof    l-ascending I-serifless
 	dfont menu     I-serifed l-ascending

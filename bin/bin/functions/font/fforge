@@ -569,6 +569,58 @@ Generate(\$1);
 	done
 }
 
+f_ascending() {
+	# create regular descender
+	confirm "f_ascending"
+
+	echo "
+Open(\$1);
+Select($(utf 'f'));
+Move(0,47);
+Select($(utf '|'));
+CopyReference();
+Select(0u0001);                        # temporary cell to avoid modifying original glyph
+Paste();
+Select(0u0001);
+CopyReference();
+Transform(100,0,0,5,0,0);
+Select($(utf 'f'));
+PasteWithOffset(Int(Strtod(\$2)),6);  # NOTE: fontforge arguments are passed as strings
+RemoveOverlap();
+Select(0u0001);
+Clear();
+Generate(\$1);
+" >${LOG}:f_ascending.script
+
+	for i in $(regular) ;do
+		ditto f_ascending $i
+		case $i in
+			*book* ) Xshift=-26 ;;
+			*bold* ) Xshift=-24 ;;
+			*      ) Xshift=-27 ;;
+		esac
+		fontforge -quiet --script ${LOG}:f_ascending.script $i $Xshift
+	done
+
+	# italicize flipped from regular glyph and shift to left of cell
+	echo "
+Open(\$2);
+Select($(utf 'f'));
+Italic($ANGLE,1,0);  # 1:no x-height shift 0: no italic embellishments (tails)
+Copy();
+Open(\$1);
+Select($(utf 'f'));
+Paste();
+Move(-70,0);  # adjust for italic side bearing shift towards left
+Generate(\$1);
+" >${LOG}:f_ascending:italic.script
+
+	for i in $(italic) ;do
+		ditto f_flipped:italic $i
+		fontforge -quiet --script ${LOG}:f_ascending:italic.script $i $(basefont $i)
+	done
+}
+
 # experimental: tweaked for book upright only
 f_asymmetric() {
 	confirm "f_asymmetric"
@@ -759,6 +811,7 @@ fforge=$1
 case $1 in
 	baseline      ) shape=$2; shift ;;
 	f_asymmetric  ) shape=$2; shift ;;
+	f_ascending   ) shape=$2; shift ;;
 	I_descending  ) shape=$2; shift ;;
 	i_flipped     ) shape=$2; shift ;;
 	l_ascending   ) shape=$2; shift ;;

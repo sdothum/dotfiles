@@ -8,6 +8,8 @@
 
 # Usage: tmux_session [name [command]]*
 
+TMUXCONF=${TMUXCONF:-$HOME/.tmux.conf}
+
 [ $1   ] && { export TMUX=$1; shift; } || export TMUX=tmux
 [ "$1" ] || fortune=FORTUNE
 [ "$1" = aerc ] && export MONOFONT=Iosevka-proof
@@ -17,7 +19,7 @@
 if tmux -S /tmp/tmux:$TMUX has-session -t $TMUX ;then
 	term ${TMUX} tmux -S /tmp/tmux:$TMUX attach -d -t $TMUX 2>/dev/null
 else
-	term ${TMUX} $fortune tmux -S /tmp/tmux:$TMUX "new-session -n '' -s $TMUX $@"
+	term ${TMUX} $fortune tmux -f $TMUXCONF -S /tmp/tmux:$TMUX "new-session -n '' -s $TMUX $@"
 	xsync $TMUX
 	tmux -S /tmp/tmux:$TMUX rename-window "$1*"
 fi

@@ -6,7 +6,7 @@
 
 # ................................................................. FLAC editing
 
-usage() { echo "[\$prefix] $(basename $0) [ls | rm <tag>* | retrack]
+usage() { echo "$(basename $0) [ls | rm <tag>* | import | export]
 > [-d] [album | albumartist | artist | date | discnumber | genre] <string> | /<regex>
 > [-d] title /<regex>, against all tracks
 > [-d] tracknumber <from>, increment all tracks starting <from>
@@ -15,7 +15,7 @@ usage() { echo "[\$prefix] $(basename $0) [ls | rm <tag>* | retrack]
 >                 /regex -> (sed s) [//match/s]/from/to/[<flag>*]
 >                 -d or \$debug envar to list set-tag only
 >                 -q for no confirmation prompt
->          \$prefix is find*pattern before filename track ##" | usage:pipe
+>          set envar find*pattern for filename \"\${prefix}##..\"" | usage:pipe
 	exit 1
 }
 
@@ -40,7 +40,8 @@ case $1 in
 	''          ) quiet=true; set -- 'ls' ;;
 	ls          ) quiet=true ;;
 	rm          ) tagcheck ${@:2} || usage ;;
-	retrack     ) ;;
+	import     ) ;;
+	export      ) ;;
 	*.flac      ) file=$1 ;;
 	[0-9]*      ) file="$(find ./ -maxdepth 1 -name "${prefix}${1}*.flac")"; [ "$file" ] || usage ;;
 	title       ) [ "${2}" = "/${2#?}" ]   || usage ;;
@@ -86,7 +87,7 @@ metaflac() {
 	fi
 }
 
-retrack() {
+export() {
 	[ "$track" ] || return
 	TRACK="$tracknumber - $artist - $title.flac"
 	mv "$track" "$TRACK"
@@ -94,33 +95,48 @@ retrack() {
 }
 
 case $1 in
-	ls      ) metadata | pager ;;
-	rm      )
-		while [ $2 ] ;do
+	ls     ) metadata | pager ;;
+	rm     )
+		while [ "$2" ] ;do
 			ditto tag "remove $2"
 			confirm
-			for i in *flac; do $METAFLAC --remove-tag=$2 "$i"; done
+			for i in *flac; do $METAFLAC --remove-tag="$2" "$i"; done
 			shift
 		done
 		;;
 
-	retrack )
+	# sync track names to titles
+	export )
 		ls -1 *.flac
 		echo '---'
 		metadata | grep '^TITLE='
-		ditto track 'sync to metadata titles'
+		ditto file 'sync to metadata titles'
 		confirm
 		# cannot ".. | while" BECAUSE: spawned subshell localizes vars in "do" block
 		while read line <&3 ;do
-			[ "${line#@track }"       != "$line" ] && { retrack ; track="${line#@track }"; }
+			[ "${line#@track }"       != "$line" ] && { export ; track="${line#@track }"; }
 			[ "${line#ARTIST=}"       != "$line" ] && artist="${line#ARTIST=}"
 			[ "${line#TITLE=}"        != "$line" ] && title="${line#TITLE=}"
 			[ "${line#TRACKNUMBER=}"  != "$line" ] && tracknumber=$(printf "%02d" "${line#TRACKNUMBER=}")
 		done 3< <(metadata | nocolor | grep -E '^(@track |ARTIST=|TITLE=|TRACKNUMBER=)')  # process substitition
-		retrack  # last track
+		export  # last track
 		;;
 
-	*       )
+	# sync titles to track names
+	import )
+		ls -1 *.flac
+		echo '---'
+		metadata | grep '^TITLE='
+		ditto title 'sync to filenames'
+		confirm
+
+		for file in *flac ;do
+			settag TRACK "$(echo $file | cut -d' ' -f1)"
+			settag TITLE "$(echo $file | sed 's/^[0-9. ]*//; s/.flac//')"
+		done
+		;;
+
+	*      )
 		TAG=$(echo $1 | tr '[:lower:]' '[:upper:]')
 		shift
 		case "$@" in
