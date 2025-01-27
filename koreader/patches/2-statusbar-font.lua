@@ -5,7 +5,8 @@
 -- frontend/document/credocument.lua
 -- frontend/ui/font.lua
 --
--- match alt-/statusbar font to document font set as "default"
+-- match statusbar font to document font set as "default"
+-- NOTE: alt-statusbar font uses the "default" font
 --
 -- ATTENTION: KOReader must be restarted to apply "default" font change and the document settings reinitialized with..
 -- top msenu -> document -> document settings -> reset document settings to default -> reset
