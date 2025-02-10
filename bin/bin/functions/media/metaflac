@@ -6,7 +6,7 @@
 
 # ................................................................. FLAC editing
 
-usage() { echo "$(basename $0) [ls | rm <tag>* | import | export]
+usage() { echo "$(basename $0) [ls | rm <tag>* | import | export | untitled]
 > [-d] [album | albumartist | artist | date | discnumber | genre] <string> | /<regex>
 > [-d] title /<regex>, against all tracks
 > [-d] tracknumber <from>, increment all tracks starting <from>
@@ -34,14 +34,16 @@ done
 confirm()  { [ $debug ] || [ $quiet ] || { ifno 'apply changes' && usage; } }
 metadata() { for f in *flac; do ditto track "$f"; $METAFLAC --export-tags-to=- "$f"; done; }
 tagcheck() { for i in $@; do metadata | grep -iq "^$i=" && ditto tag "$i" || { ditto CRITICAL tag "$i"; rcode=1; } ;done; return ${rcode:-0}; }
+titles()   { metadata | grep '^TITLE='; }
 
 shopt -s extglob  # SEE: $TAGS
 case $1 in
 	''          ) quiet=true; set -- 'ls' ;;
 	ls          ) quiet=true ;;
 	rm          ) tagcheck ${@:2} || usage ;;
-	import     ) ;;
+	import      ) ;;
 	export      ) ;;
+	untitled    ) ;;
 	*.flac      ) file=$1 ;;
 	[0-9]*      ) file="$(find ./ -maxdepth 1 -name "${prefix}${1}*.flac")"; [ "$file" ] || usage ;;
 	title       ) [ "${2}" = "/${2#?}" ]   || usage ;;
@@ -95,8 +97,8 @@ export() {
 }
 
 case $1 in
-	ls     ) metadata | pager ;;
-	rm     )
+	ls       ) metadata | pager ;;
+	rm       )
 		while [ "$2" ] ;do
 			ditto tag "remove $2"
 			confirm
@@ -106,10 +108,10 @@ case $1 in
 		;;
 
 	# sync track names to titles
-	export )
+	export   )
 		ls -1 *.flac
 		echo '---'
-		metadata | grep '^TITLE='
+		titles
 		ditto file 'sync to metadata titles'
 		confirm
 		# cannot ".. | while" BECAUSE: spawned subshell localizes vars in "do" block
@@ -120,23 +122,42 @@ case $1 in
 			[ "${line#TRACKNUMBER=}"  != "$line" ] && tracknumber=$(printf "%02d" "${line#TRACKNUMBER=}")
 		done 3< <(metadata | nocolor | grep -E '^(@track |ARTIST=|TITLE=|TRACKNUMBER=)')  # process substitition
 		export  # last track
+		ls -1
 		;;
 
 	# sync titles to track names
-	import )
+	import   )
 		ls -1 *.flac
 		echo '---'
-		metadata | grep '^TITLE='
+		titles
 		ditto title 'sync to filenames'
 		confirm
 
 		for file in *flac ;do
-			settag TRACK "$(echo $file | cut -d' ' -f1)"
+			settag TRACKNUMBER "$(echo $file | cut -d' ' -f1)"
 			settag TITLE "$(echo $file | sed 's/^[0-9. ]*//; s/.flac//')"
 		done
+		titles
 		;;
 
-	*      )
+	# replace untitled track names
+	untitled )
+		ls -1 *.flac
+		echo '---'
+		untitled="$(metadata | grep '^ALBUM=' | head -1 | cut -d= -f2)"
+		titles
+		ditto title 'generate numbered album tracks'
+		confirm
+
+		for file in *flac ;do
+			track="$(echo $file | cut -d' ' -f1)"
+			settag TRACKNUMBER "$track"
+			settag TITLE "$untitled ${track#0}"
+		done
+		titles
+		;;
+
+	*        )
 		TAG=$(echo $1 | tr '[:lower:]' '[:upper:]')
 		shift
 		case "$@" in

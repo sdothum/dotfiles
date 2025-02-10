@@ -25,7 +25,9 @@ rsync() {
 }
 
 msg=$1
-if [ -e ${0%/rsync}/functions/rsync/$msg ] ;then
+if [ -e /home/$msg ] ;then
+	rsync -r --delete /home/$msg /net/home/
+elif [ -e ${0%/rsync}/functions/rsync/$msg ] ;then
 	. ${0%/rsync}/functions/rsync/$msg $@
 else
 	rsync $@  # regular command usage

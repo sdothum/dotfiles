@@ -32,7 +32,7 @@ usage() {
 > f-extended
 > j-serifed
 > l-[hooky|serifless]
-> m-rounded
+> m-[arch[-[-]]|rounded]
 > p-[eared|serifed]
 > q-hook
 > t-[asymmetric[+|-[-]]|cross|flat]
@@ -50,6 +50,7 @@ usage() {
 > shape=<parm>
 > sb=<parm>
 > space=<parm>
+> xheight=<parm>
 
 > family=<name>
 > test
@@ -161,6 +162,8 @@ cmdopts() {
 			j-serifed      ) j=$1 ;;
 			l-hooky        ) l=$1 ;;
 			l-serifless    ) l=$1 ;;
+			m-arch         ) m=$1 ;;
+			m-arch-*       ) m=$1 ;;
 			m-rounded      ) m=$1 ;;
 			p-eared        ) glyph p $1 ;;
 			p-serifed      ) glyph p $1 ;;
@@ -180,16 +183,17 @@ cmdopts() {
 			paren-flat     ) paren=$1 ;;    # source code variant
 
 			# geometry
-			ascender=*     ) ascender="$1"  ;;
-			capadjust      ) capadjust="$1" ;;
-			cap=*          ) [ ${1#*=} = 'off' ] && unset cap || cap="$1" ;;
-			leading=*      ) leading="$1"   ;;
-			normal         ) normal=normal  ;;
-			quasi-ext*     ) quasi=$1   ;;
-			quasi-pro*     ) quasi=$1   ;;
-			sb=*           ) sb="$1"    ;;
-			shape=*        ) shape="$1" ;;
-			space=*        ) space="$1" ;;
+			ascender=*     ) ascender="$1"                                    ;;
+			capadjust      ) capadjust="$1"                                   ;;
+			cap=*          ) [ ${1#*=} = 'off' ] && unset cap || cap="cap=$1" ;;
+			leading=*      ) leading="$1"                                     ;;
+			normal         ) normal=normal                                    ;;
+			quasi-ext*     ) quasi=$1                                         ;;
+			quasi-pro*     ) quasi=$1                                         ;;
+			sb=*           ) sb="$1"                                          ;;
+			shape=*        ) shape="$1"                                       ;;
+			space=*        ) space="$1"                                       ;;
+			xheight=*      ) xheight="xheight=$1"                             ;;
 
 			family=*       ) [ $ereader ] && family="$1" ;;
 			test           ) test=true; unset ecopy ;;
@@ -230,7 +234,7 @@ update() {
 	done
 }
 
-options() { echo $adjust $ascender $cap $quasi $leading $sb $shape $normal $style $D $G $I $J $L $Q $a $b $d $f $i $j $l $m $p $q $t $y $zero $at $paren $altmono $grote $open $one $four $serifless $serifed $capadjust $expanded $@; }  # list
+options() { echo $adjust $ascender $cap $xheight $quasi $leading $sb $shape $normal $style $D $G $I $J $L $Q $a $b $d $f $i $j $l $m $p $q $t $y $zero $at $paren $altmono $grote $open $one $four $serifless $serifed $capadjust $expanded $@; }  # list
 
 # family [options]*
 e_ink() {
@@ -268,7 +272,7 @@ elif [ "$mu" ] ;then
 elif [ "$test" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat serifless serifed
  	emdash
-	e_ink lufte   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8
+	e_ink lufte   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8 cap=80 xheight=40
 	# e_ink galileo grote   I-serifed  t-asymmetric-- l-ascending Q-open 1-nobase
 
 elif [ "$quad" ] ;then
@@ -282,7 +286,8 @@ elif [ "$quad" ] ;then
 elif [ "$koreader" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat serifless serifed
  	emdash
-	e_ink luft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8
+	e_ink luft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8 m-arch-
+	e_ink lift   grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8 m-arch-
 	# e_ink galley grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase
 	# e_ink chalk  grote   I-serifed    t-asymmetric-- l-serifless a-single
 	# e_ink draft  grote   I-serifed    t-asymmetric-- l-serifless
@@ -331,7 +336,7 @@ elif [ $coding ] ;then                    # classic coding font
 
 else                                      # desktop fonts
 	unset space
-	cmdopts t-asymmetric-- j-flat 1-nobase at-tall l-hooky f-flat++
+	cmdopts t-asymmetric-- j-flat 1-nobase at-tall l-hooky f-flat++ m-arch-
 	dfont $leading 1-base  # l-flat
 	dfont proof    l-ascending I-serifless
 	dfont menu     I-serifed l-ascending

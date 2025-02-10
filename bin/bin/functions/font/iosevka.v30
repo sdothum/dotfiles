@@ -62,13 +62,13 @@ usage() {
 > i-[hooky|serifed[-]|serifless]
 > j-[flat|serifed|serifless]
 > l-[ascending|bottom|flat|hooky|serifless]
-> m-[rounded|serifless]
+> m-[arch[-[-]]|earless[-]|rounded[-]|serifless]
 > p-[eared|serifed]
 > q-[hook|tailed]
 > t-[asymmetric[+|-[-]]|cross|descending|flat]
 > u-toothed
 > w-asymmetric
-> y-straight
+> y-[straight|turn]
 
 > 0-[split|cutout]
 > 1-[[no]base|flat]
@@ -194,90 +194,97 @@ glyph() { eval $1; variant="$variant $1"; }
 variant() {
 	for o in $@ ;do  # "o"nly non-variant character ($i in use for variant :) ..since rectified with long variant names
 		case $o in
-			0-cutout       ) glyph zero=reverse-slashed-cutout                   ;;
-			0-split        ) glyph zero=reverse-slashed-split                    ;;
-			1-base         ) glyph one=base                                      ;;
-			1-nobase       ) glyph one=no-base                                   ;;
-			1-flat         ) glyph one=no-base-flat-top-serif                    ;;
-			4-open+        ) glyph four=semi-open-non-crossing-serifless         ;;
-			4-open         ) glyph four=semi-open                                ;;
-			ampersand      ) glyph ampersand=closed                              ;;
-			asterisk-high  ) glyph asterisk=penta-high                           ;;  # webfont restoration
-			asterisk-low   ) glyph asterisk=penta-low                            ;;  # paragraph separator (ebook) glyph
-			at             ) glyph at=threefold                                  ;;
-			at-tall        ) glyph at=threefold-solid-inner-tall                 ;;
-			dollar         ) glyph dollar=open                                   ;;
-			number_sign    ) glyph number_sign=slanted                           ;;
-			paren-flat     ) glyph paren=flat-arc                                ;;
-			percent        ) glyph percent=rings-continuous-slash                ;;
-			question       ) glyph question=corner                               ;;
+			0-cutout       ) glyph zero=reverse-slashed-cutout                         ;;
+			0-split        ) glyph zero=reverse-slashed-split                          ;;
+			1-base         ) glyph one=base                                            ;;
+			1-nobase       ) glyph one=no-base                                         ;;
+			1-flat         ) glyph one=no-base-flat-top-serif                          ;;
+			4-open+        ) glyph four=semi-open-non-crossing-serifless               ;;
+			4-open         ) glyph four=semi-open                                      ;;
+			ampersand      ) glyph ampersand=closed                                    ;;
+			asterisk-high  ) glyph asterisk=penta-high                                 ;; # webfont restoration
+			asterisk-low   ) glyph asterisk=penta-low                                  ;; # paragraph separator (ebook) glyph
+			at             ) glyph at=threefold                                        ;;
+			at-tall        ) glyph at=threefold-solid-inner-tall                       ;;
+			dollar         ) glyph dollar=open                                         ;;
+			number_sign    ) glyph number_sign=slanted                                 ;;
+			paren-flat     ) glyph paren=flat-arc                                      ;;
+			percent        ) glyph percent=rings-continuous-slash                      ;;
+			question       ) glyph question=corner                                     ;;
 
-			B-open         ) glyph capital_b=standard-interrupted-serifless      ;;
-			D-serifless    ) glyph capital_d=standard-serifless                  ;;
-			G-corner       ) glyph capital_g=toothless-corner-serifless-hooked   ;;
-			G-hookless     ) glyph capital_g=toothless-corner-serifless-hookless ;;
-			G-hookless+    ) glyph capital_g=toothed-serifless-hookless          ;;
-			G-rounded      ) glyph capital_g=toothless-rounded-serifless-hooked  ;;
-			G-toothed      ) glyph capital_g=toothed-serifless-hooked            ;;
-			G-toothless    ) glyph capital_g=toothless-corner-serifless-hooked   ;;
-			I-serifed      ) glyph capital_i=short-serifed;                      unset s_I ;;
-			I-serifless    ) glyph capital_i=serifless;                          s_I='I'   ;;
-			J-descending   ) glyph capital_j=descending-serifless;               unset S_J ;;
-			J-flat         ) glyph capital_j=descending-flat-hook-serifless;     S_J='J'   ;;
-			J-serifless    ) glyph capital_j=serifless;                          unset S_J ;;
-			P-open         ) glyph capital_p=open-serifless                      ;;
-			Q-bar          ) glyph capital_q=vertical-crossing                   ;;
-			Q-bend         ) glyph capital_q=detached-bend-tailed                ;;
-			Q-crossing     ) glyph capital_q=crossing                            ;;
-			Q-detached     ) glyph capital_q=detached-tailed                     ;;
-			Q-horizontal   ) glyph capital_q=horizontal-tailed                   ;;
-			Q-open         ) glyph capital_q=open-swash                          ;;
-			Q-straight     ) glyph capital_q=straight                            ;;
-			Q-tailed       ) glyph capital_q=crossing-curly-tailed               ;;
-			R-open         ) glyph capital_r=straight-open-serifless             ;;
-			W-asymmetric   ) glyph capital_w=straight-asymmetric-serifless       ;;
+			B-open         ) glyph capital_b=standard-interrupted-serifless            ;;
+			D-serifless    ) glyph capital_d=standard-serifless                        ;;
+			G-corner       ) glyph capital_g=toothless-corner-serifless-hooked         ;;
+			G-hookless     ) glyph capital_g=toothless-corner-serifless-hookless       ;;
+			G-hookless+    ) glyph capital_g=toothed-serifless-hookless                ;;
+			G-rounded      ) glyph capital_g=toothless-rounded-serifless-hooked        ;;
+			G-toothed      ) glyph capital_g=toothed-serifless-hooked                  ;;
+			G-toothless    ) glyph capital_g=toothless-corner-serifless-hooked         ;;
+			I-serifed      ) glyph capital_i=short-serifed;                  unset s_I ;;
+			I-serifless    ) glyph capital_i=serifless;                      s_I='I'   ;;
+			J-descending   ) glyph capital_j=descending-serifless;           unset S_J ;;
+			J-flat         ) glyph capital_j=descending-flat-hook-serifless; S_J='J'   ;;
+			J-serifless    ) glyph capital_j=serifless;                      unset S_J ;;
+			P-open         ) glyph capital_p=open-serifless                            ;;
+			Q-bar          ) glyph capital_q=vertical-crossing                         ;;
+			Q-bend         ) glyph capital_q=detached-bend-tailed                      ;;
+			Q-crossing     ) glyph capital_q=crossing                                  ;;
+			Q-detached     ) glyph capital_q=detached-tailed                           ;;
+			Q-horizontal   ) glyph capital_q=horizontal-tailed                         ;;
+			Q-open         ) glyph capital_q=open-swash                                ;;
+			Q-straight     ) glyph capital_q=straight                                  ;;
+			Q-tailed       ) glyph capital_q=crossing-curly-tailed                     ;;
+			R-open         ) glyph capital_r=straight-open-serifless                   ;;
+			W-asymmetric   ) glyph capital_w=straight-asymmetric-serifless             ;;
 
-			a-double       ) glyph a=double-storey-serifless                     ;;
-			a-single       ) glyph a=single-storey-serifless                     ;;
-			a-earless      ) glyph a=single-storey-earless-corner-serifless      ;;
-			a-rounded      ) glyph a=double-storey-toothless-rounded             ;;
-			a-toothless    ) glyph a=double-storey-toothless-corner              ;;
-			b-corner       ) glyph b=toothless-corner-serifless                  ;;
-			b-toothed      ) glyph b=toothed-serifless                           ;;
-			d-tailed       ) glyph d=tailed-serifless                            ;;
-			d-toothless    ) glyph d=toothless-corner-serifless                  ;;
-			f-extended     ) glyph f=flat-hook-extended-crossbar-at-x-height     ;;
-			f-extended+    ) glyph f=flat-hook-extended                          ;;
-			f-flat         ) glyph f=flat-hook-serifless-crossbar-at-x-height    ;;
-			f-flat+        ) glyph f=flat-hook-serifless                         ;;
-			g-double       ) glyph g=double-storey                               ;;
-			i-hooky        ) glyph i=hooky;                                      S_i='i'; unset s_i     ;;
-			i-serifed      ) glyph i=serifed;                                    unset s_i S_i          ;;
-			i-serifed-     ) glyph i=hooky;                                      S_i='i'; unset s_i     ;;
-			i-serifless    ) glyph i=serifless;                                  s_i='i'; unset S_i     ;;
-			j-flat         ) glyph j=flat-hook-serifless;                        S_j='j'                ;;
-			j-serifed      ) glyph j=flat-hook-serifed;                          unset S_j              ;;
-			j-serifless    ) glyph j=serifless;                                  unset S_j              ;;
-			l-ascending    ) glyph l=serifless;                                  s_l='l'; unset S_l T_l ;;
-			l-bottom       ) glyph l=hooky-bottom;                               T_l='l'; unset s_l S_l ;;
-			l-flat         ) glyph l=flat-tailed;                                T_l='l'; unset s_l S_l ;;
-			l-hooky        ) glyph l=hooky;                                      S_l='l'; unset s_l T_l ;;
-			l-serifless    ) glyph l=serifless;                                  s_l='l'; unset S_l T_l ;;
-			m-rounded      ) glyph m=earless-rounded-double-arch-serifless       ;;
-			m-serifless    ) glyph m=serifless                                   ;;
-			p-eared        ) glyph p=eared-serifless                             ;;
-			p-serifed      ) glyph p=motion-serifed                              ;;
-			q-tailed       ) glyph q=tailed-serifless                            ;;
-			t-asymmetric   ) glyph t=flat-hook-asymmetric-short-neck2            ;;
-			t-asymmetric+  ) glyph t=hookless-asymmetric-short-neck2             ;;
-			t-asymmetric-* ) glyph t=hookless-asymmetric-short-neck2             ;;
-			t-cross        ) glyph t=hookless-short-neck2                        ;;
-			t-flat         ) glyph t=flat-hook-short-neck2                       ;;
-			u-toothed      ) glyph u=toothed                                     ;;
-			w-asymmetric   ) glyph w=straight-asymmetric-serifless               ;;
-			y-straight     ) glyph y=straight-serifless                          ;;
+			a-double       ) glyph a=double-storey-serifless                           ;;
+			a-single       ) glyph a=single-storey-serifless                           ;;
+			a-earless      ) glyph a=single-storey-earless-corner-serifless            ;;
+			a-rounded      ) glyph a=double-storey-toothless-rounded                   ;;
+			a-toothless    ) glyph a=double-storey-toothless-corner                    ;;
+			b-corner       ) glyph b=toothless-corner-serifless                        ;;
+			b-toothed      ) glyph b=toothed-serifless                                 ;;
+			d-tailed       ) glyph d=tailed-serifless                                  ;;
+			d-toothless    ) glyph d=toothless-corner-serifless                        ;;
+			f-extended     ) glyph f=flat-hook-extended-crossbar-at-x-height           ;;
+			f-extended+    ) glyph f=flat-hook-extended                                ;;
+			f-flat         ) glyph f=flat-hook-serifless-crossbar-at-x-height          ;;
+			f-flat+        ) glyph f=flat-hook-serifless                               ;;
+			g-double       ) glyph g=double-storey                                     ;;
+			i-hooky        ) glyph i=hooky;               S_i='i'; unset s_i           ;;
+			i-serifed      ) glyph i=serifed;             unset s_i S_i                ;;
+			i-serifed-     ) glyph i=hooky;               S_i='i'; unset s_i           ;;
+			i-serifless    ) glyph i=serifless;           s_i='i'; unset S_i           ;;
+			j-flat         ) glyph j=flat-hook-serifless; S_j='j'                      ;;
+			j-serifed      ) glyph j=flat-hook-serifed;   unset S_j                    ;;
+			j-serifless    ) glyph j=serifless;           unset S_j                    ;;
+			l-ascending    ) glyph l=serifless;           s_l='l'; unset S_l T_l       ;;
+			l-bottom       ) glyph l=hooky-bottom;        T_l='l'; unset s_l S_l       ;;
+			l-flat         ) glyph l=flat-tailed;         T_l='l'; unset s_l S_l       ;;
+			l-hooky        ) glyph l=hooky;               S_l='l'; unset s_l T_l       ;;
+			l-serifless    ) glyph l=serifless;           s_l='l'; unset S_l T_l       ;;
+			m-arch         ) glyph m=earless-single-arch-serifless                     ;;
+			m-arch-        ) glyph m=earless-single-arch-short-leg-serifless           ;;
+			m-arch--       ) glyph m=earless-corner-double-arch-short-leg-serifless    ;;
+			m-earless      ) glyph m=earless-corner-double-arch-serifless              ;;
+			m-earless-     ) glyph m=earless-corner-double-arch-short-leg-serifless    ;;
+			m-rounded      ) glyph m=earless-rounded-double-arch-serifless             ;;
+			m-rounded-     ) glyph m=earless-rounded-double-arch-short-leg-serifless   ;;
+			m-serifless    ) glyph m=serifless                                         ;;
+			p-eared        ) glyph p=eared-serifless                                   ;;
+			p-serifed      ) glyph p=motion-serifed                                    ;;
+			q-tailed       ) glyph q=tailed-serifless                                  ;;
+			t-asymmetric   ) glyph t=flat-hook-asymmetric-short-neck2                  ;;
+			t-asymmetric+  ) glyph t=hookless-asymmetric-short-neck2                   ;;
+			t-asymmetric-* ) glyph t=hookless-asymmetric-short-neck2                   ;;
+			t-cross        ) glyph t=hookless-short-neck2                              ;;
+			t-flat         ) glyph t=flat-hook-short-neck2                             ;;
+			u-toothed      ) glyph u=toothed                                           ;;
+			w-asymmetric   ) glyph w=straight-asymmetric-serifless                     ;;
+			y-straight     ) glyph y=straight-serifless                                ;;
+			y-turn         ) glyph y=straight-turn-serifless                           ;;
 
-			*              ) variant="$variant $o"                               ;;
+			*              ) variant="$variant $o"                                     ;;
 		esac
 	done
 }
@@ -418,7 +425,13 @@ cmdopts () {
 			l-flat         ) variant $1 ;;
 			l-hooky        ) variant $1 ;;
 			l-serifless    ) variant $1 ;;
+			m-arch         ) variant $1 ;;
+			m-arch-        ) variant $1 ;;
+			m-arch--       ) variant $1 ;;
+			m-earless      ) variant $1 ;;
+			m-earless-     ) variant $1 ;;
 			m-rounded      ) variant $1 ;;
+			m-rounded-     ) variant $1 ;;
 			m-serifless    ) variant $1 ;;
 			p-eared        ) variant $1 ;;
 			p-serifed      ) variant $1 sb 0.7650 ;;         # add air for serif corner
@@ -434,6 +447,7 @@ cmdopts () {
 			u-toothed      ) variant $1 ;;
 			w-asymmetric   ) variant $1 W-asymmetric ;;
 			y-straight     ) variant $1 ;;
+			y-turn         ) variant $1 ;;
 
 			0-cutout       ) variant $1 ;;
 			0-split        ) variant $1 ;;

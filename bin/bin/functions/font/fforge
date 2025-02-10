@@ -612,6 +612,7 @@ Open(\$1);
 Select($(utf 'f'));
 Paste();
 Move(-70,0);  # adjust for italic side bearing shift towards left
+SetWidth($shape);
 Generate(\$1);
 " >${LOG}:f_ascending:italic.script
 
