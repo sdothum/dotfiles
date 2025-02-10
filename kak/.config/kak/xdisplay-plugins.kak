@@ -44,8 +44,8 @@ bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 
 	hook global WinSetOption filetype=(sh|c|cpp|go|javascript|latex|lua|markdown|perl|python|ruby|rust|toml|typescript) %{
 		lsp-enable-window
-		lsp-auto-hover-enable
-		# lsp-inlay-diagnostics-enable global
+		# lsp-inlay-diagnostics-enable global  # too visually noisy (and truncated at window width)
+		lsp-auto-hover-buffer-enable
 		colorscheme %opt{theme}  # WHY: restore Diagnostic faces (overwritten by kak-lsp injection above)
 
 		map global object a     '<a-semicolon>lsp-object<ret>'                               -docstring 'LSP any symbol'
