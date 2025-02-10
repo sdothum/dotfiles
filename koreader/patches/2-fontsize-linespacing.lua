@@ -23,7 +23,7 @@ local _ = require("gettext")
 local ReaderFont = require("apps/reader/modules/readerfont")
 
 -- ReaderFont.onSetFontSize = function(self, size)
-function ReaderFont:onSetFontSize(size)
+ReaderFont.onSetFontSize = function(self, size)
 	size = math.max(min_fontsize, math.min(size, 255))      -- from 12pt min
 	self.configurable.font_size = size
 	self.ui.document:setFontSize(Screen:scaleBySize(size))
@@ -33,7 +33,7 @@ function ReaderFont:onSetFontSize(size)
 end
 
 -- ReaderFont.onSetLineSpace = function(self, space)
-function ReaderFont:onSetLineSpace(space)
+ReaderFont.onSetLineSpace = function(self, space)
 	space = math.max(50, math.min(space, max_linespacing))  -- from 200% max
 	self.configurable.line_spacing = space
 	self.ui.document:setInterlineSpacePercent(space)

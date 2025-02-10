@@ -11,7 +11,7 @@ local Blitbuffer = require("ffi/blitbuffer")
 local Screen = require("device").screen
 local ProgressWidget = require("ui/widget/progresswidget")
 
-function ProgressWidget:updateStyle(thick, height)
+ProgressWidget.updateStyle = function(self, thick, height)
     if thick then
         self.margin_h = Screen:scaleBySize(3)
         self.margin_v = Screen:scaleBySize(1)
