@@ -90,7 +90,7 @@ abbr who 'command w'
 function b; bat (find -iname $argv[1]) ;end
 function ba; bat (al $argv[1]) ;end
 
-abbr c 'cat'
+abbr c 'sudo cat'
 abbr cp 'cp -i'
 abbr cpf 'cp -rf'
 abbr cpl 'cp -iLRfv'
@@ -107,7 +107,7 @@ abbr rmf 'rm -rf'
 abbr rmr 'rm -rf'
 abbr rmv 'rm -iv'
 abbr so 'sort -n'
-abbr t 'tail -f'
+abbr t 'sudo tail -f'
 abbr tar 'tar -xvf'
 
 # .................................................................... Directory
@@ -236,6 +236,7 @@ abbr rl 'rlwrap'
 abbr s 'sudo'
 abbr sh 'bash -norc'
 abbr ss 'sudo su -c fish'  # su otherwise just invokes sh
+abbr zz 'z -'
 
 # .................................................................. Application
 
