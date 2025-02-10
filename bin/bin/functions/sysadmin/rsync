@@ -6,9 +6,10 @@
 
 # ................................................................ Rsync wrapper
 
-usage() { usage: "$(basename $0) $(ls -1 ${0%/rsync}/functions/rsync | tr '\n' ' ' | sed 's/ / | /g')[<options>] <source> <target>"; exit 1; }
+usage() { usage: "$(basename $0) $(ls -1 ${0%/rsync}/functions/rsync | tr '\n' ' ' | sed 's/ / | /g')[--dryrun] [<option>*] <source> <target>"; exit 1; }
 
 EXCLUDE=$(dirname $0)/.rsync_exclude
+[ "$1" = '--dryrun' ] && { DRYRUN=$1; shift; }
 
 # import user path
 [ $CRONCOLORS ] || . $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
@@ -21,7 +22,7 @@ server && target=$laptop || target=$SERVER
 rsync() {
 	eval ditto rsync \"$@\"
 	# echo $SUDO /usr/bin/rsync -a --info=progress2 --exclude='lost+found' $@
-	$SUDO /usr/bin/rsync -a --info=progress2 --ignore-errors --exclude='lost+found' $@ 2>>/tmp/update:rsync.log
+	$SUDO /usr/bin/rsync $DRYRUN -a --info=progress2 --ignore-errors --exclude='lost+found' $@ 2>>/tmp/update:rsync.log
 }
 
 msg=$1
