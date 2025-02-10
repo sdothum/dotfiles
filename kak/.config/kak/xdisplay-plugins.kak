@@ -14,11 +14,11 @@ bundle kakboard https://github.com/lePerdu/kakboard.git %{
 	set-option global kakboard_paste_cmd 'cb paste'
 	hook global WinCreate .* %{ kakboard-enable }
 
-	catch %{ alpha : map global user y ': kakboard-with-push-clipboard y<ret>' -docstring 'cb yank' }
-	catch %{ alpha : map global user d ': kakboard-with-push-clipboard d<ret>' -docstring 'cb cut' }
-	catch %{ alpha : map global user p ': kakboard-with-pull-clipboard p<ret>' -docstring 'cb put after,before' }
-	catch %{ alpha : map global user P ': kakboard-with-pull-clipboard P<ret>' -docstring 'cb put after,before' }
-	catch %{ alpha : map global user R ': kakboard-with-pull-clipboard R<ret>' -docstring 'cb replace' }
+	addmodes %{ alpha : map global user y ': kakboard-with-push-clipboard y<ret>' -docstring 'cb yank' }
+	addmodes %{ alpha : map global user d ': kakboard-with-push-clipboard d<ret>' -docstring 'cb cut' }
+	addmodes %{ alpha : map global user p ': kakboard-with-pull-clipboard p<ret>' -docstring 'cb put after,before' }
+	addmodes %{ alpha : map global user P ': kakboard-with-pull-clipboard P<ret>' -docstring 'cb put after,before' }
+	addmodes %{ alpha : map global user R ': kakboard-with-pull-clipboard R<ret>' -docstring 'cb replace' }
 }
 
 # ...................................................................... kak-lsp
@@ -54,10 +54,10 @@ bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 		map global object k     '<a-semicolon>lsp-object Class Interface Struct<ret>'        -docstring 'LSP class interface or struct'
 		map global object d     '<a-semicolon>lsp-diagnostic-object --include-warnings<ret>' -docstring 'LSP errors and warnings'
 		map global object D     '<a-semicolon>lsp-diagnostic-object<ret>'                    -docstring 'LSP errors'
-		map global insert <tab> '<a-;>:try lsp-snippets-select-next-placeholders catch %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
+		map global insert <tab> '<a-;>:try lsp-snippets-select-next-placeholders addmodes %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
 	}
 
-	catch %{ alpha : map global user l ': enter-user-mode lsp<ret>' -docstring "LSP mode" }
+	addmodes %{ alpha : map global user l ': enter-user-mode lsp<ret>' -docstring "LSP mode" }
 } %{
 	# nop # NOTE: freezing kak-lsp at v17.2.1 for now due to change from TOML file for kak-lsp configuraton
 	cargo install --locked --force --path .
@@ -96,8 +96,8 @@ bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 	require-module kakpipe
 
 	# HACK: using alpha subsort to overcome "P,p" sort order (cause unknown)
-	catch %{ alpha 5 : map global buffer p ': kakpipe '    -docstring "kakpipe FIFO / bg" }
-	catch %{ alpha 6 : map global buffer P ': kakpipe-bg ' -docstring "kakpipe FIFO / bg" }
+	addmodes %{ alpha 5 : map global buffer p ': kakpipe '    -docstring "kakpipe FIFO / bg" }
+	addmodes %{ alpha 6 : map global buffer P ': kakpipe-bg ' -docstring "kakpipe FIFO / bg" }
 } %{
 	cargo install --path . --root ~/.local
 }

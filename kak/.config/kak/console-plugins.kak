@@ -27,8 +27,8 @@ if-else %{ [ -z "$DIFF" ] } %{
 # ................................................................... crosshairs
 
 bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
-	catch %{ focus h : map global user + ': crosshairs<ret>'   -docstring "crosshairs" }
-	catch %{ focus h : map global user | ': cursorcolumn<ret>' -docstring "cursor column" }
+	addmodes %{ focus h : map global user + ': crosshairs<ret>'   -docstring "crosshairs" }
+	addmodes %{ focus h : map global user | ': cursorcolumn<ret>' -docstring "cursor column" }
 }
 
 # ........................................................................ fandt
@@ -40,8 +40,8 @@ bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
 # ............................................................. find and replace
 
 bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
-	catch %{ alpha 1 : map global buffer f ': find '                   -docstring "find THEN replace" }
-	catch %{ alpha 1 : map global buffer R ': find-apply-changes<ret>' -docstring "find THEN replace" }
+	addmodes %{ alpha 1 : map global buffer f ': find '                   -docstring "find THEN replace" }
+	addmodes %{ alpha 1 : map global buffer R ': find-apply-changes<ret>' -docstring "find THEN replace" }
 }
 
 # ............................................................. focus selections
@@ -71,7 +71,7 @@ bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
 		}
 	}
 
-	catch %{ focus f : map global user <space> ': toggle-focus<ret>' -docstring "focus selections" }
+	addmodes %{ focus f : map global user <space> ': toggle-focus<ret>' -docstring "focus selections" }
 }
 
 # .......................................................................... hop
@@ -94,8 +94,8 @@ bundle hop.kak https://github.com/hadronized/hop.kak.git %{
 		hop-kak
 	}
 
-	catch %{ alpha : map global user f ': hop-kak-sel<ret>'   -docstring 'find selection,word (on page)' }
-	catch %{ alpha : map global user F ': hop-kak-words<ret>' -docstring 'find selection,word (on page)' }
+	addmodes %{ alpha : map global user f ': hop-kak-sel<ret>'   -docstring 'find selection,word (on page)' }
+	addmodes %{ alpha : map global user F ': hop-kak-words<ret>' -docstring 'find selection,word (on page)' }
 	map global normal <a-h> ': hop-kak-sel<ret>'   -docstring 'find selection (on page)'
 	map global normal <a-H> ': hop-kak-words<ret>' -docstring 'find word (on page)'
 } %{
@@ -152,10 +152,10 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 		peneira-symbols
 	}
 
-	catch %{ alpha 1 : map global buffer b ': buffers<ret>' -docstring 'buffers' }
-	catch %{ alpha 1 : map global buffer e ': files<ret>'   -docstring 'edit file' }
-	catch %{ alpha 1 : map global buffer l ': lines<ret>'   -docstring 'lines' }
-	catch %{ alpha   : map global user   c ': symbols<ret>' -docstring 'ctag symbols' }
+	addmodes %{ alpha 1 : map global buffer b ': buffers<ret>' -docstring 'buffers' }
+	addmodes %{ alpha 1 : map global buffer e ': files<ret>'   -docstring 'edit file' }
+	addmodes %{ alpha 1 : map global buffer l ': lines<ret>'   -docstring 'lines' }
+	addmodes %{ alpha   : map global user   c ': symbols<ret>' -docstring 'ctag symbols' }
 }
 
 # .................................................................. search docs

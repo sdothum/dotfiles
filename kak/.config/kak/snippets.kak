@@ -19,9 +19,9 @@ bundle kakoune-snippets https://github.com/occivink/kakoune-snippets.git %{
 	# SEE: bin/functions/edit/kaktype script
 	set-option -add global snippets 'kak:'  '%ka' %{ snippets-insert %sh{ kaktype "$kak_opt_filetype" }}
 
-	catch %{ snippet : map global format '%' ': snippets ' -docstring 'snippets' }
-	catch %{ snippet : map global format 'S' 'Z,c'         -docstring 'edit first/next placeholder' }
-	catch %{ snippet : map global format 's' 'z)Z,c'       -docstring 'edit first/next placeholder' }
+	addmodes %{ snippet : map global format '%' ': snippets ' -docstring 'snippets' }
+	addmodes %{ snippet : map global format 'S' 'Z,c'         -docstring 'edit first/next placeholder' }
+	addmodes %{ snippet : map global format 's' 'z)Z,c'       -docstring 'edit first/next placeholder' }
 }
 
 # ........................................................................ shell
