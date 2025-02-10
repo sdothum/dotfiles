@@ -84,6 +84,8 @@ d s perl-HTML-Strip
 = ════
   ruby
   ruby-devel
+  libyaml             # gem psych dependency for framework
+  libyaml-devel
 g rack-test
 
 
