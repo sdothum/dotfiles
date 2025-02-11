@@ -6,13 +6,14 @@
 
 # ................................................................ Rsync wrapper
 
-usage() { usage: "$(basename $0) $(ls -1 ${0%/rsync}/functions/rsync | tr '\n' ' ' | sed 's/ / | /g')[--dryrun] [<option>*] <source> <target>"; exit 1; }
+usage() { echo "$(basename $0) $(ls -1 ${0%/rsync}/functions/rsync | tr '\n' ' ' | sed 's/ / | /g; s/ | $//')
+> [--dryrun] [<option>*] <source> <target>
+>                        <branch>, where /home/<branch> to /net/home/" | usage:
+	exit 1
+}
 
-EXCLUDE=$(dirname $0)/.rsync_exclude
-[ "$1" = '--dryrun' ] && { DRYRUN=$1; shift; }
-
-# import user path
-[ $CRONCOLORS ] || . $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
+[[ "$1" = *dryrun* ]] && { DRYRUN=$1; shift; }
+[ $CRONCOLORS ]       || . $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
 
 laptop=${laptop:-lumen}
 netbook=${netboot:-monad}
@@ -27,13 +28,17 @@ rsync() {
 
 msg=$1
 if [ -e /home/$msg ] ;then
-	rsync -r --delete /home/$msg /net/home/
+	[ "/home/$msg" = "$HOME" ] && ifno 'instead of "home"?' && exit
+	trace -- backup /home/$msg
+	rsync -r --no-compress --links --safe-links --delete /home/$msg /net/home/
+	df -h
 elif [ -e ${0%/rsync}/functions/rsync/$msg ] ;then
 	. ${0%/rsync}/functions/rsync/$msg $@
 else
-	rsync $@  # regular command usage
+	rsync $@  # cli command usage
 fi
 
+sync
 trace --  # elapsed time if monitoring
 
 # kak: filetype=sh

@@ -1,0 +1,17 @@
+# sdothum - 2016 (c) wtfpl
+
+# Sysadmin
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Rsync wrapper
+
+EXCLUDE=$(dirname $0)/.rsync_exclude
+SOURCE=$(dirname $0)/.rsync_home
+
+trace -- backup $HOME
+exclude=$(grep -v '^#' $EXCLUDE | sed -r 's/^(.*)/--exclude="\1"/' | tr '\n' ' ')
+source=$( grep -v '^#' $SOURCE  | sed -r "s|^(.*)|$HOME/\1|" | tr '\n' ' ')
+
+rsync -r --no-compress --links --safe-links --delete $exclude $source /net/home/${HOME##*/}/
+
+# kak: filetype=sh
