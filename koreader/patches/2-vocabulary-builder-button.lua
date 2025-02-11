@@ -43,6 +43,7 @@ userpatch.registerPatchPluginFunc("vocabbuilder", function(plugin)
 					-- UIManager:setDirty(dict_popup, function()
 					-- 	return "ui", button.dimen
 					-- end)
+					-- UIManager:close(dict_popup)            -- bypasses dictionary-close-highlight-delay
 					UIManager:sendEvent(Event:new("Close"))  -- dictionary lookup :)
 				end
 			end
