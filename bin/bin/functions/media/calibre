@@ -1,0 +1,16 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Media
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ...................................................................... Calibre
+
+# FOR: supernote connect to folder
+adb devices -l | grep -qE 'Supernote_Nomad' && mtp mount
+
+/usr/bin/calibre 2>/dev/null || flatpak run --user com.calibre_ebook.calibre 2>/dev/null
+
+sync
+mtp umount
+window desktop $(chef desktop "DESK")
