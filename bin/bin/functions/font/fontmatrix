@@ -1,0 +1,10 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Font
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................... Fontmatrix
+
+[ -e /usr/bin/fontmatrix ] && /usr/bin/fontmatrix || flatpak run --user com.github.fontmatrix.Fontmatrix
+
