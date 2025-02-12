@@ -43,8 +43,9 @@ userpatch.registerPatchPluginFunc("vocabbuilder", function(plugin)
 					-- UIManager:setDirty(dict_popup, function()
 					-- 	return "ui", button.dimen
 					-- end)
-					-- UIManager:close(dict_popup)            -- bypasses dictionary-close-highlight-delay
-					UIManager:sendEvent(Event:new("Close"))  -- dictionary lookup :)
+					-- UIManager:sendEvent(Event:new("Close"))  -- close dictionary lookup stack
+					UIManager:close(dict_popup)                 -- explicit widget close
+					dict_popup:onClose()                        -- trigger scheduled highlight removal
 				end
 			end
 		}})
