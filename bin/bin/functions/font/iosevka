@@ -286,8 +286,8 @@ elif [ "$quad" ] ;then
 elif [ "$koreader" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat serifless serifed
  	emdash
-	e_ink luft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8 m-arch-
-	e_ink lift   grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8 m-arch-
+	e_ink luft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8 m-arch
+	e_ink lift   grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8 m-arch
 	# e_ink galley grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase
 	# e_ink chalk  grote   I-serifed    t-asymmetric-- l-serifless a-single
 	# e_ink draft  grote   I-serifed    t-asymmetric-- l-serifless
@@ -336,7 +336,7 @@ elif [ $coding ] ;then                    # classic coding font
 
 else                                      # desktop fonts
 	unset space
-	cmdopts t-asymmetric-- j-flat 1-nobase at-tall l-hooky f-flat++ m-arch-
+	cmdopts t-asymmetric-- j-flat 1-nobase at-tall l-hooky f-flat++ m-arch
 	dfont $leading 1-base  # l-flat
 	dfont proof    l-ascending I-serifless
 	dfont menu     I-serifed l-ascending
