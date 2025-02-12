@@ -160,10 +160,10 @@ super + {_,shift} + i
 	chef -- hidden
 
 super + j
-	xdotool search --onlyvisible --name "music" windowunmap || music
+	xdotool search --onlyvisible --name "music" windowunmap && window desktop $(chef desktop "DESK") || music
 
 super + shift + j
-	xdotool search --onlyvisible --name "Nicotine+" windowunmap || nicotine+
+	xdotool search --onlyvisible --name "Nicotine+" windowunmap && window desktop $(chef desktop "DESK") || nicotine+
 
 super + ctrl + j
 	mpc toggle
