@@ -23,12 +23,12 @@ local G_reader_settings = require("luasettings"):open(DataStorage:getDataDir() .
 local fontface = G_reader_settings:readSetting("cre_font")  -- default font
 
 local bookweights = { "-normalbookupright.ttf", "-book.ttf", "-book.otf", "-regular.ttf", "-regular.otf" }  -- selection order of user ttf and otf font files
-boldweights = {
+local boldweights = {
 	["-normalbookupright.ttf"] = function () return "-normalboldupright.ttf" end,
-	["-book.ttf"]              = function () return "-bold.ttf" end,
-	["-book.otf"]              = function () return '-bold.otf' end,
-	["-regular.ttf"]           = function () return "-bold.ttf" end,
-	["-regular.otf"]           = function () return "-bold.otf" end
+	["-book.ttf"]              = function () return "-bold.ttf"              end,
+	["-book.otf"]              = function () return "-bold.otf"              end,
+	["-regular.ttf"]           = function () return "-bold.ttf"              end,
+	["-regular.otf"]           = function () return "-bold.otf"              end
 }
 
 for _, n in pairs(bookweights) do
@@ -36,7 +36,7 @@ for _, n in pairs(bookweights) do
 	if f ~= nil then  -- font source exists
 		io.close(f)
 		regular = fontface .. n
-		bold = fontface .. boldweights[n]()
+		bold    = fontface .. boldweights[n]()
 		-- regular = bold  -- HACK: increase dictionary contrast
 		break
 	end
