@@ -132,8 +132,6 @@
 !**/mail/unknown_mail
 **/makepkg
 **/.mcabber
-**/mpd
-!*/panel/mpd
 **/mpv
 **/msmtp
 **/music
