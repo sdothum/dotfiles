@@ -133,6 +133,7 @@
 **/makepkg
 **/.mcabber
 **/mpd
+!*/panel/mpd
 **/mpv
 **/msmtp
 **/music
