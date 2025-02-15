@@ -1,0 +1,57 @@
+# sdothum - 2016 (c) wtfpl
+
+# Post_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .......................................................................... mpd
+
+CONFIG=$HOME/.config/mpd
+MPDCONF=$CONFIG/mpd.conf
+STATE=$HOME/.local/state/mpd
+
+mkdir -p $STATE
+mkdir -p $CONFIG/playlists
+
+# user configuration (not system wide)
+set -- $(echo "
+music_directory.*~   /home/music
+playlist_directory   $CONFIG/playlists
+db_file              $CONFIG/mpd.db
+pid_file             $CONFIG/mpd.pid
+state_file           $STATE/mpdstate
+user                 $USER
+bind_to_address.*any localhost
+port                 6600
+restore_paused       yes
+")
+
+if [ -e $MPDCONF ] ;then
+	diff $MPDCONF  /etc/mpd.conf
+else
+	cp -v /etc/mpd.conf $MPDCONF
+	while [ $2 ] ;do
+		ditto $1 $2
+		sed -i -r "/^#?$1/s|#?(.*)\".*\"|\1\"$2\"|" $MPDCONF
+		shift 2
+	done
+
+	# direct output to pipewire server
+	sed -i '/^# Audio Output #/a\
+\
+# connect to pipewire (optical)\
+audio_output {\
+	type "pipewire"\
+	name "pipewire server"\
+}\
+# for ncmpcpp visualizer\
+audio_output {\
+	type   "fifo"\
+	name   "my_fifo"\
+	path   "/tmp/mpd.fifo"\
+	format "44100:16:2"\
+}\
+\
+' $MPDCONF
+fi
+
+# vim: set ft=sh: #
