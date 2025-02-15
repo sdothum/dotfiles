@@ -51,7 +51,7 @@ exists cpg && export NNN_OPTS=aefHoQrux || export NNN_OPTS=aefHoQux
 export GUI=1                                                   # for media apps
 
 # sloppy mtp automount
-mtp mount && NDIR=$HOME/mtp
+mtp mount && [ "$1" ] || NDIR=$HOME/mtp
 [ "$1" != TMUX ] && trap 'mtp umount' EXIT  # must manually eject if mounted during toggle tmux session, see herbstluftwm appbinds
 udev                                        # reload udev rules
 
