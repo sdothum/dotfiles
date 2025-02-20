@@ -11,7 +11,7 @@ class="aerc"
 	window desktop $(chef desktop "COMM")                  ;\
 	xdotool search --sync --onlyvisible --classname "aerc" ;\
 	window size monocle                                    ;\
-	xdotool type ':vsplit' && xdotool key Return
+	sleep 0.1 && xdotool type ':vsplit' && xdotool key Return
 
 class="audacious"
 	window desktop $(chef desktop "PLAY") ;\

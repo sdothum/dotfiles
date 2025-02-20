@@ -159,6 +159,8 @@ super + {_,shift} + i
 	{window hide, menu unhide} ;\
 	chef -- hidden
 
+# NOTE: switch out to DESK desktop after hiding app to avoid attaching new windows to app desktop
+
 super + j
 	xdotool search --onlyvisible --classname "music" windowunmap && desktop $(chef desktop "DESK") || \{ music; desktop $(chef desktop "PLAY"); \}
 
