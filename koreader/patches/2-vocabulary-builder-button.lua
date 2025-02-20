@@ -43,9 +43,11 @@ userpatch.registerPatchPluginFunc("vocabbuilder", function(plugin)
 					-- UIManager:setDirty(dict_popup, function()
 					-- 	return "ui", button.dimen
 					-- end)
-					-- UIManager:sendEvent(Event:new("Close"))  -- close dictionary lookup stack
+
+					-- close dictionary widget to save the "close" button press!
 					UIManager:close(dict_popup)                 -- explicit widget close
 					dict_popup:onClose()                        -- trigger scheduled highlight removal
+					-- UIManager:sendEvent(Event:new("Close"))  -- more expensive than above 2 calls but feels more future proof :)
 				end
 			end
 		}})
