@@ -235,7 +235,8 @@ abbr rl 'rlwrap'
 abbr s 'sudo'
 abbr sh 'bash -norc'
 abbr ss 'sudo su -c fish'  # su otherwise just invokes sh
-abbr zz 'z -'
+abbr z 'z -'
+abbr zz 'z (pwd)'
 
 # .................................................................. Application
 
@@ -288,13 +289,14 @@ abbr wl 'wc -l'
 
 abbr mf 'metaflac'
 abbr mfq 'metaflac -q'
-abbr mfal 'metaflac -q album'
 abbr mfa 'metaflac -q artist'
-abbr mfaa 'metaflac -q albumartist'
-abbr mfdn 'metaflac -q discnumber'
+abbr mfaa 'metaflac -q artist+'
 abbr mfd 'metaflac -q date'
+abbr mfdn 'metaflac -q discnumber'
 abbr mfg 'metaflac -q genre'
+abbr mfl 'metaflac -q album'
+abbr mfla 'metaflac -q albumartist'
 abbr mfr 'metaflac -q rm'
 abbr mfrt 'metaflac -q retrack'
+abbr mft --set-cursor "metaflac -q title '/%"  # --set-cursor to % (do not pad space after slash)
 abbr mftn "metaflac -q tracknumber"
-abbr mft --set-cursor "metaflac -q title '/%"
