@@ -6,15 +6,16 @@
 
 # ....................................................................... Device
 
-# Usage: mtp [mount | umount | mounted | ls], see nnn, eject (plugin)
+# Usage: mtp [mount | umount | mounted | ls | recover], see nnn, eject (plugin)
 
 MTP=$HOME/mtp              # mount point
-[ -d $MTP ] || { rm -f $MTP; mkdir -p $MTP; }
 
 name()    { ls -1 $MTP; }  # device mount name
 device()  { jmtpfs -l | grep -q '^Device [0-9]'; }
 mounted() { mount | grep -q "^jmtpfs on $MTP "; }
+recover() { rm -f $MTP; mkdir -p $MTP; }
 
+[ -d $MTP ] || recover
 case $1 in
 	mount   )
 		if $(device) ;then
@@ -31,9 +32,10 @@ case $1 in
 		fi
 		;;
 
-	mounted )	mounted ;;
-	ls      )	$(device) && jmtpfs -l ;;
-	*       )	echo $MTP ;;
+	mounted ) mounted ;;
+	ls      ) $(device) && jmtpfs -l  ;;
+	recover ) recover; exec mtp mount ;;
+	*       ) echo $MTP ;;
 esac
 
 [ "$(ls -A $MTP/)" ] && ditto mtp "$(ls -1 $MTP)"

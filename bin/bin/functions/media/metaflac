@@ -7,7 +7,8 @@
 # ................................................................. FLAC editing
 
 usage() { echo "$(basename $0) [ls | rm <tag>* | import | export | untitled]
-> [-d] [album | albumartist | artist | date | discnumber | genre] <string> | /<regex>
+> [-d] set <tag>=<value>
+> [-d] [album | albumartist | artist[+] | date | discnumber | genre] <string> | /<regex>
 > [-d] title /<regex>, against all tracks
 > [-d] tracknumber <from>, increment all tracks starting <from>
 > [-d] [<name>.flac | <track>] <title> | /<regex>
@@ -41,9 +42,11 @@ case $1 in
 	''          ) quiet=true; set -- 'ls' ;;
 	ls          ) quiet=true ;;
 	rm          ) tagcheck ${@:2} || usage ;;
+	set         ) echo "$2" | grep -q '[^ ]=[^ ]' || usage ;;
 	import      ) ;;
 	export      ) ;;
 	untitled    ) ;;
+	artist+     ) add=true ;;  # for additional artist album references in ncmpcpp
 	*.flac      ) file=$1 ;;
 	[0-9]*      ) file="$(find ./ -maxdepth 1 -name "${prefix}${1}*.flac")"; [ "$file" ] || usage ;;
 	title       ) [ "${2}" = "/${2#?}" ]   || usage ;;
@@ -57,7 +60,7 @@ settag() {
 	if [ $debug ] ;then
 		echo $METAFLAC --set-tag=$1="$2" "$file"
 	else
-		$METAFLAC --remove-tag=$1 "$file"
+		[ $add ] || $METAFLAC --remove-tag=$1 "$file"
 		$METAFLAC --set-tag=$1="$2" "$file"
 	fi
 	ditto="ditto $1 \"$2\""
@@ -98,13 +101,21 @@ export() {
 
 case $1 in
 	ls       ) metadata | pager ;;
+
 	rm       )
 		while [ "$2" ] ;do
 			ditto tag "remove $2"
 			confirm
-			for i in *flac; do $METAFLAC --remove-tag="$2" "$i"; done
+			for i in *flac; do $METAFLAC --remove-tag="$2" "$i" ;done
 			shift
 		done
+		;;
+
+	# set tag across tracks
+	set      )
+		ditto tag "set $2"
+		confirm
+		for i in *.flac ;do settag ${2%%=*} ${2##*=} ;done
 		;;
 
 	# sync track names to titles
@@ -158,7 +169,7 @@ case $1 in
 		;;
 
 	*        )
-		TAG=$(echo $1 | tr '[:lower:]' '[:upper:]')
+		TAG=$(echo ${1%+} | tr '[:lower:]' '[:upper:]')
 		shift
 		case "$@" in
 			''          ) usage ;;
@@ -169,5 +180,8 @@ case $1 in
 		esac
 		;;
 esac
+
+# echo '---'
+mpc update >/dev/null
 
 # kak: filetype=sh
