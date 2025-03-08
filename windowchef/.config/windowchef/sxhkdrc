@@ -270,6 +270,16 @@ super + shift + Escape
 ~ctrl + v
 	cb paste
 
+# ~ctrl + c
+# 	S=$(xsel -p) && [ -n "$S" ] && echo -n "$S" | copyq copy
+
+# ~ctrl + x
+# 	S=$(xsel -p) && [ -n "$S" ] && echo -n "$S" | copyq copy ;\
+# 	xdotool key Del
+
+# ~ctrl + v
+# 	copyq paste
+
 # HACK: kak hook *Idle only triggers on keypress SEE: kakrc
 # ATTENTION: use {shift,alt,ctrl,super} + Caps_Lock to bypass keypress trigger event
 

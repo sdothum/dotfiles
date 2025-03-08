@@ -9,6 +9,6 @@
 
 xdotool search --onlyvisible --classname "org.nicotine_plus.Nicotine" windowunmap ||
 	xdotool search --classname "org.nicotine_plus.Nicotine" windowmap ||
-	/usr/bin/nicotine
+	/usr/bin/nicotine --user-data=$HOME/.local/share/nicotine
 
 # kak: filetype=sh
