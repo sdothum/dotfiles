@@ -13,6 +13,7 @@
 
 usage() { echo "[\$TEST] $(basename $0) [back'up KOBOeReader]
 > [reset p'ages]
+> [i'nverse page turn] <true|false>
 > [soft/'hyphenation | -'hyphenation]
 > [1|2' columns]
 > [P'ortrait | L'andscape]
@@ -60,6 +61,7 @@ while [ $1 ] ;do
 		P     ) sdr "portrait orientation"  '/\"copt_rotation_mode\"/s/= [0-9]*,/= 0,/';       resetpages=true; shift; continue ;;
 		L     ) sdr "landscape orientation" '/\"copt_rotation_mode\"/s/= [0-9]*,/= 1,/';       resetpages=true; shift; continue ;;
 		p     ) resetpages=true; shift; continue ;;
+		i     ) turn=$(token bool $2)      && sdr "inverse page turn ${turn}" '/\"inverse_reading_order\"/s/(true|false)/'${turn}'/'         || usage                  ;;
 		=     ) margin=$(token number $2)  && sdr "left/right margin ${margin}" '/\"copt_h_page_margins\".*=/,+2s/= [0-9]*,/= '${margin}',/' || usage; resetpages=true ;;
 		t     ) margin=$(token number $2)  && { sdr "top margin ${margin}" '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'; }          || usage; resetpages=true ;;
 		b     ) margin=$(token number $2)  && { sdr "bottom margin ${margin}" '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'; }       || usage; resetpages=true ;;
@@ -79,6 +81,7 @@ while [ $1 ] ;do
 		-     ) settings 'hyphenation'      '/\"hyph_soft_hyphens_only\"/s/= true,/= false,/'; shift; continue      ;;
 		1     ) settings "1 column"         '/\"copt_visible_pages\"/s/= [0-9]*,/= 1,/';       shift; continue      ;;
 		2     ) settings "2 columns"        '/\"copt_visible_pages\"/s/= [0-9]*,/= 2,/';       shift; continue      ;;
+		i     ) settings "inverse page turn ${turn}" '/\"inverse_reading_order\"/s/(true|false)/'${turn}'/'         ;;
 		t     ) settings "top margin ${margin}" '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'               ;;
 		b     ) settings "bottom margin ${margin}" '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'            ;;
 		=     ) settings "left/right margin ${margin}" '/\"copt_h_page_margins\".*=/,+2s/= [0-9]*,/= '${margin}',/' ;;

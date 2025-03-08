@@ -12,6 +12,6 @@
 
 book=${2%%.sdr*}
 ditto sdr "${book##*/}"
-sed "$1" "$2" | sponge "$2"  # find .. -exec sed -i ..fails on fuse mtp
+sed -r "$1" "$2" | sponge "$2"  # find .. -exec sed -i ..fails on fuse mtp
 
 # kak: filetype=sh

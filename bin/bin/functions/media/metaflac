@@ -8,7 +8,7 @@
 
 usage() { echo "$(basename $0) [ls | rm <tag>* | import | export | untitled]
 > [-d] set <tag>=<value>
-> [-d] [album | albumartist | artist[+] | date | discnumber | genre] <string> | /<regex>
+> [-d] [album | [album]artist[+] | date | discnumber | genre[+]] <string> | /<regex>
 > [-d] title /<regex>, against all tracks
 > [-d] tracknumber <from>, increment all tracks starting <from>
 > [-d] [<name>.flac | <track>] <title> | /<regex>
@@ -40,13 +40,14 @@ titles()   { metadata | grep '^TITLE='; }
 shopt -s extglob  # SEE: $TAGS
 case $1 in
 	''          ) quiet=true; set -- 'ls' ;;
-	ls          ) quiet=true ;;
+	ls          ) quiet=true; noupdate=true ;;
 	rm          ) tagcheck ${@:2} || usage ;;
 	set         ) echo "$2" | grep -q '[^ ]=[^ ]' || usage ;;
 	import      ) ;;
 	export      ) ;;
 	untitled    ) ;;
-	artist+     ) add=true ;;  # for additional artist album references in ncmpcpp
+	*artist+    ) add=true ;;  # for additional artist album references in ncmpcpp
+	genre+      ) add=true ;;
 	*.flac      ) file=$1 ;;
 	[0-9]*      ) file="$(find ./ -maxdepth 1 -name "${prefix}${1}*.flac")"; [ "$file" ] || usage ;;
 	title       ) [ "${2}" = "/${2#?}" ]   || usage ;;
@@ -60,7 +61,7 @@ settag() {
 	if [ $debug ] ;then
 		echo $METAFLAC --set-tag=$1="$2" "$file"
 	else
-		[ $add ] || $METAFLAC --remove-tag=$1 "$file"
+		[ $add ] || $METAFLAC --remove-tag=$1 "$file"  # or replace
 		$METAFLAC --set-tag=$1="$2" "$file"
 	fi
 	ditto="ditto $1 \"$2\""
@@ -100,7 +101,7 @@ export() {
 }
 
 case $1 in
-	ls       ) metadata | pager ;;
+	ls       ) metadata | pager; [ $noupdate ] && exit ;;  # skip mpc update
 
 	rm       )
 		while [ "$2" ] ;do

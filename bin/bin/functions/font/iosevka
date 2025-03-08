@@ -30,7 +30,7 @@ usage() {
 > b-rounded
 > d-[tailed|toothless]
 > f-extended
-> j-serifed
+> j-[serifed|serifless]
 > l-[hooky|serifless]
 > m-[arch[-[-]]|rounded]
 > p-[eared|serifed]
@@ -160,6 +160,7 @@ cmdopts() {
 			i-serifless    ) i=$1 ;;
 			j-flat         ) j=$1 ;;
 			j-serifed      ) j=$1 ;;
+			j-serifless    ) j=$1 ;;
 			l-hooky        ) l=$1 ;;
 			l-serifless    ) l=$1 ;;
 			m-arch         ) m=$1 ;;
@@ -286,7 +287,7 @@ elif [ "$quad" ] ;then
 elif [ "$koreader" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat serifless serifed
  	emdash
-	e_ink luft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8 m-arch
+	# e_ink luft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8 m-arch
 	e_ink lift   grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8 m-arch
 	# e_ink galley grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase
 	# e_ink chalk  grote   I-serifed    t-asymmetric-- l-serifless a-single
