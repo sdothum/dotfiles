@@ -1,0 +1,1 @@
+/home/shum/stow/supernote/koreader/defaults.custom.lua.215%
