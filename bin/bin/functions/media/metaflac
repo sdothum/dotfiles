@@ -12,8 +12,9 @@ usage() { echo "$(basename $0) [ls | rm <tag>* | import | export | untitled]
 > [-d] title /<regex>, against all tracks
 > [-d] tracknumber <from>, increment all tracks starting <from>
 > [-d] [<name>.flac | <track>] <title> | /<regex>
->          where, track  -> ## of flac filename
->                 /regex -> (sed s) [//match/s]/from/to/[<flag>*]
+>          where, <track>  -> ## of flac filename
+>                 /<regex> -> (sed s) [//match/s]/from/to/[<flag>*]
+>                 /Case    -> s/\\\b(.)/\u\\\1/g  (Proper Case All Words)
 >                 -d or \$debug envar to list set-tag only
 >                 -q for no confirmation prompt
 >          set envar find*pattern for filename \"\${prefix}##..\"" | usage:pipe
@@ -176,6 +177,7 @@ case $1 in
 			''          ) usage ;;
 			//*/s/*/*/* ) metaflac regex "$TAG" "${@#?}";;  # /match/ search and replace
 			/*/*/*      ) metaflac regex "$TAG" "s$@"   ;;  # search and replace
+			/Case       ) metaflac regex "$TAG" "s/\b(.)/\u\1/g" ;;
 			/*          ) usage ;;
 			*           ) metaflac set "$TAG" "$@";;
 		esac

@@ -31,7 +31,7 @@ if [ -e /home/$msg ] ;then
 	[ "/home/$msg" = "$HOME" ] && ifno 'instead of "home"?' && exit
 	trace -- backup /home/$msg
 	rsync -r --no-compress --links --safe-links --delete /home/$msg /net/home/
-	df -h
+	df -h | grep -E 'Filesystem|/home|/net' | sed -r "s/(^F.*)/${WHITE}\1${white}/"
 elif [ -e ${0%/rsync}/functions/rsync/$msg ] ;then
 	. ${0%/rsync}/functions/rsync/$msg $@
 else

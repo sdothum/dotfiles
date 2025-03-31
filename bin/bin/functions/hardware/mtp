@@ -38,6 +38,6 @@ case $1 in
 	*       ) echo $MTP ;;
 esac
 
-[ "$(ls -A $MTP/)" ] && ditto mtp "$(ls -1 $MTP)"
+[ "$(ls -A $MTP/)" ] && ditto mtp "$(ls -1 $MTP)" || ditto mtp "$(file --brief $MTP)"
 
 # kak: filetype=sh
