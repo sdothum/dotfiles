@@ -297,9 +297,11 @@ abbr mfg 'metaflac -q genre'
 abbr mfgg 'metaflac -q genre+'
 abbr mfg: 'metaflac ls | grep -i genre='
 abbr mfl 'metaflac -q album'
+abbr mfl: 'metaflac ls | grep -i "album="'
 abbr mfla 'metaflac -q albumartist'
 abbr mfr 'metaflac -q rm'
 abbr mfrt 'metaflac -q retrack'
 abbr mft --set-cursor "metaflac -q title '/%"  # --set-cursor to % (do not pad space after slash)
-abbr mft: 'metaflac ls | grep -i "track.*="'
+abbr mft: 'metaflac ls | grep -i "title="'
 abbr mftn "metaflac -q tracknumber"
+abbr mftn: 'metaflac ls | grep -i "track.*="'
