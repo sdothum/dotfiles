@@ -164,8 +164,10 @@ super + {_,shift} + i
 super + j
 	xdotool search --onlyvisible --classname "music" windowunmap && desktop $(chef desktop "DESK") || \{ music; desktop $(chef desktop "PLAY"); \}
 
+# HACK: remove (random empty secondary) nicotine window frame (cause unknown)
+
 super + shift + j
-	xdotool search --onlyvisible --classname "org.nicotine_plus.Nicotine" windowunmap && desktop $(chef desktop "DESK") || \{ nicotine+; desktop $(chef desktop "PEER"); \}
+	xdotool search --onlyvisible --classname "org.nicotine_plus.Nicotine" windowunmap && desktop $(chef desktop "DESK") && xdotool search --onlyvisible --classname "org.nicotine_plus.Nicotine" windowunmap || \{ nicotine+; desktop $(chef desktop "PEER"); \}  # NOTE: escaped { block }
 
 super + ctrl + j
 	mpc toggle

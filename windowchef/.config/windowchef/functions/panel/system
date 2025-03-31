@@ -86,7 +86,7 @@ currently() {
 
 # ............................................................... FIFO read loop
 
-cpu_stat() { stat="$cpu_usage ${STATPAD}$cpu_speed ${STATPAD}$cpu_temp ${STATPAD}$mem_usage${DESKPAD}${TAG_PAD}"; }
+cpu_stat() { stat="$cpu_usage ${STATPAD}$cpu_speed ${STATPAD}$cpu_temp ${STATPAD}$mem_usage${TAG_PAD}"; }
 
 panel() {
 	desktops  # initialize
@@ -99,7 +99,8 @@ panel() {
 			M*         ) mem_usage=${line#?}; cpu_stat ;;
 		esac
 
-		[ $EPOCH ] && printf "%s\n" "%{c}${desktops}${SEP}${stat}"
+		capslock && CAPS="CAPS" || unset CAPS
+		[ $EPOCH ] && printf "%s\n" "%{c}${desktops}${SEP}${stat}${CAPS}"
 		unset line EPOCH
 	done
 }
