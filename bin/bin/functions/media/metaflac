@@ -6,9 +6,10 @@
 
 # ................................................................. FLAC editing
 
-usage() { echo "$(basename $0) [ls | rm <tag>* | import | export | untitled]
+usage() { echo "$(basename $0) [ls | 01 | rm <tag>* | import | export | untitled]
 > [-d] set <tag>=<value>
-> [-d] [album | [album]artist[+] | date | discnumber | genre[+]] <string> | /<regex>
+> [-d] [album | date | discnumber] <string> | /<regex>
+> [-d] [[album]artist[+] | genre[+]] <string>* | /<regex>
 > [-d] title /<regex>, against all tracks
 > [-d] tracknumber <from>, increment all tracks starting <from>
 > [-d] [<name>.flac | <track>] <title> | /<regex>
@@ -34,14 +35,14 @@ while [ $1 ] ;do
 done
 
 confirm()  { [ $debug ] || [ $quiet ] || { ifno 'apply changes' && usage; } }
-metadata() { for f in *flac; do ditto track "$f"; $METAFLAC --export-tags-to=- "$f"; done; }
+metadata() { for f in *flac; do ditto track "$f"; $METAFLAC --export-tags-to=- "$f"; [ $1 ] && exit; done; }
 tagcheck() { for i in $@; do metadata | grep -iq "^$i=" && ditto tag "$i" || { ditto CRITICAL tag "$i"; rcode=1; } ;done; return ${rcode:-0}; }
 titles()   { metadata | grep '^TITLE='; }
 
 shopt -s extglob  # SEE: $TAGS
 case $1 in
 	''          ) quiet=true; set -- 'ls' ;;
-	ls          ) quiet=true; noupdate=true ;;
+	ls | LS     ) quiet=true; noupdate=true ;;
 	rm          ) tagcheck ${@:2} || usage ;;
 	set         ) echo "$2" | grep -q '[^ ]=[^ ]' || usage ;;
 	import      ) ;;
@@ -91,6 +92,7 @@ metaflac() {
 			[ $TRACK ] || [ $2 = TITLE ] && eval $ditto
 		done
 		[ $TRACK ] || [ $2 = TITLE ] || eval $ditto
+		unset file
 	fi
 }
 
@@ -102,7 +104,8 @@ export() {
 }
 
 case $1 in
-	ls       ) metadata | pager; [ $noupdate ] && exit ;;  # skip mpc update
+	ls       ) metadata    | pager; [ $noupdate ] && exit ;;  # skip mpc update
+	LS       ) metadata LS | pager; [ $noupdate ] && exit ;;
 
 	rm       )
 		while [ "$2" ] ;do
@@ -173,14 +176,18 @@ case $1 in
 	*        )
 		TAG=$(echo ${1%+} | tr '[:lower:]' '[:upper:]')
 		shift
-		case "$@" in
-			''          ) usage ;;
-			//*/s/*/*/* ) metaflac regex "$TAG" "${@#?}";;  # /match/ search and replace
-			/*/*/*      ) metaflac regex "$TAG" "s$@"   ;;  # search and replace
-			/Case       ) metaflac regex "$TAG" "s/\b(.)/\u\1/g" ;;
-			/*          ) usage ;;
-			*           ) metaflac set "$TAG" "$@";;
-		esac
+		for i ;do  # iterate over $@ options which may contain spaces
+			case "$i" in
+				''          ) usage ;;
+				//*/s/*/*/* ) metaflac regex "$TAG" "${i#?}";;  # /match/ search and replace
+				/*/*/*      ) metaflac regex "$TAG" "s$i"   ;;  # search and replace
+				/Case       ) metaflac regex "$TAG" "s/\b(.)/\u\1/g" ;;
+				/*          ) usage ;;
+				*           ) metaflac set "$TAG" "$i";;
+			esac
+			shift
+			add=true  # for artist & genre list
+		done
 		;;
 esac
 

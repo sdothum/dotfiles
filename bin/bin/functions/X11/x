@@ -13,6 +13,7 @@ usage() { usage: "$(basename $0) 'start [@<delay>] | 2bwm | awesome | berry | bs
 BOOTWM=$SESSION/boot:wm  # see console_login, user_login
 WM=$HOME/.windowmanager
 SEAT=/tmp/console:width  # see console_login
+DOTS=0.75                # ... draw interval
 
 # sh -c 'cd /usr/share/figlet; for i in *tlf ;do toilet -F gay -f $i $(cat $WM); echo $i; read prompt ;done'
 font=pagga
@@ -102,6 +103,15 @@ if console ;then
 
 	pstat startx && exit
 	cpu arm && { tmout ifyes 'sync with watchman' && wsync || wsync -s; }
+
+	while : ;do
+		sv status udev-settle | grep -q STARTED && break
+		[ $notice ] || ditto WARN dinit "waiting for udev-settle"
+		notice=true
+		echo -n .
+		sleep $DOTS
+	done
+	echo
 	# mount any dangling nfs shares
 	# sudo mount -a
 	startx -- 2>/tmp/startx:x.log

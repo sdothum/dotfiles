@@ -11,7 +11,7 @@
 #
 # ATTENTION: tap/double_tap sed "/match/,+count" ranges must include update search items SEE: gestures.lua file
 
-usage() { echo "[\$TEST] $(basename $0) [back'up KOBOeReader]
+usage() { echo "$(basename $0) [back'up KOReader library]
 > [reset p'ages]
 > [i'nverse page turn] <true|false>
 > [soft/'hyphenation | -'hyphenation]
@@ -24,6 +24,7 @@ usage() { echo "[\$TEST] $(basename $0) [back'up KOBOeReader]
 > [d'efault | body f'ont | h'eader/footer] <font>
 > [font g'amma] <gamma>, { contrast:gamma, 1.0:15, 1.45:25, 1.9:30, 2.5:36 }
 > [w'ord spacing 100]" | usage:
+	ditto note "ensure KOReader device is mounted"
 	exit 1
 }
 

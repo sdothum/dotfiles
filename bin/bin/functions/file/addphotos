@@ -1,4 +1,4 @@
-#!/usr/bin/dash
+#!/usr/bin/bash
 # sdothum - 2016 (c) wtfpl
 
 # File
@@ -37,5 +37,13 @@ case ${MEDIA##*/} in
 	*SIGMA ) camera $MEDIA ;;
 esac
 lf
+console && exit
+
+# change directory to last photo
+STTY=`stty -g`
+stty -echo
+xdotool type "cd $LIBRARY/$year/$date"
+xdotool key Return
+stty $STTY
 
 # kak: filetype=sh
