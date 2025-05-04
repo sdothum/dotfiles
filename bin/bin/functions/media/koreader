@@ -31,12 +31,13 @@ usage() { echo "$(basename $0) [back'up KOReader library]
 KOBO=/run/media/$USER/KOBOeReader  # USB mount point
 SUPERNOTE=$HOME/mtp/SSD/Calibre
 mkdir -p /home/SUPERNOTE/SSD       # backup
+trap "cd; mtp umount" EXIT         # cd out of calibre directory for umount
 
 # update sdr files to match ever changing default settings :)
 
 sdr()      { ditto sdr "$1"; SDR="$SDR; $2"; }
-gestures() { ditto gestures "$1"; GESTURES="$GESTURES; $2"; }
-settings() { ditto settings "$1"; SETTINGS="$SETTINGS; $2"; }
+gestures() { [ -e $SUPERNOTE ] || ditto gestures "$1"; GESTURES="$GESTURES; $2"; }
+settings() { [ -e $SUPERNOTE ] || ditto settings "$1"; SETTINGS="$SETTINGS; $2"; }
 
 font()     { sdr "font ${1}" '/\"font_face\"/s/\"[^ ]*\",/\"'${1}'\",/'; }
 header()   { sdr "header font ${1}" '/\"header_font_face\"/s/\"[^ ]*\",/\"'${1}'\",/'; }
@@ -47,9 +48,10 @@ backup()   {
 }
 
 if [ -z $TEST ] && [ -z $test ] ;then
+	[ -e $KOBO ] || mtp mount
 	[ -e $KOBO ] || [ -e $SUPERNOTE ] && [ $1 ] || usage
-	[ -e $KOBO ] && cd $KOBO || cd $SUPERNOTE  # assumed device mount points
-	echo $@ | grep -q 'u'  || backup           # keep sdr's up to date (for KOBOeReader/KOReader recovery
+	[ -e $KOBO ] && cd $KOBO || cd $SUPERNOTE         # assumed device mount points
+	echo $@ | tr ' ' '\n' | grep -q '^u$'  || backup  # keep sdr's up to date (for KOBOeReader/KOReader recovery
 fi
 
 while [ $1 ] ;do
@@ -110,6 +112,7 @@ ifno "apply changes to catalogue" && usage
 
 [ "$SDR"        ] && ditto updating "*sdr/metadata.epub.lua" && find ./ -regex '.*/metadata.epub.lua'   -exec koreader:sdr "$SDR"   {} \;  # sed -i fails on fuse mtp (script has better progress anyway :)
 [ -e $SUPERNOTE ] && exit  # no access to Internal shared storage koreader
+
 # deprecated as have moved to profile gestures
 [ "$GESTURES"   ] && ditto updating "gestures.lua"           && find ./ -regex '.*/gestures.lua'        -exec sed -i -r "$GESTURES" {} \;
 [ "$SETTINGS"   ] && ditto updating "settings.reader.lua"    && find ./ -regex '.*/settings.reader.lua' -exec sed -i    "$SETTINGS" {} \;

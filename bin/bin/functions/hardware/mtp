@@ -8,9 +8,9 @@
 
 # Usage: mtp [mount | umount | mounted | ls | recover], see nnn, eject (plugin)
 
-MTP=$HOME/mtp              # mount point
+MTP=$HOME/mtp                        # mount point
 
-name()    { ls -1 $MTP; }  # device mount name
+name()    { ls -1 $MTP | tail -1; }  # device mount name
 device()  { jmtpfs -l | grep -q '^Device [0-9]'; }
 mounted() { mount | grep -q "^jmtpfs on $MTP "; }
 recover() { rm -f $MTP; mkdir -p $MTP; }

@@ -8,6 +8,7 @@
 
 LIBRARY=/home/photos
 # udiskie automount point
+ls /run/media/$USER/*/DCIM >/dev/null 2>&1 || { ditto usb 'connect sdcard / camera'; exit; }
 MEDIA=$(find /run/media/$USER/*/DCIM/* -maxdepth 0 -type d)
 
 lf() { [ $linefeed ] && echo $lastname; unset linefeed lastname; }
@@ -21,7 +22,7 @@ copy_image() {
 	[ -d $LIBRARY/$year/$date ] || { lf; ditto on "$date"; mkdir $LIBRARY/$year/$date; }
 
 	if [ -e $LIBRARY/$year/$date/$filename ] ;then
-		[ $linefeed ] && lastname=" .. $filename" || echo -n "$filename "
+		[ $linefeed ] && lastname=" .. $filename" || echo -n "${CYAN}@${MEDIA##*/} ${TURQUOISE}$filename "
 		linefeed=true
 	else
 		lf; ditto INFO took "$date / $filename"
