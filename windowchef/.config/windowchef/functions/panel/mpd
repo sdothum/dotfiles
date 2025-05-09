@@ -55,7 +55,7 @@ panel() {
 					album="$(field 2)"
 					playing="$(field 3) • "
 					track="$(field 4)"
-					if [ "$(folder)" != "$from" ] ;then
+					if [ "$(folder)" != "$from" ] || [ -z $count ];then
 						from="$(folder)"
 						cd "$from"
 						count=$(metaflac | grep "@track" | wc -l)

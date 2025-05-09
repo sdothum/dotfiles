@@ -26,6 +26,9 @@ class="music"
 	window desktop $(chef desktop "PLAY") ;\
 	window size 1/3 && window @music snap center
 
+class="chromium"
+	window size monocle
+
 # open compuse window but raise aerc to complete to/subject fields
 
 class="compose"
@@ -35,6 +38,9 @@ class="compose"
 class="calibre"
 	window desktop $(chef desktop "DESK") ;\
 	window @calibre snap center
+
+class="gFTP"
+	window size monocle
 
 class="feh"
 	window size monocle
