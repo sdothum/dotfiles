@@ -28,7 +28,7 @@ $(basename $0)  B | C | H | I | U
 $(basename $0)  [/ | f** | [-]d | h] [<package> | <file>**]
 >  / .. search (package and description)
 >  f .. find (file)
->  d .. dependencies
+>  d .. depends on
 >  h .. history
 >  I .. installed (package)
 >  r .. required by
@@ -94,7 +94,7 @@ case $1 in
 	-H ) [ $3 ] && iterate $@ || action=unhold ;;
 	/* ) action=search; [ $1 = '/' ] || { package=${1#/}; shift; set -- 0 $package $@; } ;;  # allow /<pattern> short form (no action separator)
 	f  ) action=file ;;
-	d  ) action=dependency ;;
+	d  ) action=dependson ;;
 	h  ) action=history ;;
 	r  ) action=requiredby ;;
 	?  ) usage ;;
@@ -143,7 +143,7 @@ case $action in
 	backup     ) rsync -av $CACHE $BACKUP ;;
 	check      ) ditto xbps 'checking database..'; check || ifno "reinstall (ERROR) packages" || repair ;;  # suppress hash mismatch (bash redirect syntax)
 	count      ) ditto installed "$(xbps-query -l $options | wc -l) packages" ;;
-	dependency ) for i in $(xbps-query -x $package | sed 's/>=.*//; s/-[0-9].*/-/') ;do installed $i ;done | sort ;;
+	dependson  ) ditto "$package" "depends on.."; for i in $(xbps-query -x $package | sed 's/>=.*//; s/-[0-9].*/-/') ;do installed $i ;done | sort ;;
 	downgrade  ) sudo xdowngrade $@ ;;  # downgrade must include package dependencies
 	file       ) xlocate $package ;;
 	force      ) sudo xbps-install -f $yes $options $package ;;
@@ -153,7 +153,7 @@ case $action in
 	installed  ) xbps-query -l $options | grep '^ii' | cut -d' ' -f2- | sed -r "s/^([^ ]*)/${yellow}\1${NOCOLOR}/" | grep "$@" ;;
 	query      ) [ $options ] && xbps-query -R $options $package || xbps-query -Rs $options "$package" | a $package ;;
 	remove     ) sudo xbps-remove $recursive $options $package ;;
-	requiredby ) xbps-query -X $package ;;
+	requiredby ) ditto "$package" "required by.."; xbps-query -X $package ;;
 	search     ) xbps-query -Rs $options $package | a $package ;;
 	sync       ) sudo xbps-install $yes $options $package ;;
 	update     ) sudo xbps-install $yes $options -u $package ;;

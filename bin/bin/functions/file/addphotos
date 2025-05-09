@@ -10,6 +10,7 @@ LIBRARY=/home/photos
 # udiskie automount point
 ls /run/media/$USER/*/DCIM >/dev/null 2>&1 || { ditto usb 'connect sdcard / camera'; exit; }
 MEDIA=$(find /run/media/$USER/*/DCIM/* -maxdepth 0 -type d)
+CAMERA=$(echo ${MEDIA##*/} | sed 's/^[0-9_]*//')
 
 lf() { [ $linefeed ] && echo $lastname; unset linefeed lastname; }
 
@@ -22,10 +23,10 @@ copy_image() {
 	[ -d $LIBRARY/$year/$date ] || { lf; ditto on "$date"; mkdir $LIBRARY/$year/$date; }
 
 	if [ -e $LIBRARY/$year/$date/$filename ] ;then
-		[ $linefeed ] && lastname=" .. $filename" || echo -n "${CYAN}@${MEDIA##*/} ${TURQUOISE}$filename "
+		[ $linefeed ] && lastname=" .. $filename" || echo -n "${CYAN}@$CAMERA ${TURQUOISE}$filename "
 		linefeed=true
 	else
-		lf; ditto INFO took "$date / $filename"
+		lf; ditto INFO "$CAMERA" "$date / $filename"
 		cp $1 $LIBRARY/$year/$date/$filename
 		chmod 0644 $LIBRARY/$year/$date/$filename
 	fi
@@ -33,7 +34,7 @@ copy_image() {
 
 camera() { for i in $@ ;do for j in $i/* ;do copy_image $j ;done ;done }
 
-case ${MEDIA##*/} in
+case $CAMERA in
 	*FUJI  ) camera $MEDIA ;;
 	*SIGMA ) camera $MEDIA ;;
 esac
