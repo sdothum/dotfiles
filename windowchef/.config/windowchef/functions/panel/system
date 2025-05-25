@@ -99,7 +99,7 @@ panel() {
 			M*         ) mem_usage=${line#?}; cpu_stat ;;
 		esac
 
-		capslock && CAPS="CAPS" || unset CAPS
+		capslock && CAPS="CAPSLOCK" || unset CAPS
 		[ $EPOCH ] && printf "%s\n" "%{c}${desktops}${SEP}${stat}${CAPS}"
 		unset line EPOCH
 	done
