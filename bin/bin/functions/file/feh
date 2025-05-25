@@ -6,6 +6,8 @@
 
 # ......................................................................... View
 
-/usr/bin/feh -B black -d --scale-down --start-at $@ $(dirname $@)
+DIR=$(dirname $@)
+# nnn or pcmanfm argument passed?
+[ "$DIR" = '' ] || /usr/bin/feh -B black -d --scale-down --start-at $@ $DIR && /usr/bin/feh -B black -d --scale-down $@
 
 # kak: filetype=sh

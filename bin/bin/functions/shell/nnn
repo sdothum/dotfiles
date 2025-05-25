@@ -20,6 +20,7 @@ export VISUAL=kak       # detached window editing
 bookmarks="$(eval echo $(cat $(dirname $0)/.nnn:bookmarks))"  # hide server structure
 plugs="d:_jump-dotfiles
 e:_edit
+f:_pcmanfm
 i:imgview
 j:_jump
 J:_jump-refresh
@@ -51,7 +52,7 @@ exists cpg && export NNN_OPTS=aefHoQrux || export NNN_OPTS=aefHoQux
 export GUI=1                                                   # for media apps
 
 # sloppy mtp automount
-mtp mount && NDIR=$HOME/mtp
+mtp mount && { [ "$1" ] || NDIR=$HOME/mtp; }
 [ "$1" != TMUX ] && trap 'mtp umount' EXIT  # must manually eject if mounted during toggle tmux session, see herbstluftwm appbinds
 udev                                        # reload udev rules
 

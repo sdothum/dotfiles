@@ -1,0 +1,22 @@
+#!/usr/bin/bash
+# sdothum - 2016 (c) wtfpl
+
+# Media
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................ KOReader missing sync
+
+# filter KOReader-sync (to device) clipboard messages to fix library errors
+
+SUPERNOTE=$HOME/mtp/SSD/Calibre/books
+
+missing() { xsel --clipboard | tr '}' '\n' | egrep -v 'no need to push|success|[]]'; }
+
+ditto missing "$(missing | cut -d: -f4 | cut -d/ -f8-9)"
+mtp mount >/dev/null
+[ -e $SUPERNOTE ] || { ditto supernote "not connected"; exit; }
+
+cd $SUPERNOTE
+nnn "$(missing | cut -d/ -f8)"
+
+# kak: filetype=sh

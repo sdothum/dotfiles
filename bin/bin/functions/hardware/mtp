@@ -19,7 +19,7 @@ recover() { rm -f $MTP; mkdir -p $MTP; }
 case $1 in
 	mount   )
 		if $(device) ;then
-			[ "$(name)" = '' ] && { jmtpfs $MTP >/dev/null && notify "$(name)" "$MTP mounted" || notify critical "$MTP" "mount failed"; } || notify "$(name)" 'already mounted'
+			[ "$(name)" = '' ] && { jmtpfs $MTP -o big_writes >/dev/null && notify "$(name)" "$MTP mounted" || notify critical "$MTP" "mount failed"; } || notify "$(name)" 'already mounted'
 		else exit 1
 		fi
 		;;

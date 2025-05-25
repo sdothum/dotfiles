@@ -16,7 +16,7 @@ usage() { echo "$(basename $0) [back'up KOReader library]
 > [i'nverse page turn] <true|false>
 > [soft/'hyphenation | -'hyphenation]
 > [1|2' columns]
-> [P'ortrait | L'andscape]
+> [o'rientation] <orientation>, { clockwise: 0:portrait:up, 1:landscape:right, 2:portrait:down, 3:landscape:left }
 > [t'op | b'ottom | ='left/right] <margin>
 > [sync m'argins] <0|1>
 > [l'ine spacing] <percent>
@@ -24,27 +24,43 @@ usage() { echo "$(basename $0) [back'up KOReader library]
 > [d'efault | body f'ont | h'eader/footer] <font>
 > [font g'amma] <gamma>, { contrast:gamma, 1.0:15, 1.45:25, 1.9:30, 2.5:36 }
 > [w'ord spacing 100]" | usage:
-	ditto note "ensure KOReader device is mounted"
+	[ -e $KOBO ] || [ -e $SUPERNOTE ] || ditto note "ensure KOReader device is mounted"
 	exit 1
 }
 
 KOBO=/run/media/$USER/KOBOeReader  # USB mount point
 SUPERNOTE=$HOME/mtp/SSD/Calibre
+BACKUP=true
+
 mkdir -p /home/SUPERNOTE/SSD       # backup
-trap "cd; mtp umount" EXIT         # cd out of calibre directory for umount
+trap "cd; underline; mtp umount" EXIT         # cd out of calibre directory for umount
 
 # update sdr files to match ever changing default settings :)
+sdr()         { ditto sdr "$1"; SDR="$SDR; $2"; }
+gestures()    { [ -e $SUPERNOTE ] || ditto gestures "$1"; GESTURES="$GESTURES; $2"; }
+settings()    { [ -e $SUPERNOTE ] || ditto settings "$1"; SETTINGS="$SETTINGS; $2"; }
 
-sdr()      { ditto sdr "$1"; SDR="$SDR; $2"; }
-gestures() { [ -e $SUPERNOTE ] || ditto gestures "$1"; GESTURES="$GESTURES; $2"; }
-settings() { [ -e $SUPERNOTE ] || ditto settings "$1"; SETTINGS="$SETTINGS; $2"; }
+font()        { sdr "font ${1}" '/\"font_face\"/s/\"[^ ]*\",/\"'${1}'\",/'; }
+header()      { sdr "header font ${1}" '/\"header_font_face\"/s/\"[^ ]*\",/\"'${1}'\",/'; }
 
-font()     { sdr "font ${1}" '/\"font_face\"/s/\"[^ ]*\",/\"'${1}'\",/'; }
-header()   { sdr "header font ${1}" '/\"header_font_face\"/s/\"[^ ]*\",/\"'${1}'\",/'; }
+orientation() {
+	if [ "$1" = '-' ] ;then
+		case $2 in
+			0) echo portrait                 ;;
+			1) echo landscape                ;;
+			2) echo 'portrait (upside down)' ;;
+			3) echo 'landscape (left)'       ;;
+		esac
+	else
+		echo $1 | grep "^[0123]$";
+	fi
+}
 
 backup()   {
-	[ -e $KOBO ]      && { ifno "backup kobo"      || /usr/bin/rsync -av --info=progress2 --delete $KOBO      /home/; }
-	[ -e $SUPERNOTE ] && { ifno "backup supernote" || /usr/bin/rsync -av --info=progress2 --ignore-errors --exclude='lost+found' --delete $SUPERNOTE /home/SUPERNOTE/SSD/; }
+	[ $BACKUP ] || return
+	[ -e $KOBO ]      && { ifno "backup kobo"      && return || /usr/bin/rsync -av --info=progress2 --delete $KOBO      /home/; }
+	[ -e $SUPERNOTE ] && { ifno "backup supernote" && return || /usr/bin/rsync -av --info=progress2 --ignore-errors --exclude='lost+found' --delete $SUPERNOTE /home/SUPERNOTE/SSD/; }
+	unset BACKUP
 }
 
 if [ -z $TEST ] && [ -z $test ] ;then
@@ -57,12 +73,11 @@ fi
 while [ $1 ] ;do
 	case $1 in
 		u     ) backup; shift; [ $1 ] && continue || exit ;;
-		/     ) sdr 'hyphenation soft'      '/\"hyph_soft_hyphens_only\"/s/= false,/= true,/'; resetpages=true ;;
-		-     ) sdr 'hyphenation'           '/\"hyph_soft_hyphens_only\"/s/= true,/= false,/'; resetpages=true ;;
-		1     ) sdr "1 column"              '/\"copt_visible_pages\"/s/= [0-9]*,/= 1,/';       resetpages=true ;;
-		2     ) sdr "2 columns"             '/\"copt_visible_pages\"/s/= [0-9]*,/= 2,/';       resetpages=true ;;
-		P     ) sdr "portrait orientation"  '/\"copt_rotation_mode\"/s/= [0-9]*,/= 0,/';       resetpages=true; shift; continue ;;
-		L     ) sdr "landscape orientation" '/\"copt_rotation_mode\"/s/= [0-9]*,/= 1,/';       resetpages=true; shift; continue ;;
+		/     ) sdr 'hyphenation soft' '/\"hyph_soft_hyphens_only\"/s/= false,/= true,/'; resetpages=true ;;
+		-     ) sdr 'hyphenation'      '/\"hyph_soft_hyphens_only\"/s/= true,/= false,/'; resetpages=true ;;
+		1     ) sdr "1 column"         '/\"copt_visible_pages\"/s/= [0-9]*,/= 1,/';       resetpages=true ;;
+		2     ) sdr "2 columns"        '/\"copt_visible_pages\"/s/= [0-9]*,/= 2,/';       resetpages=true ;;
+		o     ) orientation=$(orientation $2) || usage; sdr "$(orientation - $2)"  "/\"copt_rotation_mode\"/s/= [0-9]*,/= $orientation,/"; resetpages=true; shift 2; continue ;;
 		p     ) resetpages=true; shift; continue ;;
 		i     ) turn=$(token bool $2)      && sdr "inverse page turn ${turn}" '/\"inverse_reading_order\"/s/(true|false)/'${turn}'/'         || usage                  ;;
 		=     ) margin=$(token number $2)  && sdr "left/right margin ${margin}" '/\"copt_h_page_margins\".*=/,+2s/= [0-9]*,/= '${margin}',/' || usage; resetpages=true ;;
@@ -111,11 +126,13 @@ done
 ifno "apply changes to catalogue" && usage
 
 [ "$SDR"        ] && ditto updating "*sdr/metadata.epub.lua" && find ./ -regex '.*/metadata.epub.lua'   -exec koreader:sdr "$SDR"   {} \;  # sed -i fails on fuse mtp (script has better progress anyway :)
-[ -e $SUPERNOTE ] && exit  # no access to Internal shared storage koreader
 
-# deprecated as have moved to profile gestures
-[ "$GESTURES"   ] && ditto updating "gestures.lua"           && find ./ -regex '.*/gestures.lua'        -exec sed -i -r "$GESTURES" {} \;
-[ "$SETTINGS"   ] && ditto updating "settings.reader.lua"    && find ./ -regex '.*/settings.reader.lua' -exec sed -i    "$SETTINGS" {} \;
+if [ -e $KOBO ] ;then  # no access to SUPERNOTE koreader internal shared storage
+	# [ "$GESTURES" ] && ditto updating "gestures.lua"  && find ./ -regex '.*/gestures.lua' -exec sed -i -r "$GESTURES" {} \;  # deprecated in favour of profile gestures
+	[ "$SETTINGS"   ] && ditto updating "settings.reader.lua" && find ./ -regex '.*/settings.reader.lua' -exec sed -i "$SETTINGS" {} \;
+fi
+
+backup
 sync
 
 # kak: filetype=sh
