@@ -60,6 +60,9 @@ m powerpanel
   gnupg2
 d pass
 d pinentry-qt  # for x11 desktop passphrase
+  polkit
+  polkit-qt5
+  polkit-qt6
 
 
 = sound
