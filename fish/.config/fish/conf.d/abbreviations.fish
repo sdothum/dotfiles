@@ -66,6 +66,8 @@ end
 
 abbr close 'eject -t'
 abbr left_shift_key 'test -f /etc/X11/Xmodmap; and xmodmap /etc/X11/Xmodmap'
+abbr mmtp 'mtp mount'
+abbr umtp 'mtp umount'
 abbr mount 'sudo mount'
 abbr umount 'sudo umount'
 
