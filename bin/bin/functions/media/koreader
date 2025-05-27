@@ -12,7 +12,8 @@
 # ATTENTION: tap/double_tap sed "/match/,+count" ranges must include update search items SEE: gestures.lua file
 
 usage() { echo "$(basename $0) [back'up KOReader library]
-> [reset p'ages]
+> [p'ath conversion] <kobo|supernote>
+> [r'eset pages]
 > [i'nverse page turn] <true|false>
 > [soft/'hyphenation | -'hyphenation]
 > [1|2' columns]
@@ -30,6 +31,7 @@ usage() { echo "$(basename $0) [back'up KOReader library]
 
 KOBO=/run/media/$USER/KOBOeReader  # USB mount point
 SUPERNOTE=$HOME/mtp/SSD/Calibre
+SDCARD=${SDCARD:-6F7D-F921}        # sdcard ID of SUPERNOTE
 BACKUP=true
 
 mkdir -p /home/SUPERNOTE/SSD       # backup
@@ -43,13 +45,22 @@ settings()    { [ -e $SUPERNOTE ] || ditto settings "$1"; SETTINGS="$SETTINGS; $
 font()        { sdr "font ${1}" '/\"font_face\"/s/\"[^ ]*\",/\"'${1}'\",/'; }
 header()      { sdr "header font ${1}" '/\"header_font_face\"/s/\"[^ ]*\",/\"'${1}'\",/'; }
 
+conversion()  {
+	case $1 in
+		kobo      ) sdr "path conversion KOBO"      '/cache_file_path/s|/storage/.*/koreader/|./|;           /doc_path/s|/storage/.*/Calibre/|/mnt/onboard/|'      ;;
+		supernote ) sdr "path conversion SUPERNOTE" "/cache_file_path/s|\.\/|/storage/emulated/0/koreader/|; /doc_path/s|/mnt/onboard/|/storage/$SDCARD/Calibre/|" ;;
+		*         ) return 1 ;;
+	esac
+	true
+}
+
 orientation() {
 	if [ "$1" = '-' ] ;then
 		case $2 in
-			0) echo portrait                 ;;
-			1) echo landscape                ;;
-			2) echo 'portrait (upside down)' ;;
-			3) echo 'landscape (left)'       ;;
+			0) echo 'portrait (0°)'    ;;
+			1) echo 'landscape (90°)'  ;;
+			2) echo 'portrait (180°)'  ;;
+			3) echo 'landscape (270°)' ;;
 		esac
 	else
 		echo $1 | grep "^[0123]$";
@@ -73,12 +84,13 @@ fi
 while [ $1 ] ;do
 	case $1 in
 		u     ) backup;                                                                      shift; continue ;;
-		p     ) resetpages=true;                                                             shift; continue ;;
+		r     ) resetpages=true;                                                             shift; continue ;;
 		w     ) sdr 'word spacing 100' '/\"copt_word_spacing\".*=/,+2s/= [0-9]*,/= '100',/'; shift; continue ;;
 		/     ) sdr 'hyphenation soft' '/\"hyph_soft_hyphens_only\"/s/= false,/= true,/'; resetpages=true ;;
 		-     ) sdr 'hyphenation'      '/\"hyph_soft_hyphens_only\"/s/= true,/= false,/'; resetpages=true ;;
 		1     ) sdr "1 column"         '/\"copt_visible_pages\"/s/= [0-9]*,/= 1,/';       resetpages=true ;;
 		2     ) sdr "2 columns"        '/\"copt_visible_pages\"/s/= [0-9]*,/= 2,/';       resetpages=true ;;
+		p     ) conversion $2                 || usage ;;
 		o     ) orientation=$(orientation $2) && sdr "$(orientation - $2)"  "/\"copt_rotation_mode\"/s/= [0-9]*,/= $orientation,/"; resetpages=true || usage                  ;;
 		i     ) turn=$(token bool $2)         && sdr "inverse page turn ${turn}" '/\"inverse_reading_order\"/s/(true|false)/'${turn}'/'             || usage                  ;;
 		=     ) margin=$(token number $2)     && sdr "left/right margin ${margin}" '/\"copt_h_page_margins\".*=/,+2s/= [0-9]*,/= '${margin}',/'     || usage; resetpages=true ;;

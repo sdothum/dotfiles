@@ -1,0 +1,39 @@
+#!/usr/bin/bash
+# sdothum - 2016 (c) wtfpl
+
+# Media
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................ KOReader history sync
+
+# Manual sync of KOBO KOReader to SUPERNOTE KOReader
+
+KOBO=/run/media/$USER/KOBOeReader  # USB mount point
+SUPERNOTE=$HOME/mtp/SSD/Calibre
+KOREADER=/run/media/$USER/KOBOeReader/.adds/koreader
+BACKUP=/home/SUPERNOTE/SSD
+
+mtp mount
+[ -e $SUPERNOTE ] && { ifno "backup supernote" && exit || /usr/bin/rsync -av --info=progress2 --ignore-errors --exclude='lost+found' --delete $SUPERNOTE $BACKUP/; }
+
+[ "$(adb devices | grep -v '^List')" ] || { ditto supernote "attach to usb"; exit; }
+adb pull sdcard/koreader/history.lua /tmp/ || exit
+sync
+mtp umount
+ditto supernote 'detach from usb cable'
+
+ditto kobo 'attach to usb cable and enable usb connection'
+ifno 'continue' && exit
+
+mv -v $KOREADER/history.lua $KOREADER/history.lua.old
+sed 's|/storage/.*/Calibre/|/mnt/onboard/|' /tmp/history.lua | tee -e $KOREADER/history.lua
+
+/usr/bin/rsync -av --info=progress2 --ignore-errors --exclude='lost+found' --delete $BACKUP/Calibre/books $KOBO/
+
+# set SUPERNOTE settings to default KOBO settings
+koreader = 46 t 33 b 33 g 36 d luft s 13.5 l 161 1 - o 0 i false p kobo
+
+sync
+sudo umount $KOBO
+
+# kak: filetype=sh
