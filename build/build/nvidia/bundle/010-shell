@@ -17,6 +17,7 @@
 # ueberzug    # alacritty (nnn) image preview
 # vifm
   dragon      # for drag 'n drop for cli file manager
+! stow dragon
   ncdu
   nnn
 ! stow nnn

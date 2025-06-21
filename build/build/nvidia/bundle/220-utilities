@@ -4,9 +4,10 @@
 # see bundle_install
 
 
-= file conversion
+= file / conversion
 = ═══════════════
   dos2unix
+  lsof
 
 
 = file compression
