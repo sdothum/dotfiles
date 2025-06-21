@@ -221,14 +221,16 @@ super + {_,ctrl} + v
 	{toggle panel, invert_panel}
 
 super + x
-	xdotool search --onlyvisible --name nnn windowclose || nnn TMUX
+	xdotool search --onlyvisible --name yazi windowclose || yazi TMUX
+	# xdotool search --onlyvisible --name nnn windowclose || nnn TMUX
 
 super + shift + x
 	xdotool search --onlyvisible --classname pcmanfm windowclose || pcmanfm
 
 super + ctrl + x
 	notify critical 15 nnn '<b>root</b> user' ;\
-	xdotool search --onlyvisible --name root windowclose || nnn ROOT
+	xdotool search --onlyvisible --name root windowclose || yazi ROOT
+	# xdotool search --onlyvisible --name root windowclose || nnn ROOT
 
 super + w
 	window group remove       ;\

@@ -23,7 +23,12 @@ unset name  # for inadvertant env var conflict usage in calling scripts
 # HACK: quikey cannot be spawned by autostart (the way invoked for 2bwm)
 exists qk && { pgrep quikey >/dev/null || qk start; }
 
-[ -e /usr/bin/alacritty ] && TERM=alacritty || TERM=urxvt
+case $TERM in
+	alacritty ) ;;
+	st        ) ;;
+	urxvt     ) ;;
+	*         ) TERM=alacritty ;;
+esac
 
 case $TERM in
 	alacritty )
@@ -31,6 +36,14 @@ case $TERM in
 		NAME=--class
 		blackboard=blackboard
 		name="$NAME term"  # default class SEE: rulerrc
+		;;
+
+	st        )
+		TITLE=-T
+		NAME=-n
+		blackboard="-bg '$blackboard' -fg '$blackboard' -cr '$blackboard'"
+		font='-f Iosevka'
+		geometry='-g 1024x600+0+0'
 		;;
 
 	urxvt     )
@@ -84,7 +97,7 @@ done
 
 [ -z "$name" ] && [ "$title" ] && { name="$NAME ${title#$TITLE }"; }
 
-$TERM $theme $geometry $title $name $cmd
+$TERM $theme $font $geometry $title $name $cmd
 
 [ $visible ] && [ "$title" ] && xdotool search --sync --onlyvisible --limit 1 --classname "${title#* }"
 # delay long enough.. then double return kak startup command input (to close command prompt and any popup dialogue)
