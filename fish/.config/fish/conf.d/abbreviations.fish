@@ -138,6 +138,7 @@ abbr treed 'sudo tree -aCdF'
 
 function hgc; hg cat -r $argv | bat; end
 
+abbr xftp 'cd /net/downloads/http; gftp ftp://admin:123456@'(inetutils-hostname -i | cut -d. -f1-3)'.54:2222/Internal\ shared\ storage/Download'  # to X-plore ftp server
 # abbr hgr 'hg revert -r'
 abbr N 'nnn -p -'  # cmd .. (N) file picker mode
 abbr n 'nnn'
@@ -145,6 +146,7 @@ abbr nb 'nnn -s ebooks'
 # abbr r 'vifm'
 # abbr R 'ranger'
 abbr r '/usr/bin/rsync --info=progress2 -a'
+abbr y 'yazi'
 
 # ....................................................................... Search
 
