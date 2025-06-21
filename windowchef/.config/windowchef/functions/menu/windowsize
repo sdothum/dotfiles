@@ -7,20 +7,22 @@
 # .................................................................. Window size
 
 actions() {
-	echo "Mod+Alt+w ^tile
-Mod+0 ^revert
-Mod+1 ^rotate
-Mod+2 ^monocle
- 3 ^B4
- 4 ^A4
- 5 ^B5
- 5r ^B5 rotate
- 6 ^A5
- 9 ^B6
- 6r ^B6 rotate
- 8 ^A6
- 7 ^B7
- 7r ^B7 rotate
+	echo "
+Mod+Alt+w ^tile
+Mod+0     ^revert
+Mod+1     ^rotate
+Mod+2     ^monocle
+3         ^B4 (rotate)
+4         ^A4
+4r        ^A4 rotate
+5         ^B5
+5r        ^B5 rotate
+6         ^A5
+9         ^B6
+6r        ^B6 rotate
+8         ^A6
+7         ^B7
+7r        ^B7 rotate
 " | picklist
 }
 

@@ -95,6 +95,7 @@ while : ;do
 	shift
 done
 
+[ $TERMBG    ] && theme $TERMBG  # see yazi wrapper
 [ -z "$name" ] && [ "$title" ] && { name="$NAME ${title#$TITLE }"; }
 
 $TERM $theme $font $geometry $title $name $cmd

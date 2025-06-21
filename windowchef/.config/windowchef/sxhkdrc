@@ -222,10 +222,9 @@ super + {_,ctrl} + v
 
 super + x
 	xdotool search --onlyvisible --name yazi windowclose || yazi TMUX
-	# xdotool search --onlyvisible --name nnn windowclose || nnn TMUX
 
 super + shift + x
-	xdotool search --onlyvisible --classname pcmanfm windowclose || pcmanfm
+	xdotool search --onlyvisible --name nnn windowclose || nnn TMUX
 
 super + ctrl + x
 	notify critical 15 nnn '<b>root</b> user' ;\

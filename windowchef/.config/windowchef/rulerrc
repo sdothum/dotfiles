@@ -107,7 +107,8 @@ class="term"
 	window snap center vertical
 
 name="yazi"
-	window @0.1 size monocle
+	window @0.2 size B5 rotate ;\
+	window snap center
 
 class="zathura"
 	window desktop $(chef desktop "DESK") ;\

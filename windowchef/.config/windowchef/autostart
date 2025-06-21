@@ -28,9 +28,7 @@ fi
 
 exists mpd || exit
 dbus-run-session mpd /home/shum/.config/mpd/mpd.conf  # NOTE: needs explicit dbus run (?)
-mpc play     # resume playback
-mpc toggle   # wm restarts require mpd tickling to connect to pipewire
-mpc toggle
+(sleep 2; mpc play; mpc toggle; mpc toggle) &   # wm restarts require mpd tickling to connect to pipewire
 
 nicotine -s
 
