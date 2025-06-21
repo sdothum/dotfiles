@@ -74,7 +74,6 @@
 
 = user interface
 = ══════════════
-# xclip
   autocutsel
   Clipboard
   clipit
@@ -82,6 +81,7 @@
   GPaste
   rofi
 ! stow rofi
+  xclip
   xdotool
   xsel
   xvkbd

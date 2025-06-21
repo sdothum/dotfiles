@@ -1,0 +1,22 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................... ueberzugpp
+
+# for yazi image preview
+
+sudo xbps-install -y chafa-devel libsixel-devel libvips-devel libopencv-devel tbb-devel
+
+cd /home/depot
+git clone --depth 1 https://github.com/jstkdng/ueberzugpp.git
+cd ueberzugpp
+
+mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_OPENCV=OFF ..  # disable opencv (potential CUDA issues)
+cmake --build .
+sudo cmake --install .
+
+# kak: filetype=sh

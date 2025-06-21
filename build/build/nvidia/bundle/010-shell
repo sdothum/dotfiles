@@ -13,12 +13,16 @@
 
 = file manager
 = ════════════
-# ranger   # for scope with nnn
+# ranger      # for scope with nnn
+# ueberzug    # alacritty (nnn) image preview
 # vifm
+  dragon      # for drag 'n drop for cli file manager
   ncdu
   nnn
 ! stow nnn
-d m nnn    # with icons
+d m nnn       # with icons
+m ueberzugpp  # terminal image preview
+  yazi
 
 
 = info screen
