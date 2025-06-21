@@ -65,7 +65,7 @@ map global normal '<plus>'  '}p'     -docstring 'extend to next paragraph'
 
 # .............................................................. Line operations
 
-map global normal G 'ge'      -docstring 'goto buffer end'
+# map global normal G 'ge'      -docstring 'goto buffer end'  # breaks selection motion
 map global normal ^ 'gh'      -docstring 'goto line begin'
 map global normal $ 'gl'      -docstring 'goto line end'
 map global normal C '<a-l>di' -docstring 'replace to end of line'
