@@ -20,7 +20,7 @@ size=800
 for i in $files ;do
 	output=${i%.jpg}x$size.jpg
 	ditto convert "$output"
-	convert $i -resize $size -quality $quality $output
+	magick $i -resize $size -quality $quality $output
 done
 
 # kak: filetype=sh

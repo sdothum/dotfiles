@@ -13,9 +13,11 @@ MTP=$HOME/mtp                        # mount point
 name()    { ls -1 $MTP | tail -1; }  # device mount name
 device()  { jmtpfs -l | grep -q '^Device [0-9]'; }
 mounted() { mount | grep -q "^jmtpfs on $MTP "; }
-recover() { rm -f $MTP; mkdir -p $MTP; }
+recover() { sudo umount $MTP; [ -d $MTP ] || ditto mkdir "$(mkdir -v $MTP)"; }
 
-[ -d $MTP ] || recover
+pwd | grep -q "$MTP" && { ditto ERROR mtp "cd ~ before any mtp actions"; exit 1; }
+[ ! -d $MTP ] && recover
+
 case $1 in
 	mount   )
 		if $(device) ;then
@@ -28,16 +30,16 @@ case $1 in
 		if mounted ;then
 			name=$(name)
 			echo ${PWD} | grep -q "$MTP/$name" && { notify critical "$name" "$MTP busy"; exit 1; }
-			fusermount -u $MTP && notify "$name" "$MTP unmounted" || notify critical "$name" "$MTP umount failed"
+			fusermount -u $MTP && notify 10 warning "$name" "$MTP unmounted" || notify critical "$name" "$MTP umount failed"
 		fi
 		;;
 
 	mounted ) mounted ;;
 	ls      ) $(device) && jmtpfs -l  ;;
 	recover ) recover; exec mtp mount ;;
-	*       ) echo $MTP ;;
+	*       ) [ -d $MTP ] && { [ $(find $MTP -maxdepth 1 | wc -l) -gt 1 ] && ditto dir $MTP; true; } || ditto ERROR notfound $MTP ;;
 esac
 
-[ "$(ls -A $MTP/)" ] && ditto mtp "$(ls -1 $MTP)" || ditto mtp "$(file --brief $MTP)"
+[ "$(ls -A $MTP/)" ] && ditto mtp "$(ls -1 $MTP)" || ditto mtp "unmounted"
 
 # kak: filetype=sh

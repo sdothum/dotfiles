@@ -43,7 +43,7 @@ gestures()    { [ -e $SUPERNOTE ] || ditto gestures "$1"; GESTURES="$GESTURES; $
 settings()    { [ -e $SUPERNOTE ] || ditto settings "$1"; SETTINGS="$SETTINGS; $2"; }
 
 font()        { sdr "font ${1}" '/\"font_face\"/s/\"[^ ]*\",/\"'${1}'\",/'; }
-header()      { sdr "header font ${1}" '/\"header_font_face\"/s/\"[^ ]*\",/\"'${1}'\",/'; }
+header()      { sdr "header/footer font ${1}" '/\"header_font_face\"/s/\"[^ ]*\",/\"'${1}'\",/'; }
 
 conversion()  {
 	case $1 in
@@ -69,8 +69,15 @@ orientation() {
 
 backup()   {
 	[ $BACKUP ] || return
-	[ -e $KOBO ]      && { ifno "backup kobo"      && return || /usr/bin/rsync -av --info=progress2 --delete $KOBO      /home/; }
-	[ -e $SUPERNOTE ] && { ifno "backup supernote" && return || /usr/bin/rsync -av --info=progress2 --ignore-errors --exclude='lost+found' --delete $SUPERNOTE /home/SUPERNOTE/SSD/; }
+	if [ -e $KOBO ] ;then
+		ifno "backup kobo" && return
+		/usr/bin/rsync -av --info=progress2 --delete $KOBO /home/
+	elif [ -e $SUPERNOTE ] ;then
+		ifno "backup supernote" && return
+		/usr/bin/rsync -av --info=progress2 --ignore-errors --exclude='lost+found' --delete $SUPERNOTE /home/SUPERNOTE/SSD/
+		adb pull sdcard/koreader/history.lua /home/SUPERNOTE/SSD/Download/history.lua  # for koreader:supernote2kobo
+		adb disconnect  # to prevent busy mtp device
+	fi
 	unset BACKUP
 }
 

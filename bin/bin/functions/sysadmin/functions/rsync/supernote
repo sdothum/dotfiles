@@ -5,14 +5,14 @@
 
 # ................................................................ Rsync wrapper
 
-SUPERNOTE=$HOME/mtp/SSD/Calibre
+SUPERNOTE=$HOME/mtp/SSD
 
 [ -e $SUPERNOTE ] || { echo "connect supernote to usb (mtp)"; exit 1; }
 ifno "sync SUPERNOTE" && exit
 
 ditto supernote "syncing supernote files and epubs (sdr's)"
 mkdir -p /home/SUPERNOTE/SSD
-rsync -av --delete $SUPERNOTE /home/SUPERNOTE/SSD
+rsync -av --delete $SUPERNOTE /home/SUPERNOTE/
 # wrapper does not handle filename spaces
 /usr/bin/rsync -av --info=progress2 --ignore-errors --exclude='lost+found' --delete "$HOME/mtp/Internal shared storage" /home/SUPERNOTE/
 

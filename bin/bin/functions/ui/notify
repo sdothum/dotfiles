@@ -28,7 +28,7 @@ while : ;do
 		low    |\
 		norm*  |\
 		crit*   ) urgency="-u $1"  ;;
-		warn*   ) urgency="-u low" ;;
+		warn*   ) urgency="-u low"; [ $expire ] || expire='--expire-time=5000' ;;
 		blac*   ) urgency="-h string:bgcolor:#000000" ;;
 		[0-9.]* ) [ $expire ] || echo "$1" | grep -q '[^0-9]' && break || expire="--expire-time=$(( $1 * 1000 ))" ;;
 		*       ) break ;;

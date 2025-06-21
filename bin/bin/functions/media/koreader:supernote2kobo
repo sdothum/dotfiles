@@ -12,26 +12,34 @@ KOBO=/run/media/$USER/KOBOeReader  # USB mount point
 SUPERNOTE=$HOME/mtp/SSD/Calibre
 KOREADER=/run/media/$USER/KOBOeReader/.adds/koreader
 BACKUP=/home/SUPERNOTE/SSD
+HISTORY=$BACKUP/Download/history.lua
 
+# sync supernote library
 mtp mount
-[ -e $SUPERNOTE ] && { ifno "backup supernote" && exit || /usr/bin/rsync -av --info=progress2 --ignore-errors --exclude='lost+found' --delete $SUPERNOTE $BACKUP/; }
+if [ -e $SUPERNOTE ] ;then
+	ifno "backup supernote" && exit || /usr/bin/rsync -av --info=progress2 --ignore-errors --exclude='lost+found' --delete $SUPERNOTE $BACKUP/
+	adb pull sdcard/koreader/history.lua $HISTORY
+	sync
+	mtp umount
+	ditto supernote 'detach from usb cable'
+fi
 
-[ "$(adb devices | grep -v '^List')" ] || { ditto supernote "attach to usb"; exit; }
-adb pull sdcard/koreader/history.lua /tmp/ || exit
-sync
-mtp umount
-ditto supernote 'detach from usb cable'
+# check for supernote history list
+[ -e $HISTORY ] || { ditto ERROR history "koreader back'up supernote"; exit; }
+if [ ! -e $KOREADER ] ;then
+	ditto kobo 'attach to usb cable and enable usb connection'
+	ifno 'continue' && exit
+fi
 
-ditto kobo 'attach to usb cable and enable usb connection'
-ifno 'continue' && exit
-
+# correct device path references
 mv -v $KOREADER/history.lua $KOREADER/history.lua.old
-sed 's|/storage/.*/Calibre/|/mnt/onboard/|' /tmp/history.lua | tee -e $KOREADER/history.lua
+sed 's|/storage/.*/Calibre/|/mnt/onboard/|' $HISTORY | tee $KOREADER/history.lua
 
+# sync kobo library 
 /usr/bin/rsync -av --info=progress2 --ignore-errors --exclude='lost+found' --delete $BACKUP/Calibre/books $KOBO/
 
-# set SUPERNOTE settings to default KOBO settings
-koreader = 46 t 33 b 33 g 36 d luft s 13.5 l 161 1 - o 0 i false p kobo
+# set default KOBO settings
+koreader = 46 t 35 b 35 g 36 d laft s 13.5 l 196 1 - o 2 i false p kobo
 
 sync
 sudo umount $KOBO

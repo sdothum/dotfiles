@@ -161,25 +161,25 @@ Generate(\$1);
 }
 
 # scale tailed "l" cell width
-tailed() {
+l_tailed() {
 	XSHIFT=-20
 	echo "
 Open(\$1);
-" >${LOG}:tailed.script
+" >${LOG}:l_tailed.script
 
 	set -- $(echo $letters | sed -r "s/(.)/\1 /g")
 	while [ $1 ] ;do
-		tighten $1 >>${LOG}:tailed.script
+		tighten $1 >>${LOG}:l_tailed.script
 		shift
 	done
 
 	echo "
 Generate(\$1);
-" >>${LOG}:tailed.script
+" >>${LOG}:l_tailed.script
 
 	for i in *.ttf ;do
-		ditto tailed $i
-		fontforge -quiet --script ${LOG}:tailed.script $i
+		ditto l_tailed $i
+		fontforge -quiet --script ${LOG}:l_tailed.script $i
 	done
 }
 
@@ -368,6 +368,39 @@ Generate(\$1);
 	for i in *.ttf ;do
 		ditto emdash $i
 		fontforge -quiet --script ${LOG}:punctuation.script $i
+	done
+}
+
+# "a d" tailed
+tail() {
+	echo "
+Select($(utf $1));
+SetWidth($width);
+Move($TSHIFT,0);  # tweak (tail) right side bearing
+"
+}
+
+tailed() {
+	XSHIFT=18
+	TSHIFT=1
+	width=$(( $shape + $XSHIFT ))
+	echo "
+Open(\$1);
+" >${LOG}:tailed.script
+
+	set -- $(echo $letters | sed -r "s/(.)/\1 /g")
+	while [ $1 ] ;do
+		tail $1 >>${LOG}:tailed.script
+		shift
+	done
+
+	echo "
+Generate(\$1);
+" >>${LOG}:tailed.script
+
+	for i in *.ttf ;do
+		ditto tailed $i
+		fontforge -quiet --script ${LOG}:tailed.script $i
 	done
 }
 
@@ -829,10 +862,11 @@ case $1 in
 	punctuation   ) emdash=$2; shape=$3; shift 2 ;;
 	ligature      ) [ $4 ] && { width=$2; shift 2; } || { shape=$2; shift; } ;;  # see iosevka for tricky bits
 	capadjust     ) letters=$2; shift ;;                                         # align "C G O Q S U" to x base
+	tailed        ) letters=$2; shape=$3; shift 2 ;;                             # "a d" (tailed)
 	serifed       ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "i j l" (serifed)
 	# serifless   ) letters=$2; width=$(( $3 * 845 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
 	serifless     ) letters=$2; width=$(( $3 * 825 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
-	tailed        ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "l" (tailed)
+	l_tailed      ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "l" (tailed)
 	quote         ) letters=$2; width=$(( $3 * 825 / 1000));  shift 2 ;;         # percent of quote (left,right,reversed)
 	*weight       ) regular=${1%weight}; fforge=weight; [ "$2" = 'book+regular' ] && { adjust=true; shift; } ;;
 	copy          ) [ $3 ] && { family=$2; alias=$3; shift 2; copy; exit; }      || usage ;;  # pwd commandline only!

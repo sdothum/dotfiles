@@ -37,7 +37,7 @@ while : ;do
 		-D*           ) export TRACE=/tmp/kak:trace; debug='-debug commands' ;;  # debug trace
 		-P*           ) export UNPLUG=true ;;           # kakrc plugins exclusions
 		-T*           ) export TRACE=/tmp/kak:trace ;;  # trace messages
-		-X*           ) unset DISPLAY; export COLORSCHEME=${COLORSCHEME:-dabruin} ;;
+		-X*           ) unset DISPLAY; [ $YAZI ] || export COLORSCHEME=${COLORSCHEME:-dabruin} ;;
 		--            ) ID=$(rand)    ;;  # force new instance
 		id=*          ) ID="${1#*=}"  ;;
 		ID=*          ) ID="${1#*=}"  ;;

@@ -26,7 +26,7 @@ usage() {
 > J-[descending|flat|serifless]
 > Q-[bar|crossing|detached|hook|horizontal|open|straight]
 
-> a-[earless|rounded|single]
+> a-[earless|rounded|single[/[/]]]
 > b-rounded
 > d-[tailed|toothless]
 > f-extended
@@ -76,7 +76,7 @@ usage() {
 #        make_install iosevka m-rounded
 
 # export IOSEVKA=${version:-v27}
-export IOSEVKA=${version:-v30}
+export IOSEVKA=${version:-v33}
 
 [ $clean ] && rm -r /home/depot/fonts/Iosevka.${IOSEVKA}/.build
 
@@ -153,6 +153,8 @@ cmdopts() {
 			a-earless      ) a=$1 ;;
 			a-rounded      ) a=$1 ;;
 			a-single       ) a=$1 ;;
+			a-single/      ) a=$1 ;;
+			a-single//     ) a=$1 ;;
 			b-rounded      ) glyph b $1 ;;  # unolexic
 			d-tailed       ) glyph d $1 ;;  # ebook variant
 			d-toothless    ) glyph d $1 ;;  # with p-eared
@@ -162,6 +164,7 @@ cmdopts() {
 			j-flat         ) j=$1 ;;
 			j-serifed      ) j=$1 ;;
 			j-serifless    ) j=$1 ;;
+			l-ascending    ) l=$1 ;;
 			l-hooky        ) l=$1 ;;
 			l-serifless    ) l=$1 ;;
 			m-arch         ) m=$1 ;;
@@ -176,6 +179,7 @@ cmdopts() {
 			t-cross        ) t=$1 ;;
 			t-flat         ) t=$1 ;;
 			y-straight     ) y=$1 ;;
+			y-turn         ) y=$1 ;;
 
 			0-cutout       ) zero=$1  ;;
 			0-split        ) zero=$1  ;;
@@ -288,8 +292,10 @@ elif [ "$quad" ] ;then
 elif [ "$koreader" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat serifless serifed
  	emdash
-	# e_ink luft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ u-tf-8 m-arch
-	e_ink lift   grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8 m-arch J-serifless
+	# e_ink luft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8
+ # 	e_ink lift   grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8 J-serifless
+	# e_ink laft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-single// d-tailed p-eared y-turn utf-8
+	e_ink lajt   grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-single// d-tailed p-eared y-turn j-serifed J-serifless utf-8
 	# e_ink galley grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase
 	# e_ink chalk  grote   I-serifed    t-asymmetric-- l-serifless a-single
 	# e_ink draft  grote   I-serifed    t-asymmetric-- l-serifless
@@ -325,7 +331,7 @@ elif [ $family ] ;then                    # custom e-ink font (non-published)
 	e_ink ${family#*=}
 
 elif [ $web ] ;then                       # www fonts
-	unset cap; emdash; cmdopts t-asymmetric--
+	unset cap; emdash; cmdopts t-asymmetric-- l-ascending Q-open 1-nobase a-single// d-tailed p-eared m-rounded y-turn j-serifed
 	wfont heading  quasi-ext space=1.100 webfont serifless serifed family=wMonolegible
 	wfont dyslexic quasi-ext space=0.875 webfont serifless serifed I-serifless t-asymmetric-- l-ascending f-flat++ family=wMonolexic
 	wfont dyslexic quasi-ext space=1.125 webfont I-serifless family=wCaps
@@ -338,16 +344,18 @@ elif [ $coding ] ;then                    # classic coding font
 
 else                                      # desktop fonts
 	unset space
-	cmdopts t-asymmetric-- j-flat 1-nobase at-tall l-hooky f-flat++ m-arch
+	cmdopts t-asymmetric-- j-serifed 1-nobase at-tall l-hooky f-flat++ y-turn
 	dfont $leading 1-base  # l-flat
+	[ $HOME/thedarnedestthing.com/application/public/fonts/ ] && cp -v $HOME/.fonts/Iosevka/*ttf $HOME/thedarnedestthing.com/application/public/fonts/
 	dfont proof    l-ascending I-serifless
 	dfont menu     I-serifed l-ascending
 	dfont dyslexic I-serifed space=2.2 family=qclocktwo l-ascending  # conky qclocktwo font
 	dfont dyslexic I-serifed quasi-extension space=1.125 family=monograffic serifless serifed l-ascending  # panel/dunst font
 
-	cmdopts quasi-ext open+ j-flat serifless serifed
+	cmdopts quasi-ext open+ serifless serifed
  	emdash
-	e_ink charcoal grote space=0.875 I-serifless t-asymmetric-- l-ascending Q-open 1-nobase
+	e_ink charcoal grote space=0.875 I-serifless t-asymmetric-- l-ascending Q-open 1-nobase a-single// d-tailed p-eared m-rounded y-turn
+	[ -d /var/www/localhost/fonts ] && sudo cp -v $HOME/.fonts/charcoal/*ttf /var/www/localhost/fonts/
 fi
 
 # kak: filetype=sh

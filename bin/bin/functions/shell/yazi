@@ -1,0 +1,29 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# Shell
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. yazi wrapper
+
+# Usage: yazi [TMUX | ROOT] | [path]
+
+export YAZI="/usr/bin/yazi"  # nnn compiled with icons, see make_install nnn
+TAB=/net/downloads/http     # default tmux directory
+
+# sloppy mtp automount
+mtp mount && { [ "$1" ] || MTP=$HOME/mtp; }
+[ "$1" != TMUX ] && trap 'mtp umount' EXIT  # must manually eject if mounted during toggle tmux session, see herbstluftwm appbinds
+# udev                                        # reload udev rules
+
+# BECAUSE: tmux Home End keys echo H L in nnn input..
+export TMUXCONF=$HOME/.tmux.conf.nnn  # SEE: tmux_session
+grep -Ev '^bind-key.*(Home|End)' $HOME/.tmux.conf >$TMUXCONF
+# export TERM=st
+case $1 in
+	ROOT ) tmux_session 'root' sudo -E $YAZI $TAB ;;
+	TMUX ) tmux_session 'yazi'         $YAZI $TAB ;;
+	''   ) $YAZI .            ;;
+	*    ) $YAZI "${MTP:-$@}" ;;
+esac
+
+# kak: filetype=sh

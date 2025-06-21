@@ -147,7 +147,7 @@ case $action in
 	downgrade  ) sudo xdowngrade $@ ;;  # downgrade must include package dependencies
 	file       ) xlocate $package ;;
 	force      ) sudo xbps-install -f $yes $options $package ;;
-	held       ) for i in $(xbps-query --list-hold-pkgs) ;do ditto held "$i $(status $i)" ;done ;;
+	held       ) for i in $(xbps-query --list-hold-pkgs) ;do ditto held "$i $(status $i)" ;done | column -t ;;
 	history    ) if [ $package ] ;then  ls -l $CACHE/$package* 2>/dev/null ;else history ;fi ;;
 	hold       ) [ $pkgver ] && { sudo xbps-pkgdb -m hold $options $package; xb H; [ -e $ITERATE ] || xb C; } ;;
 	installed  ) xbps-query -l $options | grep '^ii' | cut -d' ' -f2- | sed -r "s/^([^ ]*)/${yellow}\1${NOCOLOR}/" | grep "$@" ;;
