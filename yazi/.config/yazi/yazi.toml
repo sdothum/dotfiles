@@ -3,7 +3,7 @@
 "$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
 
 [mgr]
-# ratio           = [ 1, 4, 3 ]
+# ratio         = [ 1, 4, 3 ]
 ratio           = [ 3, 10, 7 ]
 sort_by         = "alphabetical"
 sort_sensitive  = false
@@ -11,8 +11,8 @@ sort_reverse    = false
 sort_dir_first  = true
 sort_translit   = false
 linemode        = "none"
-# show_hidden     = false
-# show_symlink    = true
+# show_hidden   = false
+# show_symlink  = true
 show_hidden     = true
 show_symlink    = false
 scrolloff       = 5
@@ -22,8 +22,8 @@ title_format    = "Yazi: {cwd}"
 [preview]
 wrap            = "no"
 tab_size        = 2
-# max_width       = 600
-# max_height      = 900
+# max_width     = 600
+# max_height    = 900
 max_width       = 1200
 max_height      = 1800
 cache_dir       = ""
@@ -173,8 +173,8 @@ create_offset     = [ 0, 2, 50, 3 ]
 # rename
 rename_title      = "Rename:"
 rename_origin     = "hovered"
-# rename_offset     = [ 0, 1, 50, 3 ]
-rename_offset     = [ 0, 1, 150, 3 ]
+# rename_offset   = [ 0, 1, 50, 3 ]
+rename_offset     = [ 0, 1, 150, 3 ]  # avoid long filename scrolling
 
 # filter
 filter_title      = "Filter:"
