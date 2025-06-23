@@ -1,10 +1,10 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
-# Edit
+# File
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ........................................................... x-plore ftp client
+# ........................................................... X-plore ftp client
 
 cd /net/downloads/http  # ftp target
 # connect to X-plore ftp server
