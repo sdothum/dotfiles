@@ -223,13 +223,9 @@ super + {_,ctrl} + v
 super + x
 	xdotool search --onlyvisible --name yazi windowclose || yazi TMUX
 
-super + shift + x
-	xdotool search --onlyvisible --name nnn windowclose || nnn TMUX
-
 super + ctrl + x
-	notify critical 15 nnn '<b>root</b> user' ;\
+	notify critical 0 yazi '<b>root</b> user' ;\
 	xdotool search --onlyvisible --name root windowclose || yazi ROOT
-	# xdotool search --onlyvisible --name root windowclose || nnn ROOT
 
 super + w
 	window group remove       ;\

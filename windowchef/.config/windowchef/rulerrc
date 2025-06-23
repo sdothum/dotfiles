@@ -107,7 +107,7 @@ class="term"
 	window snap center vertical
 
 name="yazi"
-	window @0.1 size A4 rotate ;\
+	window @0.15 size A4 rotate ;\
 	window snap center
 
 class="zathura"
