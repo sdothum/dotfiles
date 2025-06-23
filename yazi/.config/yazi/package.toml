@@ -1,0 +1,14 @@
+[[plugin.deps]]
+use = "stelcodes/bunny"
+rev = "a0b4e18"
+hash = "7acba2bb504c67dd7f2da135b88aae1b"
+
+[[flavor.deps]]
+use = "gosxrgxx/flexoki-light"
+rev = "45eb0a0"
+hash = "1ee212b0799497b54c7e60bac8931e4e"
+
+[[flavor.deps]]
+use = "PinThePenguinOne/sunset"
+rev = "64ad82e"
+hash = "ae36775ed414cad1bcd7af692422df0f"
