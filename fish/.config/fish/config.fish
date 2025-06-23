@@ -145,9 +145,9 @@ and set -x BROWSER qutebrowser
 
 # source shell variables
 function SOURCE --description 'Usage: SOURCE <script>'
-		for i in (grep '^export ' $argv)
-				eval $i
-		end
+	for i in (grep '^export ' $argv)
+			eval $i
+	end
 end
 
 # for alot mail
