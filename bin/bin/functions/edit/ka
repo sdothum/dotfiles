@@ -11,12 +11,14 @@ usage() { usage: "$(basename $0) <regex>"; exit 1; }
 EDITOR=${EDITOR:-kak}
 
 # v by content
-[ "$1"     ] && files=$(al "$@") || usage
-[ "$files" ] || exit
+[ "$1"     ] && files=$(al "$@" | exclude | sort) || usage
+[ "$files" ] || { ditto search "not found or match \$(exclude)'d"; exit 1; }
 
 # regex passed as search command causes file name mangling
 # echo "$@" | grep -q '^[[:alnum:]]*$' && search="-c \"/\v$@\""
 # al "$@" | exclude | sort | tr '\n' '\0x00' | xargs -r0 $EDITOR $search
-al "$@" | exclude | sort | tr '\n' '\0x00' | xargs -t -r0 $EDITOR
+# al "$@" | exclude | sort | tr '\n' '\0x00' | xargs -t -r0 $EDITOR
+echo "$files" | column
+echo "$files" | tr '\n' '\0x00' | xargs -t -r0 $EDITOR 2>/dev/null
 
 # kak: filetype=sh

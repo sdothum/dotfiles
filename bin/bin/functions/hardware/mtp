@@ -30,7 +30,7 @@ case $1 in
 		if mounted ;then
 			name=$(name)
 			echo ${PWD} | grep -q "$MTP/$name" && { notify critical "$name" "$MTP busy"; exit 1; }
-			fusermount -u $MTP && notify 10 warning "$name" "$MTP unmounted" || notify critical "$name" "$MTP umount failed"
+			fusermount -u $MTP && notify "$name" "$MTP unmounted" || notify critical "$name" "$MTP umount failed"
 		fi
 		;;
 

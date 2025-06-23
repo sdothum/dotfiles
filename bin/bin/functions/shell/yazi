@@ -30,10 +30,10 @@ export TMUXCONF=$HOME/.tmux.conf.nnn  # SEE: tmux_session
 grep -Ev '^bind-key.*(Home|End)' $HOME/.tmux.conf >$TMUXCONF
 
 case $1 in
-	ROOT ) tmux_session 'root' sudo -E $YAZI $TAB ;;
-	TMUX ) tmux_session 'yazi'         $YAZI $TAB ;;
-	''   ) $YAZI .            ;;
-	*    ) $YAZI "${MTP:-$@}" ;;
+	ROOT ) tmux_session 'root' sudo -E $YAZI $TAB         ;;
+	TMUX ) tmux_session 'yazi'         $YAZI $TAB         ;;
+	''   ) term "yazi"                 $YAZI .            ;;
+	*    ) term "yazi"                 $YAZI "${MTP:-$@}" ;;
 esac
 
 # kak: filetype=sh

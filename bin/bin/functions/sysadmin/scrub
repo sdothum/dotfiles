@@ -51,7 +51,7 @@ show() {
 	[ $in_progress ] || press_enter
 	duration="$(btrfs scrub status $V | grep 'Duration:' | sed 's/  */ /g')"
 	errors="$(btrfs scrub status $V | grep 'summary:' | sed -r 's/.*: *//g; s/^(.)/\u\1/')"
-	notify X critical "btrfs scrub $V" "$duration\n<b>$errors</b>"
+	notify X critical 0 "btrfs scrub $V" "$duration\n<b>$errors</b>"
 	rm -f $CRON  # remove triggered cron scrub, see crontab -l
 }
 

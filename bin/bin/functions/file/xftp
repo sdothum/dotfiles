@@ -1,0 +1,13 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Edit
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................... x-plore ftp client
+
+cd /net/downloads/http  # ftp target
+# connect to X-plore ftp server
+gftp ftp://admin:123456@$(inetutils-hostname -i | cut -d. -f1-3).54:2222/Internal\ shared\ storage/Download
+
+# kak: filetype=sh

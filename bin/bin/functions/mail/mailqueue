@@ -37,7 +37,7 @@ if [ $(ls -l $queue | wc -l) -gt 1 ] ;then
 	errmsg=$(/usr/local/bin/msmtp-runqueue.sh 2>&1)  # trap msmtp: error message
 	echo "$errmsg"
 	if echo "$errmsg" | grep -q FAILURE ;then
-		notify X critical 'Send mail failure..' "$(echo "$errmsg" | grep 'msmtp:' | head -1)"
+		notify X critical 0 'Send mail failure..' "$(echo "$errmsg" | grep 'msmtp:' | head -1)"
 	else
 		[ $count -eq 1 ] && notify low X 'Mail Queue' '1 message sent' || notify X 'Mail Queue' "$count messages sent"
 	fi

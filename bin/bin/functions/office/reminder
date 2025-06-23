@@ -28,7 +28,7 @@ alarms() {
 		period=$(echo $time | sed 's/.*[0-9]//')
 		start=${time%%-*}
 		[ "$start" = "${start%m}" ] && start=${start}$period
-		[ $(date -d $start +%s) -ge $now ] && notify X critical "Reminder $time" "$todo"
+		[ $(date -d $start +%s) -ge $now ] && notify X critical 0 "Reminder $time" "$todo"
 	done
 }
 

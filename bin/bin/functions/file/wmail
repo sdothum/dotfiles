@@ -37,7 +37,7 @@ mail() {
 		email=$(find $acct -name "${name}*")
 		[ -n "$email" ] || continue
 		hdr=$(mailheader "$email")
-		[ -e $QUIET ] || notify X critical "$(echo "$hdr" | grep Subject: | sed 's/ re://g' | trim $WIDTH)" "$(echo "$hdr" | grep From:)"
+		[ -e $QUIET ] || notify X critical 0 "$(echo "$hdr" | grep Subject: | sed 's/ re://g' | trim $WIDTH)" "$(echo "$hdr" | grep From:)"
 	done
 }
 
