@@ -11,6 +11,8 @@ usage() { usage: "[kmd=<command>] $(basename $0) [-l | -p [<id>] | -v | -h] [-BE
 # NOTE: $kmd is passed passively to (env) term for subsequent "xdotool type"
 
 headless=${headless:-false}
+[ -d $1 ] && exit                                       # NOTE: avoid yazi attempt to open dir
+echo $1 | grep -q '.*/yazi.*/bulk-.*' && attached=true  # FOR: yazi bulk renames
 
 # share all instances (clients) with a single kak server session
 ID=${ID:-$USER}  # default session id
@@ -77,11 +79,12 @@ fi
 
 # term call doesn't handle "space" names
 # console && { $KAK $file >>$LOG 2>&1; exit; }
-console && exec $KAK $file  # nvidia tty console doesn't play well with full default kak config
+console || [ $attached ] && exec $KAK $file  # nvidia tty console doesn't play well with full default kak config
 
 # (sleep $DELAY; window snap center) &  # see rulerrc
 title=$(echo "$file" | sed 's|\.\/||g; s| [^ ]*/||; s/ .*/.../g')
 [ $count -gt 1 ] && title="$title($count)"
-term "title=kak:$title" class=${class:-kak} PAPER ${XY:-132x52} $WAIT $KAK $debug ${session:--c} $ID "$file" >>$LOG 2>&1  # 50 line page
+# NOTE: nohup to detach window from yazi
+nohup term "title=kak:$title" class=${class:-kak} PAPER ${XY:-132x52} $WAIT $KAK $debug ${session:--c} $ID "$file" >>$LOG 2>&1  # 50 line page
 
 # kak: filetype=sh
