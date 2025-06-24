@@ -18,9 +18,9 @@ usage() { echo "$(basename $0) [back'up KOReader library]
 > [soft/'hyphenation | -'hyphenation]
 > [1|2' columns]
 > [o'rientation] <rotation>, { 0:portrait (0°), 1:landscape (90°), 2:portrait (180°), 3:landscape (270°) }
-> [t'op | b'ottom | ='left/right] <margin>
+> [t'op | b'ottom | =' left/right] <margin>
 > [sync m'argins] <0|1>
-> [l'ine spacing] <percent>
+> [%' line spacing] <percent>
 > [font s'ize] <size>
 > [d'efault | body f'ont | h'eader/footer] <font>
 > [font g'amma] <gamma>, { contrast:gamma, 1.0:15, 1.45:25, 1.9:30, 2.5:36 }
@@ -75,6 +75,7 @@ backup()   {
 	elif [ -e $SUPERNOTE ] ;then
 		ifno "backup supernote" && return
 		/usr/bin/rsync -av --info=progress2 --ignore-errors --exclude='lost+found' --delete $SUPERNOTE /home/SUPERNOTE/SSD/
+		ditto backup "history.lua"
 		adb pull sdcard/koreader/history.lua /home/SUPERNOTE/SSD/Download/history.lua  # for koreader:supernote2kobo
 		adb disconnect  # to prevent busy mtp device
 	fi
@@ -103,7 +104,7 @@ while [ $1 ] ;do
 		=     ) margin=$(token number $2)     && sdr "left/right margin ${margin}" '/\"copt_h_page_margins\".*=/,+2s/= [0-9]*,/= '${margin}',/'     || usage; resetpages=true ;;
 		t     ) margin=$(token number $2)     && { sdr "top margin ${margin}" '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'; }              || usage; resetpages=true ;;
 		b     ) margin=$(token number $2)     && { sdr "bottom margin ${margin}" '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'; }           || usage; resetpages=true ;;
-		l     ) percent=$(token number $2)    && sdr "line spacing ${percent}"% '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'               || usage; resetpages=true ;;
+		%     ) percent=$(token number $2)    && sdr "line spacing ${percent}"% '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'               || usage; resetpages=true ;;
 		m     ) sync=$(token binary $2)       && sdr "sync margins ${sync}" '/\"copt_sync_t_b_page_margins\"/s/[01]/'${sync}'/'                     || usage                  ;;
 		d     ) font=$(token word $2)         && font ${font} && header ${font}                                                                     || usage; resetpages=true ;;
 		f     ) font=$(token word $2)         && font ${font}                                                                                       || usage; resetpages=true ;;
@@ -122,7 +123,7 @@ while [ $1 ] ;do
 		t     ) settings "top margin ${margin}" '/\"copt_t_page_margin\"/s/= [0-9]*,/= '${margin}',/'               ;;
 		b     ) settings "bottom margin ${margin}" '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'            ;;
 		=     ) settings "left/right margin ${margin}" '/\"copt_h_page_margins\".*=/,+2s/= [0-9]*,/= '${margin}',/' ;;
-		l     ) settings "line spacing ${percent}"% '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'           ;;
+		%     ) settings "line spacing ${percent}"% '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'           ;;
 		d | h ) settings "font ${font}" '/\"cre_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                                ;;
 		s     ) settings "font size ${size}" '/\"copt_font_size\"/s/= [0-9.]*,/= '${size}',/'                       ;;
 		g     ) settings "font gamma ${gamma}" '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                    ;;
@@ -132,7 +133,7 @@ while [ $1 ] ;do
 		t     ) gestures "top margin ${margin}" '/\"tap_right_bottom_corner\".*=/,+28s/(\"t_page_margin\".*=) [0-9]*,/\1 '${margin}',/'     ;;
 		b     ) gestures "bottom margin ${margin}" '/\"tap_right_bottom_corner\".*=/,+28s/(\"b_page_margin\".*=) [0-9]*,/\1 '${margin}',/'  ;;
 		=     ) gestures "left/right margin ${margin}" '/\"tap_right_bottom_corner\".*=/,+28s/(\[[12]\] =) [0-9]*,/\1 '${margin}',/'        ;;
-		l     ) gestures "line spacing ${percent}"% '/\"tap_right_bottom_corner\".*=/,+28s/(\"line_spacing\".*=) [0-9]*,/\1 '${percent}',/' ;;
+		%     ) gestures "line spacing ${percent}"% '/\"tap_right_bottom_corner\".*=/,+28s/(\"line_spacing\".*=) [0-9]*,/\1 '${percent}',/' ;;
 		d | f ) gestures "font ${font}" '/\"set_font\"/s/\"[^ ]*\",/\"'${font}'\",/'                                                        ;;
 		s     ) gestures "font size ${size}" '/\"copt_font_size\"/s/= [0-9.]*,/= '${size}',/'                                               ;;
 		g     ) gestures "font gamma ${gamma}" '/\"font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                                                 ;;

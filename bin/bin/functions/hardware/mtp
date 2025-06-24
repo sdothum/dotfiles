@@ -6,7 +6,7 @@
 
 # ....................................................................... Device
 
-# Usage: mtp [mount | umount | mounted | ls | recover], see nnn, eject (plugin)
+# Usage: mtp [mount | umount | mounted | ls | recover], SEE: $FILEMANAGER, eject (plugin)
 
 MTP=$HOME/mtp                        # mount point
 

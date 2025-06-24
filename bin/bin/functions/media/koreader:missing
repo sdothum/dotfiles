@@ -17,6 +17,6 @@ mtp mount >/dev/null
 [ -e $SUPERNOTE ] || { ditto supernote "not connected"; exit; }
 
 cd $SUPERNOTE
-nnn "$(missing | cut -d/ -f8)"
+$FILEMANAGER "$(missing | cut -d/ -f8)"
 
 # kak: filetype=sh

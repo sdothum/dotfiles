@@ -11,29 +11,27 @@ export YAZI="/usr/bin/yazi"   # NOTE: envar is also used in alacrityt/kak wrappe
 export EDITOR=kak
 THEME=$HOME/.config/yazi/theme.toml
 TAB=/net/downloads/http     # default tmux directory
+console || termyazi='term "yazi"'
 
 # sloppy mtp automount
 mtp mount && { [ "$1" ] || MTP=$HOME/mtp; }
 [ "$1" != TMUX ] && trap 'mtp umount' EXIT  # must manually eject if mounted during toggle tmux session, see herbstluftwm appbinds
 # udev                                        # reload udev rules
 
-[ -e $SESSION/yazi ] && TERMBG=$(cat $SESSION/yazi)
+[ $TERMBG ] || { [ -e $SESSION/yazi ] && TERMBG=$(cat $SESSION/yazi); }  # see abbreviations.fish
 case $TERMBG in
-	''     ) cp $THEME:custom $THEME ;;
-	dark   ) cp $THEME:flavor $THEME ;;
-	light  ) cp $THEME:flavor $THEME; export TERMBG=PAPER ;;  # see term
-	*      ) cp $THEME:custom $THEME ;;
+	''     ) cp $THEME:dark  $THEME ;;
+	dark   ) cp $THEME:dark  $THEME ;;
+	light  ) cp $THEME:light $THEME; export TERMBG=PAPER ;;  # see term
+	*      ) cp $THEME:dark  $THEME ;;
 esac
 
-export TMUXCONF=$HOME/.tmux.conf.nnn  # SEE: tmux_session
-# BECAUSE: tmux Home End keys echo H L in nnn input..
-grep -Ev '^bind-key.*(Home|End)' $HOME/.tmux.conf >$TMUXCONF
-
+export TMUXCONF=$HOME/.tmux.conf  # SEE: tmux_session
 case $1 in
 	ROOT ) tmux_session 'root' sudo -E $YAZI $TAB         ;;
 	TMUX ) tmux_session 'yazi'         $YAZI $TAB         ;;
-	''   ) term "yazi"                 $YAZI .            ;;
-	*    ) term "yazi"                 $YAZI "${MTP:-$@}" ;;
+	''   ) $termyazi                   $YAZI .            ;;
+	*    ) $termyazi                   $YAZI "${MTP:-$@}" ;;
 esac
 
 # kak: filetype=sh
