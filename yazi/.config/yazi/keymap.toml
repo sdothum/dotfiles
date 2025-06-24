@@ -397,3 +397,9 @@ run    = ''' shell 'dragon-drop --all --and-exit $@' '''
 desc   = "Term window"
 on     = "T"
 run    = ''' shell --orphan 'term' '''
+
+# Resize yazi window
+[[mgr.prepend_keymap]]
+desc   = "Resize yazi window"
+on     = "<C-v>"
+run    = ''' shell 'window size A4 rotate && window snap center' '''

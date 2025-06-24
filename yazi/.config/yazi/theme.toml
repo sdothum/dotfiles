@@ -1,3 +1,9 @@
+# sdothum - 2016 (c) wtfpl
+# yazi
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................................ Theme
+
 # If the user's terminal is in dark mode, Yazi will load `theme-dark.toml` on startup; otherwise, `theme-light.toml`.
 # You can override any parts of them that are not related to the dark/light mode in your own `theme.toml`.
 
@@ -62,8 +68,6 @@ inactive        = { fg = "blue", bg = "gray" }
 # Separator
 # sep_inner     = { open = "", close = "" }
 # sep_outer     = { open = "", close = "" }
-# sep_inner     = { open = "█", close = "█" }
-# sep_outer     = { open = "█", close = "█" }
 sep_inner       = { open = "", close = "" }
 sep_outer       = { open = "█", close = "" }
 
@@ -93,8 +97,6 @@ unset_alt       = { fg = "red", bg = "gray" }
 overall         = {}
 # sep_left      = { open = "", close = "" }
 # sep_right     = { open = "", close = "" }
-# sep_left      = { open = "█", close = "█" }
-# sep_right     = { open = "█", close = "█" }
 sep_left        = { open = "█", close = "" }
 sep_right       = { open = "", close = "█" }
 
@@ -232,15 +234,18 @@ footer          = { fg = "black", bg = "white" }
 [filetype]
 rules = [
 	# Images
+	# { mime = "image/*", fg = "yellow" },
 	{ mime = "image/*", fg = "white" },
 
 	# Media
+	# { mime = "{audio,video}/*", fg = "magenta" },
 	{ mime = "{audio,video}/*", fg = "white" },
 
 	# Archives
 	{ mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", fg = "red" },
 
 	# Documents
+	# { mime = "application/{pdf,doc,rtf}", fg = "cyan" },
 	{ mime = "application/{pdf,doc,rtf}", fg = "white" },
 
 	# Empty files
@@ -248,6 +253,7 @@ rules = [
 
 	# Special files
 	{ name = "*", is = "orphan", bg = "red" },
+	# { name = "*", is = "exec"  , fg = "green" },
 	{ name = "*", is = "exec"  , fg = "green", bold = true },
 
 	# Dummy files
@@ -263,6 +269,8 @@ rules = [
 	{ name = "*/", is = "link", fg = "cyan", bold = true },
 
 	# Fallback
+	# # { name = "*", fg = "white" },
+	# { name = "*/", fg = "blue" },
 	{ name = "*", fg = "white" },
 	{ name = "*/", fg = "yellow", bold = true },
 ]
@@ -968,9 +976,10 @@ conds = [
 	# Fallback
 	{ if = "dir", text = "" },
 	# { if = "exec", text = "" },
-	# { if = "exec", text = "" },
 	{ if = "exec", text = "" },
 	{ if = "!dir", text = "" },
 ]
 
 # : }}}
+
+# kak: filetype=toml
