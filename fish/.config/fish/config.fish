@@ -29,6 +29,9 @@ set -x CDPATH . .. ../.. ~ ~/.config ~/build ~/stow /usr / >/dev/null
 echo $PATH | grep -q "$HOME/.gem/ruby/(rubyver)/bin"
 or set -x PATH $PATH ~/.gem/ruby/(rubyver)/bin ~/.cabal/bin /bin /sbin /usr/sbin /usr/bin/core_perl /usr/local/games >/dev/null
 
+# cli filemanager
+set -x FILEMANAGER yazi
+
 # ........................................................... System environment
 
 set -x LC_ALL en_US.UTF-8

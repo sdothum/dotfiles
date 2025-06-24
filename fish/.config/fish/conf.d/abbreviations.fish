@@ -146,6 +146,7 @@ abbr nb 'nnn -s ebooks'
 # abbr R 'ranger'
 abbr r '/usr/bin/rsync --info=progress2 -a'
 abbr y 'yazi'
+abbr Y 'set -x TERMBG light; yazi; set -u TERMBG' 
 
 # ....................................................................... Search
 
