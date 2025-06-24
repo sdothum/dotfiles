@@ -120,8 +120,10 @@ progress_error  = { fg = "red", bg = "black" }
 [which]
 cols            = 3
 mask            = { bg = "black" }
-cand            = { fg = "lightcyan" }
-rest            = { fg = "darkgray" }
+# cand            = { fg = "lightcyan" }
+# rest            = { fg = "darkgray" }
+cand            = { fg = "lightcyan", bold = true }
+rest            = { fg = "red", bold = true }
 desc            = { fg = "lightmagenta" }
 separator       = "  "
 separator_style = { fg = "darkgray" }
