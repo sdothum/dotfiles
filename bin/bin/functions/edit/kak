@@ -11,7 +11,6 @@ usage() { usage: "[kmd=<command>] $(basename $0) [-l | -p [<id>] | -v | -h] [-BE
 # NOTE: $kmd is passed passively to (env) term for subsequent "xdotool type"
 
 headless=${headless:-false}
-[ -d $1 ] && exit                                       # NOTE: avoid yazi attempt to open dir
 echo $1 | grep -q '.*/yazi.*/bulk-.*' && attached=true  # FOR: yazi bulk renames
 
 # share all instances (clients) with a single kak server session
