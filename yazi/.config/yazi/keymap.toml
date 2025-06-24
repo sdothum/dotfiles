@@ -403,3 +403,19 @@ run    = ''' shell --orphan 'term' '''
 desc   = "Resize yazi window"
 on     = "<C-v>"
 run    = ''' shell 'window size A4 rotate && window snap center' '''
+
+# Smart folder/file handling
+[[mgr.prepend_keymap]]
+desc = "Enter the child directory, or open the file"
+on   = "<Enter>"
+run  = "plugin --sync smart-enter"
+
+[[mgr.prepend_keymap]]
+desc = "Enter the child directory, or open the file"
+on   = "l"
+run  = "plugin --sync smart-enter"
+
+[[mgr.prepend_keymap]]
+desc = "Enter the child directory, or open the file"
+on   = "o"
+run  = "plugin --sync smart-enter"

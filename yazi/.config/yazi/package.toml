@@ -3,5 +3,10 @@ use = "stelcodes/bunny"
 rev = "a0b4e18"
 hash = "7acba2bb504c67dd7f2da135b88aae1b"
 
+[[plugin.deps]]
+use = "yazi-rs/plugins:smart-enter"
+rev = "5eea960"
+hash = "56fdabc96fc1f4d53c96eb884b02a5be"
+
 [flavor]
 deps = []
