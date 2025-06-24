@@ -7,6 +7,7 @@
 
 # turn off
 set fish_greeting
+set -Ua fish_features no-keyboard-protocols  # FOR: termux (fixes '5u' prompt characters)
 
 # only shells with vi mode accepted here!
 # fish_vi_key_bindings >/dev/null  # suppress fish_vi_key_bindings eval error!!
