@@ -25,6 +25,8 @@
   ncdu
 m ueberzugpp  # (yazi c++) terminal image preview
   yazi
+! ya pkg add yazi-rs/plugins:smart-enter
+! ya pkg add stelcodes/bunny
 ! stow yazi
 
 
