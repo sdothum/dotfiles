@@ -1,0 +1,17 @@
+# sdothum - 2016 (c) wtfpl
+
+# Post_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................................... yazi
+
+# SEE: yazi/keymap.toml
+
+ya pkg add yazi-rs/plugins:chmod
+ya pkg add yazi-rs/plugins:diff
+ya pkg add yazi-rs/plugins:smart-enter
+ya pkg add yazi-rs/plugins:smart-paste
+ya pkg add yazi-rs/plugins:toggle-pane
+ya pkg add stelcodes/bunny
+
+# vim: set ft=sh: #

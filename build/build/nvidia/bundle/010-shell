@@ -15,8 +15,8 @@
 = ════════════
 # broot
 # nnn
-# ! stow nnn
 # d m nnn     # with icons
+# ! stow nnn
 # ranger      # for scope with nnn
 # ueberzug    # alacritty (nnn) image preview
 # vifm
@@ -25,8 +25,6 @@
   ncdu
 m ueberzugpp  # (yazi c++) terminal image preview
   yazi
-! ya pkg add yazi-rs/plugins:smart-enter
-! ya pkg add stelcodes/bunny
 ! stow yazi
 
 
