@@ -979,7 +979,7 @@ conds = [
 	# Fallback
 	{ if = "dir", text = "" },
 	# { if = "exec", text = "" },
-	{ if = "exec", text = "" },
+	{ if = "exec", text = "" },
 	{ if = "!dir", text = "" },
 ]
 

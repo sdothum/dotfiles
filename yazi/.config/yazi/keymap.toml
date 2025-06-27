@@ -371,51 +371,93 @@ keymap = [
 	{ on = "f",                run = "filter",                                            desc = "Filter help items" },
 ]
 
-# Overrides / Customizations
+# Plugins
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# Bunny bookmarks
+# ......................................................... persistent bookmarks
+
 [[mgr.prepend_keymap]]
-desc   = "Start bunny.yazi"
 on     = "'"  # vi mark :-)
 run    = "plugin bunny"
+desc   = "Hop to bunny bookmark"
 
-# Optionally, add another keymap to immediately fuzzy search bookmarks
 [[mgr.prepend_keymap]]
-desc   = "Start bunny.yazi fuzzy search"
 on     = "\""
 run    = "plugin bunny fuzzy"
+desc   = "Fuzzy search bunny bookmarks"
 
-# Drag 'n drop selections
+# ........................................................................ chmod
+
 [[mgr.prepend_keymap]]
-desc   = "Drag 'n drop popup"
+on   = [ "c", "m" ]
+run  = "plugin chmod"
+desc = "Chmod on selected files"
+
+# .......................................................... generate diff patch
+
+[[mgr.prepend_keymap]]
+on   = [ "c", "d" ]
+run  = "plugin diff"
+desc = "Diff the selected with the hovered file"
+
+# ...................................................... drag 'n drop selections
+
+[[mgr.prepend_keymap]]
 on     = "<C-y>"
 run    = ''' shell 'dragon-drop --all --and-exit $@' '''
+desc   = "Drag 'n drop popup"
 
-# Spawn term in current tab directory
-[[mgr.prepend_keymap]]
-desc   = "Term window"
-on     = "T"
-run    = ''' shell --orphan 'term' '''
+# ................................................... smart folder/file handling
 
-# Resize yazi window
-[[mgr.prepend_keymap]]
-desc   = "Resize yazi window"
-on     = "<C-v>"
-run    = ''' shell 'window size A4 rotate && window snap center' '''
-
-# Smart folder/file handling
 [[mgr.prepend_keymap]]
 desc = "Enter the child directory, or open the file"
 on   = "<Enter>"
 run  = "plugin --sync smart-enter"
 
 [[mgr.prepend_keymap]]
-desc = "Enter the child directory, or open the file"
 on   = "l"
 run  = "plugin --sync smart-enter"
+desc = "Enter the child directory, or open the file"
 
 [[mgr.prepend_keymap]]
-desc = "Enter the child directory, or open the file"
 on   = "o"
 run  = "plugin --sync smart-enter"
+desc = "Enter the child directory, or open the file"
+
+# .................................................................. smart paste
+
+[[mgr.prepend_keymap]]
+on   = "p"
+run  = "plugin smart-paste"
+desc = "Paste into the hovered directory or CWD"
+
+# .......................................................... toggle preview size
+
+[[mgr.prepend_keymap]]
+on   = "<C-t>"
+run  = "plugin toggle-pane max-preview"
+desc = "Maximize or restore the preview pane"
+
+# Shell actions
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# .......................................... spawn term in current tab directory
+
+[[mgr.prepend_keymap]]
+on     = "T"
+run    = ''' shell --orphan 'term' '''
+desc   = "Term window"
+
+# ...................................................... eject removable devices
+
+[[mgr.prepend_keymap]]
+on     = "U"
+run    = ''' shell --orphan 'eeject' '''  # for ereaders
+desc   = "Eject removable devices"
+
+# .......................................................... restore yazi window
+
+[[mgr.prepend_keymap]]
+on     = "<C-v>"
+run    = ''' shell 'window size A4 rotate && window snap center' '''
+desc   = "Resize yazi window"
