@@ -50,17 +50,18 @@ panel() {
 				duration=${duration#0’}  # prune 0 hours
 				duration=${duration#0}   # prune leading zero minutes
 				if [ "$line" != "$currently" ] ;then
+					DURATION=$duration  # full play length
 					currently="$line"
 					artist="$(field 1)"
 					album="$(field 2)"
 					playing="$(field 3) • "
 					track="$(field 4)"
-					if [ "$(folder)" != "$from" ] || [ -z $count ];then
+					if [ "$(folder)" != "$from" ] || [ -z $TRACKS ];then
 						from="$(folder)"
 						cd "$from"
-						count=$(metaflac | grep "@track" | wc -l)
+						TRACKS=$(metaflac | grep "@track" | wc -l)
 					fi
-					[ $track = $count ] && unset count
+					[ $track = $TRACKS ] && unset TRACKS
 				fi
 				song="$playing"
 				playing="$(ribbon "$playing")"
@@ -70,7 +71,7 @@ panel() {
 			'[paused]'  ) button="%{F$FAINT}■" ;;      # dimmed :)
 			*           ) [ "$line" = 'CLEAR' ] && printf "%s\n" "%{c} "; continue ;;
 		esac
-		printf "%s\n" "%{c}${artist}${SEP}${album}${SEP}${song}${SEP}${track}␥${count} ${button} %{F-}${duration}"
+		printf "%s\n" "%{c}${artist}${SEP}${album}${SEP}${song}${SEP}${track}␥${TRACKS}  $DURATION ${button} %{F-}${duration}"
 	done
 }
 
