@@ -17,7 +17,7 @@ ansi='\[\([0-9]{1,2}\(;[0-9]{1,2}\)?\)?[m|K]'
 # directory exclusions
 ignore=$(grep -E -v '^#|^ *$' $IGNORE | sed -e 's/^\./\\./g; s/\*/.*/g' | tr '\n' '|')
 
-# <regex> restricts exclude to filename portion of input list, see a and al
+# <regex> restricts exclude to filename portion of input list, SEE: a and al
 [ $1 ] && grep -E -v "\($ansi\)?.*\($ignore\)" | grep -E -v "$1" || grep -E -v "\($ansi\)?.*\($ignore\)"
 
 # kak: filetype=sh

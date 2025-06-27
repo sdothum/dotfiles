@@ -24,7 +24,7 @@ space='•'         # hard char
 tab=$(for i in $(seq $tabstop) ;do echo -n "‣" ;done )  # hard char to avoid "echo" loss
 nth=1             # pattern position
 gutter=' '        # pattern gutter prefix
-ignore='❌'       # nth space column split case avoidance (see below)
+ignore='❌'       # nth space column split case avoidance (SEE: below)
 backslash='◌'     # preserve backslash
 continuation='➥'  # special ;\ pair
 

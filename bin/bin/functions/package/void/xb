@@ -43,11 +43,11 @@ CACHE=/var/cache/xbps
 BACKUP=/net/depot/
 ITERATE=/tmp/xb:iterate
 XBDIR=$(dirname $0)
-ACTIONS=$XBDIR/functions/rules  # tuple: <action> <package> -> file: function/<action>, see upgrade_check and upgrade_actions
+ACTIONS=$XBDIR/functions/rules  # tuple: <action> <package> -> file: function/<action>, SEE: upgrade_check and upgrade_actions
 
 [ $1 ] || usage
 
-# kernel must be last of ordered action tuples, see file function/kernel
+# kernel must be last of ordered action tuples, SEE: file function/kernel
 [ -e $ACTIONS ] && upgrade_actions=$(cat $ACTIONS | sed 's/#.*//')  # prune comments
 upgrade_actions="$upgrade_actions
 	kernel  linux[0-9]
@@ -70,7 +70,7 @@ upgrade_check() {
 iterate() {
 	action=$1
 	shift
-	touch $ITERATE  # see hold (below)
+	touch $ITERATE  # SEE: hold (below)
 	trap "rm -f $ITERATE" EXIT
 	count=$#
 	for i in $@ ;do count=$(( $count - 1 )); [ $count -eq 0 ] && rm $ITERATE; xb $action $i ;done

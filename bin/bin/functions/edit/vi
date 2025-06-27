@@ -30,7 +30,7 @@ done
 
 if [ -z "$1" ] ;then
 	[ $PWD = $HOME ] && depth=1 || depth=9
-	# force ncurses mode, see fzf wrapper
+	# force ncurses mode, SEE: fzf wrapper
 	file=$(find -maxdepth $depth -type f 2>/dev/null | exclude | TERMINAL=true rmenu 'Edit' --multi) || exit
 else
 	if [ ! -e "$1" ] ;then

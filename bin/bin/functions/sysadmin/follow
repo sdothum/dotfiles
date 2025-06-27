@@ -6,7 +6,7 @@
 
 # ..................................................................... Log tail
 
-# tail file in terminal window (see rox)
+# tail file in terminal window (SEE: rox)
 term "$@" sudo tail -f $@
 
 # kak: filetype=sh

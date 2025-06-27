@@ -1,5 +1,5 @@
 # /etc/profile.d/path.sh
-# see .xinitrc -> . /etc/profile
+# SEE: .xinitrc -> . /etc/profile
 [ $USER = root ] && exit
 
 # set PATH so it includes user's private bin if it exists

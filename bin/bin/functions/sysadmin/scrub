@@ -19,7 +19,7 @@ $(basename $0) { c'ancel | s'tatus | I'nitialize } [boot | root | net | share | 
 }
 
 interval=${interval:-300}              # default 5 minute interval reporting
-CRON=/tmp/scrub                        # see crontab -l
+CRON=/tmp/scrub                        # SEE: crontab -l
 
 # import user path
 [ $CRONCOLORS ] || . $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
@@ -52,10 +52,10 @@ show() {
 	duration="$(btrfs scrub status $V | grep 'Duration:' | sed 's/  */ /g')"
 	errors="$(btrfs scrub status $V | grep 'summary:' | sed -r 's/.*: *//g; s/^(.)/\u\1/')"
 	notify X critical 0 "btrfs scrub $V" "$duration\n<b>$errors</b>"
-	rm -f $CRON  # remove triggered cron scrub, see crontab -l
+	rm -f $CRON  # remove triggered cron scrub, SEE: crontab -l
 }
 
-# schedule cron scrub, see crontab
+# schedule cron scrub, SEE: crontab
 if [ "$1" = '-' ] ;then
 	volume $2 >$CRON
 	[ -s $CRON ]|| { rm $CRON; usage; }

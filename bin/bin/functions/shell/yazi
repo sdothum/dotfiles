@@ -7,22 +7,22 @@
 
 # Usage: yazi [TMUX | ROOT] | [path]
 
-export YAZI="/usr/bin/yazi"   # NOTE: envar is also used in alacrityt/kak wrappers for conditional tweaks
+export YAZI="/usr/bin/yazi"        # NOTE: envar is also used in alacrityt/kak wrappers for conditional tweaks
 export EDITOR=kak
 THEME=$HOME/.config/yazi/theme.toml
-TAB=/net/downloads/http     # default tmux directory
-console || termyazi='term "yazi"'
+TAB=/net/downloads/http            # default tmux directory
+console || termyazi='term "yazi"'  # console mode or X11 window
 
 # sloppy mtp automount
 mtp mount && { [ "$1" ] || MTP=$HOME/mtp; }
-[ "$1" != TMUX ] && trap 'mtp umount' EXIT  # must manually eject if mounted during toggle tmux session, see herbstluftwm appbinds
-# udev                                        # reload udev rules
+[ "$1" != TMUX ] && trap 'mtp umount' EXIT  # must manually eject if mounted during toggle tmux session, SEE: herbstluftwm appbinds
+udev                                        # reload udev rules
 
-[ $TERMBG ] || { [ -e $SESSION/yazi ] && TERMBG=$(cat $SESSION/yazi); }  # see abbreviations.fish
+[ $TERMBG ] || { [ -e $SESSION/yazi ] && TERMBG=$(cat $SESSION/yazi); }  # SEE: abbreviations.fish
 case $TERMBG in
 	''     ) cp $THEME:dark  $THEME ;;
 	dark   ) cp $THEME:dark  $THEME ;;
-	light  ) cp $THEME:light $THEME; export TERMBG=PAPER ;;  # see term
+	light  ) cp $THEME:light $THEME; export TERMBG=PAPER ;;               # SEE: term
 	*      ) cp $THEME:dark  $THEME ;;
 esac
 

@@ -23,7 +23,7 @@ if console ;then
 	# sleep 1
 	# cbonsai -il
 elif [ -e $FORTUNE:term ] ;then
-	# see (herbstluftwm) term
+	# SEE: (herbstluftwm) term
 	trap "rm -f $FORTUNE:term" EXIT
 	if [ ! -e $FORTUNE ] ;then
 		if exists $fortune ;then

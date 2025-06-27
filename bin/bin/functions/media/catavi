@@ -6,7 +6,7 @@
 
 # ................................................................... Screenshot
 
-# see http://www.doctort.org/adam/nerd-notes/concatenating-avi-files.html
+# SEE: http://www.doctort.org/adam/nerd-notes/concatenating-avi-files.html
 usage() { usage: "$(basename $0) <file>*"; exit 1; }
 
 TEMPFILE=$(mktemp)

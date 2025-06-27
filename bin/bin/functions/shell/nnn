@@ -7,7 +7,7 @@
 
 # Usage: nnn [TMUX | ROOT] | [path]
 
-NNN="/usr/local/bin/nnn -E"  # nnn compiled with icons, see make_install nnn
+NNN="/usr/local/bin/nnn -E"  # nnn compiled with icons, SEE: make_install nnn
 TAB=/net/downloads/http     # default tmux directory
 
 [ -e "${NNN% *}" ] || NNN=/usr/bin/nnn
@@ -33,7 +33,7 @@ x:_eject
 "
 
 # expand key:value pairs into ";" delimited list
-# NOTE: cannot be done within export statement -- will cause fish source error, see config.fish
+# NOTE: cannot be done within export statement -- will cause fish source error, SEE: config.fish
 list() { echo $@ | sed 's/ /;/g'; }
 
 bookmarks="$(list $bookmarks)"
@@ -54,7 +54,7 @@ export GUI=1                                                   # for media apps
 
 # sloppy mtp automount
 mtp mount && { [ "$1" ] || MTP=$HOME/mtp; }
-[ "$1" != TMUX ] && trap 'mtp umount' EXIT  # must manually eject if mounted during toggle tmux session, see herbstluftwm appbinds
+[ "$1" != TMUX ] && trap 'mtp umount' EXIT  # must manually eject if mounted during toggle tmux session, SEE: herbstluftwm appbinds
 udev                                        # reload udev rules
 
 # BECAUSE: tmux Home End keys echo H L in nnn input..

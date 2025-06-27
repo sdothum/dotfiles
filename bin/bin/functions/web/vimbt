@@ -11,7 +11,7 @@ histfile=$HOME/.config/vimb/history
 histsize=1000
 winid=/tmp/tabbed:winid
 
-# see dhistory for external browser history access
+# SEE: dhistory for external browser history access
 prune_history() {
 	work=$(mktemp)
 	trap "rm -f $work" EXIT
@@ -31,7 +31,7 @@ vimbt() {
 	# killall -TERM unclutter 2>/dev/null
 	# (winstance 'VimbT' && toggle unclutter) &
 
-	# tabbed appends winid to expanded command arguments, see vimb
+	# tabbed appends winid to expanded command arguments, SEE: vimb
 	# vimb embed terminates this function
 	tabbed -c -n 'VimbT' -ps+1 -t '#B3431E' -T '#fdf6e3' -u '#464F52' -U '#B2BBBD' >$winid
 }

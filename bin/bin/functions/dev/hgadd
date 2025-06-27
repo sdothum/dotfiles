@@ -23,7 +23,7 @@ delay=20      # notificaton duration
 [ "$1" ]  || usage
 exists hg || exit
 
-exclude=${exclude:-$(cat $IGNORE | sed '1i\\.git*\n\\.hg*' | tr '\n' '|' | sed 's/[|]*$//')}  # see note above!
+exclude=${exclude:-$(cat $IGNORE | sed '1i\\.git*\n\\.hg*' | tr '\n' '|' | sed 's/[|]*$//')}  # SEE: note above!
 # echo $exclude
 
 exclude()   { grep -E -v "$exclude"; }  # exclude projects not in $STOW
@@ -40,6 +40,6 @@ done
 
 [ "$files" ] || exit 1  # non-interested source changes
 notify 'Mercurial' "$(echo "${files#  }" | sed 's,  ,\n,g')"            # newline on /path
-hg commit --$output --cwd $REPO -m "$(date -R | cut -d- -f1) ..$files"  # see hgl alias (hg log) for compact listing
+hg commit --$output --cwd $REPO -m "$(date -R | cut -d- -f1) ..$files"  # SEE: hgl alias (hg log) for compact listing
 
 # kak: filetype=sh

@@ -6,7 +6,7 @@
 # ................................................................ Rsync wrapper
 
 rsync_home() {
-	# passport source directory precludes using default rsync(), see usb()
+	# passport source directory precludes using default rsync(), SEE: usb()
 	ditto exclude "$(cat $EXCLUDE | tr '\n' ' ')"
 	ditto rsync "$HOME $1" 
 	rsync -r --delete --delete-excluded --exclude-from=$EXCLUDE $HOME "$1"

@@ -5,7 +5,7 @@
 
 # ................................................................ Rsync wrapper
 
-SUDO=sudo  # see rsync
+SUDO=sudo  # SEE: rsync
 
 if server ;then
 	ifno 'restore media server databases from /net/archive' || {

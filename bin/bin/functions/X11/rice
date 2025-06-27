@@ -6,7 +6,7 @@
 
 # ............................................................... Rice utilities
 
-# Usage: rice [<message>], see functions/rice
+# Usage: rice [<message>], SEE: functions/rice
 
 msg=$1
 [ $msg ] && shift || usage: $0

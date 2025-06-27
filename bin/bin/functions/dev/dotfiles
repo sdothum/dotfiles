@@ -23,10 +23,10 @@ DOTFILES=$(dirname $0)/.dotfiles:folders
 MESSAGES=/tmp/dotfiles:messages
 UPTODATE="nothing to commit, working tree clean"
 
-[ -d "$1" ] && { STOW="$1"; shift; }  # see config.fish
+[ -d "$1" ] && { STOW="$1"; shift; }  # SEE: config.fish
 [ -e $HOME/.git/stow ] && ln -sf $HOME/.git/stow $HOME/stow/.git
 # update github dotfiles
-# see .gitignore, to remove items from remote repository
+# SEE: .gitignore, to remove items from remote repository
 # git rm --cached <filespec>
 # git rm --cached -r <dir>
 
@@ -54,7 +54,7 @@ commit() {
 	echo
 	git commit --message="$DESC"
 	git push --force --set-upstream origin main
-	COMMIT=true  # see bulk
+	COMMIT=true  # SEE: bulk
 }
 
 pending() {

@@ -10,14 +10,14 @@ usage() { usage: "$(basename $0) -- | [-] [dir] [<pattern>]"; exit 1; }
 
 exists zoxide && CD=z
 
-# refresh directory cache, see fcache
+# refresh directory cache, SEE: fcache
 case $1 in
 	help ) usage ;;
 	--   ) exec fcache I ;;
 	-    ) refresh=$1; shift ;;
 esac
 
-# fish shell ignores non-fish cd's, see j.fish
+# fish shell ignores non-fish cd's, SEE: j.fish
 case $# in
 	0 ) pwd | grep -q $HOME && { dir=$(fcache $refresh $HOME | fZf); exit; } || dir=$(fcache $refresh $PWD | fZf) ;;
 	1 ) [ -d $1 ] && dir=$(fcache $refresh $1 | fZf) || dir=$(fcache $refresh $HOME | fZf -q $1) ;;

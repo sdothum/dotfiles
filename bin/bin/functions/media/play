@@ -21,7 +21,7 @@ YOUTUBE=/net/downloads/http/youtube-dl
 trap "rm -f $HOME/mpv-shot*.jpg" EXIT
 
 [ "$1" = '-q' ] && { quiet=true; shift; }
-# play media (see rox, menu movies, menu series, browsers..)
+# play media (SEE: rox, menu movies, menu series, browsers..)
 [ "$2" ] && title=$2 || title=${1##*/}
 
 # check for attached usb drive
@@ -43,7 +43,7 @@ while : ;do
 	mpv --vf=eq "$STREAM" --sub-font-size=$fontsize >/dev/null 2>&1 &
 	# zoom window after window focus delay
 	# xdotool search --sync --class mpv windowactivate  # activate instead of key direct
-	# xdotool key Super+Shift+z                         # see rulerrc
+	# xdotool key Super+Shift+z                         # SEE: rulerrc
 	notify 30 blackboard "$title" "$(printf '1/2^Contrast\n3/4^Brightness\n5/6^Gamma\n7/8^Saturation\n9/0^Volume^m^Mute\n-/+^Audio Delay^ #^Language\nj/J^Subtitles^ v^Toggle\nx/z^Subtitle Delay' | column -s^ -t)"
 	xdotool search --sync --class Dunst windowraise
 	pidwait -f "mpv --vf=eq"

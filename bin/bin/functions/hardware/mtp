@@ -6,7 +6,7 @@
 
 # ....................................................................... Device
 
-# Usage: mtp [mount | umount | mounted | ls | recover], SEE: $FILEMANAGER, eject (plugin)
+# Usage: mtp [mount | umount | mounted | list | ls | recover], SEE: $FILEMANAGER, eject (plugin)
 
 MTP=$HOME/mtp                        # mount point
 
@@ -15,7 +15,16 @@ device()  { jmtpfs -l | grep -q '^Device [0-9]'; }
 mounted() { mount | grep -q "^jmtpfs on $MTP "; }
 recover() { sudo umount $MTP; [ -d $MTP ] || ditto mkdir "$(mkdir -v $MTP)"; }
 
-pwd | grep -q "$MTP" && { ditto ERROR mtp "cd ~ before any mtp actions"; exit 1; }
+busy() { ditto ERROR mtp "cd ~ before any mtp actions"; exit 1; }
+
+if pwd | grep -q "$MTP" ;then
+	case $1 in
+		mount   ) busy ;;
+		u*mount ) busy ;;
+		recover ) busy ;;
+	esac
+fi
+
 [ ! -d $MTP ] && recover
 
 case $1 in
@@ -34,8 +43,9 @@ case $1 in
 		fi
 		;;
 
-	mounted ) mounted ;;
-	ls      ) $(device) && jmtpfs -l  ;;
+	mounted ) mounted; exit ;;
+	list    ) $(device) && jmtpfs -l  ;;
+	ls      ) [ -d $MTP ] && [ $(find $MTP -maxdepth 1 | wc -l) -gt 1 ] && { echo $MTP; exit; } ;;  # SEE: eeject
 	recover ) recover; exec mtp mount ;;
 	*       ) [ -d $MTP ] && { [ $(find $MTP -maxdepth 1 | wc -l) -gt 1 ] && ditto dir $MTP; true; } || ditto ERROR notfound $MTP ;;
 esac

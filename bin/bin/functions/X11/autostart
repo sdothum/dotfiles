@@ -64,7 +64,7 @@ else
 	[ -e $CMST ] && cmst &
 fi
 
-[ $FCCACHE ] && { (fc-cache -f; rm -f $FCCACHE) & }  # see iosevka
+[ $FCCACHE ] && { (fc-cache -f; rm -f $FCCACHE) & }  # SEE: iosevka
 
 # ....................................................... Desktop initialization
 

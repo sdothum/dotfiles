@@ -23,7 +23,7 @@
 #     iosevka ebook atkinson english         (strict hyperlegible variants)
 #     iosevka expanded geometric jost proof  (expanded width jost prose font)
 #
-# see make_install
+# SEE: make_install
 
 ditto IOSEVKA "${IOSEVKA}"
 ditto 'tuples now changed from "option value" pairs to -> option=value'
@@ -58,7 +58,7 @@ usage() {
 > b-corner
 > d-[tailed|toothless]
 > f-[asymmetric|extended[+]|flat[+[+]]]
-> g-[double|flat]
+> g-[double|flat|open]
 > i-[hooky|serifed[-]|serifless]
 > j-[flat|serifed|serifless]
 > l-[ascending|bottom|flat|hooky|serifless]
@@ -254,6 +254,7 @@ variant() {
 			f-flat+        ) glyph f=flat-hook-serifless                                ;;
 			g-double       ) glyph g=double-storey                                      ;;
 			g-flat         ) glyph g=single-storey-flat-hook-serifless                  ;;
+			g-open         ) glyph g=double-storey-open                                 ;;
 			i-hooky        ) glyph i=hooky;               S_i='i'; unset s_i            ;;
 			i-serifed      ) glyph i=serifed;             unset s_i S_i                 ;;
 			i-serifed-     ) glyph i=hooky;               S_i='i'; unset s_i            ;;
@@ -361,7 +362,7 @@ cmdopts () {
 			nerdfont       ) nerdfont=true ;;
 
 			# styles
-			book+regular   ) adjust="book+regular" ;;    # see fforge bookweight
+			book+regular   ) adjust="book+regular" ;;    # SEE: fforge bookweight
 			descenders     ) variant 'FP=DESCENDING'; FP_descending=true; baseline=true ;;
 			double         ) unset mono ;;
 			emdash=*       ) emdash ${1#*=} || usage ;;  # emdash width
@@ -419,6 +420,7 @@ cmdopts () {
 			f-flat++       ) variant f-flat+ 'ASCENDING'; f_ascending=true ;;
 			g-double       ) variant $1 ;;
 			g-flat         ) variant $1 ;;
+			g-open         ) variant $1 ;;
 			i-hooky        ) variant $1 ;;
 			i-serifed      ) variant $1 ;;
 			i-serifed-     ) variant $1 'FLIPPED'; i_flipped=true ;;

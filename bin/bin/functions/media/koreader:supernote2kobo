@@ -38,10 +38,7 @@ sed 's|/storage/.*/Calibre/|/mnt/onboard/|' $HISTORY | tee $KOREADER/history.lua
 # sync kobo library 
 /usr/bin/rsync -av --info=progress2 --ignore-errors --exclude='lost+found' --delete $BACKUP/Calibre/books $KOBO/
 
-# set default KOBO settings
-koreader = 46 t 35 b 35 g 36 d laft s 13.5 l 196 1 - o 2 i false p kobo
-
-sync
-sudo umount $KOBO
+# update sdr's to default KOBO settings
+koreader = 46 t 40 b 38 g 36 d laft s 13.5 % 186 1 - o 2 i false p kobo
 
 # kak: filetype=sh

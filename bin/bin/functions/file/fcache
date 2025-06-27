@@ -27,7 +27,7 @@ BOOKMARKS="$(dirname $0)/.fcache:bookmarks"
 # zero caches from interrupted builds can cause hangs, ignore pacaur/pkg permission denials 
 find $CACHEDIR -name 'fcache:*' -size 0c -exec rm {} \; 2>/dev/null
 
-# speed up fuzzy searches (especially arm), see shell/j j.fish
+# speed up fuzzy searches (especially arm), SEE: shell/j j.fish
 while [ $1 ] ;do
 	case $1 in
 		I*         ) rm -fv $FCACHE*; exit ;;
@@ -62,7 +62,7 @@ eval find $link $node $maxdepth -type d 2>/dev/null | ${filter:-exclude} >$dcach
 [ $type = d ] || eval find $link $node $maxdepth $perm $regextype $regex -type $type 2>/dev/null | ${filter:-exclude} >$cache &
 
 wait
-grep -q "$node" $FCACHE || echo $type $node $maxdepth $perm $regextype $regex >>$FCACHE  # see fcached (tbd)
+grep -q "$node" $FCACHE || echo $type $node $maxdepth $perm $regextype $regex >>$FCACHE  # SEE: fcached (tbd)
 [ $nocat ] || cat $cache $BOOKMARKS                                                      # append bookmarks
 
 # kak: filetype=sh

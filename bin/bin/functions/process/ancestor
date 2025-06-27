@@ -9,7 +9,7 @@
 # Usage: . ancestor
 #
 # NOTE: must be sourced in order to obtain correct parent id or called within a
-#       script that is itself sourced, see log/parent as called from herbstluftwm
+#       script that is itself sourced, SEE: log/parent as called from herbstluftwm
 #       scripts
 
 ps -ef | grep $PPID | sort | head -1 | awk '{ ps=$NF; sub(/.*\//, "", ps); print ps }'

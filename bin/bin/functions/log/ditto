@@ -30,7 +30,7 @@ while [ "$1" ] ;do
 		INF* ) ATTCOLOR=${WHITE} MSGCOLOR=${GREY}    ;;
 		@    ) [ "$2" ] || usage; desc=$2; message=' ';     shift ;;
 		@*   ) [ "$2" ] && usage; desc=${1#@}; message=' ' ;;
-		-ne  ) export ne=$1 ;;  # see reboot :)
+		-ne  ) export ne=$1 ;;  # SEE: reboot :)
 		-t   ) timestamp="${WHITE}$(date "+%-H %M'%S\" ")" ;;
 		..   ) [ "$2" ] || usage; justify=true; message=$2; shift ;;
 		--   ) separator=true ;;

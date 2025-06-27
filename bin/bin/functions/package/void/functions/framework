@@ -1,6 +1,6 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-# see xb, .xb_actions
+# SEE: xb, .xb_actions
 
 gem list
 ditto version "$(ruby --version)"

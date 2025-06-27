@@ -7,7 +7,7 @@
 # .............................................................. Shell benchmark
 
 # benchmark shells (not applicable to fish)
-# see http://unix.stackexchange.com/questions/148035/is-dash-or-some-other-shell-faster-than-bash/148061#148061
+# SEE: http://unix.stackexchange.com/questions/148035/is-dash-or-some-other-shell-faster-than-bash/148061#148061
 
 # shells='dash bash zsh'
 shells='dash bash'

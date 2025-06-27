@@ -171,7 +171,7 @@ stdin() {
 	stdin=$(mktemp)
 	# tr -cd '\11\12\15\40-\176' | fold -sw $fold >$stdin
 	ascii | fold -sw $fold >$stdin
-	# set (title, time) format values, see case mail below
+	# set (title, time) format values, SEE: case mail below
 	[ $1 ] && $@
 	print $stdin
 	[ $proof ] || rm $stdin
@@ -186,7 +186,7 @@ case $1 in
 	stdin ) stdin ;;
 	
 	mail  )
-		fontsize=9  # content is piped in from mail application, see alot
+		fontsize=9  # content is piped in from mail application, SEE: alot
 		spacing='\onehalfspacing'
 		unset linenumbers
 		# hexdump log for inspecting unprintable punctuation characters

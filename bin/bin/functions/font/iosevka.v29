@@ -25,7 +25,7 @@ VERSION=v29
 #     iosevka ebook atkinson english         (strict hyperlegible variants)
 #     iosevka expanded geometric jost proof  (expanded width jost prose font)
 #
-# see make_install
+# SEE: make_install
 
 ditto 'tuples now changed from "option value" pairs to -> option=value'
 ditto "refactoring is not fully tested"
@@ -358,7 +358,7 @@ cmdopts () {
 			monolexic      ) monolexic ;;
 
 			# styles
-			book+regular   ) adjust="book+regular" ;;    # see fforge bookweight
+			book+regular   ) adjust="book+regular" ;;    # SEE: fforge bookweight
 			descenders     ) variant 'FP=DESCENDING'; FP_descending=true; baseline=true ;;
 			double         ) unset mono ;;
 			emdash=*       ) emdash ${1#*=} || usage ;;  # emdash width

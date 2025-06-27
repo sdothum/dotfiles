@@ -1,0 +1,39 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Sysadmin
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ...................................................... eject removable devices
+
+# SEE: yazi/keymap.toml
+
+# MTP=$HOME/mtp  # SEE: mtp
+USB=/run/media/$USER
+
+if type sudo >/dev/null 2>&1; then
+	SUDO=sudo
+elif type sudoedit >/dev/null 2>&1; then
+	SUDO=sudoedit
+elif type doas >/dev/null 2>&1; then
+	SUDO=doas
+fi
+
+busy() { notify critical 5 "$(echo $1 | tr '[:lower:]' '[:upper:]') busy" "cd ~ before attempting to eject"; exit 1; }
+
+sync  # IO before eject
+
+# mtp mount point is fixed (vs dynamic udiskie mount point)
+if $(mtp mounted) ;then
+	MTP=$(mtp ls)
+	pwd | grep -qv "$MTP" && mtp umount || busy "${MTP##*/}"
+fi
+
+# unmount all usb connected devices :-)
+for i in $USB/* ;do
+	if [ -d "$i" ] ;then
+		pwd | grep -qv "$i" && $SUDO eject $i || busy "${i##*/}"
+	fi
+done
+
+# vim: set ft=sh: #

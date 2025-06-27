@@ -13,7 +13,7 @@ CONFIG=$CONF/config.toml
 LANGUAGES=$CONF/languages.toml
 SCRATCH=/tmp/helix:scratch
 # LOGGING=-v      # :log-open level upto -vvv
-export TABSTOP=3  # default for (pipe), see align
+export TABSTOP=3  # default for (pipe), SEE: align
 
 [ "$1" = WAIT ] && { WAIT=$1; shift; }  # foreground process?
 [ "$1" ] || { touch $SCRATCH; set -- $SCRATCH; }

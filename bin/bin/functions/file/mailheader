@@ -11,7 +11,7 @@ require 'sanitize'
 require 'mail'
 require 'time'
 
-# view email (see rox)
+# view email (SEE: rox)
 begin
 	mail = Mail.read(ARGV[0])
 	to = mail.to[0]

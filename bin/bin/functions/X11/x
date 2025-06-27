@@ -10,9 +10,9 @@
 
 usage() { usage: "$(basename $0) 'start [@<delay>] | 2bwm | awesome | berry | bspwm | budgie | cinnamon | dwm | gnome | goomwwm | guile | herbstluftwm | i3 | kde | lxde | lxqt | notion | openbox | ratpoison | razor-qt | spectrwm | stumpwm | subtle | shell | windowchef | wmii | wmutils | worm | wtftw | xfce4 | xmonad"; rm -f $BOOTWM; exit 1; }
 
-BOOTWM=$SESSION/boot:wm  # see console_login, user_login
+BOOTWM=$SESSION/boot:wm  # SEE: console_login, user_login
 WM=$HOME/.windowmanager
-SEAT=/tmp/console:width  # see console_login
+SEAT=/tmp/console:width  # SEE: console_login
 DOTS=0.75                # ... draw interval
 
 # sh -c 'cd /usr/share/figlet; for i in *tlf ;do toilet -F gay -f $i $(cat $WM); echo $i; read prompt ;done'
@@ -21,12 +21,12 @@ font=future
 font=emboss
 font=ascii12
 
-[ "${1#@}" != "$1" ] && { sleep ${1#@}; shift; }  # see user_login for delayed launch
+[ "${1#@}" != "$1" ] && { sleep ${1#@}; shift; }  # SEE: user_login for delayed launch
 
 export WMREBOOT=/tmp/wm:reboot  # SEE: reboot (script)
 rm -f $WMREBOOT
 
-# see .xinitrc
+# SEE: .xinitrc
 case $1 in
 	abort | halt | stop ) [ -e $BOOTWM ] && ditto user_login 'canceling startx'; rm -f $BOOTWM; exit ;;  # boot intercept shortcut
 	''   ) ;;

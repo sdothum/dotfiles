@@ -22,7 +22,7 @@ if os.ttyname(sys.stdout.fileno()) == '/dev/tty1':
 		with open('/dev/tty1', 'w') as fd:
 			# funny kludge to restore right fish prompt
 			fcntl.ioctl(fd, termios.TIOCSTI, '\b')
-			# issue newline to refresh command prompt, see we
+			# issue newline to refresh command prompt, SEE: we
 			fcntl.ioctl(fd, termios.TIOCSTI, '\n')
 
 # vim: set ft=python: #

@@ -15,7 +15,7 @@ while ! wego -backend forecast.io -location $city -days 2 $(cat $HOME/.wego) $@ 
 	sleep 1  # arm on boot delay..
 done
 
-# restore prompt if we &, see console_login
+# restore prompt if we &, SEE: console_login
 console && sudo console_prompt || return 0
 
 # kak: filetype=sh

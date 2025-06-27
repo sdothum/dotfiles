@@ -49,7 +49,7 @@ fi
 #            startx command (x)
 filter='^[^ ]*  *(([^ ]*)|((cd|h|kk*|l[alrst]*|pa*|r|x|z)( *| .*)))$'
 
-# discard command duplicates, see dmenu shistory
+# discard command duplicates, SEE: dmenu shistory
 week=$(date '+%W')
 weekof() {
 	# calculation assumes history size does not span more than one calendar year
@@ -60,7 +60,7 @@ weekof() {
 fish_history() { fish -c "history --show-time='%s %W '"; }
 zsh_history()  { zsh -c "export HISTFILE=$ZSH; export HISTSIZE=10000; fc -R; fc -l -t '%W' 1"; }
 
-# interactively paste into terminal session or pass filtered history list (see dmenu shistory)
+# interactively paste into terminal session or pass filtered history list (SEE: dmenu shistory)
 history() {
 	# terminal invocation?
 	if [ -t 1 ] ;then

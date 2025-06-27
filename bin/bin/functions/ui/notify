@@ -15,7 +15,7 @@ LOG=/tmp/notify.log
 color1=${YELLOW}
 color2=${BLUE}
 
-# enable cron notifications, see .xinitrc
+# enable cron notifications, SEE: .xinitrc
 [ -r $HOME/.dbus/Xdbus ] && . $HOME/.dbus/Xdbus >/dev/null
 
 while : ;do

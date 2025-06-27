@@ -45,7 +45,7 @@ def parse_mail(mail)
 	body.gsub(/&amp;/, '&').gsub('&nbsp;', ' ').gsub(/=E2=80=93/, '--').gsub(/=E2=80=99/, "'")
 end
 
-# view email (see rox)
+# view email (SEE: rox)
 begin
 	mail = Mail.read(ARGV[0])
 	to = mail.to[0]

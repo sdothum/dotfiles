@@ -1,5 +1,5 @@
 # sdothum - 2016 (c) wtfpl
-# tuple: <object> <package> -> file: functions/<action>, see xb
+# tuple: <object> <package> -> file: functions/<action>, SEE: xb
 
 hints     chromium
 imap      dovecot

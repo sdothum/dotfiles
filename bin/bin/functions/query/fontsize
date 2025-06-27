@@ -6,7 +6,7 @@
 
 # .................................................................... Font size
 
-# see urxvt wrapper, draw panel, theme.vim
+# SEE: urxvt wrapper, draw panel, theme.vim
 
 SESSION=${SESSION:-$HOME/.session}  # for root invocation
 FONTSIZE=$SESSION/fontsize

@@ -284,7 +284,7 @@ W6() { echo "11 ELEVEN \n12 TWELVE "; }
 
 defvars() {
 	f=defvars
-	eval set -- $(shuffle "$(W$i)")  # see layout()
+	eval set -- $(shuffle "$(W$i)")  # SEE: layout()
 	for j in $(seq 1 $(W$i | wc -l)) ;do
 		var="I$i$j=$1"
 		echo $var >>$QCLOCK:vars
@@ -342,7 +342,7 @@ qclocktwo() {
 		ditto qclocktwo "hour $H -- interval $M5" >$LOG
 		layout
 		for i in $(seq 0 9) ;do
-			unset qclock                         # clear buffer, see draw()
+			unset qclock                         # clear buffer, SEE: draw()
 			eval qclock$i
 			draw $i
 		done
@@ -380,6 +380,6 @@ while [ -e $DEBUG ] ;do
 	fi
 	init
 done
-rm -f $ANIMATE  # remove on break but not toggle (see X11/qclocktwo)
+rm -f $ANIMATE  # remove on break but not toggle (SEE: X11/qclocktwo)
 
 # kak: filetype=sh

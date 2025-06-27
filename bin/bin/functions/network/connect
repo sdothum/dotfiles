@@ -8,7 +8,7 @@
 
 usage() { usage: "$(basename $0) [confirm]"; exit 1; }
 
-# see wego and console_login
+# SEE: wego and console_login
 site=www.google.com
 timeout=5
 

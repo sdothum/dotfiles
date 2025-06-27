@@ -14,7 +14,7 @@ nerdfonts='--fontawesome --fontawesomeext --octicons --material'  # powerline ad
 
 NAMELIMIT=222  # arbitrarily long name limt
 
-# see make_install iosevka
+# SEE: make_install iosevka
 NERD=/home/depot/nerd-fonts
 MAKE_NERD=/tmp/iosevka:nerdfont
 

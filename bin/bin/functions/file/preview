@@ -6,7 +6,7 @@
 
 # ......................................................................... View
 
-# preview document (see rox)
+# preview document (SEE: rox)
 vi $@
 
 # kak: filetype=sh

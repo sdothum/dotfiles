@@ -6,7 +6,7 @@
 
 # ........................................................................ Conky
 
-# Usage: conky [<message>], see functions/conky
+# Usage: conky [<message>], SEE: functions/conky
 #        conky, start daemon
 
 if [ $1 ] ;then

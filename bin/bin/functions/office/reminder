@@ -6,7 +6,7 @@
 
 # .......................................................... Getting things done
 
-# Usage: reminder [<date string>], see date --date
+# Usage: reminder [<date string>], SEE: date --date
 #        reminder [<weeks>], (default) 4 weeks (0) current month
 #        reminder alarms
 

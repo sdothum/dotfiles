@@ -21,7 +21,7 @@ MAILBOX=$MAILDIR/$ME
 # import user path
 [ $CRONCOLORS ] || . $HOME/bin/functions/shell/user_path  # bash shell required for cron colors
 
-# mail poller (see offlineimap and imapfilter)
+# mail poller (SEE: offlineimap and imapfilter)
 # lifted from http://cpbl.wordpress.com/2009/11/07/alpine-offlineimap-and-gmail-under-ubuntu/
 interval=${interval:-15}
 [ -e /tmp/mailsync:new ] || touch /tmp/mailsync:new

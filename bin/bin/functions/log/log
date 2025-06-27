@@ -11,7 +11,7 @@
 # use -n option to suppress line break
 [ $logfile ] || export logfile=/tmp/session.log
 
-# check for var ne (see reboot, ditto)
+# check for var ne (SEE: reboot, ditto)
 [ $ne ] && echo -ne "$@\r" | tee -a $logfile 2>/dev/null \
 	|| echo "$@" | tee -a $logfile 2>/dev/null  # suppress sudo log "permission denied" error 
 

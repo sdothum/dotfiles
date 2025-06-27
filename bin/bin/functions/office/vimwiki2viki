@@ -6,7 +6,7 @@
 
 # .......................................................... the darnedest thing
 
-# convert vimwiki headers and bold/italics to viki highlighting (see vim config)
+# convert vimwiki headers and bold/italics to viki highlighting (SEE: vim config)
 # note necessary changes to thedarnedestthing.com/application markup conversion
 
 NONWORD='[^a-zA-Z0-9*]'

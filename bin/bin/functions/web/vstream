@@ -10,7 +10,7 @@ usage() { usage: "$(basename $0) dust | netflix | prime"; exit 0; }
 
 BROWSER=firefox
 BROWSER=chromium-browser          # alpine
-options='-s statusbar.hide true'  # see web/qutebrowser
+options='-s statusbar.hide true'  # SEE: web/qutebrowser
 delay=1
 
 case $1 in

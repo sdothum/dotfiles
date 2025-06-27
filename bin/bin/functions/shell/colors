@@ -7,8 +7,8 @@
 # ................................................... cron ANSI terminal colours
 
 # NOTE: cron process must be bash shell (dash does not show ansi colors)
-# see user_path
-# see colors.fish
+# SEE: user_path
+# SEE: colors.fish
 export CRONCOLORS=true
 
 # for posix shell scripts
@@ -42,7 +42,7 @@ export RED=$(printf "\e[1;91m")
 export yellow=$(printf "\e[0;33m")
 export YELLOW=$(printf "\e[1;93m")
 
-# 256 color palette, see ditto
+# 256 color palette, SEE: ditto
 export turquoise=$(printf "\e[38;5;031m")
 export TURQUOISE=$(printf "\e[38;5;039m")
 

@@ -9,7 +9,7 @@
 usage() { usage: "$(basename $0) DVI-'0 | DVI-'1 | k'ill | l'eft | r'ight | a'll [<demo>]"; exit 1; }
 
 # Usage: record action [script]
-#        action = display (see below) | kill
+#        action = display (SEE: below) | kill
 #        script = optional demo application
 
 # create .webm screencast
