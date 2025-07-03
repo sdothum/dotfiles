@@ -8,6 +8,7 @@
 
 # FOR: supernote connect to folder
 # adb devices -l | grep -qE 'Supernote_Nomad' && { killall -q nnn; mtp mount; }  # avoid dangling nnn mtp lock
+adb devices -l | grep -qE 'Supernote_Nomad' && mtp mount
 
 /usr/bin/calibre 2>/dev/null || flatpak run --user com.calibre_ebook.calibre 2>/dev/null
 
