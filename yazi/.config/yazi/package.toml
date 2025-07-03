@@ -28,5 +28,10 @@ use = "yazi-rs/plugins:toggle-pane"
 rev = "5eea960"
 hash = "d6f60c24d8c0cf57a855bf46115b2502"
 
+[[plugin.deps]]
+use = "yazi-rs/plugins:smart-filter"
+rev = "2ad42fa"
+hash = "a9d553bd19a3cd7f4eab3abaac5d67ff"
+
 [flavor]
 deps = []

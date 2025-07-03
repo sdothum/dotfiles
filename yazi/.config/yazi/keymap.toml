@@ -407,6 +407,13 @@ on     = "<C-y>"
 run    = ''' shell 'dragon-drop --all --and-exit $@' '''
 desc   = "Drag 'n drop popup"
 
+# ................................................................. smart filter
+
+[[mgr.prepend_keymap]]
+on   = "F"
+run  = "plugin smart-filter"
+desc = "Smart filter"
+
 # ................................................... smart folder/file handling
 
 [[mgr.prepend_keymap]]
