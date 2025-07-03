@@ -92,6 +92,11 @@ class="pavucontrol"
 	xdotool search --onlyvisible --classname "pavucontrol" windowunmap ;\
 	desktop $(chef desktop "DESK")
 
+# auto close gooodreads account popup
+
+name="Search results for.*showing.*of.*books.*"
+	sleep 0.1 && xdotool key space
+
 class="qutebrowser"
 	window desktop $(desktop) ;\
 	window '@∏ano - qutebrowser' size B6 rotate || layout tile 3 qutebrowser

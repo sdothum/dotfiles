@@ -72,7 +72,7 @@ paper() {
 }
 
 case $1 in
-	mon*  ) monocle ;;
+	mono* ) monocle ;;
 	term  ) reterm  ;;
 	[AB]* ) paper $1 $2                   ;;
 	*/*   ) aspect ${1%/*} ${1#*/}        ;;

@@ -79,6 +79,13 @@ desktop() {
 	esac
 }
 
+restore() {
+	D=$desktop
+	for i in $(seq 1 9) ;do waitron group_activate $i ;done
+	rm $GROUP:?:deactivated 2>/dev/null
+	waitron window_focus $(cat $GROUP:$D:focus)
+}
+
 plus() {
 	tagcount=$(chef desktop count)
 	desktop=$(( desktop + $1 ))
@@ -91,10 +98,11 @@ plus() {
 }
 
 case $1 in
-	''    ) echo $desktop ;;
-	[1-9] ) desktop $1 $2 ;;       # SEE: chef desktop and rulerrc
-	last  ) [ -e $WME:desktop:last ] && desktop $(cat $WME:desktop:last) ;;
-	*     ) desktop $(plus $1) ;;	 # -1/+1
+	''      ) echo $desktop ;;
+	restore ) restore       ;;
+	[1-9]   ) desktop $1 $2 ;;        # SEE: chef desktop and rulerrc
+	last    ) [ -e $WME:desktop:last ] && desktop $(cat $WME:desktop:last) ;;
+	*       ) desktop $(plus $1) ;;	 # -1/+1
 esac
 
 # kak: filetype=sh

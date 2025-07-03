@@ -7,14 +7,24 @@
 
 # NOTE: only use groups 1-9 with desktop 0 reserved for special actions (typically, "last")
 
-super + {_,ctrl} + space
-	waitron {window_ver_maximize, window_hor_maximize}
+# ................................................................. (chef) menus
 
-super + shift + space
-	menu
+super + {F1,F2}
+	souschef {group, window}
 
-super + ctrl + shift + space
-	xdotool mousemove $(( $(chef display width) / 2 )) $(( $(chef display height) / 2 ))
+super + {shift,ctrl} + q
+	{menu halt, waitron wm_quit 0}
+
+super + shift + w
+	menu windowfocus
+
+super + {alt,ctrl} + w
+	souschef window {tile,form}
+
+super + shift + ctrl + w
+	menu layout
+
+# ........................................................................ terms
 
 super + {_,shift} + Return
 	scratchpad {scratchy, itchy}
@@ -22,14 +32,33 @@ super + {_,shift} + Return
 super + ctrl + Return
 	term
 
+super + alt + t
+	for i in $(xdotool search --onlyvisible --classname "term") ;do xdotool windowactivate --sync $i; window desktop $(chef desktop "CODE") teleport ;done
+
+# ....................................................................... resize
+
+super + {_,ctrl} + space
+	waitron {window_ver_maximize, window_hor_maximize}
+
 super + alt + space
-	window size term
+	window size term            ;\
+	wgeometry record $(pfw)     ;\
+	window snap center vertical ;\
+	wgeometry restore $(pfw)
 
-ctrl + {_,shift} + space
-	dunstctl {close, close-all}
+super + ctrl + shift + {Left,Down,Up,Right}
+	waitron window_resize {-20 0, 0 20, 0 -20, 20 0}
 
-ctrl + BackSpace
-	dunstctl history-pop
+super + shift + {Left,Down,Up,Right}
+	waitron window_resize {-50 0, 0 50, 0 -50, 50 0}
+
+super + shift + {t,r}
+	window tile {left, right}
+
+super + {_,shift} + z
+	waitron {window_monocle, window_maximize}
+
+# ....................................................................... select
 
 super + {_,shift} + Tab
 	waitron {window_cycle_in_group, window_rev_cycle_in_group} ;\
@@ -43,30 +72,71 @@ super + ctrl + Tab
 	waitron window_focus_last ;\
 	chef -- desktop
 
-super + ctrl + {Left,Down,Up,Right}
-	waitron window_move {-20 0, 0 20, 0 -20, 20 0}
-
-super + ctrl + shift + {Left,Down,Up,Right}
-	waitron window_resize {-20 0, 0 20, 0 -20, 20 0}
-
-super + {Left,Down,Up,Right}
-	waitron window_move {-50 0, 0 50, 0 -50, 50 0}
-
-super + shift + {Left,Down,Up,Right}
-	waitron window_resize {-50 0, 0 50, 0 -50, 50 0}
-
 alt + {Left,Down,Up,Right}
 	waitron window_cardinal_focus {west, south, north, east} ;\
 	chef -- desktop
 
+# ......................................................................... swap
+
 alt + super + {Left,Down,Up,Right}
 	window swap {west, south, north, east}
+
+# ......................................................................... move
+
+super + ctrl + {Left,Down,Up,Right}
+	waitron window_move {-20 0, 0 20, 0 -20, 20 0}
+
+super + {Left,Down,Up,Right}
+	waitron window_move {-50 0, 0 50, 0 -50, 50 0}
+
+super + ctrl + {p,l,n,f}
+	window shift {left, down, up, right}
+
+super + {c,g}
+	window snap {center vertical, center}
+
+super + {shift,ctrl} + c
+	window snap {top, bottom}
+
+super + {d,n}
+	window snap top {left, right}
+
+super + ctrl + e
+	layout level
+
+super + {ctrl,shift} + g
+	window snap center {left, right}
+
+super + {p,l}
+	window snap bottom {left, right}
+
+super + {t,r}
+	side="{left, right}" ;\
+	[ "$(chef window classname)"  = "term" ] && window spread 3 $side || window snap $side
+
+# ....................................................................... window
 
 super + {0,1}
 	window {revert, rotate}
 
 super + ctrl + 0
 	layout revert
+
+super + {_,shift} + i
+	{window hide, menu unhide} ;\
+	chef -- hidden
+
+super + {_,shift} + s
+	waitron {window_stack_toggle, window_focus $(pfw)} ;\
+	chef -- desktop
+
+super + w
+	window group remove       ;\
+	waitron window_close      ;\
+	waitron window_focus_last ;\
+	chef -- desktop
+
+# ................................................................ (tile) column
 
 super + 2
 	window size monocle
@@ -76,6 +146,8 @@ super + {5,6,3}
 
 super + {4,8,7,9}
 	window tile 4 {1, 2, 3, 4}
+
+# ......................................................................... tile
 
 super + shift + {0,1,2,3,4,5}
 	W=$(pfw)                                                ;\
@@ -87,6 +159,8 @@ super + shift + ctrl + 0
 	layout fold 0 ;\
 	waitron window_focus $W
 
+# ........................................................................ group
+
 alt + {0,1,2,3,4,5,6,7,8,9}
 	desktop {last, 1, 2, 3, 4, 5, 6, 7, 8, 9}
 
@@ -96,169 +170,73 @@ alt + super + {0,1,2,3,4,5,6,7,8,9}
 alt + shift + {0,1,2,3,4,5,6,7,8,9}
 	desktop {$(desktop), 1, 2, 3, 4, 5, 6, 7, 8, 9} specific
 
-alt + ctrl + {1,2,3,4,5,6,7,8,9}
-	window desktop {1, 2, 3, 4, 5, 6, 7, 8, 9}
-
 alt + ctrl + 0
-	for i in $(seq 1 9) ;do waitron group_activate $i ;done ;\
-	rm $GROUP:?:deactivated 2>/dev/null                     ;\
-	waitron window_focus $(cat $GROUP:$(desktop):focus)     ;\
-	desktop $(desktop)
-
-alt + ctrl + {comma,period}
-	window desktop $(desktop get {-1, +1})
-
-alt + ctrl + super + {1,2,3,4,5,6,7,8,9}
-	window desktop {1, 2, 3, 4, 5, 6, 7, 8, 9} teleport
-
-alt + ctrl + super + {comma,period}
-	window desktop $(desktop get {-1, +1}) teleport
+	desktop restore
 
 super + ctrl + {1,2,3,4,5,6,7,8,9}
 	desktop {1, 2, 3, 4, 5, 6, 7, 8, 9} close ;\
 	waitron window_focus_last                 ;\
 	chef -- desktop
 
-super + ctrl + {p,l,n,f}
-	window shift {left, down, up, right}
+# ............................................................... window (group)
 
-super + {_,ctrl} + a
-	conky clock {_, toggle}
+alt + ctrl + {comma,period}
+	window desktop $(desktop get {-1, +1})
 
-super + shift + a
-	menu reminder
+alt + ctrl + super + {comma,period}
+	window desktop $(desktop get {-1, +1}) teleport
 
-super + {_,ctrl} + b
-	qutebrowser {_, closeall}
+alt + ctrl + {1,2,3,4,5,6,7,8,9}
+	window desktop {1, 2, 3, 4, 5, 6, 7, 8, 9}
 
-super + shift + b
-	layout fold 3 qutebrowser
-
-super + {c,g}
-	window snap {center vertical, center}
-
-super + {shift,ctrl} + c
-	window snap {top, bottom}
-
-super + {d,n}
-	window snap top {left, right}
-
-super + {shift,ctrl} + d
-	toggle {wallpaper, background}
-
-super + ctrl + e
-	layout level
-
-super + {alt,ctrl,shift} + g
-	window snap center {vertical, left, right}
-
-super + h
-	xdotool search --onlyvisible --classname "Surf" windowactivate && window tile 4 1 || hangouts
-
-super + {_,shift} + i
-	{window hide, menu unhide} ;\
-	chef -- hidden
-
-# NOTE: switch out to DESK desktop after hiding app to avoid attaching new windows to app desktop
-
-super + j
-	xdotool search --onlyvisible --classname "music" windowunmap && desktop $(chef desktop "DESK") || \{ music; desktop $(chef desktop "PLAY"); \}
-
-# NOTE: removal of random empty secondary nicotine window frame (cause unknown) requires repeating key action
-
-super + shift + j
-	xdotool search --onlyvisible --classname "org.nicotine_plus.Nicotine" windowunmap && desktop $(chef desktop "DESK") || \{ nicotine+; desktop $(chef desktop "PEER"); \}  # NOTE: escaped { block }
-
-super + ctrl + j
-	mpc toggle
-
-super + shift + ctrl + j
-	xdotool search --classname "Asunder" windowkill && rm -f /tmp/rulerrc:asunder || asunder
-
-super + m
-	xdotool search --onlyvisible --classname aerc windowclose || aerc
-
-super + shift + m
-	menu abook
-
-super + {_,shift} + o
-	menu {scripts, projects}
-
-super + {p,l}
-	window snap bottom {left, right}
-
-super + {shift,ctrl} + q
-	{menu halt, waitron wm_quit 0}
+alt + ctrl + super + {1,2,3,4,5,6,7,8,9}
+	window desktop {1, 2, 3, 4, 5, 6, 7, 8, 9} teleport
 
 super + ctrl + r
 	waitron group_remove_window ;\
 	chef -- desktop
 
-super + {_,shift} + s
-	waitron {window_stack_toggle, window_focus $(pfw)} ;\
-	chef -- desktop
-
-super + shift + {u,v,colon}
-	menu {passwords, media, system}
-
-super + {t,r}
-	side="{left, right}" ;\
-	[ "$(chef window classname)"  = "term" ] && window spread 3 $side || window snap $side
-
-super + shift + {t,r}
-	window tile {left, right}
-
-super + alt + t
-	for i in $(xdotool search --onlyvisible --classname "term") ;do xdotool windowactivate --sync $i; window desktop $(chef desktop "CODE") teleport ;done
-
-super + u
-	xdotool search --name btop windowkill || btop
-
-super + ctrl + u
-	nvidia_fan toggle
-
-super + {_,ctrl} + v
-	{toggle panel, invert_panel}
-
-super + x
-	xdotool search --onlyvisible --name yazi windowclose || yazi TMUX
-
-super + ctrl + x
-	notify critical 0 yazi '<b>root</b> user' ;\
-	xdotool search --onlyvisible --name root windowclose || yazi ROOT
-
-super + w
-	window group remove       ;\
-	waitron window_close      ;\
-	waitron window_focus_last ;\
-	chef -- desktop
-
-super + {shift,ctrl,alt} + w
-	menu {windowfocus, windowtile, windowsize}
-
-super + shift + ctrl + w
-	menu layout
-
-super + {_,ctrl}+ y
-	xdotool search --onlyvisible --name "∏ano - qutebrowser" {windowunmap, windowkill} || piano
-
-super + {_,shift} + z
-	waitron {window_monocle, window_maximize}
-
-super + {shift,ctrl} + apostrophe
-	menu {wikis, notes}
+# ........................................................................... ui
 
 super + {F6,F5}
 	brightness {-5, +5}
 
-super + Escape
-	notify reloading "sxhkd & ruler" ;\
-	pkill -USR1 -x sxhkd             ;\
-	pkill -KILL -x ruler             ;\
-	ruler -i -c $HOME/.config/$WM/rulerrc &
+ctrl + {_,shift} + space
+	dunstctl {close, close-all}
 
-super + shift + Escape
-	kak $(find $HOME/.config/${WM}/ -maxdepth 1 -type f -name '*rc')
+ctrl + BackSpace
+	dunstctl history-pop
+
+super + {_,ctrl} + a
+	conky clock {_, toggle}
+
+super + {shift,ctrl} + d
+	toggle {wallpaper, background}
+
+super + {_,ctrl} + v
+	{toggle panel, invert_panel}
+
+# HACK: kak hook *Idle only triggers on keypress SEE: kakrc
+# ATTENTION: use {shift,alt,ctrl,super} + Caps_Lock to bypass keypress trigger event
+
+~Caps_Lock
+	xdotool key Right Left
+
+# ........................................................................... ux
+
+# center mouse pointer
+
+super + ctrl + shift + space
+	xdotool mousemove $(( $(chef display width) / 2 )) $(( $(chef display height) / 2 ))
+
+# NOTE: restore mouse focus after group_activate (of top of window stack)
+# HACK: bypass QT apps to avoid interference with mouse menus
+
+~button1
+	xdotool getwindowclassname $(pfw) | grep -q -E "calibre|fontmatrix" && exit ;\
+	pfw >$WME:mouse                                                             ;\
+	chef -- desktop                                                             ;\
+	waitron window_focus $(cat $WME:mouse)
 
 # BUG: manual keybinds circumvent (random) X session clipboard loss (cause unknown)
 # HISTORY: cb replaces "xclip {-in, -out} -selection clipboard"
@@ -279,20 +257,82 @@ super + shift + Escape
 # ~ctrl + v
 # 	copyq paste
 
-# HACK: kak hook *Idle only triggers on keypress SEE: kakrc
-# ATTENTION: use {shift,alt,ctrl,super} + Caps_Lock to bypass keypress trigger event
+# ........................................................................ sxhkd
 
-~Caps_Lock
-	xdotool key Right Left
+super + Escape
+	notify reloading "sxhkd & ruler" ;\
+	pkill -USR1 -x sxhkd             ;\
+	pkill -KILL -x ruler             ;\
+	ruler -i -c $HOME/.config/$WM/rulerrc &
 
-# NOTE: restore mouse focus after group_activate (of top of window stack)
-# HACK: bypass QT apps to avoid interference with mouse menus
+super + shift + Escape
+	kak $(find $HOME/.config/${WM}/ -maxdepth 1 -type f -name '*rc')
 
-~button1
-	xdotool getwindowclassname $(pfw) | grep -q -E "calibre|fontmatrix" && exit ;\
-	pfw >$WME:mouse                                                             ;\
-	chef -- desktop                                                             ;\
-	waitron window_focus $(cat $WME:mouse)
+# ........................................................................ menus
+
+super + shift + space
+	menu
+
+super + {shift,ctrl} + apostrophe
+	menu {wikis, notes}
+
+super + shift + a
+	menu reminder
+
+super + shift + m
+	menu abook
+
+super + {_,shift} + o
+	menu {scripts, projects}
+
+super + shift + {u,v,colon}
+	menu {passwords, media, system}
+
+# ......................................................................... apps
+
+super + {_,ctrl} + b
+	qutebrowser {_, closeall}
+
+super + shift + b
+	layout fold 3 qutebrowser
+
+super + h
+	xdotool search --onlyvisible --classname "Surf" windowactivate && window tile 4 1 || hangouts
+
+# NOTE: switch out to DESK desktop after hiding app to avoid attaching new windows to app desktop
+
+super + j
+	xdotool search --onlyvisible --classname "music" windowunmap && desktop $(chef desktop "DESK") || \{ music; desktop $(chef desktop "PLAY"); \}
+
+# NOTE: removal of random empty secondary nicotine window frame (cause unknown) requires repeating key action
+
+super + shift + j
+	xdotool search --onlyvisible --classname "org.nicotine_plus.Nicotine" windowunmap && desktop $(chef desktop "DESK") || \{ nicotine+; desktop $(chef desktop "PEER"); \}  # NOTE: escaped { block }
+
+super + ctrl + j
+	mpc toggle
+
+super + shift + ctrl + j
+	xdotool search --classname "Asunder" windowkill && rm -f /tmp/rulerrc:asunder || asunder
+
+super + m
+	xdotool search --onlyvisible --classname aerc windowclose || aerc
+
+super + u
+	xdotool search --name btop windowkill || btop
+
+super + ctrl + u
+	nvidia_fan toggle
+
+super + x
+	xdotool search --onlyvisible --name yazi windowclose || yazi TMUX
+
+super + ctrl + x
+	notify critical 0 yazi '<b>root</b> user' ;\
+	xdotool search --onlyvisible --name root windowclose || yazi ROOT
+
+super + {_,ctrl} + y
+	xdotool search --onlyvisible --name "∏ano - qutebrowser" {windowunmap, windowkill} || piano
 
 # kak: filetype=sh
 
