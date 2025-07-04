@@ -6,7 +6,13 @@
 
 # ................................................................ Level windows
 
-for i in $(chef window ids) ;do
+chef window ids >/tmp/level:wmctl
+lsw -a | sort   >/tmp/level:lsw:all
+lsw -u | sort   >/tmp/level:lsw:invisible
+
+# select only visible windows
+for i in $(diff /tmp/level:lsw:all /tmp/level:lsw:invisible | grep '<' | cut -d' ' -f2) ;do
+	grep -q "$i" /tmp/level:wmctl || continue
 	save_geometry $i             # for full desktop restore :)
 	waitron window_focus $i
 	window snap center vertical  # NOTE: Super+Shift+g jitter offset occurs when used in a loop

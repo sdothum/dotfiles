@@ -52,7 +52,7 @@ super + ctrl + shift + {Left,Down,Up,Right}
 super + shift + {Left,Down,Up,Right}
 	waitron window_resize {-50 0, 0 50, 0 -50, 50 0}
 
-super + shift + {t,r}
+super + shift + {t,s}
 	window tile {left, right}
 
 super + {_,shift} + z
@@ -92,25 +92,25 @@ super + {Left,Down,Up,Right}
 super + ctrl + {p,l,n,f}
 	window shift {left, down, up, right}
 
-super + {c,g}
-	window snap {center vertical, center}
-
-super + {shift,ctrl} + c
-	window snap {top, bottom}
-
-super + {d,n}
+super + {d,m}
 	window snap top {left, right}
 
 super + ctrl + e
 	layout level
 
-super + {ctrl,shift} + g
-	window snap center {left, right}
+super + {_,ctrl,shift} + g
+	window snap center {  ,left, right}
 
-super + {p,l}
+super + {n,l}
+	window snap {top,bottom}
+
+super + {p,f}
 	window snap bottom {left, right}
 
-super + {t,r}
+super + {_,shift} + r
+	window snap center {vertical, horizontal}
+
+super + {t,s}
 	side="{left, right}" ;\
 	[ "$(chef window classname)"  = "term" ] && window spread 3 $side || window snap $side
 
@@ -126,7 +126,7 @@ super + {_,shift} + i
 	{window hide, menu unhide} ;\
 	chef -- hidden
 
-super + {_,shift} + s
+super + {_,shift} + e
 	waitron {window_stack_toggle, window_focus $(pfw)} ;\
 	chef -- desktop
 
@@ -279,14 +279,14 @@ super + {shift,ctrl} + apostrophe
 super + shift + a
 	menu reminder
 
-super + shift + m
-	menu abook
-
 super + {_,shift} + o
 	menu {scripts, projects}
 
 super + shift + {u,v,colon}
 	menu {passwords, media, system}
+
+super + shift + y
+	menu abook
 
 # ......................................................................... apps
 
@@ -315,13 +315,13 @@ super + ctrl + j
 super + shift + ctrl + j
 	xdotool search --classname "Asunder" windowkill && rm -f /tmp/rulerrc:asunder || asunder
 
-super + m
-	xdotool search --onlyvisible --classname aerc windowclose || aerc
+super + {_,ctrl} + k
+	xdotool search --onlyvisible --name "∏ano - qutebrowser" {windowunmap, windowkill} || piano
 
-super + u
+super + v
 	xdotool search --name btop windowkill || btop
 
-super + ctrl + u
+super + ctrl + v
 	nvidia_fan toggle
 
 super + x
@@ -331,8 +331,8 @@ super + ctrl + x
 	notify critical 0 yazi '<b>root</b> user' ;\
 	xdotool search --onlyvisible --name root windowclose || yazi ROOT
 
-super + {_,ctrl} + y
-	xdotool search --onlyvisible --name "∏ano - qutebrowser" {windowunmap, windowkill} || piano
+super + y
+	xdotool search --onlyvisible --classname aerc windowclose || aerc
 
 # kak: filetype=sh
 

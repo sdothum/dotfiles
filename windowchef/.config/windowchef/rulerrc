@@ -95,7 +95,7 @@ class="pavucontrol"
 # auto close gooodreads account popup
 
 name="Search results for.*showing.*of.*books.*"
-	sleep 0.1 && xdotool key space
+	sleep 1 && xdotool key space
 
 class="qutebrowser"
 	window desktop $(desktop) ;\
