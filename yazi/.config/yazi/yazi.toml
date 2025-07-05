@@ -63,6 +63,9 @@ play = [
 	{ run = 'mpv --force-window %*',   orphan = true, for = "windows" },
 	{ run = '''mediainfo "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show media info", for = "unix" },
 ]
+feh = [
+	{ run = 'feh "$1"', orphan = true, desc = "feh", for = "linux" },  # SEE: feh wrapper
+]
 
 [open]
 rules = [
@@ -71,6 +74,7 @@ rules = [
 	# Text
 	{ mime = "text/*", use = [ "edit", "reveal" ] },
 	# Image
+	{ mime = "image/jpeg", use = [ "feh", "reveal" ] },
 	{ mime = "image/*", use = [ "open", "reveal" ] },
 	# Media
 	{ mime = "{audio,video}/*", use = [ "play", "reveal" ] },

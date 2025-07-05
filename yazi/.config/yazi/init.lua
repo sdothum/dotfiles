@@ -4,6 +4,10 @@
 
 -- ........................................................................ init
 
+-- last photo shoot
+local day   = io.popen("ls -1 /home/photos/$(date '+%Y') | tail -1")
+local snaps = day:read()
+
 require("bunny"):setup({
 	hops = {
 		{ key = "/",          path = "/",                                                         },
@@ -33,9 +37,9 @@ require("bunny"):setup({
 		{ key = "M",          path = "/home/music",                                               },
 		{ key = { "m", "m" }, path = "~/mtp",                                                     },
 		{ key = { "m", "u" }, path = "/run/media/" .. os.getenv("USER"),                          },
-		{ key = "N",          path = "/net",                                                      },
+		{ key = "N",          path = "/net/home/".. os.getenv("USER"),                            },
 		{ key = "n",          path = "/net/downloads/nicotine",                                   },
-		{ key = "p",          path = "/home/photos/" .. os.date("%Y")                             },
+		{ key = "p",          path = "/home/photos/" .. os.date("%Y/") .. snaps                   },
 		{ key = "r",          path = "/home/library/references",                                  },
 		{ key = "S",          path = "~/sandbox",                                                 },
 		{ key = "s",          path = "~/stow",                                                    },
