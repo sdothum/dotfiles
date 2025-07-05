@@ -7,7 +7,11 @@
 # ......................................................................... View
 
 DIR=$(dirname $@)
-# nnn or pcmanfm argument passed?
-[ "$DIR" = '' ] || /usr/bin/feh -B black -d --scale-down --start-at $@ $DIR && /usr/bin/feh -B black -d --scale-down $@
+# yazi, nnn or pcmanfm argument passed?
+if [ "$DIR" ] ;then
+	/usr/bin/feh -B black -d --scale-down --start-at $@ $DIR
+else
+	/usr/bin/feh -B black -d --scale-down $@
+fi
 
 # kak: filetype=sh
