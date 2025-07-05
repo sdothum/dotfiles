@@ -152,10 +152,10 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 		peneira-symbols
 	}
 
-	addmodes %{ alpha 1 : map global buffer b ': buffers<ret>' -docstring 'buffers' }
-	addmodes %{ alpha 1 : map global buffer e ': files<ret>'   -docstring 'edit file' }
-	addmodes %{ alpha 1 : map global buffer l ': lines<ret>'   -docstring 'lines' }
-	addmodes %{ alpha   : map global user   c ': symbols<ret>' -docstring 'ctag symbols' }
+	addmodes %{ alpha 0 : map global buffer <ret> ': buffers<ret>' -docstring 'buffers' }
+	addmodes %{ alpha 1 : map global buffer e     ': files<ret>'   -docstring 'edit file' }
+	addmodes %{ alpha 1 : map global buffer l     ': lines<ret>'   -docstring 'lines' }
+	addmodes %{ alpha   : map global user   c     ': symbols<ret>' -docstring 'ctag symbols' }
 }
 
 # .................................................................. search docs
