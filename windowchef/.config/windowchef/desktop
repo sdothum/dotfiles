@@ -8,7 +8,7 @@
 # ............................................................. Group operations
 
 # Usage: desktop <msg>
-#          where <msg>: <group> [specific | toggle | close] | last
+#          where <msg>: <group> [specific | toggle | close] | last | restone
 
 # NOTE: waitron group handling deficiencies (quirks) and extensions are handled here
 # HACK: waitron group_toggle/_activate does not restore the group window stack order (focused window)
@@ -81,7 +81,7 @@ desktop() {
 
 restore() {
 	D=$desktop
-	for i in $(seq 1 9) ;do waitron group_activate $i ;done
+	for i in $(seq 1 $(( $(chef desktop count) - 1 ))) ;do waitron group_activate $i ;done  # except CHEF group
 	rm $GROUP:?:deactivated 2>/dev/null
 	waitron window_focus $(cat $GROUP:$D:focus)
 }

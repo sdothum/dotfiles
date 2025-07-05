@@ -108,7 +108,7 @@ super + {p,f}
 	window snap bottom {left, right}
 
 super + {_,shift} + r
-	window snap center {vertical, horizontal}
+	window snap center {horizontal, vertical}
 
 super + {t,s}
 	side="{left, right}" ;\
