@@ -16,8 +16,8 @@ bundle kakboard https://github.com/lePerdu/kakboard.git %{
 
 	addmodes %{ alpha : map global user y ': kakboard-with-push-clipboard y<ret>' -docstring 'cb yank' }
 	addmodes %{ alpha : map global user d ': kakboard-with-push-clipboard d<ret>' -docstring 'cb cut' }
-	addmodes %{ alpha : map global user p ': kakboard-with-pull-clipboard p<ret>' -docstring 'cb put after,before' }
-	addmodes %{ alpha : map global user P ': kakboard-with-pull-clipboard P<ret>' -docstring 'cb put after,before' }
+	addmodes %{ alpha : map global user p ': kakboard-with-pull-clipboard p<ret>' -docstring 'cb put: after,before' }
+	addmodes %{ alpha : map global user P ': kakboard-with-pull-clipboard P<ret>' -docstring 'cb put: after,before' }
 	addmodes %{ alpha : map global user R ': kakboard-with-pull-clipboard R<ret>' -docstring 'cb replace' }
 }
 
@@ -96,8 +96,8 @@ bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 	require-module kakpipe
 
 	# HACK: using alpha subsort to overcome "P,p" sort order (cause unknown)
-	addmodes %{ alpha 5 : map global buffer p ': kakpipe '    -docstring "kakpipe FIFO / bg" }
-	addmodes %{ alpha 6 : map global buffer P ': kakpipe-bg ' -docstring "kakpipe FIFO / bg" }
+	addmodes %{ alpha 5 : map global buffer p ': kakpipe '    -docstring "FIFO (shell): show,bg" }
+	addmodes %{ alpha 6 : map global buffer P ': kakpipe-bg ' -docstring "FIFO (shell): show,bg" }
 } %{
 	cargo install --path . --root ~/.local
 }

@@ -45,10 +45,10 @@ addmodes %{ align x : map global format ','     'x|align \;\\<ret>'   -docstring
 # .................................................................... Searching
 
 addmodes %{ focus 0 : map global user <ret> ': execute-keys /$<ret><ret>' -docstring 'clear search' }
-addmodes %{ focus s : map global user /   '/(?i)'                         -docstring 'isearch prev,next' }
-addmodes %{ focus s : map global user '\' '<a-/>(?i)'                     -docstring 'isearch prev,next' }
-addmodes %{ focus x : map global user >   '?(?i)'                         -docstring 'iextend prev,next' }
-addmodes %{ focus x : map global user <   '<a-?>(?i)'                     -docstring 'iextend prev,next' }
+addmodes %{ focus s : map global user /   '/(?i)'                         -docstring 'isearch: prev,next' }
+addmodes %{ focus s : map global user '\' '<a-/>(?i)'                     -docstring 'isearch: prev,next' }
+addmodes %{ focus x : map global user >   '?(?i)'                         -docstring 'iextend: prev,next' }
+addmodes %{ focus x : map global user <   '<a-?>(?i)'                     -docstring 'iextend: prev,next' }
 
 # .................................................................... Selection
 
@@ -83,7 +83,8 @@ map global normal <c-n> ':<space>yank-ring-next<ret>'
 set-option global autoreload yes
 declare-user-mode buffer
 
-map global normal <ret> ': enter-user-mode buffer<ret>'
+map global normal <ret>   ': enter-user-mode buffer<ret>'
+map global normal <c-ret> ': enter-user-mode buffer<ret>'  # for find *scratch* buffer
 addmodes %{ alpha : map global user b ': enter-user-mode buffer<ret>' -docstring 'buffer user-mode' }
 
 # no sudo-write-all so sync root owned files on buffer switching
@@ -130,12 +131,13 @@ hook global WinDisplay .*diff %{
 hook global WinSetOption filetype=diff %{
 	add-highlighter buffer/diff-allow-one-trailing-space regex '^ ' 0:Default
 }
-addmodes %{ alpha 1 : map global buffer d ': buffer *debug*<ret>'            -docstring '*debug*' }
-addmodes %{ alpha 1 : map global buffer D ': sync<ret>: delete-buffer<ret>'  -docstring 'save and delete' }
+addmodes %{ alpha 1 : map global buffer * ': buffer *debug*<ret>'            -docstring '*debug*' }
+addmodes %{ alpha 2 : map global buffer D ': delete-buffer only<ret>'            -docstring 'delete: save,discard only' }
+addmodes %{ alpha 1 : map global buffer d ': sync<ret>: delete-buffer<ret>'  -docstring 'delete: save,discard only' }
 # SEE: kakpipe alpha subsort in xdisplay-plugins
-addmodes %{ alpha 9 : map global buffer q ': quit!<ret>'                     -docstring 'quit' }
-addmodes %{ alpha 9 : map global buffer w ': sync<ret>'                      -docstring 'save / quit' }
-addmodes %{ alpha 9 : map global buffer W ': sync<ret>: quit!'               -docstring 'save / quit' }
+addmodes %{ alpha 9 : map global buffer q ': quit!<ret>'                     -docstring 'quit!' }
+addmodes %{ alpha 9 : map global buffer w ': sync<ret>'                      -docstring 'write: save,and quit!' }
+addmodes %{ alpha 9 : map global buffer W ': sync<ret>: quit!'               -docstring 'write: save,and quit!' }
 addmodes %{ alpha 9 : map global buffer x ': sync<ret>: write-all-quit<ret>' -docstring 'save all and quit' }
 
 # Terminal / shell

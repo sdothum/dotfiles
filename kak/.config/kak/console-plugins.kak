@@ -40,8 +40,13 @@ bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
 # ............................................................. find and replace
 
 bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
-	addmodes %{ alpha 1 : map global buffer f ': find '                   -docstring "find THEN replace" }
-	addmodes %{ alpha 1 : map global buffer R ': find-apply-changes<ret>' -docstring "find THEN replace" }
+	define-command c-ret-message %{
+		nop %sh{ notify 10 critical "find & replace" "&lt;ret&gt;    goto buffer:line\n&lt;c-ret&gt;  buffer (user-mode)" }
+	}
+	
+	addmodes %{ alpha 1 : map global buffer f ': c-ret-message<ret>: find ' -docstring "buffers: find,then replace" }
+	# NOTE: <ret> jumps to buffer line, <c-ret> for buffer user-mode
+	addmodes %{ alpha 1 : map global buffer R ': find-apply-changes<ret>'   -docstring "buffers: find,then replace" }
 }
 
 # ............................................................. focus selections
@@ -94,8 +99,8 @@ bundle hop.kak https://github.com/hadronized/hop.kak.git %{
 		hop-kak
 	}
 
-	addmodes %{ alpha : map global user f ': hop-kak-sel<ret>'   -docstring 'find selection,word (on page)' }
-	addmodes %{ alpha : map global user F ': hop-kak-words<ret>' -docstring 'find selection,word (on page)' }
+	addmodes %{ alpha : map global user f ': hop-kak-sel<ret>'   -docstring 'find: selection,word (on page)' }
+	addmodes %{ alpha : map global user F ': hop-kak-words<ret>' -docstring 'find: selection,word (on page)' }
 	map global normal <a-h> ': hop-kak-sel<ret>'   -docstring 'find selection (on page)'
 	map global normal <a-H> ': hop-kak-words<ret>' -docstring 'find word (on page)'
 } %{
