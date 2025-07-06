@@ -66,6 +66,9 @@ play = [
 feh = [
 	{ run = 'feh "$1"', orphan = true, desc = "feh", for = "linux" },  # SEE: feh wrapper
 ]
+rawtherapee = [
+	{ run = 'rawtherapee "$1"', orphan = true, desc = "rawtherapee", for = "linux" },
+]
 
 [open]
 rules = [
@@ -74,7 +77,7 @@ rules = [
 	# Text
 	{ mime = "text/*", use = [ "edit", "reveal" ] },
 	# Image
-	{ mime = "image/jpeg", use = [ "feh", "reveal" ] },
+	{ mime = "image/jpeg", use = [ "feh", "rawtherapee", "reveal" ] },
 	{ mime = "image/*", use = [ "open", "reveal" ] },
 	# Media
 	{ mime = "{audio,video}/*", use = [ "play", "reveal" ] },
