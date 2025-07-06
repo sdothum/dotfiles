@@ -41,11 +41,11 @@ bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
 
 bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
 	define-command c-ret-message %{
-		nop %sh{ notify 10 critical "find & replace" "&lt;ret&gt;    goto buffer:line\n&lt;c-ret&gt;  buffer (user-mode)" }
+		nop %sh{ notify 15 critical "find & replace" "&lt;ret&gt;    goto buffer:line\n&lt;c-ret&gt;  buffer (user-mode)" }
 	}
-	
-	addmodes %{ alpha 1 : map global buffer f ': c-ret-message<ret>: find ' -docstring "buffers: find,then replace" }
+
 	# NOTE: <ret> jumps to buffer line, <c-ret> for buffer user-mode
+	addmodes %{ alpha 1 : map global buffer f ': c-ret-message<ret>: find ' -docstring "buffers: find,then replace" }
 	addmodes %{ alpha 1 : map global buffer R ': find-apply-changes<ret>'   -docstring "buffers: find,then replace" }
 }
 
@@ -76,7 +76,7 @@ bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
 		}
 	}
 
-	addmodes %{ focus f : map global user <space> ': toggle-focus<ret>' -docstring "focus selections" }
+	addmodes %{ focus 0 : map global user <space> ': toggle-focus<ret>' -docstring "focus selections" }
 }
 
 # .......................................................................... hop

@@ -44,7 +44,7 @@ addmodes %{ align x : map global format ','     'x|align \;\\<ret>'   -docstring
 
 # .................................................................... Searching
 
-addmodes %{ focus 0 : map global user <ret> ': execute-keys /$<ret><ret>' -docstring 'clear search' }
+addmodes %{ focus 1 : map global user <ret> ': execute-keys /$<ret><ret>' -docstring 'clear search' }
 addmodes %{ focus s : map global user /   '/(?i)'                         -docstring 'isearch: prev,next' }
 addmodes %{ focus s : map global user '\' '<a-/>(?i)'                     -docstring 'isearch: prev,next' }
 addmodes %{ focus x : map global user >   '?(?i)'                         -docstring 'iextend: prev,next' }
