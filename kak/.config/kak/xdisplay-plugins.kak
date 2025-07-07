@@ -14,11 +14,11 @@ bundle kakboard https://github.com/lePerdu/kakboard.git %{
 	set-option global kakboard_paste_cmd 'cb paste'
 	hook global WinCreate .* %{ kakboard-enable }
 
-	addmodes %{ alpha : map global user y ': kakboard-with-push-clipboard y<ret>' -docstring 'clipboard yank' }
-	addmodes %{ alpha : map global user d ': kakboard-with-push-clipboard d<ret>' -docstring 'clipboard cut' }
-	addmodes %{ alpha : map global user p ': kakboard-with-pull-clipboard p<ret>' -docstring 'clipboard put —— after,before' }
-	addmodes %{ alpha : map global user P ': kakboard-with-pull-clipboard P<ret>' -docstring 'clipboard put —— after,before' }
-	addmodes %{ alpha : map global user R ': kakboard-with-pull-clipboard R<ret>' -docstring 'clipboard replace' }
+	addmodes %{ alpha : map global edit y ': kakboard-with-push-clipboard y<ret>' -docstring 'clipboard yank' }
+	addmodes %{ alpha : map global edit d ': kakboard-with-push-clipboard d<ret>' -docstring 'clipboard cut' }
+	addmodes %{ alpha : map global edit p ': kakboard-with-pull-clipboard p<ret>' -docstring 'clipboard put —— after,before' }
+	addmodes %{ alpha : map global edit P ': kakboard-with-pull-clipboard P<ret>' -docstring 'clipboard put —— after,before' }
+	addmodes %{ alpha : map global edit R ': kakboard-with-pull-clipboard R<ret>' -docstring 'clipboard replace' }
 }
 
 # ...................................................................... kak-lsp
@@ -57,7 +57,7 @@ bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 		map global insert <tab> '<a-;>:try lsp-snippets-select-next-placeholders addmodes %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
 	}
 
-	addmodes %{ alpha : map global user L ': enter-user-mode lsp<ret>' -docstring "LSP mode" }
+	addmodes %{ alpha 5 : map global buffer l ': enter-user-mode lsp<ret>' -docstring "LSP mode" }
 } %{
 	# nop # NOTE: freezing kak-lsp at v17.2.1 for now due to change from TOML file for kak-lsp configuraton
 	cargo install --locked --force --path .

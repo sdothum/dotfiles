@@ -44,16 +44,16 @@ addmodes %{ align x : map global format ','     'x|align \;\\<ret>'   -docstring
 
 # .................................................................... Searching
 
-addmodes %{ focus 1 : map global user <ret> ': execute-keys /$<ret><ret>' -docstring 'clear search' }
-addmodes %{ focus s : map global user /   '/(?i)'                         -docstring 'isearch —— prev,next' }
-addmodes %{ focus s : map global user '\' '<a-/>(?i)'                     -docstring 'isearch —— prev,next' }
-addmodes %{ focus x : map global user >   '?(?i)'                         -docstring 'iextend —— prev,next' }
-addmodes %{ focus x : map global user <   '<a-?>(?i)'                     -docstring 'iextend —— prev,next' }
+addmodes %{ focus 1 : map global edit <ret> ': execute-keys /$<ret><ret>' -docstring 'clear search' }
+addmodes %{ focus s : map global edit /   '/(?i)'                         -docstring 'isearch —— prev,next' }
+addmodes %{ focus s : map global edit '\' '<a-/>(?i)'                     -docstring 'isearch —— prev,next' }
+addmodes %{ focus x : map global edit >   '?(?i)'                         -docstring 'iextend —— prev,next' }
+addmodes %{ focus x : map global edit <   '<a-?>(?i)'                     -docstring 'iextend —— prev,next' }
 
 # .................................................................... Selection
 
-addmodes %{ alpha : map global user s 'x<a-s>s'     -docstring 'split —— select,iselect' }
-addmodes %{ alpha : map global user S 'x<a-s>s(?i)' -docstring 'split —— select,iselect' }
+addmodes %{ alpha : map global edit s 'x<a-s>s'     -docstring 'split —— select,iselect' }
+addmodes %{ alpha : map global edit S 'x<a-s>s(?i)' -docstring 'split —— select,iselect' }
 
 map global normal S         's(?i)'  -docstring 'split: iselect:'
 
@@ -85,7 +85,7 @@ declare-user-mode buffer
 
 map global normal <ret>   ': enter-user-mode buffer<ret>'
 map global normal <c-ret> ': enter-user-mode buffer<ret>'  # for find *scratch* buffer
-addmodes %{ alpha : map global user b ': enter-user-mode buffer<ret>' -docstring 'buffer user-mode' }
+# addmodes %{ alpha 0 : map global edit <c-ret> ': enter-user-mode buffer<ret>' -docstring 'buffer user-mode' }
 
 # no sudo-write-all so sync root owned files on buffer switching
 define-command sync %{
@@ -122,7 +122,7 @@ map global normal <a-backspace> ': sync<ret>: buffer-previous<ret>' -docstring '
 map global normal <a-space>     ': sync<ret>ga'                     -docstring 'last buffer'
 
 # USE: .*diff BECAUSE: rc/filetype/mail.kak also maps <ret> causing unexpected *.eml plug error(?)
-hook global WinDisplay .*diff %{
+hook global WinDisplay .*[.]diff %{
 	map global normal <ret>      ': diff-jump<ret>'                  -docstring 'diff-jump new file'
 	map global normal <a-ret>    ': diff-jump -<ret>'                -docstring 'diff-jump old file'
 }
@@ -131,9 +131,9 @@ hook global WinDisplay .*diff %{
 hook global WinSetOption filetype=diff %{
 	add-highlighter buffer/diff-allow-one-trailing-space regex '^ ' 0:Default
 }
-addmodes %{ alpha 1 : map global buffer * ': buffer *debug*<ret>'            -docstring '*debug*' }
-addmodes %{ alpha 2 : map global buffer D ': delete-buffer only<ret>'            -docstring 'delete —— save,discard only' }
-addmodes %{ alpha 1 : map global buffer d ': sync<ret>: delete-buffer<ret>'  -docstring 'delete —— save,discard only' }
+addmodes %{ alpha 2 : map global buffer * ': buffer *debug*<ret>'            -docstring '*debug*' }
+addmodes %{ alpha 6 : map global buffer D ': delete-buffer only<ret>'            -docstring 'delete —— save,discard only' }
+addmodes %{ alpha 5 : map global buffer d ': sync<ret>: delete-buffer<ret>'  -docstring 'delete —— save,discard only' }
 # SEE: kakpipe alpha subsort in xdisplay-plugins
 addmodes %{ alpha 9 : map global buffer q ': quit!<ret>'                     -docstring 'quit!' }
 addmodes %{ alpha 9 : map global buffer w ': sync<ret>'                      -docstring 'write —— save,and quit!' }
@@ -144,6 +144,6 @@ addmodes %{ alpha 9 : map global buffer x ': sync<ret>: write-all-quit<ret>' -do
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 addmodes %{ alpha 9 : map global buffer t ': nop %sh{ term >/dev/null 2>&1 }<ret>' -docstring 'terminal' }
-addmodes %[ alpha 9 : map global buffer s ': echo %sh{  }<left><left>'             -docstring 'shell' ]  # ATTENTION: %[] to escape '{}' :)
+addmodes %[ alpha 9 : map global buffer s ': echo %sh{  }<left><left>'             -docstring 'echo %shell' ]  # ATTENTION: %[] to escape '{}' :)
 
 # kak: filetype=kak

@@ -67,7 +67,7 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 	colorscheme %opt{theme}
 }
 
-# push %{ alpha : map global user <space> ': normal-mode-colorscheme<ret>' -docstring "%opt{theme}" }
+# push %{ alpha : map global edit <space> ': normal-mode-colorscheme<ret>' -docstring "%opt{theme}" }
 
 # Layout
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

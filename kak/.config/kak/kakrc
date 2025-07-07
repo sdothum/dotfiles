@@ -5,7 +5,7 @@
 
 # Config for Kakoune
 
-# runtime env control variables SEE: bin/functions/edit/kak shell script wrapper
+# runtime env control variables SEE: bin/functions/edit /kak shell script wrapper
 # $UNPLUG   -> nop all bundles
 # $DISPLAY  -> load $DISPLAY (server) dependent bundles
 # $DIFF     -> kak diff mode
@@ -99,6 +99,9 @@ if %{ [ -n "$TEST" ] } %{
 # Config
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+declare-user-mode edit 
+map global normal <space> ': enter-user-mode edit <ret>'
+
 source "%val{config}/ui.kak"
 source "%val{config}/ux.kak"
 
@@ -107,10 +110,10 @@ declare-option str admonition "\s(?i)(att(n|ention)|(be)*cause|bu[gt]|deprecated
 hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt{admonition} 1:WrapMarker }  # select field 1: (vs 0:) to not hilight the colon :)
 
 # arrange user-mode lists
-setmodes %{ user   } %{ focus   }
-setmodes %{ user   } %{ snippet }
-setmodes %{ user   } %{ shell   }
-setmodes %{ user   } %{ alpha   }
+setmodes %{ edit   } %{ focus   }
+setmodes %{ edit   } %{ snippet }
+setmodes %{ edit   } %{ shell   }
+setmodes %{ edit   } %{ alpha   }
 setmodes %{ buffer }
 setmodes %{ format } %{ snippet }
 setmodes %{ format } %{ align   }

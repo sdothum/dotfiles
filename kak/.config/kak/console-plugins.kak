@@ -27,8 +27,8 @@ if-else %{ [ -z "$DIFF" ] } %{
 # ................................................................... crosshairs
 
 bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
-	addmodes %{ focus h : map global user + ': crosshairs<ret>'   -docstring "crosshairs" }
-	addmodes %{ focus h : map global user | ': cursorcolumn<ret>' -docstring "cursor column" }
+	addmodes %{ alpha 1 : map global buffer + ': crosshairs<ret>'   -docstring "crosshairs" }
+	addmodes %{ alpha 1 : map global buffer | ': cursorcolumn<ret>' -docstring "columnhair" }
 }
 
 # ........................................................................ fandt
@@ -45,8 +45,8 @@ bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
 	}
 
 	# NOTE: <ret> jumps to buffer line, <c-ret> for buffer user-mode
-	addmodes %{ alpha 1 : map global buffer f ': c-ret-message<ret>: find ' -docstring "buffers —— find,then replace" }
-	addmodes %{ alpha 1 : map global buffer R ': find-apply-changes<ret>'   -docstring "buffers —— find,then replace" }
+	addmodes %{ alpha 5 : map global buffer f ': c-ret-message<ret>: find ' -docstring "buffers —— find,then replace" }
+	addmodes %{ alpha 5 : map global buffer R ': find-apply-changes<ret>'   -docstring "buffers —— find,then replace" }
 }
 
 # ............................................................. focus selections
@@ -76,7 +76,7 @@ bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
 		}
 	}
 
-	addmodes %{ focus 0 : map global user <space> ': toggle-focus<ret>' -docstring "focus selections" }
+	addmodes %{ focus 0 : map global edit <space> ': toggle-focus<ret>' -docstring "focus selections" }
 }
 
 # .......................................................................... hop
@@ -99,8 +99,8 @@ bundle hop.kak https://github.com/hadronized/hop.kak.git %{
 		hop-kak
 	}
 
-	addmodes %{ alpha : map global user f ': hop-kak-sel<ret>'   -docstring 'find —— search register,word on page' }
-	addmodes %{ alpha : map global user F ': hop-kak-words<ret>' -docstring 'find —— search register,word on page' }
+	addmodes %{ alpha : map global edit f ': hop-kak-sel<ret>'   -docstring 'find —— search register,word on page' }
+	addmodes %{ alpha : map global edit F ': hop-kak-words<ret>' -docstring 'find —— search register,word on page' }
 	map global normal <a-h> ': hop-kak-sel<ret>'   -docstring 'find selection (on page)'
 	map global normal <a-H> ': hop-kak-words<ret>' -docstring 'find word (on page)'
 } %{
@@ -158,9 +158,9 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 	}
 
 	addmodes %{ alpha 0 : map global buffer <ret> ': buffers<ret>' -docstring 'buffers' }
-	addmodes %{ alpha 1 : map global buffer e     ': files<ret>'   -docstring 'edit file' }
-	addmodes %{ alpha   : map global user   l     ': lines<ret>'   -docstring '*filter lines' }
-	addmodes %{ alpha   : map global user   c     ': symbols<ret>' -docstring 'ctag symbols' }
+	addmodes %{ alpha 3 : map global buffer e     ': files<ret>'   -docstring 'edit file' }
+	addmodes %{ alpha   : map global edit  l     ': lines<ret>'   -docstring '*filter lines' }
+	addmodes %{ alpha   : map global edit  c     ': symbols<ret>' -docstring 'ctag symbols' }
 }
 
 # .................................................................. search docs
