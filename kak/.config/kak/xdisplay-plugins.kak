@@ -16,8 +16,8 @@ bundle kakboard https://github.com/lePerdu/kakboard.git %{
 
 	addmodes %{ alpha : map global user y ': kakboard-with-push-clipboard y<ret>' -docstring 'clipboard yank' }
 	addmodes %{ alpha : map global user d ': kakboard-with-push-clipboard d<ret>' -docstring 'clipboard cut' }
-	addmodes %{ alpha : map global user p ': kakboard-with-pull-clipboard p<ret>' -docstring 'clipboard put ➤ after,before' }
-	addmodes %{ alpha : map global user P ': kakboard-with-pull-clipboard P<ret>' -docstring 'clipboard put ➤ after,before' }
+	addmodes %{ alpha : map global user p ': kakboard-with-pull-clipboard p<ret>' -docstring 'clipboard put —— after,before' }
+	addmodes %{ alpha : map global user P ': kakboard-with-pull-clipboard P<ret>' -docstring 'clipboard put —— after,before' }
 	addmodes %{ alpha : map global user R ': kakboard-with-pull-clipboard R<ret>' -docstring 'clipboard replace' }
 }
 
@@ -57,7 +57,7 @@ bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 		map global insert <tab> '<a-;>:try lsp-snippets-select-next-placeholders addmodes %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
 	}
 
-	addmodes %{ alpha : map global user l ': enter-user-mode lsp<ret>' -docstring "LSP mode" }
+	addmodes %{ alpha : map global user L ': enter-user-mode lsp<ret>' -docstring "LSP mode" }
 } %{
 	# nop # NOTE: freezing kak-lsp at v17.2.1 for now due to change from TOML file for kak-lsp configuraton
 	cargo install --locked --force --path .
@@ -96,8 +96,8 @@ bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 	require-module kakpipe
 
 	# HACK: using alpha subsort to overcome "P,p" sort order (cause unknown)
-	addmodes %{ alpha 5 : map global buffer p ': kakpipe '    -docstring "FIFO (shell) ➤ show,bg" }
-	addmodes %{ alpha 6 : map global buffer P ': kakpipe-bg ' -docstring "FIFO (shell) ➤ show,bg" }
+	addmodes %{ alpha 5 : map global buffer p ': kakpipe '    -docstring "pipe —— switch to output,capture" }
+	addmodes %{ alpha 6 : map global buffer P ': kakpipe-bg ' -docstring "pipe —— switch to output,capture" }
 } %{
 	cargo install --path . --root ~/.local
 }
