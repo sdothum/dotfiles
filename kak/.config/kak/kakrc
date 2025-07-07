@@ -115,6 +115,7 @@ setmodes %{ edit   } %{ snippet }
 setmodes %{ edit   } %{ shell   }
 setmodes %{ edit   } %{ alpha   }
 setmodes %{ buffer }
+setmodes %{ format } %{ hilite  }
 setmodes %{ format } %{ snippet }
 setmodes %{ format } %{ align   }
 setmodes %{ format } %{ comment }
