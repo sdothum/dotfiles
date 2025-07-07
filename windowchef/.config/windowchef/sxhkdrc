@@ -288,7 +288,7 @@ super + shift + {u,v,colon}
 super + shift + y
 	menu abook
 
-# ......................................................................... apps
+# ......................................................................... http
 
 super + {_,ctrl} + b
 	qutebrowser {_, closeall}
@@ -299,24 +299,36 @@ super + shift + b
 super + h
 	xdotool search --onlyvisible --classname "Surf" windowactivate && window tile 4 1 || hangouts
 
-# NOTE: switch out to DESK desktop after hiding app to avoid attaching new windows to app desktop
-
-super + j
-	xdotool search --onlyvisible --classname "music" windowunmap && desktop $(chef desktop "DESK") || \{ music; desktop $(chef desktop "PLAY"); \}
-
 # NOTE: removal of random empty secondary nicotine window frame (cause unknown) requires repeating key action
 
 super + shift + j
 	xdotool search --onlyvisible --classname "org.nicotine_plus.Nicotine" windowunmap && desktop $(chef desktop "DESK") || \{ nicotine+; desktop $(chef desktop "PEER"); \}  # NOTE: escaped { block }
 
+super + {_,ctrl} + k
+	xdotool search --onlyvisible --name "∏ano - qutebrowser" {windowunmap, windowkill} || piano
+
+# ......................................................................... mail
+
+super + y
+	xdotool search --onlyvisible --classname aerc windowclose || aerc
+
+# .......................................................................... mpc
+
+# NOTE: switch out to DESK desktop after hiding app to avoid attaching new windows to app desktop
+
+super + j
+	xdotool search --onlyvisible --classname "music" windowunmap && desktop $(chef desktop "DESK") || \{ music; desktop $(chef desktop "PLAY"); \}
+
 super + ctrl + j
 	mpc toggle
 
+super + {comma,period}
+	mpc {prev, next}
+
+# ..................................................................... hardware
+
 super + shift + ctrl + j
 	xdotool search --classname "Asunder" windowkill && rm -f /tmp/rulerrc:asunder || asunder
-
-super + {_,ctrl} + k
-	xdotool search --onlyvisible --name "∏ano - qutebrowser" {windowunmap, windowkill} || piano
 
 super + v
 	xdotool search --name btop windowkill || btop
@@ -324,15 +336,14 @@ super + v
 super + ctrl + v
 	nvidia_fan toggle
 
+# ................................................................. file manager
+
 super + x
 	xdotool search --onlyvisible --name yazi windowclose || yazi TMUX
 
 super + ctrl + x
 	notify critical 0 yazi '<b>root</b> user' ;\
 	xdotool search --onlyvisible --name root windowclose || yazi ROOT
-
-super + y
-	xdotool search --onlyvisible --classname aerc windowclose || aerc
 
 # kak: filetype=sh
 
