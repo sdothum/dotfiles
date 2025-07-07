@@ -45,8 +45,8 @@ bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
 	}
 
 	# NOTE: <ret> jumps to buffer line, <c-ret> for buffer user-mode
-	addmodes %{ alpha 5 : map global buffer f ': c-ret-message<ret>: find ' -docstring "buffers —— find,then replace" }
-	addmodes %{ alpha 5 : map global buffer R ': find-apply-changes<ret>'   -docstring "buffers —— find,then replace" }
+	addmodes %{ alpha 5 : map global buffer f ': c-ret-message<ret>: find ' -docstring "find —— buffers,then replace" }
+	addmodes %{ alpha 5 : map global buffer R ': find-apply-changes<ret>'   -docstring "find —— buffers,then replace" }
 }
 
 # ............................................................. focus selections
