@@ -159,7 +159,7 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 
 	addmodes %{ alpha 0 : map global buffer <ret> ': buffers<ret>' -docstring 'buffers' }
 	addmodes %{ alpha 5 : map global buffer e     ': files<ret>'   -docstring 'edit file' }
-	addmodes %{ alpha   : map global edit   f     ': lines<ret>'   -docstring '*fuzzy find line' }
+	addmodes %{ alpha   : map global edit   f     ': lines<ret>'   -docstring '*fuzzy match line' }
 	addmodes %{ alpha   : map global edit   c     ': symbols<ret>' -docstring 'ctag symbols' }
 }
 
