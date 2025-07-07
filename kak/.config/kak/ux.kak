@@ -132,8 +132,8 @@ hook global WinSetOption filetype=diff %{
 	add-highlighter buffer/diff-allow-one-trailing-space regex '^ ' 0:Default
 }
 addmodes %{ alpha 2 : map global buffer * ': buffer *debug*<ret>'            -docstring '*debug*' }
-addmodes %{ alpha 5 : map global buffer D ': delete-buffer<ret>'             -docstring 'delete —— save,discard only' }
-addmodes %{ alpha 4 : map global buffer d ': sync<ret>: delete-buffer<ret>'  -docstring 'delete —— save,discard only' }
+addmodes %{ alpha 5 : map global buffer D ': delete-buffer!<ret>'            -docstring 'delete —— save and,discard!' }
+addmodes %{ alpha 4 : map global buffer d ': sync<ret>: delete-buffer<ret>'  -docstring 'delete —— save and,discard!' }
 # SEE: kakpipe alpha subsort in xdisplay-plugins
 addmodes %{ alpha 9 : map global buffer q ': quit!<ret>'                     -docstring 'quit!' }
 addmodes %{ alpha 9 : map global buffer w ': sync<ret>'                      -docstring 'write —— save,and quit!' }
