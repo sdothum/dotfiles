@@ -99,8 +99,8 @@ bundle hop.kak https://github.com/hadronized/hop.kak.git %{
 		hop-kak
 	}
 
-	addmodes %{ alpha : map global edit j ': hop-kak-sel<ret>'   -docstring 'jump —— /register,words' }
-	addmodes %{ alpha : map global edit J ': hop-kak-words<ret>' -docstring 'jump —— /register,words' }
+	addmodes %{ alpha : map global edit h ': hop-kak-sel<ret>'   -docstring 'hint —— /register,words' }
+	addmodes %{ alpha : map global edit H ': hop-kak-words<ret>' -docstring 'hint —— /register,words' }
 	map global normal <a-h> ': hop-kak-sel<ret>'   -docstring 'find selection (on page)'
 	map global normal <a-H> ': hop-kak-words<ret>' -docstring 'find word (on page)'
 } %{
