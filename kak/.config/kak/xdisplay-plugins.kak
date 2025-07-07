@@ -96,8 +96,8 @@ bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 	require-module kakpipe
 
 	# HACK: using alpha subsort to overcome "P,p" sort order (cause unknown)
-	addmodes %{ alpha 5 : map global buffer p ': kakpipe '    -docstring "pipe cmd —— to scratch show,bg" }
-	addmodes %{ alpha 6 : map global buffer P ': kakpipe-bg ' -docstring "pipe cmd —— to scratch show,bg" }
+	addmodes %{ alpha 5 : map global buffer p ': kakpipe '    -docstring "pipe cmd —— scratch focus,bg" }
+	addmodes %{ alpha 6 : map global buffer P ': kakpipe-bg ' -docstring "pipe cmd —— scratch focus,bg" }
 } %{
 	cargo install --path . --root ~/.local
 }

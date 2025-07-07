@@ -99,8 +99,8 @@ bundle hop.kak https://github.com/hadronized/hop.kak.git %{
 		hop-kak
 	}
 
-	addmodes %{ alpha : map global edit f ': hop-kak-sel<ret>'   -docstring 'find —— search register,word on page' }
-	addmodes %{ alpha : map global edit F ': hop-kak-words<ret>' -docstring 'find —— search register,word on page' }
+	addmodes %{ alpha : map global edit j ': hop-kak-sel<ret>'   -docstring 'jump —— /register,words' }
+	addmodes %{ alpha : map global edit J ': hop-kak-words<ret>' -docstring 'jump —— /register,words' }
 	map global normal <a-h> ': hop-kak-sel<ret>'   -docstring 'find selection (on page)'
 	map global normal <a-H> ': hop-kak-words<ret>' -docstring 'find word (on page)'
 } %{
@@ -159,8 +159,8 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 
 	addmodes %{ alpha 0 : map global buffer <ret> ': buffers<ret>' -docstring 'buffers' }
 	addmodes %{ alpha 5 : map global buffer e     ': files<ret>'   -docstring 'edit file' }
-	addmodes %{ alpha   : map global edit  l     ': lines<ret>'   -docstring '*filter lines' }
-	addmodes %{ alpha   : map global edit  c     ': symbols<ret>' -docstring 'ctag symbols' }
+	addmodes %{ alpha   : map global edit   l     ': lines<ret>'   -docstring '*filter lines' }
+	addmodes %{ alpha   : map global edit   c     ': symbols<ret>' -docstring 'ctag symbols' }
 }
 
 # .................................................................. search docs

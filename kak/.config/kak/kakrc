@@ -5,7 +5,7 @@
 
 # Config for Kakoune
 
-# runtime env control variables SEE: bin/functions/edit /kak shell script wrapper
+# runtime env control variables SEE: bin/functions/edit/kak shell script wrapper
 # $UNPLUG   -> nop all bundles
 # $DISPLAY  -> load $DISPLAY (server) dependent bundles
 # $DIFF     -> kak diff mode
@@ -65,7 +65,7 @@ declare-option str usermodes ''
 # addmodes %{ group sortkey* : map global user-mode .. }
 define-command addmodes -params 1 %{
 	trace %arg{1}
- 	set-option global usermodes "%sh{ echo ""$kak_opt_usermodes\n$(echo $1 | cut -d: -f2- | cut -d' ' -f4 )$1"" }"
+	set-option global usermodes "%sh{ echo ""$kak_opt_usermodes\n$(echo $1 | cut -d: -f2- | cut -d' ' -f4 )$1"" }"
 }
 
 # setmodes %{ user-mode } [ %{ group } ]
@@ -99,8 +99,9 @@ if %{ [ -n "$TEST" ] } %{
 # Config
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-declare-user-mode edit 
-map global normal <space> ': enter-user-mode edit <ret>'
+# second default <space> "user" mode
+declare-user-mode edit
+map global normal <space> ': enter-user-mode edit<ret>'
 
 source "%val{config}/ui.kak"
 source "%val{config}/ux.kak"
