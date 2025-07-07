@@ -10,8 +10,8 @@
 
 bundle kakboard https://github.com/lePerdu/kakboard.git %{
 	# HISTORY: cb replaces "xclip {-in, -out} -selection clipboard"
-	set-option global kakboard_copy_cmd 'clipboard copy'
-	set-option global kakboard_paste_cmd 'clipboard paste'
+	set-option global kakboard_copy_cmd 'cb copy'
+	set-option global kakboard_paste_cmd 'cb paste'
 	hook global WinCreate .* %{ kakboard-enable }
 
 	addmodes %{ alpha : map global user y ': kakboard-with-push-clipboard y<ret>' -docstring 'clipboard yank' }
