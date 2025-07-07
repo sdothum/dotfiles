@@ -307,11 +307,6 @@ super + shift + j
 super + {_,ctrl} + k
 	xdotool search --onlyvisible --name "∏ano - qutebrowser" {windowunmap, windowkill} || piano
 
-# ......................................................................... mail
-
-super + y
-	xdotool search --onlyvisible --classname aerc windowclose || aerc
-
 # .......................................................................... mpc
 
 # NOTE: switch out to DESK desktop after hiding app to avoid attaching new windows to app desktop
@@ -344,6 +339,11 @@ super + x
 super + ctrl + x
 	notify critical 0 yazi '<b>root</b> user' ;\
 	xdotool search --onlyvisible --name root windowclose || yazi ROOT
+
+# ......................................................................... mail
+
+super + y
+	xdotool search --onlyvisible --classname aerc windowclose || aerc
 
 # kak: filetype=sh
 
