@@ -141,6 +141,8 @@
 **/mutt
 **/nano
 **/nanoki
+**/ncmpcpp/.config/ncmpcpp/*
+!**/ncmpcpp/.config/ncmpcpp/config
 **/neofetch
 **/newsbeuter
 **/nginx
