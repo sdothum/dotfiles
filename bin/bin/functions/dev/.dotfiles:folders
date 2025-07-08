@@ -38,6 +38,7 @@ bin/bin/functions/mail/mailsync
 bin/bin/functions/mail/notmail
 mime
 miniflux
+mpd
 nnn/.config/nnn/plugins/._*
 nnn/.config/nnn/plugins/_*
 picom
