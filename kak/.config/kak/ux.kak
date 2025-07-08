@@ -44,16 +44,15 @@ addmodes %{ align x : map global format ','     'x|align \;\\<ret>'   -docstring
 
 # .................................................................... Searching
 
-addmodes %{ focus 1 : map global edit <ret> ': execute-keys /$<ret><ret>' -docstring 'clear search' }
-addmodes %{ focus s : map global edit /   '/(?i)'                         -docstring 'isearch —— prev,next' }
-addmodes %{ focus s : map global edit '\' '<a-/>(?i)'                     -docstring 'isearch —— prev,next' }
-addmodes %{ focus x : map global edit >   '?(?i)'                         -docstring 'iextend —— prev,next' }
-addmodes %{ focus x : map global edit <   '<a-?>(?i)'                     -docstring 'iextend —— prev,next' }
+addmodes %{ focus s : map global edit /         '/(?i)'               -docstring 'isearch —— prev,next' }
+addmodes %{ focus s : map global edit '\'       '<a-/>(?i)'           -docstring 'isearch —— prev,next' }
+addmodes %{ focus x : map global edit >         '?(?i)'               -docstring 'iextend —— prev,next' }
+addmodes %{ focus x : map global edit <         '<a-?>(?i)'           -docstring 'iextend —— prev,next' }
 
 # .................................................................... Selection
 
-addmodes %{ alpha : map global edit s 'x<a-s>s'     -docstring 'split —— select,iselect' }
-addmodes %{ alpha : map global edit S 'x<a-s>s(?i)' -docstring 'split —— select,iselect' }
+addmodes %{ alpha : map global edit s           'x<a-s>s'             -docstring 'split —— select,iselect' }
+addmodes %{ alpha : map global edit S           'x<a-s>s(?i)'         -docstring 'split —— select,iselect' }
 
 map global normal S         's(?i)'  -docstring 'split: iselect:'
 
@@ -65,7 +64,7 @@ map global normal '<plus>'  '}p'     -docstring 'extend to next paragraph'
 
 # .............................................................. Line operations
 
-# map global normal G 'ge'      -docstring 'goto buffer end'  # breaks selection motion
+# map global normal G 'ge'    -docstring 'goto buffer end'  # breaks selection motion
 map global normal ^ 'gh'      -docstring 'goto line begin'
 map global normal $ 'gl'      -docstring 'goto line end'
 map global normal C '<a-l>di' -docstring 'replace to end of line'
