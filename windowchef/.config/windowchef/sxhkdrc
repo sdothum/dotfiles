@@ -318,6 +318,12 @@ super + ctrl + j
 	mpc toggle
 
 super + {comma,period}
+	mpc volume {-10, +10}
+
+super + ctrl + {comma,period}
+	mpc volume {-2, +2}
+
+super + shift + {comma,period}
 	mpc {prev, next}
 
 # ..................................................................... hardware
