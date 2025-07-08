@@ -76,6 +76,7 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 
 # set-option global ui_options terminal_status_on_top=true terminal_assistant=cat
 # set-option global ui_options terminal_status_on_top=true
+set-option global ui_options terminal_assistant=none
 
 # lines and columns displayed around the cursor
 set-option global scrolloff 4,4
@@ -127,7 +128,5 @@ add-highlighter global/ regex \h+$ 0:Trailing
 declare-option str spacer ' '
 # display utf-8 value for non-latin characters
 set-option global modelinefmt '%sh{capslock && echo "—CAPS— "}{{mode_info}} %opt{spacer} %val{buf_line_count}%opt{ruler} %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -lt 32 ] || [ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname}{{context_info}} [%sh{[ -z "$kak_opt_filetype" ] && echo "--" || echo "$kak_opt_filetype"}] %opt{spacer} %val{session}(%sh{echo "$kak_client" | sed -r "s/[^0-9]*(.*)/\1/"})'
-
-# set-option global ui_options terminal_assistant=cat
 
 # kak: filetype=kak
