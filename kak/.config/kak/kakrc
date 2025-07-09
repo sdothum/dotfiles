@@ -99,7 +99,7 @@ if %{ [ -n "$TEST" ] } %{
 # Config
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# second default <space> "user" mode
+# redefine default <space> "user" mode
 declare-user-mode edit
 map global normal <space> ': enter-user-mode edit<ret>'
 

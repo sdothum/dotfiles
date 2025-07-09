@@ -68,13 +68,24 @@ map global normal '<plus>'  '}p'     -docstring 'extend to next paragraph'
 map global normal ^ 'gh'      -docstring 'goto line begin'
 map global normal $ 'gl'      -docstring 'goto line end'
 map global normal C '<a-l>di' -docstring 'replace to end of line'
-map global normal D '<a-l>d'  -docstring 'delete to end of line'
+map global normal D '<a-l>d'  -docstring 'delete to end of line'  # BUG: plugin kakboard interferes with yank buffer
 map global normal Y '<a-l>'   -docstring 'yank to end of line'
 
 # ........................................................................ Paste
 
 map global normal <c-p> ':<space>yank-ring-previous<ret>'
 map global normal <c-n> ':<space>yank-ring-next<ret>'
+
+# .................................................................... Clipboard
+
+# auto update clipoard with yank, change and delete actions
+hook global RegisterModified '"' %{ nop %sh{ printf %s "$kak_main_reg_dquote" | xsel --input --clipboard } }
+
+# addmodes %{ alpha : map global edit y '<a-|> xsel --input --clipboard<ret>'  -docstring 'clipboard yank' }  # SEE: above
+# addmodes %{ alpha : map global edit d '| xsel --input --clipboard<ret>'      -docstring 'clipboard cut' }
+addmodes %{ alpha : map global edit p '<a-!> xsel --output --clipboard<ret>'   -docstring 'clipboard put —— after,before' }
+addmodes %{ alpha : map global edit P '! xsel --output --clipboard<ret>'       -docstring 'clipboard put —— after,before' }
+addmodes %{ alpha : map global edit R '| xsel --output --clipboard<ret>'       -docstring 'clipboard replace' }
 
 # Buffers
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -122,8 +133,11 @@ map global normal <a-space>     ': sync<ret>ga'                     -docstring '
 
 # USE: .*diff BECAUSE: rc/filetype/mail.kak also maps <ret> causing unexpected *.eml plug error(?)
 hook global WinDisplay .*[.]diff %{
-	map global normal <ret>      ': diff-jump<ret>'                  -docstring 'diff-jump new file'
-	map global normal <a-ret>    ': diff-jump -<ret>'                -docstring 'diff-jump old file'
+	nop %sh{ notify 20 critical "kak diff" "&lt;ret&gt;    goto 1st buffer:line\n&lt;c-ret&gt;  goto 2nd buffer:line\n&lt;space&gt;  buffer (user-mode)" }
+
+	map buffer normal <ret>      ': diff-jump -<ret>'                -docstring 'diff-jump 1st file'
+	map buffer normal <a-ret>    ': diff-jump  <ret>'                -docstring 'diff-jump 2nd file'
+	map buffer normal <space>    ': enter-user-mode buffer<ret>'     -docstring 'diff buffer mode'
 }
 
 # Allow one trailing space only in diff output

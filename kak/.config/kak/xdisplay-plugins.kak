@@ -6,21 +6,6 @@
 # Terminal $DISPLAY plugins
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# ......................................................... kakboard (clipboard)
-
-bundle kakboard https://github.com/lePerdu/kakboard.git %{
-	# HISTORY: cb replaces "xclip {-in, -out} -selection clipboard"
-	set-option global kakboard_copy_cmd 'cb copy'
-	set-option global kakboard_paste_cmd 'cb paste'
-	hook global WinCreate .* %{ kakboard-enable }
-
-	addmodes %{ alpha : map global edit y ': kakboard-with-push-clipboard y<ret>' -docstring 'clipboard yank' }
-	addmodes %{ alpha : map global edit d ': kakboard-with-push-clipboard d<ret>' -docstring 'clipboard cut' }
-	addmodes %{ alpha : map global edit p ': kakboard-with-pull-clipboard p<ret>' -docstring 'clipboard put —— after,before' }
-	addmodes %{ alpha : map global edit P ': kakboard-with-pull-clipboard P<ret>' -docstring 'clipboard put —— after,before' }
-	addmodes %{ alpha : map global edit R ': kakboard-with-pull-clipboard R<ret>' -docstring 'clipboard replace' }
-}
-
 # ...................................................................... kak-lsp
 
 bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{

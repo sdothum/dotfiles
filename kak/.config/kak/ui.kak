@@ -89,7 +89,8 @@ define-command scroll-home %{
 # ................................................................. Line numbers
 
 # modal line numbers
-declare-option str ruler '│'  # SEE: statusline
+declare-option str ruler '│'
+if %{ [ -n "$RULER" ] } %{ set-option global ruler %sh{ echo "$RULER" } }  # SEE: statusline and kak wrapper
 
 # assign highlighter name "number-lines" for peneira compatibility
 define-command margin -params ..1 %{ evaluate-commands add-highlighter -override window/number-lines number-lines -hlcursor -separator "'%opt{ruler}   '" %arg{@} }  # escape 'quotes' for eval
@@ -126,7 +127,13 @@ add-highlighter global/ regex \h+$ 0:Trailing
 
 # a minimalist statusline of "mode - column [utf-8] - filename [context]"
 declare-option str spacer ' '
-# display utf-8 value for non-latin characters
-set-option global modelinefmt '%sh{capslock && echo "—CAPS— "}{{mode_info}} %opt{spacer} %val{buf_line_count}%opt{ruler} %val{cursor_char_column}%sh{[ "$kak_cursor_char_value" -lt 32 ] || [ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value"} %opt{spacer} %val{bufname}{{context_info}} [%sh{[ -z "$kak_opt_filetype" ] && echo "--" || echo "$kak_opt_filetype"}] %opt{spacer} %val{session}(%sh{echo "$kak_client" | sed -r "s/[^0-9]*(.*)/\1/"})'
+if-else %{ [ "$kak_opt_ruler" = " " ] } %{
+	declare-option str colsep ":"
+} %{
+	declare-option str colsep "%opt{ruler} "
+}
+
+# display utf-8 value for non-latin characters (except U+000a linefeed)
+set-option global modelinefmt '%sh{ capslock && echo "—CAPS— " }{{mode_info}} %opt{spacer} %val{buf_line_count}%opt{colsep}%val{cursor_char_column}%sh{ [ "$kak_cursor_char_value" -lt 32 ] && [ "$kak_cursor_char_value" -ne 10 ] || [ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value" } %opt{spacer} %val{bufname}{{context_info}} [%sh{ [ -z "$kak_opt_filetype" ] && echo "--" || echo "$kak_opt_filetype" }] %opt{spacer} %val{session}(%sh{ echo "$kak_client" | sed -r "s/[^0-9]*(.*)/\1/" })'
 
 # kak: filetype=kak
