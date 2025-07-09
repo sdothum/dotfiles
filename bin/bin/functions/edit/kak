@@ -12,6 +12,7 @@ usage() { usage: "[kmd=<command>] $(basename $0) [-l | -p [<id>] | -v | -h] [-BE
 
 headless=${headless:-false}
 echo $1 | grep -q '.*/yazi.*/bulk-.*' && attached=true  # FOR: yazi bulk renames
+# export SHELL=/usr/bin/bash
 
 # share all instances (clients) with a single kak server session
 ID=${ID:-$USER}  # default session id
@@ -50,6 +51,7 @@ while : ;do
 	esac
 	shift
 done
+# debug='-debug shell'
 
 # snapshot sources (in lieu of persistent undo avalability)
 console || hgadd $@ &  # don' wait :)
