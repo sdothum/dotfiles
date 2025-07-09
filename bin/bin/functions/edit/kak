@@ -6,7 +6,7 @@
 
 # ....................................................................... Editor
 
-usage() { usage: "[kmd=<command>] $(basename $0) [-l | -p [<id>] | -v | -h] [-BENCHMARK | -DEBUG | -PLUG | -TRACE | -X11 | -- | ID=<id>] [WAIT] [<row>x<col>] <file>*"; exit 1; }
+usage() { usage: "[kmd=<command>] $(basename $0) [-l | -p [<id>] | -v | -h] [-BENCHMARK | -DEBUG | -PLUG | -TRACE | -X11 | RULER=<char> | -- | ID=<id>] [WAIT] [<row>x<col>] <file>*"; exit 1; }
 
 # NOTE: $kmd is passed passively to (env) term for subsequent "xdotool type"
 
@@ -24,6 +24,7 @@ TOML=$HOME/.config/kak-lsp/kak-lsp.toml  # NOTE: for kak-lsp v17.2.1
 LOG=/tmp/kak.log
 DELAY=0.25        # tuned time to center window
 export TABSTOP=3  # default for (pipe), SEE: align
+[ -e $SESSION/kak:ruler ] && export RULER=$(cat $SESSION/kak:ruler)
 
 $KAK -l | grep -q dead | $KAK -clear  # dead sessions
 sudo chmod 666 $LOG                   # in case first time creation by root
@@ -39,7 +40,8 @@ while : ;do
 		-P*           ) export UNPLUG=true ;;           # kakrc plugins exclusions
 		-T*           ) export TRACE=/tmp/kak:trace ;;  # trace messages
 		-X*           ) unset DISPLAY; [ $YAZI ] || export COLORSCHEME=${COLORSCHEME:-dabruin} ;;
-		--            ) ID=$(rand)    ;;  # force new instance
+		RULER=*       ) export RULER="${1#*=}" ;;       # default RULER='│'
+		--            ) ID=$(rand)    ;;                # force new instance
 		id=*          ) ID="${1#*=}"  ;;
 		ID=*          ) ID="${1#*=}"  ;;
 		WAIT          ) WAIT=$1 ;;
