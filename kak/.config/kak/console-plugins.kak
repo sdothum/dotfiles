@@ -27,8 +27,8 @@ if-else %{ [ -z "$DIFF" ] } %{
 # ................................................................... crosshairs
 
 bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
-	addmodes %{ hilite : map global format + ': crosshairs<ret>'   -docstring "crosshairs" }
-	addmodes %{ hilite : map global format | ': cursorcolumn<ret>' -docstring "columnhair" }
+	addmodes %{ meta 1 : map global buffer + ': crosshairs<ret>'   -docstring "crosshairs" }
+	addmodes %{ meta 1 : map global buffer | ': cursorcolumn<ret>' -docstring "columnhair" }
 }
 
 # ........................................................................ fandt
@@ -157,7 +157,7 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 		peneira-symbols
 	}
 
-	addmodes %{ alpha 0 : map global buffer <ret> ': buffers<ret>' -docstring 'buffers' }
+	addmodes %{ meta  0 : map global buffer <ret> ': buffers<ret>' -docstring 'buffers' }
 	addmodes %{ alpha 5 : map global buffer e     ': files<ret>'   -docstring 'edit file' }
 	addmodes %{ alpha   : map global edit   f     ': lines<ret>'   -docstring '*fuzzy match line' }
 	addmodes %{ alpha   : map global edit   c     ': symbols<ret>' -docstring 'ctag symbols' }

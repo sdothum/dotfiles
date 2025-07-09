@@ -113,11 +113,10 @@ hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt
 # arrange user-mode lists
 setmodes %{ edit   } %{ focus   }
 setmodes %{ edit   } %{ snippet }
-setmodes %{ edit   } %{ shell   }
+setmodes %{ edit   } %{ search  }
 setmodes %{ edit   } %{ alpha   }
-setmodes %{ buffer }
-setmodes %{ format } %{ hilite  }
-setmodes %{ format } %{ snippet }
+setmodes %{ buffer } %{ meta    }
+setmodes %{ buffer } %{ alpha   }
 setmodes %{ format } %{ align   }
 setmodes %{ format } %{ comment }
 

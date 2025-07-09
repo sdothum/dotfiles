@@ -42,7 +42,7 @@ bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 		map global insert <tab> '<a-;>:try lsp-snippets-select-next-placeholders addmodes %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
 	}
 
-	addmodes %{ alpha 5 : map global buffer l ': enter-user-mode lsp<ret>' -docstring "LSP mode" }
+	addmodes %{ alpha : map global edit l ': enter-user-mode lsp<ret>' -docstring "LSP mode" }
 } %{
 	# nop # NOTE: freezing kak-lsp at v17.2.1 for now due to change from TOML file for kak-lsp configuraton
 	cargo install --locked --force --path .

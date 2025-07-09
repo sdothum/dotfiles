@@ -44,10 +44,10 @@ addmodes %{ align x : map global format ','     'x|align \;\\<ret>'   -docstring
 
 # .................................................................... Searching
 
-addmodes %{ focus s : map global edit /         '/(?i)'               -docstring 'isearch —— prev,next' }
-addmodes %{ focus s : map global edit '\'       '<a-/>(?i)'           -docstring 'isearch —— prev,next' }
-addmodes %{ focus x : map global edit >         '?(?i)'               -docstring 'iextend —— prev,next' }
-addmodes %{ focus x : map global edit <         '<a-?>(?i)'           -docstring 'iextend —— prev,next' }
+addmodes %{ search s : map global edit /        '/(?i)'               -docstring 'isearch —— prev,next' }
+addmodes %{ search s : map global edit '\'      '<a-/>(?i)'           -docstring 'isearch —— prev,next' }
+addmodes %{ search x : map global edit >        '?(?i)'               -docstring 'iextend —— prev,next' }
+addmodes %{ search x : map global edit <        '<a-?>(?i)'           -docstring 'iextend —— prev,next' }
 
 # .................................................................... Selection
 
