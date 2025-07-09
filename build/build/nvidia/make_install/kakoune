@@ -7,6 +7,7 @@
 # ............................................................... Kakoune editor
 
 XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
+HYPRLAND=$XDG_CONFIG_HOME/kak/autoload/rc/windowing/hyprland.kak
 COLORS=$XDG_CONFIG_HOME/kak/colors
 mkdir -p $COLORS
 KAKLSP=$XDG_CONFIG_HOME/kak-lsp
@@ -21,5 +22,11 @@ make man
 sudo make install
 
 ln -sf /usr/local/share/kak/rc $HOME/.config/kak/autoload
+
+# patch hyprland shell test
+if [ -e $HYPRLAND ] ;then
+	original $HYPRLAND
+	sed -i '/\[ .* == .*\]/s/  *==  */ = /' $HYPRLAND
+fi
 
 # kak: filetype=sh
