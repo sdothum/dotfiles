@@ -120,6 +120,6 @@ setmodes %{ buffer } %{ alpha   }
 setmodes %{ format } %{ align   }
 setmodes %{ format } %{ comment }
 
-nop %sh{ notify 10 user-modes "space   user\nreturn  buffer\n#      format" }
+nop %sh{ notify 10 user-modes "&lt;<b>space</b>&gt;\tedit\n&lt;<b>ret</b>&gt;\tbuffer\n<b>#</b>\tformat" }
 
 # kak: filetype=kak

@@ -133,7 +133,7 @@ map global normal <a-space>     ': sync<ret>ga'                     -docstring '
 
 # USE: .*diff BECAUSE: rc/filetype/mail.kak also maps <ret> causing unexpected *.eml plug error(?)
 hook global WinDisplay .*[.]diff %{
-	nop %sh{ notify 20 critical "kak diff" "&lt;ret&gt;    goto 1st buffer:line\n&lt;c-ret&gt;  goto 2nd buffer:line\n&lt;space&gt;  buffer (user-mode)" }
+	nop %sh{ notify 20 critical "*.diff buffer" "&lt;<b>ret</b>&gt;\tgoto 1st buffer &amp; line\n&lt;<b>c-ret</b>&gt;\tgoto 2nd buffer &amp; line\n&lt;<b>space</b>&gt;\tbuffer (user-mode)" }
 
 	map buffer normal <ret>      ': diff-jump -<ret>'                -docstring 'diff-jump 1st file'
 	map buffer normal <a-ret>    ': diff-jump  <ret>'                -docstring 'diff-jump 2nd file'
