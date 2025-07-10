@@ -56,7 +56,7 @@ bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
 	declare-option str focus "off"
 	declare-option int focus_line 0
 
-	define-command focus-message %{ nop %sh{ notify 20 critical "focus selections" "&lt;<b>a-n</b>&gt;,<b>n</b>\t(deselect) prev,next\n&lt;<b>a-N</b>&gt;,<b>N</b>\t(select) prev,next" }}
+	define-command focus-message %{ nop %sh{ notify 20 critical "focus selections" "&lt;<b>a-n</b>&gt;,<b>n</b>\t(deselect) prev,next\n&lt;<b>a-N</b>&gt;,<b>N</b>\t(select)   prev,next" }}
 
 	# manage focus view to show maximum selections
 	define-command toggle-focus %{

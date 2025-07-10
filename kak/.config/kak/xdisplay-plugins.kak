@@ -10,6 +10,7 @@
 
 bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 	# diff kak-lsp.toml $HOME/.config/kak/kak-lsp/kak-lsp.toml.unmarksman
+	set-option global lsp_snippet_support false
 	nop evaluate-commands %sh{ kak-lsp -s $kak_session --kakoune }
 	# set global lsp_debug true  # FOR: kak-lsp v18.x
 
@@ -39,7 +40,6 @@ bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 		map global object k     '<a-semicolon>lsp-object Class Interface Struct<ret>'        -docstring 'LSP class interface or struct'
 		map global object d     '<a-semicolon>lsp-diagnostic-object --include-warnings<ret>' -docstring 'LSP errors and warnings'
 		map global object D     '<a-semicolon>lsp-diagnostic-object<ret>'                    -docstring 'LSP errors'
-		map global insert <tab> '<a-;>:try lsp-snippets-select-next-placeholders addmodes %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
 	}
 
 	addmodes %{ alpha : map global edit l ': enter-user-mode lsp<ret>' -docstring "LSP mode" }
