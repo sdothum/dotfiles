@@ -6,13 +6,12 @@
 
 # ....................................................................... Editor
 
-usage() { usage: "[kmd=<command>] $(basename $0) [-l | -p [<id>] | -v | -h] [-BENCHMARK | -DEBUG | -PLUG | -TRACE | -X11 | RULER=<char> | -- | ID=<id>] [WAIT] [<row>x<col>] <file>*"; exit 1; }
+usage() { usage: "[kmd=<command>] $(basename $0) [-l | -p [<id>] | -v | -h] [-BENCHMARK | -DEBUG [hooks|shell|profile|keys|commands] | -PLUG | -TRACE | -X11 | RULER=<char> | -- | ID=<id>] [WAIT] [<row>x<col>] <file>*"; exit 1; }
 
 # NOTE: $kmd is passed passively to (env) term for subsequent "xdotool type"
 
 headless=${headless:-false}
 echo $1 | grep -q '.*/yazi.*/bulk-.*' && attached=true  # FOR: yazi bulk renames
-# export SHELL=/usr/bin/bash
 
 # share all instances (clients) with a single kak server session
 ID=${ID:-$USER}  # default session id
@@ -30,6 +29,8 @@ export TABSTOP=3  # default for (pipe), SEE: align
 $KAK -l | grep -q dead | $KAK -clear  # dead sessions
 sudo chmod 666 $LOG                   # in case first time creation by root
 
+debug() { echo "$1" | grep -qE 'hooks|shell|profile|keys|commands' && debug="-debug $1" || { debug="-debug commands"; return 1; } }
+
 while : ;do
 	case $1 in
 		-l            ) $KAK -l; exit ;;
@@ -37,7 +38,7 @@ while : ;do
 		-v*           ) $KAK -version; exit ;;
 		-h*           ) $KAK -help; ditto '-debug' "hooks | shell | profile | keys | commands"; ditto 'kak' "-l | -p [<id>] | -v | -DEBUG (commands) | -P (no plugins) | -X (non-modal colorscheme)"; usage ;;
 		-B*           ) hyperfine -warmup 10 "$KAK -ui dummy -e quit"; exit ;;
-		-D*           ) export TRACE=/tmp/kak:trace; debug='-debug commands' ;;  # debug trace
+		-D*           ) export TRACE=/tmp/kak:trace; debug $2 && shift ;;  # debug trace
 		-P*           ) export UNPLUG=true ;;           # kakrc plugins exclusions
 		-T*           ) export TRACE=/tmp/kak:trace ;;  # trace messages
 		-X*           ) unset DISPLAY; [ $YAZI ] || export COLORSCHEME=${COLORSCHEME:-dabruin} ;;
@@ -51,7 +52,6 @@ while : ;do
 	esac
 	shift
 done
-# debug='-debug shell'
 
 # snapshot sources (in lieu of persistent undo avalability)
 console || hgadd $@ &  # don' wait :)
