@@ -6,27 +6,14 @@
 
 # ............................................................... Kakoune editor
 
-XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
-HYPRLAND=$XDG_CONFIG_HOME/kak/autoload/rc/windowing/hyprland.kak
-COLORS=$XDG_CONFIG_HOME/kak/colors
-mkdir -p $COLORS
-KAKLSP=$XDG_CONFIG_HOME/kak-lsp
-mkdir -p $KAKLSP
-
 sudo xbps-install -y kakoune cargo git lua LuaJIT
+
 cd /home/depot
 exists --repo kakoune && { cd kakoune; git pull; cd ..; } || git clone --depth 1 https://github.com/mawww/kakoune.git
+
 cd kakoune
 make
 make man
 sudo make install
-
-ln -sf /usr/local/share/kak/rc $HOME/.config/kak/autoload
-
-# patch hyprland shell test
-if [ -e $HYPRLAND ] ;then
-	original $HYPRLAND
-	sed -i '/\[ .* == .*\]/s/  *==  */ = /' $HYPRLAND
-fi
 
 # kak: filetype=sh
