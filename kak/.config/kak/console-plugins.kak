@@ -43,8 +43,8 @@ bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
 	define-command c-ret-message %{ nop %sh{ notify 20 critical "find & replace" "&lt;<b>ret</b>&gt;\tgoto buffer:line\n&lt;<b>c-ret</b>&gt;\tbuffer (user-mode) to replace" }}
 
 	# NOTE: <ret> jumps to buffer line, <c-ret> for buffer user-mode (to apply replace)
-	addmodes %{ alpha 5 : map global buffer f ': c-ret-message<ret>: find ' -docstring "find —— buffer:line,(replace edits)" }
-	addmodes %{ alpha 5 : map global buffer R ': find-apply-changes<ret>'   -docstring "find —— buffer:line,(replace edits)" }
+	addmodes %{ alpha 5 : map global buffer f ': c-ret-message<ret>: find ' -docstring "find    —— buffer:line,(replace edits)" }
+	addmodes %{ alpha 5 : map global buffer R ': find-apply-changes<ret>'   -docstring "find    —— buffer:line,(replace edits)" }
 }
 
 # ............................................................. focus selections
@@ -100,8 +100,8 @@ bundle hop.kak https://github.com/hadronized/hop.kak.git %{
 		hop-kak
 	}
 
-	addmodes %{ alpha : map global edit h ': hop-kak-sel<ret>'   -docstring 'hint —— /register,words' }
-	addmodes %{ alpha : map global edit H ': hop-kak-words<ret>' -docstring 'hint —— /register,words' }
+	addmodes %{ alpha : map global edit h ': hop-kak-sel<ret>'   -docstring 'hint      —— /register,words' }
+	addmodes %{ alpha : map global edit H ': hop-kak-words<ret>' -docstring 'hint      —— /register,words' }
 	map global normal <a-h> ': hop-kak-sel<ret>'   -docstring 'find selection (on page)'
 	map global normal <a-H> ': hop-kak-words<ret>' -docstring 'find word (on page)'
 } %{

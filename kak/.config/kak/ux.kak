@@ -44,15 +44,15 @@ addmodes %{ align x : map global format ','     'x|align \;\\<ret>'   -docstring
 
 # .................................................................... Searching
 
-addmodes %{ search s : map global edit /        '/(?i)'               -docstring 'isearch —— prev,next' }
-addmodes %{ search s : map global edit '\'      '<a-/>(?i)'           -docstring 'isearch —— prev,next' }
-addmodes %{ search x : map global edit >        '?(?i)'               -docstring 'iextend —— prev,next' }
-addmodes %{ search x : map global edit <        '<a-?>(?i)'           -docstring 'iextend —— prev,next' }
+addmodes %{ search s : map global edit /        '/(?i)'               -docstring 'isearch   —— prev,next' }
+addmodes %{ search s : map global edit '\'      '<a-/>(?i)'           -docstring 'isearch   —— prev,next' }
+addmodes %{ search x : map global edit >        '?(?i)'               -docstring 'iextend   —— prev,next' }
+addmodes %{ search x : map global edit <        '<a-?>(?i)'           -docstring 'iextend   —— prev,next' }
 
 # .................................................................... Selection
 
-addmodes %{ search z : map global edit s        'x<a-s>s'             -docstring 'split —— select,iselect' }
-addmodes %{ search z : map global edit S        'x<a-s>s(?i)'         -docstring 'split —— select,iselect' }
+addmodes %{ search z : map global edit s        'x<a-s>s'             -docstring 'split     —— select,iselect' }
+addmodes %{ search z : map global edit S        'x<a-s>s(?i)'         -docstring 'split     —— select,iselect' }
 
 map global normal S         's(?i)'  -docstring 'split: iselect:'
 
@@ -83,8 +83,8 @@ hook global RegisterModified '"' %{ nop %sh{ printf %s "$kak_main_reg_dquote" | 
 
 # addmodes %{ alpha : map global edit y '<a-|> xsel --input --clipboard<ret>'  -docstring 'clipboard yank' }  # SEE: above
 # addmodes %{ alpha : map global edit d '| xsel --input --clipboard<ret>'      -docstring 'clipboard cut' }
-addmodes %{ alpha : map global edit p '<a-!> xsel --output --clipboard<ret>'   -docstring 'clipboard put —— after,before' }
-addmodes %{ alpha : map global edit P '! xsel --output --clipboard<ret>'       -docstring 'clipboard put —— after,before' }
+addmodes %{ alpha : map global edit p '<a-!> xsel --outafter --clipboard<ret>' -docstring 'clipboard —— after,before' }
+addmodes %{ alpha : map global edit P '! xsel --outafter --clipboard<ret>'     -docstring 'clipboard —— after,before' }
 addmodes %{ alpha : map global edit R '| xsel --output --clipboard<ret>'       -docstring 'clipboard replace' }
 
 # Buffers
@@ -145,12 +145,12 @@ hook global WinSetOption filetype=diff %{
 	add-highlighter buffer/diff-allow-one-trailing-space regex '^ ' 0:Default
 }
 addmodes %{ alpha 2 : map global buffer * ': buffer *debug*<ret>'            -docstring '*debug*' }
-addmodes %{ alpha 5 : map global buffer D ': delete-buffer!<ret>'            -docstring 'delete —— save,discard!' }
-addmodes %{ alpha 4 : map global buffer d ': sync<ret>: delete-buffer<ret>'  -docstring 'delete —— save,discard!' }
+addmodes %{ alpha 5 : map global buffer D ': delete-buffer!<ret>'            -docstring 'delete  —— save,discard!' }
+addmodes %{ alpha 4 : map global buffer d ': sync<ret>: delete-buffer<ret>'  -docstring 'delete  —— save,discard!' }
 # SEE: kakpipe alpha subsort in xdisplay-plugins
 addmodes %{ alpha 9 : map global buffer q ': quit!<ret>'                     -docstring 'quit!' }
-addmodes %{ alpha 9 : map global buffer w ': sync<ret>'                      -docstring 'write —— save,and quit!' }
-addmodes %{ alpha 9 : map global buffer W ': sync<ret>: quit!'               -docstring 'write —— save,and quit!' }
+addmodes %{ alpha 9 : map global buffer w ': sync<ret>'                      -docstring 'write   —— save,and quit!' }
+addmodes %{ alpha 9 : map global buffer W ': sync<ret>: quit!'               -docstring 'write   —— save,and quit!' }
 addmodes %{ alpha 9 : map global buffer x ': sync<ret>: write-all-quit<ret>' -docstring 'save all and quit' }
 
 # Terminal / shell
