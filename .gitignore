@@ -63,6 +63,7 @@
 **/font-manager
 **/fonts/b-rounded
 **/fonts/.fonts/*
+!**/fonts/.fonts/Iosevka*
 **/fstab
 **/geany
 **/georgi/qmk_firmware/users/dennytom*
