@@ -90,7 +90,7 @@ define-command scroll-home %{
 
 # modal line numbers
 declare-option str ruler '│'
-if %{ [ -n "$RULER" ] } %{ set-option global ruler %sh{ echo "$RULER" } }  # SEE: statusline and kak wrapper
+if %{ [ -n "$RULER" ] } %{ set-option global ruler %sh{ echo "$RULER" }}  # SEE: statusline and kak wrapper
 
 # assign highlighter name "number-lines" for peneira compatibility
 define-command margin -params ..1 %{ evaluate-commands add-highlighter -override window/number-lines number-lines -hlcursor -separator "'%opt{ruler}   '" %arg{@} }  # escape 'quotes' for eval

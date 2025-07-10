@@ -45,7 +45,7 @@ define-command if -params 2 %{ if-else %arg{1} %arg{2} %{ nop } }
 # trace %{ message }
 if-else %{ [ -n "$TRACE" ] } %{
 	nop %sh{ rm -f $TRACE }  # clear last trace
-	define-command trace -params 1 %{ nop %sh{ echo "${1# }" >>$TRACE } }
+	define-command trace -params 1 %{ nop %sh{ echo "${1# }" >>$TRACE }}
 } %{
 	define-command trace -params 1 %{ nop }
 }

@@ -51,8 +51,8 @@ addmodes %{ search x : map global edit <        '<a-?>(?i)'           -docstring
 
 # .................................................................... Selection
 
-addmodes %{ alpha : map global edit s           'x<a-s>s'             -docstring 'split —— select,iselect' }
-addmodes %{ alpha : map global edit S           'x<a-s>s(?i)'         -docstring 'split —— select,iselect' }
+addmodes %{ search z : map global edit s        'x<a-s>s'             -docstring 'split —— select,iselect' }
+addmodes %{ search z : map global edit S        'x<a-s>s(?i)'         -docstring 'split —— select,iselect' }
 
 map global normal S         's(?i)'  -docstring 'split: iselect:'
 
@@ -79,7 +79,7 @@ map global normal <c-n> ':<space>yank-ring-next<ret>'
 # .................................................................... Clipboard
 
 # auto update clipoard with yank, change and delete actions
-hook global RegisterModified '"' %{ nop %sh{ printf %s "$kak_main_reg_dquote" | xsel --input --clipboard } }
+hook global RegisterModified '"' %{ nop %sh{ printf %s "$kak_main_reg_dquote" | xsel --input --clipboard }}
 
 # addmodes %{ alpha : map global edit y '<a-|> xsel --input --clipboard<ret>'  -docstring 'clipboard yank' }  # SEE: above
 # addmodes %{ alpha : map global edit d '| xsel --input --clipboard<ret>'      -docstring 'clipboard cut' }
@@ -95,7 +95,7 @@ declare-user-mode buffer
 
 map global normal <ret>   ': enter-user-mode buffer<ret>'
 map global normal <c-ret> ': enter-user-mode buffer<ret>'  # for find *scratch* buffer
-# addmodes %{ alpha 0 : map global edit <c-ret> ': enter-user-mode buffer<ret>' -docstring 'buffer user-mode' }
+addmodes %{ focus 1 : map global edit <ret> ': enter-user-mode buffer<ret>' -docstring 'buffer user-mode' }
 
 # no sudo-write-all so sync root owned files on buffer switching
 define-command sync %{
