@@ -35,12 +35,14 @@
 
 = photography
 = ═══════════
-  # gmic-gimp
+# gmic-gimp
+# gwenview
   digikam
   dispcalGUI
   gimp
   gpick
   ImageMagick
+m oculante
   resynthesizer
   rawtherapee
 
@@ -53,12 +55,12 @@
 = ═══════
 # audacity      [server]
 # cdrdao        [server]
-# ffmpeg        [server]
 # handbrake     [server]
 # mkvtoolnix    [server]
 # transcode     [server]
 # xfburn        [server]
   asunder
+  ffmpeg6
   flac
   mediainfo
 
