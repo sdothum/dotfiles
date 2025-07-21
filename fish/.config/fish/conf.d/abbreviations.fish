@@ -226,8 +226,8 @@ for i in (seq 1 9); abbr \$$i "\$argv[$i]" ;end
 function flirt:cd; test (count $argv) -gt 0 && z $argv; set -l f (flirt); test -d "$f" && z $f || z (dirname $f) ;end
 function flirt:sh; test (count $argv) -gt 0 && z $argv; set -l IFS; set -l f (flirt); test -z "$f" || echo "$f" | vipe | sh ;end
 
-# abbr cd 'z'
 # abbr nd 'ncd'
+abbr cd 'z'
 abbr dash 'rlwrap -n dash'
 abbr fd 'flirt:cd'
 abbr fh 'flirt:sh'
