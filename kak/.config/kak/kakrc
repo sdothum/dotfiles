@@ -107,7 +107,7 @@ source "%val{config}/ui.kak"
 source "%val{config}/ux.kak"
 
 # inline admonitions
-declare-option str admonition "\s(?i)(att(n|ention)|(be)*cause|bu[gt]|deprecated|donot|ex(ample)*|for|hack|hist(ory)*|note|see|tip|(to)*do|us(ag)*e|warn(ing)*):\s"
+declare-option str admonition "\s(?i)(att(n|ention)|(be)*cause|bu[gt]|deprecated|donot|ex(ample)*|for|hack|hist(ory)*|note|see|tip|(to)*do|unknown|us(ag)*e|warn(ing)*):\s"
 hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt{admonition} 1:WrapMarker }  # select field 1: (vs 0:) to not hilight the colon :)
 
 # arrange user-mode lists
@@ -120,6 +120,7 @@ setmodes %{ buffer } %{ alpha   }
 setmodes %{ format } %{ align   }
 setmodes %{ format } %{ comment }
 
+# info-notifier %{user-modes} %{<space>   edit\n<ret>     buffer\n#         format}
 nop %sh{ notify 10 user-modes "&lt;<b>space</b>&gt;\tedit\n&lt;<b>ret</b>&gt;\tbuffer\n<b>#</b>\tformat" }
 
 # kak: filetype=kak

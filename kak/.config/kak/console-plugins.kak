@@ -40,11 +40,13 @@ bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
 # ............................................................. find and replace
 
 bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
-	define-command c-ret-message %{ nop %sh{ notify 20 critical "find & replace" "&lt;<b>ret</b>&gt;\tgoto buffer:line\n&lt;<b>c-ret</b>&gt;\tbuffer (user-mode) to replace" }}
+	# define-command c-ret-message %{ info-notifier %{find & replace} %{<ret>     goto buffer:line\n<c-ret>   buffer (user-mode) to replace} }
+	define-command c-ret-message %{ nop %sh{ notify 20 critical "find & replace" "&lt;<b>ret</b>&gt;\tgoto buffer:line\n&lt;<b>c-u</b>&gt;\tcommit buffer edits\n&lt;<b>c-ret</b>&gt;\tbuffer (user-mode)" }}
 
 	# NOTE: <ret> jumps to buffer line, <c-ret> for buffer user-mode (to apply replace)
-	addmodes %{ alpha 5 : map global buffer f ': c-ret-message<ret>: find ' -docstring "find    —— buffer:line,(replace edits)" }
-	addmodes %{ alpha 5 : map global buffer R ': find-apply-changes<ret>'   -docstring "find    —— buffer:line,(replace edits)" }
+	addmodes %{ alpha 5 : map global buffer f     ': c-ret-message<ret>: find ' -docstring "find    —— buffer:line,(commit buffer edits)" }
+	addmodes %{ alpha 6 : map global buffer <c-u> ': find-apply-changes<ret>;'  -docstring "find    —— buffer:line,(commit buffer edits)" }
+	map global normal <c-u> ': find-apply-changes<ret>;' -docstring "commit buffer edits"
 }
 
 # ............................................................. focus selections
@@ -56,7 +58,8 @@ bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
 	declare-option str focus "off"
 	declare-option int focus_line 0
 
-	define-command focus-message %{ nop %sh{ notify 20 critical "focus selections" "&lt;<b>a-n</b>&gt;,<b>n</b>\t(deselect) prev,next\n&lt;<b>a-N</b>&gt;,<b>N</b>\t(select)   prev,next" }}
+	# define-command focus-message %{ info-notifier %{focus selections} %{<a-n>,n   (deselect) then prev,next\n<a-N>,N   (select)   then prev,next} }
+	define-command focus-message %{ nop %sh{ notify 20 critical "focus selections" "&lt;<b>a-n</b>&gt;,<b>n</b>\t(deselect) then prev,next\n&lt;<b>a-N</b>&gt;,<b>N</b>\t(select)   then prev,next" }}
 
 	# manage focus view to show maximum selections
 	define-command toggle-focus %{

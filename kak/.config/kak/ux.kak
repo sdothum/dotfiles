@@ -20,7 +20,18 @@ map global insert <a-ret> '<esc><a-o>ji'        -docstring 'insert non-comment l
 
 # ................................................................... Commenting
 
+define-command refold %{
+	if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|fold -sw $kak_opt_autowrap_column<ret>" }}
+}
+
+define-command unfold %{
+	# if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|tr '\n' '※'|iconv -f latin1 -t utf-8|sed 's/â *â/⁋/g; s/â/ /g; s/⁋/\n\n/g; $a\'''<ret>" }}  # UNKNOWN: sed does not complete as expected from kak shell
+	if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|comment F<ret>" }}  # SEE: above
+}
+
 addmodes %{ comment : map global format c       ': comment-line<ret>' -docstring 'comment' }
+addmodes %{ comment : map global format f       ': refold<ret>'       -docstring 'fold,unfold' }
+addmodes %{ comment : map global format F       ': unfold<ret>'       -docstring 'fold,unfold' }
 addmodes %{ comment : map global format l       'x|comment l .<ret>'  -docstring 'leader    ... xxx' }
 addmodes %{ comment : map global format t       'x|comment t .<ret>'  -docstring 'trailer   xxx ...' }
 addmodes %{ comment : map global format R       'x|comment r =<ret>'  -docstring 'ruler     ═══' }
@@ -49,12 +60,14 @@ addmodes %{ search s : map global edit '\'      '<a-/>(?i)'           -docstring
 addmodes %{ search x : map global edit >        '?(?i)'               -docstring 'iextend   —— prev,next' }
 addmodes %{ search x : map global edit <        '<a-?>(?i)'           -docstring 'iextend   —— prev,next' }
 
-# .................................................................... Selection
+# .............................................................. Split selection
 
 addmodes %{ search z : map global edit s        'x<a-s>s'             -docstring 'split     —— select,iselect' }
 addmodes %{ search z : map global edit S        'x<a-s>s(?i)'         -docstring 'split     —— select,iselect' }
 
 map global normal S         's(?i)'  -docstring 'split: iselect:'
+
+# .......................................................... Paragraph selection
 
 map global normal '<minus>' '{p'     -docstring 'extend to previous paragraph'
 map global normal {         '[p'     -docstring 'select to paragraph begin'
