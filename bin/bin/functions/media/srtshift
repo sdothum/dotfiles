@@ -1,0 +1,20 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Media
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................... Subtitle shift
+
+usage() { usage: "$(basename $0) [-]<S>[.<d>] [<file>.srt]"; exit 1; }
+
+[ $1 ] || usage
+
+# assumes one subtitle file per media folder
+[ $2 ] && subtitle="$2" || subtitle=$(ls -t *.srt)
+[ "$subtitle" ] || { ditto ERROR srt "subtitle file not found"; usage; }
+
+[ -e $subtitle.old ] || sudo cp --preserve=all $subtitle $subtitle.old
+ffmpeg -itsoffset $1 -i $subtitle.old -c copy $subtitle
+
+# kak: filetype=sh

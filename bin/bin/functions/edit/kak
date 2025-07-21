@@ -87,7 +87,10 @@ console || [ $attached ] && exec $KAK $file  # nvidia tty console doesn't play w
 # (sleep $DELAY; window snap center) &  # SEE: rulerrc
 title=$(echo "$file" | sed 's|\.\/||g; s| [^ ]*/||; s/ .*/.../g')
 [ $count -gt 1 ] && title="$title($count)"
-# NOTE: nohup to detach window from yazi
-nohup term "title=kak:$title" class=${class:-kak} PAPER ${XY:-132x52} $WAIT $KAK $debug ${session:--c} $ID "$file" >>$LOG 2>&1  # 50 line page
+if [ $WAIT ] ;then
+	exec term "title=kak:$title" class=${class:-kak} PAPER ${XY:-132x52} $WAIT $KAK $debug ${session:--c} $ID "$file" >>$LOG 2>&1  # NOTE: exec for pwait pattern match
+else
+	nohup term "title=kak:$title" class=${class:-kak} PAPER ${XY:-132x52} $KAK $debug ${session:--c} $ID "$file" >>$LOG 2>&1       # NOTE: nohup to detach window from yazi
+fi
 
 # kak: filetype=sh

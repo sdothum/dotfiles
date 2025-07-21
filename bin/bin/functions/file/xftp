@@ -6,8 +6,10 @@
 
 # ........................................................... X-plore ftp client
 
+IP=54
+
 cd /net/downloads/http  # ftp target
 # connect to X-plore ftp server
-gftp ftp://admin:123456@$(inetutils-hostname -i | cut -d. -f1-3).54:2222/Internal\ shared\ storage/Download
+gftp ftp://admin:123456@$(inetutils-hostname -i | cut -d. -f1-3).$IP:2222/Internal\ shared\ storage/Download
 
 # kak: filetype=sh

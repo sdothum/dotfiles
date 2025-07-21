@@ -61,18 +61,17 @@ fillchar() {
 	esac
 }
 
-code() {
-	sed 's/\t/  /g; /^[^ ]/s/$/`/; /^ /s/$/\\`/; s/^/`/; s/^`$/` `/'  # wiki markdown backtick code block
-	exit
-}
+code()   { sed 's/\t/  /g; /^[^ ]/s/$/`/; /^ /s/$/\\`/; s/^/`/; s/^`$/` `/'; exit; }  # wiki markdown backtick code block
+unfold() { tr '\n' '※' | iconv -f latin1 -t utf-8 | sed 's/â *â/⁋/g; s/â/ /g; s/⁋/\n\n/g; $a\'''; exit; }  # HACK: utf-8 conversion required for sed
 
 case $action in
 	c*   ) code       ;;  # wiki codeblock wrapper
+	F*   ) unfold     ;;
 	l*   ) fillchar . ;;
 	t*   ) fillchar . ;;
 	u*   ) fillchar ━ ;;
 	r*   ) fillchar ═ ;;
-	*    ) usage ;;
+	*    ) usage      ;;
 esac
 
 while IFS= read -r line ;do
