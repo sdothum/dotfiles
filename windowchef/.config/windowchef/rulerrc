@@ -10,7 +10,7 @@
 class="aerc"
 	window desktop $(chef desktop "COMM")                  ;\
 	xdotool search --sync --onlyvisible --classname "aerc" ;\
-	window size monocle                                    ;\
+	window @0.3 size monocle                                ;\
 	sleep 0.2 && xdotool type ':vsplit' && xdotool key Return
 
 class="audacious"
@@ -72,6 +72,9 @@ class="krita"
 class="mpv"
 	waitron window_maximize
 
+class="oculante"
+	window size monocle
+
 class="org.nicotine_plus.Nicotine"
 	window desktop $(chef desktop "PEER") ;\
 	window size 1/3 && window @org.nicotine_plus.Nicotine snap center ;\
@@ -112,7 +115,7 @@ class="term"
 	window snap center vertical
 
 name="yazi"
-	window @0.125 size A4 rotate ;\
+	window @0.15 size A4 rotate ;\
 	window snap center
 
 class="zathura"

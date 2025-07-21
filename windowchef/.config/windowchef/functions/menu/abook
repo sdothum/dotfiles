@@ -110,10 +110,10 @@ while : ;do
 			[ $tag ] || tag=Contacts
 			echo "\n$tag :: $addresses" >>$contacts
 			unset addresses
-			vim -g -f $contacts
+			$FGEDIT $contacts
 			;;
 
-		"$EDIT"      ) vim -g -f $contacts ;;
+		"$EDIT"      ) $FGEDIT $contacts ;;
 		"$REBUILD"   ) abook; unset addresses ;;
 		"$CLIPBOARD" ) clipboard "$addresses"; notify 'Ctrl-Alt-V' "$(echo $addresses | sed 's/ <\S*>//g')"; break ;;
 		*            ) [ "$addresses" ] && addresses=$addresses,$address || addresses=$address ;;

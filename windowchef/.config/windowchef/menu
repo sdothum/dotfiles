@@ -13,6 +13,8 @@ export MENU=${MENU:-$(dirname $0)/functions/menu}
 export HISTORY=$MENU/.history
 export SEP='∙'             # list separator
 export LEADER='○∘⋯  '
+# export FGEDIT='vim -g -f'
+export FGEDIT='kak WAIT'
 
 X()        { echo "$LEADER$@"; }  # pick list action
 picklist() { sed "s/\^/^$SEP /" | column -s^ -t ; }

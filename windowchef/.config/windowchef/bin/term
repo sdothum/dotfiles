@@ -7,7 +7,7 @@
 
 # ..................................................................... Terminal
 
-# Usage: [kmd=<string>] term [[title=]<title>] [[class=]<class>] [BLACKBOARD | TRANSPARENT | PAPER | <X>x<Y> | VISIBLE | WAIT | FORTUNE]* [[SHELL] <command>]
+# Usage: [kmd=<string>] term [[title=]<title>] [[class=]<class>] [BLACKBOARD | TRANSPARENT | PAPER | OPACITY=<decimal> | <X>x<Y> | VISIBLE | WAIT | FORTUNE]* [[SHELL] <command>]
 #        title (and default name string)
 #        FORTUNE, login notifier message
 #        BLACKBOARD, cinema background mode for omxplayer
@@ -63,6 +63,7 @@ while : ;do
 		''            ) break ;;
 		BLACKBOARD    ) theme $1 ;;
 		TRANSPARENT   ) theme $1 ;;
+		OPACITY=*     ) theme $1 ;;
 		PAPER         ) theme $1 ;;
 		*[0-9]x[0-9]* ) theme $1 ;;
 		FORTUNE       ) touch $FORTUNE:term ;;
@@ -106,6 +107,9 @@ $TERM $theme $font $geometry $title $name $cmd
 
 "; }
 # window snap center
-[ $wait    ] && pidwait -f "$process"
+[ $wait    ] && {
+	echo "$process" | grep -q '/kak ' && process=".*/kak .*/${process##* /}"
+	pidwait -f "$process"
+}
 
 # kak: filetype=sh
