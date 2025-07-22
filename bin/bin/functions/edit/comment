@@ -6,7 +6,7 @@
 
 # ........................................................... modal pipe actions
 
-usage() { echo "<selection> | $(basename $0) l'eader | t'railer | u'nderline | r'uler [<char>] | c'ode
+usage() { echo "<selection> | $(basename $0) l'eader | t'railer | u'nderline | r'uler [<char>] | c'ode | f'old <length> | unF'old
 >   where, first word of line is treated as comment symbol
 >          '.' -> default leader/trailer 
 >          '━' -> default (heavy horizontal) underline
@@ -62,11 +62,13 @@ fillchar() {
 }
 
 code()   { sed 's/\t/  /g; /^[^ ]/s/$/`/; /^ /s/$/\\`/; s/^/`/; s/^`$/` `/'; exit; }  # wiki markdown backtick code block
-unfold() { tr '\n' '※' | iconv -f latin1 -t utf-8 | sed 's/â *â/⁋/g; s/â/ /g; s/⁋/\n\n/g; $a\'''; exit; }  # HACK: utf-8 conversion required for sed
+refold() { [ $1 ] && fold -sw $1 || usage; exit; }
+unfold() { tr '\n' '⁋' | iconv -f latin1 -t utf-8 | sed -r 's/ *â *â/⁋/g; s/ â/ /g; s/(.)â/\1 /g; s/ $//g; s/^â/⁋/g; s/⁋/\n\n/g; $a\'''; exit; }  # HACK: utf-8 conversion required for sed ???: tr '\n' '⁋' -> 'â'
 
 case $action in
 	c*   ) code       ;;  # wiki codeblock wrapper
-	F*   ) unfold     ;;
+	f*   ) refold $2  ;;
+	*F*  ) unfold     ;;
 	l*   ) fillchar . ;;
 	t*   ) fillchar . ;;
 	u*   ) fillchar ━ ;;

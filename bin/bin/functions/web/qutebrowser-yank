@@ -7,7 +7,7 @@
 # ...................................................................... Browser
 
 # macro to yank url to clipboard
-cb clear >/dev/null  # HACK: clipboard action is unreliable (?)
+cb clear >/dev/null  # ???: clipboard action unreliable otherwise
 # qutebrowser configured for kakoune..
 xdotool type ':edit-url'
 xdotool key Return

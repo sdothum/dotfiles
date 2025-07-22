@@ -25,7 +25,7 @@ unlock() {
 initialize() {
 	rm -f $HOME/.weechat/*.log
 
-	# re-initialize disappearing(?) autoload links
+	# ???: re-initialize disappearing autoload links
 	cd $HOME/.weechat/perl/autoload
 	for i in ../*pl ;do ln -s $i . 2>/dev/null ;done
 

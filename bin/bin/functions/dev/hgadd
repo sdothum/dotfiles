@@ -13,7 +13,7 @@ usage() { echo "$(basename $0) <file>* <path>*
 	exit 1
 }
 
-# IMPORTANT: exclude must include .gitignore (will cause race condition otherwise ??)
+# IMPORTANT: exclude must include .gitignore ???: will cause race condition otherwise
 
 REPO=${REPO:-$STOW}
 IGNORE=$REPO/.hgadd:ignore
