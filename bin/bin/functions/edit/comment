@@ -6,7 +6,7 @@
 
 # ........................................................... modal pipe actions
 
-usage() { echo "<selection> | $(basename $0) l'eader | t'railer | u'nderline | r'uler [<char>] | c'ode | f'old <length> | unF'old
+usage() { echo "<selection> | $(basename $0) l'eader | t'railer | u'nderline | r'uler [<char>] | c'ode | f'old <column> | unF'old
 >   where, first word of line is treated as comment symbol
 >          '.' -> default leader/trailer 
 >          '━' -> default (heavy horizontal) underline
@@ -66,14 +66,14 @@ refold() { [ $1 ] && fold -sw $1 || usage; exit; }
 unfold() { tr '\n' '⁋' | iconv -f latin1 -t utf-8 | sed -r 's/ *â *â/⁋/g; s/ â/ /g; s/(.)â/\1 /g; s/ $//g; s/^â/⁋/g; s/⁋/\n\n/g; $a\'''; exit; }  # HACK: utf-8 conversion required for sed ???: tr '\n' '⁋' -> 'â'
 
 case $action in
-	c*   ) code       ;;  # wiki codeblock wrapper
-	f*   ) refold $2  ;;
-	*F*  ) unfold     ;;
-	l*   ) fillchar . ;;
-	t*   ) fillchar . ;;
-	u*   ) fillchar ━ ;;
-	r*   ) fillchar ═ ;;
-	*    ) usage      ;;
+	c*  ) code       ;;  # wiki codeblock wrapper
+	f*  ) refold $2  ;;  # to line wrap column
+	*F* ) unfold     ;;
+	l*  ) fillchar . ;;
+	t*  ) fillchar . ;;
+	u*  ) fillchar ━ ;;
+	r*  ) fillchar ═ ;;
+	*   ) usage      ;;
 esac
 
 while IFS= read -r line ;do
