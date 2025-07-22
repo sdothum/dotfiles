@@ -21,12 +21,12 @@ map global insert <a-ret> '<esc><a-o>ji'        -docstring 'insert non-comment l
 # ................................................................... Commenting
 
 define-command refold %{
-	if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|fold -sw $kak_opt_autowrap_column<ret>" }}
+	if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|comment f $kak_opt_autowrap_column<ret>" }}
 }
 
 define-command unfold %{
-	# if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|tr '\n' '※'|iconv -f latin1 -t utf-8|sed 's/â *â/⁋/g; s/â/ /g; s/⁋/\n\n/g; $a\'''<ret>" }}  # UNKNOWN: sed does not complete as expected from kak shell
-	if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|comment F<ret>" }}  # SEE: above
+	# UNKNOWN: utf-8 sed expression does not complete fully from kak shell SEE: comment unFold
+	if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|comment F<ret>" }}
 }
 
 addmodes %{ comment : map global format c       ': comment-line<ret>' -docstring 'comment' }
