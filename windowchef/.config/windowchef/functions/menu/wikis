@@ -47,7 +47,7 @@ add() {
 	file="$WIKIS/$wiki/$title.wiki"
 	# prepend h1 title
 	echo "# $title\n\n[ kak: filetype=markdown ]: #" >"$file"
-	# HACK: link gets written over as regular file so loop back to menu to edit as old (?)
+	# HACK: link gets written over as regular file so loop back to menu to edit as old
 }
 
 wiki() {

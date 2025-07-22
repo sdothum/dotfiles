@@ -12,7 +12,7 @@
 
 [ $1 ] && panel_offsetY=$1
 
-if [ "$panel_offsetY" = "0" ] ;then   # ATTN: use of -eq fails comparison (?)
+if [ "$panel_offsetY" = "0" ] ;then   # (??) use of -eq fails comparison
 	SEP="  %{F$INACTIVE_FG}%{F-}  "  # top bar
 else
 	SEP="  %{F$INACTIVE_FG}%{F-}  "  # bottom bar
@@ -29,7 +29,7 @@ tape() {
 		# hours 0 - 9, cycle aligns on ten second intervals
 		len=11
 		pos=${tic##*:}
-		# pos=$(( ${pos%??} % 10 ))  # crashes in dash (memory leak on arm?)
+		# pos=$(( ${pos%??} % 10 ))  # (??) crashes in dash (memory leak on arm?)
 		pos=$(echo "${pos%??} % 10" | bc)
 		[ $pos = 0 ] && pos=10
 	else

@@ -318,13 +318,16 @@ super + ctrl + j
 	mpc toggle
 
 super + {comma,period}
-	mpc volume {-10, +10}
+	mpc volume {-10, +10} ;\
+	mpc:settings
 
 super + ctrl + {comma,period}
-	mpc volume {-2, +2}
+	mpc volume {-2, +2} ;\
+	mpc:settings
 
 super + shift + {comma,period}
-	mpc {prev, next}
+	mpc {prev, next} ;\
+	mpc:settings
 
 # ..................................................................... hardware
 
