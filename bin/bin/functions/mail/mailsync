@@ -89,7 +89,7 @@ initialize() {
 mail_daemon() {
 	# trace 'Starting mailsync..'
 	while : ;do
-		# ???: updating old message after offlineimap fails cmp everytime (..puzzler!)
+		# (??) updating old message after offlineimap fails cmp everytime (..puzzler!)
 		mv /tmp/mailsync:new /tmp/mailsync:old
 		# curl -u ${ME}:$(imap_keyring ${ME}@gmail.com) --silent 'https://mail.google.com/mail/feed/atom' | perl -ne 'print '\t' if /<name>/; print "$2\n" if /<(title|name)>(.*)<\/\1>/ ;' >/tmp/mailsync:new
 		curl -u ${ME}:$(cat $MAILDIR/.mailsync) --silent 'https://mail.google.com/mail/feed/atom' \

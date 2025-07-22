@@ -10,7 +10,7 @@ usage() { usage: "$(basename $0) [proof] eject | stdin | <file>.pdf|ps | code | 
 
 PROOF=${PROOF:-$SESSION/proof}
 
-# ???: raspberry pi could not print using /tmp
+# (??) raspberry pi could not print using /tmp
 # TMP=$HOME/tmp
 TMP=/tmp
 

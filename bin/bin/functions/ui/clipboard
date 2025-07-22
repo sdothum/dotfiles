@@ -6,7 +6,7 @@
 
 # .................................................................... Clipboard
 
-# gpaste history add not available on raspberry pi, and ???: xsel hangs script
+# gpaste history add not available on raspberry pi, and (??) xsel hangs script
 # cpu arm && echo -n "$@" | xsel -b || gpaste-client file "$@"
 cpu arm && exit
 [ "$1" ] && gpaste-client file "$@" || gpaste-client | head -1 | cut -d' ' -f2
