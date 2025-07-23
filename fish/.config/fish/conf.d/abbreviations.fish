@@ -152,6 +152,10 @@ abbr Y 'set -x TERMBG light; yazi; set -u TERMBG'
 
 function ww; cd (dirname (which $argv 2>/dev/null) 2>/dev/null); test $HOME = (pwd) and ditto "$argv" 'not found' and cd - ;end  # no 755 in $HOME
 
+abbr a0 'a --depth 0'
+abbr a1 'a --depth 1'
+abbr a2 'a --depth 2'
+abbr a3 'a --depth 3'
 abbr f 'find -iname'
 abbr fi 'find'
 abbr fr 'find -regex'
