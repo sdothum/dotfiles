@@ -20,14 +20,8 @@ map global insert <a-ret> '<esc><a-o>ji'        -docstring 'insert non-comment l
 
 # ................................................................... Commenting
 
-define-command refold %{
-	if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|comment f $kak_opt_autowrap_column<ret>" }}
-}
-
-define-command unfold %{
-	# UNKNOWN: utf-8 sed expression does not complete fully from kak shell SEE: comment unFold
-	if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|comment F<ret>" }}
-}
+define-command refold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|comment f $kak_opt_autowrap_column<ret>" }}}
+define-command unfold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys 'x|comment F<ret>' }}  # (??) utf-8 sed errors from kak shell
 
 addmodes %{ comment : map global format c       ': comment-line<ret>' -docstring 'comment' }
 addmodes %{ comment : map global format f       ': refold<ret>'       -docstring 'fold,unfold' }
@@ -55,15 +49,23 @@ addmodes %{ align x : map global format ','     'x|align \;\\<ret>'   -docstring
 
 # .................................................................... Searching
 
-addmodes %{ search s : map global edit /        '/(?i)'               -docstring 'isearch   —— prev,next' }
-addmodes %{ search s : map global edit '\'      '<a-/>(?i)'           -docstring 'isearch   —— prev,next' }
-addmodes %{ search x : map global edit >        '?(?i)'               -docstring 'iextend   —— prev,next' }
-addmodes %{ search x : map global edit <        '<a-?>(?i)'           -docstring 'iextend   —— prev,next' }
+addmodes %{ search i : map global edit /        '/(?i)'               -docstring 'isearch   —— prev,next' }
+addmodes %{ search i : map global edit '\'      '<a-/>(?i)'           -docstring 'isearch   —— prev,next' }
+addmodes %{ search j : map global edit >        '?(?i)'               -docstring 'iextend   —— prev,next' }
+addmodes %{ search j : map global edit <        '<a-?>(?i)'           -docstring 'iextend   —— prev,next' }
 
 # .............................................................. Split selection
 
-addmodes %{ search z : map global edit s        'x<a-s>s'             -docstring 'split     —— select,iselect' }
-addmodes %{ search z : map global edit S        'x<a-s>s(?i)'         -docstring 'split     —— select,iselect' }
+define-command mkd-para  %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[^|`]<ret>x' }}
+define-command mkd-table %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[|]<ret>x' }}
+define-command mkd-code  %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[`]<ret>x' }}
+
+addmodes %{ search m : map global edit m        ': mkd-para<ret>'     -docstring 'markdown  —— paragraphs,tables,code' }
+addmodes %{ search m : map global edit M        ': mkd-table<ret>'    -docstring 'markdown  —— paragraphs,tables,code' }
+addmodes %{ search n : map global edit <c-m>    ': mkd-code<ret>'     -docstring 'markdown  —— paragraphs,tables,code' }
+
+addmodes %{ search s : map global edit s        'x<a-s>s'             -docstring 'split     —— select,iselect' }
+addmodes %{ search s : map global edit S        'x<a-s>s(?i)'         -docstring 'split     —— select,iselect' }
 
 map global normal S         's(?i)'  -docstring 'split: iselect:'
 
@@ -128,15 +130,6 @@ hook global BufCreate .* %{ modeline-parse }
 # hook global BufOpenFile .*[.](eml|note) %{ set-option buffer filetype markdown }
 hook global BufCreate .*[.](eml|note) %{ set-option buffer filetype markdown }
 hook global FocusOut .* sync   # over "write" for system files
-
-# kettelkasten
-hook global WinSetOption filetype=markdown %{
-	define-command zk-index %sh{ zk index --no-input" }
-	addmodes %{ alpha 9 : map global buffer Z ': zk-index<ret>' -docstring 'zk index' }
-
-	define-command zk-new %sh{ zk new $(dirname "$kak_buffile") --title="$kak_selection" }
-	addmodes %{ alpha 9 : map global buffer z ': zk-new<ret>'   -docstring 'zk new' }
-}
 
 # ............................................................ Buffer management
 
