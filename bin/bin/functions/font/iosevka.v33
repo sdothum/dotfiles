@@ -54,7 +54,7 @@ usage() {
 > W-asymmetric
 > Y-descending (includes I-descending T-descending)
 
-> a-[double|earless|rounded|single[/[/]]|toothless]
+> a-[double[_]|earless|rounded|single[/|_]]|toothless]
 > b-corner
 > d-[tailed|toothless]
 > f-[asymmetric|extended[+]|flat[+[+]]]
@@ -238,9 +238,10 @@ variant() {
 			W-asymmetric   ) glyph capital_w=straight-asymmetric-serifless              ;;
 
 			a-double       ) glyph a=double-storey-serifless ;                unset T_a ;;
+			a-double_      ) glyph a=double-storey-tailed ;                   T_a='a'   ;;
 			a-single       ) glyph a=single-storey-serifless ;                unset T_a ;;
 			a-single/      ) glyph a=single-storey-top-cut-serifless ;        unset T_a ;;
-			a-single//     ) glyph a=single-storey-top-cut-tailed ;           T_a='a'   ;;
+			a-single_      ) glyph a=single-storey-top-cut-tailed ;           T_a='a'   ;;
 			a-earless      ) glyph a=single-storey-earless-corner-serifless ; unset T_a ;;
 			a-rounded      ) glyph a=double-storey-toothless-rounded ;        unset T_a ;;
 			a-toothless    ) glyph a=double-storey-toothless-corner ;         unset T_a ;;
@@ -402,11 +403,12 @@ cmdopts () {
 			Y-descending   ) variant I-serifless 'DESCENDING T=DESCENDING Y=DESCENDING'; I_descending=true; T_descending=true; Y_descending=true; baseline=true ;;
 
 			a-double       ) variant $1 ;;
+			a-double_      ) variant $1 ;;
 			a-earless      ) variant $1 ;;
 			a-rounded      ) variant $1 ;;
 			a-single       ) variant $1 ;;
 			a-single/      ) variant $1 ;;
-			a-single//     ) variant $1 ;;
+			a-single_      ) variant $1 ;;
 			a-toothless    ) variant $1 ;;
 			b-corner       ) variant $1 p-serifed ;;         # alternate b p dyslexic glyphs
 			b-toothed      ) variant $1 ;;

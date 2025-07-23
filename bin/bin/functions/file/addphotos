@@ -8,7 +8,7 @@
 
 LIBRARY=/home/photos
 # udiskie automount point
-ls /run/media/$USER/*/DCIM >/dev/null 2>&1 || { ditto usb 'connect sdcard / camera'; exit; }
+ls /run/media/$USER/*/DCIM >/dev/null 2>&1 || { ditto usb 'connect camera / media'; exit; }
 MEDIA=$(find /run/media/$USER/*/DCIM/* -maxdepth 0 -type d)
 CAMERA=$(echo ${MEDIA##*/} | sed 's/^[0-9_]*//')
 

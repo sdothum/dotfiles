@@ -26,7 +26,7 @@ usage() {
 > J-[descending|flat|serifless]
 > Q-[bar|crossing|detached|hook|horizontal|open|straight]
 
-> a-[earless|rounded|single[/[/]]]
+> a-[double[_]|earless|rounded|single[/|_]]]
 > b-rounded
 > d-[tailed|toothless]
 > f-extended
@@ -150,6 +150,8 @@ cmdopts() {
 			Q-open         ) Q=$1 ;;
 			Q-straight     ) Q=$1 ;;
 
+			a-double       ) a=$1 ;;
+			a-double_      ) a=$1 ;;
 			a-earless      ) a=$1 ;;
 			a-rounded      ) a=$1 ;;
 			a-single       ) a=$1 ;;
@@ -293,8 +295,8 @@ elif [ "$koreader" ] ;then
  	emdash
 	e_ink luft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8
 	e_ink lift   grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8 J-serifless
-	e_ink laft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-single// d-tailed p-eared y-turn utf-8
-	e_ink lajt   grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-single// d-tailed p-eared y-turn j-serifed J-serifless utf-8
+	e_ink laft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-single_ d-tailed p-eared y-turn utf-8
+	e_ink lajt   grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-double_ d-tailed p-eared y-turn j-serifed J-serifless utf-8
 	# e_ink galley grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase
 	# e_ink chalk  grote   I-serifed    t-asymmetric-- l-serifless a-single
 	# e_ink draft  grote   I-serifed    t-asymmetric-- l-serifless
