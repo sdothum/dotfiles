@@ -43,7 +43,9 @@ class="gFTP"
 	window size monocle
 
 class="feh"
-	window size monocle
+	xdotool key space                  ;\
+	sleep 0.1 && xdotool key BackSpace ;\
+	window @0.1 snap center
 
 class="Firefox"
 	window size monocle
