@@ -27,6 +27,7 @@ export TABSTOP=3  # default for (pipe), SEE: align
 [ -e $SESSION/kak:ruler ] && export RULER=$(cat $SESSION/kak:ruler)
 
 $KAK -l | grep -q dead | $KAK -clear  # dead sessions
+touch $LOG
 sudo chmod 666 $LOG                   # in case first time creation by root
 
 debug() { echo "$1" | grep -qE 'hooks|shell|profile|keys|commands' && debug="-debug $1" || { debug="-debug commands"; return 1; } }

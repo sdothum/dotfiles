@@ -6,7 +6,7 @@
 
 # ........................................................... X-plore ftp client
 
-IP=54
+IP=${1:-54}
 
 cd /net/downloads/http  # ftp target
 # connect to X-plore ftp server
