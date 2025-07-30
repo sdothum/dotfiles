@@ -16,7 +16,8 @@ map global normal <c-l>   ': comment-line<ret>' -docstring 'comment'  # beakl ke
 map global normal |       'x| '                 -docstring "pipe FIFO buffer"
 map global normal '#'     ': enter-user-mode format<ret>'
 map global insert <a-ret> '<esc><a-o>ji'        -docstring 'insert non-comment line below cursor'
-
+map global insert <tab>   '<a-;><a-gt>'  # tab key indents (with spaces)
+map global insert <s-tab> '<a-;><a-lt>'  # shift tab deindents
 
 # ................................................................... Commenting
 
