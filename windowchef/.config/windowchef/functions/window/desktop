@@ -16,10 +16,13 @@ group_focus $winid $1  # see desktop and window stack
 
 # teleport and refocus to window's previous group
 if [ $2 ] ;then
-	desktop $desktop
 	W=$(head -1 $GROUP:$desktop)
-	[ $W ] && { waitron window_focus $W; group_focus $W $desktop; }
-	exit                # do not refocus window, SEE: window wrapper
+	[ $W ] && {
+		desktop $desktop
+		waitron window_focus $W
+		group_focus $W $desktop
+		exit             # skip original window refocus SEE: window wrapper
+	}
 fi
 
 # kak: filetype=sh
