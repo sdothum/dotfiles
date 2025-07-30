@@ -6,7 +6,7 @@
 
 # ...................................................................... E-books
 
-usage() { usage: "$(basename $0) econvert [azw3 | epub | reformat] [default | justify | noindent | poetry | all] [<file> | '<regex>', default '*epub']"; exit 1; }
+usage() { usage: "$(basename $0) econvert [azw3 | epub | reformat] [default | justify | noformat | poetry | all] [<file> | '<regex>', default '*epub']"; exit 1; }
 
 KINDLE=/run/media/$USER/Kindle
 [ -d $KINDLE ] && sudo mount -o remount,rw $(mount | grep $KINDLE | cut -d' ' -f1) $KINDLE
@@ -33,8 +33,8 @@ case "$1" in
 	''      ) ;;
 	default ) option=default;  shift ;;
 	justify ) option=justify;  shift ;;
-	no*dent ) option=noindent; shift ;;  # retain original formatting
-	poetry  ) option=noindent; shift ;;  # retain poetry formatting
+	no*     ) option=noformat; shift ;;  # retain original formatting
+	poetry  ) option=noformat; shift ;;  # retain poetry formatting
 	all     ) option=all;      shift ;;
 	*       ) [ -e "$1" ] || { find . -iname "$1" | grep -q '/' || usage; } ;;
 esac
@@ -111,7 +111,7 @@ em_linespace=${em_linespace%,*}
 em_indent="--remove-paragraph-spacing --remove-paragraph-spacing-indent-size=$em_indent"
 case $option in
 	default  ) ;;
-	noindent ) unset em_indent; em_linespace=${em_linespace#*,} ;;
+	noformat ) unset em_indent em_linespace ;;
 	justify  ) justify=justify ;;
 	all      ) unset indent; em_linespace=${em_linespace#*,}; justify=justify ;;
 esac

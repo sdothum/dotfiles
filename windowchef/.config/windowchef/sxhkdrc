@@ -61,20 +61,16 @@ super + {_,shift} + z
 # ....................................................................... select
 
 super + {_,shift} + Tab
-	waitron {window_cycle_in_group, window_rev_cycle_in_group} ;\
-	chef -- desktop
+	waitron {window_cycle_in_group, window_rev_cycle_in_group}
 
 alt + {_,super} + Tab
-	waitron {window_cycle, window_rev_cycle} ;\
-	chef -- desktop
+	waitron {window_cycle, window_rev_cycle}
 
 super + ctrl + Tab
-	waitron window_focus_last ;\
-	chef -- desktop
+	waitron window_focus_last
 
 alt + {Left,Down,Up,Right}
-	waitron window_cardinal_focus {west, south, north, east} ;\
-	chef -- desktop
+	waitron window_cardinal_focus {west, south, north, east}
 
 # ......................................................................... swap
 
@@ -127,14 +123,12 @@ super + {_,shift} + i
 	chef -- hidden
 
 super + {_,shift} + e
-	waitron {window_stack_toggle, window_focus $(pfw)} ;\
-	chef -- desktop
+	waitron {window_stack_toggle, window_focus $(pfw)}
 
 super + w
-	window group remove       ;\
-	waitron window_close      ;\
-	waitron window_focus_last ;\
-	chef -- desktop
+	window group remove  ;\
+	waitron window_close ;\
+	waitron window_focus_last  # some apps take longer to be removed from chef stack
 
 # ................................................................ (tile) column
 
@@ -175,8 +169,7 @@ alt + ctrl + 0
 
 super + ctrl + {1,2,3,4,5,6,7,8,9}
 	desktop {1, 2, 3, 4, 5, 6, 7, 8, 9} close ;\
-	waitron window_focus_last                 ;\
-	chef -- desktop
+	waitron window_focus_last                
 
 # ............................................................... window (group)
 
@@ -193,10 +186,9 @@ alt + ctrl + super + {1,2,3,4,5,6,7,8,9}
 	window desktop {1, 2, 3, 4, 5, 6, 7, 8, 9} teleport
 
 super + ctrl + r
-	waitron group_remove_window ;\
-	chef -- desktop
+	waitron group_remove_window
 
-# ........................................................................... ui
+# ...................................................................... desktop
 
 super + {F6,F5}
 	brightness {-5, +5}
@@ -216,13 +208,7 @@ super + {shift,ctrl} + d
 super + {_,ctrl} + v
 	{toggle panel, invert_panel}
 
-# HACK: kak hook *Idle only triggers on keypress SEE: kakrc
-# ATTENTION: use {shift,alt,ctrl,super} + Caps_Lock to bypass keypress trigger event
-
-~Caps_Lock
-	xdotool key Right Left
-
-# ........................................................................... ux
+# ........................................................................ mouse
 
 # center mouse pointer
 
@@ -235,8 +221,17 @@ super + ctrl + shift + space
 ~button1
 	xdotool getwindowclassname $(pfw) | grep -q -E "calibre|fontmatrix" && exit ;\
 	pfw >$WME:mouse                                                             ;\
-	chef -- desktop                                                             ;\
 	waitron window_focus $(cat $WME:mouse)
+
+# ..................................................................... keyboard
+
+# HACK: kak hook *Idle only triggers on keypress SEE: kakrc
+# ATTENTION: use {shift,alt,ctrl,super} + Caps_Lock to bypass keypress trigger event
+
+~Caps_Lock
+	xdotool key Right Left
+
+# .................................................................... clipboard
 
 # BUG: manual keybinds circumvent (random) X session clipboard loss (cause unknown)
 # HISTORY: cb replaces "xclip {-in, -out} -selection clipboard"
@@ -315,24 +310,22 @@ super + j
 	xdotool search --onlyvisible --classname "music" windowunmap && desktop $(chef desktop "DESK") || \{ music; desktop $(chef desktop "PLAY"); \}
 
 super + ctrl + j
-	mpc toggle
+	mpc toggle ;\
+	mpc | grep -q playing && mpc:settings volume
 
 super + {comma,period}
 	mpc volume {-10, +10} ;\
-	mpc:settings
+	mpc:settings volume
 
 super + ctrl + {comma,period}
 	mpc volume {-2, +2} ;\
-	mpc:settings
+	mpc:settings volume
 
 super + shift + {comma,period}
 	mpc {prev, next} ;\
 	mpc:settings
 
-# ..................................................................... hardware
-
-super + shift + ctrl + j
-	xdotool search --classname "Asunder" windowkill && rm -f /tmp/rulerrc:asunder || asunder
+# ....................................................................... system
 
 super + v
 	xdotool search --name btop windowkill || btop
@@ -349,7 +342,10 @@ super + ctrl + x
 	notify critical 0 yazi '<b>root</b> user' ;\
 	xdotool search --onlyvisible --name root windowclose || yazi ROOT
 
-# ......................................................................... mail
+# ......................................................................... apps
+
+super + shift + ctrl + j
+	xdotool search --classname "Asunder" windowkill && rm -f /tmp/rulerrc:asunder || asunder
 
 super + y
 	xdotool search --onlyvisible --classname aerc windowclose || aerc

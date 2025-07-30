@@ -6,7 +6,7 @@
 
 # .............................................................. Windowchef stat
 
-# Usage: chef -- desktop | hidden | snapshot
+# Usage: chef -- desktop | hidden | vacuum
 
 # SEE: draw panel, desktop and sxhkdrc
 
@@ -29,9 +29,9 @@ desktop_focus() {
 }
 
 case $1 in
-	desktop ) desktop_focus ;;
-	hidden  ) refresh_panel; desktop_focus ;;
-	vacuum  ) vacuum $(desktop) ;;  # SEE: draw panel while:loop
+	desktop ) desktop_focus ;;  # NOTE: vacuum integration relieves previous granular usage within sxhkdrc :)
+	hidden  ) refresh_panel; desktop_focus     ;;
+	vacuum  ) desktop_focus; vacuum $(desktop) ;; # SEE: draw panel while:loop
 esac
 
 # kak: filetype=sh

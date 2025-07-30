@@ -119,7 +119,6 @@ case $menu in
 				group=$(echo "$groups" | pick "close") || exit
 				desktop ${group%% *} close
 				waitron window_focus_last
-				chef -- desktop
 				;;
 			filter )
 				group=$(echo "$groups" | sed '1i-   restore all\n0   current' | pick "by") || exit

@@ -24,8 +24,13 @@ FLASH=$(transparency D0 "$ICANDY")   # dim icon
 
 # ............................................................... FIFO read loop
 
+VOLUME=/tmp/mpc:volume
+VOLTIME=3
+VOLSYM='<◌)'
+
 field()  { echo "$line" | cut -f$1; }
 folder() { folder=$(field 5); echo "/home/music/${folder%%/*}"; }
+volume() { [ -e $VOLUME ] && { volume="  $VOLSYM $(cat $VOLUME)"; volsecs=$VOLTIME; };}
 
 seconds() {
 	M=${1%:*}
@@ -43,6 +48,7 @@ folder=''
 panel() {
 	while read -r line ;do
 		status=$(mpc status | sed -n '2p')
+		[ $volsecs ] || { volume; false; } && { [ $(cat $VOLUME) = ${volume##* } ] || volume; }
 		case ${status%% *} in
 			'[playing]' )
 				T=$(echo $status | cut -d' ' -f3)
@@ -71,7 +77,8 @@ panel() {
 			'[paused]'  ) button="%{F$FAINT}■" ;;      # dimmed :)
 			*           ) [ "$line" = 'CLEAR' ] && printf "%s\n" "%{c} "; continue ;;
 		esac
-		printf "%s\n" "%{c}${artist}${SEP}${album}${SEP}${song}${SEP}${track}␥${TRACKS}  $DURATION ${button} %{F-}${duration}"
+		printf "%s\n" "%{c}${artist}${SEP}${album}${SEP}${song}${SEP}${track}␥${TRACKS}  $DURATION ${button} %{F-}${duration}${volume}"
+		[ "$volume" ] && { volsecs=$(( volsecs - 1 )); [ $volsecs -le 0 ] && { unset volume volsecs; rm /tmp/mpc:volume; };}
 	done
 }
 
