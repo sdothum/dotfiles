@@ -1,4 +1,4 @@
- sdothum - 2016 (c) wtfpl
+# sdothum - 2016 (c) wtfpl
 # [ $TRACE ] && CHILD="chef/window $@" . $PARENT
 
 # Windowchef
@@ -14,19 +14,19 @@ classname() { xdotool getactivewindow getwindowclassname; }
 
 count() {
 	case $1 in
-		'' ) wmctrl -l | wc -l ;;
-	#  *  ) wmctrl -l | grep -w "$1" | wc -l ;;  # WARNING: can still be fooled by browser url titles
+		'' ) wmctrl -l 2>/dev/null | wc -l ;;
+	#  *  ) wmctrl -l 2>/dev/null | grep -w "$1" | wc -l ;;  # WARNING: can still be fooled by browser url titles
 		*  ) xdotool search --onlyvisible --classname "$1" | wc -l ;;
 	esac
 }
 
 # ................................................................... Window ids
 
-winids() { wmctrl -l | cut -d' ' -f1; }  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
+winids() { wmctrl -l 2>/dev/null | cut -d' ' -f1; }  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
 
 ids() {
 	case $1 in
-		'' ) winids 2>/dev/null ;;  # trap windowchef autostart initialization errors
+		'' ) winids ;;
 		*  ) for i in $(winids) ;do [ "$(xdotool getwindowclassname $i)" = $1 ] && echo $i ;done ;;
 	esac
 }
