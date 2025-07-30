@@ -32,8 +32,11 @@
 
 = sync
 = ════
+# gftp
 # syncthing
 # watchman
+m cbftp
+! stow cbftp
   lsyncd
 ! stow lsyncd
 " check lsyncd configuration before sv enable

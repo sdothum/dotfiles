@@ -47,16 +47,16 @@
 
 = gtk/qt5 theme/engine
 = ════════════════
+# Adapta
 # adwaita-qt
 # arc-theme           # qt5 dark themes
-# paper-icon-theme    # missing down arrow menu button
+# papirus-icon-theme
 # qt5-styleplugins
-  Adapta
   archlabs-themes
   breeze-hacked-cursor-theme
   gtk-engine-murrine  # for lxappearance theming
   meson
-  papirus-icon-theme
+  paper-icon-theme    # missing down arrow menu button
 
 
 = notification
