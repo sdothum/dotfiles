@@ -72,7 +72,7 @@ echo $PANEL_FIFO:$fifo >$PANEL_FIFO  # SEE: refresh_panel
 
 # event driven panel update
 xtitle -sf 'X%s\n' >$PANEL_FIFO:$fifo 2>/dev/null &
-while : ;do chef -- vacuum; sleep 0.5; done &
+while : ;do chef -- vacuum; sleep 0.5; done &  # trap mouse focus movements
 
 cat $PANEL_FIFO:$fifo | panel | handlebar &
 

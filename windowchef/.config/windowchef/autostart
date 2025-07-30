@@ -10,12 +10,12 @@ restore root
 restore panel
 conky clock auto
 restore unclutter
-rm $WME:pavucontrol  # hide pavucontrol SEE: rulerrc
+rm -f $WME:pavucontrol  # hide pavucontrol SEE: rulerrc
 pulse
 udev
-qk stop              # HACK: need to start in a term session
+qk stop                 # HACK: need to start in a term session
 brightness
-sleep 1              # settle pipewire for mpd server connection
+sleep 1                 # settle pipewire for mpd server connection
 desktop $(chef desktop "DESK")
 [ -e $SESSION/cbonsai ] && cbonsai
 [ -e $SESSION/term    ] && term
@@ -27,8 +27,8 @@ if void 'runit' ;then
 fi
 
 exists mpd || exit
-dbus-run-session mpd /home/shum/.config/mpd/mpd.conf  # NOTE: needs explicit dbus run
-(sleep 3; mpc play; mpc toggle; mpc toggle; mpc:settings) &   # wm restarts require mpd tickling to connect to pipewire
+dbus-run-session mpd /home/shum/.config/mpd/mpd.conf 2>/dev/null  # NOTE: needs explicit dbus run
+(sleep 3; mpc play; mpc toggle; mpc toggle; mpc:settings) &       # wm restarts require mpd tickling to connect to pipewire
 
 nicotine -s
 

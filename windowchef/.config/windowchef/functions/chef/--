@@ -12,7 +12,7 @@
 
 # not all windows necessarily closed via sxhkd
 vacuum() {
-	chef window ids | cmp --silent $PANEL:winids && exit  # ignore initial pass file error
+	chef window ids | cmp --silent $PANEL:winids && return  # ignore initial pass file error
 	chef window ids >$PANEL:winids
 	for i in $(cat $GROUP:$1) ;do
 		grep -q $i $PANEL:winids || { window group remove $i; removals=true; }
@@ -21,7 +21,7 @@ vacuum() {
 }
 
 desktop_focus() {
-	winid=$(pfw)
+	winid=$(pfw 2>/dev/null)  # trap windowchef autostart initialization errors
 	for i in $(ag --nocolor -l $winid $GROUP:?) ;do
 		echo $winid >$i:focus
 		desktop ${i##*:}
@@ -30,8 +30,8 @@ desktop_focus() {
 
 case $1 in
 	desktop ) desktop_focus ;;  # NOTE: vacuum integration relieves previous granular usage within sxhkdrc :)
-	hidden  ) refresh_panel; desktop_focus     ;;
-	vacuum  ) desktop_focus; vacuum $(desktop) ;; # SEE: draw panel while:loop
+	hidden  ) refresh_panel;     desktop_focus ;;
+	vacuum  ) vacuum $(desktop); desktop_focus ;; # SEE: draw panel while:loop
 esac
 
 # kak: filetype=sh
