@@ -6,7 +6,13 @@
 
 # ........................................................... X-plore ftp client
 
-IP=${1:-54}
+exists cbftp && {
+	yazi XFTP
+	sleep 0.1  # allow rulerrc xftp completion
+	exec term cbftp class=cbftp cbftp
+}
+
+IP=${1:-55}
 
 cd /net/downloads/http  # ftp target
 # connect to X-plore ftp server

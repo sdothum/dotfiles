@@ -6,6 +6,11 @@
 
 # ................................................................. mpc settings
 
-notify "mpc" "$(mpc | grep 'volume:' | sed -r 's/   *([rs])/\n\1/g' | sed 's/^./\u&/; s/: /:\t/; s/consume/ \u&/')"
+# Usage: mpc:settings [volume]
+
+case $1 in
+	v* ) mpc | grep 'volume:' | cut -d' ' -f2 >/tmp/mpc:volume ;;  # SEE: panel mpd
+	*  ) dunstctl close-all; notify "mpc" "$(mpc | grep 'volume:' | sed -r 's/   *([rs])/\n\1/g' | sed 's/^./\u&/; s/: /:\t/; s/consume/ \u&/')" ;;  # SEE: sxhkdrc
+esac
 
 # kak: filetype=sh

@@ -35,7 +35,14 @@ if [ -e /home/$msg ] ;then
 elif [ -e ${0%/rsync}/functions/rsync/$msg ] ;then
 	. ${0%/rsync}/functions/rsync/$msg $@
 else
-	rsync $@  # cli command usage
+	[ $# -lt 2 ] && usage
+	eval source=\$$(( $# - 1 ))
+	eval target=\$$#
+	if [ -e "$source" ] && [ -e "$target" ] ;then
+		rsync $@  # cli command usage
+	else
+		usage
+	fi
 fi
 
 sync
