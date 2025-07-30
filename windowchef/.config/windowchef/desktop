@@ -17,6 +17,8 @@
 [ -e $WME:desktop ] && desktop=$(cat $WME:desktop)
 desktop=${desktop:--1}
 
+group_focus() { echo $1 >$GROUP:$2:focus; }
+
 current() {
 	if [ -e $WME:desktop ] ;then
 		cmp --silent $WME:desktop $WME:desktop:last || mv $WME:desktop $WME:desktop:last
@@ -70,7 +72,7 @@ desktop() {
 			;;
 
 		*        )
-			[ $desktop -eq $1 ] && { echo $(pfw 2>/dev/null) >$GROUP:$1:focus; return; }  # trap windowchef autostart initialization errors
+			[ $desktop -eq $1 ] && { group_focus $(pfw 2>/dev/null) $1; return; }  # trap windowchef autostart initialization errors
 			current $1
 			waitron group_activate $1
 			[ -e $GROUP:$1:focus ] && waitron window_focus $(cat $GROUP:$1:focus)         # restore window stack NOTE: this also fixes calibre mouse focus issue!

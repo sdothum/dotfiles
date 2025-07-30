@@ -106,9 +106,11 @@ $TERM $theme $font $geometry $title $name $cmd
 [ "$kmd"   ] && { sleep 0.5; xdotool type "$kmd
 
 "; }
+
 # window snap center
+
 [ $wait    ] && {
-	echo "$process" | grep -q '/kak ' && process=".*/kak .*/${process##* /}"
+	echo "$process" | grep -q '/kak ' && process=".*/kak .*/${process##* /}"  # fix kak session command
 	pidwait -f "$process"
 }
 

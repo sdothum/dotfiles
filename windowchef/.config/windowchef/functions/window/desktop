@@ -12,11 +12,14 @@ desktop=$(desktop)
 waitron group_remove_window
 waitron group_add_window $1
 window group $1 add $winid
-echo $winid >$GROUP:$1:focus  # see desktop and window stack
+group_focus $winid $1  # see desktop and window stack
+
+# teleport and refocus to window's previous group
 if [ $2 ] ;then
-	desktop $(desktop)
-	sleep 0.1 && waitron window_cycle_in_group
-	exit                       # do not refocus window, SEE: window wrapper
+	desktop $desktop
+	W=$(head -1 $GROUP:$desktop)
+	[ $W ] && { waitron window_focus $W; group_focus $W $desktop; }
+	exit                # do not refocus window, SEE: window wrapper
 fi
 
 # kak: filetype=sh
