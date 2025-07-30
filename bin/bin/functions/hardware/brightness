@@ -17,13 +17,14 @@ brightness() {
 	notify brightness "${level:-$1}%"
 }
 
-[ $1 ] || { [ -e $LEVEL ] && brightness $(cat $LEVEL) || brightness 100; usage; }
-echo $1 | grep -q '^[+-]*[0-9]*$' || usage
+[ -e $LEVEL ] || { brightness 100; usage; }
+
+[ $1 ] && { echo $1 | grep -q '^[+-]*[0-9]*$' || usage; }
 
 case $1 in
 	-* ) brightness $(( $(cat $LEVEL) + $1 )) ;;
 	+* ) brightness $(( $(cat $LEVEL) + $1 )) ;;
-	*  ) brightness $1 ;;
+	*  ) brightness $(cat $LEVEL) ;;
 esac
 
 # kak: filetype=sh
