@@ -27,8 +27,8 @@ if-else %{ [ -z "$DIFF" ] } %{
 # ................................................................... crosshairs
 
 bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
-	addmodes %{ meta 1 : map global buffer + ': crosshairs<ret>'   -docstring "crosshairs" }
-	addmodes %{ meta 1 : map global buffer | ': cursorcolumn<ret>' -docstring "columnhair" }
+	addm %{ meta 1 : map global buffer + ': crosshairs<ret>'   -docstring "crosshairs" }
+	addm %{ meta 1 : map global buffer | ': cursorcolumn<ret>' -docstring "columnhair" }
 }
 
 # ........................................................................ fandt
@@ -44,8 +44,8 @@ bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
 	define-command c-ret-message %{ nop %sh{ notify 20 critical "find & replace" "&lt;<b>ret</b>&gt;\tgoto buffer:line\n&lt;<b>c-u</b>&gt;\tcommit buffer edits\n&lt;<b>c-ret</b>&gt;\tbuffer (user-mode)" }}
 
 	# NOTE: <ret> jumps to buffer line, <c-ret> for buffer user-mode (to apply replace)
-	addmodes %{ alpha 5 : map global buffer f     ': c-ret-message<ret>: find ' -docstring "find    —— buffer:line,(commit buffer edits)" }
-	addmodes %{ alpha 6 : map global buffer <c-u> ': find-apply-changes<ret>;'  -docstring "find    —— buffer:line,(commit buffer edits)" }
+	addm %{ alpha 5 : map global buffer f     ': c-ret-message<ret>: find ' -docstring "find    —— buffer:line,(commit buffer edits)" }
+	addm %{ alpha 6 : map global buffer <c-u> ': find-apply-changes<ret>;'  -docstring "find    —— buffer:line,(commit buffer edits)" }
 	map global normal <c-u> ': find-apply-changes<ret>;' -docstring "commit buffer edits"
 }
 
@@ -80,7 +80,7 @@ bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
 		}
 	}
 
-	addmodes %{ focus 0 : map global edit <space> ': toggle-focus<ret>' -docstring "focus selections" }
+	addm %{ focus 0 : map global edit <space> ': toggle-focus<ret>' -docstring "focus selections" }
 }
 
 # .......................................................................... hop
@@ -103,8 +103,8 @@ bundle hop.kak https://github.com/hadronized/hop.kak.git %{
 		hop-kak
 	}
 
-	addmodes %{ alpha : map global edit h ': hop-kak-sel<ret>'   -docstring 'hint      —— /register,words' }
-	addmodes %{ alpha : map global edit H ': hop-kak-words<ret>' -docstring 'hint      —— /register,words' }
+	addm %{ alpha : map global edit h ': hop-kak-sel<ret>'   -docstring 'hint      —— /register,words' }
+	addm %{ alpha : map global edit H ': hop-kak-words<ret>' -docstring 'hint      —— /register,words' }
 	map global normal <a-h> ': hop-kak-sel<ret>'   -docstring 'find selection (on page)'
 	map global normal <a-H> ': hop-kak-words<ret>' -docstring 'find word (on page)'
 } %{
@@ -161,10 +161,10 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 		peneira-symbols
 	}
 
-	addmodes %{ meta  0 : map global buffer <ret> ': buffers<ret>' -docstring 'buffers' }
-	addmodes %{ alpha 5 : map global buffer e     ': files<ret>'   -docstring 'edit file' }
-	addmodes %{ alpha   : map global edit   f     ': lines<ret>'   -docstring '*fuzzy match line' }
-	addmodes %{ alpha   : map global edit   c     ': symbols<ret>' -docstring 'ctag symbols' }
+	addm %{ meta  0 : map global buffer <ret> ': buffers<ret>' -docstring 'buffers' }
+	addm %{ alpha 5 : map global buffer e     ': files<ret>'   -docstring 'edit file' }
+	addm %{ alpha   : map global edit   f     ': lines<ret>'   -docstring '*fuzzy match line' }
+	addm %{ alpha   : map global edit   c     ': symbols<ret>' -docstring 'ctag symbols' }
 }
 
 # .................................................................. search docs

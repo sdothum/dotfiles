@@ -62,14 +62,14 @@ if %{ [ -n "$UNPLUG" ] || [ -n "$TEST"] } %{
 
 declare-option str usermodes ''
 
-# addmodes %{ group sortkey* : map global user-mode .. }
-define-command addmodes -params 1 %{
+# addm %{ group sortkey* : map global user-mode .. }
+define-command addm -params 1 %{
 	trace %arg{1}
 	set-option global usermodes "%sh{ echo ""$kak_opt_usermodes\n$(echo $1 | cut -d: -f2- | cut -d' ' -f4 )$1"" }"
 }
 
-# setmodes %{ user-mode } [ %{ group } ]
-define-command setmodes -params ..2 %{
+# setm %{ user-mode } [ %{ group } ]
+define-command setm -params ..2 %{
 	trace %sh{ echo "$kak_opt_usermodes" | grep "^$(echo $1) $(echo $2) | sort" }
 	evaluate-commands %sh{ echo "$kak_opt_usermodes" | grep "^$(echo $1) $(echo $2)" | sort | cut -d: -f2- }
 }
@@ -111,14 +111,14 @@ declare-option str admonition "\s(((?i)(att(n|ention)|(be)*cause|bu[gt]|deprecat
 hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt{admonition} 1:WrapMarker }  # select field 1: (vs 0:) to not hilight the colon :)
 
 # arrange user-mode lists
-setmodes %{ edit   } %{ focus   }
-setmodes %{ edit   } %{ snippet }
-setmodes %{ edit   } %{ search  }
-setmodes %{ edit   } %{ alpha   }
-setmodes %{ buffer } %{ meta    }
-setmodes %{ buffer } %{ alpha   }
-setmodes %{ format } %{ align   }
-setmodes %{ format } %{ comment }
+setm %{ edit   } %{ focus   }
+setm %{ edit   } %{ snippet }
+setm %{ edit   } %{ search  }
+setm %{ edit   } %{ alpha   }
+setm %{ buffer } %{ meta    }
+setm %{ buffer } %{ alpha   }
+setm %{ format } %{ align   }
+setm %{ format } %{ comment }
 
 # info-notifier %{user-modes} %{<space>   edit\n<ret>     buffer\n#         format}
 nop %sh{ notify 10 user-modes "&lt;<b>space</b>&gt;\tedit\n&lt;<b>ret</b>&gt;\tbuffer\n<b>#</b>\tformat" }
