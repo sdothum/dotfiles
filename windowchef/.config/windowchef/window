@@ -4,7 +4,7 @@
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
-set -x
+
 # ............................................................ Window operations
 
 # Usage: window [@[<delay> | <class> | <name>] WAIT] <msg>, SEE: functions/window

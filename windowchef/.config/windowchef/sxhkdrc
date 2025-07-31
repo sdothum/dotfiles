@@ -3,11 +3,47 @@
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ...................................................................... Hotkeys
-
 # NOTE: only use groups 1-9 with desktop 0 reserved for special actions (typically, "last")
 
-# ................................................................. (chef) menus
+# Hotkeys
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ........................................................................ sxhkd
+
+super + Escape
+	notify reloading "sxhkd & ruler" ;\
+	pkill -USR1 -x sxhkd             ;\
+	pkill -KILL -x ruler             ;\
+	ruler -i -c $HOME/.config/$WM/rulerrc &
+
+super + shift + Escape
+	kak $(find $HOME/.config/${WM}/ -maxdepth 1 -type f -name '*rc')
+
+# .................................................................... clipboard
+
+# BUG: manual keybinds circumvent (random) X session clipboard loss (cause unknown)
+# HISTORY: cb replaces "xclip {-in, -out} -selection clipboard"
+
+~ctrl + {c,x}
+	S=$(xsel -p) && [ -n "$S" ] && echo -n "$S" | cb {copy, cut}
+
+~ctrl + v
+	cb paste
+
+# ~ctrl + c
+# 	S=$(xsel -p) && [ -n "$S" ] && echo -n "$S" | copyq copy
+
+# ~ctrl + x
+# 	S=$(xsel -p) && [ -n "$S" ] && echo -n "$S" | copyq copy ;\
+# 	xdotool key Del
+
+# ~ctrl + v
+# 	copyq paste
+
+# Chef
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ........................................................................ menus
 
 super + {F1,F2}
 	souschef {group, window}
@@ -24,16 +60,42 @@ super + {alt,ctrl} + w
 super + shift + ctrl + w
 	menu layout
 
-# ........................................................................ terms
+# Windows
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-super + {_,shift} + Return
-	scratchpad {scratchy, itchy}
+# ....................................................................... select
 
-super + ctrl + Return
-	term
+super + {_,shift} + Tab
+	waitron {window_cycle_in_group, window_rev_cycle_in_group}
 
-super + alt + t
-	for i in $(xdotool search --onlyvisible --classname "term") ;do xdotool windowactivate --sync $i; window desktop $(chef desktop "CODE") teleport ;done
+alt + {_,super} + Tab
+	waitron {window_cycle, window_rev_cycle}
+
+super + ctrl + Tab
+	waitron window_focus_last
+
+alt + {Left,Down,Up,Right}
+	waitron window_cardinal_focus {west, south, north, east}
+
+# ........................................................................ focus
+
+super + {0,1}
+	window {revert, rotate}
+
+super + ctrl + 0
+	layout revert
+
+super + {_,shift} + i
+	{window hide, menu unhide} ;\
+	chef -- hidden
+
+super + {_,shift} + e
+	waitron {window_stack_toggle, window_focus $(pfw)}
+
+super + w
+	window group remove        ;\
+	waitron window_close       ;\
+	waitron window_focus_last  # some apps take longer to be removed from chef stack
 
 # ....................................................................... resize
 
@@ -57,20 +119,6 @@ super + shift + {t,s}
 
 super + {_,shift} + z
 	waitron {window_monocle, window_maximize}
-
-# ....................................................................... select
-
-super + {_,shift} + Tab
-	waitron {window_cycle_in_group, window_rev_cycle_in_group}
-
-alt + {_,super} + Tab
-	waitron {window_cycle, window_rev_cycle}
-
-super + ctrl + Tab
-	waitron window_focus_last
-
-alt + {Left,Down,Up,Right}
-	waitron window_cardinal_focus {west, south, north, east}
 
 # ......................................................................... swap
 
@@ -110,27 +158,7 @@ super + {t,s}
 	side="{left, right}" ;\
 	[ "$(chef window classname)"  = "term" ] && window spread 3 $side || window snap $side
 
-# ....................................................................... window
-
-super + {0,1}
-	window {revert, rotate}
-
-super + ctrl + 0
-	layout revert
-
-super + {_,shift} + i
-	{window hide, menu unhide} ;\
-	chef -- hidden
-
-super + {_,shift} + e
-	waitron {window_stack_toggle, window_focus $(pfw)}
-
-super + w
-	window group remove  ;\
-	waitron window_close ;\
-	waitron window_focus_last  # some apps take longer to be removed from chef stack
-
-# ................................................................ (tile) column
+# ......................................................................... tile
 
 super + 2
 	window size monocle
@@ -141,7 +169,7 @@ super + {5,6,3}
 super + {4,8,7,9}
 	window tile 4 {1, 2, 3, 4}
 
-# ......................................................................... tile
+# ....................................................................... layout
 
 super + shift + {0,1,2,3,4,5}
 	W=$(pfw)                                                ;\
@@ -149,11 +177,14 @@ super + shift + {0,1,2,3,4,5}
 	waitron window_focus $W
 
 super + shift + ctrl + 0
-	W=$(pfw)      ;\
-	layout fold 0 ;\
+	W=$(pfw)                                                ;\
+	layout fold 0                                           ;\
 	waitron window_focus $W
 
-# ........................................................................ group
+# Groups
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ........................................................................ focus
 
 alt + {0,1,2,3,4,5,6,7,8,9}
 	desktop {last, 1, 2, 3, 4, 5, 6, 7, 8, 9}
@@ -169,9 +200,9 @@ alt + ctrl + 0
 
 super + ctrl + {1,2,3,4,5,6,7,8,9}
 	desktop {1, 2, 3, 4, 5, 6, 7, 8, 9} close ;\
-	waitron window_focus_last                
+	waitron window_focus_last
 
-# ............................................................... window (group)
+# ....................................................................... window
 
 alt + ctrl + {comma,period}
 	window desktop $(desktop get {-1, +1})
@@ -188,25 +219,13 @@ alt + ctrl + super + {1,2,3,4,5,6,7,8,9}
 super + ctrl + r
 	waitron group_remove_window
 
-# ...................................................................... desktop
+# UI
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ...................................................................... monitor
 
 super + {F6,F5}
 	brightness {-5, +5}
-
-ctrl + {_,shift} + space
-	dunstctl {close, close-all}
-
-ctrl + BackSpace
-	dunstctl history-pop
-
-super + {_,ctrl} + a
-	conky clock {_, toggle}
-
-super + {shift,ctrl} + d
-	toggle {wallpaper, background}
-
-super + {_,ctrl} + v
-	{toggle panel, invert_panel}
 
 # ........................................................................ mouse
 
@@ -231,37 +250,25 @@ super + ctrl + shift + space
 ~Caps_Lock
 	xdotool key Right Left
 
-# .................................................................... clipboard
+# ...................................................................... desktop
 
-# BUG: manual keybinds circumvent (random) X session clipboard loss (cause unknown)
-# HISTORY: cb replaces "xclip {-in, -out} -selection clipboard"
+ctrl + {_,shift} + space
+	dunstctl {close, close-all}
 
-~ctrl + {c,x}
-	S=$(xsel -p) && [ -n "$S" ] && echo -n "$S" | cb {copy, cut}
+ctrl + BackSpace
+	dunstctl history-pop
 
-~ctrl + v
-	cb paste
+super + {_,ctrl} + a
+	conky clock {_, toggle}
 
-# ~ctrl + c
-# 	S=$(xsel -p) && [ -n "$S" ] && echo -n "$S" | copyq copy
+super + {shift,ctrl} + d
+	toggle {wallpaper, background}
 
-# ~ctrl + x
-# 	S=$(xsel -p) && [ -n "$S" ] && echo -n "$S" | copyq copy ;\
-# 	xdotool key Del
+super + {_,ctrl} + v
+	{toggle panel, invert_panel}
 
-# ~ctrl + v
-# 	copyq paste
-
-# ........................................................................ sxhkd
-
-super + Escape
-	notify reloading "sxhkd & ruler" ;\
-	pkill -USR1 -x sxhkd             ;\
-	pkill -KILL -x ruler             ;\
-	ruler -i -c $HOME/.config/$WM/rulerrc &
-
-super + shift + Escape
-	kak $(find $HOME/.config/${WM}/ -maxdepth 1 -type f -name '*rc')
+# Applications
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # ........................................................................ menus
 
@@ -283,6 +290,48 @@ super + shift + {u,v,colon}
 super + shift + y
 	menu abook
 
+# ........................................................................ terms
+
+super + {_,shift} + Return
+	scratchpad {scratchy, itchy}
+
+super + ctrl + Return
+	term
+
+super + alt + t
+	for i in $(xdotool search --onlyvisible --classname "term") ;do xdotool windowactivate --sync $i; window desktop $(chef desktop "CODE") teleport ;done
+
+# ....................................................................... system
+
+super + v
+	xdotool search --name btop windowkill || btop
+
+super + ctrl + v
+	nvidia_fan toggle
+
+# ........................................................................ audio
+
+# NOTE: switch out to DESK desktop after hiding app to avoid attaching new windows to app desktop
+
+super + j
+	xdotool search --onlyvisible --classname "music" windowunmap && desktop $(chef desktop "DESK") || \{ music; desktop $(chef desktop "PLAY"); \}
+
+super + ctrl + j
+	mpc toggle            ;\
+	mpc | grep -q playing && mpc:settings volume
+
+super + {comma,period}
+	mpc volume {-10, +10} ;\
+	mpc:settings volume
+
+super + ctrl + {comma,period}
+	mpc volume {-2, +2}   ;\
+	mpc:settings volume
+
+super + shift + {comma,period}
+	mpc {prev, next}      ;\
+	mpc:settings
+
 # ......................................................................... http
 
 super + {_,ctrl} + b
@@ -302,38 +351,7 @@ super + shift + j
 super + {_,ctrl} + k
 	xdotool search --onlyvisible --name "∏ano - qutebrowser" {windowunmap, windowkill} || piano
 
-# .......................................................................... mpc
-
-# NOTE: switch out to DESK desktop after hiding app to avoid attaching new windows to app desktop
-
-super + j
-	xdotool search --onlyvisible --classname "music" windowunmap && desktop $(chef desktop "DESK") || \{ music; desktop $(chef desktop "PLAY"); \}
-
-super + ctrl + j
-	mpc toggle ;\
-	mpc | grep -q playing && mpc:settings volume
-
-super + {comma,period}
-	mpc volume {-10, +10} ;\
-	mpc:settings volume
-
-super + ctrl + {comma,period}
-	mpc volume {-2, +2} ;\
-	mpc:settings volume
-
-super + shift + {comma,period}
-	mpc {prev, next} ;\
-	mpc:settings
-
-# ....................................................................... system
-
-super + v
-	xdotool search --name btop windowkill || btop
-
-super + ctrl + v
-	nvidia_fan toggle
-
-# ................................................................. file manager
+# ......................................................................... yazi
 
 super + x
 	xdotool search --onlyvisible --name yazi windowclose || yazi TMUX
@@ -342,7 +360,7 @@ super + ctrl + x
 	notify critical 0 yazi '<b>root</b> user' ;\
 	xdotool search --onlyvisible --name root windowclose || yazi ROOT
 
-# ......................................................................... apps
+# ......................................................................... user
 
 super + shift + ctrl + j
 	xdotool search --classname "Asunder" windowkill && rm -f /tmp/rulerrc:asunder || asunder

@@ -13,9 +13,9 @@
 # ......................................................................... mail
 
 class="aerc"
-	window desktop $(chef desktop "COMM")                  ;\
-	xdotool search --sync --onlyvisible --classname "aerc" ;\
-	window @0.4 size monocle                               ;\
+	window desktop $(chef desktop "COMM")                             ;\
+	xdotool search --sync --onlyvisible --classname "aerc"            ;\
+	window @0.4 size monocle                                          ;\
 	sleep 0.2 && xdotool type ':vsplit' && xdotool key Return
 
 # open compuse window but raise aerc to complete to/subject fields
@@ -67,7 +67,7 @@ class="term"
 # ........................................................................ audio
 
 class="audacious"
-	window desktop $(chef desktop "PLAY") ;\
+	window desktop $(chef desktop "PLAY")                              ;\
 	window @audacious snap center
 
 # delay for pavucontrol/pipewire sync SEE: pulse
@@ -89,12 +89,12 @@ class="asunder"
 	touch /tmp/rulerrc:asunder
 
 class="calibre"
-	window desktop $(chef desktop "DESK") ;\
+	window desktop $(chef desktop "DESK")                             ;\
 	window @calibre snap center
 
 class="org.nicotine_plus.Nicotine"
-	window desktop $(chef desktop "PEER") ;\
-	window size 1/3 && window @org.nicotine_plus.Nicotine snap center ;\
+	window desktop $(chef desktop "PEER")                             ;\
+	window @org.nicotine_plus.Nicotine size 1/3 && window @org.nicotine_plus.Nicotine snap center ;\
 	window size monocle
 
 # ......................................................................... draw
@@ -108,13 +108,16 @@ class="krita"
 # ...................................................................... viewers
 
 class="feh"
-	xdotool key space                  ;\
-	sleep 0.1 && xdotool key BackSpace ;\
+	xdotool key space                     ;\
+	sleep 0.1 && xdotool key BackSpace    ;\
 	window @0.1 snap center
 
 class="foliate"
 	window desktop $(chef desktop "DESK") ;\
 	window size monocle
+
+class="fontmatrix"
+	window desktop $(chef desktop "CODE")
 
 class="mpv"
 	waitron window_maximize
@@ -149,9 +152,6 @@ class="Surf"
 
 class="gFTP"
 	window size monocle
-
-class="fontmatrix"
-	window desktop $(chef desktop "CODE")
 
 class="pcmanfm"
 	window desktop $(chef desktop "DESK") ;\
