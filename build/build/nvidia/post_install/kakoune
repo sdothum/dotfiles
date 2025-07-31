@@ -17,11 +17,11 @@ mkdir -p $KAKLSP
 ln -sf /usr/local/share/kak/rc $RC
 
 # patch kak shell test "==" errors
-cd $RC
-for i in $(al '\[ .* == .*\]') ;do
-	echo $i | grep -q '@xbps' && continue  # in case, previously run
-	original $i
-	sudo sed -i '/\[ .* == .*\]/s/  *==  */ = /' $i
-done
+# cd $RC
+# for i in $(al '\[ .* == .*\]') ;do
+# 	echo $i | grep -q '@xbps' && continue  # in case, previously run
+# 	original $i
+# 	sudo sed -i '/\[ .* == .*\]/s/  *==  */ = /' $i
+# done
 
 # kak: filetype=sh
