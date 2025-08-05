@@ -30,6 +30,7 @@ exists mpd || exit
 dbus-run-session mpd /home/shum/.config/mpd/mpd.conf 2>/dev/null  # NOTE: needs explicit dbus run
 (sleep 3; mpc play; mpc toggle; mpc toggle; mpc:settings) &       # wm restarts require mpd tickling to connect to pipewire
 
+[ -e /tmp/nicotine-plus ] || { make_install nicotine-plus; touch /tmp/nicotine-plus; }  # using nightly build
 nicotine -s
 
 # kak: filetype=sh

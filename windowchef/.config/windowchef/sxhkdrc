@@ -5,6 +5,9 @@
 
 # NOTE: only use groups 1-9 with desktop 0 reserved for special actions (typically, "last")
 
+# NOTE: block { statements.. } must be escaped \{ statements.. \}
+#       lest block be treated as positional sxhkd parameter list
+
 # Hotkeys
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -91,11 +94,14 @@ super + {_,shift} + i
 
 super + {_,shift} + e
 	waitron {window_stack_toggle, window_focus $(pfw)}
+	
+# NOTE: some apps take longer to be removed from chef stack
 
 super + w
 	window group remove        ;\
 	waitron window_close       ;\
-	waitron window_focus_last  # some apps take longer to be removed from chef stack
+	waitron window_focus_last  ;\
+	refresh_panel  # for last visible window removal
 
 # ....................................................................... resize
 
@@ -309,7 +315,7 @@ super + v
 super + ctrl + v
 	nvidia_fan toggle
 
-# ........................................................................ audio
+# ........................................................................ music
 
 # NOTE: switch out to DESK desktop after hiding app to avoid attaching new windows to app desktop
 
@@ -318,7 +324,7 @@ super + j
 
 super + ctrl + j
 	mpc toggle            ;\
-	mpc | grep -q playing && mpc:settings volume
+	mpc | grep -q playing && \{ mpc:settings volume; mpc:settings; \}
 
 super + {comma,period}
 	mpc volume {-10, +10} ;\
@@ -346,7 +352,7 @@ super + h
 # NOTE: removal of random empty secondary nicotine window frame (cause unknown) requires repeating key action
 
 super + shift + j
-	xdotool search --onlyvisible --classname "org.nicotine_plus.Nicotine" windowunmap && desktop $(chef desktop "DESK") || \{ nicotine+; desktop $(chef desktop "PEER"); \}  # NOTE: escaped { block }
+	xdotool search --onlyvisible --classname "org.nicotine_plus.Nicotine" windowunmap && desktop $(chef desktop "DESK") || \{ nicotine; desktop $(chef desktop "PEER"); \}
 
 super + {_,ctrl} + k
 	xdotool search --onlyvisible --name "∏ano - qutebrowser" {windowunmap, windowkill} || piano

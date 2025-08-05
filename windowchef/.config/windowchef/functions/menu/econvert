@@ -30,7 +30,7 @@ esac
 
 # override left justification
 case "$1" in
-	''      ) ;;
+	''      ) option=noformat        ;;  # only reformat "simple" epubs
 	default ) option=default;  shift ;;
 	justify ) option=justify;  shift ;;
 	no*     ) option=noformat; shift ;;  # retain original formatting
@@ -111,10 +111,11 @@ em_linespace=${em_linespace%,*}
 em_indent="--remove-paragraph-spacing --remove-paragraph-spacing-indent-size=$em_indent"
 case $option in
 	default  ) ;;
-	noformat ) unset em_indent em_linespace ;;
-	justify  ) justify=justify ;;
-	all      ) unset indent; em_linespace=${em_linespace#*,}; justify=justify ;;
+	noformat ) unset em_indent em_linespace  ;;
+	justify  ) justify=justify               ;;
+	all      ) unset indent; justify=justify ;;
 esac
+[ $em_linespace ] && em_linespace="--insert-blank-line --insert-blank-line-size=$em_linespace"
 
 notify low "$title" "Converting to $format..\n--change-justification="$justify" $indent"
 ditto $format "$file"
@@ -123,11 +124,10 @@ ditto $format "$file"
 # convert even .azw3 to inject folder title and author
 [ -e /usr/bin/ebook-convert ] && ECONVERT=/usr/bin/ebook-convert || ECONVERT='eval flatpak run --command="ebook-convert" --user com.calibre_ebook.calibre'
 
-eval $ECONVERT \"$file\" \"${output%.*}.$format\"                               \
+eval $ECONVERT \"$file\" \"${output%.*}.$format\"                              \
 	$([ $reformat ] && echo || echo "--title=\"$title\" --authors=\"$author\"") \
 	--change-justification=\"$justify\"                                         \
-	$em_indent                                                                  \
-	--insert-blank-line --insert-blank-line-size=$em_linespace                  \
+	$em_indent $em_linespace                                                    \
 	--filter-css=\'font-family, float\'                                         \
 	>/tmp/ebook-convert.log 2>/dev/null || exit  # suppress plugin initialization warnings
 
