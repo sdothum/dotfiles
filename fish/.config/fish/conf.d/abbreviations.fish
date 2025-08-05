@@ -230,8 +230,8 @@ for i in (seq 1 9); abbr \$$i "\$argv[$i]" ;end
 function flirt:cd; test (count $argv) -gt 0 && z $argv; set -l f (flirt); test -d "$f" && z $f || z (dirname $f) ;end
 function flirt:sh; test (count $argv) -gt 0 && z $argv; set -l IFS; set -l f (flirt); test -z "$f" || echo "$f" | vipe | sh ;end
 
+# abbr cd 'z'
 # abbr nd 'ncd'
-abbr cd 'z'
 abbr dash 'rlwrap -n dash'
 abbr fd 'flirt:cd'
 abbr fh 'flirt:sh'
@@ -247,6 +247,7 @@ abbr zz 'z -'
 
 # .................................................................. Application
 
+function kc; kconvert $argv '*epub'; end
 
 abbr \? 'chatgpt'
 abbr \?\? 'chatgpt -n'  # new conversation
@@ -274,7 +275,6 @@ abbr dot 'rlwrap -n dotfiles'
 abbr gif 'nsxiv -a'
 abbr handbrake 'ghb'
 abbr hex 'hexdump -C'
-abbr kc "kconvert '*epub'"
 abbr kindle 'dmenu econvert azw3'
 abbr eformat 'dmenu econvert reformat'
 abbr kobo 'dmenu econvert epub'
