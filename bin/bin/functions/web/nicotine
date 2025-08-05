@@ -1,0 +1,17 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Web
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ nicotine-plus
+
+# Usage: nicotine [-s]
+
+[ -e /usr/bin/nicotine ] && exec /usr/bin/nicotine $@ 2>/dev/null
+
+# nightly build
+cd /home/depot/nicotine-plus
+./nicotine $@ 2>/dev/null
+
+# kak: filetype=sh
