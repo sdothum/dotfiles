@@ -23,8 +23,9 @@
 = file transfer
 = ═════════════
 # sabnzbd  [server]
+# nicotine+
 # qbittorrent
-  nicotine+
+m nicotine-plus  # nightly build to minimize soulseek connection disruptions
   nzbget   [server]
 d m sonarr [server]
   transmission-gtk
