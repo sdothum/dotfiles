@@ -119,7 +119,7 @@ search=''
 while note=$(notes | rmenu "$(echo $ext | sed -r 's/./\u&/') [/search]" $(highlight)) || exit ;do
 	case ${note#$(X)} in
 		/*       ) search="${note#*/}"; continue ;;
-		"$EDIT"  ) term $FOLDER WAIT nnn $FOLDER ;;
+		"$EDIT"  ) yazi WAIT $FOLDER ;;
 		"$NEW"   ) file=$(mktemp -p $FOLDER --suffix=.$ext); update=true; action=edit ;;
 	
 		"$purge" )

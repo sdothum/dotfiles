@@ -61,8 +61,7 @@ while : ;do
 	book=$(catlg | mhistory ebooks | column -s^ -t | sed "1i$(X $EDIT)\n$(X $SWITCH)" | rmenu "E-book" -filter \"$author\" -no-custom)
 
 	case ${book#$(X)} in
-		"$EDIT"   ) killall 'nnn' 2>/dev/null; term 'ebooks' WAIT nnn -s ebooks; continue ;;
-	
+		"$EDIT"   ) yazi WAIT $LIBRARY; continue ;;
 		"$SWITCH" )
 			library=$(ls -1 $LIBRARY | grep -E -v "$EXCLUDE" | rmenu "Catalogue" -no-custom)
 			[ "$library" ] && { CATLG=$LIBRARY/$library; }

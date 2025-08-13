@@ -1,0 +1,18 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="winids $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. class winids
+
+# Usage: winids <class>
+
+# NOTE: fetch dangling child window frames for wmutils
+#   eg. mapw -u $(winids "class") 2>/dev/null || ...
+if xdotool search --onlyvisible --classname "$1" >/dev/null ;then
+	for i in $(xdotool search --classname "$1"); do printf "0x%x " $i ;done
+fi
+
+# kak: filetype=sh

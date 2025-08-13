@@ -24,8 +24,9 @@ vacuum() {
 	wmctrl -l 2>/dev/null | cut -d' ' -f1 >$VACUUM
 	for i in $HIDDEN:* ;do
 		[ "${i##*:}" = '*' ] && break  # no hidden windows
-		grep -q ${i##*:} $VACUUM || { rm $i; removal=true; }
+		grep -q ${i##*:} $VACUUM || { rm $i; removals=true; }
 	done
+
 	[ $removals ] && refresh_panel
 }
 

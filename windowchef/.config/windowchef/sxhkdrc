@@ -95,13 +95,12 @@ super + {_,shift} + i
 super + {_,shift} + e
 	waitron {window_stack_toggle, window_focus $(pfw)}
 	
-# NOTE: some apps take longer to be removed from chef stack
 
 super + w
 	window group remove        ;\
-	waitron window_close       ;\
-	waitron window_focus_last  ;\
-	refresh_panel  # for last visible window removal
+	waitron window_close       ;\  # (??) doesn't completely close windows that leave dangling frames
+	waitron window_focus_last  ;\  # NOTE: some apps take longer to be removed from chef stack
+	refresh_panel                  # for last visible window removal
 
 # ....................................................................... resize
 
@@ -349,10 +348,10 @@ super + shift + b
 super + h
 	xdotool search --onlyvisible --classname "Surf" windowactivate && window tile 4 1 || hangouts
 
-# NOTE: removal of random empty secondary nicotine window frame (cause unknown) requires repeating key action
+# NOTE: nicotine leaves dangling child window frames SEE: winids
 
 super + shift + j
-	xdotool search --onlyvisible --classname "org.nicotine_plus.Nicotine" windowunmap && desktop $(chef desktop "DESK") || \{ nicotine; desktop $(chef desktop "PEER"); \}
+	mapw -u $(winids "org.nicotine_plus.Nicotine") 2>/dev/null && desktop $(chef desktop "DESK") || xdotool search --classname "org.nicotine_plus.Nicotine" windowmap || \{ nicotine; desktop $(chef desktop "PEER"); \}
 
 super + {_,ctrl} + k
 	xdotool search --onlyvisible --name "∏ano - qutebrowser" {windowunmap, windowkill} || piano
