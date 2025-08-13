@@ -6,7 +6,7 @@
 
 # ........................................................... modal pipe actions
 
-usage() { echo "<selection> | $(basename $0) [<nth>] [')' | '{' | '|' | '&' | '=' | '#' | '\' | ';\' | '//' | '--' | '||' | '&&' | ';;' | <string>]
+usage() { echo "<selection> | $(basename $0) [<nth>] [')' | '{' | '|' | '&' | '=' | '#' | '\' | ';\' | '//' | '--' | '||' | '&&' | ';;' | '*/' | <string>]
 >   where, 'pattern' -> ' pattern '
 >          '#'       -> '  # ' (appended comment)
 >          ''        -> ' '    (nth <space>* column)
@@ -29,37 +29,39 @@ backslash='◌'     # preserve backslash
 continuation='➥'  # special ;\ pair
 
 case "$1" in
-	')'   ) match=$1; ignore="()" ;;  # align case pattern ')'
-	'{'   ) match=$1; ignore="{}" ;;       # align single line f() '{'
-	'||'  ) match=$1 ;;
-	'&&'  ) match=$1 ;;
-	'|'   ) match=$1 ;;
-	'&'   ) match=$1 ;;
-	'='   ) match=$1 ;;
-	'\'   ) match='\\' ;;
-	'#'   ) match=$1; gutter='  ' ;;
-	'//'  ) match=$1; gutter='  ' ;;
-	'--'  ) match=$1; gutter='  ' ;;
-	[1-9] ) nth=$1; match=''; shift ;;     # align by spaces
+	')'   ) match=$1; ignore="()"    ;;  # align case pattern ')'
+	'{'   ) match=$1; ignore="{}"    ;;  # align single line f() '{'
+	'*/'  ) match=$1                 ;;  # css comment
+	'||'  ) match=$1                 ;;
+	'&&'  ) match=$1                 ;;
+	'|'   ) match=$1                 ;;
+	'&'   ) match=$1                 ;;
+	'='   ) match=$1                 ;;
+	'\'   ) match='\\'               ;;
+	'#'   ) match=$1; gutter='  '    ;;
+	'//'  ) match=$1; gutter='  '    ;;
+	'--'  ) match=$1; gutter='  '    ;;
+	[1-9] ) nth=$1; match=' '; shift ;;  # align by spaces
 	help  ) usage ;;
-	*     ) match=" " ;;                   # force drop through (below)
-esac
-[ "$1" = ';;' ] && match=semicolons       # case cannot match on statement terminator
-[ "$1" = ';\' ] && match=semibslash       # case cannot match on statement terminator
+	*     ) ;;                           # align by string
+	esac
+
+[ "$1" = ';;' ] && match=semicolons     # case cannot match on statement terminator
+[ "$1" = ';\' ] && match=semibslash     # case cannot match on statement terminator
 
 # insert split char and mark special chars
 case "$match" in
-	[\)\{]     ) sed "/^[^${ignore}]*)/s/ *$match */$delim$gutter$match /" ;;
-	'#'        ) sed -r "s/^( *$match*.*[^ ]) *$match */\1$delim$gutter$match /$nth" ;;    # ignore leading #  comment
+	[\)\{]     ) sed "/^[^${ignore}]*)/s/ *$match */$delim$gutter$match /" ;;              # case) / block{
+	'#'        ) sed -r "s/^( *$match*.*[^ ]) *$match */\1$delim$gutter$match /$nth" ;;    # ignore leading ^#  comment
+	'//'       ) sed -r "s|^( *($match)*.*[^ ]) *$match *|\1$delim$gutter$match |$nth" ;;  # ignore leading ^// c
+	'--'       ) sed -r "s/^( *($match)*.*[^ ]) *$match */\1$delim$gutter$match /$nth" ;;  # ignore leading ^-- lua
 	'\\'       ) sed -r "s/^(.*[^ ]) *$match */\1$delim$gutter$match /$nth" ;;             # ignore any preceding backslashes
-	'//'       ) sed -r "s|^( *($match)*.*[^ ]) *$match *|\1$delim$gutter$match |$nth" ;;  # ignore leading // c
-	'--'       ) sed -r "s/^( *($match)*.*[^ ]) *$match */\1$delim$gutter$match /$nth" ;;  # ignore leading -- lua
+	'*/'       ) sed "s/ *[*][/] */$delim \*\/ /$nth" ;;
 	semicolons ) sed "s/ *;; */$delim$gutter;; /$nth" ;;
-	semibslash ) sed "s/ *;\\ */$delim$gutter;$continuation /$nth" ;;  # backslash continuation variant
-	''         ) sed "s/  */$delim /$nth" ;;    # align by spaces
-	"$match"   ) sed "s/ *$match */$delim$gutter$match /$nth" ;;
-	*          ) sed "s/$1/$delim $1/$nth" ;;   # align by string
-esac | sed -r ":a; s/^( *) /\1$space/; ta; s/\t/$tab/g; s/[$]/$dollar/g; s/\\\/$backslash/g" >$LINES         # leading hard char
+	semibslash ) sed "s/ *;\\ */$delim$gutter;$continuation /$nth" ;;                      # backslash continuation variant
+	' '        ) sed "s/  */$delim /$nth" ;;                                               # align by spaces
+	*          ) if [ "$match" ] ;then sed "s/ *$match */$delim$gutter$match /$nth" ;else sed "s/$1/$delim $1/$nth" ;fi ;;  # align by match / string
+esac | sed -r ":a; s/^( *) /\1$space/; ta; s/\t/$tab/g; s/[$]/$dollar/g; s/\\\/$backslash/g" >$LINES  # leading hard char
 
 # max left part width
 max=0

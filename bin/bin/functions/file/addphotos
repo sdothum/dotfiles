@@ -20,24 +20,24 @@ copy_image() {
 	filename=$(basename $1)
 	date=$(stat -c '%y' $1 | cut -d' ' -f1)
 	year=$(echo $date | cut -d- -f1)
-	[ -d $LIBRARY/$year       ] || mkdir $LIBRARY/$year
-	[ -d $LIBRARY/$year/$date ] || { lf; ditto on "$date"; mkdir $LIBRARY/$year/$date; }
+	[ -d "$LIBRARY/$year"       ] || mkdir "$LIBRARY/$year"
+	[ -d "$LIBRARY/$year/$date" ] || { lf; ditto on "$date"; mkdir "$LIBRARY/$year/$date"; }
 
-	if [ -e $LIBRARY/$year/$date/$filename ] ;then
+	if [ -e "$LIBRARY/$year/$date/$filename" ] ;then
 		[ $linefeed ] && lastname=" .. $filename" || echo -n "${CYAN}@$CAMERA ${TURQUOISE}$filename "
 		linefeed=true
 	else
 		lf; ditto INFO "$(type)" "$date / $filename"
-		cp $1 $LIBRARY/$year/$date/$filename
-		chmod 0644 $LIBRARY/$year/$date/$filename
+		cp $1 "$LIBRARY/$year/$date/$filename"
+		chmod 0644 "$LIBRARY/$year/$date/$filename"
 	fi
 }
 
-camera() { for i in $@ ;do for j in $i/* ;do copy_image $j ;done ;done }
+camera() { LIBRARY="$LIBRARY/$camera"; for i in $@ ;do for j in $i/* ;do copy_image $j ;done ;done }
 
 case $CAMERA in
-	*FUJI  ) camera $MEDIA ;;
-	*SIGMA ) camera $MEDIA ;;
+	*FUJI  ) camera="fuji_x";   camera $MEDIA ;;
+	*SIGMA ) camera="sigma_fp"; camera $MEDIA ;;
 esac
 lf
 console && exit
@@ -45,7 +45,7 @@ console && exit
 # change directory to last photo
 STTY=`stty -g`
 stty -echo
-xdotool type "cd $LIBRARY/$year/$date"
+xdotool type "cd \"$LIBRARY/$year/$date\""
 xdotool key Return
 stty $STTY
 

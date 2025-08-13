@@ -5,7 +5,7 @@
 
 # ................................................................. yazi wrapper
 
-# Usage: yazi [TMUX | ROOT | XFTP] | [path]
+# Usage: yazi [TMUX | ROOT | XFTP] | [WAIT] [path]
 
 export YAZI="/usr/bin/yazi"        # NOTE: envar is also used in alacrityt/kak wrappers for conditional tweaks
 export EDITOR=kak
@@ -32,6 +32,7 @@ case $1 in
 	TMUX ) tmux_session 'yazi'         $YAZI $TAB         ;;
 	XFTP ) term xftp class=xftp /bin/yazi /net/downloads/http ;;
 	''   ) $termyazi                   $YAZI .            ;;
+	WAIT ) $termyazi WAIT              $YAZI "${MTP:-$@}" ;;
 	*    ) $termyazi                   $YAZI "${MTP:-$@}" ;;
 esac
 

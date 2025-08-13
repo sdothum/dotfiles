@@ -280,7 +280,7 @@ elif [ "$mu" ] ;then
 elif [ "$test" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat serifless serifed
  	emdash
-	e_ink lamt   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-single_ d-tailed p-eared y-turn m-rounded- utf-8
+	e_ink lajt   grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-double_ d-tailed p-eared y-turn j-serifed J-serifless utf-8
 
 elif [ "$quad" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+
@@ -296,7 +296,8 @@ elif [ "$koreader" ] ;then
 	e_ink luft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8
 	e_ink lift   grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8 J-serifless
 	e_ink laft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-single_ d-tailed p-eared y-turn utf-8
-	e_ink lajt   grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-double_ d-tailed p-eared y-turn j-serifed J-serifless utf-8
+	e_ink lajt   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-double_ d-tailed p-eared y-turn J-serifless utf-8
+	e_ink lait   grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-double_ d-tailed p-eared y-turn j-serifed J-serifless utf-8
 	# e_ink galley grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase
 	# e_ink chalk  grote   I-serifed    t-asymmetric-- l-serifless a-single
 	# e_ink draft  grote   I-serifed    t-asymmetric-- l-serifless
@@ -355,7 +356,7 @@ else                                      # desktop fonts
 
 	cmdopts quasi-ext open+ serifless serifed
  	emdash
-	e_ink charcoal grote space=0.875 I-serifless t-asymmetric-- l-ascending Q-open 1-nobase a-single// d-tailed p-eared m-rounded y-turn
+	e_ink charcoal grote space=0.875 I-serifless t-asymmetric-- l-ascending Q-open 1-nobase a-double_ d-tailed p-eared m-rounded y-turn J-serifless
 	[ -d /var/www/localhost/fonts ] && sudo cp -v $HOME/.fonts/charcoal/*ttf /var/www/localhost/fonts/
 fi
 
