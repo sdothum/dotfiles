@@ -24,36 +24,39 @@ map global insert <s-tab> '<a-;><a-lt>'  # shift tab deindents
 define-command refold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|comment f $kak_opt_autowrap_column<ret>" }}}
 define-command unfold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys 'x|comment F<ret>' }}  # (??) utf-8 sed errors from kak shell
 
-addm %{ comment : map global format c       ': comment-line<ret>' -docstring 'comment' }
-addm %{ comment : map global format f       ': refold<ret>'       -docstring 'fold,unfold' }
-addm %{ comment : map global format F       ': unfold<ret>'       -docstring 'fold,unfold' }
-addm %{ comment : map global format l       'x|comment l .<ret>'  -docstring 'leader    ... xxx' }
-addm %{ comment : map global format t       'x|comment t .<ret>'  -docstring 'trailer   xxx ...' }
-addm %{ comment : map global format R       'x|comment r =<ret>'  -docstring 'ruler     ═══' }
-addm %{ comment : map global format r       'x|comment r --<ret>' -docstring 'ruler     ━━━' }
-addm %{ comment : map global format U       'x|comment u =<ret>'  -docstring 'underline ═══' }
-addm %{ comment : map global format u       'x|comment u --<ret>' -docstring 'underline ━━━' }
-addm %{ comment : map global format '`'     'x|comment c<ret>'    -docstring 'css       <code></code> block' }
+addm %{ comment a : map global format c       ': comment-line<ret>'  -docstring 'comment,block (kak)' }
+addm %{ comment b : map global format b       ': comment-block<ret>' -docstring 'comment,block (kak)' }
+addm %{ comment c : map global format C       'x|comment c<ret>'     -docstring '/* css */'           }
+addm %{ comment f : map global format f       ': refold<ret>'        -docstring 'fold,unfold' }
+addm %{ comment f : map global format F       ': unfold<ret>'        -docstring 'fold,unfold' }
+addm %{ comment f : map global format l       'x|comment l .<ret>'   -docstring 'leader    ... xxx' }
+addm %{ comment f : map global format t       'x|comment t .<ret>'   -docstring 'trailer   xxx ...' }
+addm %{ comment f : map global format R       'x|comment r =<ret>'   -docstring 'ruler     ═══' }
+addm %{ comment f : map global format r       'x|comment r --<ret>'  -docstring 'ruler     ━━━' }
+addm %{ comment f : map global format U       'x|comment u =<ret>'   -docstring 'underline ═══' }
+addm %{ comment f : map global format u       'x|comment u --<ret>'  -docstring 'underline ━━━' }
+addm %{ comment f : map global format '`'     'x|comment `<ret>'     -docstring 'css       <code></code> block' }
 
 # ..................................................................... Aligning
 
-addm %{ align a : map global format <space> 'x|align '            -docstring 'align     '' '' nth+1 word' }
-addm %{ align b : map global format <minus> 'x|align --<ret>'     -docstring 'align     --  comment' }
-addm %{ align c : map global format '#'     'x|align \#<ret>'     -docstring 'align     #   comment' }
-addm %{ align d : map global format /       'x|align //<ret>'     -docstring 'align     //  comment' }
-addm %{ align e : map global format =       'x|align =<ret>'      -docstring 'align     =   statement' }
-addm %[ align s : map global format {       'x|align \{<ret>'     -docstring 'align     {   block' ]  # ATTENTION: %[] to escape '{' :)
-addm %{ align s : map global format )       'x|align \)<ret>'     -docstring 'align     )   case' }
-addm %{ align s : map global format ';'     'x|align \;\;<ret>'   -docstring 'align     ;;  endcase' }
-addm %{ align x : map global format '\'     'x|align \\<ret>'     -docstring 'align     \   continuation' }
-addm %{ align x : map global format ','     'x|align \;\\<ret>'   -docstring 'align     ;\  continuation' }
+addm %{ align a : map global format <space> 'x|align '             -docstring 'align     '' '' nth+1 word' }
+addm %{ align b : map global format <minus> 'x|align --<ret>'      -docstring 'align     --  comment'      }
+addm %{ align c : map global format '#'     'x|align \#<ret>'      -docstring 'align     #   comment'      }
+addm %{ align d : map global format /       'x|align //<ret>'      -docstring 'align     //  comment'      }
+addm %{ align e : map global format =       'x|align =<ret>'       -docstring 'align     =   statement'    }
+addm %[ align s : map global format {       'x|align \{<ret>'      -docstring 'align     {   block'        ]  # ATTENTION: %[] to escape '{' :)
+addm %{ align s : map global format )       'x|align \)<ret>'      -docstring 'align     )   case'         }
+addm %{ align s : map global format ';'     'x|align \;\;<ret>'    -docstring 'align     ;;  endcase'      }
+addm %{ align x : map global format '\'     'x|align \\<ret>'      -docstring 'align     \   continuation' }
+addm %{ align x : map global format ','     'x|align \;\\<ret>'    -docstring 'align     ;\  continuation' }
+addm %{ align z : map global format '*'     'x|align \*/<ret>'     -docstring 'align     */  css comment'  }
 
 # .................................................................... Searching
 
-addm %{ search i : map global edit /        '/(?i)'               -docstring 'isearch   —— prev,next' }
-addm %{ search i : map global edit '\'      '<a-/>(?i)'           -docstring 'isearch   —— prev,next' }
-addm %{ search j : map global edit >        '?(?i)'               -docstring 'iextend   —— prev,next' }
-addm %{ search j : map global edit <        '<a-?>(?i)'           -docstring 'iextend   —— prev,next' }
+addm %{ search i : map global edit /        '/(?i)'                -docstring 'isearch   —— prev,next' }
+addm %{ search i : map global edit '\'      '<a-/>(?i)'            -docstring 'isearch   —— prev,next' }
+addm %{ search j : map global edit >        '?(?i)'                -docstring 'iextend   —— prev,next' }
+addm %{ search j : map global edit <        '<a-?>(?i)'            -docstring 'iextend   —— prev,next' }
 
 # .............................................................. Split selection
 
@@ -85,7 +88,7 @@ map global normal ^         'gh'      -docstring 'goto line begin'
 map global normal $         'gl'      -docstring 'goto line end'
 map global normal C         '<a-l>di' -docstring 'replace to end of line'
 map global normal D         '<a-l>d'  -docstring 'delete to end of line'  # BUG: plugin kakboard interferes with yank buffer
-map global normal Y         '<a-l>'   -docstring 'yank to end of line'
+map global normal Y         '<a-l>y'  -docstring 'yank to end of line'
 
 # ........................................................................ Paste
 
