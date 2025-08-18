@@ -24,9 +24,11 @@ map global insert <s-tab> '<a-;><a-lt>'  # shift tab deindents
 define-command refold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|comment f $kak_opt_autowrap_column<ret>" }}}
 define-command unfold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys 'x|comment F<ret>' }}  # (??) utf-8 sed errors from kak shell
 
+addm %{ comment 0 : map global format <tab>   '%|unexpand --first-only -t<space>' -docstring 'tabs,spaces   (n spaces)' }
+addm %{ comment 1 : map global format <s-tab> '%|expand --init -t<space>'         -docstring 'tabs,spaces   (n spaces)' }
 addm %{ comment a : map global format c       ': comment-line<ret>'  -docstring 'comment,block (kak)' }
 addm %{ comment b : map global format b       ': comment-block<ret>' -docstring 'comment,block (kak)' }
-addm %{ comment c : map global format C       'x|comment c<ret>'     -docstring '/* css */'           }
+addm %{ comment c : map global format C       'x|comment c<ret>'     -docstring '/* css */'   }
 addm %{ comment f : map global format f       ': refold<ret>'        -docstring 'fold,unfold' }
 addm %{ comment f : map global format F       ': unfold<ret>'        -docstring 'fold,unfold' }
 addm %{ comment f : map global format l       'x|comment l .<ret>'   -docstring 'leader    ... xxx' }
@@ -71,24 +73,25 @@ addm %{ search n : map global edit <c-m>    ': mkd-code<ret>'     -docstring 'ma
 addm %{ search s : map global edit s        'x<a-s>s'             -docstring 'split     —— select,iselect' }
 addm %{ search s : map global edit S        'x<a-s>s(?i)'         -docstring 'split     —— select,iselect' }
 
-map global normal S         's(?i)'   -docstring 'split: iselect:'
+map global normal S         's(?i)'      -docstring 'split: iselect:'
 
 # .......................................................... Paragraph selection
 
-map global normal '<minus>' '{p'      -docstring 'extend to previous paragraph'
-map global normal {         '[p'      -docstring 'select to paragraph begin'
-map global normal '='       '<a-a>p'  -docstring 'select surrounding paragraph'
-map global normal }         ']p'      -docstring 'select to paragraph end'
-map global normal '<plus>'  '}p'      -docstring 'extend to next paragraph'
+map global normal '<minus>' '{p'         -docstring 'extend to previous paragraph'
+map global normal {         '[p'         -docstring 'select to paragraph begin'
+map global normal '='       '<a-a>p'     -docstring 'select surrounding paragraph'
+map global normal }         ']p'         -docstring 'select to paragraph end'
+map global normal '<plus>'  '}p'         -docstring 'extend to next paragraph'
 
 # .............................................................. Line operations
 
-# map global normal G       'ge'      -docstring 'goto buffer end'  # breaks selection motion
-map global normal ^         'gh'      -docstring 'goto line begin'
-map global normal $         'gl'      -docstring 'goto line end'
-map global normal C         '<a-l>di' -docstring 'replace to end of line'
-map global normal D         '<a-l>d'  -docstring 'delete to end of line'  # BUG: plugin kakboard interferes with yank buffer
-map global normal Y         '<a-l>y'  -docstring 'yank to end of line'
+# map global normal G       'ge'         -docstring 'goto buffer end'  # breaks selection motion
+map global normal ^         'gh'         -docstring 'goto line begin'
+map global normal $         'gl'         -docstring 'goto line end'
+map global normal C         '<a-l>di'    -docstring 'replace to end of line'
+map global normal D         '<a-l>d'     -docstring 'delete to end of line'  # BUG: plugin kakboard interferes with yank buffer
+map global normal <a-D>     '<a-l><a-d>' -docstring 'delete to end of line (not yanking)'
+map global normal Y         '<a-l>y'     -docstring 'yank to end of line'
 
 # ........................................................................ Paste
 

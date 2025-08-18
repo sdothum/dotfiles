@@ -29,6 +29,8 @@ if-else %{ [ -z "$DIFF" ] } %{
 bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
 	addm %{ meta 1 : map global buffer + ': crosshairs<ret>'   -docstring "crosshairs" }
 	addm %{ meta 1 : map global buffer | ': cursorcolumn<ret>' -docstring "columnhair" }
+	addm %{ meta 1 : map global buffer _ ': cursorline<ret>'   -docstring "linehair"   }
+	cursorline
 }
 
 # ........................................................................ fandt
