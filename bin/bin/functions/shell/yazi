@@ -32,7 +32,7 @@ case $1 in
 	TMUX ) tmux_session 'yazi'         $YAZI $TAB         ;;
 	XFTP ) term xftp class=xftp /bin/yazi /net/downloads/http ;;
 	''   ) $termyazi                   $YAZI .            ;;
-	WAIT ) $termyazi WAIT              $YAZI "${MTP:-$@}" ;;
+	WAIT ) shift; $termyazi WAIT       $YAZI "${MTP:-$@}" ;;  # don't pass WAIT in command string
 	*    ) $termyazi                   $YAZI "${MTP:-$@}" ;;
 esac
 
