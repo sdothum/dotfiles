@@ -107,15 +107,19 @@ output="/tmp/${file##*/}"
 output=ebook-convert:ebook  # flatpak ebook-convert cannot not output to path
 [ $option ] || option=$(echo -n "default (ragged-right)\nnoindent\njustify\nall" | rmenu 'export options' -no-custom) || break
 justify=left
-em_linespace=${em_linespace%,*}
-em_indent="--remove-paragraph-spacing --remove-paragraph-spacing-indent-size=$em_indent"
+# em_linespace=${em_linespace%,*}
+# indent="--remove-paragraph-spacing --remove-paragraph-spacing-indent-size=$em_indent"
+indent="--extra-css='p+p { text-indent: ${em_indent}em !important; }'"
 case $option in
 	default  ) ;;
 	noformat ) unset em_indent em_linespace  ;;
 	justify  ) justify=justify               ;;
 	all      ) unset indent; justify=justify ;;
 esac
-[ $em_linespace ] && em_linespace="--insert-blank-line --insert-blank-line-size=$em_linespace"
+
+# NOTE: deprecated in favour of koreader css overrides
+# [ $em_linespace ] && linespace="--insert-blank-line --insert-blank-line-size=$em_linespace"
+# justification="--change-justification='$justify'"                                         \
 
 notify low "$title" "Converting to $format..\n--change-justification="$justify" $indent"
 ditto $format "$file"
@@ -126,10 +130,9 @@ ditto $format "$file"
 
 eval $ECONVERT \"$file\" \"${output%.*}.$format\"                              \
 	$([ $reformat ] && echo || echo "--title=\"$title\" --authors=\"$author\"") \
-	--change-justification=\"$justify\"                                         \
-	$em_indent $em_linespace                                                    \
+	$indent $linespace $justification                                     \
 	--filter-css=\'font-family, float\'                                         \
-	>/tmp/ebook-convert.log 2>/dev/null || exit  # suppress plugin initialization warnings
+	>/tmp/ebook-convert.log 2>&1 || exit  # suppress plugin initialization warnings
 
 # ........................................................................ Write
 

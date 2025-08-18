@@ -34,7 +34,7 @@ class="wiki"
 	window desktop $(chef desktop "WIKI") ;\
 	layout tile 3 wiki
 
-# .................................................................... cd player
+# ................................................................. music player
 
 class="music"
 	window desktop $(chef desktop "PLAY") ;\
@@ -99,6 +99,10 @@ class="org.nicotine_plus.Nicotine"
 	window size monocle
 
 # ......................................................................... draw
+
+class="darktable"
+	window desktop $(chef desktop "DESK") ;\
+	window @darktable snap center
 
 class="gimp"
 	window desktop $(chef desktop "DESK")

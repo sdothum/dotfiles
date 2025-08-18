@@ -8,7 +8,7 @@
 # ................................................................ Refresh panel
 
 # xtitle -f "X%s" >$(cat $PANEL_FIFO)
-wmctrl -l | grep -q $(pfw) || waitron window_cycle  # NOTE: clears closed window id on empty desktop
+# wmctrl -l | grep -q $(pfw) || waitron window_cycle  # NOTE: clears closed window id on empty desktop
 echo "X" >$(cat $PANEL_FIFO)
 
 # kak: filetype=sh
