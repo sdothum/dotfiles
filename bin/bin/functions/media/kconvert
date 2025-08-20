@@ -6,18 +6,23 @@
 
 # ................................................................ ebook convert
 
-# Usage: [dropcap=<class>] kconvert [poetry] <epub>*
+# Usage: [dropcap=<class>] kconvert [<format>|css=<css>]* <epub>*
 
 # SEE: econvert
-case "$1" in
-	default  ) option=default;  shift ;;
-	justify  ) option=justify;  shift ;;
-	noformat ) option=noformat; shift ;;
-	poetry   ) option=noformat; shift ;;  # retain poetry formatting
-	all      ) option=all;      shift ;;
-esac
+while : ;do
+	case "$1" in
+		css=*    ) css=$1          ;;
+		default  ) option=default  ;;
+		justify  ) option=justify  ;;
+		noformat ) option=noformat ;;
+		poetry   ) option=noformat ;; # retain poetry formatting
+		all      ) option=all      ;;
+		*        ) break           ;;
+	esac
+	shift
+done
 
-menu econvert azw3 $option "$@"  # kindle
-menu econvert epub $option "$@"  # kobo
+menu econvert azw3 "$css" $option "$@"  # kindle
+menu econvert epub "$css" $option "$@"  # kobo
 
 # kak: filetype=sh
