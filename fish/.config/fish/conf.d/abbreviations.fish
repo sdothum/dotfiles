@@ -275,6 +275,7 @@ abbr dot 'rlwrap -n dotfiles'
 abbr gif 'nsxiv -a'
 abbr handbrake 'ghb'
 abbr hex 'hexdump -C'
+abbr kcm "kc css='p { margin: 0 !important; }'"
 abbr kcn 'kc noformat'
 abbr kindle 'dmenu econvert azw3'
 abbr eformat 'dmenu econvert reformat'
