@@ -8,10 +8,6 @@
 
 usage() { usage: "$(basename $0) econvert [azw3 | epub | reformat] [default | justify | noformat | poetry | all | css=<css> ] [<file> | '<regex>', default '*epub']"; exit 1; }
 
-KINDLE=/run/media/$USER/Kindle
-[ -d $KINDLE ] && sudo mount -o remount,rw $(mount | grep $KINDLE | cut -d' ' -f1) $KINDLE
-KINDLE=$KINDLE/documents/
-
 # kobo,kindle tuples
 # enhanced em-legible spacing!
 # em_indent=2,2        # conventional paragraph indent
@@ -69,38 +65,6 @@ author=${name##* - }
 title=${name% - *}
 [ "${file%/*}" = "$file" ] && folder=./ || folder=${file%/*}/  # library
 
-# .............................................................. Amazon transfer
-
-# kindle update via email
-email() {
-	cat - <<END
-Content-Type: multipart/mixed; boundary="$boundary"
-MIME-Version: 1.0
-Subject: $title
-From: $account
-To: $address
-
---$boundary
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-
-$title attached.
-
---$boundary
-Content-Type: application/octet-stream
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="${mobi##*/}"
-
-END
-	base64 "$mobi"
-	cat - <<END
-
---$boundary--
-END
-}
-
 # ...................................................................... Convert
 
 [ $library ] || { [ -d $KINDLE ] && format=azw3 || format=${format:-mobi}; }
@@ -147,20 +111,6 @@ if [ $library ] ;then
 	# find /tmp -maxdepth 1 -name "*$format" -exec mv -f "{}" "$folder" \;
 	mv -f "${output%.*}.$format" "${file%.*}.$format"  # alpine flatpak
 	notify low "$title" "$folder"
-elif [ -d $KINDLE ] ;then
-	find $KINDLE -maxdepth 1 -wholename "${file% - *}*.sdr" -exec rm -rf "{}" \;  # cleanup dangling sdr files
-	find /tmp -maxdepth 1 -name "*$format" -exec rm -rf "$KINDLE${file% - *}*.sdr" \; -exec mv -f "{}" $KINDLE \;
-	notify low "$title" "$KINDLE"
-	sync
-elif [ $format = mobi ] ;then
-	mobi=$(find /tmp -maxdepth 1 -name "*$format")
-	address=$(echo | mhistory kindle | rmenu 'Address <@kindle.com>') || break
-	echo "$address" | grep -q '\@' || address=${address}@kindle.com
-	mhistory kindle $address
-	account=$(grep $USER /etc/aliases | cut -d' ' -f2)
-	boundary="=-=-=-=-=-=-=-=-=-=$(od -An -N9 -i /dev/random | sed 's/ //g' | cut -b1-19)=-="
-	email | /usr/local/bin/msmtp-enqueue.sh -t &
-	notify low "$title" "$address"
 else
 	ditto epub "$(find /tmp -maxdepth 1 -name "*$format")"
 fi
