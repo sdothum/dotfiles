@@ -10,4 +10,6 @@
 cd /home/depot
 exists --repo nicotine-plus && { cd nicotine-plus; git pull; cd ..; } || git clone https://github.com/nicotine-plus/nicotine-plus.git
 
+ditto deco "set modem dns 8.8.8.8/8.8.4.4 to bypass internet provider blocking"
+
 # kak: filetype=sh
