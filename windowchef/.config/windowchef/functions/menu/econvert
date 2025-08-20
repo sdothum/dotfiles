@@ -6,7 +6,7 @@
 
 # ...................................................................... E-books
 
-usage() { usage: "$(basename $0) econvert [azw3 | epub | reformat] [default | justify | noformat | poetry | all] [<file> | '<regex>', default '*epub']"; exit 1; }
+usage() { usage: "$(basename $0) econvert [azw3 | epub | reformat] [default | justify | noformat | poetry | all | css=<css> ] [<file> | '<regex>', default '*epub']"; exit 1; }
 
 KINDLE=/run/media/$USER/Kindle
 [ -d $KINDLE ] && sudo mount -o remount,rw $(mount | grep $KINDLE | cut -d' ' -f1) $KINDLE
@@ -29,31 +29,35 @@ case $1 in
 esac
 
 # override left justification
-case "$1" in
-	''      ) option=noformat        ;;  # only reformat "simple" epubs
-	default ) option=default;  shift ;;
-	justify ) option=justify;  shift ;;
-	no*     ) option=noformat; shift ;;  # retain original formatting
-	poetry  ) option=noformat; shift ;;  # retain poetry formatting
-	all     ) option=all;      shift ;;
-	*       ) [ -e "$1" ] || { find . -iname "$1" | grep -q '/' || usage; } ;;
-esac
+while : ;do
+	case "$1" in
+		''      ) option=noformat; break ;;  # only reformat "simple" epubs
+		css=*   ) css=$1          ;;
+		default ) option=default  ;;
+		justify ) option=justify  ;;
+		no*     ) option=noformat ;;         # retain original formatting
+		poetry  ) option=noformat ;;         # retain poetry formatting
+		all     ) option=all      ;;
+		*       ) [ -e "$1" ] || { find . -iname "$1" | grep -q '/' || usage; }; break ;;
+	esac
+	shift
+done
 
 # <regex> autoconvert epubs to awz3
 case "$format" in
 	azw3     )
-		[ "$1"    ] || { find . -iname '*epub'             -exec menu econvert azw3 $option {} \; ; exit; }
-		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert azw3 $option {} \; ; exit; }
+		[ "$1"    ] || { find . -iname '*epub'             -exec menu econvert azw3 "$css" $option {} \; ; exit; }
+		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert azw3 "$css" $option {} \; ; exit; }
 		;;
 
 	epub     )
-		[ "$1"    ] || { find . -iname '*azw3'             -exec menu econvert epub $option {} \; ; exit; }
-		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert epub $option {} \; ; exit; }
+		[ "$1"    ] || { find . -iname '*azw3'             -exec menu econvert epub "$css" $option {} \; ; exit; }
+		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert epub "$css" $option {} \; ; exit; }
 		;;
 
 	reformat )
-		[ "$1"    ] || { find . -iregex '.*\(azw3\|epub\)' -exec menu econvert reformat $option {} \; ; exit; }
-		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert reformat $option {} \; ; exit; }
+		[ "$1"    ] || { find . -iregex '.*\(azw3\|epub\)' -exec menu econvert reformat "$css" $option {} \; ; exit; }
+		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert reformat "$css" $option {} \; ; exit; }
 		format=${1##*\.}
 		reformat=true  # for re-tweaking converted ebooks
 		;;
@@ -109,13 +113,15 @@ output=ebook-convert:ebook  # flatpak ebook-convert cannot not output to path
 justify=left
 # em_linespace=${em_linespace%,*}
 # indent="--remove-paragraph-spacing --remove-paragraph-spacing-indent-size=$em_indent"
-indent="--extra-css='p+p { text-indent: ${em_indent}em !important; }'"
+CSS="p+p { text-indent: ${em_indent}em !important; }"
 case $option in
 	default  ) ;;
-	noformat ) unset em_indent em_linespace  ;;
-	justify  ) justify=justify               ;;
-	all      ) unset indent; justify=justify ;;
+	noformat ) unset CSS indent em_linespace     ;;
+	justify  ) justify=justify                   ;;
+	all      ) unset CSS indent; justify=justify ;;
 esac
+[ "$css" ] && CSS="$CSS ${css#*=}"
+CSS="--extra-css='$CSS'"
 
 # NOTE: deprecated in favour of koreader css overrides
 # [ $em_linespace ] && linespace="--insert-blank-line --insert-blank-line-size=$em_linespace"
@@ -130,8 +136,8 @@ ditto $format "$file"
 
 eval $ECONVERT \"$file\" \"${output%.*}.$format\"                              \
 	$([ $reformat ] && echo || echo "--title=\"$title\" --authors=\"$author\"") \
-	$indent $linespace $justification                                     \
-	--filter-css=\'font-family, float\'                                         \
+	$indent $linespace $justification                                           \
+	--filter-css=\'font-family, float\' $CSS                                    \
 	>/tmp/ebook-convert.log 2>&1 || exit  # suppress plugin initialization warnings
 
 # ........................................................................ Write
