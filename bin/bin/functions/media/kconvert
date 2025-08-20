@@ -11,7 +11,7 @@
 # SEE: econvert
 while : ;do
 	case "$1" in
-		css=*    ) css=$1          ;;
+		css=*    ) css="\"$1\""    ;; # BECAUSE: protect spaces within $<var> (css statement)
 		default  ) option=default  ;;
 		justify  ) option=justify  ;;
 		noformat ) option=noformat ;;
@@ -22,7 +22,7 @@ while : ;do
 	shift
 done
 
-menu econvert azw3 "$css" $option "$@"  # kindle
-menu econvert epub "$css" $option "$@"  # kobo
+eval menu econvert azw3 $css $option "$@"  # kindle
+eval menu econvert epub $css $option "$@"  # kobo
 
 # kak: filetype=sh
