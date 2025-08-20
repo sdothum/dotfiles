@@ -8,32 +8,24 @@
 
 usage() { usage: "$(basename $0) econvert [azw3 | epub | reformat] [default | justify | noformat | poetry | all | css=<css> ] [<file> | '<regex>', default '*epub']"; exit 1; }
 
-# kobo,kindle tuples
-# enhanced em-legible spacing!
-# em_indent=2,2        # conventional paragraph indent
-# em_linespace=0,1     # conventional indent,noindent spacing
-# em_linespace=0.33,1.25
-# em_indent=1.80,1.95  # adjust indent to 3x space per rendering engine (kindle shape 600) see iosevka
-em_indent=1.80,1.80    # adjust indent to 3x space per rendering engine (kindle shape 576) see iosevka
-em_linespace=0,1.25
+em_indent=1.80em  # adjust indent to 3x space per rendering engine (kindle shape 576) see iosevka
 
 # override device/cloud transfer and create kindle/kobo file
 case $1 in
-	azw3     ) format=$1; option=${option:-default}; em_indent=${em_indent#*,}; library=true; shift ;;  # library update
-	epub     ) format=$1; option=${option:-default}; em_indent=${em_indent%,*}; library=true; shift ;;  # epub output hack
-	reformat ) format=$1; option=${option:-default}; em_indent=${em_indent%,*}; library=true; shift ;;  # epub output hack
+	azw3     ) format=$1; library=true; shift ;;  # library update
+	epub     ) format=$1; library=true; shift ;;  # epub output hack
+	reformat ) format=$1; library=true; shift ;;  # epub output hack
 esac
 
 # override left justification
 while : ;do
 	case "$1" in
-		''      ) option=noformat; break ;;  # only reformat "simple" epubs
 		css=*   ) css=$1          ;;
-		default ) option=default  ;;
-		justify ) option=justify  ;;
-		no*     ) option=noformat ;;         # retain original formatting
-		poetry  ) option=noformat ;;         # retain poetry formatting
-		all     ) option=all      ;;
+		left    ) option=$1       ;;
+		justify ) option=$1       ;;
+		no*     ) option=noformat ;;  # retain original formatting
+		poetry  ) option=noformat ;;  # retain poetry formatting
+		default ) option=$1       ;;
 		*       ) [ -e "$1" ] || { find . -iname "$1" | grep -q '/' || usage; }; break ;;
 	esac
 	shift
@@ -42,18 +34,16 @@ done
 # <regex> autoconvert epubs to awz3
 case "$format" in
 	azw3     )
-		[ "$1"    ] || { find . -iname '*epub'             -exec menu econvert azw3 "$css" $option {} \; ; exit; }
-		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert azw3 "$css" $option {} \; ; exit; }
+		[ "$1"    ] || { find . -iname '*epub'             -exec menu econvert azw3     "$css" $option {} \;; exit; }
+		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert azw3     "$css" $option {} \;; exit; }
 		;;
-
 	epub     )
-		[ "$1"    ] || { find . -iname '*azw3'             -exec menu econvert epub "$css" $option {} \; ; exit; }
-		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert epub "$css" $option {} \; ; exit; }
+		[ "$1"    ] || { find . -iname '*azw3'             -exec menu econvert epub     "$css" $option {} \;; exit; }
+		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert epub     "$css" $option {} \;; exit; }
 		;;
-
 	reformat )
-		[ "$1"    ] || { find . -iregex '.*\(azw3\|epub\)' -exec menu econvert reformat "$css" $option {} \; ; exit; }
-		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert reformat "$css" $option {} \; ; exit; }
+		[ "$1"    ] || { find . -iregex '.*\(azw3\|epub\)' -exec menu econvert reformat "$css" $option {} \;; exit; }
+		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert reformat "$css" $option {} \;; exit; }
 		format=${1##*\.}
 		reformat=true  # for re-tweaking converted ebooks
 		;;
@@ -73,25 +63,20 @@ find /tmp -maxdepth 1 -name "*$format" -exec rm {} \;
 # use calibre conversion module
 output="/tmp/${file##*/}"
 output=ebook-convert:ebook  # flatpak ebook-convert cannot not output to path
-[ $option ] || option=$(echo -n "default (ragged-right)\nnoindent\njustify\nall" | rmenu 'export options' -no-custom) || break
-justify=left
-# em_linespace=${em_linespace%,*}
-# indent="--remove-paragraph-spacing --remove-paragraph-spacing-indent-size=$em_indent"
-CSS="p+p { text-indent: ${em_indent}em !important; }"
+
+# [ $option ] || option=$(echo -n "noindent\nleft (ragged-right)\njustify\ndefault" | rmenu 'export options' -no-custom) || break
+CSS="p+p { text-indent: ${em_indent} !important; }"
 case $option in
-	default  ) ;;
-	noformat ) unset CSS indent em_linespace     ;;
-	justify  ) justify=justify                   ;;
-	all      ) unset CSS indent; justify=justify ;;
+	no*     ) unset CSS                  ;;
+	left    ) justify=left               ;;
+	justify ) justify=justify            ;;
+	default ) unset CSS; justify=justify ;;
 esac
+[ $justify ] && justification="--change-justification='$justify'"                                         \
 [ "$css" ] && CSS="$CSS ${css#*=}"
 CSS="--extra-css='$CSS'"
 
-# NOTE: deprecated in favour of koreader css overrides
-# [ $em_linespace ] && linespace="--insert-blank-line --insert-blank-line-size=$em_linespace"
-# justification="--change-justification='$justify'"                                         \
-
-notify low "$title" "Converting to $format..\n--change-justification="$justify" $indent"
+notify low "$title" "Converting to $format..\n--change-justification=${justify:-..inbook justification..}"
 ditto $format "$file"
 
 # ebook-convert "$file" "${output%.*}.epub"  # test image
@@ -100,8 +85,8 @@ ditto $format "$file"
 
 eval $ECONVERT \"$file\" \"${output%.*}.$format\"                              \
 	$([ $reformat ] && echo || echo "--title=\"$title\" --authors=\"$author\"") \
-	$indent $linespace $justification                                           \
-	--filter-css=\'font-family, float\' $CSS                                    \
+	$justification $CSS                                                         \
+	--filter-css=\'font-family, float\'                                         \
 	>/tmp/ebook-convert.log 2>&1 || exit  # suppress plugin initialization warnings
 
 # ........................................................................ Write
