@@ -23,6 +23,7 @@ git clone https://github.com/qmk/qmk_firmware.git
 cd qmk_firmware
 
 # HACK: $USER pip install fails.. so forcing under root (for now)
+ditto install 'disregard gui configurator error messages'
 sudo python3 -m pip install --force --break-system-packages --user qmk
 sudo cp /root/.local/bin/qmk $HOME/.local/bin
 sudo chown $USER:$USER $HOME/.local/bin/qmk
