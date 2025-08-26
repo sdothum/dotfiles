@@ -77,21 +77,19 @@ map global normal S         's(?i)'      -docstring 'split: iselect:'
 
 # .......................................................... Paragraph selection
 
-map global normal '<minus>' '{p'         -docstring 'extend to previous paragraph'
-map global normal {         '[p'         -docstring 'select to paragraph begin'
-map global normal '='       '<a-a>p'     -docstring 'select surrounding paragraph'
-map global normal }         ']p'         -docstring 'select to paragraph end'
-map global normal '<plus>'  '}p'         -docstring 'extend to next paragraph'
+map global normal <c-=> '{p'         -docstring 'extend to previous paragraph'  # NOTE: flip <a-;> selection direction after forward select
+map global normal =     '<a-a>p'     -docstring 'select surrounding paragraph'
+map global normal <a-=> '}p'         -docstring 'extend to next paragraph'
 
 # .............................................................. Line operations
 
-# map global normal G       'ge'         -docstring 'goto buffer end'  # breaks selection motion
-map global normal ^         'gh'         -docstring 'goto line begin'
-map global normal $         'gl'         -docstring 'goto line end'
-map global normal C         '<a-l>di'    -docstring 'replace to end of line'
-map global normal D         '<a-l>d'     -docstring 'delete to end of line'  # BUG: plugin kakboard interferes with yank buffer
-map global normal <a-D>     '<a-l><a-d>' -docstring 'delete to end of line (not yanking)'
-map global normal Y         '<a-l>y'     -docstring 'yank to end of line'
+# map global normal G   'ge'         -docstring 'goto buffer end'  # breaks selection motion
+map global normal ^     'gh'         -docstring 'goto line begin'
+map global normal $     'gl'         -docstring 'goto line end'
+map global normal C     '<a-l>di'    -docstring 'replace to end of line'
+map global normal D     '<a-l>d'     -docstring 'delete to end of line'  # BUG: plugin kakboard interferes with yank buffer
+map global normal <a-D> '<a-l><a-d>' -docstring 'delete to end of line (not yanking)'
+map global normal Y     '<a-l>y'     -docstring 'yank to end of line'
 
 # ........................................................................ Paste
 
