@@ -15,6 +15,7 @@ group=$(cat $MAILDIR/.mailsync:group)
 # push out any flag and trash changes when finished
 trap "mailsync $group" EXIT
 
+notify aerc "<b>Ctrl-v</b>  vsplit\n<b>q</b>      close"
 offsetY=4 term email class=aerc WAIT PAPER OPACITY=1 $AERC
 
 # kak: filetype=sh

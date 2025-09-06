@@ -5,10 +5,13 @@
 
 # ................................................................ Rsync wrapper
 
+SUDO=sudo  # SEE: rsync
+
 if server ;then
-	ifyes "backup depot to $laptop" && rsync -r --delete /net/depot $laptop:/net/
-else
-	ifno "restore depot to $SERVER" || rsync /net/depot $SERVER:/net/
+	ifyes 'backup media server databases to /net/archive' && {
+		mkdir -pv /net/archive/var/lib || exit 1
+		rsync -r --delete /var/lib/sonarr /net/archive/var/lib/
+	}
 fi
 
 # kak: filetype=sh

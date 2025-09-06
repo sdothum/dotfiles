@@ -43,10 +43,11 @@ lf
 console && exit
 
 # change directory to last photo
-STTY=`stty -g`
-stty -echo
-xdotool type "cd \"$LIBRARY/$year/$date\""
-xdotool key Return
-stty $STTY
+# STTY=`stty -g`
+# stty -echo
+# xdotool type "cd \"$LIBRARY/$year/$date\""
+# xdotool key Return
+# stty $STTY
+yazi "$LIBRARY/$year/$date"
 
 # kak: filetype=sh

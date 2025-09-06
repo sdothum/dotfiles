@@ -22,7 +22,9 @@ while : ;do
 	shift
 done
 
-eval menu econvert azw3 $css $option "$@"  # kindle
-eval menu econvert epub $css $option "$@"  # kobo
+for i in $@ ;do
+	eval menu econvert azw3 $css $option \"$i\"  # kindle
+	eval menu econvert epub $css $option \"$i\"  # koreader
+done
 
 # kak: filetype=sh
