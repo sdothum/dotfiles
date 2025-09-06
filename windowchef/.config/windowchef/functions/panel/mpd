@@ -67,7 +67,8 @@ panel() {
 						cd "$from"
 						TRACKS=$(metaflac | grep "@track" | wc -l)
 					fi
-					[ $track = $TRACKS ] && unset TRACKS
+					# [ $track = $TRACKS ] && unset TRACKS
+					[ $track = $TRACKS ] && TRACKS='‥'
 				fi
 				song="$playing"
 				playing="$(ribbon "$playing")"

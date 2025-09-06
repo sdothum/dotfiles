@@ -115,7 +115,7 @@ while : ;do
 
 		"$EDIT"      ) $FGEDIT $contacts ;;
 		"$REBUILD"   ) abook; unset addresses ;;
-		"$CLIPBOARD" ) clipboard "$addresses"; notify 'Ctrl-Alt-V' "$(echo $addresses | sed 's/ <\S*>//g')"; break ;;
+		"$CLIPBOARD" ) clipboard "$addresses"; notify 'Ctrl-Alt-v' "$(echo $addresses | sed 's/ <\S*>//g')"; break ;;
 		*            ) [ "$addresses" ] && addresses=$addresses,$address || addresses=$address ;;
 	esac
 done

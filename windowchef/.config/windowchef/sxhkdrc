@@ -319,7 +319,7 @@ super + ctrl + v
 # NOTE: switch out to DESK desktop after hiding app to avoid attaching new windows to app desktop
 
 super + j
-	xdotool search --onlyvisible --classname "music" windowunmap && desktop $(chef desktop "DESK") || \{ music; desktop $(chef desktop "PLAY"); \}
+	xdotool search --onlyvisible --classname "music" windowunmap && \{ desktop $(desktop) toggle; desktop $(chef desktop "DESK"); \} || \{ music; desktop $(chef desktop "PLAY"); \}
 
 super + ctrl + j
 	mpc toggle            ;\
@@ -351,7 +351,7 @@ super + h
 # NOTE: nicotine leaves dangling child window frames SEE: winids
 
 super + shift + j
-	mapw -u $(winids "org.nicotine_plus.Nicotine") 2>/dev/null && desktop $(chef desktop "DESK") || xdotool search --classname "org.nicotine_plus.Nicotine" windowmap || \{ nicotine; desktop $(chef desktop "PEER"); \}
+	mapw -u $(winids "org.nicotine_plus.Nicotine") 2>/dev/null && \{ desktop $(desktop) toggle; desktop $(chef desktop "DESK"); \} || xdotool search --classname "org.nicotine_plus.Nicotine" windowmap || \{ nicotine; desktop $(chef desktop "PEER"); \}
 
 super + {_,ctrl} + k
 	xdotool search --onlyvisible --name "∏ano - qutebrowser" {windowunmap, windowkill} || piano

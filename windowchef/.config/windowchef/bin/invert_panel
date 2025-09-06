@@ -9,6 +9,6 @@
 
 # Usage: invert [notify]
 
-[ $1 ] && notify 15 'Invert Panel Contrast' 'Press <b>Mod-Ctrl-V</b>' || toggle contrast
+[ $1 ] && notify 15 'Invert Panel Contrast' 'Press <b>Mod-Ctrl-v</b>' || toggle contrast
 
 # kak: filetype=sh
