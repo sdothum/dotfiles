@@ -81,16 +81,25 @@
 				},
 				{
 					"type": "visual_array",
-					"_comment": "str(;) will disable (unknown trigger of) autorepeat of ',.' -> ';'",
-					"keys": ["TOP2", "TOP3", "BOT3", "BOT4", "TOP6", "BOT6", "TOP8", "BOT8"],
+					"_comment": "str(;) avoids random (undetermined fingering) autorepeat of ',.' -> ';'",
+					"keys": ["TOP2", "BOT2", "TOP3", "BOT3", "TOP4", "BOT4", "TOP5", "BOT5", "TOP6", "BOT6", "TOP8", "BOT8"],
 					"dictionary": [
-						["X", " ", " ", " ", " ", " ", "X", "X",    "STR(;)"],
-						["X", "X", " ", " ", " ", " ", "X", "X", "STR( :: )"],
-						[" ", " ", "X", " ", " ", " ", "X", "X",         "?"],
-						[" ", " ", " ", "X", " ", " ", "X", "X",         "!"],
-						[" ", " ", "X", "X", " ", " ", " ", " ",    "STR(;)"],
-						[" ", " ", " ", " ", "X", " ", "X", "X",         "_"],
-						[" ", " ", " ", " ", " ", "X", "X", "X",        "\""]
+						["X", " ", " ", " ", " ", " ", " ", " ", " ", " ", "X", "X",  "STR(;)"],
+						["X", " ", "X", " ", " ", " ", " ", " ", " ", " ", "X", "X", "STR(::)"],
+						["X", "X", " ", " ", " ", " ", " ", " ", " ", " ", "X", "X",  "STR(Q)"],
+						[" ", "X", " ", " ", " ", " ", " ", " ", " ", " ", "X", "X",  "STR(J)"],
+						[" ", " ", "X", " ", " ", " ", " ", " ", " ", " ", "X", "X",  "STR(Y)"],
+						[" ", " ", "X", "X", " ", " ", " ", " ", " ", " ", "X", "X",  "STR(H)"],
+						[" ", " ", " ", "X", " ", " ", " ", " ", " ", " ", "X", "X",       "?"],
+						[" ", " ", " ", "X", " ", "X", " ", " ", " ", " ", " ", " ",  "STR(;)"],
+						[" ", " ", " ", " ", "X", " ", " ", " ", " ", " ", "X", "X",  "STR(O)"],
+						[" ", " ", " ", " ", "X", "X", " ", " ", " ", " ", "X", "X",  "STR(E)"],
+						[" ", " ", " ", " ", " ", "X", " ", " ", " ", " ", "X", "X",       "!"],
+						[" ", " ", " ", " ", " ", " ", "X", " ", " ", " ", "X", "X",  "STR(U)"],
+						[" ", " ", " ", " ", " ", " ", " ", "X", " ", " ", "X", "X",  "STR(K)"],
+						[" ", " ", " ", " ", " ", " ", " ", " ", "X", " ", "X", "X",       "_"],
+						[" ", " ", " ", " ", " ", " ", " ", " ", "X", "X", "X", "X",  "STR(W)"],
+						[" ", " ", " ", " ", " ", " ", " ", " ", " ", "X", "X", "X",      "\""]
 					]
 				},
 				{
@@ -139,35 +148,29 @@
 					"type": "visual_array",
 					"keys": ["TOP5", "BOT5", "TOP7", "BOT7", "TOP8", "BOT8", "TOP9", "BOT9", "TOP10", "BOT10", "TOP11", "BOT11"],
 					"dictionary": [
-						["X", "X", "X", " ", " ", " ", " ", " ", " ", " ", " ", " ", "STR(gg)"],
-						["X", "X", "X", "X", " ", " ", " ", " ", " ", " ", " ", " ", "STR(cc)"],
-						["X", "X", " ", "X", " ", " ", " ", " ", " ", " ", " ", " ", "STR(bb)"],
-						["X", "X", " ", " ", "X", " ", " ", " ", " ", " ", " ", " ", "STR(dd)"],
-						["X", "X", " ", " ", "X", "X", " ", " ", " ", " ", " ", " ", "STR(tt)"],
-						["X", "X", " ", " ", " ", "X", " ", " ", " ", " ", " ", " ", "STR(pp)"],
-						["X", "X", " ", " ", " ", " ", "X", " ", " ", " ", " ", " ", "STR(nn)"],
-						["X", "X", " ", " ", " ", " ", "X", "X", " ", " ", " ", " ", "STR(rr)"],
-						["X", "X", " ", " ", " ", " ", " ", "X", " ", " ", " ", " ", "STR(ll)"],
-						["X", "X", " ", " ", " ", " ", " ", " ", "X", " ", " ", " ", "STR(mm)"],
-						["X", "X", " ", " ", " ", " ", " ", " ", "X", "X", " ", " ", "STR(ss)"],
-						["X", "X", " ", " ", " ", " ", " ", " ", " ", "X", " ", " ", "STR(ff)"],
-						["X", "X", " ", " ", " ", " ", " ", " ", " ", " ", "X", "X", "STR(zz)"]
-					]
-				},
-				{
-					"type": "visual_array",
-					"keys": ["TOP4", "BOT4", "TOP8", "BOT8"],
-					"dictionary": [
-						["X", " ", "X", "X", "STR(oo)"],
-						["X", "X", "X", "X", "STR(ee)"]
+						["X", "X", "X", " ", " ", " ", " ", " ", " ", " ", " ", " ", "STR(G)"],
+						["X", "X", "X", "X", " ", " ", " ", " ", " ", " ", " ", " ", "STR(C)"],
+						["X", "X", " ", "X", " ", " ", " ", " ", " ", " ", " ", " ", "STR(B)"],
+						["X", "X", " ", " ", "X", " ", " ", " ", " ", " ", " ", " ", "STR(D)"],
+						["X", "X", " ", " ", "X", "X", " ", " ", " ", " ", " ", " ", "STR(T)"],
+						["X", "X", " ", " ", " ", "X", " ", " ", " ", " ", " ", " ", "STR(P)"],
+						["X", "X", " ", " ", " ", " ", "X", " ", " ", " ", " ", " ", "STR(N)"],
+						["X", "X", " ", " ", " ", " ", "X", "X", " ", " ", " ", " ", "STR(R)"],
+						["X", "X", " ", " ", " ", " ", " ", "X", " ", " ", " ", " ", "STR(L)"],
+						["X", "X", " ", " ", " ", " ", " ", " ", "X", " ", " ", " ", "STR(M)"],
+						["X", "X", " ", " ", " ", " ", " ", " ", "X", "X", " ", " ", "STR(S)"],
+						["X", "X", " ", " ", " ", " ", " ", " ", " ", "X", " ", " ", "STR(F)"],
+						["X", "X", " ", " ", " ", " ", " ", " ", " ", " ", "X", " ", "STR(X)"],
+						["X", "X", " ", " ", " ", " ", " ", " ", " ", " ", "X", "X", "STR(Z)"],
+						["X", "X", " ", " ", " ", " ", " ", " ", " ", " ", " ", "X", "STR(V)"] 
 					]
 				},
 				{
 					"type": "visual_array",
 					"_comment": "sloppy pinkie bigram",
-					"keys": ["TOP2", "BOT2", "TOP5"],
+					"keys": ["TOP2", "BOT2", "TOP3", "BOT3"],
 					"dictionary": [
-						["X", "X", "X", "STR(qu)"]
+						["X", "X", "X", "X", "STR(qu)"]
 					]
 				}
 			]
@@ -188,9 +191,9 @@
 				{
 					"type": "visual_array",
 					"_comment": "sloppy pinkie bigram",
-					"keys": ["TOP2", "BOT2", "TOP5"],
+					"keys": ["TOP2", "BOT2", "TOP3", "BOT3"],
 					"dictionary": [
-						["X", "X", "X", "STR(QU)"]
+						["X", "X", "X", "X", "STR(QU)"]
 					]
 				}
 			]
@@ -391,8 +394,6 @@
 	],
 	"leader_sequences": [],
 	"extra_code": "void cap(const struct Chord* self) {\n   switch (*self->state) {\n   case ACTIVATED:\n     tap_key(self->value1);\n     tap_key(self->value2);\n     break;\n   case DEACTIVATED:\n     current_pseudolayer = CAPS;\n     *self->state = IN_ONE_SHOT;\n     break;\n   case FINISHED:\n   case PRESS_FROM_ACTIVE:\n     current_pseudolayer = CAPS;\n     a_key_went_through = false;\n     break;\n   case RESTART:\n     if (a_key_went_through) {\n       current_pseudolayer = self->pseudolayer;\n     } else {\n       *self->state = IN_ONE_SHOT;\n     }\n   }\n }\n \n static uint16_t postfix = KC_G;\n static uint8_t postcap = 0;\n static uint16_t pairs[][3] = { {KC_NO, KC_LBRC, KC_RBRC}, {KC_LSFT, KC_9, KC_0}, {KC_LSFT, KC_LCBR, KC_RCBR} };\n static uint8_t bracket = 0;\n \n void output(int16_t modifier, int16_t keycode) {\n   key_in(modifier);\n   tap_key(keycode);\n   key_out(modifier);\n }\n \n void hexpad(const struct Chord* self) {\n   switch (*self->state) {\n   case ACTIVATED:\n     switch (self->value1) {\n     case 0:\n       switch (self->value2) {\n       case 1:\n         postfix = postfix == KC_G ? KC_SPC : KC_G;\n         break;\n       case 2:\n         bracket = (bracket == 0) ? 1 : ((bracket == 1) ? 2 : 0);\n         break;\n       case 0:\n         current_pseudolayer = BEAKL;\n         if (!postcap) {\n           break;\n         }\n       case 3:\n         tap_key(KC_CAPS);\n         postcap = !postcap;\n       }\n       break;\n     case 1:\n       output(postcap == 0 ? KC_LSFT : KC_NO, postfix);\n       break;\n     case 2:\n       output(pairs[bracket][0], pairs[bracket][self->value2]);\n     }\n   }\n }\n \n static uint8_t harmonic = 0;\n \n #define interval(k) if (record->event.pressed) { harmonic |= k; if (harmonic == 3) { layer_move(0); return false; } } else { harmonic &= ~k; } break\n \n bool process_steno_user(uint16_t keycode, keyrecord_t *record) { \n   switch (keycode) {\n   case STN_FN:\n     interval(1);\n   case STN_PWR:\n     interval(2);\n   }\n   return true;\n }\n \n void matrix_init_user() {\n   steno_set_mode(STENO_MODE_GEMINI);\n }\n",
-	"extra_dependencies": [
-		"keymap_steno.h"
-	]
+	"extra_dependencies": []
 }
 
