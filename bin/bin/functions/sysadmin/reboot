@@ -6,25 +6,36 @@
 
 # ....................................................................... reboot
 
+# Usage: reboot [noprompt]
+
 delay=5  # reboot delay window
 
-ifno 'reboot kernel' && exit
-ifno "passive (delayed) boot into default window manager" && rm -f $SESSION/boot:wm || echo $WM >$SESSION/boot:wm
+if [ -z $1 ] ;then
+	ifno 'reboot kernel' && exit
+	ifno "passive (delayed) boot into default window manager" && rm -f $SESSION/boot:wm || echo $WM >$SESSION/boot:wm
+fi
 
-# (sleep $delay; sudo rm -f /tmp/login:console; sudo /sbin/reboot) &  # will not reboot in ssh subshell in alpine
-trap "tput cnorm; exit" INT  # restore cursor
-tput civis                   # hide cursor
-for i in $(seq $delay | tac) ;do
-	ditto -ne reboot "in $i seconds.."
-	sleep 1
-done
-
-tput cnorm                                              # recover before closing sshd session
-touch $WMREBOOT                                         # SEE x (script)
-sudo rm -f /tmp/login:console
-(sleep 0.4; pkill tmux) &
-(sleep 0.3; console && exec supervisor reboot) &
-(sleep 0.2; pkill $(cat $HOME/.windowmanager)) &
-(sleep 0.1; sudo pkill -f "sshd: $USER" 2>/dev/null) &  # close remote ssh session connect
+if console ;then
+	trap "tput cnorm; exit" INT  # restore cursor on break
+	printf "\r"                  # to override shell prompt leader
+	tput civis                   # hide cursor
+	for i in $(seq $delay | tac) ;do
+		ditto -ne reboot "in $i seconds.."
+		sleep 1
+	done
+	tput cnorm
+	echo
+	echo
+	supervisor reboot
+else
+	touch $WMREBOOT  # SEE x (script)
+	sudo rm -f /tmp/login:console
+	# (sleep 0.4; pkill tmux) &
+	# (sleep 0.3; console && exec supervisor reboot) &
+	# (sleep 0.2; pkill $(cat $HOME/.windowmanager)) &
+	# (sleep 0.1; sudo pkill -f "sshd: $USER" 2>/dev/null) &  # close remote ssh session connect
+	sudo pkill -f "sshd: $USER" 2>/dev/null  # close remote ssh session connect
+	pkill $(cat $HOME/.windowmanager)
+fi
 
 # kak: filetype=sh

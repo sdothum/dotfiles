@@ -166,9 +166,7 @@ fi
 
 # reboot exit from wm SEE: reboot (script)
 [ -e $WMREBOOT ] || exit
-echo
-echo
-sleep 3
-exec supervisor reboot
+# HACK: spawn reboot AFTER closing this script so reboot messages do not print across display
+(sleep 3; reboot noprompt) &
 
-# kak: filetype=sh
+# kak: filetype=sho

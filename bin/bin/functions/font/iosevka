@@ -156,7 +156,7 @@ cmdopts() {
 			a-rounded      ) a=$1 ;;
 			a-single       ) a=$1 ;;
 			a-single/      ) a=$1 ;;
-			a-single//     ) a=$1 ;;
+			a-single_      ) a=$1 ;;
 			b-rounded      ) glyph b $1 ;;  # unolexic
 			d-tailed       ) glyph d $1 ;;  # ebook variant
 			d-toothless    ) glyph d $1 ;;  # with p-eared
@@ -296,7 +296,8 @@ elif [ "$koreader" ] ;then
 	e_ink luft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8
 	e_ink lift   grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8 J-serifless
 	e_ink laft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-single_ d-tailed p-eared y-turn utf-8
-	e_ink lajt   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-double_ d-tailed p-eared y-turn J-serifless utf-8
+	# e_ink lajt   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-double_ d-tailed p-eared y-turn J-serifless utf-8
+	e_ink lajt   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-double_ d-tailed p-eared y-turn J-descending utf-8
 	e_ink lait   grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-double_ d-tailed p-eared y-turn j-serifed J-serifless utf-8
 	# e_ink galley grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase
 	# e_ink chalk  grote   I-serifed    t-asymmetric-- l-serifless a-single
@@ -333,10 +334,10 @@ elif [ $family ] ;then                    # custom e-ink font (non-published)
 	e_ink ${family#*=}
 
 elif [ $web ] ;then                       # www fonts
-	unset cap; emdash; cmdopts t-asymmetric-- l-ascending Q-open 1-nobase a-single// d-tailed p-eared m-rounded y-turn j-serifed
+	unset cap; emdash; cmdopts t-asymmetric-- l-ascending Q-open 1-nobase a-double_ d-tailed p-eared m-rounded y-turn j-serifed J-descending
 	wfont heading  quasi-ext space=1.100 webfont serifless serifed family=wMonolegible
 	wfont dyslexic quasi-ext space=0.875 webfont serifless serifed I-serifless t-asymmetric-- l-ascending f-flat++ family=wMonolexic
-	wfont dyslexic quasi-ext space=1.125 webfont I-serifless family=wCaps
+	wfont dyslexic quasi-ext space=1.125 webfont I-serifless J-serifless family=wCaps
 	wfont expanded quasi-pro space=1     webfont I-serifed sb=1 l-serifless family=wQuasilexic
 
 elif [ $coding ] ;then                    # classic coding font
@@ -346,7 +347,7 @@ elif [ $coding ] ;then                    # classic coding font
 
 else                                      # desktop fonts
 	unset space
-	cmdopts t-asymmetric-- j-serifed 1-nobase at-tall l-hooky f-flat++ y-turn
+	cmdopts t-asymmetric-- j-serifed 1-nobase at-tall l-hooky f-flat++ y-turn J-descending
 	dfont $leading 1-base  # l-flat
 	[ $HOME/thedarnedestthing.com/application/public/fonts/ ] && cp -v $HOME/.fonts/Iosevka/*ttf $HOME/thedarnedestthing.com/application/public/fonts/
 	dfont proof    l-ascending I-serifless
@@ -356,7 +357,7 @@ else                                      # desktop fonts
 
 	cmdopts quasi-ext open+ serifless serifed
  	emdash
-	e_ink charcoal grote space=0.875 I-serifless t-asymmetric-- l-ascending Q-open 1-nobase a-double_ d-tailed p-eared m-rounded y-turn J-serifless
+	e_ink charcoal grote space=0.875 I-serifless t-asymmetric-- l-ascending Q-open 1-nobase a-double_ d-tailed p-eared m-rounded y-turn J-descending
 	[ -d /var/www/localhost/fonts ] && sudo cp -v $HOME/.fonts/charcoal/*ttf /var/www/localhost/fonts/
 fi
 

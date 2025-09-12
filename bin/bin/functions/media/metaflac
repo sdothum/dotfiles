@@ -181,7 +181,7 @@ case $1 in
 				''          ) usage ;;
 				//*/s/*/*/* ) metaflac regex "$TAG" "${i#?}";;  # /match/ search and replace
 				/*/*/*      ) metaflac regex "$TAG" "s$i"   ;;  # search and replace
-				/Case       ) metaflac regex "$TAG" "s/\b(.)/\u\1/g" ;;
+				/Case       ) metaflac regex "$TAG" "s/.*/\L&/; s/\b(.)/\u\1/g" ;;
 				/*          ) usage ;;
 				*           ) metaflac set "$TAG" "$i";;
 			esac
