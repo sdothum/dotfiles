@@ -27,6 +27,7 @@ FLASH=$(transparency D0 "$ICANDY")   # dim icon
 VOLUME=/tmp/mpc:volume
 VOLTIME=3
 VOLSYM='<))'
+# VOLSYM='<◌)'
 
 field()  { echo "$line" | cut -f$1; }
 folder() { folder=$(field 5); echo "/home/music/${folder%%/*}"; }
