@@ -280,8 +280,8 @@ super + {_,ctrl} + v
 super + shift + space
 	menu
 
-super + {shift,ctrl} + apostrophe
-	menu {wikis, notes}
+super + {_,shift,ctrl} + apostrophe
+	menu {shortcuts, wikis, notes}
 
 super + shift + a
 	menu reminder
