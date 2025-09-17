@@ -50,7 +50,7 @@ m hexwalk
 
 = keyboard macros
 = ═══════════════
-m quikey
+# m quikey  # no longer supported
 
 
 = version control

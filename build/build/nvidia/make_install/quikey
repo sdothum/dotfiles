@@ -6,7 +6,8 @@
 # ....................................................................... quikey
 
 # --break-system-packages to circumvent python venv restriction for system wide access
-# pip3 uninstall --break-system-packages quikey     # if fresh install required
+qk stop 2>/dev/null
+pip3 uninstall --break-system-packages quikey  # if fresh install required
 pip3 install --user --break-system-packages quikey  
 
 if [ ! -L $HOME/.local/share/quikey ] ;then
