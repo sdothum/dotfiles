@@ -166,7 +166,7 @@ fi
 
 # reboot exit from wm SEE: reboot (script)
 [ -e $WMREBOOT ] || exit
-# HACK: spawn reboot AFTER closing this script so reboot messages do not print across display
-(sleep 3; reboot noprompt) &
+# HACK: spawn reboot AFTER closing this script to avoid staircase dinit messages across display
+(sleep 2; reboot noprompt) &
 
-# kak: filetype=sho
+# kak: filetype=sh

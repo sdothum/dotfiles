@@ -293,17 +293,18 @@ elif [ "$quad" ] ;then
 elif [ "$koreader" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat serifless serifed
  	emdash
-	e_ink luft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8
-	e_ink lift   grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8 J-serifless
-	e_ink laft   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-single_ d-tailed p-eared y-turn utf-8
-	# e_ink lajt   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-double_ d-tailed p-eared y-turn J-serifless utf-8
-	e_ink lajt   grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-double_ d-tailed p-eared y-turn J-descending utf-8
-	e_ink lait   grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-double_ d-tailed p-eared y-turn j-serifed J-serifless utf-8
-	# e_ink galley grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase
-	# e_ink chalk  grote   I-serifed    t-asymmetric-- l-serifless a-single
-	# e_ink draft  grote   I-serifed    t-asymmetric-- l-serifless
-	# e_ink pencil grote   I-descending t-asymmetric-- l-ascending a-single $descending
-	# e_ink proof  grote   I-descending t-asymmetric-- l-ascending          $descending
+	# e_ink luft    grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8
+	# e_ink lift    grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ utf-8 J-serifless
+	# e_ink laft    grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-single_ d-tailed p-eared y-turn utf-8
+	# e_ink lajt    grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-double_ d-tailed p-eared y-turn J-serifless utf-8
+	# e_ink lajt    grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-double_ d-tailed p-eared y-turn J-descending utf-8
+	e_ink grotesq grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-extended++ a-double_ d-tailed p-eared y-turn J-descending utf-8
+	# e_ink lait    grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-double_ d-tailed p-eared y-turn j-serifed J-serifless utf-8
+	# e_ink galley  grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase
+	# e_ink chalk   grote   I-serifed    t-asymmetric-- l-serifless a-single
+	# e_ink draft   grote   I-serifed    t-asymmetric-- l-serifless
+	# e_ink pencil  grote   I-descending t-asymmetric-- l-ascending a-single $descending
+	# e_ink proof   grote   I-descending t-asymmetric-- l-ascending          $descending
 
 elif [ "$serifed" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat serifless serifed
@@ -347,7 +348,9 @@ elif [ $coding ] ;then                    # classic coding font
 
 else                                      # desktop fonts
 	unset space
-	cmdopts t-asymmetric-- j-serifed 1-nobase at-tall l-hooky f-flat++ y-turn J-descending
+	# cmdopts t-asymmetric-- j-serifed 1-nobase at-tall l-hooky f-flat++ y-turn
+	# NOTE: source code highlighting distinguishes lower case "l" (el) from "|" (bar)
+	cmdopts t-asymmetric-- j-serifed 1-nobase at-tall l-ascending f-flat++ y-turn J-descending
 	dfont $leading 1-base  # l-flat
 	[ $HOME/thedarnedestthing.com/application/public/fonts/ ] && cp -v $HOME/.fonts/Iosevka/*ttf $HOME/thedarnedestthing.com/application/public/fonts/
 	dfont proof    l-ascending I-serifless

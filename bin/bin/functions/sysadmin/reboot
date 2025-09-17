@@ -8,7 +8,7 @@
 
 # Usage: reboot [noprompt]
 
-delay=5  # reboot delay window
+delay=7  # reboot delay window
 
 if [ -z $1 ] ;then
 	ifno 'reboot kernel' && exit
@@ -17,7 +17,7 @@ fi
 
 if console ;then
 	trap "tput cnorm; exit" INT  # restore cursor on break
-	printf "\r"                  # to override shell prompt leader
+	printf "\r\33[2K\n"          # clear shell prompt leader SEE: x script
 	tput civis                   # hide cursor
 	for i in $(seq $delay | tac) ;do
 		ditto -ne reboot "in $i seconds.."

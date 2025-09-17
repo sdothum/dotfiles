@@ -55,9 +55,9 @@ usage() {
 > Y-descending (includes I-descending T-descending)
 
 > a-[double[_]|earless|rounded|single[/|_]]|toothless]
-> b-corner
+> b-[corner|cut]
 > d-[tailed|toothless]
-> f-[asymmetric|extended[+]|flat[+[+]]]
+> f-[asymmetric|extended[+[+]]|flat[+[+]]]
 > g-[double|flat|open]
 > i-[hooky|serifed[-]|serifless]
 > j-[flat|serifed|serifless]
@@ -246,6 +246,7 @@ variant() {
 			a-rounded      ) glyph a=double-storey-toothless-rounded ;        unset T_a ;;
 			a-toothless    ) glyph a=double-storey-toothless-corner ;         unset T_a ;;
 			b-corner       ) glyph b=toothless-corner-serifless                         ;;
+			b-cut          ) glyph b=bottom-cut-serifless                               ;;
 			b-toothed      ) glyph b=toothed-serifless                                  ;;
 			d-tailed       ) glyph d=tailed-serifless;                        T_d='d'   ;;
 			d-toothless    ) glyph d=toothless-corner-serifless               unset T_d ;;
@@ -411,12 +412,14 @@ cmdopts () {
 			a-single_      ) variant $1 ;;
 			a-toothless    ) variant $1 ;;
 			b-corner       ) variant $1 p-serifed ;;         # alternate b p dyslexic glyphs
+			b-cut          ) variant $1 p-eared ;;
 			b-toothed      ) variant $1 ;;
 			d-tailed       ) variant $1 b-corner p-eared ;;  # alternate b d p dyslexic glyphs
 			d-toothless    ) variant $1 p-eared ;;
 			f-asymmetric   ) variant $1 'ASYMMETRIC'; f_asymmetric=true ;;
 			f-extended     ) variant $1 ;;                   # unolexic (homage to universal grotesk)
 			f-extended+    ) variant $1 ;;                   # unolexic (homage to universal grotesk)
+			f-extended++   ) variant f-flat+ 'DESCENDING'; f_descending=true ;;
 			f-flat         ) variant $1 ;;
 			f-flat+        ) variant $1 ;;
 			f-flat++       ) variant f-flat+ 'ASCENDING'; f_ascending=true ;;
@@ -804,6 +807,7 @@ unset adjust baseline capadjust  # no longer applying for koreader and version 3
 
 [ $f_asymmetric  ] && fforge f_asymmetric       ${shape##* } $family  # font mod for asymmetric f
 [ $f_ascending   ] && fforge f_ascending        ${shape##* } $family  # font mod for ascending serifless f
+[ $f_descending  ] && fforge f_descending       ${shape##* } $family  # font mod for descending serifless f
 [ $I_descending  ] && fforge I_descending       ${shape##* } $family  # font mod for descending serifless capital I
 [ $i_flipped     ] && fforge i_flipped          ${shape##* } $family  # font mod for flipped serifed i
 [ $l_ascending   ] && fforge l_ascending        ${shape##* } $family  # font mod for ascending serifless l
