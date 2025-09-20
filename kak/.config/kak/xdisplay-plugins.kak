@@ -51,6 +51,8 @@ bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 
 # ............................................................. kakoune-livedown
 
+# NOTE: livedown idle hooks reduce "undo" action to single character undo
+
 bundle kakoune-livedown https://github.com/Delapouite/kakoune-livedown.git %{
 	declare-option str livedown ''
 	set-option global livedown_browser "qutebrowser-instance"
@@ -58,7 +60,9 @@ bundle kakoune-livedown https://github.com/Delapouite/kakoune-livedown.git %{
 	define-command enable-livedown %{
 		if %{ [ ${kak_bufname##*.} != 'eml' ] } %{  # exclude mail compose
 			set-option global livedown "%val{bufname}"
-			livedown-start-with-write-on-idle
+			# livedown-start-with-write-on-idle BECAUSE: InsertIdle hook alters "undo" action, instead..
+			livedown-start
+			hook -group livedown-idle buffer NormalIdle .* %{ eval -no-hooks write }  # "normal" mode refresh
 		}
 	}
 
