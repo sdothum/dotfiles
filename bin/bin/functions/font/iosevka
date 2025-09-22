@@ -29,7 +29,7 @@ usage() {
 > a-[double[_]|earless|rounded|single[/|_]]]
 > b-rounded
 > d-[tailed|toothless]
-> f-extended
+> f-extended[++]
 > j-[serifed|serifless]
 > l-[hooky|serifless]
 > m-[arch[-[-]]|rounded]
@@ -161,6 +161,7 @@ cmdopts() {
 			d-tailed       ) glyph d $1 ;;  # ebook variant
 			d-toothless    ) glyph d $1 ;;  # with p-eared
 			f-extended     ) f=$1 ;;        # unolexic (homage to universal grotesk)
+			f-extended++   ) f=$1 ;;        # unolexic (homage to universal grotesk)
 			f-flat++       ) f=$1 ;;
 			i-serifless    ) i=$1 ;;
 			j-flat         ) j=$1 ;;
@@ -304,6 +305,7 @@ elif [ "$koreader" ] ;then
 	# e_ink lait    grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-double_ d-tailed p-eared y-turn j-serifed J-serifless utf-8
 	# e_ink lajt    grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-double_ d-tailed p-eared y-turn J-descending utf-8
 	e_ink grotesq grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-extended++ a-double_ d-tailed p-eared y-turn J-descending utf-8
+	# e_ink grotisq grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-extended++ a-double_ d-tailed p-eared y-turn J-descending j-serifed utf-8
 
 elif [ "$serifed" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat serifless serifed
@@ -349,7 +351,7 @@ else                                      # desktop fonts
 	unset space
 	# cmdopts t-asymmetric-- j-serifed 1-nobase at-tall l-hooky f-flat++ y-turn
 	# NOTE: source code highlighting distinguishes lower case "l" (el) from "|" (bar)
-	cmdopts t-asymmetric-- j-serifed 1-nobase at-tall l-ascending f-flat++ y-turn J-descending
+	cmdopts t-asymmetric-- j-serifed 1-nobase at-tall l-ascending f-extended++ y-turn J-descending
 	dfont $leading 1-base  # l-flat
 	[ $HOME/thedarnedestthing.com/application/public/fonts/ ] && cp -v $HOME/.fonts/Iosevka/*ttf $HOME/thedarnedestthing.com/application/public/fonts/
 	dfont proof    l-ascending I-serifless
