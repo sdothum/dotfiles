@@ -336,11 +336,11 @@ elif [ $family ] ;then                    # custom e-ink font (non-published)
 	e_ink ${family#*=}
 
 elif [ $web ] ;then                       # www fonts
-	unset cap; emdash; cmdopts t-asymmetric-- l-ascending Q-open 1-nobase a-double_ d-tailed p-eared m-rounded y-turn j-serifed J-descending
-	wfont heading  quasi-ext space=1.100 webfont serifless serifed family=wMonolegible
-	wfont dyslexic quasi-ext space=0.875 webfont serifless serifed I-serifless t-asymmetric-- l-ascending f-flat++ family=wMonolexic
-	wfont dyslexic quasi-ext space=1.125 webfont I-serifless J-serifless family=wCaps
-	wfont expanded quasi-pro space=1     webfont I-serifed sb=1 l-serifless family=wQuasilexic
+	unset cap; emdash; cmdopts t-asymmetric-- l-ascending Q-open 1-nobase a-double_ d-tailed p-eared m-rounded y-turn j-serifed J-descending f-extended++
+	wfont heading  quasi-ext space=1.100 webfont serifless serifed family=wMonolegible l-ascending
+	# wfont dyslexic quasi-ext space=0.875 webfont serifless serifed I-serifless t-asymmetric-- l-ascending f-flat++ family=wMonolexic
+	# wfont dyslexic quasi-ext space=1.125 webfont I-serifless J-serifless family=wCaps
+	# wfont expanded quasi-pro space=1     webfont I-serifed sb=1 l-serifless family=wQuasilexic
 
 elif [ $coding ] ;then                    # classic coding font
 	unset space
