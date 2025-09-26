@@ -80,7 +80,7 @@ define-command setm -params ..2 %{
 # ncurses console plugins
 if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 	source "%val{config}/bundle/kak-bundle/rc/kak-bundle.kak"
-	bundle-noload kak-bundle https://github.com/jdugan6240/kak-bundle
+   bundle-noload kak-bundle https://codeberg.org/jdugan6240/kak-bundle
 
 	source "%val{config}/console-plugins.kak"
 	source "%val{config}/snippets.kak"

@@ -27,9 +27,9 @@ if-else %{ [ -z "$DIFF" ] } %{
 # ................................................................... crosshairs
 
 bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
-	addm %{ meta 1 : map global buffer + ': crosshairs<ret>'   -docstring "crosshairs" }
-	addm %{ meta 1 : map global buffer | ': cursorcolumn<ret>' -docstring "columnhair" }
-	addm %{ meta 1 : map global buffer _ ': cursorline<ret>'   -docstring "linehair"   }
+	addm %{ meta 1 : map global buffer + ': crosshairs<ret>'   -docstring "toggle: crosshairs" }
+	addm %{ meta 1 : map global buffer | ': cursorcolumn<ret>' -docstring "toggle: column" }
+	addm %{ meta 1 : map global buffer _ ': cursorline<ret>'   -docstring "toggle: line"   }
 	cursorline
 }
 
@@ -145,8 +145,10 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 
 	define-command buffers %{
 		peneira-resync
-		peneira 'buffers: ' %{ printf '%s\n' $kak_quoted_buflist } %{ buffer %arg{1} }
+		# peneira 'buffers: ' %{ printf '%s\n' $kak_quoted_buflist } %{ buffer %arg{1} }  # NOTE: documented usage will not accomodate space filenames
+		peneira 'buffers: ' %{ printf '%s\n' "$kak_quoted_buflist" | sed -e "s/' '/\n/g; s/^'//; s/'$//" } %{ buffer %arg{1} }
 	}
+
 
 	define-command files %{
 		peneira-resync

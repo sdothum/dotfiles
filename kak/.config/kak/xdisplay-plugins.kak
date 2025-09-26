@@ -51,30 +51,30 @@ bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 
 # ............................................................. kakoune-livedown
 
-# NOTE: livedown idle hooks reduce "undo" action to single character undo
+# BUG: filenames with special characters "()" will not live update
 
 bundle kakoune-livedown https://github.com/Delapouite/kakoune-livedown.git %{
 	declare-option str livedown ''
 	set-option global livedown_browser "qutebrowser-instance"
 
-	define-command enable-livedown %{
+	define-command livedown-enable %{
 		if %{ [ ${kak_bufname##*.} != 'eml' ] } %{  # exclude mail compose
 			set-option global livedown "%val{bufname}"
-			# livedown-start-with-write-on-idle BECAUSE: InsertIdle hook alters "undo" action, instead..
+			# livedown-start-with-write-on-idle  # NOTE: InsertIdle hook forces char by char "undo" action, instead..
 			livedown-start
 			hook -group livedown-idle buffer NormalIdle .* %{ eval -no-hooks write }  # "normal" mode refresh
 		}
 	}
 
-	define-command disable-livedown %{
+	define-command livedown-disable %{
 		if %{ [ -n "$kak_opt_livedown" ] } %{
 			set-option global livedown ''
 			livedown-stop  # close browser instance
 		}
 	}
 
-	hook -once global BufSetOption filetype=markdown enable-livedown
-	hook       global BufClose     .*                disable-livedown
+	hook -once global BufSetOption filetype=markdown livedown-enable
+	hook       global BufClose     .*                livedown-disable
 } %{
 	sudo npm install -g livedown
 }

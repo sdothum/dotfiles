@@ -86,7 +86,7 @@ evaluate-commands %sh{
 			menu="${pale_cyan}"
 			comment="$(desaturate ${background})"
 			[ "${kak_opt_mode}" = 'normal' ] && cursor="${pale_orange}" || cursor="${vivid_cyan}"
-			ruler="$(desaturate ${background} '44 / 45')"
+			ruler="$(desaturate ${background} '36 / 37')"
 			;;
 		*        )  # insert mode (default non-modal mode)
 			background="${pale_orange}"
@@ -94,7 +94,7 @@ evaluate-commands %sh{
 			# comment="$(desaturate ${background})"
 			comment="${desaturated_orange}"  # from duochrome.vim
 			cursor="${vivid_cyan}"
-			ruler="$(desaturate ${background} '44 / 45')"
+			ruler="$(desaturate ${background} '42 / 43')"
 			;;
 	esac
 
