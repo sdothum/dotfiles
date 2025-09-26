@@ -28,7 +28,7 @@ class="compose"
 
 class="kak"
 	window desktop $(chef desktop "CODE") ;\
-	layout tile 4 kak
+	[ $(chef window count kak) -eq 1 ] && layout tile 3 kak || layout tile 4 kak
 
 class="wiki"
 	window desktop $(chef desktop "WIKI") ;\
