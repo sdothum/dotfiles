@@ -8,7 +8,7 @@
 
 exists cbftp && {
 	yazi XFTP
-	sleep 0.4  # allow rulerrc xftp completion
+	sleep 0.75  # allow rulerrc cbftp completion
 	exec term cbftp class=cbftp cbftp
 }
 

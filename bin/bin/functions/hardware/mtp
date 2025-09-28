@@ -30,7 +30,7 @@ fi
 case $1 in
 	mount   )
 		if $(device) ;then
-			[ "$(name)" = '' ] && { jmtpfs $MTP -o big_writes >/dev/null && notify "$(name)" "$MTP mounted" || notify critical "$MTP" "mount failed"; } || notify "$(name)" 'already mounted'
+			[ "$(name)" = '' ] && { jmtpfs $MTP -o big_writes >/dev/null && notify critical "$(name)" "$MTP mounted" || notify critical "$MTP" "mount failed"; } || notify "$(name)" 'already mounted'
 		else exit 1
 		fi
 		;;
@@ -39,7 +39,7 @@ case $1 in
 		if mounted ;then
 			name=$(name)
 			echo ${PWD} | grep -q "$MTP/$name" && { notify critical "$name" "$MTP busy"; exit 1; }
-			fusermount -u $MTP && notify "$name" "$MTP unmounted" || notify critical "$name" "$MTP umount failed"
+			fusermount -u $MTP && notify critical "$name" "$MTP unmounted" || notify critical "$name" "$MTP umount failed"
 		fi
 		;;
 
