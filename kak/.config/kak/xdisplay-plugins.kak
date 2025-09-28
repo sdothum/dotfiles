@@ -51,7 +51,7 @@ bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 
 # ............................................................. kakoune-livedown
 
-# BUG: filenames with special characters "()" will not live update
+# (??) filenames with special characters "()" do not live update, requiring manual browser refresh
 
 bundle kakoune-livedown https://github.com/Delapouite/kakoune-livedown.git %{
 	declare-option str livedown ''

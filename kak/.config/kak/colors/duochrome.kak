@@ -5,11 +5,16 @@
 
 # duochrome theme for Kakoune
 
-# SEE: kakrc for modal/capslock background colorscheme control
+# SEE: - kakrc for modal/capslock background colorscheme control
+#      - $USER/bin/function/shell/min
+#      - $USER/bin/function/test/exists
+#      - dyetide git for dye
 
 # dynamic theme modal/capslock contrast
 
 evaluate-commands %sh{
+
+	exists dye && lighten=true  # unset for desaturated cursor ruler
 
 	# from dabruin.kak
 	desaturate() {
@@ -19,13 +24,19 @@ evaluate-commands %sh{
 		done | xargs printf 'rgb:%s'
 	}
 
+	lighten() {
+		[ $2 ] || set -- $@ 10  # default lightening %
+		set -- $@ $(dye -x hsl "#${1#*:}")
+		l=$(min 100 $(( ${5%%%*} + $2 )) )
+		echo "rgb:$(dye -h hex "$3 $4 ${l}%)" | cut -d\# -f2)"
+	}
+
 	# runtime background color BG=<normal>,<insert>,<capslock>
 	if [ "$BG" ] ;then
 		NORMAL=$(echo $BG | cut -s -d, -f1)
 		INSERT=$(echo $BG | cut -s -d, -f2)
 		CAPSLOCK=$(echo $BG | cut -s -d, -f3)
 	fi
-
 
 	# ............................................................. Color palette
 
@@ -78,23 +89,36 @@ evaluate-commands %sh{
 			background="${pale_cyan}"
 			menu="${pale_orange}"
 			comment="$(desaturate ${background})"
-			cursor="${pale_orange}"
-			ruler="$(desaturate ${background} '34 / 35')"
+			if [ $lighten ] ;then
+				cursor="${white}"
+				ruler="$(lighten ${background} 10)"
+			else
+				cursor="${pale_orange}"
+				ruler="$(desaturate ${background} '34 / 35')"
+			fi
 			;;
 		capslock )
 			background="${pale_pink}"
 			menu="${pale_cyan}"
 			comment="$(desaturate ${background})"
-			[ "${kak_opt_mode}" = 'normal' ] && cursor="${pale_orange}" || cursor="${vivid_cyan}"
-			ruler="$(desaturate ${background} '36 / 37')"
+			if [ $lighten ] ;then
+				[ "${kak_opt_mode}" = 'normal' ] && cursor="${white}" || cursor="${vivid_cyan}"
+				ruler="$(lighten ${background} 2)"
+			else
+				[ "${kak_opt_mode}" = 'normal' ] && cursor="${pale_orange}" || cursor="${vivid_cyan}"
+				ruler="$(desaturate ${background} '36 / 37')"
+			fi
 			;;
 		*        )  # insert mode (default non-modal mode)
 			background="${pale_orange}"
 			menu="${pale_cyan}"
-			# comment="$(desaturate ${background})"
-			comment="${desaturated_orange}"  # from duochrome.vim
+			comment="${desaturated_orange}"
 			cursor="${vivid_cyan}"
-			ruler="$(desaturate ${background} '42 / 43')"
+			if [ $lighten ] ;then
+				ruler="$(lighten ${background} 5)"
+			else
+				ruler="$(desaturate ${background} '42 / 43')"
+			fi
 			;;
 	esac
 

@@ -41,17 +41,17 @@ addm %{ comment f : map global format '`'     'x|comment `<ret>'     -docstring 
 
 # ..................................................................... Aligning
 
-addm %{ align a : map global format <space> 'x|align '             -docstring 'align     '' '' nth+1 word' }
-addm %{ align b : map global format <minus> 'x|align --<ret>'      -docstring 'align     --  comment'      }
+addm %{ align a : map global format <space> 'x|align '             -docstring 'align space   nth+1 word'   }
+addm %{ align b : map global format <minus> 'x|align --<ret>'      -docstring 'align    --   comment'      }
 addm %{ align c : map global format '#'     'x|align \#<ret>'      -docstring 'align     #   comment'      }
-addm %{ align d : map global format /       'x|align //<ret>'      -docstring 'align     //  comment'      }
+addm %{ align d : map global format /       'x|align //<ret>'      -docstring 'align    //   comment'      }
 addm %{ align e : map global format =       'x|align =<ret>'       -docstring 'align     =   statement'    }
 addm %[ align s : map global format {       'x|align \{<ret>'      -docstring 'align     {   block'        ]  # ATTENTION: %[] to escape '{' :)
 addm %{ align s : map global format )       'x|align \)<ret>'      -docstring 'align     )   case'         }
-addm %{ align s : map global format ';'     'x|align \;\;<ret>'    -docstring 'align     ;;  endcase'      }
+addm %{ align s : map global format ';'     'x|align \;\;<ret>'    -docstring 'align    ;;   endcase'      }
 addm %{ align x : map global format '\'     'x|align \\<ret>'      -docstring 'align     \   continuation' }
-addm %{ align x : map global format ','     'x|align \;\\<ret>'    -docstring 'align     ;\  continuation' }
-addm %{ align z : map global format '*'     'x|align \*/<ret>'     -docstring 'align     */  css comment'  }
+addm %{ align x : map global format ','     'x|align \;\\<ret>'    -docstring 'align    ;\   continuation' }
+addm %{ align z : map global format '*'     'x|align \*/<ret>'     -docstring 'align    */   css comment'  }
 
 # .................................................................... Searching
 
@@ -138,9 +138,9 @@ hook global FocusOut .* sync   # over "write" for system files
 
 # ............................................................ Buffer management
 
-map global normal <a-ret>       ': sync<ret>: buffer-next<ret>'     -docstring 'next buffer'
+map global normal <a-space>     ': sync<ret>: buffer-next<ret>'     -docstring 'next buffer'
 map global normal <a-backspace> ': sync<ret>: buffer-previous<ret>' -docstring 'previous buffer'
-map global normal <a-space>     ': sync<ret>ga'                     -docstring 'last buffer'
+map global normal <a-ret>       ': sync<ret>ga'                     -docstring 'last buffer'
 
 # USE: .*diff BECAUSE: rc/filetype/mail.kak also maps <ret> causing unexpected *.eml plug error(?)
 hook global WinDisplay .*[.]diff %{
