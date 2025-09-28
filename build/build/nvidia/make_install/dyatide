@@ -1,0 +1,15 @@
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ...................................................................... dyetide
+
+cd /home/depot
+exists --repo dyetide || git clone https://github.com/tomit4/dyetide.git
+
+cd dyetide
+chmod 755 install
+./install
+
+# vim: set ft=sh: #

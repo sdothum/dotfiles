@@ -64,7 +64,11 @@ m shell-functools
 = ════════════════════
   tmux
 ! stow tmux
-  
+
+
+= utilities
+= ═════════
+m dyetide
 
 # vim: set ft=conf: #
 

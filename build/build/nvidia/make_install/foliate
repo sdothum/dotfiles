@@ -11,7 +11,8 @@
 sudo xbps-install -y gjs-devel gtk4-devel libadwaita-devel libwebkitgtk60-devel
 
 cd /home/depot
-git clone --recurse-submodules https://github.com/johnfactotum/foliate.git
+exists --repo foliate || git clone --recurse-submodules https://github.com/johnfactotum/foliate.git
+
 cd foliate/src
 sed -i '/import Gtk from /aGtk.init()' main.js
 cd ..

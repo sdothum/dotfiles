@@ -19,7 +19,7 @@ ditto georgi "see sdothum chording_engine"
 
 # manual qmk install required for alpine
 cd $HOME
-git clone https://github.com/qmk/qmk_firmware.git
+exists --repo qmk_firmware || git clone https://github.com/qmk/qmk_firmware.git
 cd qmk_firmware
 
 # HACK: $USER pip install fails.. so forcing under root (for now)

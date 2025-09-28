@@ -11,7 +11,7 @@
 sudo xbps-install -y chafa-devel libsixel-devel libvips-devel libopencv-devel tbb-devel
 
 cd /home/depot
-git clone --depth 1 https://github.com/jstkdng/ueberzugpp.git
+exists --repo ueberzugpp || git clone --depth 1 https://github.com/jstkdng/ueberzugpp.git
 cd ueberzugpp
 
 mkdir build && cd build
