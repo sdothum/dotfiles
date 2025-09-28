@@ -78,7 +78,6 @@ while : ;do
 			(sleep 0.1; xdotool key Return) &  # loop back to menu to acutally open file!
 			continue
 			;;
-
 		*        ) wiki ;;
 	esac
 	break
