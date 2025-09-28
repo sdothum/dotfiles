@@ -22,6 +22,7 @@
 # vifm
   dragon      # for drag 'n drop for cli file manager
 ! stow dragon
+! cargo install flirt
   ncdu
 m ueberzugpp  # (yazi c++) terminal image preview
   yazi
@@ -36,6 +37,15 @@ m ueberzugpp  # (yazi c++) terminal image preview
   toilet
 
 
+= search
+= ══════
+  ack
+  ripgrep
+  the_silver_searcher
+! stow ag
+  ugrep
+
+
 = shell
 = ═════
   dash
@@ -46,29 +56,22 @@ m ueberzugpp  # (yazi c++) terminal image preview
 = ══════════
 # pv
 # shellcheck
-  ack
   expect
-! cargo install flirt
   fzf
   moreutils
-  pcre
-  ripgrep
 m shell-functools
-  the_silver_searcher
-! stow ag
-  ugrep
   zoxide
+
+
+= shell utilities
+= ═══════════════
+m dyetide
 
 
 = terminal multiplexor
 = ════════════════════
   tmux
 ! stow tmux
-
-
-= utilities
-= ═════════
-m dyetide
 
 # vim: set ft=conf: #
 
