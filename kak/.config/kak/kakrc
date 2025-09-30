@@ -17,21 +17,12 @@
 
 # simplifying "try %{ .. } catch %{ .. }" to "eval -verbatim %arg{1} %arg{2} %arg{3}"
 # where %arg{1} is "%sh{ test .. && echo .. || echo .. }"
-# further refactored to "%{ test .. }" by the define-command with %arg{1} as $1 SEE: ATTENTION
-
-# ATTENTION: the eval $1 "$kak_opt_<names>" must be explicitly provided for %sh{} env variable export
-# SEE: the comment (#) list of "$kak_opt_<names>" in the define-command "%sh{ .. # .. }" block
-#      variables passed to if(-else) within this kakrc:
-#         - %opt{color}     # SEE: ui.kak
-#         - %opt{mode}      # SEE: ui.kak
-#         - %opt{focus}     # SEE: console-plugins.kak
-#         - %opt{livedown}  # SEE: xdisplay-plugins.kak
+# further refactored to "%{ test .. }" by the define-command with %arg{1} as $1
 
 # ................................................................. if-then-else
 
 # if-else %{ condition } %{ then } %{ else }
-# define-command if-else -params 3 %{ evaluate-commands -verbatim %sh{ eval $1 && echo then || echo else # kak_opt_color kak_opt_mode kak_opt_focus kak_opt_livedown kak_opt_typewriter } %arg{2} %arg{3} }  # SEE: ATTENTION
-define-command if-else -params 3 %{ evaluate-commands -verbatim %sh{ eval $1 && echo then || echo else } %arg{2} %arg{3} }  # SEE: ATTENTION
+define-command if-else -params 3 %{ evaluate-commands -verbatim %sh{ eval $1 && echo then || echo else } %arg{2} %arg{3} }
 define-command then    -params 2 %{ evaluate-commands %arg{1} }
 define-command else    -params 2 %{ evaluate-commands %arg{2} }
 

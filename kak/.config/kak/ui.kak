@@ -51,6 +51,7 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 				normal-mode-colorscheme
 			}
 		}
+		echo  # HACK: clear :%val{buffile} (??) trigger unknown
 	}
 
 	# window modal/capslock "duo"chrome HACK: see sxhkdrc for Caps_Lock trigger SEE: BUG above
