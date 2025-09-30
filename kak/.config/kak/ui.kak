@@ -13,12 +13,15 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 	declare-option str mode  'normal'  # initial state
 	declare-option str color ''        # force colorscheme initialization
 
+	# NOTE: "echo" to clear statusline filename from caplock switching
+
 	define-command normal-mode-colorscheme %{
 		set-option window mode "normal"
 		if %{ [ "$kak_opt_color" != "normal" ] } %{
 			trace %{ normal-mode-colorscheme }
 			set-option window color "normal"
 			colorscheme %opt{theme}
+			echo
 		}
 	}
 
@@ -28,6 +31,7 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 			trace %{ insert-mode-colorscheme }
 			set-option window color "insert"
 			colorscheme %opt{theme}
+			echo
 		}
 	}
 
@@ -36,10 +40,11 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 			trace %{ capslock-colorscheme }
 			set-option window color "capslock"
 			colorscheme %opt{theme}
+			echo
 		}
 	}
 
-	# BUG: capslock colorscheme switching defers until the first keystroke (vs the realtime statusline reporting)
+	# (??) capslock colorscheme switching defers until the first keystroke HACK: see sxhkdrc for Caps_Lock trigger
 	define-command capslock-check %{
 		trace %{ capslock-check }
 		if-else %{ capslock } %{
@@ -51,10 +56,9 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 				normal-mode-colorscheme
 			}
 		}
-		echo  # HACK: clear :%val{buffile} (??) trigger unknown
 	}
 
-	# window modal/capslock "duo"chrome HACK: see sxhkdrc for Caps_Lock trigger SEE: BUG above
+	# window modal/capslock "duo"chrome
 	hook global WinCreate .* %{
 		normal-mode-colorscheme
 		hook window ModeChange (push|pop):.*:insert insert-mode-colorscheme
