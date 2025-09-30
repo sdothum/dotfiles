@@ -3,23 +3,18 @@
 # Kakoune
 # ══════════════════════════════════════════════════════════════════════════════
 
-# Editing
+# Formatting
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# ................................................................... Formatting
+# ..................................................................... Defaults
 
 set-option global tabstop 3
 set-option global indentwidth 3
 declare-user-mode format
 
-map global normal <c-l>   ': comment-line<ret>' -docstring 'comment'  # beakl key position for "#" NOTE: <c-c> unmappable
-map global normal |       'x| '                 -docstring "pipe FIFO buffer"
 map global normal '#'     ': enter-user-mode format<ret>'
-map global insert <a-ret> '<esc><a-o>ji'        -docstring 'insert non-comment line below cursor'
-map global insert <tab>   '<a-;><a-gt>'  # tab key indents (with spaces)
-map global insert <s-tab> '<a-;><a-lt>'  # shift tab deindents
 
-# ................................................................... Commenting
+# ...................................................................... Comment
 
 define-command refold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|comment f $kak_opt_autowrap_column<ret>" }}}
 define-command unfold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys 'x|comment F<ret>' }}  # (??) utf-8 sed errors from kak shell
@@ -39,7 +34,9 @@ addm %{ comment f : map global format U       'x|comment u =<ret>'   -docstring 
 addm %{ comment f : map global format u       'x|comment u --<ret>'  -docstring 'underline ━━━' }
 addm %{ comment f : map global format '`'     'x|comment `<ret>'     -docstring 'css       <code></code> block' }
 
-# ..................................................................... Aligning
+map global normal <c-l> ': comment-line<ret>' -docstring 'comment'  # beakl key position for "#" NOTE: <c-c> unmappable
+
+# .................................................................... Alignment
 
 addm %{ align a : map global format <space> 'x|align '             -docstring 'align space   nth+1 word'   }
 addm %{ align b : map global format <minus> 'x|align --<ret>'      -docstring 'align    --   comment'      }
@@ -53,16 +50,24 @@ addm %{ align x : map global format '\'     'x|align \\<ret>'      -docstring 'a
 addm %{ align x : map global format ','     'x|align \;\\<ret>'    -docstring 'align    ;\   continuation' }
 addm %{ align z : map global format '*'     'x|align \*/<ret>'     -docstring 'align    */   css comment'  }
 
-# .............................................................. Line operations
+map global insert <tab>   '<a-;><a-gt>'  # tab key indents (with spaces)
+map global insert <s-tab> '<a-;><a-lt>'  # shift tab deindents
 
-map global normal C     '<a-l>di'    -docstring 'replace to end of line'
-map global normal D     '<a-l>d'     -docstring 'delete to end of line'  # BUG: plugin kakboard interferes with yank buffer
-map global normal <a-D> '<a-l><a-d>' -docstring 'delete to end of line (not yanking)'
+# Editing
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ......................................................................... Line
+
+map global insert <a-ret> '<esc><a-o>ji' -docstring 'insert non-comment line below cursor'
+map global normal C       '<a-l>di'      -docstring 'replace to end of line'
+map global normal D       '<a-l>d'       -docstring 'delete to end of line'  # BUG: plugin kakboard interferes with yank buffer
+map global normal <a-D>   '<a-l><a-d>'   -docstring 'delete to end of line (not yanking)'
 
 # ........................................................................ Paste
 
-map global normal <c-p> ':<space>yank-ring-previous<ret>'
-map global normal <c-n> ':<space>yank-ring-next<ret>'
+map global normal |       'x| '          -docstring "pipe FIFO buffer"
+map global normal <c-p>   ':<space>yank-ring-previous<ret>'
+map global normal <c-n>   ':<space>yank-ring-next<ret>'
 
 # .................................................................... Clipboard
 
@@ -78,12 +83,25 @@ addm %{ alpha : map global edit R '| xsel --output --clipboard<ret>'       -docs
 # Selection
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+# ......................................................................... Line
+
+# map global normal G   'ge'     -docstring 'goto buffer end'  # breaks selection motion
+map global normal ^     'gh'     -docstring 'goto line begin'
+map global normal $     'gl'     -docstring 'goto line end'
+map global normal Y     '<a-l>y' -docstring 'yank to end of line'
+
+# ........................................................................ Block
+
+map global normal <c-=> '{p'     -docstring 'extend to previous paragraph'  # NOTE: flip <a-;> selection direction after forward select
+map global normal =     '<a-a>p' -docstring 'select surrounding paragraph'
+map global normal <a-=> '}p'     -docstring 'extend to next paragraph'
+
 # .................................................................... Searching
 
-addm %{ search i : map global edit /        '/(?i)'                -docstring 'isearch   —— prev,next' }
-addm %{ search i : map global edit '\'      '<a-/>(?i)'            -docstring 'isearch   —— prev,next' }
-addm %{ search j : map global edit >        '?(?i)'                -docstring 'iextend   —— prev,next' }
-addm %{ search j : map global edit <        '<a-?>(?i)'            -docstring 'iextend   —— prev,next' }
+addm %{ search i : map global edit /     '/(?i)'             -docstring 'isearch   —— prev,next' }
+addm %{ search i : map global edit '\'   '<a-/>(?i)'         -docstring 'isearch   —— prev,next' }
+addm %{ search j : map global edit >     '?(?i)'             -docstring 'iextend   —— prev,next' }
+addm %{ search j : map global edit <     '<a-?>(?i)'         -docstring 'iextend   —— prev,next' }
 
 # .............................................................. Split selection
 
@@ -91,27 +109,14 @@ define-command mkd-para  %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execut
 define-command mkd-table %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[|]<ret>x' }}
 define-command mkd-code  %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[`]<ret>x' }}
 
-addm %{ search m : map global edit m        ': mkd-para<ret>'     -docstring 'markdown  —— paragraphs,tables,code' }
-addm %{ search m : map global edit M        ': mkd-table<ret>'    -docstring 'markdown  —— paragraphs,tables,code' }
-addm %{ search n : map global edit <c-m>    ': mkd-code<ret>'     -docstring 'markdown  —— paragraphs,tables,code' }
+addm %{ search m : map global edit m     ': mkd-para<ret>'  -docstring 'markdown  —— paragraphs,tables,code' }
+addm %{ search m : map global edit M     ': mkd-table<ret>' -docstring 'markdown  —— paragraphs,tables,code' }
+addm %{ search n : map global edit <c-m> ': mkd-code<ret>'  -docstring 'markdown  —— paragraphs,tables,code' }
 
-addm %{ search s : map global edit s        'x<a-s>s'             -docstring 'split     —— select,iselect' }
-addm %{ search s : map global edit S        'x<a-s>s(?i)'         -docstring 'split     —— select,iselect' }
+addm %{ search s : map global edit s     'x<a-s>s'          -docstring 'split     —— select,iselect' }
+addm %{ search s : map global edit S     'x<a-s>s(?i)'      -docstring 'split     —— select,iselect' }
 
-map global normal S         's(?i)'      -docstring 'split: iselect:'
-
-# .......................................................... Paragraph selection
-
-map global normal <c-=> '{p'         -docstring 'extend to previous paragraph'  # NOTE: flip <a-;> selection direction after forward select
-map global normal =     '<a-a>p'     -docstring 'select surrounding paragraph'
-map global normal <a-=> '}p'         -docstring 'extend to next paragraph'
-
-# .............................................................. Line operations
-
-# map global normal G   'ge'         -docstring 'goto buffer end'  # breaks selection motion
-map global normal ^     'gh'         -docstring 'goto line begin'
-map global normal $     'gl'         -docstring 'goto line end'
-map global normal Y     '<a-l>y'     -docstring 'yank to end of line'
+map global normal S 's(?i)' -docstring 'split: iselect:'
 
 # Buffers
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

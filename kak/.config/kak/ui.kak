@@ -87,13 +87,13 @@ define-command info-notifier -params 2 %{
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # .................................................................... Scrolling
-# lines and columns displayed around the cursor
 
-declare-option bool typewriter false
+# lines and columns displayed around the cursor (margins)
+declare-option bool typewriter
 
-define-command cursormode %{
+define-command cursor-mode %{
 	if-else %{ [ "$kak_opt_typewriter" = true ] } %{
-		set-option global scrolloff %sh{ printf '%s,30' $(( $kak_window_height / 2 )) }
+		set-option global scrolloff %sh{ printf '%s,30' $(( $kak_window_height / 2 )) }  # centered cursor (row) for "freehand writing"
 		set-option window typewriter false
 	} %{
 		set-option global scrolloff 5,15
@@ -101,12 +101,12 @@ define-command cursormode %{
 	}
 }
 
-addm %{ meta t : map global buffer T ': cursormode<ret>'  -docstring "typewriter mode" }
+addm %{ meta t : map global buffer T ': cursor-mode<ret>'  -docstring "typewriter mode" }
 
 hook global WinSetOption filetype=markdown %{ set-option window typewriter true }
-hook global WinDisplay .* %{ cursormode }
+hook global WinDisplay .* %{ cursor-mode }
 
-# Layout
+# UI
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # ....................................................................... Screen
@@ -160,7 +160,10 @@ add-highlighter global/ show-whitespaces -tab '┊' -tabpad ' ' -spc ' ' -lf ' '
 # highlight trailing whitespace
 add-highlighter global/ regex \h+$ 0:Trailing
 
-# ................................................................... Statusline
+# Statusline
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ..................................................................... Kak info
 
 # a minimalist statusline of "mode - column [utf-8] - filename [context]"
 declare-option str spacer ' '
