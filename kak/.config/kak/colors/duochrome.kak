@@ -16,19 +16,19 @@ evaluate-commands %sh{
 
 	exists dye && lighten=true  # unset for desaturated cursor ruler
 
+	lightness() {
+		[ $2 ] || set -- $@ 10              # default lightness amount NOTE: negative values darken
+		set -- $@ $(dye -x hsl "#${1#*:}")  # rgb:<hex color> <lightness amount> hsla(<hue>, <saturation>%, <lightness>%)
+		[ "${2%-*}" = '' ] && l=$(max 0 $(( ${5%%%*} + $2 )) ) || l=$(min 100 $(( ${5%%%*} + $2 )) )
+		echo "rgb:$(dye -h hex "$3 $4 ${l}%)" | cut -d\# -f2)"
+	}
+
 	# from dabruin.kak
 	desaturate() {
 		printf "${1#*:}\n" | fold -b2 | while read -r hex; do
 			base10="$(printf '%d' "0x${hex}")"
 			printf '%02x' "$(( base10 * ${2:-7 / 10} ))"
 		done | xargs printf 'rgb:%s'
-	}
-
-	lighten() {
-		[ $2 ] || set -- $@ 10  # default lightening %
-		set -- $@ $(dye -x hsl "#${1#*:}")
-		l=$(min 100 $(( ${5%%%*} + $2 )) )
-		echo "rgb:$(dye -h hex "$3 $4 ${l}%)" | cut -d\# -f2)"
 	}
 
 	# runtime background color BG=<normal>,<insert>,<capslock>
@@ -53,7 +53,7 @@ evaluate-commands %sh{
 	# oranges
 	strong_orange='rgb:bf450c'
 	light_orange='rgb:ffe5b4'
-	desaturated_orange='rgb:d5b875'
+	desaturated_orange='rgb:d5a575'
 	pale_orange="rgb:${INSERT:-f6f3ef}"
 	# blues
 	dark_blue='rgb:0069af'
@@ -91,7 +91,7 @@ evaluate-commands %sh{
 			comment="$(desaturate ${background})"
 			if [ $lighten ] ;then
 				cursor="${white}"
-				ruler="$(lighten ${background} 10)"
+				ruler="$(lightness ${background} 10)"
 			else
 				cursor="${pale_orange}"
 				ruler="$(desaturate ${background} '34 / 35')"
@@ -103,7 +103,7 @@ evaluate-commands %sh{
 			comment="$(desaturate ${background})"
 			if [ $lighten ] ;then
 				[ "${kak_opt_mode}" = 'normal' ] && cursor="${white}" || cursor="${vivid_cyan}"
-				ruler="$(lighten ${background} 2)"
+				ruler="$(lightness ${background} 2)"
 			else
 				[ "${kak_opt_mode}" = 'normal' ] && cursor="${pale_orange}" || cursor="${vivid_cyan}"
 				ruler="$(desaturate ${background} '36 / 37')"
@@ -115,7 +115,7 @@ evaluate-commands %sh{
 			comment="${desaturated_orange}"
 			cursor="${vivid_cyan}"
 			if [ $lighten ] ;then
-				ruler="$(lighten ${background} 5)"
+				ruler="$(lightness ${background} 5)"
 			else
 				ruler="$(desaturate ${background} '42 / 43')"
 			fi

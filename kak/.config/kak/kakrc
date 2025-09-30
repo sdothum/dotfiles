@@ -30,7 +30,8 @@
 # ................................................................. if-then-else
 
 # if-else %{ condition } %{ then } %{ else }
-define-command if-else -params 3 %{ evaluate-commands -verbatim %sh{ eval $1 && echo then || echo else # kak_opt_color kak_opt_mode kak_opt_focus kak_opt_livedown } %arg{2} %arg{3} }  # SEE: ATTENTION
+# define-command if-else -params 3 %{ evaluate-commands -verbatim %sh{ eval $1 && echo then || echo else # kak_opt_color kak_opt_mode kak_opt_focus kak_opt_livedown kak_opt_typewriter } %arg{2} %arg{3} }  # SEE: ATTENTION
+define-command if-else -params 3 %{ evaluate-commands -verbatim %sh{ eval $1 && echo then || echo else } %arg{2} %arg{3} }  # SEE: ATTENTION
 define-command then    -params 2 %{ evaluate-commands %arg{1} }
 define-command else    -params 2 %{ evaluate-commands %arg{2} }
 
@@ -62,7 +63,7 @@ if %{ [ -n "$UNPLUG" ] || [ -n "$TEST"] } %{
 
 declare-option str usermodes ''
 
-# addm %{ group sortkey* : map global user-mode .. }
+# addm %{ group sortkey* : map scope user-mode .. }
 define-command addm -params 1 %{
 	trace %arg{1}
 	set-option global usermodes "%sh{ echo ""$kak_opt_usermodes\n$(echo $1 | cut -d: -f2- | cut -d' ' -f4 )$1"" }"
@@ -122,5 +123,6 @@ setm %{ format } %{ comment }
 
 # info-notifier %{user-modes} %{<space>   edit\n<ret>     buffer\n#         format}
 nop %sh{ notify 10 user-modes "&lt;<b>space</b>&gt;\tedit\n&lt;<b>ret</b>&gt;\tbuffer\n<b>#</b>\tformat" }
+nop %sh{ xdotool key g c }  # HACK: refreshes occaisonally stale cursorline at startup
 
 # kak: filetype=kak

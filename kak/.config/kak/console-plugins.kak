@@ -42,11 +42,11 @@ bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
 # ............................................................. find and replace
 
 bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
-	# define-command c-ret-message %{ info-notifier %{find & replace} %{<ret>     goto buffer:line\n<c-ret>   buffer (user-mode) to replace} }
-	define-command c-ret-message %{ nop %sh{ notify 30 critical "find & replace" "&lt;<b>ret</b>&gt;\tgoto buffer:line\n&lt;<b>c-^</b>&gt;\tcommit buffer edits\n&lt;<b>c-ret</b>&gt;\tbuffer (user-mode)" }}
+	# define-command find-notify %{ info-notifier %{find & replace} %{<ret>     goto buffer:line\n<c-ret>   buffer (user-mode) to replace} }
+	define-command find-notify %{ nop %sh{ notify 30 critical "find & replace" "&lt;<b>ret</b>&gt;\tgoto buffer:line\n&lt;<b>c-^</b>&gt;\tcommit buffer edits\n&lt;<b>c-ret</b>&gt;\tbuffer (user-mode)" }}
 
 	# NOTE: <ret> jumps to buffer line, <c-ret> for buffer user-mode (to apply replace)
-	addm %{ alpha 5 : map global buffer f     ': c-ret-message<ret>: find ' -docstring "find    —— buffer:line,(commit buffer edits)" }
+	addm %{ alpha 5 : map global buffer f     ': find-notify<ret>: find '   -docstring "find    —— buffer:line,(commit buffer edits)" }
 	addm %{ alpha 6 : map global buffer <c-^> ': find-apply-changes<ret>;'  -docstring "find    —— buffer:line,(commit buffer edits)" }
 	map global normal <c-^> ': find-apply-changes<ret>;' -docstring "commit buffer edits"
 }

@@ -78,6 +78,29 @@ define-command info-notifier -params 2 %{
 	info -style modal
 }
 
+# Cursor
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# .................................................................... Scrolling
+# lines and columns displayed around the cursor
+
+declare-option bool typewriter false
+
+define-command cursormode %{
+	if-else %{ [ "$kak_opt_typewriter" = true ] } %{
+		set-option global scrolloff %sh{ printf '%s,30' $(( $kak_window_height / 2 )) }
+		set-option window typewriter false
+	} %{
+		set-option global scrolloff 5,15
+		set-option window typewriter true
+	}
+}
+
+addm %{ meta t : map global buffer T ': cursormode<ret>'  -docstring "typewriter mode" }
+
+hook global WinSetOption filetype=markdown %{ set-option window typewriter true }
+hook global WinDisplay .* %{ cursormode }
+
 # Layout
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -86,9 +109,6 @@ define-command info-notifier -params 2 %{
 # set-option global ui_options terminal_status_on_top=true terminal_assistant=cat
 # set-option global ui_options terminal_status_on_top=true
 set-option global ui_options terminal_assistant=none
-
-# lines and columns displayed around the cursor
-set-option global scrolloff 4,4
 
 # similar to goto g BUT: preserves selections
 define-command scroll-home %{

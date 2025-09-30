@@ -53,6 +53,31 @@ addm %{ align x : map global format '\'     'x|align \\<ret>'      -docstring 'a
 addm %{ align x : map global format ','     'x|align \;\\<ret>'    -docstring 'align    ;\   continuation' }
 addm %{ align z : map global format '*'     'x|align \*/<ret>'     -docstring 'align    */   css comment'  }
 
+# .............................................................. Line operations
+
+map global normal C     '<a-l>di'    -docstring 'replace to end of line'
+map global normal D     '<a-l>d'     -docstring 'delete to end of line'  # BUG: plugin kakboard interferes with yank buffer
+map global normal <a-D> '<a-l><a-d>' -docstring 'delete to end of line (not yanking)'
+
+# ........................................................................ Paste
+
+map global normal <c-p> ':<space>yank-ring-previous<ret>'
+map global normal <c-n> ':<space>yank-ring-next<ret>'
+
+# .................................................................... Clipboard
+
+# auto update clipoard with yank, change and delete actions
+hook global RegisterModified '"' %{ nop %sh{ printf %s "$kak_main_reg_dquote" | xsel --input --clipboard }}
+
+# addm %{ alpha : map global edit y '<a-|> xsel --input --clipboard<ret>'  -docstring 'clipboard yank' }  # SEE: above
+# addm %{ alpha : map global edit d '| xsel --input --clipboard<ret>'      -docstring 'clipboard cut' }
+addm %{ alpha : map global edit p '<a-!> xsel --outafter --clipboard<ret>' -docstring 'clipboard —— after,before' }
+addm %{ alpha : map global edit P '! xsel --outafter --clipboard<ret>'     -docstring 'clipboard —— after,before' }
+addm %{ alpha : map global edit R '| xsel --output --clipboard<ret>'       -docstring 'clipboard replace' }
+
+# Selection
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 # .................................................................... Searching
 
 addm %{ search i : map global edit /        '/(?i)'                -docstring 'isearch   —— prev,next' }
@@ -86,26 +111,7 @@ map global normal <a-=> '}p'         -docstring 'extend to next paragraph'
 # map global normal G   'ge'         -docstring 'goto buffer end'  # breaks selection motion
 map global normal ^     'gh'         -docstring 'goto line begin'
 map global normal $     'gl'         -docstring 'goto line end'
-map global normal C     '<a-l>di'    -docstring 'replace to end of line'
-map global normal D     '<a-l>d'     -docstring 'delete to end of line'  # BUG: plugin kakboard interferes with yank buffer
-map global normal <a-D> '<a-l><a-d>' -docstring 'delete to end of line (not yanking)'
 map global normal Y     '<a-l>y'     -docstring 'yank to end of line'
-
-# ........................................................................ Paste
-
-map global normal <c-p> ':<space>yank-ring-previous<ret>'
-map global normal <c-n> ':<space>yank-ring-next<ret>'
-
-# .................................................................... Clipboard
-
-# auto update clipoard with yank, change and delete actions
-hook global RegisterModified '"' %{ nop %sh{ printf %s "$kak_main_reg_dquote" | xsel --input --clipboard }}
-
-# addm %{ alpha : map global edit y '<a-|> xsel --input --clipboard<ret>'  -docstring 'clipboard yank' }  # SEE: above
-# addm %{ alpha : map global edit d '| xsel --input --clipboard<ret>'      -docstring 'clipboard cut' }
-addm %{ alpha : map global edit p '<a-!> xsel --outafter --clipboard<ret>' -docstring 'clipboard —— after,before' }
-addm %{ alpha : map global edit P '! xsel --outafter --clipboard<ret>'     -docstring 'clipboard —— after,before' }
-addm %{ alpha : map global edit R '| xsel --output --clipboard<ret>'       -docstring 'clipboard replace' }
 
 # Buffers
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -155,6 +161,7 @@ hook global WinDisplay .*[.]diff %{
 hook global WinSetOption filetype=diff %{
 	add-highlighter buffer/diff-allow-one-trailing-space regex '^ ' 0:Default
 }
+
 addm %{ alpha 2 : map global buffer * ': buffer *debug*<ret>'                  -docstring '*debug*' }
 addm %{ alpha 5 : map global buffer D ': delete-buffer!<ret>'                  -docstring 'delete  —— save,discard!' }
 addm %{ alpha 4 : map global buffer d ': sync<ret>: delete-buffer<ret>'        -docstring 'delete  —— save,discard!' }
@@ -163,6 +170,9 @@ addm %{ alpha 9 : map global buffer q ': quit!<ret>'                           -
 addm %{ alpha 9 : map global buffer w ': sync<ret>'                            -docstring 'write   —— save,and quit!' }
 addm %{ alpha 9 : map global buffer W ': sync<ret>: quit!'                     -docstring 'write   —— save,and quit!' }
 addm %{ alpha 9 : map global buffer x ': sync<ret>: write-all-quit<ret>'       -docstring 'save all and quit' }
+
+map global normal <c-w> ': sync<ret>'       -docstring 'write'
+map global insert <c-w> '<esc>: sync<ret>i' -docstring 'write'
 
 # Terminal / shell
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
