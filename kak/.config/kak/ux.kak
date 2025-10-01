@@ -167,11 +167,12 @@ hook global WinSetOption filetype=diff %{
 	add-highlighter buffer/diff-allow-one-trailing-space regex '^ ' 0:Default
 }
 
-addm %{ alpha 2 : map global buffer * ': buffer *debug*<ret>'            -docstring '*debug*' }
+addm %{ alpha 2 : map global buffer * ': buffer *debug*<ret>'            -docstring '*debug*,scratch' }
+addm %{ alpha 2 : map global buffer @ ': edit -scratch<ret>'             -docstring '*debug*,scratch' }
 addm %{ alpha 5 : map global buffer D ': delete-buffer!<ret>'            -docstring 'delete  —— save,discard!' }
 addm %{ alpha 4 : map global buffer d ': sync<ret>: delete-buffer<ret>'  -docstring 'delete  —— save,discard!' }
 # SEE: kakpipe alpha subsort in xdisplay-plugins
-addm %{ alpha 9 : map global buffer q ': quit!<ret>'                     -docstring 'quit!' }
+addm %{ alpha 7 : map global buffer q ': quit!<ret>'                     -docstring 'quit!' }
 addm %{ alpha 9 : map global buffer w ': sync<ret>'                      -docstring 'write   —— save,and quit!' }
 addm %{ alpha 9 : map global buffer W ': sync<ret>: quit!'               -docstring 'write   —— save,and quit!' }
 addm %{ alpha 9 : map global buffer x ': sync<ret>: write-all-quit<ret>' -docstring 'save all and quit' }
@@ -182,7 +183,7 @@ map global insert <c-w> '<esc>: sync<ret>i' -docstring 'write'
 # Terminal / shell
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-addm %{ alpha 9 : map global buffer t ': nop %sh{ term >/dev/null 2>&1 }<ret>' -docstring 'terminal' }
-addm %[ alpha 9 : map global buffer s ': echo %sh{  }<left><left>'             -docstring 'echo %shell' ]  # ATTENTION: %[] to escape '{}' :)
+addm %{ alpha 7 : map global buffer s ': nop %sh{ term >/dev/null 2>&1 }<ret>' -docstring 'shell   -- terminal,echo %{}' }
+addm %[ alpha 8 : map global buffer S ': echo %sh{  }<left><left>'             -docstring 'shell   -- terminal,echo %{}' ]  # ATTENTION: %[] to escape '{}' :)
 
 # kak: filetype=kak

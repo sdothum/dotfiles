@@ -101,7 +101,7 @@ define-command cursor-mode %{
 	}
 }
 
-addm %{ meta t : map global buffer T ': cursor-mode<ret>'  -docstring "typewriter mode" }
+addm %{ meta t : map global buffer t ': cursor-mode<ret>'  -docstring "typewriter scroll" }
 
 hook global WinSetOption filetype=markdown %{ set-option window typewriter true }
 hook global WinDisplay .* %{ cursor-mode }
