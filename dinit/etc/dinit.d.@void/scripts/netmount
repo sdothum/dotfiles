@@ -17,6 +17,7 @@ case $1 in
 		ret=$?
 		[ $ret -ne 0 ] && umount -a -f -l -O _netdev > /dev/null 2>&1
 		;;
+
 	*    )
 		# Ensure the network manager is running
 		[ -z "$NETWORK_MANAGER" ] || sv check "$NETWORK_MANAGER" > /dev/null 2>&1 || exit 1

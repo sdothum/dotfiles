@@ -3,17 +3,18 @@
 # SEE: /etc/runit/shutdown.d/60-udev.sh
 # SEE: /etc/runit/core-services/02-udev.sh
 . /etc/runit/functions
-[ -z "${container+x}" ] || export VIRTUALIZATION=1
+[ -z "${container+x}" ] || export IS_CONTAINER=1
 
-[ -n "$VIRTUALIZATION" ] && return 0
+[ -n "$IS_CONTAINER" ] && return 0
 
 case $1 in
 	stop )
-		if [ -z "$VIRTUALIZATION" ]; then
+		if [ -z "$IS_CONTAINER" ]; then
 			msg "Stopping udev..."
 			udevadm control --exit
 		fi
 		;;
+
 	*    )
 		if [ -x /usr/lib/systemd/systemd-udevd ]; then
 			_udevd=/usr/lib/systemd/systemd-udevd

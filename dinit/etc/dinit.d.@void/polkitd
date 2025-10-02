@@ -1,0 +1,4 @@
+type            = process
+command         = /usr/lib/polkit-1/polkitd --no-debug
+smooth-recovery = true
+depends-on      = dbusd

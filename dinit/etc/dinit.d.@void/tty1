@@ -1,8 +1,12 @@
+# WARNING: udev-settle started from boot.d instead (experimental)
+
 type            = process
+# command       = /sbin/agetty --noclear tty2 38400 linux
 command         = /sbin/agetty --noclear tty1 38400 linux --autologin shum
 restart         = true
 depends-on      = loginready
-depends-on      = udev-settle
+# depends-on    = udev-settle
+waits-for       = udev-trigger
 termsignal      = HUP
 smooth-recovery = true
 inittab-id      = 1

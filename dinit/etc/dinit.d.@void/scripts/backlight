@@ -11,6 +11,7 @@ case $1 in
 			fi
 		done
 		;;
+
 	*    )
 		[ ! -d /var/cache/backlight ] && mkdir -p /var/cache/backlight
 		[ ! -w /var/cache/backlight ] && chmod 755 /var/cache/backlight

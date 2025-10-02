@@ -3,7 +3,7 @@
 # SEE: /etc/runit/core-services/00-pseudofs.sh
 . /etc/runit/functions
 [ -r /etc/rc.conf ] && . /etc/rc.conf
-[ -z "${container+x}" ] || export VIRTUALIZATION=1
+[ -z "${container+x}" ] || export IS_CONTAINER=1
 
 msg "Mounting pseudo-filesystems"
 mountpoint -q /proc || mount -o nosuid,noexec,nodev -t proc proc /proc
@@ -19,18 +19,20 @@ if [ -d /sys/firmware/efi/efivars ]; then
 	mountpoint -q /sys/firmware/efi/efivars || mount -o nosuid,noexec,nodev -t efivarfs efivarfs /sys/firmware/efi/efivars
 fi
 
-if [ -z "$VIRTUALIZATION" ]; then
+if [ -z "$IS_CONTAINER" ]; then
 	_cgroupv1=""
 	_cgroupv2=""
 
-	case "${CGROUP_MODE:-hybrid}" in
+	case "${CGROUP_MODE:-unified}" in
 		legacy)
 			_cgroupv1="/sys/fs/cgroup"
 			;;
+
 		hybrid)
 			_cgroupv1="/sys/fs/cgroup"
 			_cgroupv2="${_cgroupv1}/unified"
 			;;
+
 		unified)
 			_cgroupv2="/sys/fs/cgroup"
 			;;
@@ -45,12 +47,28 @@ if [ -z "$VIRTUALIZATION" ]; then
 			mkdir -p "$_controller"
 			mountpoint -q "$_controller" || mount -t cgroup -o "$_subsys_name" cgroup "$_controller"
 		done < /proc/cgroups
+		# always mount the systemd tracking cgroup,
+		# to support containerized systemd instances
+		mkdir -p /sys/fs/cgroup/systemd
+		mountpoint -q /sys/fs/cgroup/systemd || \
+			mount -t cgroup -o none,name=systemd cgroup /sys/fs/cgroup/systemd
 	fi
 
 	# cgroup v2
 	if [ -n "$_cgroupv2" ]; then
 		mkdir -p "$_cgroupv2"
-		mountpoint -q "$_cgroupv2" || mount -t cgroup2 -o nsdelegate cgroup2 "$_cgroupv2"
+		mountpoint -q "$_cgroupv2" || \
+			mount -t cgroup2 -o nsdelegate cgroup2 "$_cgroupv2"
+	fi
+else
+	# in containers, unless otherwise configured,
+	# attempt to mount cgroup2 at the standard path,
+	# but never fail
+	if [ "${CGROUP_MODE:-unified}" = "unified" ]; then
+	_cgroup2="/sys/fs/cgroup"
+	mkdir -p "$_cgroup2"
+	mountpoint -q "$_cgroup2" || \
+		mount -t cgroup2 -o nsdelegate cgroup2 "$_cgroup2" || true
 	fi
 fi
 

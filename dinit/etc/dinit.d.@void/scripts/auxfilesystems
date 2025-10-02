@@ -1,0 +1,8 @@
+#!/bin/sh
+# sdothum - 2016 (c) wtfpl
+# SEE: /etc/runit/core-services/03-filesystems.sh
+. /etc/runit/functions
+
+msg "Mounting all non-network filesystems..."
+mount -a -t "nosysfs,nonfs,nonfs4,nosmbfs,nocifs" -O no_netdev || emergency_shell
+

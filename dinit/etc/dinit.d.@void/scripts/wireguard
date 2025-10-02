@@ -8,6 +8,7 @@ case "$1" in
 			wg-quick down "$conf"
 		done
 		;;
+
 	*    )
 		for conf in /etc/wireguard/*.conf; do
 			[ -e "$conf" ] || continue;

@@ -1,0 +1,6 @@
+type            = process
+command         = nicotine -s
+run-as          = shum
+smooth-recovery = true
+logfile         = /var/log/dinit/nicotine.log
+depends-on      = network

@@ -3,7 +3,7 @@
 # SEE: /etc/runit/core-services/01-static-devnodes.sh
 # SEE: /etc/runit/core-services/02-kmods.sh
 . /etc/runit/functions
-[ -z "${container+x}" ] || export VIRTUALIZATION=1
+[ -z "${container+x}" ] || export IS_CONTAINER=1
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
 
 # Some kernel modules must be loaded before starting udev(7).
@@ -13,7 +13,7 @@ for f in $(kmod static-nodes -f devname 2>/dev/null|cut -d' ' -f1); do
 	modprobe -bq $f 2>/dev/null
 done
 
-[ -n "$VIRTUALIZATION" ] && return 0
+[ -n "$IS_CONTAINER" ] && return 0
 # Do not try to load modules if kernel does not support them.
 [ ! -e /proc/modules ] && return 0
 

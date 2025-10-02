@@ -1,6 +1,6 @@
 type            = process
 command         = /usr/local/bin/pwrstatd &
-stop-command    = pkill pwrstatd
+stop-command    = pkill -9 pwrstatd
 smooth-recovery = true
 logfile         = /var/log/dinit/powerpanel.log
 after           = loginready

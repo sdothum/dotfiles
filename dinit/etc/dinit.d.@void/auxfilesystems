@@ -1,5 +1,6 @@
 type       = scripted
 command    = /usr/bin/mount -a -t "nosysfs,nonfs,nonfs4,nosmbfs,nocifs" -O no_netdev
+# command  = /etc/dinit.d/scripts/auxfilesystems
 restart    = false
 depends-on = rootrw
 waits-for  = rootfscheck

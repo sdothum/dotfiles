@@ -3,9 +3,9 @@
 # SEE: /etc/runit/core-services/03-console-setup.sh
 . /etc/runit/functions
 [ -r /etc/rc.conf ] && . /etc/rc.conf
-[ -z "${container+x}" ] || export VIRTUALIZATION=1
+[ -z "${container+x}" ] || export IS_CONTAINER=1
 
-[ -n "$VIRTUALIZATION" ] && return 0
+[ -n "$IS_CONTAINER" ] && return 0
 
 TTYS=${TTYS:-12}
 if [ -n "$FONT" ]; then

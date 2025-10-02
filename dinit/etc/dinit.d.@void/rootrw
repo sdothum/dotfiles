@@ -2,6 +2,7 @@
 
 type       = scripted
 command    = /bin/mount -o remount,rw /
+# command  = /etc/dinit.d/scripts/rootrw
 restart    = false
 options    = starts-rwfs
 depends-on = filesystems

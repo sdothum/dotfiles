@@ -4,21 +4,22 @@
 # SEE: /etc/runit/core-services/05-misc.sh
 . /etc/runit/functions
 [ -r /etc/rc.conf ] && . /etc/rc.conf
-[ -z "${container+x}" ] || export VIRTUALIZATION=1
+[ -z "${container+x}" ] || export IS_CONTAINER=1
 
 case $1 in
 	stop )
 		# The system is being shut down
-		if [ -z "$VIRTUALIZATION" ]; then
+		if [ -z "$IS_CONTAINER" ]; then
 			msg "Saving random number seed..."
 			seedrng
 		fi
 		;;
+
 	*    )
 		install -m0664 -o root -g utmp /dev/null /run/utmp
 		halt -B  # for wtmp
 
-		if [ -z "$VIRTUALIZATION" ]; then
+		if [ -z "$IS_CONTAINER" ]; then
 			msg "Seeding random number generator..."
 			seedrng || true
 		fi

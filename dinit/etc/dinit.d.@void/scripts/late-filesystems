@@ -17,6 +17,7 @@ case "$1" in
 			fi
 		fi
 		;;
+
 	*    )
 		if [ -n "$LATE_FILESYSTEMS" ]; then
 			mount -a -v -t "$LATE_FILESYSTEMS"
