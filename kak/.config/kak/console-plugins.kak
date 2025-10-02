@@ -105,8 +105,8 @@ bundle hop.kak https://github.com/hadronized/hop.kak.git %{
 		hop-kak
 	}
 
-	addm %{ alpha 13 : map global buffer h ': hop-kak-sel<ret>'   -docstring 'hint    —— /register,words' }
-	addm %{ alpha 13 : map global buffer H ': hop-kak-words<ret>' -docstring 'hint    —— /register,words' }
+	addm %{ alpha h : map global buffer h ': hop-kak-sel<ret>'   -docstring 'hint    —— /register,words' }
+	addm %{ alpha i : map global buffer H ': hop-kak-words<ret>' -docstring 'hint    —— /register,words' }
 	map global normal <a-h> ': hop-kak-sel<ret>'   -docstring 'find selection (on page)'
 	map global normal <a-H> ': hop-kak-words<ret>' -docstring 'find word (on page)'
 } %{
@@ -165,10 +165,10 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 		peneira-symbols
 	}
 
-	addm %{ meta   0 : map global buffer <ret> ': buffers<ret>' -docstring 'buffers'    }
-	addm %{ alpha 23 : map global buffer e     ': files<ret>'   -docstring 'edit file' }
-	addm %{ alpha 13 : map global buffer f     ': lines<ret>'   -docstring '*fuzzy match line' }
-	addm %{ alpha 13 : map global buffer c     ': symbols<ret>' -docstring 'ctag symbols'      }
+	addm %{ meta  0 : map global buffer <ret> ': buffers<ret>' -docstring 'buffers'    }
+	addm %{ file  e : map global buffer e     ': files<ret>'   -docstring 'edit file' }
+	addm %{ alpha f : map global buffer f     ': lines<ret>'   -docstring 'fuzzy match line' }
+	addm %{ alpha c : map global buffer c     ': symbols<ret>' -docstring 'ctag symbols'      }
 }
 
 # .................................................................. search docs

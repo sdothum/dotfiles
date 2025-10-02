@@ -109,7 +109,9 @@ setm %{ edit   } %{ alpha   }
 setm %{ edit   } %{ snippet }
 setm %{ buffer } %{ meta    }
 setm %{ buffer } %{ alpha   }
+setm %{ buffer } %{ file    }
 setm %{ format } %{ align   }
+setm %{ format } %{ format  }
 setm %{ format } %{ comment }
 
 # info-notifier %{user-modes} %{<space>   edit\n<ret>     buffer\n#         format}
