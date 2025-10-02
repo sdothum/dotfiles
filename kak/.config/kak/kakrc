@@ -49,18 +49,21 @@ if %{ [ -n "$UNPLUG" ] || [ -n "$TEST"] } %{
 	hook global WinCreate    .*          %{ echo -debug setting %val{hook_param} }
 }
 
-# User-mode
+# User-mode prettifier
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# sorts user-mode popup lists by evaluating "setm" (map) *after* all map definitions are "addm"
+# NOTE: two unique (nop) line separators map (key, docstring) utf-8 chars U+00b7 and U+2027 (centered dot) respectively
 
 declare-option str usermodes ''
 
-# addm %{ group sortkey* : map scope user-mode .. }
+# addm %{ <group> [<sortkey>] : map <scope> <user-mode> <key> <command> -docstring <string> }
 define-command addm -params 1 %{
 	trace %arg{1}
 	set-option global usermodes "%sh{ echo ""$kak_opt_usermodes\n$(echo $1 | cut -d: -f2- | cut -d' ' -f4 )$1"" }"
 }
 
-# setm %{ user-mode } [ %{ group } ]
+# setm %{ <user-mode> } [ %{ <group> } ]
 define-command setm -params ..2 %{
 	trace %sh{ echo "$kak_opt_usermodes" | grep "^$(echo $1) $(echo $2) | sort" }
 	evaluate-commands %sh{ echo "$kak_opt_usermodes" | grep "^$(echo $1) $(echo $2)" | sort | cut -d: -f2- }
@@ -116,6 +119,6 @@ setm %{ format } %{ comment }
 
 # info-notifier %{user-modes} %{<space>   edit\n<ret>     buffer\n#         format}
 nop %sh{ notify 10 user-modes "&lt;<b>space</b>&gt;\tedit\n&lt;<b>ret</b>&gt;\tbuffer\n<b>#</b>\tformat" }
-nop %sh{ xdotool key g c }  # HACK: refreshes occaisonally stale cursorline at startup
+nop %sh{ xdotool key g c }  # center cursor, also HACK: refreshes occaisonally stale cursorline at startup
 
 # kak: filetype=kak

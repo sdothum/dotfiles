@@ -79,18 +79,6 @@ bundle kakoune-livedown https://github.com/Delapouite/kakoune-livedown.git %{
 	sudo npm install -g livedown
 }
 
-# ...................................................................... kakpipe
-
-bundle kakpipe https://github.com/eburghar/kakpipe.git %{
-	require-module kakpipe
-
-	# HACK: using alpha subsort to overcome "P,p" sort order (cause unknown)
-	addm %{ file p : map global buffer p ': kakpipe '    -docstring "kakpipe —— scratch,(background)" }
-	addm %{ file q : map global buffer P ': kakpipe-bg ' -docstring "kakpipe —— scratch,(background)" }
-} %{
-	cargo install --path . --root ~/.local
-}
-
 # ........................................................................ popup
 
 bundle popup.kak https://github.com/enricozb/popup.kak.git %{

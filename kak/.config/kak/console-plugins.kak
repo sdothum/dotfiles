@@ -27,9 +27,9 @@ if-else %{ [ -z "$DIFF" ] } %{
 # ................................................................... crosshairs
 
 bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
-	addm %{ meta 1 : map global buffer + ': crosshairs<ret>'   -docstring "visual  -- crosshairs,column,line"  }
-	addm %{ meta 2 : map global buffer | ': cursorcolumn<ret>' -docstring "visual  -- crosshairs,column,line" }
-	addm %{ meta 3 : map global buffer _ ': cursorline<ret>'   -docstring "visual  -- crosshairs,column,line" }
+	addm %{ meta 1 : map global buffer + ': crosshairs<ret>'   -docstring "visual  —— crosshairs,column,line"  }
+	addm %{ meta 2 : map global buffer | ': cursorcolumn<ret>' -docstring "visual  —— crosshairs,column,line" }
+	addm %{ meta 3 : map global buffer _ ': cursorline<ret>'   -docstring "visual  —— crosshairs,column,line" }
 	cursorline
 }
 
@@ -166,9 +166,21 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 	}
 
 	addm %{ meta  0 : map global buffer <ret> ': buffers<ret>' -docstring 'buffers'    }
-	addm %{ file  e : map global buffer e     ': files<ret>'   -docstring 'edit file' }
+	addm %{ file  1 : map global buffer e     ': files<ret>'   -docstring 'edit file' }
 	addm %{ alpha f : map global buffer f     ': lines<ret>'   -docstring 'fuzzy match line' }
 	addm %{ alpha c : map global buffer c     ': symbols<ret>' -docstring 'ctag symbols'      }
+}
+
+# ...................................................................... kakpipe
+
+bundle kakpipe https://github.com/eburghar/kakpipe.git %{
+	require-module kakpipe
+
+	# HACK: using alpha subsort to overcome "P,p" sort order (cause unknown)
+	addm %{ file 2 : map global buffer p ': kakpipe '    -docstring "pipe    —— *scratch*,(background)" }
+	addm %{ file 3 : map global buffer P ': kakpipe-bg ' -docstring "pipe    —— *scratch*,(background)" }
+} %{
+	cargo install --path . --root ~/.local
 }
 
 # .................................................................. search docs
