@@ -6,7 +6,7 @@
 # Modal UI
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# .................................................................. Colorscheme
+# .............................................................. GUI colorscheme
 
 if-else %{ [ -n "$DISPLAY" ] } %{
 	declare-option str theme 'duochrome'
@@ -44,7 +44,10 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 		}
 	}
 
+# ............................................................... Capslock event
+
 	# (??) capslock colorscheme switching defers until the first keystroke HACK: see sxhkdrc for Caps_Lock trigger
+
 	define-command capslock-check %{
 		trace %{ capslock-check }
 		if-else %{ capslock } %{
@@ -68,7 +71,10 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 		hook window PromptIdle .*                   capslock-check
 	}
 } %{
-	declare-option str theme %sh{ echo "${COLORSCHEME:-dabruin}" }
+
+# .......................................................... Console colorscheme
+
+declare-option str theme %sh{ echo "${COLORSCHEME:-dabruin}" }
 	colorscheme %opt{theme}
 }
 

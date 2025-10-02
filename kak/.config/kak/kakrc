@@ -49,19 +49,23 @@ if %{ [ -n "$UNPLUG" ] || [ -n "$TEST"] } %{
 	hook global WinCreate    .*          %{ echo -debug setting %val{hook_param} }
 }
 
-# User-mode prettifier
+# User-mode sort
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# sorts user-mode popup lists by evaluating "setm" (map) *after* all map definitions are "addm"
+# organize user mode popup lists by sort key
 # NOTE: two unique (nop) line separators map (key, docstring) utf-8 chars U+00b7 and U+2027 (centered dot) respectively
 
 declare-option str usermodes ''
+
+# .................................................................... Queue map
 
 # addm %{ <group> [<sortkey>] : map <scope> <user-mode> <key> <command> -docstring <string> }
 define-command addm -params 1 %{
 	trace %arg{1}
 	set-option global usermodes "%sh{ echo ""$kak_opt_usermodes\n$(echo $1 | cut -d: -f2- | cut -d' ' -f4 )$1"" }"
 }
+
+# ................................................................. Activate map
 
 # setm %{ <user-mode> } [ %{ <group> } ]
 define-command setm -params ..2 %{
@@ -105,7 +109,7 @@ source "%val{config}/ux.kak"
 declare-option str admonition "\s(((?i)(att(n|ention)|(be)*cause|bu[gt]|deprecated|donot|ex(ample)*|for|hack|hist(ory)*|important|note|see|tip|(to)*do|unknown|us(ag)*e|warn(ing)*):)|\([?][?]+\))\s"
 hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt{admonition} 1:WrapMarker }  # select field 1: (vs 0:) to not hilight the colon :)
 
-# construct user-mode lists
+# build sorted user-mode lists
 setm %{ edit   } %{ focus   }
 setm %{ edit   } %{ search  }
 setm %{ edit   } %{ clip    }

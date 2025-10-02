@@ -14,7 +14,7 @@ declare-user-mode format
 
 map global normal '#' ': enter-user-mode format<ret>'
 
-# ...................................................................... Comment
+# ....................................................................... Format
 
 addm %{ format  0 : map global format '·'     ': nop<ret>'                        -docstring '· · ·' }  # separator
 addm %{ format  1 : map global format <tab>   '%|unexpand --first-only -t<space>' -docstring 'tabs,spaces   (n spaces)' }
@@ -24,6 +24,9 @@ addm %{ format  b : map global format b       ': comment-block<ret>'            
 addm %{ format  c : map global format C       'x|comment c<ret>'                  -docstring '/* css */'   }
 addm %{ format  f : map global format f       ': refold<ret>'                     -docstring 'fold,unfold' }
 addm %{ format  f : map global format F       ': unfold<ret>'                     -docstring 'fold,unfold' }
+
+# ...................................................................... Comment
+
 addm %{ comment 0 : map global format '‧'     ': nop<ret>'                        -docstring '‧ ‧ ‧' }  # separator
 addm %{ comment l : map global format l       'x|comment l .<ret>'                -docstring 'leader    ... xxx' }
 addm %{ comment m : map global format t       'x|comment t .<ret>'                -docstring 'trailer   xxx ...' }
