@@ -104,9 +104,9 @@ hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt
 
 # construct user-mode lists
 setm %{ edit   } %{ focus   }
-setm %{ edit   } %{ snippet }
 setm %{ edit   } %{ search  }
 setm %{ edit   } %{ alpha   }
+setm %{ edit   } %{ snippet }
 setm %{ buffer } %{ meta    }
 setm %{ buffer } %{ alpha   }
 setm %{ format } %{ align   }

@@ -46,8 +46,8 @@ bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
 	define-command find-notify %{ nop %sh{ notify 30 critical "find & replace" "&lt;<b>ret</b>&gt;\tgoto buffer:line\n&lt;<b>c-^</b>&gt;\tcommit buffer edits\n&lt;<b>c-ret</b>&gt;\tbuffer (user-mode)" }}
 
 	# NOTE: <ret> jumps to buffer line, <c-ret> for buffer user-mode (to apply replace)
-	addm %{ alpha 5 : map global buffer f     ': find-notify<ret>: find '   -docstring "find    —— buffer:line,(commit buffer edits)" }
-	addm %{ alpha 6 : map global buffer <c-^> ': find-apply-changes<ret>;'  -docstring "find    —— buffer:line,(commit buffer edits)" }
+	addm %{ search f : map global edit f     ': find-notify<ret>: find '   -docstring "find      —— buffer:line,(commit buffer edits)" }
+	addm %{ search g : map global edit <c-^> ': find-apply-changes<ret>;'  -docstring "find      —— buffer:line,(commit buffer edits)" }
 	map global normal <c-^> ': find-apply-changes<ret>;' -docstring "commit buffer edits"
 }
 
@@ -105,8 +105,8 @@ bundle hop.kak https://github.com/hadronized/hop.kak.git %{
 		hop-kak
 	}
 
-	addm %{ alpha : map global edit h ': hop-kak-sel<ret>'   -docstring 'hint      —— /register,words' }
-	addm %{ alpha : map global edit H ': hop-kak-words<ret>' -docstring 'hint      —— /register,words' }
+	addm %{ alpha 13 : map global buffer h ': hop-kak-sel<ret>'   -docstring 'hint    —— /register,words' }
+	addm %{ alpha 13 : map global buffer H ': hop-kak-words<ret>' -docstring 'hint    —— /register,words' }
 	map global normal <a-h> ': hop-kak-sel<ret>'   -docstring 'find selection (on page)'
 	map global normal <a-H> ': hop-kak-words<ret>' -docstring 'find word (on page)'
 } %{
@@ -165,10 +165,10 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 		peneira-symbols
 	}
 
-	addm %{ meta  0 : map global buffer <ret> ': buffers<ret>' -docstring 'buffers' }
-	addm %{ alpha 5 : map global buffer e     ': files<ret>'   -docstring 'edit file' }
-	addm %{ alpha   : map global edit   f     ': lines<ret>'   -docstring '*fuzzy match line' }
-	addm %{ alpha   : map global edit   c     ': symbols<ret>' -docstring 'ctag symbols' }
+	addm %{ meta   0 : map global buffer <ret> ': buffers<ret>' -docstring 'buffers'    }
+	addm %{ alpha 23 : map global buffer e     ': files<ret>'   -docstring 'edit file' }
+	addm %{ alpha 13 : map global buffer f     ': lines<ret>'   -docstring '*fuzzy match line' }
+	addm %{ alpha 13 : map global buffer c     ': symbols<ret>' -docstring 'ctag symbols'      }
 }
 
 # .................................................................. search docs
