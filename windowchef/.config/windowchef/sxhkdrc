@@ -128,7 +128,9 @@ super + {_,shift} + z
 # ......................................................................... swap
 
 alt + super + {Left,Down,Up,Right}
-	window swap {west, south, north, east}
+	W=$(pfw)                               ;\
+	window swap {west, south, north, east} ;\
+	waitron window_focus $W
 
 # ......................................................................... move
 
