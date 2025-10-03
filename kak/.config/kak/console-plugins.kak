@@ -27,9 +27,9 @@ if-else %{ [ -z "$DIFF" ] } %{
 # ................................................................... crosshairs
 
 bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
-	addm %{ meta 1 : map global buffer + ': crosshairs<ret>'   -docstring "visual  —— crosshairs,column,line"  }
-	addm %{ meta 2 : map global buffer | ': cursorcolumn<ret>' -docstring "visual  —— crosshairs,column,line" }
-	addm %{ meta 3 : map global buffer _ ': cursorline<ret>'   -docstring "visual  —— crosshairs,column,line" }
+	addm %{ focus c : map global edit + ': crosshairs<ret>'   -docstring "visual     —— crosshairs,column,line"  }
+	addm %{ focus c : map global edit | ': cursorcolumn<ret>' -docstring "visual     —— crosshairs,column,line" }
+	addm %{ focus c : map global edit _ ': cursorline<ret>'   -docstring "visual     —— crosshairs,column,line" }
 	cursorline
 }
 
@@ -46,8 +46,8 @@ bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
 	define-command find-notify %{ nop %sh{ notify 30 critical "find & replace" "&lt;<b>ret</b>&gt;\tgoto buffer:line\n&lt;<b>c-^</b>&gt;\tcommit buffer edits\n&lt;<b>c-ret</b>&gt;\tbuffer (user-mode)" }}
 
 	# NOTE: <ret> jumps to buffer line, <c-ret> for buffer user-mode (to apply replace)
-	addm %{ search f : map global edit f     ': find-notify<ret>: find '   -docstring "find      —— buffer:line,(commit buffer edits)" }
-	addm %{ search g : map global edit <c-^> ': find-apply-changes<ret>;'  -docstring "find      —— buffer:line,(commit buffer edits)" }
+	addm %{ search f : map global edit f     ': find-notify<ret>: find '   -docstring "find       —— buffer:line,(commit buffer edits)" }
+	addm %{ search g : map global edit <c-^> ': find-apply-changes<ret>;'  -docstring "find       —— buffer:line,(commit buffer edits)" }
 	map global normal <c-^> ': find-apply-changes<ret>;' -docstring "commit buffer edits"
 }
 
@@ -177,8 +177,8 @@ bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 	require-module kakpipe
 
 	# HACK: using alpha subsort to overcome "P,p" sort order (cause unknown)
-	addm %{ file 2 : map global buffer p ': kakpipe '    -docstring "pipe    —— *scratch*,(background)" }
-	addm %{ file 3 : map global buffer P ': kakpipe-bg ' -docstring "pipe    —— *scratch*,(background)" }
+	addm %{ alpha p : map global buffer p ': kakpipe '    -docstring "pipe    —— *scratch*,(background)" }
+	addm %{ alpha q : map global buffer P ': kakpipe-bg ' -docstring "pipe    —— *scratch*,(background)" }
 } %{
 	cargo install --path . --root ~/.local
 }

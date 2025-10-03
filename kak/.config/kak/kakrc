@@ -53,7 +53,7 @@ if %{ [ -n "$UNPLUG" ] || [ -n "$TEST"] } %{
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # organize user mode popup lists by sort key
-# NOTE: two unique (nop) line separators map (key, docstring) utf-8 chars U+00b7 and U+2027 (centered dot) respectively
+# NOTE: two unique (nop) line separators map (key, docstring) utf-8 chars U+00b7 and U+2027 (centered dot) respectively SEE: ux.kak
 
 declare-option str usermodes ''
 

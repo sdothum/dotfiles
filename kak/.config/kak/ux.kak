@@ -16,32 +16,32 @@ map global normal '#' ': enter-user-mode format<ret>'
 
 # ....................................................................... Format
 
-addm %{ format  0 : map global format '·'     ': nop<ret>'                        -docstring '· · ·' }  # separator
+addm %{ format  0 : map global format '·'     ': nop<ret>'                        -docstring '······' }  # separator
 addm %{ format  1 : map global format <tab>   '%|unexpand --first-only -t<space>' -docstring 'tabs,spaces   (n spaces)' }
 addm %{ format  2 : map global format <s-tab> '%|expand --init -t<space>'         -docstring 'tabs,spaces   (n spaces)' }
-addm %{ format  a : map global format c       ': comment-line<ret>'               -docstring 'comment,block (kak)' }
+addm %{ format  a : map global format <c-c>   ': comment-line<ret>'               -docstring 'comment,block (kak)' }
 addm %{ format  b : map global format b       ': comment-block<ret>'              -docstring 'comment,block (kak)' }
-addm %{ format  c : map global format C       'x|comment c<ret>'                  -docstring '/* css */'   }
+addm %{ format  c : map global format c       'x|comment c<ret>'                  -docstring '/* css */'   }
+addm %{ format  c : map global format '`'     'x|comment \`<ret>'                 -docstring 'markdown ``   (code block)' }
 addm %{ format  f : map global format f       ': refold<ret>'                     -docstring 'fold,unfold' }
 addm %{ format  f : map global format F       ': unfold<ret>'                     -docstring 'fold,unfold' }
 
 # ...................................................................... Comment
 
-addm %{ comment 0 : map global format '‧'     ': nop<ret>'                        -docstring '‧ ‧ ‧' }  # separator
+addm %{ comment 0 : map global format '‧'     ': nop<ret>'                        -docstring '‧‧‧‧‧‧' }  # separator
 addm %{ comment l : map global format l       'x|comment l .<ret>'                -docstring 'leader    ... xxx' }
 addm %{ comment m : map global format t       'x|comment t .<ret>'                -docstring 'trailer   xxx ...' }
 addm %{ comment r : map global format R       'x|comment r =<ret>'                -docstring 'ruler     ═══'     }
 addm %{ comment s : map global format r       'x|comment r --<ret>'               -docstring 'ruler     ━━━'     }
 addm %{ comment u : map global format U       'x|comment u =<ret>'                -docstring 'underline ═══'     }
 addm %{ comment v : map global format u       'x|comment u --<ret>'               -docstring 'underline ━━━'     }
-addm %{ comment x : map global format '`'     'x|comment `<ret>'                  -docstring 'css       <code></code> block' }
 
 define-command refold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|comment f $kak_opt_autowrap_column<ret>" }}}
 define-command unfold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys 'x|comment F<ret>' }}  # (??) utf-8 sed errors from kak shell
 
 map global normal <c-l> ': comment-line<ret>' -docstring 'comment'  # beakl key position for "#" NOTE: <c-c> unmappable
 
-# .................................................................... Alignment
+# ........................................................................ Align
 
 addm %{ align a : map global format <space> 'x|align '          -docstring 'align space   nth+1 word'   }
 addm %{ align b : map global format <minus> 'x|align --<ret>'   -docstring 'align    --   comment'      }
@@ -79,12 +79,12 @@ map global normal <c-n>   ':<space>yank-ring-next<ret>'
 # auto update clipoard with yank, change and delete actions
 hook global RegisterModified '"' %{ nop %sh{ printf %s "$kak_main_reg_dquote" | xsel --input --clipboard }}
 
-addm %{ clip 0 : map global edit '‧'   ': nop<ret>'       -docstring '‧ ‧ ‧' }  # separator
+addm %{ clip 0 : map global edit '‧'   ': nop<ret>'       -docstring '‧‧‧‧‧‧' }  # separator
 # addm %{ clip p : map global edit y '<a-|> xsel --input --clipboard<ret>'  -docstring 'clipboard yank' }  # SEE: above
 # addm %{ clip p : map global edit d '| xsel --input --clipboard<ret>'      -docstring 'clipboard cut' }
-addm %{ clip p : map global edit p '<a-!> xsel --outafter --clipboard<ret>' -docstring 'clipboard —— after,before,replace' }
-addm %{ clip p : map global edit P '! xsel --outafter --clipboard<ret>'     -docstring 'clipboard —— after,before,replace' }
-addm %{ clip p : map global edit R '| xsel --output --clipboard<ret>'       -docstring 'clipboard —— after,before,replace' }
+addm %{ clip p : map global edit p '<a-!> xsel --outafter --clipboard<ret>' -docstring 'clipboard  —— after,before,replace' }
+addm %{ clip p : map global edit P '! xsel --outafter --clipboard<ret>'     -docstring 'clipboard  —— after,before,replace' }
+addm %{ clip p : map global edit R '| xsel --output --clipboard<ret>'       -docstring 'clipboard  —— after,before,replace' }
 
 # Selection
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -104,20 +104,20 @@ map global normal <a-=> '}p'     -docstring 'extend to next paragraph'
 
 # .................................................................... Searching
 
-addm %{ search 0 : map global edit '·'   ': nop<ret>'        -docstring '· · ·' }  # separator
-addm %{ search 1 : map global edit /     '/(?i)'             -docstring 'isearch   —— prev,next' }
-addm %{ search 1 : map global edit '\'   '<a-/>(?i)'         -docstring 'isearch   —— prev,next' }
-addm %{ search 2 : map global edit >     '?(?i)'             -docstring 'iextend   —— prev,next' }
-addm %{ search 2 : map global edit <     '<a-?>(?i)'         -docstring 'iextend   —— prev,next' }
+addm %{ search 0 : map global edit '·'   ': nop<ret>'        -docstring '······' }  # separator
+addm %{ search 1 : map global edit /     '/(?i)'             -docstring 'isearch    —— prev,next' }
+addm %{ search 1 : map global edit '\'   '<a-/>(?i)'         -docstring 'isearch    —— prev,next' }
+addm %{ search 2 : map global edit >     '?(?i)'             -docstring 'iextend    —— prev,next' }
+addm %{ search 2 : map global edit <     '<a-?>(?i)'         -docstring 'iextend    —— prev,next' }
 
 # .............................................................. Split selection
 
-addm %{ search d : map global edit m     ': mkd-para<ret>'  -docstring 'markdown  —— paragraphs,tables,code' }
-addm %{ search d : map global edit M     ': mkd-table<ret>' -docstring 'markdown  —— paragraphs,tables,code' }
-addm %{ search e : map global edit <c-m> ': mkd-code<ret>'  -docstring 'markdown  —— paragraphs,tables,code' }
+addm %{ search d : map global edit m     ': mkd-para<ret>'  -docstring 'markdown   —— paragraphs,tables,code' }
+addm %{ search d : map global edit M     ': mkd-table<ret>' -docstring 'markdown   —— paragraphs,tables,code' }
+addm %{ search e : map global edit <c-m> ': mkd-code<ret>'  -docstring 'markdown   —— paragraphs,tables,code' }
 
-addm %{ search 3 : map global edit s     'x<a-s>s'          -docstring 'split     —— select,iselect' }
-addm %{ search 3 : map global edit S     'x<a-s>s(?i)'      -docstring 'split     —— select,iselect' }
+addm %{ search 3 : map global edit s     'x<a-s>s'          -docstring 'split      —— select,iselect' }
+addm %{ search 3 : map global edit S     'x<a-s>s(?i)'      -docstring 'split      —— select,iselect' }
 
 define-command mkd-para  %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[^|`]<ret>x' }}
 define-command mkd-table %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[|]<ret>x'   }}
@@ -133,7 +133,7 @@ declare-user-mode buffer
 
 map global normal <ret>   ': enter-user-mode buffer<ret>'
 map global normal <c-ret> ': enter-user-mode buffer<ret>'  # for find *scratch* buffer
-addm %{ focus 1 : map global edit <ret> ': enter-user-mode buffer<ret>' -docstring 'buffer user-mode' }
+addm %{ focus b : map global edit <ret> ': enter-user-mode buffer<ret>' -docstring 'buffer user-mode' }
 
 # no sudo-write-all so sync root owned files on buffer switching
 define-command sync %{
@@ -174,9 +174,9 @@ hook global WinSetOption filetype=diff %{
 	add-highlighter buffer/diff-allow-one-trailing-space regex '^ ' 0:Default
 }
 
-addm %{ alpha 0 : map global buffer '·' ': nop<ret>'                       -docstring '· · ·' }  # separator
-addm %{ alpha b : map global buffer *   ': buffer *debug*<ret>'            -docstring '*debug*'   }
-addm %{ file  0 : map global buffer '‧' ': nop<ret>'                       -docstring '‧ ‧ ‧' }  # separator
+addm %{ alpha 0 : map global buffer '·' ': nop<ret>'                       -docstring '······' }  # separator
+addm %{ meta  b : map global buffer *   ': buffer *debug*<ret>'            -docstring '*debug*'   }
+addm %{ file  0 : map global buffer '‧' ': nop<ret>'                       -docstring '‧‧‧‧‧‧' }  # separator
 addm %{ file  d : map global buffer d   ': sync<ret>: delete-buffer<ret>'  -docstring 'delete  —— save,discard!'  }
 addm %{ file  e : map global buffer D   ': delete-buffer!<ret>'            -docstring 'delete  —— save,discard!'  }
 # SEE: kakpipe alpha subsort in xdisplay-plugins
@@ -191,7 +191,7 @@ map global insert <c-w> '<esc>: sync<ret>i' -docstring 'write'
 # Terminal / shell
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-addm %{ alpha t : map global buffer t ': nop %sh{ term >/dev/null 2>&1 }<ret>' -docstring 'terminal'      }
+addm %{ meta  t : map global buffer t ': nop %sh{ term >/dev/null 2>&1 }<ret>' -docstring 'terminal'      }
 addm %[ alpha i : map global buffer i ': echo %sh{ % }<left><left>'            -docstring 'inspect %{..}' ]  # ATTENTION: %[] to escape '{}' :)
 
 # kak: filetype=kak

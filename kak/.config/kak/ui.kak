@@ -6,7 +6,7 @@
 # Modal UI
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# .............................................................. GUI colorscheme
+# ............................................................. Term colorscheme
 
 if-else %{ [ -n "$DISPLAY" ] } %{
 	declare-option str theme 'duochrome'
@@ -46,7 +46,7 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 
 # ............................................................... Capslock event
 
-	# (??) capslock colorscheme switching defers until the first keystroke HACK: see sxhkdrc for Caps_Lock trigger
+	# (??) capslock colorscheme switching defers until the next keystroke HACK: see sxhkdrc for Caps_Lock trigger
 
 	define-command capslock-check %{
 		trace %{ capslock-check }
@@ -107,7 +107,7 @@ define-command cursor-mode %{
 	}
 }
 
-addm %{ meta 4 : map global buffer T   ': cursor-mode<ret>'  -docstring "typewriter scroll" }
+addm %{ focus t : map global edit t   ': cursor-mode<ret>'  -docstring "typewriter scroll" }
 
 hook global WinSetOption filetype=markdown %{ set-option window typewriter true }
 hook global WinDisplay .* %{ cursor-mode }
