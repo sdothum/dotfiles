@@ -27,9 +27,9 @@ if-else %{ [ -z "$DIFF" ] } %{
 # ................................................................... crosshairs
 
 bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
-	addm %{ focus c : map global edit + ': crosshairs<ret>'   -docstring "visual     —— crosshairs,column,line"  }
-	addm %{ focus c : map global edit | ': cursorcolumn<ret>' -docstring "visual     —— crosshairs,column,line" }
-	addm %{ focus c : map global edit _ ': cursorline<ret>'   -docstring "visual     —— crosshairs,column,line" }
+	addm %{ focus x1 : map global edit + ': crosshairs<ret>'   -docstring "visual     —— crosshairs,column,line"  }
+	addm %{ focus x2 : map global edit | ': cursorcolumn<ret>' -docstring "visual     —— crosshairs,column,line" }
+	addm %{ focus x3 : map global edit _ ': cursorline<ret>'   -docstring "visual     —— crosshairs,column,line" }
 	cursorline
 }
 
@@ -46,8 +46,8 @@ bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
 	define-command find-notify %{ nop %sh{ notify 30 critical "find & replace" "&lt;<b>ret</b>&gt;\tgoto buffer:line\n&lt;<b>c-^</b>&gt;\tcommit buffer edits\n&lt;<b>c-ret</b>&gt;\tbuffer (user-mode)" }}
 
 	# NOTE: <ret> jumps to buffer line, <c-ret> for buffer user-mode (to apply replace)
-	addm %{ search f : map global edit f     ': find-notify<ret>: find '   -docstring "find       —— buffer:line,(commit buffer edits)" }
-	addm %{ search g : map global edit <c-^> ': find-apply-changes<ret>;'  -docstring "find       —— buffer:line,(commit buffer edits)" }
+	addm %{ search f1 : map global edit f     ': find-notify<ret>: find '   -docstring "find       —— /buffer:line,(commit edits)" }
+	addm %{ search f2 : map global edit <c-^> ': find-apply-changes<ret>;'  -docstring "find       —— /buffer:line,(commit edits)" }
 	map global normal <c-^> ': find-apply-changes<ret>;' -docstring "commit buffer edits"
 }
 
@@ -105,8 +105,8 @@ bundle hop.kak https://github.com/hadronized/hop.kak.git %{
 		hop-kak
 	}
 
-	addm %{ alpha h : map global buffer h ': hop-kak-sel<ret>'   -docstring 'hint    —— /register,words' }
-	addm %{ alpha i : map global buffer H ': hop-kak-words<ret>' -docstring 'hint    —— /register,words' }
+	addm %{ goto h1 : map global buffer h ': hop-kak-sel<ret>'   -docstring 'hint    —— /register,words' }
+	addm %{ goto h2 : map global buffer H ': hop-kak-words<ret>' -docstring 'hint    —— /register,words' }
 	map global normal <a-h> ': hop-kak-sel<ret>'   -docstring 'find selection (on page)'
 	map global normal <a-H> ': hop-kak-words<ret>' -docstring 'find word (on page)'
 } %{
@@ -165,10 +165,11 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 		peneira-symbols
 	}
 
-	addm %{ meta  0 : map global buffer <ret> ': buffers<ret>' -docstring 'buffers'    }
-	addm %{ file  1 : map global buffer e     ': files<ret>'   -docstring 'edit file' }
-	addm %{ alpha f : map global buffer f     ': lines<ret>'   -docstring 'fuzzy match line' }
-	addm %{ alpha c : map global buffer c     ': symbols<ret>' -docstring 'ctag symbols'      }
+	nopm %{ goto 0 : buffer }
+	addm %{ meta b : map global buffer <ret> ': buffers<ret>' -docstring 'buffers'    }
+	addm %{ file 1 : map global buffer e     ': files<ret>'   -docstring 'edit file' }
+	addm %{ goto c : map global buffer c     ': symbols<ret>' -docstring 'ctag symbols'      }
+	addm %{ goto f : map global buffer f     ': lines<ret>'   -docstring 'fuzzy match line' }
 }
 
 # ...................................................................... kakpipe
@@ -177,8 +178,8 @@ bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 	require-module kakpipe
 
 	# HACK: using alpha subsort to overcome "P,p" sort order (cause unknown)
-	addm %{ test p : map global buffer p ': kakpipe '    -docstring "pipe    —— *scratch*,(background)" }
-	addm %{ test q : map global buffer P ': kakpipe-bg ' -docstring "pipe    —— *scratch*,(background)" }
+	addm %{ test p1 : map global buffer p ': kakpipe '    -docstring "pipe    —— *scratch*,(background)" }
+	addm %{ test p2 : map global buffer P ': kakpipe-bg ' -docstring "pipe    —— *scratch*,(background)" }
 } %{
 	cargo install --path . --root ~/.local
 }

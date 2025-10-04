@@ -60,16 +60,16 @@ declare-option str usermodes ''
 
 # addm %{ <group> [<sortkey>] : map global <user-mode> <key> <command> -docstring <string> }
 define-command addm -params 1 %{
-	trace %arg{1}
+	# nop %sh{ echo "$1" >>/tmp/kak:trace }
 	set-option global usermodes "%sh{ echo ""$kak_opt_usermodes\n$(echo $1 | cut -d: -f2- | cut -d' ' -f4 )$1"" }"
 }
 
 # ...................................................... nop user-mode separator
 
-# nopm %{ <group> [<sortkey>] : <user-mode> [+|-|=] }
+# nopm %{ <group> [<sortkey>] : <user-mode> [+|-|=] }  # NOTE: select up to 3 separators (+-=) within a single user-mode popup list
 define-command nopm -params 1 %{
 	evaluate-commands %sh{
-		docstring() { for i in $(seq 1 7) ;do echo -n $K ;done }
+		docstring() { for i in $(seq 1 32) ;do echo -n '⠀' ;done; echo -n $K; }  # U+2800 (braille blank) avoids space char trimming
 
 		S=${1%%:*}
 		set -- ${1#*:}
@@ -79,17 +79,20 @@ define-command nopm -params 1 %{
 			= ) K=ꞏ; D=$(docstring) ;;  # U+a78f
 			* ) K=·; D=$(docstring) ;;  # U+00b7
 		esac
-		# NOTE: remove any {} argument spaces for consistent setm sort
+		# NOTE: remove any {} argument spaces for consistent setm full line sort
 		echo "addm %{ $S : map global $1 '$K' ': nop<ret>' -docstring '$D' }" | sed 's/  */ /g'
 	}
 }
 
-	# ................................................................. Activate map
+# ................................................................. Activate map
 
-# setm %{ <user-mode> } [ %{ <group> } ]
-define-command setm -params ..2 %{
-	trace %sh{ echo "$kak_opt_usermodes" | grep "^$(echo $1) $(echo $2) | sort" }
-	evaluate-commands %sh{ echo "$kak_opt_usermodes" | grep "^$(echo $1) $(echo $2)" | sort | cut -d: -f2- }
+# setm %{ <user-mode> [: <group>] }
+define-command setm -params 1 %{
+	evaluate-commands %sh{
+		M=$(echo ${1%%:*})
+		[ "${1%%:*}" = "${1#*:}" ] || G=$(echo ${1#*:})
+		echo "$kak_opt_usermodes" | grep "^$M $G" | sort | cut -d: -f2-
+	}
 }
 
 # Plugins
@@ -128,19 +131,19 @@ source "%val{config}/ux.kak"
 declare-option str admonition "\s(((?i)(att(n|ention)|(be)*cause|bu[gt]|deprecated|donot|ex(ample)*|for|hack|hist(ory)*|important|note|see|tip|(to)*do|unknown|us(ag)*e|warn(ing)*):)|\([?][?]+\))\s"
 hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt{admonition} 1:WrapMarker }  # select field 1: (vs 0:) to not hilight the colon :)
 
-# build sorted user-mode lists
-setm %{ edit   } %{ focus   }
-setm %{ edit   } %{ search  }
-setm %{ edit   } %{ clip    }
-setm %{ edit   } %{ snippet }
-setm %{ edit   } %{ mode    }
-setm %{ buffer } %{ meta    }
-setm %{ buffer } %{ alpha   }
-setm %{ buffer } %{ test    }
-setm %{ buffer } %{ file    }
-setm %{ format } %{ align   }
-setm %{ format } %{ format  }
-setm %{ format } %{ comment }
+# build visually organized user-mode lists
+setm %{ edit   : focus   }
+setm %{ edit   : search  }
+setm %{ edit   : paste   }
+setm %{ edit   : mode    }
+setm %{ buffer : meta    }
+setm %{ buffer : goto    }
+setm %{ buffer : test    }
+setm %{ buffer : file    }
+setm %{ format : format  }
+setm %{ format : align   }
+setm %{ format : comment }
+setm %{ format : line    }
 
 # info-notifier %{user-modes} %{<space>   edit\n<ret>     buffer\n#         format}
 nop %sh{ notify 10 user-modes "&lt;<b>space</b>&gt;\tedit\n&lt;<b>ret</b>&gt;\tbuffer\n<b>#</b>\tformat" }
