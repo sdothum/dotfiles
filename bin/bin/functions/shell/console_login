@@ -27,7 +27,8 @@ if [ $USER != root ] ;then
 		# assign deadline scheduler to SSD boot drive
 		if [ $(hostname) = $SERVER ] ;then
 			if [ ! -e /tmp/ssd:scheduler ] ;then
-				ssd=$(ls -l /dev/disk/by-id/*ata* >/dev/null | grep Samsung_SSD | head -1 | cut -d/ -f7)
+				# nvme drive check for newer mobo's
+				[ -e /dev/nvme0n1p1 ] || ssd=$(ls -l /dev/disk/by-id/*ata* >/dev/null | grep Samsung_SSD | head -1 | cut -d/ -f7)
 				if [ $ssd ] ;then
 					# virtual block devices must be referenced explicitly
 					case $ssd in
