@@ -16,7 +16,7 @@ map global normal '#' ': enter-user-mode format<ret>'
 
 # ....................................................................... Format
 
-addm %{ format  0 : map global format '·'     ': nop<ret>'                        -docstring '······' }  # separator
+sep1 %{ format  0 : format }
 addm %{ format  1 : map global format <tab>   '%|unexpand --first-only -t<space>' -docstring 'tabs,spaces   (n spaces)' }
 addm %{ format  2 : map global format <s-tab> '%|expand --init -t<space>'         -docstring 'tabs,spaces   (n spaces)' }
 addm %{ format  a : map global format <c-c>   ': comment-line<ret>'               -docstring 'comment,block (kak)' }
@@ -28,7 +28,7 @@ addm %{ format  f : map global format F       ': unfold<ret>'                   
 
 # ...................................................................... Comment
 
-addm %{ comment 0 : map global format '‧'     ': nop<ret>'                        -docstring '‧‧‧‧‧‧' }  # separator
+sep2 %{ comment 0 : format }
 addm %{ comment l : map global format l       'x|comment l .<ret>'                -docstring 'leader    ... xxx' }
 addm %{ comment m : map global format t       'x|comment t .<ret>'                -docstring 'trailer   xxx ...' }
 addm %{ comment r : map global format R       'x|comment r =<ret>'                -docstring 'ruler     ═══'     }
@@ -79,9 +79,7 @@ map global normal <c-n>   ':<space>yank-ring-next<ret>'
 # auto update clipoard with yank, change and delete actions
 hook global RegisterModified '"' %{ nop %sh{ printf %s "$kak_main_reg_dquote" | xsel --input --clipboard }}
 
-addm %{ clip 0 : map global edit '‧'   ': nop<ret>'       -docstring '‧‧‧‧‧‧' }  # separator
-# addm %{ clip p : map global edit y '<a-|> xsel --input --clipboard<ret>'  -docstring 'clipboard yank' }  # SEE: above
-# addm %{ clip p : map global edit d '| xsel --input --clipboard<ret>'      -docstring 'clipboard cut' }
+sep2 %{ clip 0 : edit } 
 addm %{ clip p : map global edit p '<a-!> xsel --outafter --clipboard<ret>' -docstring 'clipboard  —— after,before,replace' }
 addm %{ clip p : map global edit P '! xsel --outafter --clipboard<ret>'     -docstring 'clipboard  —— after,before,replace' }
 addm %{ clip p : map global edit R '| xsel --output --clipboard<ret>'       -docstring 'clipboard  —— after,before,replace' }
@@ -104,7 +102,7 @@ map global normal <a-=> '}p'     -docstring 'extend to next paragraph'
 
 # .................................................................... Searching
 
-addm %{ search 0 : map global edit '·'   ': nop<ret>'        -docstring '······' }  # separator
+sep1 %{ search 0 : edit }
 addm %{ search 1 : map global edit /     '/(?i)'             -docstring 'isearch    —— prev,next' }
 addm %{ search 1 : map global edit '\'   '<a-/>(?i)'         -docstring 'isearch    —— prev,next' }
 addm %{ search 2 : map global edit >     '?(?i)'             -docstring 'iextend    —— prev,next' }
@@ -174,11 +172,11 @@ hook global WinSetOption filetype=diff %{
 	add-highlighter buffer/diff-allow-one-trailing-space regex '^ ' 0:Default
 }
 
-addm %{ alpha 0 : map global buffer '·' ': nop<ret>'                       -docstring '······' }  # separator
+sep1 %{ alpha 0 : buffer }
 addm %{ meta  b : map global buffer *   ': buffer *debug*<ret>'            -docstring '*debug*'   }
-addm %{ file  0 : map global buffer '‧' ': nop<ret>'                       -docstring '‧‧‧‧‧‧' }  # separator
-addm %{ file  d : map global buffer d   ': sync<ret>: delete-buffer<ret>'  -docstring 'delete  —— save,discard!'  }
-addm %{ file  e : map global buffer D   ': delete-buffer!<ret>'            -docstring 'delete  —— save,discard!'  }
+sep2 %{ file  0 : buffer }
+addm %{ file  d : map global buffer d   ': sync<ret>: delete-buffer<ret>'  -docstring 'delete  —— with save,discard!'  }
+addm %{ file  e : map global buffer D   ': delete-buffer!<ret>'            -docstring 'delete  —— with save,discard!'  }
 # SEE: kakpipe alpha subsort in xdisplay-plugins
 addm %{ file  q : map global buffer q   ': quit!<ret>'                     -docstring 'quit!' }
 addm %{ file  w : map global buffer w   ': sync<ret>'                      -docstring 'write   —— save,and quit!' }

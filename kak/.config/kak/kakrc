@@ -49,20 +49,31 @@ if %{ [ -n "$UNPLUG" ] || [ -n "$TEST"] } %{
 	hook global WinCreate    .*          %{ echo -debug setting %val{hook_param} }
 }
 
-# User-mode sort
+# User-mode order manager
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # organize user mode popup lists by sort key
-# NOTE: two unique (nop) line separators map (key, docstring) utf-8 chars U+00b7 and U+2027 (centered dot) respectively SEE: ux.kak
 
 declare-option str usermodes ''
 
 # .................................................................... Queue map
 
-# addm %{ <group> [<sortkey>] : map <scope> <user-mode> <key> <command> -docstring <string> }
+# addm %{ <group> [<sortkey>] : map global <user-mode> <key> <command> -docstring <string> }
 define-command addm -params 1 %{
 	trace %arg{1}
 	set-option global usermodes "%sh{ echo ""$kak_opt_usermodes\n$(echo $1 | cut -d: -f2- | cut -d' ' -f4 )$1"" }"
+}
+
+# ...................................................... nop user-mode separator
+
+# sep1 %{ <group> [<sortkey>] : <user-mode> }  NOTE: sed to remove any {} argument spaces to match corresponding addm statements
+define-command sep1 -params 1 %{
+	evaluate-commands %sh{ echo "addm %{ ${1%%:*} : map global ${1#*:} '·' ': nop<ret>' -docstring '······' }" | sed 's/  */ /g' }  # U+00b7
+}
+
+# NOTE: multiple separators within a single user-mode list must map unique keys and docstrings (to display as separate lines)
+define-command sep2 -params 1 %{
+	evaluate-commands %sh{ echo "addm %{ ${1%%:*} : map global ${1#*:} '‧' ': nop<ret>' -docstring '‧‧‧‧‧‧' }" | sed 's/  */ /g' }  # U+2027
 }
 
 # ................................................................. Activate map
