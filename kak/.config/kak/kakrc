@@ -66,17 +66,25 @@ define-command addm -params 1 %{
 
 # ...................................................... nop user-mode separator
 
-# sep1 %{ <group> [<sortkey>] : <user-mode> }  NOTE: sed to remove any {} argument spaces to match corresponding addm statements
-define-command sep1 -params 1 %{
-	evaluate-commands %sh{ echo "addm %{ ${1%%:*} : map global ${1#*:} '·' ': nop<ret>' -docstring '······' }" | sed 's/  */ /g' }  # U+00b7
+# nopm %{ <group> [<sortkey>] : <user-mode> [+|-|=] }
+define-command nopm -params 1 %{
+	evaluate-commands %sh{
+		docstring() { for i in $(seq 1 7) ;do echo -n $K ;done }
+
+		S=${1%%:*}
+		set -- ${1#*:}
+		# NOTE: multiple separators within a single user-mode list must map unique keys and docstrings (to display as separate lines)
+		case "$2" in
+			- ) K=‧; D=$(docstring) ;;  # U+2027
+			= ) K=ꞏ; D=$(docstring) ;;  # U+a78f
+			* ) K=·; D=$(docstring) ;;  # U+00b7
+		esac
+		# NOTE: remove any {} argument spaces for consistent setm sort
+		echo "addm %{ $S : map global $1 '$K' ': nop<ret>' -docstring '$D' }" | sed 's/  */ /g'
+	}
 }
 
-# NOTE: multiple separators within a single user-mode list must map unique keys and docstrings (to display as separate lines)
-define-command sep2 -params 1 %{
-	evaluate-commands %sh{ echo "addm %{ ${1%%:*} : map global ${1#*:} '‧' ': nop<ret>' -docstring '‧‧‧‧‧‧' }" | sed 's/  */ /g' }  # U+2027
-}
-
-# ................................................................. Activate map
+	# ................................................................. Activate map
 
 # setm %{ <user-mode> } [ %{ <group> } ]
 define-command setm -params ..2 %{
@@ -125,8 +133,10 @@ setm %{ edit   } %{ focus   }
 setm %{ edit   } %{ search  }
 setm %{ edit   } %{ clip    }
 setm %{ edit   } %{ snippet }
+setm %{ edit   } %{ mode    }
 setm %{ buffer } %{ meta    }
 setm %{ buffer } %{ alpha   }
+setm %{ buffer } %{ test    }
 setm %{ buffer } %{ file    }
 setm %{ format } %{ align   }
 setm %{ format } %{ format  }

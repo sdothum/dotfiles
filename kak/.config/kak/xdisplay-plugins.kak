@@ -42,7 +42,7 @@ bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 		map global object D     '<a-semicolon>lsp-diagnostic-object<ret>'                    -docstring 'LSP errors'
 	}
 
-	addm %{ snippet l : map global edit l ': enter-user-mode lsp<ret>' -docstring "LSP mode" }
+	addm %{ mode l : map global edit L ': enter-user-mode lsp<ret>' -docstring "LSP mode" }
 } %{
 	# nop # NOTE: freezing kak-lsp at v17.2.1 for now due to change from TOML file for kak-lsp configuraton
 	cargo install --locked --force --path .

@@ -107,7 +107,7 @@ define-command cursor-mode %{
 	}
 }
 
-addm %{ focus t : map global edit t   ': cursor-mode<ret>'  -docstring "typewriter scroll" }
+addm %{ focus 2 : map global edit t   ': cursor-mode<ret>'  -docstring "typewriter scroll" }
 
 hook global WinSetOption filetype=markdown %{ set-option window typewriter true }
 hook global WinDisplay .* %{ cursor-mode }
