@@ -23,7 +23,6 @@ addm %{ block   f2 : map global format F       ': unfold<ret>'                  
 
 # ...................................................................... Comment
 
-# sepm %{ comment    : format }
 addm %{ comment c1 : map global format <c-c>   ': comment-line<ret>'               -docstring 'comment,block  (kak)' }
 addm %{ comment c2 : map global format c       ': comment-block<ret>'              -docstring 'comment,block  (kak)' }
 addm %{ comment h  : map global format h       'x|comment c<ret>'                  -docstring '/* css */'   }
@@ -31,7 +30,6 @@ addm %{ comment m  : map global format '`'     'x|comment \`<ret>'              
 
 # ......................................................................... Line
 
-# sepm %{ heading -  : format }
 addm %{ heading l1 : map global format l       'x|comment l .<ret>'                -docstring 'leader     ... xxx' }
 addm %{ heading l2 : map global format t       'x|comment t .<ret>'                -docstring 'trailer    xxx ...' }
 addm %{ heading r1 : map global format R       'x|comment r =<ret>'                -docstring 'ruler      ═══'     }
@@ -46,7 +44,6 @@ map global normal <c-l> ': comment-line<ret>' -docstring 'comment'  # beakl key 
 
 # ........................................................................ Align
 
-# sepm %{ align =  : format }
 addm %{ align 1  : map global format <space> 'x|align '          -docstring 'align  space   nth+1 word'         }
 addm %{ align c1 : map global format '#'     'x|align \#<ret>'   -docstring 'align      #   comment'            }
 addm %{ align c2 : map global format /       'x|align //<ret>'   -docstring 'align     //   comment'            }
@@ -83,7 +80,6 @@ map global normal <c-n>   ':<space>yank-ring-next<ret>'
 # auto update clipoard with yank, change and delete actions
 hook global RegisterModified '"' %{ nop %sh{ printf %s "$kak_main_reg_dquote" | xsel --input --clipboard }}
 
-# sepm %{ paste -  : edit }
 addm %{ paste p1 : map global edit p '<a-!> xsel --outafter --clipboard<ret>' -docstring 'clipboard  —— after,before,replace' }
 addm %{ paste p2 : map global edit P '! xsel --outafter --clipboard<ret>'     -docstring 'clipboard  —— after,before,replace' }
 addm %{ paste p9 : map global edit R '| xsel --output --clipboard<ret>'       -docstring 'clipboard  —— after,before,replace' }
@@ -106,7 +102,6 @@ map global normal <a-=> '}p'     -docstring 'extend to next paragraph'
 
 # .................................................................... Searching
 
-# sepm %{ search    : edit }
 addm %{ search /1 : map global edit /     '/(?i)'             -docstring 'isearch    —— prev,next' }
 addm %{ search /2 : map global edit '\'   '<a-/>(?i)'         -docstring 'isearch    —— prev,next' }
 addm %{ search /3 : map global edit >     '?(?i)'             -docstring 'iextend    —— prev,next' }
@@ -136,7 +131,6 @@ declare-user-mode buffer
 map global normal <ret>   ': enter-user-mode buffer<ret>'
 map global normal <c-ret> ': enter-user-mode buffer<ret>'  # for find *scratch* buffer
 
-# sepm %{ mode = : edit }
 addm %{ mode b : map global edit <ret> ': enter-user-mode buffer<ret>' -docstring 'buffer user-mode' }
 
 # no sudo-write-all so sync root owned files on buffer switching
@@ -178,11 +172,8 @@ hook global WinSetOption filetype=diff %{
 	add-highlighter buffer/diff-allow-one-trailing-space regex '^ ' 0:Default
 }
 
-# sepm %{ test =  : buffer }
 addm %{ test b  : map global buffer *   ': buffer *debug*<ret>'            -docstring '*debug*'   }
-
-# sepm %{ file -  : buffer }
-addm %{ file d1: map global buffer d   ': sync<ret>: delete-buffer<ret>'  -docstring 'delete  —— with save,discard!'  }
+addm %{ file d1 : map global buffer d   ': sync<ret>: delete-buffer<ret>'  -docstring 'delete  —— with save,discard!'  }
 addm %{ file d2 : map global buffer D   ': delete-buffer!<ret>'            -docstring 'delete  —— with save,discard!'  }
 # SEE: kakpipe alpha subsort in xdisplay-plugins
 addm %{ file q  : map global buffer q   ': quit!<ret>'                     -docstring 'quit!' }

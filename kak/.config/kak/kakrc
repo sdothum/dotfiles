@@ -64,32 +64,9 @@ define-command addm -params 1 %{
 }
 
 # ...................................................... nop user-mode separator
-
-# sepm %{ <group> [<sortkey>]  [<separator>] : <user-mode> }  # WHERE: up to 3 separators [+-=] within a single user-mode, default '+'
-# define-command sepm -params 1 %{
-# 	evaluate-commands %sh{
-# 		docstring() { for i in $(seq 1 32) ;do echo -n '⠀' ;done; echo -n $K; }  # U+2800 (braille blank) to prevent kak space char trimming
-
-# 		M=${1#*:}
-# 		set -- ${1%%:*}
-# 		case $# in
-# 			1) G=$1; shift; S='0' ;;  # default to top of alphanumeric sort order
-# 			3) G=$1; S=$2; shift 2 ;;
-# 			2) G=$1; shift; echo $1 | grep -Ev '^(\+|-|=)$' && { S=$1; shift; } || S='0' ;;
-# 		esac
-# 		# NOTE: multiple separators within a single user-mode list must map unique keys and docstrings (to display as separate lines)
-# 		case "$1" in
-# 			- ) K=‧; D=$(docstring) ;;  # U+2027 of 3 available printable utf-8 blank character cells
-# 			= ) K=ꞏ; D=$(docstring) ;;  # U+a78f
-# 			* ) K=·; D=$(docstring) ;;  # U+00b7 default '+'
-# 		esac
-# 		# NOTE: remove any {} argument spaces for consistent setm full line sort
-# 		echo "addm %{ $G $S : map global $M '$K' ': nop<ret>' -docstring '$D' }" | sed 's/  */ /g'
-# 	}
-# }
  
-# spam %{ <user-mode> [<separator>] }  # WHERE: up to 3 separators [+-=] within a single user-mode, default '+'
-define-command spam -params 1 %{
+# line %{ <user-mode> [<separator>] }  # WHERE: up to 3 separators [+-=] within a single user-mode, default '+'
+define-command line -params 1 %{
 	evaluate-commands %sh{
 		docstring() { for i in $(seq 1 32) ;do echo -n '⠀' ;done; echo -n $K; }  # U+2800 (braille blank) to prevent kak space char trimming
 
@@ -155,25 +132,27 @@ hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt
 
 # build visually organized user-mode lists
 setm %{ edit   : focus   }
-spam %{ edit }
+line %{ edit             }
 setm %{ edit   : search  }
-spam %{ edit - }
+line %{ edit -           }
 setm %{ edit   : paste   }
-spam %{ edit = }
+line %{ edit =           }
 setm %{ edit   : mode    }
+
 setm %{ buffer : meta    }
-spam %{ buffer }
+line %{ buffer           }
 setm %{ buffer : goto    }
-spam %{ buffer - }
+line %{ buffer -         }
 setm %{ buffer : test    }
-spam %{ buffer = }
+line %{ buffer =         }
 setm %{ buffer : file    }
+
 setm %{ format : block   }
-spam %{ format }
+line %{ format           }
 setm %{ format : align   }
-spam %{ format - }
+line %{ format -         }
 setm %{ format : comment }
-spam %{ format = }
+line %{ format =         }
 setm %{ format : heading }
 
 # info-notifier %{user-modes} %{<space>   edit\n<ret>     buffer\n#         format}
