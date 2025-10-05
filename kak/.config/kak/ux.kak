@@ -14,16 +14,16 @@ declare-user-mode format
 
 map global normal '#' ': enter-user-mode format<ret>'
 
-# ....................................................................... Format
+# ............................................................. Block conversion
 
-addm %{ format  >1 : map global format <tab>   '%|unexpand --first-only -t<space>' -docstring 'leading tabs,n spaces' }
-addm %{ format  >2 : map global format <s-tab> '%|expand --init -t<space>'         -docstring 'leading tabs,n spaces' }
-addm %{ format  f1 : map global format f       ': refold<ret>'                     -docstring 'fold,unfold' }
-addm %{ format  f2 : map global format F       ': unfold<ret>'                     -docstring 'fold,unfold' }
+addm %{ block   e1 : map global format <tab>   '%|unexpand --first-only -t<space>' -docstring 'leading tabs,n spaces' }
+addm %{ block   e2 : map global format <s-tab> '%|expand --init -t<space>'         -docstring 'leading tabs,n spaces' }
+addm %{ block   f1 : map global format f       ': refold<ret>'                     -docstring 'fold,unfold' }
+addm %{ block   f2 : map global format F       ': unfold<ret>'                     -docstring 'fold,unfold' }
 
 # ...................................................................... Comment
 
-nopm %{ comment 0  : format }
+sepm %{ comment    : format }
 addm %{ comment c1 : map global format <c-c>   ': comment-line<ret>'               -docstring 'comment,block  (kak)' }
 addm %{ comment c2 : map global format c       ': comment-block<ret>'              -docstring 'comment,block  (kak)' }
 addm %{ comment h  : map global format h       'x|comment c<ret>'                  -docstring '/* css */'   }
@@ -31,13 +31,13 @@ addm %{ comment m  : map global format '`'     'x|comment \`<ret>'              
 
 # ......................................................................... Line
 
-nopm %{ line    0  : format - }
-addm %{ line    l1 : map global format l       'x|comment l .<ret>'                -docstring 'leader     ... xxx' }
-addm %{ line    l2 : map global format t       'x|comment t .<ret>'                -docstring 'trailer    xxx ...' }
-addm %{ line    r1 : map global format R       'x|comment r =<ret>'                -docstring 'ruler      ═══'     }
-addm %{ line    r2 : map global format r       'x|comment r --<ret>'               -docstring 'ruler      ━━━'     }
-addm %{ line    u1 : map global format U       'x|comment u =<ret>'                -docstring 'underline  ═══'     }
-addm %{ line    u2 : map global format u       'x|comment u --<ret>'               -docstring 'underline  ━━━'     }
+sepm %{ heading -  : format }
+addm %{ heading l1 : map global format l       'x|comment l .<ret>'                -docstring 'leader     ... xxx' }
+addm %{ heading l2 : map global format t       'x|comment t .<ret>'                -docstring 'trailer    xxx ...' }
+addm %{ heading r1 : map global format R       'x|comment r =<ret>'                -docstring 'ruler      ═══'     }
+addm %{ heading r2 : map global format r       'x|comment r --<ret>'               -docstring 'ruler      ━━━'     }
+addm %{ heading u1 : map global format U       'x|comment u =<ret>'                -docstring 'underline  ═══'     }
+addm %{ heading u2 : map global format u       'x|comment u --<ret>'               -docstring 'underline  ━━━'     }
 
 define-command refold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|comment f $kak_opt_autowrap_column<ret>" }}}
 define-command unfold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys 'x|comment F<ret>' }}  # (??) utf-8 sed errors from kak shell
@@ -46,7 +46,7 @@ map global normal <c-l> ': comment-line<ret>' -docstring 'comment'  # beakl key 
 
 # ........................................................................ Align
 
-nopm %{ align 0  : format = }
+sepm %{ align =  : format }
 addm %{ align 1  : map global format <space> 'x|align '          -docstring 'align  space   nth+1 word'         }
 addm %{ align c1 : map global format '#'     'x|align \#<ret>'   -docstring 'align      #   comment'            }
 addm %{ align c2 : map global format /       'x|align //<ret>'   -docstring 'align     //   comment'            }
@@ -83,7 +83,7 @@ map global normal <c-n>   ':<space>yank-ring-next<ret>'
 # auto update clipoard with yank, change and delete actions
 hook global RegisterModified '"' %{ nop %sh{ printf %s "$kak_main_reg_dquote" | xsel --input --clipboard }}
 
-nopm %{ paste 0  : edit - }
+sepm %{ paste -  : edit }
 addm %{ paste p1 : map global edit p '<a-!> xsel --outafter --clipboard<ret>' -docstring 'clipboard  —— after,before,replace' }
 addm %{ paste p2 : map global edit P '! xsel --outafter --clipboard<ret>'     -docstring 'clipboard  —— after,before,replace' }
 addm %{ paste p9 : map global edit R '| xsel --output --clipboard<ret>'       -docstring 'clipboard  —— after,before,replace' }
@@ -106,7 +106,7 @@ map global normal <a-=> '}p'     -docstring 'extend to next paragraph'
 
 # .................................................................... Searching
 
-nopm %{ search 0  : edit }
+sepm %{ search    : edit }
 addm %{ search /1 : map global edit /     '/(?i)'             -docstring 'isearch    —— prev,next' }
 addm %{ search /2 : map global edit '\'   '<a-/>(?i)'         -docstring 'isearch    —— prev,next' }
 addm %{ search /3 : map global edit >     '?(?i)'             -docstring 'iextend    —— prev,next' }
@@ -135,7 +135,8 @@ declare-user-mode buffer
 
 map global normal <ret>   ': enter-user-mode buffer<ret>'
 map global normal <c-ret> ': enter-user-mode buffer<ret>'  # for find *scratch* buffer
-nopm %{ mode 0 : edit = }
+
+sepm %{ mode = : edit }
 addm %{ mode b : map global edit <ret> ': enter-user-mode buffer<ret>' -docstring 'buffer user-mode' }
 
 # no sudo-write-all so sync root owned files on buffer switching
@@ -177,9 +178,10 @@ hook global WinSetOption filetype=diff %{
 	add-highlighter buffer/diff-allow-one-trailing-space regex '^ ' 0:Default
 }
 
-nopm %{ test 0  : buffer = }
+sepm %{ test =  : buffer }
 addm %{ test b  : map global buffer *   ': buffer *debug*<ret>'            -docstring '*debug*'   }
-nopm %{ file 0  : buffer - }
+
+sepm %{ file -  : buffer }
 addm %{ file d1: map global buffer d   ': sync<ret>: delete-buffer<ret>'  -docstring 'delete  —— with save,discard!'  }
 addm %{ file d2 : map global buffer D   ': delete-buffer!<ret>'            -docstring 'delete  —— with save,discard!'  }
 # SEE: kakpipe alpha subsort in xdisplay-plugins

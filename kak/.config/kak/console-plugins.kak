@@ -165,9 +165,10 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 		peneira-symbols
 	}
 
-	nopm %{ goto 0 : buffer }
 	addm %{ meta b : map global buffer <ret> ': buffers<ret>' -docstring 'buffers'    }
 	addm %{ file 1 : map global buffer e     ': files<ret>'   -docstring 'edit file' }
+
+	sepm %{ goto   : buffer }
 	addm %{ goto c : map global buffer c     ': symbols<ret>' -docstring 'ctag symbols'      }
 	addm %{ goto f : map global buffer f     ': lines<ret>'   -docstring 'fuzzy match line' }
 }
