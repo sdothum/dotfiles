@@ -102,19 +102,18 @@ map global normal <a-=> '}p'     -docstring 'extend to next paragraph'
 
 # .................................................................... Searching
 
-addm %{ search /1 : map global edit /     '/(?i)'             -docstring 'isearch    —— prev,next' }
-addm %{ search /2 : map global edit '\'   '<a-/>(?i)'         -docstring 'isearch    —— prev,next' }
-addm %{ search /3 : map global edit >     '?(?i)'             -docstring 'iextend    —— prev,next' }
-addm %{ search /4 : map global edit <     '<a-?>(?i)'         -docstring 'iextend    —— prev,next' }
+addm %{ search /1 : map global edit '\'   '<a-/>(?i)'         -docstring 'isearch    —— prev,next' }
+addm %{ search /2 : map global edit /     '/(?i)'             -docstring 'isearch    —— prev,next' }
+addm %{ search /3 : map global edit <     '<a-?>(?i)'         -docstring 'iextend    —— prev,next' }
+addm %{ search /4 : map global edit >     '?(?i)'             -docstring 'iextend    —— prev,next' }
 
 # .............................................................. Split selection
 
-addm %{ search d1 : map global edit m     ': mkd-para<ret>'  -docstring 'markdown   —— paragraphs,tables,code' }
-addm %{ search d2 : map global edit M     ': mkd-table<ret>' -docstring 'markdown   —— paragraphs,tables,code' }
-addm %{ search d3 : map global edit <c-m> ': mkd-code<ret>'  -docstring 'markdown   —— paragraphs,tables,code' }
-
-addm %{ search /5 : map global edit s     'x<a-s>s'          -docstring 'split      —— select,iselect' }
-addm %{ search /6 : map global edit S     'x<a-s>s(?i)'      -docstring 'split      —— select,iselect' }
+addm %{ search /5 : map global edit s     'x<a-s>s'           -docstring 'split      —— select,iselect' }
+addm %{ search /6 : map global edit S     'x<a-s>s(?i)'       -docstring 'split      —— select,iselect' }
+addm %{ search d1 : map global edit m     ': mkd-para<ret>'   -docstring 'markdown   —— paragraphs,tables,code' }
+addm %{ search d2 : map global edit M     ': mkd-table<ret>'  -docstring 'markdown   —— paragraphs,tables,code' }
+addm %{ search d3 : map global edit <c-m> ': mkd-code<ret>'   -docstring 'markdown   —— paragraphs,tables,code' }
 
 define-command mkd-para  %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[^|`]<ret>x' }}
 define-command mkd-table %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[|]<ret>x'   }}

@@ -63,22 +63,22 @@ define-command addm -params 1 %{
 	set-option global usermodes "%sh{ echo ""$kak_opt_usermodes\n$(echo $1 | cut -d: -f2- | cut -d' ' -f4 )$1"" }"
 }
 
-# ...................................................... nop user-mode separator
+# ................................................... Insert user-mode separator
  
-# line %{ <user-mode> [<separator>] }  # WHERE: up to 3 separators [+-=] within a single user-mode, default '+'
-define-command line -params 1 %{
+# gapm %{ <user-mode> [<separator>] }  # WHERE: up to 3 separators [+-=] within a single user-mode, default '+'
+define-command gapm -params 1 %{
 	evaluate-commands %sh{
+		# docstring() { for i in $(seq 1 32) ;do echo -n '—' ;done; echo -n $K; }
 		docstring() { for i in $(seq 1 32) ;do echo -n '⠀' ;done; echo -n $K; }  # U+2800 (braille blank) to prevent kak space char trimming
 
 		set -- $1  # <user-mode> [<separator>]
 		# NOTE: multiple separators within a single user-mode list must map unique keys and docstrings (to display as separate lines)
 		case "$2" in
-			- ) K=‧; D=$(docstring) ;;  # U+2027 of 3 available printable utf-8 blank character cells
-			= ) K=ꞏ; D=$(docstring) ;;  # U+a78f
-			* ) K=·; D=$(docstring) ;;  # U+00b7 default '+'
+			- ) K=‧ ;;  # U+2027 of 3 available utf-8 center dot characters
+			= ) K=ꞏ ;;  # U+a78f
+			* ) K=· ;;  # U+00b7 default '+'
 		esac
-		# NOTE: remove any {} argument spaces for consistent setm full line sort
-		echo "map global $1 '$K' ': nop<ret>' -docstring '$D'"
+		echo "map global $1 '$K' ': nop<ret>' -docstring '$(docstring)'"
 	}
 }
 
@@ -132,27 +132,27 @@ hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt
 
 # build visually organized user-mode lists
 setm %{ edit   : focus   }
-line %{ edit             }
+gapm %{ edit             }
 setm %{ edit   : search  }
-line %{ edit -           }
+gapm %{ edit -           }
 setm %{ edit   : paste   }
-line %{ edit =           }
+gapm %{ edit =           }
 setm %{ edit   : mode    }
 
 setm %{ buffer : meta    }
-line %{ buffer           }
+gapm %{ buffer           }
 setm %{ buffer : goto    }
-line %{ buffer -         }
+gapm %{ buffer -         }
 setm %{ buffer : test    }
-line %{ buffer =         }
+gapm %{ buffer =         }
 setm %{ buffer : file    }
 
 setm %{ format : block   }
-line %{ format           }
+gapm %{ format           }
 setm %{ format : align   }
-line %{ format -         }
+gapm %{ format -         }
 setm %{ format : comment }
-line %{ format =         }
+gapm %{ format =         }
 setm %{ format : heading }
 
 # info-notifier %{user-modes} %{<space>   edit\n<ret>     buffer\n#         format}
