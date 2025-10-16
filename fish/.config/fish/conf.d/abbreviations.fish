@@ -248,8 +248,6 @@ abbr zz 'z -'
 
 # .................................................................. Application
 
-function kc; kconvert $argv '*epub'; end
-
 abbr \? 'chatgpt'
 abbr \?\? 'chatgpt -n'  # new conversation
 abbr \@ 'aichat'
@@ -276,8 +274,9 @@ abbr dot 'rlwrap -n dotfiles'
 abbr gif 'nsxiv -a'
 abbr handbrake 'ghb'
 abbr hex 'hexdump -C'
-abbr kcm "kc css='p { margin: 0 !important; }'"
-abbr kcn 'kc noformat'
+abbr kc 'kconvert'
+abbr kc0 "kconvert css='p { margin: 0 !important; }'"
+abbr kcn 'kconvert noformat'
 abbr kindle 'dmenu econvert azw3'
 abbr eformat 'dmenu econvert reformat'
 abbr kobo 'dmenu econvert epub'
