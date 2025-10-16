@@ -27,9 +27,9 @@ if-else %{ [ -z "$DIFF" ] } %{
 # ................................................................... crosshairs
 
 bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
-	addm %{ focus x1 : map global edit + ': crosshairs<ret>'   -docstring "visual     —— crosshairs,column,line"  }
-	addm %{ focus x2 : map global edit | ': cursorcolumn<ret>' -docstring "visual     —— crosshairs,column,line" }
-	addm %{ focus x3 : map global edit _ ': cursorline<ret>'   -docstring "visual     —— crosshairs,column,line" }
+	addm %{ focus x1 : map global select + ': crosshairs<ret>'   -docstring "visual     —— crosshairs,column,line"  }
+	addm %{ focus x2 : map global select | ': cursorcolumn<ret>' -docstring "visual     —— crosshairs,column,line" }
+	addm %{ focus x3 : map global select _ ': cursorline<ret>'   -docstring "visual     —— crosshairs,column,line" }
 	cursorline
 }
 
@@ -46,8 +46,8 @@ bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
 	define-command find-notify %{ nop %sh{ notify 30 critical "find & replace" "&lt;<b>ret</b>&gt;\tgoto buffer:line\n&lt;<b>c-^</b>&gt;\tcommit buffer edits\n&lt;<b>c-ret</b>&gt;\tbuffer (user-mode)" }}
 
 	# NOTE: <ret> jumps to buffer line, <c-ret> for buffer user-mode (to apply replace)
-	addm %{ search f1 : map global edit f     ': find-notify<ret>: find '   -docstring "find       —— /buffer:line,(commit edits)" }
-	addm %{ search f2 : map global edit <c-^> ': find-apply-changes<ret>;'  -docstring "find       —— /buffer:line,(commit edits)" }
+	addm %{ search f1 : map global select f     ': find-notify<ret>: find '   -docstring "find       —— /buffer:line,(commit edits)" }
+	addm %{ search f2 : map global select <c-^> ': find-apply-changes<ret>;'  -docstring "find       —— /buffer:line,(commit edits)" }
 	map global normal <c-^> ': find-apply-changes<ret>;' -docstring "commit buffer edits"
 }
 
@@ -82,7 +82,7 @@ bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
 		}
 	}
 
-	addm %{ focus 0 : map global edit <space> ': toggle-focus<ret>' -docstring "focus selections" }
+	addm %{ focus 0 : map global select <space> ': toggle-focus<ret>' -docstring "focus selections" }
 }
 
 # .......................................................................... hop

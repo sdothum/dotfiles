@@ -69,14 +69,16 @@ define-command addm -params 1 %{
 define-command gapm -params 1 %{
 	evaluate-commands %sh{
 		# docstring() { for i in $(seq 1 32) ;do echo -n '—' ;done; echo -n $K; }
-		docstring() { for i in $(seq 1 32) ;do echo -n '⠀' ;done; echo -n $K; }  # U+2800 (braille blank) to prevent kak space char trimming
+		docstring() { for i in $(seq 1 32) ;do echo -n "${F:-⠀}" ;done; echo -n $K; }  # U+2800 (braille blank) to prevent kak space char trimming
 
 		set -- $1  # <user-mode> [<separator>]
 		# NOTE: multiple separators within a single user-mode list must map unique keys and docstrings (to display as separate lines)
 		case "$2" in
-			- ) K=‧ ;;  # U+2027 of 3 available utf-8 center dot characters
-			= ) K=ꞏ ;;  # U+a78f
-			* ) K=· ;;  # U+00b7 default '+'
+			'' ) K=· ;;         # U+00b7 default
+			1  ) K=· ;;         # U+00b7 of 3 available utf-8 center dot characters
+			2  ) K=‧ ;;         # U+2027
+			3  ) K=ꞏ ;;         # U+a78f
+			*  ) K=$2; F=$2 ;;  # non-blank (visual) separator NOTE: limited to glyphs not represented by kak "<named>" character
 		esac
 		echo "map global $1 '$K' ': nop<ret>' -docstring '$(docstring)'"
 	}
@@ -120,8 +122,8 @@ if %{ [ -n "$TEST" ] } %{
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # redefine default <space> "user" mode
-declare-user-mode edit
-map global normal <space> ': enter-user-mode edit<ret>'
+declare-user-mode select
+map global normal <space> ': enter-user-mode select<ret>'
 
 source "%val{config}/ui.kak"
 source "%val{config}/ux.kak"
@@ -131,29 +133,29 @@ declare-option str admonition "\s(((?i)(att(n|ention)|(be)*cause|bu[gt]|deprecat
 hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt{admonition} 1:WrapMarker }  # select field 1: (vs 0:) to not hilight the colon :)
 
 # build visually organized user-mode lists
-setm %{ edit   : focus   }
-gapm %{ edit             }
-setm %{ edit   : search  }
-gapm %{ edit -           }
-setm %{ edit   : paste   }
-gapm %{ edit =           }
-setm %{ edit   : mode    }
+setm %{ select   : focus   }
+gapm %{ select 1           }
+setm %{ select   : search  }
+gapm %{ select 2           }
+setm %{ select   : paste   }
+gapm %{ select 3           }
+setm %{ select   : mode    }
 
-setm %{ buffer : meta    }
-gapm %{ buffer           }
-setm %{ buffer : goto    }
-gapm %{ buffer -         }
-setm %{ buffer : test    }
-gapm %{ buffer =         }
-setm %{ buffer : file    }
+setm %{ buffer   : meta    }
+gapm %{ buffer 1         }
+setm %{ buffer   : goto    }
+gapm %{ buffer 2         }
+setm %{ buffer   : test    }
+gapm %{ buffer 3         }
+setm %{ buffer   : file    }
 
-setm %{ format : block   }
-gapm %{ format           }
-setm %{ format : align   }
-gapm %{ format -         }
-setm %{ format : comment }
-gapm %{ format =         }
-setm %{ format : heading }
+setm %{ format   : block   }
+gapm %{ format 1         }
+setm %{ format   : align   }
+gapm %{ format 2         }
+setm %{ format   : comment }
+gapm %{ format 3         }
+setm %{ format   : heading }
 
 # info-notifier %{user-modes} %{<space>   edit\n<ret>     buffer\n#         format}
 nop %sh{ notify 10 user-modes "&lt;<b>space</b>&gt;\tedit\n&lt;<b>ret</b>&gt;\tbuffer\n<b>#</b>\tformat" }

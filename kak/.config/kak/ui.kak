@@ -78,7 +78,7 @@ declare-option str theme %sh{ echo "${COLORSCHEME:-dabruin}" }
 	colorscheme %opt{theme}
 }
 
-# push %{ alpha : map global edit <space> ': normal-mode-colorscheme<ret>' -docstring "%opt{theme}" }
+# push %{ alpha : map global select <space> ': normal-mode-colorscheme<ret>' -docstring "%opt{theme}" }
 
 # Info notifier
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -107,7 +107,11 @@ define-command cursor-mode %{
 	}
 }
 
-addm %{ focus t : map global edit t   ': cursor-mode<ret>'  -docstring "typewriter scroll" }
+# more granular scrolling than <c-d> and <c-u> while holding visual cursor position within screen
+map global normal <up>   'vkk' -docstring 'scroll up one row'  # sort of a toss whether to use cursor keys or "kj"
+map global normal <down> 'vjj' -docstring 'scroll down one row'
+
+addm %{ focus t : map global select t   ': cursor-mode<ret>'  -docstring "typewriter scroll" }
 
 hook global WinSetOption filetype=markdown %{ set-option window typewriter true }
 hook global WinDisplay .* %{ cursor-mode }
@@ -172,7 +176,7 @@ add-highlighter global/ regex \h+$ 0:Trailing
 # ..................................................................... Kak info
 
 # a minimalist statusline of "mode - column [utf-8] - filename [context]"
-declare-option str spacer ' '
+declare-option str spacer '  '
 if-else %{ [ "$kak_opt_ruler" = " " ] } %{
 	declare-option str colsep ":"
 } %{

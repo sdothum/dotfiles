@@ -80,9 +80,9 @@ map global normal <c-n>   ':<space>yank-ring-next<ret>'
 # auto update clipoard with yank, change and delete actions
 hook global RegisterModified '"' %{ nop %sh{ printf %s "$kak_main_reg_dquote" | xsel --input --clipboard }}
 
-addm %{ paste p1 : map global edit p '<a-!> xsel --outafter --clipboard<ret>' -docstring 'clipboard  —— after,before,replace' }
-addm %{ paste p2 : map global edit P '! xsel --outafter --clipboard<ret>'     -docstring 'clipboard  —— after,before,replace' }
-addm %{ paste p9 : map global edit R '| xsel --output --clipboard<ret>'       -docstring 'clipboard  —— after,before,replace' }
+addm %{ paste p1 : map global select p '<a-!> xsel --outafter --clipboard<ret>' -docstring 'clipboard  —— after,before,replace' }
+addm %{ paste p2 : map global select P '! xsel --outafter --clipboard<ret>'     -docstring 'clipboard  —— after,before,replace' }
+addm %{ paste p9 : map global select R '| xsel --output --clipboard<ret>'       -docstring 'clipboard  —— after,before,replace' }
 
 # Selection
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -102,18 +102,18 @@ map global normal <a-=> '}p'     -docstring 'extend to next paragraph'
 
 # .................................................................... Searching
 
-addm %{ search /1 : map global edit '\'   '<a-/>(?i)'         -docstring 'isearch    —— prev,next' }
-addm %{ search /2 : map global edit /     '/(?i)'             -docstring 'isearch    —— prev,next' }
-addm %{ search /3 : map global edit <     '<a-?>(?i)'         -docstring 'iextend    —— prev,next' }
-addm %{ search /4 : map global edit >     '?(?i)'             -docstring 'iextend    —— prev,next' }
+addm %{ search /1 : map global select '\'   '<a-/>(?i)'         -docstring 'isearch    —— prev,next' }
+addm %{ search /2 : map global select /     '/(?i)'             -docstring 'isearch    —— prev,next' }
+addm %{ search /3 : map global select <     '<a-?>(?i)'         -docstring 'iextend    —— prev,next' }
+addm %{ search /4 : map global select >     '?(?i)'             -docstring 'iextend    —— prev,next' }
 
 # .............................................................. Split selection
 
-addm %{ search /5 : map global edit s     'x<a-s>s'           -docstring 'split      —— select,iselect' }
-addm %{ search /6 : map global edit S     'x<a-s>s(?i)'       -docstring 'split      —— select,iselect' }
-addm %{ search d1 : map global edit m     ': mkd-para<ret>'   -docstring 'markdown   —— paragraphs,tables,code' }
-addm %{ search d2 : map global edit M     ': mkd-table<ret>'  -docstring 'markdown   —— paragraphs,tables,code' }
-addm %{ search d3 : map global edit <c-m> ': mkd-code<ret>'   -docstring 'markdown   —— paragraphs,tables,code' }
+addm %{ search /5 : map global select s     'x<a-s>s'           -docstring 'split      —— select,iselect' }
+addm %{ search /6 : map global select S     'x<a-s>s(?i)'       -docstring 'split      —— select,iselect' }
+addm %{ search d1 : map global select m     ': mkd-para<ret>'   -docstring 'markdown   —— paragraphs,tables,code' }
+addm %{ search d2 : map global select M     ': mkd-table<ret>'  -docstring 'markdown   —— paragraphs,tables,code' }
+addm %{ search d3 : map global select <c-m> ': mkd-code<ret>'   -docstring 'markdown   —— paragraphs,tables,code' }
 
 define-command mkd-para  %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[^|`]<ret>x' }}
 define-command mkd-table %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[|]<ret>x'   }}
@@ -130,7 +130,7 @@ declare-user-mode buffer
 map global normal <ret>   ': enter-user-mode buffer<ret>'
 map global normal <c-ret> ': enter-user-mode buffer<ret>'  # for find *scratch* buffer
 
-addm %{ mode b : map global edit <ret> ': enter-user-mode buffer<ret>' -docstring 'buffer user-mode' }
+addm %{ mode b : map global select <ret> ': enter-user-mode buffer<ret>' -docstring 'buffer user-mode' }
 
 # no sudo-write-all so sync root owned files on buffer switching
 define-command sync %{
