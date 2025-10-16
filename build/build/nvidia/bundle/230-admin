@@ -8,13 +8,13 @@
 = ═════════════
 # foomatic-db
 # foomatic-db-nonfree
+# hplip
 # system-config-printer [server]
   cups
   cups-filters
   ghostscript
   gsfonts
   gutenprint
-  hplip
   libcups
 
 
