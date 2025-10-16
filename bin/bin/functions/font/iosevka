@@ -305,6 +305,9 @@ elif [ "$koreader" ] ;then
 	# e_ink lait    grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-double_ d-tailed p-eared y-turn j-serifed J-serifless utf-8
 	# e_ink lajt    grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-flat++ a-double_ d-tailed p-eared y-turn J-descending utf-8
 	e_ink grotesq grote   I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-extended++ a-double_ d-tailed p-eared y-turn J-descending utf-8
+	e_ink grotesk grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-extended++ a-double_ d-tailed p-eared y-turn J-descending utf-8
+	e_ink krotesq grote   I-serifless  t-cross        l-ascending Q-open 1-nobase f-extended++ a-double_ d-tailed p-eared y-turn J-descending utf-8
+	e_ink krotesk grote   I-serifed    t-cross        l-ascending Q-open 1-nobase f-extended++ a-double_ d-tailed p-eared y-turn J-descending utf-8
 	# e_ink grotisq grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-extended++ a-double_ d-tailed p-eared y-turn J-descending j-serifed utf-8
 
 elif [ "$serifed" ] ;then

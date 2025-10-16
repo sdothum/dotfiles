@@ -11,7 +11,7 @@ usage() { usage: "$(basename $0) halt | poweroff | reboot | shutdown | soft-rebo
 if void 'dinit' ;then
 	sudo dinit-$1 2>/dev/null || usage
 else
-	sudo $1 2>/dev/null       || usage  # runit
+	sudo /sbin/$1 2>/dev/null || usage  # runit, openrc
 fi
 
 # kak: filetype=sh
