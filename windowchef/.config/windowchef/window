@@ -7,8 +7,12 @@
 
 # ............................................................ Window operations
 
-# Usage: window [@[<delay> | <class> | <name>] WAIT] <msg>, SEE: functions/window
-#               where, <name> is window name (containing spaces)
+# Usage: window <msg>,      SEE: functions/window
+#               @<delay> <msg>
+#               @[<class> | <name>] [URL] <msg>
+#                    where, @   wait for delay time or visible window
+#                           URL indicates the spawned window name is a URL (even if <class> is defined)
+#                           SEE: web/qutebrowser-instance, windowchef/rulerrc
 
 # usable screen dimensions
 margin=$(chef screen margin)
@@ -24,13 +28,13 @@ border=$(chef screen window_border)
 winid=$(pfw)
 # xdotool windowstate --remove fullscreen $winid  # fullscreen negates any attempted window actions
 
-geometry()      { xdotool getwindowgeometry --shell ${1:-$winid}; }  # X Y WIDTH HEIGHT (doesn't include borders)
-set_geometry()  { eval $(geometry ${1:-$winid}); }
-cat_geometry()  { [ -e $WINFO:$winid ] && eval $(cat $WINFO:$winid) || exit 1; }
-save_geometry() { geometry $1 >$WINFO:${1:-$winid}; }                           # for revert
-opposite_side() { echo $(( width + margin * 2 - (X + WIDTH + border * 2) )); }  # for nearest edge SEE: window snap / stretch
-windowfocus()   { xdotool search -sync -onlyvisible -$1 "$xname" windowfocus; }
-xname_is()      { xdotool getwindow$1 $winid | grep -q "$xname"; }
+geometry()       { xdotool getwindowgeometry --shell ${1:-$winid}; }             # X Y WIDTH HEIGHT (doesn't include borders)
+set_geometry()   { eval $(geometry ${1:-$winid}); }
+cat_geometry()   { [ -e $WINFO:$winid ] && eval $(cat $WINFO:$winid) || exit 1; }
+save_geometry()  { geometry $1 >$WINFO:${1:-$winid}; }                           # for revert
+opposite_side()  { echo $(( width + margin * 2 - (X + WIDTH + border * 2) )); }  # for nearest edge SEE: window snap / stretch
+windowfocus_by() { xdotool search -sync -onlyvisible -$1 "$xname" windowfocus; }
+xname_is()       { xdotool getwindow$1 $winid | grep -q "$xname"; }
 
 # ..................................................................... X Y size
 
@@ -44,22 +48,21 @@ draw() {
 
 # do we need to wait longer for window creation?
 if [ "$1" ] && [ -z "${1%%@*}" ] ;then
-	# notify trace "window $1"
 	case $1 in
 		@[0-9.]* ) sleep ${1#@} ;;
 
 		*        )
 			xname="${1#@}"
-			if [ $2 = 'WAIT' ] ;then
+			if [ $2 = 'URL' ] ;then
 				case $1 in
-					@*\ *    ) windowfocus name      ;;
-					@*       ) windowfocus classname ;;
+					@*\ * ) windowfocus_by name      ;;
+					@*    ) windowfocus_by classname ;;
 				esac
 				shift
 			elif xname_is classname ;then
-				windowfocus classname
+				windowfocus_by classname
 			elif xname_is name ;then
-				windowfocus name
+				windowfocus_by name
 			else
 				return 1  # not expected window
 			fi
