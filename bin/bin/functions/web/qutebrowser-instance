@@ -46,8 +46,8 @@ settings="
 eval $QUTEBROWSER $RUNOPT $settings $startpage 2>/dev/null &
 
 case ${name:-livedown} in
-	livedown ) window @livedown WAIT tile 3 && waitron window_cycle_in_group ;;  # focus editor
-	sonarr   ) window @sonarr WAIT size monocle ;;
+	livedown ) window @livedown URL tile 3 && waitron window_cycle_in_group ;;  # focus editor
+	sonarr   ) window @sonarr URL size monocle ;;
 esac
 
 # kak: filetype=sh
