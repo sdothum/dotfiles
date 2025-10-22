@@ -104,7 +104,7 @@ if console ;then
 	pstat startx && exit
 	cpu arm && { tmout ifyes 'sync with watchman' && wsync || wsync -s; }
 
-	while : ;do
+	exists dinit && while : ;do
 		sv status udev-settle | grep -q STARTED && break
 		[ $notice ] || ditto WARN dinit "waiting for udev-settle"
 		notice=true

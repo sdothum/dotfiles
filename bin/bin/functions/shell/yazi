@@ -7,11 +7,11 @@
 
 # Usage: yazi [TMUX | ROOT | XFTP] | [WAIT] [path]
 
-export YAZI="/usr/bin/yazi"        # NOTE: envar is also used in alacrityt/kak wrappers for conditional tweaks
+export YAZI="/usr/bin/yazi"                 # NOTE: envar is also used in alacrityt/kak wrappers for conditional tweaks
 export EDITOR=kak
 THEME=$HOME/.config/yazi/theme.toml
-TAB=/net/downloads/http            # default tmux directory
-console || termyazi='term "yazi"'  # console mode or X11 window
+TAB=/net/downloads/http                     # default tmux directory
+console || termyazi='term yazi'             # console mode or X11 window
 
 # sloppy mtp automount
 mtp mount && { [ "$1" ] || MTP=$HOME/mtp; }

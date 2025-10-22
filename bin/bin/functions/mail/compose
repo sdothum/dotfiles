@@ -16,13 +16,12 @@ if [ "$1" ] ;then  # mail app hook
 	# toggle focus defer   # share aerc frame
 	# (keyboard off; window @$DELAY tile 4 left; xdotool search --onlyvisible --classname mail windowraise; keyboard on) &  # SEE: rulerrc
 
-	notify 60 Compose "Complete <b>Recipients:</b> and <b>Subject:</b> before composing email"
-	class=compose offsetY=1 kak ID=draft WAIT $@
+	notify 60 Email "Complete <b>Recipients:</b> and <b>Subject:</b> before composing email"
+	class=email offsetY=1 kak ID=draft WAIT $@
 else  # email scratchpad
 	file=$(mktemp)
 	mv $file $file.eml
-	class=email kak ID=draft $file.eml
-	ditto email "$file.eml"
+	offsetY=0 paddingY=4 paddingX=5 class=compose kak ID=draft $file.eml
 fi
 
 # kak: filetype=sh

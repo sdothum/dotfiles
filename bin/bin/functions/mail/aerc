@@ -6,6 +6,8 @@
 
 # .................................................................. Mail Client
 
+# export MONOFONT="Iosevka-proof"  # SEE: offsetY, paddingY tweaked line spacing (for 4K display)
+
 # compose directory for temporary eml files
 export TMPDIR=~/drafts  # override /tmp (because dir is not persistent in alpine)
 MAILDIR=$HOME/Mail
@@ -16,6 +18,6 @@ group=$(cat $MAILDIR/.mailsync:group)
 trap "mailsync $group" EXIT
 
 notify aerc "<b>Ctrl-v</b>  vsplit\n<b>q</b>      close"
-offsetY=4 term email class=aerc WAIT PAPER OPACITY=1 $AERC
+offsetY=6 paddingY=6 term email class=aerc WAIT PAPER OPACITY=1 $AERC
 
 # kak: filetype=sh

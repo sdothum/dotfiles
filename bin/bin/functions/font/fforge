@@ -293,65 +293,7 @@ q_hook() {
 	echo "
 Open(\$1);
 $(replace $(utf 'q') 0u024b)
-Generate(\$Usage: xsel [options]
-Manipulate the X selection.
-
-By default the current selection is output and not modified if both
-standard input and standard output are terminals (ttys).  Otherwise,
-the current selection is output if standard output is not a terminal
-(tty), and the selection is set from standard input if standard input
-is not a terminal (tty). If any input or output options are given then
-the program behaves only in the requested mode.
-
-If both input and output is required then the previous selection is
-output before being replaced by the contents of standard input.
-
-Input options
-  -a, --append          Append standard input to the selection
-  -f, --follow          Append to selection as standard input grows
-  -z, --zeroflush       Overwrites selection when zero ('\0') is received
-  -i, --input           Read standard input into the selection
-
-Output options
-  -o, --output          Write the selection to standard output
-
-Action options
-  -c, --clear           Clear the selection
-  -d, --delete          Request that the selection be cleared and that
-                        the application owning it delete its contents
-
-Selection options
-  -p, --primary         Operate on the PRIMARY selection (default)
-  -s, --secondary       Operate on the SECONDARY selection
-  -b, --clipboard       Operate on the CLIPBOARD selection
-
-  -k, --keep            Do not modify the selections, but make the PRIMARY
-                        and SECONDARY selections persist even after the
-                        programs they were selected in exit.
-  -x, --exchange        Exchange the PRIMARY and SECONDARY selections
-
-X options
-  --display displayname
-                        Specify the connection to the X server
-  -m wm, --name wm      Name with the process will be identified
-  -t ms, --selectionTimeout ms
-                        Specify the timeout in milliseconds within which the
-                        selection must be retrieved. A value of 0 (zero)
-                        specifies no timeout (default)
-
-Miscellaneous options
-  --trim                Remove newline ('\n') char from end of input / output
-  -l, --logfile         Specify file to log errors to when detached.
-  -n, --nodetach        Do not detach from the controlling terminal. Without
-                        this option, xsel will fork to become a background
-                        process in input, exchange and keep modes.
-
-  -h, --help            Display this help and exit
-  -v, --verbose         Print informative messages
-  --version             Output version information and exit
-
-Please report bugs to <conrad@vergenet.net>.
-1);
+Generate(\$1);
 " >${LOG}:q_hook.script
 
 	for i in *ttf ;do
@@ -359,6 +301,62 @@ Please report bugs to <conrad@vergenet.net>.
 		fontforge -quiet --script ${LOG}:q_hook.script $i
 	done
 }
+
+# substitute curly tail q (extended as in atkinson hyperlegible)
+# NOTE: extended tail spec'd for cell shapes 576, 600 (and 650 for webfont headers :-)
+q_hook_() {
+	# copy char 0u024b and paste to char 0u0071
+	# confirm 'atkinson q-hook'  # SEE: iosevka
+	echo "
+Open(\$1);
+$(replace $(utf 'q') 0u024b)
+Select($(utf '╺'));                                  # U+237a (box drawing glyph)
+CopyReference();
+Select(0u0001);                                      # temporary cell to avoid modifying original glyph
+Paste();
+Select(0u0001);
+CopyReference();
+Transform(Int(Strtod(\$2)),0,0,Int(Strtod(\$3)),0,0);
+Select($(utf 'q'));
+PasteWithOffset(Int(Strtod(\$4)),Int(Strtod(\$5)));  # NOTE: fontforge arguments are passed as strings
+RemoveOverlap();
+Select(0u0001);
+Clear();
+Generate(\$1);
+" >${LOG}:q_hook_.script
+
+	for i in $(regular) ;do
+		ditto q_hook_ $i
+		[ $shape -eq 650 ] && case $i in  # webfont
+			*book* ) Xshape=630 ;;
+			*bold* ) Xshape=628 ;;
+			*      ) Xshape=640 ;;
+		esac
+		case $i in
+			*book* ) Xshift=$(( 526 + ${Xshape:-$shape} - 576 )); Yshift=-398; Ydepth=54 ;;  # NOTE: spec for cell shape 576
+			*bold* ) Xshift=$(( 526 + ${Xshape:-$shape} - 576 )); Yshift=-401; Ydepth=58 ;;
+			*      ) Xshift=$(( 526 + ${Xshape:-$shape} - 576 )); Yshift=-402; Ydepth=55 ;;
+		esac
+		fontforge -quiet --script ${LOG}:q_hook_.script $i 25 $Ydepth $Xshift $Yshift
+	done
+
+	# italics left shifted in character cell
+	for i in $(italic) ;do
+		ditto q_hook_:italic $i
+		[ $shape -eq 650 ] && case $i in  # webfont
+			*book* ) Xshape=705 ;;
+			*bold* ) Xshape=698 ;;
+			*      ) Xshape=700 ;;
+		esac
+		case $i in
+			*book* ) Xshift=$(( 456 + ${Xshape:-$shape} - $shape )); Yshift=-398; Ydepth=54 ;;  # Xshift -70 from upright
+			*bold* ) Xshift=$(( 456 + ${Xshape:-$shape} - $shape )); Yshift=-401; Ydepth=58 ;;
+			*      ) Xshift=$(( 456 + ${Xshape:-$shape} - $shape )); Yshift=-402; Ydepth=55 ;;
+		esac
+		fontforge -quiet --script ${LOG}:q_hook_.script $i 20 $Ydepth $Xshift $Yshift
+	done
+}
+
 
 Q_hook() {
 	# copy char 0u024a and paste to char 0u0051
@@ -670,7 +668,7 @@ Select($(utf 'f'));
 Move(0,47);
 Select($(utf '|'));
 CopyReference();
-Select(0u0001);                        # temporary cell to avoid modifying original glyph
+Select(0u0001);                                      # temporary cell to avoid modifying original glyph
 Paste();
 Select(0u0001);
 CopyReference();
@@ -922,6 +920,7 @@ case $1 in
 	Q_horizontal  ) shape=$2; shift ;;
 	Q_custom      ) shape=$2; shift ;;
 	q_hook        ) ;;
+	q_hook_       ) shape=$2; shift ;;
 	Q_hook        ) ;;
 	space         ) space=$2; shift ;;
 	punctuation   ) emdash=$2; shape=$3; shift 2 ;;

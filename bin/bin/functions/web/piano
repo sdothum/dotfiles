@@ -11,7 +11,7 @@
 DELAY=0.15
 
 # tuned delays required to work around system dependent qutebrowser url loading
-qutebrowser https://p-node.org/piano/
+/usr/bin/qutebrowser -s zoom.default 50 https://p-node.org/piano/
 sleep $DELAY
 xdotool search -sync -onlyvisible -name '∏ano - qutebrowser' windowfocus
 sleep $DELAY

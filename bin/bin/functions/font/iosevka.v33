@@ -64,7 +64,7 @@ usage() {
 > l-[ascending|bottom|flat|hooky|serifless]
 > m-[arch[-[-]]|earless[-]|rounded[-]|serifless]
 > p-[eared|serifed]
-> q-[hook|tailed]
+> q-[hook[_]|tailed]
 > t-[asymmetric[+|-[-]]|cross|descending|flat]
 > u-toothed
 > w-asymmetric
@@ -448,7 +448,8 @@ cmdopts () {
 			m-serifless    ) variant $1 ;;
 			p-eared        ) variant $1 ;;
 			p-serifed      ) variant $1 sb 0.7650 ;;         # add air for serif corner
-			q-hook         ) variant 'q=HOOK-TAILED'; q_hook=true; baseline=true ;;
+			q-hook         ) variant 'q=HOOK-TAILED';  q_hook=true; unset q_hook_; baseline=true ;;
+			q-hook_        ) variant 'q=HOOK-TAILED_'; q_hook_=true; unset q_hook; baseline=true ;;
 			q-tailed       ) variant $1; unset q_hook ;;
 			t-asymmetric   ) variant $1 ;;
 			t-asymmetric+  ) variant $1 ;;
@@ -800,7 +801,8 @@ done
 
 unset adjust baseline capadjust  # no longer applying for koreader and version 3x
 
-[ $q_hook        ] && fforge q_hook                          $family 2>/dev/null  # hyperlegible font mod for better q
+[ $q_hook        ] && fforge q_hook                          $family 2>/dev/null
+[ $q_hook_       ] && fforge q_hook_            ${shape##* } $family 2>/dev/null  # hyperlegible font mod for better q
 [ $Q_hook        ] && fforge Q_hook                          $family  # hooked capital Q
 [ $Q_horizontal  ] && fforge Q_horizontal       ${shape##* } $family  # open horizontal capital Q
 [ $Q_custom      ] && fforge Q_custom           ${shape##* } $family  # custom capital Q

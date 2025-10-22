@@ -11,7 +11,7 @@ NNN="/usr/local/bin/nnn -E"  # nnn compiled with icons, SEE: make_install nnn
 TAB=/net/downloads/http     # default tmux directory
 
 [ -e "${NNN% *}" ] || NNN=/usr/bin/nnn
-[ -e ${NNN%% } ]   || exit
+[ -e "${NNN% *}" ] || exit
 # export EDITOR='env COLORSCHEME=dabruin kak -X'
 export EDITOR='kak -X'  # rename files is non-detached editing
 export VISUAL=kak       # detached window editing
