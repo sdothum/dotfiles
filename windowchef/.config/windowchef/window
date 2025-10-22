@@ -29,6 +29,8 @@ set_geometry()  { eval $(geometry ${1:-$winid}); }
 cat_geometry()  { [ -e $WINFO:$winid ] && eval $(cat $WINFO:$winid) || exit 1; }
 save_geometry() { geometry $1 >$WINFO:${1:-$winid}; }                           # for revert
 opposite_side() { echo $(( width + margin * 2 - (X + WIDTH + border * 2) )); }  # for nearest edge SEE: window snap / stretch
+windowfocus()   { xdotool search -sync -onlyvisible -$1 "$xname" windowfocus; }
+xname_is()      { xdotool getwindow$1 $winid | grep -q "$xname"; }
 
 # ..................................................................... X Y size
 
@@ -47,12 +49,17 @@ if [ "$1" ] && [ -z "${1%%@*}" ] ;then
 		@[0-9.]* ) sleep ${1#@} ;;
 
 		*        )
-			if [ $2 = 'WAIT' ] || xdotool getwindowname $(pfw) | grep -q "${1#@}" ;then
+			xname="${1#@}"
+			if [ $2 = 'WAIT' ] ;then
 				case $1 in
-					@*\ *    ) xdotool search -sync -onlyvisible -name      "${1#@}" windowfocus ;;
-					@*       ) xdotool search -sync -onlyvisible -classname "${1#@}" windowfocus ;;
+					@*\ *    ) windowfocus name      ;;
+					@*       ) windowfocus classname ;;
 				esac
-				[ $2 = 'WAIT' ] && shift
+				shift
+			elif xname_is classname ;then
+				windowfocus classname
+			elif xname_is name ;then
+				windowfocus name
 			else
 				return 1  # not expected window
 			fi

@@ -324,7 +324,7 @@ super + j
 	xdotool search --onlyvisible --classname "music" windowunmap && \{ desktop $(desktop) toggle; desktop $(chef desktop "DESK"); \} || \{ music; desktop $(chef desktop "PLAY"); \}
 
 super + ctrl + j
-	mpc toggle            ;\
+	mpc toggle ;\
 	mpc | grep -q playing && \{ mpc:settings volume; mpc:settings; \}
 
 super + {comma,period}
@@ -332,11 +332,11 @@ super + {comma,period}
 	mpc:settings volume
 
 super + ctrl + {comma,period}
-	mpc volume {-2, +2}   ;\
+	mpc volume {-2, +2} ;\
 	mpc:settings volume
 
 super + shift + {comma,period}
-	mpc {prev, next}      ;\
+	mpc {prev, next} ;\
 	mpc:settings
 
 # ......................................................................... http

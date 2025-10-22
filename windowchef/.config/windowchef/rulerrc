@@ -13,21 +13,23 @@
 # ......................................................................... mail
 
 class="aerc"
-	window desktop $(chef desktop "COMM")                             ;\
-	xdotool search --sync --onlyvisible --classname "aerc"            ;\
-	window @0.4 size monocle                                          ;\
-	sleep 0.2 && xdotool type ':vsplit' && xdotool key Return
+	window desktop $(chef desktop "COMM") ;\
+	window @aerc size monocle             ;\
+	sleep 0.3 && xdotool type ':vsplit' && xdotool key Return
 
-# open compuse window but raise aerc to complete to/subject fields
+# open compose window but raise aerc to complete to/subject fields
+
+class="email"
+	window @email tile 3 2 && window desktop $(chef desktop "COMM") ;\
+	waitron window_stack_toggle
 
 class="compose"
-	window @compose tile 3 2 && window desktop $(chef desktop "COMM") ;\
-	waitron window_stack_toggle
+	window @compose tile 3 2 && window desktop $(chef desktop "COMM")
 
 # ......................................................................... edit
 
 class="kak"
-	window desktop $(chef desktop "CODE") ;\
+	window desktop $(chef desktop "CODE")                  ;\
 	N=$(chef window count kak)                             ;\
 	[ $N -lt 4 ] && layout tile 3 kak || layout tile 4 kak ;\
 	[ $N -eq 4 ] && layout fold 4 kak
@@ -53,7 +55,7 @@ class="xftp"
 	window @xftp tile 3 3
 
 name="yazi"
-	window @0.2 size A4 rotate ;\
+	window @yazi size A4 rotate ;\
 	window snap center
 
 # ........................................................................ terms
@@ -69,7 +71,7 @@ class="term"
 # ........................................................................ audio
 
 class="audacious"
-	window desktop $(chef desktop "PLAY")                              ;\
+	window desktop $(chef desktop "PLAY") ;\
 	window @audacious snap center
 
 # delay for pavucontrol/pipewire sync SEE: pulse
@@ -91,11 +93,11 @@ class="asunder"
 	touch /tmp/rulerrc:asunder
 
 class="calibre"
-	window desktop $(chef desktop "DESK")       ;\
+	window desktop $(chef desktop "DESK") ;\
 	window @calibre snap center
 
 class="org.nicotine_plus.Nicotine"
-	window desktop $(chef desktop "PEER")                                                                                                     ;\
+	window desktop $(chef desktop "PEER")                                                                                                         ;\
 	[ $(xdotool search --onlyvisible --classname "org.nicotine_plus.Nicotine" | wc -l) -eq 1 ] && window @org.nicotine_plus.Nicotine size monocle ;\
 	window @0.1 snap center
 
@@ -116,7 +118,7 @@ class="krita"
 class="feh"
 	xdotool key space                     ;\
 	sleep 0.1 && xdotool key BackSpace    ;\
-	window @0.1 snap center
+	window @feh snap center
 
 class="foliate"
 	window desktop $(chef desktop "DESK") ;\
