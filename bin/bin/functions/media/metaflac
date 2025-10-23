@@ -35,7 +35,7 @@ while [ $1 ] ;do
 done
 
 confirm()  { [ $debug ] || [ $quiet ] || { ifno 'apply changes' && usage; } }
-metadata() { for f in *flac; do ditto track "$f"; $METAFLAC --export-tags-to=- "$f"; [ $1 ] && exit; done; }
+metadata() { for f in *flac; do [ "$f" = '*flac' ] && exit; ditto track "$f"; $METAFLAC --export-tags-to=- "$f"; [ $1 ] && exit; done; }
 tagcheck() { for i in $@; do metadata | grep -iq "^$i=" && ditto tag "$i" || { ditto CRITICAL tag "$i"; rcode=1; } ;done; return ${rcode:-0}; }
 titles()   { metadata | grep '^TITLE='; }
 

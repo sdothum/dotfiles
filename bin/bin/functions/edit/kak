@@ -25,6 +25,7 @@ LOG=/tmp/kak.log
 DELAY=0.25        # tuned time to center window
 export TABSTOP=3  # default for (pipe), SEE: align
 [ -e $SESSION/kak:ruler ] && export RULER=$(cat $SESSION/kak:ruler)
+[ "$BG" ] || { [ -e $SESSION/kak:bg    ] && export BG=$(cat $SESSION/kak:bg); }
 
 $KAK -l | grep -q dead | $KAK -clear  # dead sessions
 touch $LOG
