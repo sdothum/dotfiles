@@ -13,6 +13,7 @@ LTEXVSN=16.0.0
 sudo xbps-install -y cargo git nodejs ruby ruby-devel
 
 # sudo npm install -g bash-language-server                 # shell
+sudo xbps-install -y bash-language-server
 sudo npm install -g typescript typescript-language-server  # javascript
 sudo npm install -g vscode-langservers-extracted           # css / html / json
 sudo npm install -g yaml-language-server@next              # yaml
