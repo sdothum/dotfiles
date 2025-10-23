@@ -17,7 +17,7 @@ evaluate-commands %sh{
 	exists dye && lighten=true  # unset for desaturated cursor ruler
 
 	lightness() {
-		[ $2 ] || set -- $@ 10              # default lightness amount NOTE: negative values darken
+		[ $2 ] || set -- $@ 10              # default lightness adjustment % amount NOTE: negative values darken
 		set -- $@ $(dye -x hsl "#${1#*:}")  # rgb:<hex color> <lightness amount> hsla(<hue>, <saturation>%, <lightness>%)
 		[ "${2%-*}" = '' ] && l=$(max 0 $(( ${5%%%*} + $2 )) ) || l=$(min 100 $(( ${5%%%*} + $2 )) )
 		echo "rgb:$(dye -h hex "$3 $4 ${l}%)" | cut -d\# -f2)"
@@ -31,12 +31,20 @@ evaluate-commands %sh{
 		done | xargs printf 'rgb:%s'
 	}
 
-	# runtime background color BG=<normal>,<insert>,<capslock>
-	if [ "$BG" ] ;then
-		NORMAL=$(echo $BG | cut -s -d, -f1)
-		INSERT=$(echo $BG | cut -s -d, -f2)
-		CAPSLOCK=$(echo $BG | cut -s -d, -f3)
-	fi
+	# Usage: setbg <BG #> <NAME> <default:lightness>
+	#              where, BG=<normal[:lightness]>,<insert[:lightness]>,<capslock[:lightness]> SEE: kak wrapper
+	#                     <[+|-]lightness> is hsla lightness (lighten/darken) adjustment percentage for ruler
+	#              example: BG=ffead0:-5,fff5e8:9,ffd7a6:-6 (orange monochromatic theme)
+	setbg() {
+		hex=$(echo $BG,, | cut -s -d, -f$1)
+		[ $hex ] || hex=$3  # apply default triadic color
+		eval ${2}=${hex%:*}
+		[ $hex != ${hex#*:} ] && eval ${2}_=${hex#*:}
+	}
+
+	setbg 1 NORMAL   96f8f8:-18  # default triadic color theme: pale_cyan,pale_orange,pale_pink
+	setbg 2 INSERT   f6f3ef:9
+	setbg 3 CAPSLOCK ffd4db:-7
 
 	# ............................................................. Color palette
 
@@ -49,12 +57,12 @@ evaluate-commands %sh{
 	# reds
 	dark_red='rgb:a1462a'
 	soft_red='rgb:fa8c69'
-	pale_pink="rgb:${CAPSLOCK:-ffd4db}"
+	pale_pink='rgb:ffd4db'
 	# oranges
 	strong_orange='rgb:bf450c'
 	light_orange='rgb:ffe5b4'
 	desaturated_orange='rgb:d5a575'
-	pale_orange="rgb:${INSERT:-f6f3ef}"
+	pale_orange='rgb:f6f3ef'
 	# blues
 	dark_blue='rgb:0069af'
 	faint_blue='rgb:add8e6'
@@ -63,7 +71,7 @@ evaluate-commands %sh{
 	dark_cyan='rgb:0087af'
 	soft_cyan='rgb:a3d5e4'
 	vivid_cyan='rgb:20fccf'
-	pale_cyan="rgb:${NORMAL:-96f8f8}"
+	pale_cyan='rgb:96f8f8'
 
 	# one-light colors for testing.. ltex-ls highlighter overwritten(?)
 	lightred='rgb:e45649'
@@ -86,38 +94,45 @@ evaluate-commands %sh{
 	# modal highlights
 	case "${kak_opt_color}" in
 		normal   )
-			background="${pale_cyan}"
-			menu="${pale_orange}"
+			background="rgb:${NORMAL}"
+			menu="rgb:${INSERT:-${pale_orange}}"
 			comment="$(desaturate ${background})"
 			if [ $lighten ] ;then
+				# cursor="${vivid_cyan}"
 				cursor="${white}"
-				ruler="$(lightness ${background} 10)"
+				ruler="$(lightness ${background} ${NORMAL_:--5})"
 			else
 				cursor="${pale_orange}"
 				ruler="$(desaturate ${background} '34 / 35')"
 			fi
 			;;
 		capslock )
-			background="${pale_pink}"
-			menu="${pale_cyan}"
+			background="rgb:${CAPSLOCK}"
+			menu="rgb:${INSERT:-${pale_orange}}"
 			comment="$(desaturate ${background})"
 			if [ $lighten ] ;then
-				[ "${kak_opt_mode}" = 'normal' ] && cursor="${white}" || cursor="${vivid_cyan}"
-				ruler="$(lightness ${background} 2)"
+				if [ "${kak_opt_mode}" = 'normal' ] ;then
+					cursor="${white}"
+					ruler="$(lightness ${background} ${CAPSLOCK_:--6})"
+				else
+					cursor="${vivid_cyan}"  # insert mode cursor and ruler
+					ruler="$(lightness ${pale_orange} ${INSERT_:-9})"
+				fi
 			else
 				[ "${kak_opt_mode}" = 'normal' ] && cursor="${pale_orange}" || cursor="${vivid_cyan}"
 				ruler="$(desaturate ${background} '36 / 37')"
 			fi
 			;;
 		*        )  # insert mode (default non-modal mode)
-			background="${pale_orange}"
-			menu="${pale_cyan}"
-			comment="${desaturated_orange}"
+			background="rgb:${INSERT}"
+			menu="rgb:${NORMAL}"
 			cursor="${vivid_cyan}"
 			if [ $lighten ] ;then
-				ruler="$(lightness ${background} 5)"
+				ruler="$(lightness ${background} ${INSERT_:-9})"
+				comment="$(desaturate $(lightness ${background} -18) '5 / 6')"
 			else
 				ruler="$(desaturate ${background} '42 / 43')"
+				comment="${desaturated_orange}"
 			fi
 			;;
 	esac
