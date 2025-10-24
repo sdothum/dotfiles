@@ -35,7 +35,11 @@ evaluate-commands %sh{
 	#              where, BG=<normal[:lightness]>,<insert[:lightness]>,<capslock[:lightness]> SEE: kak wrapper
 	#                     <[+|-]lightness> is hsla lightness (lighten/darken) adjustment percentage for ruler
 	#              example: $BG= -> ffead0:-7,fff5e8:9,ffd7a6:-8  (monochromatic orange theme)
-	#                            -> 96f8f8:-12,fff5e8:9,ffd9d6:-7 (triadic cyan/orange/salmon theme)
+	#                            -> ffead0:-7,fff5e8:9,96f8f8:-12 (duochromatic orange/cyan theme)
+	#                            -> 96f8f8:-12,fff5e8:9,ffd9b6:-7 (triadic cyan/orange/salmon theme)
+
+   [ $kak_opt_filetype = 'markdown' ] && BG=${BG:-ffead0:-7,fff5e8:9,96f8f8:-12} || BG=${BG:-96f8f8:-12,fff5e8:9,ffd9b6:-7}
+
 	setbg() {
 		hex=$(echo $BG,, | cut -s -d, -f$1)
 		[ $hex ] || hex=$3  # apply default triadic color
@@ -43,9 +47,9 @@ evaluate-commands %sh{
 		[ $hex != ${hex#*:} ] && eval ${2}_=${hex#*:}
 	}
 
-	setbg 1 NORMAL   ffead0:-7  # default duochromatic orange/cyan theme
+	setbg 1 NORMAL   96f8f8:-12
 	setbg 2 INSERT   fff5e8:9
-	setbg 3 CAPSLOCK 96f8f8:-12
+	setbg 3 CAPSLOCK ffd9b6:-7
 
 	# ............................................................. Color palette
 
@@ -102,7 +106,7 @@ evaluate-commands %sh{
 			if [ $lighten ] ;then
 				# cursor="${vivid_cyan}"
 				cursor="${white}"
-				ruler="$(lightness ${background} ${NORMAL_:--5})"
+				ruler="$(lightness ${background} ${NORMAL_:--12})"  # NOTE: double minus for darkening
 			else
 				cursor="${pale_orange}"
 				ruler="$(desaturate ${background} '34 / 35')"
@@ -115,7 +119,7 @@ evaluate-commands %sh{
 			if [ $lighten ] ;then
 				if [ "${kak_opt_mode}" = 'normal' ] ;then
 					cursor="${white}"
-					ruler="$(lightness ${background} ${CAPSLOCK_:--6})"
+					ruler="$(lightness ${background} ${CAPSLOCK_:--7})"
 				else
 					cursor="${vivid_cyan}"  # insert mode cursor and ruler
 					ruler="$(lightness ${pale_orange} ${INSERT_:-9})"
@@ -243,7 +247,7 @@ set-face window MatchingChar                   "${match},${background}+br"
 set-face window Whitespace                     "${space},${background}+f"
 set-face window WrapMarker                     "${wrap}+bf"
 set-face window BufferPadding                  "${background},${background}"  # hide tilde
-set-face window Trailing                       "default,${white}"
+set-face window Trailing                       "default,${white}+bs"
 
 # ................................................................. Highlighting
 
