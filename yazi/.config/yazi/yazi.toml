@@ -21,7 +21,8 @@ title_format    = "Yazi: {cwd}"
 
 [preview]
 wrap            = "no"
-tab_size        = 2
+# tab_size      = 2
+tab_size        = 3
 # max_width     = 600
 # max_height    = 900
 max_width       = 1200
