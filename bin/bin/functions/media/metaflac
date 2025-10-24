@@ -6,19 +6,16 @@
 
 # ................................................................. FLAC editing
 
-usage() { echo "$(basename $0) [ls | 01 | rm <tag>* | import | export | untitled]
-> [-d] set <tag>=<value>
-> [-d] [album | date | discnumber] <string> | /<regex>
-> [-d] [[album]artist[+] | genre[+]] <string>* | /<regex>
-> [-d] title /<regex>, against all tracks
+usage() { echo "$(basename $0) [ls | rm <tag>* | import | export | untitled]
 > [-d] tracknumber <from>, increment all tracks starting <from>
-> [-d] [<name>.flac | <track>] <title> | /<regex>
->          where, <track>  -> ## of flac filename
->                 /<regex> -> (sed s) [//match/s]/from/to/[<flag>*]
->                 /Case    -> s/\\\b(.)/\u\\\1/g  (Proper Case All Words)
->                 -d or \$debug envar to list set-tag only
->                 -q for no confirmation prompt
->          set envar find*pattern for filename \"\${prefix}##..\"" | usage:pipe
+> [-d] [<name.flac> | <track>] set <tag>=<value>
+> [-d] [<name.flac> | <track>] [album | date | discnumber | title] <string> | /<regex>
+> [-d] [<name.flac> | <track>] [[album]artist[+] | genre[+]] <string>*
+>              where, <track>  -> ## of flac filename
+>                     /<regex> -> (sed s) [//match/s]/from/to/[<flag>*]
+>                     /Case    -> s/\\\b(.)/\u\\\1/g  (Proper Case All Words)
+>                     -d or \$debug envar to list set-tag only
+>                     -q for no confirmation prompt" | usage:pipe
 	exit 1
 }
 
@@ -34,8 +31,19 @@ while [ $1 ] ;do
 	shift
 done
 
+IFS=$(echo)  # to handle filename spaces
+while [ $1 ] ;do
+	case $1 in
+		*.flac ) file="$(find ./ -name "${1}")"; [ "$file" ] || usage ;;
+		[0-9]* ) file="$(find ./ -maxdepth 1 -name "${1}*.flac")"; [ "$file" ] || usage ;;
+		*      ) file='*.flac'; break ;;
+	esac
+	shift
+	break
+done
+
 confirm()  { [ $debug ] || [ $quiet ] || { ifno 'apply changes' && usage; } }
-metadata() { for f in *flac; do [ "$f" = '*flac' ] && exit; ditto track "$f"; $METAFLAC --export-tags-to=- "$f"; [ $1 ] && exit; done; }
+metadata() { for f in *flac; do [ "$f" = '*flac' ] && usage; ditto track "$f"; $METAFLAC --export-tags-to=- "$f"; [ $1 ] && exit; done; }
 tagcheck() { for i in $@; do metadata | grep -iq "^$i=" && ditto tag "$i" || { ditto CRITICAL tag "$i"; rcode=1; } ;done; return ${rcode:-0}; }
 titles()   { metadata | grep '^TITLE='; }
 
@@ -50,9 +58,7 @@ case $1 in
 	untitled    ) ;;
 	*artist+    ) add=true ;;  # for additional artist album references in ncmpcpp
 	genre+      ) add=true ;;
-	*.flac      ) file=$1 ;;
-	[0-9]*      ) file="$(find ./ -maxdepth 1 -name "${prefix}${1}*.flac")"; [ "$file" ] || usage ;;
-	title       ) [ "${2}" = "/${2#?}" ]   || usage ;;
+	title       ) [ "$file" = '*flac' ] && { [ "${2}" = "/${2#?}" ] || usage; } ;;
 	tracknumber ) TRACK=$(token number $2) || usage ;;  # TRACK unset otherwise SEE: metaflac()
 	$TAGS       ) ;;
 	*           ) usage ;;
@@ -60,40 +66,36 @@ esac
 shopt -u extglob
 
 settag() {
+	TAG=$(echo $1 | tr '[:lower:]' '[:upper:]')
 	if [ $debug ] ;then
-		echo $METAFLAC --set-tag=$1="$2" "$file"
+		echo $METAFLAC --set-tag=$TAG="$2" "$f"
 	else
-		[ $add ] || $METAFLAC --remove-tag=$1 "$file"  # or replace
-		$METAFLAC --set-tag=$1="$2" "$file"
+		[ $add ] || $METAFLAC --remove-tag=$TAG "$f"  # or replace
+		$METAFLAC --set-tag=$TAG="$2" "$f"
 	fi
-	ditto="ditto $1 \"$2\""
+	ditto="ditto $TAG \"$2\""
 }
 
 regextag() {
 	echo | sed -r "$2" >/dev/null 2>&1 || { ditto syntax "sed "$2""; exit; }  # sed sanity check
 	if [ $debug ] ;then
-		# $METAFLAC --show-tag=$1 "$file"
-		ditto $1 "$($METAFLAC --show-tag=$1 "$file" | cut -d= --complement -f1)"
-		ditto regex= "$($METAFLAC --show-tag=$1 "$file" | cut -d= --complement -f1 | sed -r "$2")"
+		# $METAFLAC --show-tag=$1 "$f"
+		ditto $1 "$($METAFLAC --show-tag=$1 "$f" | cut -d= --complement -f1)"
+		ditto regex= "$($METAFLAC --show-tag=$1 "$f" | cut -d= --complement -f1 | sed -r "$2")"
 	fi
-	tag=$($METAFLAC --show-tag=$1 "$file" | cut -d= --complement -f1 | sed -r "$2")  # NOTE: --complement for LAST field :)
+	tag=$($METAFLAC --show-tag=$1 "$f" | cut -d= --complement -f1 | sed -r "$2")  # NOTE: --complement for LAST field :)
 	settag $1 "$tag"
 }
 
 metaflac() {
 	confirm
-	if [ "$file" ] ;then
-		${1}tag TITLE "${TRACK:-$3}"    # track specific action
-		eval $ditto
-	else
-		for file in *.flac ;do
-			${1}tag "$2" "${TRACK:-$3}"
-			[ $TRACK ] && (( TRACK++ ))  # tracknumbers must increment
-			[ $TRACK ] || [ $2 = TITLE ] && eval $ditto
-		done
-		[ $TRACK ] || [ $2 = TITLE ] || eval $ditto
-		unset file
-	fi
+	for f in $file ;do
+		${1}tag "$2" "${TRACK:-$3}"
+		[ $TRACK ] && (( TRACK++ ))  # tracknumbers must increment
+		[ $TRACK ] || [ $2 = TITLE ] && eval $ditto
+	done
+	[ $TRACK ] || [ $2 = TITLE ] || eval $ditto
+	unset file
 }
 
 export() {
@@ -111,7 +113,7 @@ case $1 in
 		while [ "$2" ] ;do
 			ditto tag "remove $2"
 			confirm
-			for i in *flac; do $METAFLAC --remove-tag="$2" "$i" ;done
+			for f in *flac; do $METAFLAC --remove-tag="$2" "$f" ;done
 			shift
 		done
 		;;
@@ -120,7 +122,7 @@ case $1 in
 	set      )
 		ditto tag "set $2"
 		confirm
-		for i in *.flac ;do settag ${2%%=*} ${2##*=} ;done
+		for f in $file ;do settag ${2%%=*} ${2##*=} ;done
 		;;
 
 	# sync track names to titles
@@ -150,8 +152,8 @@ case $1 in
 		confirm
 
 		for file in *flac ;do
-			settag TRACKNUMBER "$(echo $file | cut -d' ' -f1)"
-			settag TITLE "$(echo $file | sed 's/^[0-9. ]*//; s/.flac//')"
+			settag TRACKNUMBER "$(echo $f | cut -d' ' -f1)"
+			settag TITLE "$(echo $f | sed 's/^[0-9. ]*//; s/.flac//')"
 		done
 		titles
 		;;
@@ -166,7 +168,7 @@ case $1 in
 		confirm
 
 		for file in *flac ;do
-			track="$(echo $file | cut -d' ' -f1)"
+			track="$(echo $f | cut -d' ' -f1)"
 			settag TRACKNUMBER "$track"
 			settag TITLE "$untitled ${track#0}"
 		done
@@ -191,7 +193,7 @@ case $1 in
 		;;
 esac
 
-# echo '---'
+# # echo '---'
 mpc update >/dev/null
 
 # kak: filetype=sh
