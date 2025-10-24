@@ -10,7 +10,6 @@
 
 set-option global tabstop 3
 set-option global indentwidth 3
-declare-user-mode format
 
 map global normal '#' ': enter-user-mode format<ret>'
 
@@ -125,7 +124,6 @@ map global normal S 's(?i)' -docstring 'split: iselect:'
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 set-option global autoreload yes
-declare-user-mode buffer
 
 map global normal <ret>   ': enter-user-mode buffer<ret>'
 map global normal <c-ret> ': enter-user-mode buffer<ret>'  # for find *scratch* buffer

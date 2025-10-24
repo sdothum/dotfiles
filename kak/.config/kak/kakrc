@@ -55,6 +55,9 @@ if %{ [ -n "$UNPLUG" ] || [ -n "$TEST"] } %{
 # organize user mode popup lists by sort key
 
 declare-option str usermodes ''
+declare-user-mode select
+declare-user-mode buffer
+declare-user-mode format
 
 # .................................................................... Queue map
 
@@ -102,7 +105,7 @@ define-command setm -params 1 %{
 # ncurses console plugins
 if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 	source "%val{config}/bundle/kak-bundle/rc/kak-bundle.kak"
-   bundle-noload kak-bundle https://codeberg.org/jdugan6240/kak-bundle
+	bundle-noload kak-bundle https://codeberg.org/jdugan6240/kak-bundle
 
 	source "%val{config}/console-plugins.kak"
 	source "%val{config}/snippets.kak"
@@ -122,7 +125,6 @@ if %{ [ -n "$TEST" ] } %{
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # redefine default <space> "user" mode
-declare-user-mode select
 map global normal <space> ': enter-user-mode select<ret>'
 
 source "%val{config}/ui.kak"
@@ -133,32 +135,32 @@ declare-option str admonition "\s(((?i)(att(n|ention)|(be)*cause|bu[gt]|deprecat
 hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt{admonition} 1:WrapMarker }  # select field 1: (vs 0:) to not hilight the colon :)
 
 # build visually organized user-mode lists
-setm %{ select   : focus   }
-gapm %{ select 1           }
-setm %{ select   : search  }
-gapm %{ select 2           }
-setm %{ select   : paste   }
-gapm %{ select 3           }
-setm %{ select   : mode    }
+setm %{ select : focus   }
+gapm %{ select 1         }
+setm %{ select : search  }
+gapm %{ select 2         }
+setm %{ select : paste   }
+gapm %{ select 3         }
+setm %{ select : mode    }
 
-setm %{ buffer   : meta    }
+setm %{ buffer : meta    }
 gapm %{ buffer 1         }
-setm %{ buffer   : goto    }
+setm %{ buffer : goto    }
 gapm %{ buffer 2         }
-setm %{ buffer   : test    }
+setm %{ buffer : test    }
 gapm %{ buffer 3         }
-setm %{ buffer   : file    }
+setm %{ buffer : file    }
 
-setm %{ format   : block   }
+setm %{ format : block   }
 gapm %{ format 1         }
-setm %{ format   : align   }
+setm %{ format : align   }
 gapm %{ format 2         }
-setm %{ format   : comment }
+setm %{ format : comment }
 gapm %{ format 3         }
-setm %{ format   : heading }
+setm %{ format : heading }
 
 # info-notifier %{user-modes} %{<space>   edit\n<ret>     buffer\n#         format}
 nop %sh{ notify 10 user-modes "&lt;<b>space</b>&gt;\tedit\n&lt;<b>ret</b>&gt;\tbuffer\n<b>#</b>\tformat" }
-nop %sh{ xdotool key g c }  # center cursor, also HACK: refreshes occaisonally stale cursorline at startup
+nop %sh{ sleep 0.1; xdotool key g c }  # center cursor, also HACK: refreshes occaisonally stale cursorline at startup
 
 # kak: filetype=kak

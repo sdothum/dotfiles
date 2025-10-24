@@ -31,10 +31,11 @@ evaluate-commands %sh{
 		done | xargs printf 'rgb:%s'
 	}
 
-	# Usage: setbg <BG #> <NAME> <default:lightness>
+	# Usage: setbg <BG #> <varname> <default:lightness>
 	#              where, BG=<normal[:lightness]>,<insert[:lightness]>,<capslock[:lightness]> SEE: kak wrapper
 	#                     <[+|-]lightness> is hsla lightness (lighten/darken) adjustment percentage for ruler
-	#              example: BG=ffead0:-5,fff5e8:9,ffd7a6:-6 (orange monochromatic theme)
+	#              example: $BG= -> ffead0:-7,fff5e8:9,ffd7a6:-8  (monochromatic orange theme)
+	#                            -> 96f8f8:-12,fff5e8:9,ffd9d6:-7 (triadic cyan/orange/salmon theme)
 	setbg() {
 		hex=$(echo $BG,, | cut -s -d, -f$1)
 		[ $hex ] || hex=$3  # apply default triadic color
@@ -42,9 +43,9 @@ evaluate-commands %sh{
 		[ $hex != ${hex#*:} ] && eval ${2}_=${hex#*:}
 	}
 
-	setbg 1 NORMAL   96f8f8:-18  # default triadic color theme: pale_cyan,pale_orange,pale_pink
-	setbg 2 INSERT   f6f3ef:9
-	setbg 3 CAPSLOCK ffd4db:-7
+	setbg 1 NORMAL   ffead0:-7  # default duochromatic orange/cyan theme
+	setbg 2 INSERT   fff5e8:9
+	setbg 3 CAPSLOCK 96f8f8:-12
 
 	# ............................................................. Color palette
 
@@ -57,6 +58,7 @@ evaluate-commands %sh{
 	# reds
 	dark_red='rgb:a1462a'
 	soft_red='rgb:fa8c69'
+	salmon='rgb:ffd9b6'
 	pale_pink='rgb:ffd4db'
 	# oranges
 	strong_orange='rgb:bf450c'
@@ -95,7 +97,7 @@ evaluate-commands %sh{
 	case "${kak_opt_color}" in
 		normal   )
 			background="rgb:${NORMAL}"
-			menu="rgb:${INSERT:-${pale_orange}}"
+			menu="rgb:${INSERT}"
 			comment="$(desaturate ${background})"
 			if [ $lighten ] ;then
 				# cursor="${vivid_cyan}"
@@ -108,7 +110,7 @@ evaluate-commands %sh{
 			;;
 		capslock )
 			background="rgb:${CAPSLOCK}"
-			menu="rgb:${INSERT:-${pale_orange}}"
+			menu="rgb:${INSERT}"
 			comment="$(desaturate ${background})"
 			if [ $lighten ] ;then
 				if [ "${kak_opt_mode}" = 'normal' ] ;then
@@ -123,8 +125,8 @@ evaluate-commands %sh{
 				ruler="$(desaturate ${background} '36 / 37')"
 			fi
 			;;
-		*        )  # insert mode (default non-modal mode)
-			background="rgb:${INSERT}"
+		*        )
+			background="rgb:${INSERT}"  # insert mode (default non-modal mode)
 			menu="rgb:${NORMAL}"
 			cursor="${vivid_cyan}"
 			if [ $lighten ] ;then
