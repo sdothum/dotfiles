@@ -56,8 +56,7 @@ wiki() {
 	if expand "$file" >/dev/null ;then
 		file="$(expand "$file")"
 		filename_check
-		# offsetY=0 paddingY=4 paddingX=5 class=wiki $EDITOR "$file" $DICTIONARY  # MONOFONT size++
-		class=wiki $EDITOR "$file" $DICTIONARY
+		class=wiki $EDITOR -DICTIONARY "$file" $DICTIONARY
 	else
 		error=": ${file##*/} ∉ ${file%/*}"
 		sed -i "\|${file##*/}.$SEP ${file%/*}$|d" $HISTORY/wiki

@@ -6,6 +6,8 @@
 
 # ......................................................... Appointment calendar
 
+export MONOFONT="Iosevka-proof"
+
 REMINDERS=${REMINDERS:-$HOME/.reminders}
 
 ADD='add'

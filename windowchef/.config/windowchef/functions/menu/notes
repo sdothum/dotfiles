@@ -8,8 +8,9 @@
 
 # Usage: menu notes [<extension>] [<path>]
 
-EDITOR='kak ID=note WAIT'  # default
+export MONOFONT="Iosevka-proof"
 
+EDITOR='kak ID=note WAIT'  # default
 NEW='new'
 EDIT='file manager'
 PURGE='purge'
