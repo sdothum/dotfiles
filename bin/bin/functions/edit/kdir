@@ -10,7 +10,7 @@ usage() { usage: "$(basename $0) <maxdepth> | <name>"; exit 1; }
 
 EDITOR=${EDITOR:-kak}
 
-v0() { exclude | sort | tr '\n' '\0x00' | xargs -t -r0 $EDITOR; }
+v0() { exclude | sort | xargs -rt -d'\n' $EDITOR; }
 
 walk() {
 	[ -e $DYNAMIC ] && toggle focus
@@ -19,8 +19,8 @@ walk() {
 		[ "$files" ] || continue
 		echo
 		echo -n "$files\n"
-		ifyes "edit $i" || continue
-		find -L $i -maxdepth 1 -type f | v0
+		ifno "edit $i" && continue
+		echo "$files" | v0
 	done
 	[ -e $DYNAMIC ] && toggle focus
 }
