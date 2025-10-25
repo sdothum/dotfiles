@@ -32,6 +32,7 @@ hgadd()     { ! changed && return; hg add --$output --cwd $REPO "$file" 2>/dev/n
 addfile()   { for file in $(find $REPO -regex ".*${i#$HOME/}" | exclude) ;do hgadd ;done }  # handle multifile name match
 addfolder() { for file in $(find $i -maxdepth 1 -type f | exclude) ;do hgadd ;done }
 
+IFS=$(echo)  # to handle space filename parsing
 for i in $@ ;do
 	[ -d $i ] && { addfolder ; continue; }
 	[ -e $i ] && { addfile   ; continue; }

@@ -50,20 +50,18 @@ fi
 
 # escape filenames containing spaces
 count=0
-[ "$file" ] || while : ;do 
-file="$file $(escape $1)"
+IFS=$(echo)  # to handle space filename parsing
+for i in $@ ;do
+	files=$(printf "%s\n%s" "$i" "$files")
 	count=$(( count + 1 ))
-	shift
-	[ $# -gt 0 ] || break 
 done
 
-exists vim || exec /usr/bin/vi $file  # moving to kakoune
+exists vim || exec echo "$files" | xargs -d'\n' /usr/bin/vi
 [ $count -gt 1 ] && notify low 'Gvim' "$count files to edit" 2>/dev/null
 
 console || { gui=-g; [ -e $DYNAMIC ] && focus frame; }
 [ -e $SESSION/vim ] && fg=-f
 # --quote used for single space separated filename
-session="vim $gui $role $fg $cmd $file"
-eval $sudo $session 2>>$LOG
+eval echo "$files" | xargs -d'\n' $sudo vim $gui $role $fg $cmd  # untested change over to xargs (have moved to kakoune)
 
 # kak: filetype=sh

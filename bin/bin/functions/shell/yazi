@@ -8,7 +8,8 @@
 # Usage: yazi [TMUX | ROOT | XFTP] | [WAIT] [path]
 
 export YAZI="/usr/bin/yazi"                 # NOTE: envar is also used in alacrityt/kak wrappers for conditional tweaks
-export EDITOR=kak
+# export EDITOR=/usr/bin/kak
+export EDITOR=kak  # wrapper checks whether attached to yazi (for bulk file renaming)
 THEME=$HOME/.config/yazi/theme.toml
 TAB=/net/downloads/http                     # default tmux directory
 console || termyazi='term yazi'             # console mode or X11 window

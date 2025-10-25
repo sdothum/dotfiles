@@ -19,6 +19,6 @@ EDITOR=${EDITOR:-kak}
 # al "$@" | exclude | sort | tr '\n' '\0x00' | xargs -r0 $EDITOR $search
 # al "$@" | exclude | sort | tr '\n' '\0x00' | xargs -t -r0 $EDITOR
 echo "$files" | column
-echo "$files" | tr '\n' '\0x00' | xargs -t -r0 $EDITOR 2>/dev/null
+echo "$files" | xargs -rt -d'\n' $EDITOR
 
 # kak: filetype=sh

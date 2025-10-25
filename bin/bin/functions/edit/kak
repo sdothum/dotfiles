@@ -6,13 +6,12 @@
 
 # ....................................................................... Editor
 
-usage() { usage: "[kmd=<command>] $(basename $0) [-l | -p [<id>] | -v | -h] [-BENCHMARK | -DEBUG [hooks|shell|profile|keys|commands] | -DICTIONARY | -PLUG | -TRACE | -X11 | RULER=<char> | -- | ID=<id>] [WAIT] [<row>x<col>] <file>*"; exit 1; }
+usage() { usage: "[kmd=<command>] $(basename $0) [-l | -p [<id>] | -v | -h] [-BENCHMARK | -DEBUG [hooks|shell|profile|keys|commands] | -LEXICON | -PLUG | -TRACE | -X11 | RULER=<char> | -- | ID=<id>] [WAIT] [<row>x<col>] <file>*"; exit 1; }
 
 # NOTE: $kmd is passed passively to (env) term for subsequent "xdotool type"
 
-[ -e /usr/local/bin/kak ] && KAK=/usr/local/bin/kak || KAK=/usr/bin/kak
 headless=${headless:-false}
-echo $1 | grep -q '.*/yazi.*/bulk-.*' && attached=true  # FOR: yazi bulk renames
+echo $1 | grep -q '.*/yazi-.*/bulk-.*' && yazi=true  # FOR: attached yazi bulk renames
 # share all instances (clients) with a single kak server session
 ID=${ID:-$USER}  # default session id
 
@@ -20,9 +19,7 @@ ID=${ID:-$USER}  # default session id
 [ "$BG" ] || { [ -e $SESSION/kak:bg ] && export BG=$(cat $SESSION/kak:bg); }
 export TABSTOP=3      # default for (pipe), SEE: align
 
-FILES=/tmp/kak:files  # to handle filenames with spaces
-XARG=/tmp/kak:xarg    # term script for filename list
-rm -f $FILES
+[ -e /usr/local/bin/kak ] && KAK=/usr/local/bin/kak || KAK=/usr/bin/kak
 $KAK -l | grep -q dead | $KAK -clear  # dead sessions
 
 debug() { echo "$1" | grep -qE 'hooks|shell|profile|keys|commands' && debug="-debug $1" || { debug="-debug commands"; return 1; } }
@@ -34,8 +31,8 @@ while : ;do
 		-v*           ) $KAK -version; exit ;;
 		-h*           ) $KAK -help; ditto '-debug' "hooks | shell | profile | keys | commands"; ditto 'kak' "-l | -p [<id>] | -v | -DEBUG (commands) | -P (no plugins) | -X (non-modal colorscheme)"; usage ;;
 		-B*           ) hyperfine -warmup 10 "$KAK -ui dummy -e quit"; exit ;;
-		-DE*          ) export TRACE=/tmp/kak:trace; debug $2 && shift ;;  # debug trace
-		-DI*          ) DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary ;;
+		-D*           ) export TRACE=/tmp/kak:trace; debug $2 && shift ;;  # debug trace
+		-LEXICON      ) DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary ;;
 		-P*           ) export UNPLUG=true ;;           # kakrc plugins exclusions
 		-T*           ) export TRACE=/tmp/kak:trace ;;  # trace messages
 		-X*           ) unset DISPLAY; [ $YAZI ] || export COLORSCHEME=${COLORSCHEME:-dabruin} ;;
@@ -50,7 +47,7 @@ while : ;do
 	shift
 done
 
-# inject spelling dictionary manually into ltex configuration in lieu of unavailable (helix) ltex-ls dictionary update
+# inject spelling dictionary manually into ltex configuration in lieu of unavailable ltex-ls dictionary update
 if [ "$DICTIONARY" ] ;then
 	TOML=$HOME/.config/kak-lsp/kak-lsp.toml  # FOR: kak-lsp v17.2.1
 	cat $TOML:zk $TOML:add >$TOML:template
@@ -62,17 +59,17 @@ fi
 
 # escape filenames containing spaces
 count=0
-IFS=$(echo)
+IFS=$(echo)  # to handle space filename parsing
 for i in $@ ;do
 	grep -q '^#.*filetype=sh' "$i"         && ID=script
 	echo "$i" | grep -Eq '(^kakrc|\.kak)$' && ID=kakoune
-	echo $i >>$FILES
+	files=$(printf "%s\n%s" "$i" "$files")
 	count=$(( count + 1 ))
 done
 
 [ $count -gt 1 ] && notify low 'Kakoune' "$count files to edit"
 # snapshot sources (in lieu of persistent undo avalability)
-console || (cat $FILES | tr '\n' '\0x00' | xargs -0 hgadd) &  # don' wait :)
+console || (echo "$files" | xargs -d'\n' hgadd) &  # don' wait :)
 
 # client/server
 if $headless ;then
@@ -81,14 +78,17 @@ else
 	$KAK -l | grep -q $ID || session='-s'
 fi
 
-console || [ $attached ] && exec cat $FILES | tr '\n' '\0x00' | xargs -0 $KAK  # (??) nvidia tty issues with kak config
+[ $yazi ] && exec $KAK $files  # NOTE: attached yazi session only issues 1 file (??) spawning via xargs causes desktop windowing issues
+console   && exec echo "$files" | xargs -d'\n' $KAK
 
-echo "#!/bin/dash
-cat $FILES | tr '\\\n' '\\\0x00' | xargs -0 $KAK $debug ${session:--c} $ID
-" >$XARG
-chmod 755 $XARG
 title=$(echo "$1" | sed 's|\.\/||g; s| [^ ]*/||; s/ .*/.../g')
 [ $count -gt 1 ] && title="$title($count)"
+XARG=/tmp/kak:xarg
+
+echo "#!/bin/dash
+echo \"$files\" | xargs -d'\\\n' $KAK $debug ${session:--c} $ID
+" >$XARG
+chmod 755 $XARG
 
 exec term "title=kak:$title" class=${class:-kak} PAPER ${XY:-132x52} $WAIT $XARG  # NOTE: exec for pwait pattern match
 

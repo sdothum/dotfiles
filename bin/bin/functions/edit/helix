@@ -30,19 +30,22 @@ if [ -e $(languages spelling) ] ;then
 	sed "/ltex.dictionary/a${spelling%::}" $(languages template) | sed "/ltex.dictionary/{n;s/::/,\n/g}" >$LANGUAGES
 fi
 
-[ $# -eq 1 ] && { cd $(dirname $1) >/dev/null; file=$(basename $1); shift; }  # enable :open in file directory
+[ $# -eq 1 ] && { cd $(dirname $1) >/dev/null; files=$(basename $1); shift; }  # enable :open in file directory
 
-# escape filenames containing spaces
 count=0
-[ "$file" ] || while : ;do
-	file="$file $(escape $1)"
+IFS=$(echo)  # to handle space filename parsing
+[ "$files" ] || for i in $@ ;do
+	files=$(printf "%s\n%s" "$i" "$files")
 	count=$(( count + 1 ))
-	shift
-	[ $# -gt 0 ] || break
 done
 [ $count -gt 1 ] && notify low 'Helix' "$count files to edit"
+XARG=/tmp/helix:xarg
 
-# term call doesn't handle "space" names
-term ${name:-helix} PAPER 132x53 $WAIT ${HX:-hx} -c $CONFIG $LOGGING $file  # 50 line page
+echo "#!/bin/dash
+echo \"$files\" | xargs -d'\\\n' ${HX:-hx} -c $CONFIG $LOGGING
+" >$XARG
+chmod 755 $XARG
+
+exec term "title=kak:$title" class=${class:-kak} PAPER ${XY:-132x52} $WAIT $XARG  # NOTE: exec for pwait pattern match
 
 # kak: filetype=sh

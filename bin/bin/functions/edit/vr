@@ -15,6 +15,6 @@ EDITOR=${EDITOR:-kak}
 files=$(a "$@" | fZf --multi | nocolor | cut -d: -f1 | uniq | quote)
 [ "$files" ] || exit
 
-$EDITOR $files
+echo "$files" | xargs -rt -d'\n' $EDITOR
 
 # kak: filetype=sh

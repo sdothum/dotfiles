@@ -14,9 +14,6 @@ EDITOR=${EDITOR:-kak}
 [ "$1"     ] && files=$(al "$@") || usage
 [ "$files" ] || exit
 
-# regex passed as search command causes file name mangling
-# echo "$@" | grep -q '^[[:alnum:]]*$' && search="-c \"/\v$@\""
-# al "$@" | exclude | sort | tr '\n' '\0x00' | xargs -r0 $EDITOR $search
-al "$@" | exclude | sort | tr '\n' '\0x00' | xargs -t -r0 $EDITOR
+al "$@" | exclude | sort | xargs -rt -d'\n' $EDITOR
 
 # kak: filetype=sh
