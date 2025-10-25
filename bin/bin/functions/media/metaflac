@@ -193,7 +193,7 @@ case $1 in
 		;;
 esac
 
-# # echo '---'
+# echo '---'
 mpc update >/dev/null
 
 # kak: filetype=sh

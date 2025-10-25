@@ -21,7 +21,7 @@ if [ "$1" ] ;then  # mail app hook
 else  # email scratchpad
 	file=$(mktemp)
 	mv $file $file.eml
-	offsetY=0 paddingY=4 paddingX=5 class=compose kak ID=draft $file.eml
+	class=compose kak ID=draft $file.eml
 fi
 
 # kak: filetype=sh

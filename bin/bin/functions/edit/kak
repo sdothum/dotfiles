@@ -6,30 +6,24 @@
 
 # ....................................................................... Editor
 
-usage() { usage: "[kmd=<command>] $(basename $0) [-l | -p [<id>] | -v | -h] [-BENCHMARK | -DEBUG [hooks|shell|profile|keys|commands] | -PLUG | -TRACE | -X11 | RULER=<char> | -- | ID=<id>] [WAIT] [<row>x<col>] <file>*"; exit 1; }
+usage() { usage: "[kmd=<command>] $(basename $0) [-l | -p [<id>] | -v | -h] [-BENCHMARK | -DEBUG [hooks|shell|profile|keys|commands] | -DICTIONARY | -PLUG | -TRACE | -X11 | RULER=<char> | -- | ID=<id>] [WAIT] [<row>x<col>] <file>*"; exit 1; }
 
 # NOTE: $kmd is passed passively to (env) term for subsequent "xdotool type"
 
+[ -e /usr/local/bin/kak ] && KAK=/usr/local/bin/kak || KAK=/usr/bin/kak
 headless=${headless:-false}
 echo $1 | grep -q '.*/yazi.*/bulk-.*' && attached=true  # FOR: yazi bulk renames
-
 # share all instances (clients) with a single kak server session
 ID=${ID:-$USER}  # default session id
-KAK=/usr/bin/kak
-[ -e /usr/local/bin/kak ] && KAK=/usr/local/bin/kak
 
-CONF=$XDG_CONFIG_HOME/kak
-DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary
-TOML=$HOME/.config/kak-lsp/kak-lsp.toml  # NOTE: for kak-lsp v17.2.1
-LOG=/tmp/kak.log
-DELAY=0.25        # tuned time to center window
-export TABSTOP=3  # default for (pipe), SEE: align
 [ -e $SESSION/kak:ruler ] && export RULER=$(cat $SESSION/kak:ruler)
-[ "$BG" ] || { [ -e $SESSION/kak:bg    ] && export BG=$(cat $SESSION/kak:bg); }
+[ "$BG" ] || { [ -e $SESSION/kak:bg ] && export BG=$(cat $SESSION/kak:bg); }
+export TABSTOP=3      # default for (pipe), SEE: align
 
+FILES=/tmp/kak:files  # to handle filenames with spaces
+XARG=/tmp/kak:xarg    # term script for filename list
+rm -f $FILES
 $KAK -l | grep -q dead | $KAK -clear  # dead sessions
-touch $LOG
-sudo chmod 666 $LOG                   # in case first time creation by root
 
 debug() { echo "$1" | grep -qE 'hooks|shell|profile|keys|commands' && debug="-debug $1" || { debug="-debug commands"; return 1; } }
 
@@ -40,7 +34,8 @@ while : ;do
 		-v*           ) $KAK -version; exit ;;
 		-h*           ) $KAK -help; ditto '-debug' "hooks | shell | profile | keys | commands"; ditto 'kak' "-l | -p [<id>] | -v | -DEBUG (commands) | -P (no plugins) | -X (non-modal colorscheme)"; usage ;;
 		-B*           ) hyperfine -warmup 10 "$KAK -ui dummy -e quit"; exit ;;
-		-D*           ) export TRACE=/tmp/kak:trace; debug $2 && shift ;;  # debug trace
+		-DE*          ) export TRACE=/tmp/kak:trace; debug $2 && shift ;;  # debug trace
+		-DI*          ) DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary ;;
 		-P*           ) export UNPLUG=true ;;           # kakrc plugins exclusions
 		-T*           ) export TRACE=/tmp/kak:trace ;;  # trace messages
 		-X*           ) unset DISPLAY; [ $YAZI ] || export COLORSCHEME=${COLORSCHEME:-dabruin} ;;
@@ -55,25 +50,29 @@ while : ;do
 	shift
 done
 
-# snapshot sources (in lieu of persistent undo avalability)
-console || hgadd $@ &  # don' wait :)
-
 # inject spelling dictionary manually into ltex configuration in lieu of unavailable (helix) ltex-ls dictionary update
-cat $TOML:zk $TOML:add >$TOML:template
-if [ -e $DICTIONARY ] ;then
-	spelling="$(sort -df $DICTIONARY | sed -r '/^ *$/d; s/^ *(.*) *$/\\"\1\\":/' | tr '\n' ':')"  # comma's cause unterminated address regex error
-	sed "/^dictionary/a${spelling%::}" $TOML:template | sed "/^dictionary/{n;s/::/,\n/g}" >$TOML
+if [ "$DICTIONARY" ] ;then
+	TOML=$HOME/.config/kak-lsp/kak-lsp.toml  # FOR: kak-lsp v17.2.1
+	cat $TOML:zk $TOML:add >$TOML:template
+	if [ -e $DICTIONARY ] ;then
+		spelling="$(sort -df $DICTIONARY | sed -r '/^ *$/d; s/^ *(.*) *$/\\"\1\\":/' | tr '\n' ':')"  # comma's cause unterminated address regex error
+		sed "/^dictionary/a${spelling%::}" $TOML:template | sed "/^dictionary/{n;s/::/,\n/g}" >$TOML
+	fi
 fi
 
 # escape filenames containing spaces
 count=0
+IFS=$(echo)
 for i in $@ ;do
 	grep -q '^#.*filetype=sh' "$i"         && ID=script
 	echo "$i" | grep -Eq '(^kakrc|\.kak)$' && ID=kakoune
-	file="$file $(echo $i | sed 's/ /\\ /g')"
+	echo $i >>$FILES
 	count=$(( count + 1 ))
 done
+
 [ $count -gt 1 ] && notify low 'Kakoune' "$count files to edit"
+# snapshot sources (in lieu of persistent undo avalability)
+console || (cat $FILES | tr '\n' '\0x00' | xargs -0 hgadd) &  # don' wait :)
 
 # client/server
 if $headless ;then
@@ -82,17 +81,15 @@ else
 	$KAK -l | grep -q $ID || session='-s'
 fi
 
-# term call doesn't handle "space" names
-# console && { $KAK $file >>$LOG 2>&1; exit; }
-console || [ $attached ] && exec $KAK $file  # nvidia tty console doesn't play well with full default kak config
+console || [ $attached ] && exec cat $FILES | tr '\n' '\0x00' | xargs -0 $KAK  # (??) nvidia tty issues with kak config
 
-# (sleep $DELAY; window snap center) &  # SEE: rulerrc
-title=$(echo "$file" | sed 's|\.\/||g; s| [^ ]*/||; s/ .*/.../g')
+echo "#!/bin/dash
+cat $FILES | tr '\\\n' '\\\0x00' | xargs -0 $KAK $debug ${session:--c} $ID
+" >$XARG
+chmod 755 $XARG
+title=$(echo "$1" | sed 's|\.\/||g; s| [^ ]*/||; s/ .*/.../g')
 [ $count -gt 1 ] && title="$title($count)"
-if [ $WAIT ] ;then
-	exec term "title=kak:$title" class=${class:-kak} PAPER ${XY:-132x52} $WAIT $KAK $debug ${session:--c} $ID "$file" >>$LOG 2>&1  # NOTE: exec for pwait pattern match
-else
-	nohup term "title=kak:$title" class=${class:-kak} PAPER ${XY:-132x52} $KAK $debug ${session:--c} $ID "$file" >>$LOG 2>&1       # NOTE: nohup to detach window from yazi
-fi
+
+exec term "title=kak:$title" class=${class:-kak} PAPER ${XY:-132x52} $WAIT $XARG  # NOTE: exec for pwait pattern match
 
 # kak: filetype=sh
