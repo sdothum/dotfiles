@@ -38,7 +38,7 @@ evaluate-commands %sh{
 	#                            -> ffead0:-7,fff5e8:9,96f8f8:-12 (duochromatic orange/cyan theme)
 	#                            -> 96f8f8:-12,fff5e8:9,ffd9b6:-7 (triadic cyan/orange/salmon theme)
 
-   [ $kak_opt_filetype = 'markdown' ] && BG=${BG:-ffead0:-7,fff5e8:9,96f8f8:-12} || BG=${BG:-96f8f8:-12,fff5e8:9,ffd9b6:-7}
+   [ "$kak_opt_filetype" = 'markdown' ] && BG=${BG:-ffead0:-7,fff5e8:9,96f8f8:-12} || BG=${BG:-96f8f8:-12,fff5e8:9,ffd9b6:-7}
 
 	setbg() {
 		hex=$(echo $BG,, | cut -s -d, -f$1)
@@ -106,7 +106,7 @@ evaluate-commands %sh{
 			if [ $lighten ] ;then
 				# cursor="${vivid_cyan}"
 				cursor="${white}"
-				ruler="$(lightness ${background} ${NORMAL_:--12})"  # NOTE: double minus for darkening
+				ruler="$(lightness ${background} ${NORMAL_:--12})"  # NOTE: negative value for darkening
 			else
 				cursor="${pale_orange}"
 				ruler="$(desaturate ${background} '34 / 35')"

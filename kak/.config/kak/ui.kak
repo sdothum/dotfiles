@@ -74,7 +74,7 @@ if-else %{ [ -n "$DISPLAY" ] } %{
 
 # .......................................................... Console colorscheme
 
-declare-option str theme %sh{ echo "${COLORSCHEME:-dabruin}" }
+declare-option str theme %sh{ echo "${COLORSCHEME:-plain}" }
 	colorscheme %opt{theme}
 }
 
@@ -124,11 +124,6 @@ hook global WinDisplay .* %{ cursor-mode }
 # set-option global ui_options terminal_status_on_top=true terminal_assistant=cat
 # set-option global ui_options terminal_status_on_top=true
 set-option global ui_options terminal_assistant=none
-
-# similar to goto g BUT: preserves selections
-define-command scroll-home %{
-	evaluate-commands %sh{ for i in $(seq 1 $(( $kak_cursor_line / $(tput lines) )) ) ;do echo "execute-keys <pageup>" ;done  }
-}
 
 # ................................................................. Line numbers
 

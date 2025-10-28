@@ -17,14 +17,14 @@ map global normal '#' ': enter-user-mode format<ret>'
 
 addm %{ block   e1 : map global format <tab>   '%|unexpand --first-only -t<space>' -docstring 'leading tabs,n spaces' }
 addm %{ block   e2 : map global format <s-tab> '%|expand --init -t<space>'         -docstring 'leading tabs,n spaces' }
-addm %{ block   f1 : map global format f       ': refold<ret>'                     -docstring 'fold,unfold' }
-addm %{ block   f2 : map global format F       ': unfold<ret>'                     -docstring 'fold,unfold' }
+addm %{ block   f1 : map global format f       ': refold<ret>'                     -docstring 'fold,unfold'           }
+addm %{ block   f2 : map global format F       ': unfold<ret>'                     -docstring 'fold,unfold'           }
 
 # ...................................................................... Comment
 
-addm %{ comment c1 : map global format <c-c>   ': comment-line<ret>'               -docstring 'comment,block  (kak)' }
-addm %{ comment c2 : map global format c       ': comment-block<ret>'              -docstring 'comment,block  (kak)' }
-addm %{ comment h  : map global format h       'x|comment c<ret>'                  -docstring '/* css */'   }
+addm %{ comment c1 : map global format <c-c>   ': comment-line<ret>'               -docstring 'comment,block  (kak)'        }
+addm %{ comment c2 : map global format c       ': comment-block<ret>'              -docstring 'comment,block  (kak)'        }
+addm %{ comment h  : map global format h       'x|comment c<ret>'                  -docstring '/* css */'                   }
 addm %{ comment m  : map global format '`'     'x|comment \`<ret>'                 -docstring 'markdown ``    (code block)' }
 
 # ......................................................................... Line
@@ -88,16 +88,16 @@ addm %{ paste p9 : map global select R '| xsel --output --clipboard<ret>'       
 
 # ......................................................................... Line
 
-# map global normal G   'ge'     -docstring 'goto buffer end'  # breaks selection motion
-map global normal ^     'gh'     -docstring 'goto line begin'
-map global normal $     'gl'     -docstring 'goto line end'
-map global normal Y     '<a-l>y' -docstring 'yank to end of line'
+# map global normal G     'ge'     -docstring 'goto buffer end'  # breaks selection motion
+map global normal ^       'gh'     -docstring 'goto line begin'
+map global normal $       'gl'     -docstring 'goto line end'
+map global normal Y       '<a-l>y' -docstring 'yank to end of line'
 
 # ........................................................................ Block
 
-map global normal <c-=> '{p'     -docstring 'extend to previous paragraph'  # NOTE: flip <a-;> selection direction after forward select
-map global normal =     '<a-a>p' -docstring 'select surrounding paragraph'
-map global normal <a-=> '}p'     -docstring 'extend to next paragraph'
+map global normal <minus> '[p'     -docstring 'select to start of paragraph'
+map global normal =       '<a-a>p' -docstring 'select surrounding paragraph'
+map global normal <plus>  '}p'     -docstring 'extend to next paragraph'
 
 # .................................................................... Searching
 
