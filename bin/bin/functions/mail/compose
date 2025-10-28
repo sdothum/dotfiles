@@ -6,8 +6,6 @@
 
 # ................................................................. Compose mail
 
-export MONOFONT="Iosevka-proof"
-
 if [ "$1" ] ;then  # mail app hook
 	# focus management between aerc and compose windows SEE: rulerrc
 	trap "xdotool search --onlyvisible --classname mail windowactivate; window size monocle" EXIT
@@ -21,7 +19,7 @@ if [ "$1" ] ;then  # mail app hook
 else  # email scratchpad
 	file=$(mktemp)
 	mv $file $file.eml
-	class=compose kak ID=draft $file.eml
+	class=compose kak -PROOF ID=draft $file.eml
 fi
 
 # kak: filetype=sh

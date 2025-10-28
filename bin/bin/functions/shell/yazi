@@ -16,7 +16,7 @@ console || termyazi='term yazi'             # console mode or X11 window
 
 # sloppy mtp automount
 mtp mount && { [ "$1" ] || MTP=$HOME/mtp; }
-[ "$1" != TMUX ] && trap 'mtp umount' EXIT  # must manually eject if mounted during toggle tmux session, SEE: herbstluftwm appbinds
+# [ "$1" != TMUX ] && trap 'mtp umount' EXIT  # must manually eject if mounted during toggle tmux session, SEE: herbstluftwm appbinds
 udev                                        # reload udev rules
 
 [ $TERMBG ] || { [ -e $SESSION/yazi ] && TERMBG=$(cat $SESSION/yazi); }  # SEE: abbreviations.fish

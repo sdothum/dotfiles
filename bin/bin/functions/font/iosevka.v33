@@ -337,7 +337,7 @@ cmdopts () {
 			heading        ) shape 650; sb 0.8000; leading 1.2500; weight 300 light; ebook monolegible ;;  # web heading
 			kindle         ) leading 1.9; shape $extended; sb 0.6150 ;;
 			kobo           ) leading 1; shape $extended; sb 0.6850 ;;
-			menu           ) leading 1.5000; sb 0.9000; build=-menu ;;                                     # rofi menu
+			menu           ) leading 1.5000; build=-menu ;;                                                # rofi menu
 			normal         ) shape 500; sb 0.7000 ;;                                                       # normal width
 			# proof        ) leading 2.0000; sb 0.8000; build=${build}-proof ;;                            # for pure writing :)
 			proof          ) leading 2.0000; build=${build}-proof ;;

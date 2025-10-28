@@ -6,7 +6,13 @@
 
 # ....................................................................... Editor
 
-usage() { usage: "[kmd=<command>] $(basename $0) [-l | -p [<id>] | -v | -h] [-BENCHMARK | -DEBUG [hooks|shell|profile|keys|commands] | -LEXICON | -PLUG | -TRACE | -X11 | RULER=<char> | -- | ID=<id>] [WAIT] [<row>x<col>] <file>*"; exit 1; }
+usage() { echo "[kmd=<command>] $(basename $0) [-l'ist | -k'ill [<id>] | -d'ebug [<debug>] | -v'ersion | -h'elp]
+> [-BENCHMARK | -LEXICON | -PROOF | -TRACE | -UNPLUG | -CONSOLE | RULER=<char>]
+> [-- | ID=<id>] [WAIT] [<row>x<col>]
+> <file>*
+> where, <debug> is [hooks|shell|profile|keys|commands]" | usage:
+	exit 1
+}
 
 # NOTE: $kmd is passed passively to (env) term for subsequent "xdotool type"
 
@@ -22,20 +28,21 @@ export TABSTOP=3      # default for (pipe), SEE: align
 [ -e /usr/local/bin/kak ] && KAK=/usr/local/bin/kak || KAK=/usr/bin/kak
 $KAK -l | grep -q dead | $KAK -clear  # dead sessions
 
-debug() { echo "$1" | grep -qE 'hooks|shell|profile|keys|commands' && debug="-debug $1" || { debug="-debug commands"; return 1; } }
+debug() { echo "$1" | grep -qE 'hooks|shell|profile|keys|commands' && debug="-debug $1" || debug="-debug commands"; }
 
 while : ;do
 	case $1 in
 		-l            ) $KAK -l; exit ;;
-		-p            ) [ $2 ] && $KAK -p $2 || { for i in $($KAK -l); do ditto kak "$i ${RED}❌"; echo kill | $KAK -p $i ;done }; exit ;;
+		-k            ) [ $2 ] && $KAK -p $2 || { for i in $($KAK -l); do ditto kak "$i ${RED}❌"; echo kill | $KAK -p $i ;done }; exit ;;
+		-d            ) export TRACE=/tmp/kak:trace; debug $2 && shift ;;  # debug trace
 		-v*           ) $KAK -version; exit ;;
-		-h*           ) $KAK -help; ditto '-debug' "hooks | shell | profile | keys | commands"; ditto 'kak' "-l | -p [<id>] | -v | -DEBUG (commands) | -P (no plugins) | -X (non-modal colorscheme)"; usage ;;
+		-h* | help    ) $KAK -help; usage ;;
 		-B*           ) hyperfine -warmup 10 "$KAK -ui dummy -e quit"; exit ;;
-		-D*           ) export TRACE=/tmp/kak:trace; debug $2 && shift ;;  # debug trace
-		-LEXICON      ) DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary ;;
-		-P*           ) export UNPLUG=true ;;           # kakrc plugins exclusions
+		-LEXICON      ) DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary; reverse=-r ;;  # push .config dictionary to end of sort list
+		-PROOF        ) export MONOFONT="Iosevka-proof" ;;
 		-T*           ) export TRACE=/tmp/kak:trace ;;  # trace messages
-		-X*           ) unset DISPLAY; [ $YAZI ] || export COLORSCHEME=${COLORSCHEME:-dabruin} ;;
+		-U*           ) export UNPLUG=true ;;           # kakrc plugins exclusions
+		-C*           ) unset DISPLAY; console=true; export COLORSCHEME=${COLORSCHEME:-default} ;;
 		RULER=*       ) export RULER="${1#*=}" ;;       # default RULER='│'
 		--            ) ID=$(rand)    ;;                # force new instance
 		id=*          ) ID="${1#*=}"  ;;
@@ -69,7 +76,7 @@ done
 
 [ $count -gt 1 ] && notify low 'Kakoune' "$count files to edit"
 # snapshot sources (in lieu of persistent undo avalability)
-console || (echo "$files" | xargs -d'\n' hgadd) &  # don' wait :)
+console || (printf "$files" | xargs -r -d'\n' hgadd) &
 
 # client/server
 if $headless ;then
@@ -79,17 +86,19 @@ else
 fi
 
 [ $yazi ] && exec $KAK $files  # NOTE: attached yazi session only issues 1 file (??) spawning via xargs causes desktop windowing issues
-console   && exec echo "$files" | xargs -d'\n' $KAK
+console || [ $console ] && { printf "$files" | sort $reverse | xargs -d'\n' $KAK; exit; }  # NOTE: "exec .. | .." (pipe) will not redirect shell, hence, "exit"
 
 title=$(echo "$1" | sed 's|\.\/||g; s| [^ ]*/||; s/ .*/.../g')
 [ $count -gt 1 ] && title="$title($count)"
-XARG=/tmp/kak:xarg
+XARGS=/tmp/kak:xargs
+
+# NOTE: ".. | xargs kak" will additionally open a *stdin* scratch buffer
 
 echo "#!/bin/dash
-echo \"$files\" | xargs -d'\\\n' $KAK $debug ${session:--c} $ID
-" >$XARG
-chmod 755 $XARG
+printf \"$files\" | sort $reverse | xargs -d'\\\n' $KAK $debug ${session:--c} $ID
+" >$XARGS
+chmod 755 $XARGS
 
-exec term "title=kak:$title" class=${class:-kak} PAPER ${XY:-132x52} $WAIT $XARG  # NOTE: exec for pwait pattern match
+exec term "title=kak:$title" class=${class:-kak} PAPER ${XY:-132x52} $WAIT $XARGS  # NOTE: exec for pwait pattern match
 
 # kak: filetype=sh

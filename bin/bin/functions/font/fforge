@@ -12,27 +12,33 @@
 
 usage() { 
 	echo "$(basename $0) Q_hook | q_hook
+$(basename $0) baseline      <shape>
+$(basename $0) bookweight    [book+regular]
+$(basename $0) capadjust     <letters>
+$(basename $0) copy <family> <name>, font alias via commandline only
+$(basename $0) f_ascending   <shape>
+$(basename $0) f_asymmetric  <shape>
+$(basename $0) f_descending  <shape>
+$(basename $0) FP_descending <shape>
 $(basename $0) I_descending  <shape>
 $(basename $0) i_flipped     <shape>, experimental
 $(basename $0) l_ascending   <shape>
-$(basename $0) Q_custom      <shape>
-$(basename $0) Q_horizontal  <shape>
-$(basename $0) T_descending  <shape>
-$(basename $0) t_descending  <shape>
-$(basename $0) t_flipped     <shape>
-$(basename $0) Y_descending  <shape>
-$(basename $0) FP_descending <shape>
-$(basename $0) baseline      <shape>
-$(basename $0) space         <space>
-$(basename $0) punctuation   <emdash>  <shape>
+$(basename $0) l_tailed      <letters> <shape>
 $(basename $0) ligature      <width>   <shape>
-$(basename $0) capadjust     <letters>
+$(basename $0) map  <family> <glyph> <glyph>, map U+<glyph> via commandline only
+$(basename $0) punctuation   <emdash>  <shape>
+$(basename $0) Q_custom      <shape>
+$(basename $0) q_hook_       <shape>
+$(basename $0) Q_horizontal  <shape>
+$(basename $0) quote         <letters> <shape>
 $(basename $0) serifed       <letters> <shape>
 $(basename $0) serifless     <letters> <shape>
+$(basename $0) space         <space>
 $(basename $0) tailed        <letters> <shape>
-$(basename $0) bookweight    [book+regular]
-$(basename $0) copy <family> <name>, font alias via commandline only
-$(basename $0) map  <family> <glyph> <glyph>, map U+<glyph> via commandline only" | usage:
+$(basename $0) t_descending  <shape>
+$(basename $0) T_descending  <shape>
+$(basename $0) t_flipped     <shape>
+$(basename $0) Y_descending  <shape>" | usage:
 	exit 1
 }
 
@@ -327,33 +333,55 @@ Generate(\$1);
 
 	for i in $(regular) ;do
 		ditto q_hook_ $i
-		[ $shape -eq 650 ] && case $i in  # webfont
-			*book* ) Xshape=630 ;;
-			*bold* ) Xshape=628 ;;
-			*      ) Xshape=640 ;;
-		esac
+		unset Xwidth Ydepth Xshift Yshift
+		if [ $shape -eq 650 ] ;then
+			Xwidth=28
+			case $i in  # webfont
+				*book* ) Xshift=578; Yshift=-400 ;;
+				*bold* ) Xshift=566; Yshift=-399;;
+				*      ) Xshift=580; Yshift=-403 ;;
+			esac
+		elif [ $shape -eq 600 ] ;then
+			Xwidth=28
+			case $i in  # webfont
+				*book* ) Xshift=542; Yshift=-400; Ydepth=55 ;;
+				*bold* ) Xshift=523; Yshift=-400; Ydepth=58;;
+				*      ) Xshift=534; Yshift=-402; Ydepth=55 ;;
+			esac
+		fi
 		case $i in
-			*book* ) Xshift=$(( 526 + ${Xshape:-$shape} - 576 )); Yshift=-398; Ydepth=54 ;;  # NOTE: spec for cell shape 576
-			*bold* ) Xshift=$(( 526 + ${Xshape:-$shape} - 576 )); Yshift=-401; Ydepth=58 ;;
-			*      ) Xshift=$(( 526 + ${Xshape:-$shape} - 576 )); Yshift=-402; Ydepth=55 ;;
+			*book* ) Xshift=${Xshift:-561}; Yshift=${Yshift:--401}; Ydepth=${Ydepth:-55} ;;  # NOTE: spec for cell shape 576
+			*bold* ) Xshift=${Xshift:-556}; Yshift=${Yshift:--401}; Ydepth=${Ydepth:-58} ;;
+			*      ) Xshift=${Xshift:-565}; Yshift=${Yshift:--403}; Ydepth=${Ydepth:-55} ;;
 		esac
-		fontforge -quiet --script ${LOG}:q_hook_.script $i 25 $Ydepth $Xshift $Yshift
+		fontforge -quiet --script ${LOG}:q_hook_.script $i ${Xwidth:-18} $Ydepth $Xshift $Yshift
 	done
 
 	# italics left shifted in character cell
 	for i in $(italic) ;do
 		ditto q_hook_:italic $i
-		[ $shape -eq 650 ] && case $i in  # webfont
-			*book* ) Xshape=705 ;;
-			*bold* ) Xshape=698 ;;
-			*      ) Xshape=700 ;;
-		esac
+		unset Xwidth Ydepth Xshift Yshift
+		if [ $shape -eq 650 ] ;then
+			Xwidth=28
+			case $i in  # webfont
+				*book* ) Xshift=484; Yshift=-399; Ydepth=55 ;;
+				*bold* ) Xshift=477; Yshift=-403; Ydepth=59 ;;
+				*      ) Xshift=487; Yshift=-403; Ydepth=55 ;;
+			esac
+		elif [ $shape -eq 600 ] ;then
+			Xwidth=18
+			case $i in  # webfont
+				*book* ) Xshift=490; Yshift=-401; Ydepth=55 ;;
+				*bold* ) Xshift=483; Yshift=-404; Ydepth=59 ;;
+				*      ) Xshift=493; Yshift=-400; Ydepth=54 ;;
+			esac
+		fi
 		case $i in
-			*book* ) Xshift=$(( 456 + ${Xshape:-$shape} - $shape )); Yshift=-398; Ydepth=54 ;;  # Xshift -70 from upright
-			*bold* ) Xshift=$(( 456 + ${Xshape:-$shape} - $shape )); Yshift=-401; Ydepth=58 ;;
-			*      ) Xshift=$(( 456 + ${Xshape:-$shape} - $shape )); Yshift=-402; Ydepth=55 ;;
+			*book* ) Xshift=${Xshift:-475}; Yshift=${Yshift:--398}; Ydepth=${Ydepth:-54} ;;  # Xshift from upright
+			*bold* ) Xshift=${Xshift:-466}; Yshift=${Yshift:--401}; Ydepth=${Ydepth:-58} ;;
+			*      ) Xshift=${Xshift:-474}; Yshift=${Yshift:--403}; Ydepth=${Ydepth:-55} ;;
 		esac
-		fontforge -quiet --script ${LOG}:q_hook_.script $i 20 $Ydepth $Xshift $Yshift
+		fontforge -quiet --script ${LOG}:q_hook_.script $i ${Xwidth:-17} $Ydepth $Xshift $Yshift
 	done
 }
 
@@ -712,8 +740,9 @@ Generate(\$1);
 }
 
 f_descending() {
-	Yshift=-160
-	Ydepth=60
+	Yshift=-208
+	Ydepth=32
+	[ $shape -eq 600 ] && { Yshift=-200; Ydepth=36; }  # web font extended cap height
 	f_ascending
 }
 
@@ -906,35 +935,35 @@ Generate(\$1);
 fforge=$1
 case $1 in
 	baseline      ) shape=$2; shift ;;
-	f_asymmetric  ) shape=$2; shift ;;
+	capadjust     ) letters=$2; shift ;;                                         # align "C G O Q S U" to x base
+	copy          ) [ $3 ] && { family=$2; alias=$3; shift 2; copy; exit; }      || usage ;;  # pwd commandline only!
 	f_ascending   ) shape=$2; shift ;;
+	f_asymmetric  ) shape=$2; shift ;;
 	f_descending  ) shape=$2; shift ;;
+	FP_descending ) shape=$2; shift ;;
 	I_descending  ) shape=$2; shift ;;
 	i_flipped     ) shape=$2; shift ;;
 	l_ascending   ) shape=$2; shift ;;
-	T_descending  ) shape=$2; shift ;;
-	t_descending  ) shape=$2; shift ;;
-	t_flipped     ) shape=$2; shift ;;
-	Y_descending  ) shape=$2; shift ;;
-	FP_descending ) shape=$2; shift ;;
-	Q_horizontal  ) shape=$2; shift ;;
+	l_tailed      ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "l" (tailed)
+	ligature      ) [ $4 ] && { width=$2; shift 2; } || { shape=$2; shift; } ;;  # SEE: iosevka for tricky bits
+	map           ) [ $4 ] && { family=$2; from=$3; to=$4; shift 3; map; exit; } || usage ;;  # pwd commandline only!
+	punctuation   ) emdash=$2; shape=$3; shift 2 ;;
 	Q_custom      ) shape=$2; shift ;;
 	q_hook        ) ;;
-	q_hook_       ) shape=$2; shift ;;
 	Q_hook        ) ;;
-	space         ) space=$2; shift ;;
-	punctuation   ) emdash=$2; shape=$3; shift 2 ;;
-	ligature      ) [ $4 ] && { width=$2; shift 2; } || { shape=$2; shift; } ;;  # SEE: iosevka for tricky bits
-	capadjust     ) letters=$2; shift ;;                                         # align "C G O Q S U" to x base
-	tailed        ) letters=$2; shape=$3; shift 2 ;;                             # "a d" (tailed)
-	serifed       ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "i j l" (serifed)
-	# serifless   ) letters=$2; width=$(( $3 * 845 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
-	serifless     ) letters=$2; width=$(( $3 * 825 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
-	l_tailed      ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "l" (tailed)
+	q_hook_       ) shape=$2; shift ;;
+	Q_horizontal  ) shape=$2; shift ;;
 	quote         ) letters=$2; width=$(( $3 * 825 / 1000));  shift 2 ;;         # percent of quote (left,right,reversed)
+	serifed       ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "i j l" (serifed)
+	serifless     ) letters=$2; width=$(( $3 * 825 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
+	# serifless   ) letters=$2; width=$(( $3 * 845 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
+	space         ) space=$2; shift ;;
+	tailed        ) letters=$2; shape=$3; shift 2 ;;                             # "a d" (tailed)
+	t_descending  ) shape=$2; shift ;;
+	T_descending  ) shape=$2; shift ;;
+	t_flipped     ) shape=$2; shift ;;
 	*weight       ) regular=${1%weight}; fforge=weight; [ "$2" = 'book+regular' ] && { adjust=true; shift; } ;;
-	copy          ) [ $3 ] && { family=$2; alias=$3; shift 2; copy; exit; }      || usage ;;  # pwd commandline only!
-	map           ) [ $4 ] && { family=$2; from=$3; to=$4; shift 3; map; exit; } || usage ;;  # pwd commandline only!
+	Y_descending  ) shape=$2; shift ;;
 	*             ) usage ;;
 esac
 shift
