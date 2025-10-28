@@ -11,10 +11,9 @@
 EDIT='new'
 DIARY='diary'
 
-EDITOR=${EDITOR:-kak ID=wiki}
+EDITOR=${EDITOR:-kak -LEXICON -PROOF ID=wiki}
 DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary
 [ -e $DICTIONARY ] || unset DICTIONARY
-export MONOFONT="Iosevka-proof"
 
 WIKIS="$HOME/vimwiki"
 [ $1 ] && prompt=Diary || { option=-v; prompt=Wiki; menu="\n$(X $DIARY)"; }
@@ -56,7 +55,7 @@ wiki() {
 	if expand "$file" >/dev/null ;then
 		file="$(expand "$file")"
 		filename_check
-		class=wiki $EDITOR -LEXICON "$file" $DICTIONARY
+		class=wiki $EDITOR "$file" $DICTIONARY
 	else
 		error=": ${file##*/} ∉ ${file%/*}"
 		sed -i "\|${file##*/}.$SEP ${file%/*}$|d" $HISTORY/wiki
