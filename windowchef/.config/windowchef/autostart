@@ -13,9 +13,9 @@ restore unclutter
 rm -f $WME:pavucontrol  # hide pavucontrol SEE: rulerrc
 pulse
 udev
-qk stop                 # HACK: need to start in a term session
-brightness
 sleep 1                 # settle pipewire for mpd server connection
+brightness
+dispwin -d1 $(cat $SESSION/displaycal:profile)
 desktop $(chef desktop "DESK")
 [ -e $SESSION/cbonsai ] && cbonsai
 [ -e $SESSION/term    ] && term
