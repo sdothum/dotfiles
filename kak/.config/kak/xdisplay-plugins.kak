@@ -88,5 +88,6 @@ bundle popup.kak https://github.com/enricozb/popup.kak.git %{
 # ....................................................................... splash
 
 bundle splash.kak https://github.com/Hjagu09/splash.kak.git
+# bundle texture.kak https://github.com/ftonneau/texture.kak.git
 
 # kak: filetype=kak
