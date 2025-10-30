@@ -1,0 +1,18 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................... DisplayCAL-py3
+
+sudo xbps-install -y glibc-devel gtk+3-devel libXxf86vm-devel pkg-config python3-devel
+
+cd $HOME
+python -m venv venv-displaycal
+. venv-displaycal/bin/activate
+pip3 install displaycal
+
+displaycal3  # to complete installation (missing modules) and calibrate monitor
+
+# kak: filetype=sh

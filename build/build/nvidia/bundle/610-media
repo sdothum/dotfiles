@@ -35,10 +35,11 @@
 
 = photography
 = ═══════════
+# dispcalGUI
 # gmic-gimp
 # gwenview
   digikam
-  dispcalGUI
+d m displaycal-py3
   exiftool
   gimp
   gpick
