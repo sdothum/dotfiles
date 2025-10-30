@@ -1,0 +1,22 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Hardware
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................... DisplayCAL-py3
+
+ditto displaycal 'note instructions to "calibrate" colormunki by rotating its sensor to the closed position'
+ditto displaycal '.. then opening the sensor before placing it over the center of the colored calibration swatch to continue'
+ditto displaycal 'missing modules will be prompted to be downloaded..'
+
+ditto WARNING displaycal 'center application windows on the screen to position the calibration swatch for colormunki placement'
+ifno 'proceed to calibrate monitor (about 30 minutes)?' && exit
+ditto displaycal 'PAY ATTENTION TO TERM PROMPTS !!!\nthere are several steps to calculate the color profile for the monitor'
+
+sleep 5
+cd $HOME
+. venv-displaycal/bin/activate
+displaycal
+
+# kak: filetype=sh

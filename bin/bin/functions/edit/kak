@@ -39,7 +39,7 @@ while : ;do
 		-h* | help    ) $KAK -help; usage ;;
 		-B*           ) hyperfine -warmup 10 "$KAK -ui dummy -e quit"; exit ;;
 		-LEXICON      ) DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary; reverse=-r ;;  # push .config dictionary to end of sort list
-		-PROOF        ) export MONOFONT="Iosevka-proof" ;;
+		-PROOF        ) export MONOFONT="Iosevka-proof"; export BG='ffead0:-7,fff5e8:9,96f8f8:-12' ;;
 		-T*           ) export TRACE=/tmp/kak:trace ;;  # trace messages
 		-U*           ) export UNPLUG=true ;;           # kakrc plugins exclusions
 		-C*           ) unset DISPLAY; console=true; export COLORSCHEME=${COLORSCHEME:-default} ;;
@@ -86,16 +86,16 @@ else
 fi
 
 [ $yazi ] && exec $KAK $files  # NOTE: attached yazi session only issues 1 file (??) spawning via xargs causes desktop windowing issues
-console || [ $console ] && { printf "$files" | sort $reverse | xargs -d'\n' $KAK; exit; }  # NOTE: "exec .. | .." (pipe) will not redirect shell, hence, "exit"
+console || [ $console ] && { printf "$files" | sort $reverse | xargs -d'\n' $KAK -e 'db *stdin*'; exit; }  # NOTE: "exec .. | .." (pipe) will not redirect shell, hence, "exit"
 
 title=$(echo "$1" | sed 's|\.\/||g; s| [^ ]*/||; s/ .*/.../g')
 [ $count -gt 1 ] && title="$title($count)"
 XARGS=/tmp/kak:xargs
 
-# NOTE: ".. | xargs kak" will additionally open a *stdin* scratch buffer
+# NOTE: kak -e 'db *stdin*' to remove *stdin* scratch buffer created by "xargs kak"
 
 echo "#!/bin/dash
-printf \"$files\" | sort $reverse | xargs -d'\\\n' $KAK $debug ${session:--c} $ID
+printf \"$files\" | sort $reverse | xargs -d'\\\n' $KAK -e 'db *stdin*' $debug ${session:--c} $ID
 " >$XARGS
 chmod 755 $XARGS
 
