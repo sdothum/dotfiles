@@ -33,7 +33,7 @@ debug() { echo "$1" | grep -qE 'hooks|shell|profile|keys|commands' && debug="-de
 while : ;do
 	case $1 in
 		-l            ) $KAK -l; exit ;;
-		-k            ) [ $2 ] && $KAK -p $2 || { for i in $($KAK -l); do ditto kak "$i ${RED}❌"; echo kill | $KAK -p $i ;done }; exit ;;
+		-k            ) [ $2 ] && $KAK -p $2 || { for i in $($KAK -l); do ditto kak "$i ${RED}❌"; echo kill | $KAK -p $i ;done; pkill kak-lsp; }; exit ;;
 		-d            ) export TRACE=/tmp/kak:trace; debug $2 && shift ;;  # debug trace
 		-v*           ) $KAK -version; exit ;;
 		-h* | help    ) $KAK -help; usage ;;
