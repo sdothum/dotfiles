@@ -24,7 +24,7 @@
 
 = codec
 = ═════
-  gst-libav
+# gst-libav
   gst-plugins-base1
   gst-plugins-good1
   gst-plugins-ugly1

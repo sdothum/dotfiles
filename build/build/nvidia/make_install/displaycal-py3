@@ -13,6 +13,8 @@ python -m venv venv-displaycal
 . venv-displaycal/bin/activate
 pip3 install displaycal
 
+ln -sf $(find $HOME/.local/share -name dispwin) $HOME/.local/bin
+
 displaycal3  # to complete installation (missing modules) and calibrate monitor
 
 # kak: filetype=sh
