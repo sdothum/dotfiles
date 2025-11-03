@@ -43,9 +43,9 @@ nop bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
 
 bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
 	# NOTE: <ret> jumps to buffer line
-	addm %{ goto   z  : map global buffer : ': find '                   -docstring "find buffer:line" }
-	addm %{ search z1 : map global select : ': find '                   -docstring "find       —— buffer:line,commit edits!" }
-	addm %{ search z2 : map global select ! ': find-apply-changes<ret>' -docstring "find       —— buffer:line,commit edits!" }
+	addm %{ goto   z  : map global buffer / ': find '                   -docstring "search buffers(:lines)" }
+	addm %{ search z1 : map global select / ': find '                   -docstring "search     —— buffers(:lines),commit edits!" }
+	addm %{ search z2 : map global select = ': find-apply-changes<ret>' -docstring "search     —— buffers(:lines),commit edits!" }
 }
 
 # ............................................................. focus selections

@@ -101,18 +101,18 @@ map global normal <plus>  '}p'     -docstring 'extend to next paragraph'
 
 # .................................................................... Searching
 
-addm %{ search /1 : map global select '\'   '<a-/>(?i)'         -docstring 'isearch    —— prev,next' }
-addm %{ search /2 : map global select /     '/(?i)'             -docstring 'isearch    —— prev,next' }
-addm %{ search /3 : map global select <     '<a-?>(?i)'         -docstring 'iextend    —— prev,next' }
-addm %{ search /4 : map global select >     '?(?i)'             -docstring 'iextend    —— prev,next' }
+addm %{ search /1 : map global select (     '<a-/>(?i)'        -docstring 'isearch    —— prev,next' }
+addm %{ search /2 : map global select )     '/(?i)'            -docstring 'isearch    —— prev,next' }
+addm %[ search /3 : map global select '{'   '<a-?>(?i)'        -docstring 'iextend    —— prev,next' ]
+addm %[ search /4 : map global select '}'   '?(?i)'            -docstring 'iextend    —— prev,next' ]
 
 # .............................................................. Split selection
 
-addm %{ search s1 : map global select s     'x<a-s>s'           -docstring 'split      —— select,iselect' }
-addm %{ search s2 : map global select S     'x<a-s>s(?i)'       -docstring 'split      —— select,iselect' }
-addm %{ search w1 : map global select m     ': mkd-para<ret>'   -docstring 'markdown   —— paragraph,table,code' }
+addm %{ search s1 : map global select s     'x<a-s>s'          -docstring 'split      —— select,iselect' }
+addm %{ search s2 : map global select S     'x<a-s>s(?i)'      -docstring 'split      —— select,iselect' }
+addm %{ search w1 : map global select m     ': mkd-para<ret>'  -docstring 'markdown   —— paragraph,table,code' }
 addm %{ search w2 : map global select M     ': mkd-table<ret>'  -docstring 'markdown   —— paragraph,table,code' }
-addm %{ search w3 : map global select <c-m> ': mkd-code<ret>'   -docstring 'markdown   —— paragraph,table,code' }
+addm %{ search w3 : map global select <c-m> ': mkd-code<ret>'  -docstring 'markdown   —— paragraph,table,code' }
 
 define-command mkd-para  %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[^|`]<ret>x' }}
 define-command mkd-table %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[|]<ret>x'   }}
