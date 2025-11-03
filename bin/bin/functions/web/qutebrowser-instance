@@ -20,6 +20,7 @@ startpage="$@"
 startpage=$(escape $startpage)  # must \escape '&' in url
 
 settings="
+	-s auto_save.interval '0'
 	-s fonts.completion.category '$size'
 	-s fonts.completion.entry '$size'
 	-s fonts.contextmenu '$size'
@@ -40,12 +41,14 @@ settings="
 	-s fonts.web.family.serif '$FONT'
 	-s fonts.web.family.standard '$FONT'
 	-s scrolling.bar 'when-searching'
+	-s statusbar.show 'never'
+	-s tabs.show 'never'
 	-s tabs.last_close 'close'
 "
 
 eval $QUTEBROWSER $RUNOPT $settings $startpage 2>/dev/null &
 
-case ${name:-livedown} in
+case "${name:-livedown}" in
 	livedown ) window @livedown URL tile 3 && waitron window_cycle_in_group ;;  # focus editor
 	sonarr   ) window @sonarr URL size monocle ;;
 esac

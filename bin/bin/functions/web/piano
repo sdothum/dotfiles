@@ -8,17 +8,19 @@
 
 # SEE: rulerrc for window management
 
-DELAY=0.15
+BROWSER=qutebrowser-instance
+PIANO=https://p-node.org/piano/
+DELAY=0.65
 
 # tuned delays required to work around system dependent qutebrowser url loading
-/usr/bin/qutebrowser -s zoom.default 50 https://p-node.org/piano/
+name=piano ${BROWSER:-qutebrowser} $PIANO
 sleep $DELAY
 xdotool search -sync -onlyvisible -name '∏ano - qutebrowser' windowfocus
+# complete zoom command and execute play button :)
 sleep $DELAY
-xdotool type ':zoom 50'
-# complete  zoom command and execute play button :)
+xdotool type ':zoom 34'
 xdotool key Return Return
-sleep $DELAY
-window '@∏ano - qutebrowser' snap center
+window '@∏ano - qutebrowser' size 600x300
+window '@∏ano - qutebrowser' snap top left
 
 # kak: filetype=sh

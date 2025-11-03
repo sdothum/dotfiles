@@ -129,6 +129,14 @@ history() {
 	ifno 'full history' || xilog | tac | less
 }
 
+downgrade() {
+	for i in $@ ;do
+		[ -e $i ] || ls -1t $CACHE/$i*xbps >/dev/null 2>&1 || ditto notfound "$i"
+		downgrade="$downgrade $([ -e $i ] && echo $i || ls -1t $CACHE/$i*xbps 2>/dev/null | sed -n '2p')"
+	done
+	sudo xdowngrade $downgrade
+}
+
 installed() { file=$(stat -c '%x %n' $CACHE/$1* 2>/dev/null | sort | tail -1); [ "$file" ] && ditto ${file%% *} ${file##*/}; }
 version()   { sed 's|^.*/||; s/^[+a-zA-Z-]*//; s/.x.*//'; }  # trim path*, package name and extension*
 package()   { grep "$1$package-[0-9]*[._][0-9]*"; }         # package name template
@@ -144,17 +152,17 @@ case $action in
 	check      ) ditto xbps 'checking database..'; check || ifno "reinstall (ERROR) packages" || repair ;;  # suppress hash mismatch (bash redirect syntax)
 	count      ) ditto installed "$(xbps-query -l $options | wc -l) packages" ;;
 	dependson  ) ditto "$package" "depends on.."; for i in $(xbps-query -x $package | sed 's/>=.*//; s/-[0-9].*/-/') ;do installed $i ;done | sort ;;
-	downgrade  ) sudo xdowngrade $@ ;;  # downgrade must include package dependencies
+	downgrade  ) downgrade $@ ;;  # downgrade must include package dependencies
 	file       ) xlocate $package ;;
 	force      ) sudo xbps-install -f $yes $options $package ;;
 	held       ) for i in $(xbps-query --list-hold-pkgs) ;do ditto held "$i $(status $i)" ;done | column -t ;;
-	history    ) if [ $package ] ;then  ls -l $CACHE/$package* 2>/dev/null ;else history ;fi ;;
+	history    ) if [ $package ] ;then  ls -l $CACHE/$package* 2>/dev/null ;else history ;fi | pager ;;
 	hold       ) [ $pkgver ] && { sudo xbps-pkgdb -m hold $options $package; xb H; [ -e $ITERATE ] || xb C; } ;;
 	installed  ) xbps-query -l $options | grep '^ii' | cut -d' ' -f2- | sed -r "s/^([^ ]*)/${yellow}\1${NOCOLOR}/" | grep "$@" ;;
-	query      ) [ $options ] && xbps-query -R $options $package || xbps-query -Rs $options "$package" | a $package ;;
+	query      ) [ $options ] && xbps-query -R $options $package | pager || xbps-query -Rs $options "$package" | a $package | pager ;;
 	remove     ) sudo xbps-remove $recursive $options $package ;;
 	requiredby ) ditto "$package" "required by.."; xbps-query -X $package ;;
-	search     ) xbps-query -Rs $options $package | a $package ;;
+	search     ) xbps-query -Rs $options $package | a $package | pager ;;
 	sync       ) sudo xbps-install $yes $options $package ;;
 	update     ) sudo xbps-install $yes $options -u $package ;;
 	upgrade    ) sudo xbps-install -y -u xbps | grep -q 'is up to date' || exec xb U; sudo xbps-install $options -u; upgrade_actions; xb H ;;  # 2 stage upgrade!

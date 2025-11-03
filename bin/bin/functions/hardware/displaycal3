@@ -6,6 +6,8 @@
 
 # ............................................................... DisplayCAL-py3
 
+ICC=$(find $HOME/.config/color/icc/devices/display -name '*.icc')
+
 ditto displaycal 'note instructions to "calibrate" colormunki by rotating its sensor to the closed position'
 ditto displaycal '.. then opening the sensor before placing it over the center of the colored calibration swatch to continue'
 ditto displaycal 'missing modules will be prompted to be downloaded..'
@@ -15,6 +17,7 @@ ifno 'proceed to calibrate monitor (about 30 minutes)?' && exit
 ditto displaycal 'PAY ATTENTION TO TERM PROMPTS !!!\nthere are several steps to calculate the color profile for the monitor'
 
 sleep 5
+[ -e "$ICC" ] && mv -v "$ICC" /tmp
 cd $HOME
 . venv-displaycal/bin/activate
 displaycal

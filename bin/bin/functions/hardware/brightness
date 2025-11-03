@@ -9,22 +9,27 @@
 usage() { usage: "$(basename $0) [+-]<percent>"; exit 1; }
 
 LEVEL=$SESSION/brightness
+min=20
+max=100
 
 brightness() {
-	[ $1 -gt 100 ] && level=100 || { [ $1 -lt 20 ] && level=20; }
-	xrandr --output HDMI-0 --brightness $(echo "scale=2; ${level:-$1} / 100" | bc)
-	echo ${level:-$1} >$LEVEL
-	notify brightness "${level:-$1}%"
+	xrandr --output HDMI-0 --brightness $(echo "scale=2; ${1} / 100" | bc)
+	echo ${1} >$LEVEL
+	notify brightness "${1}%"
 }
 
-[ -e $LEVEL ] || { brightness 100; usage; }
+[ -e $LEVEL ] && level=$(cat $LEVEL)
+[ $level ] || level=100
 
 [ $1 ] && { echo $1 | grep -q '^[+-]*[0-9]*$' || usage; }
 
 case $1 in
-	-* ) brightness $(( $(cat $LEVEL) + $1 )) ;;
-	+* ) brightness $(( $(cat $LEVEL) + $1 )) ;;
-	*  ) brightness $(cat $LEVEL) ;;
+	'' ) ;;
+	-* ) level=$(( level + $1 )); [ $level -lt $min ] && level=$min ;;
+	+* ) level=$(( level + $1 )); [ $level -gt $max ] && level=$max ;;
+	*  ) level=$1 ;;
 esac
+
+brightness $level
 
 # kak: filetype=sh
