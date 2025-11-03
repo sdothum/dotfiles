@@ -145,11 +145,15 @@ class="chromium"
 class="Firefox"
 	window size monocle
 
-# don't attach qutebrowser to server groups
+# don't attach browsers to server groups
+
+class="luakit"
+	[ $(desktop) -lt $(chef desktop "CHEF") ] && window desktop $(desktop) || window desktop 1 ;\
+	layout tile 3 luakit
 
 class="qutebrowser"
 	[ $(desktop) -lt $(chef desktop "CHEF") ] && window desktop $(desktop) || window desktop 1 ;\
-	window '@∏ano - qutebrowser' size B6 rotate || layout tile 3 qutebrowser
+	layout tile 3 qutebrowser
 
 # single purpose hangouts browser (for zoom and custom font control) SEE: hangouts script
 

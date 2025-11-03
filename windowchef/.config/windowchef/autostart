@@ -6,6 +6,8 @@
 
 # .................................................................... Autostart
 
+ICC=$(find $HOME/.config/color/icc/devices/display -name '*.icc')
+
 restore root
 restore panel
 conky clock auto
@@ -13,9 +15,9 @@ restore unclutter
 rm -f $WME:pavucontrol  # hide pavucontrol SEE: rulerrc
 pulse
 udev
-sleep 1                 # settle pipewire for mpd server connection
+
+dispwin -d1 "$ICC" 2>/dev/null
 brightness
-dispwin -d1 $(cat $SESSION/displaycal:profile)
 desktop $(chef desktop "DESK")
 [ -e $SESSION/cbonsai ] && cbonsai
 [ -e $SESSION/term    ] && term
@@ -27,6 +29,8 @@ if void 'runit' ;then
 fi
 
 exists mpd || exit
+
+sleep 1                 # settle pipewire for mpd server connection
 dbus-run-session mpd /home/shum/.config/mpd/mpd.conf 2>/dev/null                        # NOTE: needs explicit dbus run
 [ -e /tmp/nicotine-plus ] || { make_install nicotine-plus; touch /tmp/nicotine-plus; }  # using nightly build
 
