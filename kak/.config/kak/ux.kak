@@ -108,11 +108,11 @@ addm %{ search /4 : map global select >     '?(?i)'             -docstring 'iext
 
 # .............................................................. Split selection
 
-addm %{ search /5 : map global select s     'x<a-s>s'           -docstring 'split      —— select,iselect' }
-addm %{ search /6 : map global select S     'x<a-s>s(?i)'       -docstring 'split      —— select,iselect' }
-addm %{ search d1 : map global select m     ': mkd-para<ret>'   -docstring 'markdown   —— paragraphs,tables,code' }
-addm %{ search d2 : map global select M     ': mkd-table<ret>'  -docstring 'markdown   —— paragraphs,tables,code' }
-addm %{ search d3 : map global select <c-m> ': mkd-code<ret>'   -docstring 'markdown   —— paragraphs,tables,code' }
+addm %{ search s1 : map global select s     'x<a-s>s'           -docstring 'split      —— select,iselect' }
+addm %{ search s2 : map global select S     'x<a-s>s(?i)'       -docstring 'split      —— select,iselect' }
+addm %{ search w1 : map global select m     ': mkd-para<ret>'   -docstring 'markdown   —— paragraph,table,code' }
+addm %{ search w2 : map global select M     ': mkd-table<ret>'  -docstring 'markdown   —— paragraph,table,code' }
+addm %{ search w3 : map global select <c-m> ': mkd-code<ret>'   -docstring 'markdown   —— paragraph,table,code' }
 
 define-command mkd-para  %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[^|`]<ret>x' }}
 define-command mkd-table %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[|]<ret>x'   }}
@@ -169,7 +169,7 @@ hook global WinSetOption filetype=diff %{
 	add-highlighter buffer/diff-allow-one-trailing-space regex '^ ' 0:Default
 }
 
-addm %{ test b  : map global buffer *   ': buffer *debug*<ret>'            -docstring '*debug*'   }
+addm %{ test b  : map global buffer *   ': buffer *debug*<ret>'            -docstring '*debug*' }
 addm %{ file d1 : map global buffer d   ': sync<ret>: delete-buffer<ret>'  -docstring 'delete  —— with save,discard!'  }
 addm %{ file d2 : map global buffer D   ': delete-buffer!<ret>'            -docstring 'delete  —— with save,discard!'  }
 # SEE: kakpipe alpha subsort in xdisplay-plugins

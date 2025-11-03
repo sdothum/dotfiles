@@ -27,7 +27,7 @@ if-else %{ [ -z "$DIFF" ] } %{
 # ................................................................... crosshairs
 
 bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
-	addm %{ focus x1 : map global select + ': crosshairs<ret>'   -docstring "visual     —— crosshairs,column,line"  }
+	addm %{ focus x1 : map global select + ': crosshairs<ret>'   -docstring "visual     —— crosshairs,column,line" }
 	addm %{ focus x2 : map global select | ': cursorcolumn<ret>' -docstring "visual     —— crosshairs,column,line" }
 	addm %{ focus x3 : map global select _ ': cursorline<ret>'   -docstring "visual     —— crosshairs,column,line" }
 	cursorline
@@ -35,20 +35,17 @@ bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
 
 # ........................................................................ fandt
 
-bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
+nop bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
 	require-module fandt
 }
 
 # ............................................................. find and replace
 
 bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
-	# define-command find-notify %{ info-notifier %{find & replace} %{<ret>     goto buffer:line\n<c-ret>   buffer (user-mode) to replace} }
-	define-command find-notify %{ nop %sh{ notify 30 critical "find & replace" "&lt;<b>ret</b>&gt;\tgoto buffer:line\n&lt;<b>c-^</b>&gt;\tcommit buffer edits\n&lt;<b>c-ret</b>&gt;\tbuffer (user-mode)" }}
-
-	# NOTE: <ret> jumps to buffer line, <c-ret> for buffer user-mode (to apply replace)
-	addm %{ search f1 : map global select f     ': find-notify<ret>: find '   -docstring "find       —— /buffer:line,(commit edits)" }
-	addm %{ search f2 : map global select <c-^> ': find-apply-changes<ret>;'  -docstring "find       —— /buffer:line,(commit edits)" }
-	map global normal <c-^> ': find-apply-changes<ret>;' -docstring "commit buffer edits"
+	# NOTE: <ret> jumps to buffer line
+	addm %{ goto   z  : map global buffer : ': find '                   -docstring "find buffer:line" }
+	addm %{ search z1 : map global select : ': find '                   -docstring "find       —— buffer:line,commit edits!" }
+	addm %{ search z2 : map global select ! ': find-apply-changes<ret>' -docstring "find       —— buffer:line,commit edits!" }
 }
 
 # ............................................................. focus selections
@@ -60,8 +57,9 @@ bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
 	declare-option str focus "off"
 	declare-option int focus_line 0
 
-	# define-command focus-message %{ info-notifier %{focus selections} %{<a-n>,n   (deselect) then prev,next\n<a-N>,N   (select)   then prev,next} }
-	define-command focus-message %{ nop %sh{ notify 20 critical "focus selections" "&lt;<b>a-n</b>&gt;,<b>n</b>\t(deselect) then prev,next\n&lt;<b>a-N</b>&gt;,<b>N</b>\t(select)   then prev,next" }}
+	define-command focus-message %{
+		nop %sh{ notify 20 critical "focus selections" "&lt;<b>a-n</b>&gt;,<b>n</b>\t(deselect) then prev,next\n&lt;<b>a-N</b>&gt;,<b>N</b>\t(select)   then prev,next" }
+	}
 
 	# manage focus view to show maximum selections
 	define-command toggle-focus %{
@@ -105,10 +103,8 @@ bundle hop.kak https://github.com/hadronized/hop.kak.git %{
 		hop-kak
 	}
 
-	addm %{ goto h1 : map global buffer h ': hop-kak-sel<ret>'   -docstring 'hint    —— /register,words' }
-	addm %{ goto h2 : map global buffer H ': hop-kak-words<ret>' -docstring 'hint    —— /register,words' }
-	map global normal <a-h> ': hop-kak-sel<ret>'   -docstring 'find selection (on page)'
-	map global normal <a-H> ': hop-kak-words<ret>' -docstring 'find word (on page)'
+	addm %{ goto h1 : map global buffer h '*: hop-kak-sel<ret>' -docstring 'hint *selection,/register' }
+	addm %{ goto h2 : map global buffer H ': hop-kak-sel<ret>'  -docstring 'hint *selection,/register' }
 } %{
 	cargo install hop-kak
 }
@@ -165,11 +161,10 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 		peneira-symbols
 	}
 
-	addm %{ meta b : map global buffer <ret> ': buffers<ret>' -docstring 'buffers'    }
-	addm %{ file 1 : map global buffer e     ': files<ret>'   -docstring 'edit file' }
-
-	addm %{ goto c : map global buffer c     ': symbols<ret>' -docstring 'ctag symbols'      }
-	addm %{ goto f : map global buffer f     ': lines<ret>'   -docstring 'fuzzy match line' }
+	addm %{ meta b : map global buffer <ret> ': buffers<ret>' -docstring 'buffers'      }
+	addm %{ goto c : map global buffer c     ': symbols<ret>' -docstring 'ctag symbols' }
+	addm %{ goto g : map global buffer g     ': lines<ret>'   -docstring 'fuzzy goto'   }
+	addm %{ file 1 : map global buffer e     ': files<ret>'   -docstring 'edit file'    }
 }
 
 # ...................................................................... kakpipe
@@ -182,6 +177,17 @@ bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 	addm %{ test p2 : map global buffer P ': kakpipe-bg ' -docstring "pipe    —— *scratch*,(background)" }
 } %{
 	cargo install --path . --root ~/.local
+}
+
+# .................................................................. Reasymotion
+
+bundle reasymotion https://github.com/astaugaard/reasymotion.git %{
+	evaluate-commands %sh{ rkak_easymotion start }
+
+	addm %{ goto m1 : map global buffer m ': reasymotion-on-letter-to-word<ret>'   -docstring 'easymotion to word,letter' }
+	addm %{ goto m2 : map global buffer M ': reasymotion-on-letter-to-letter<ret>' -docstring 'easymotion to word,letter' }
+} %{
+	cargo install --path .
 }
 
 # .................................................................. search docs

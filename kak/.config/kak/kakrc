@@ -72,9 +72,9 @@ define-command addm -params 1 %{
 define-command gapm -params 1 %{
 	evaluate-commands %sh{
 		# docstring() { for i in $(seq 1 32) ;do echo -n '—' ;done; echo -n $K; }
-		docstring() { for i in $(seq 1 32) ;do echo -n "${F:-⠀}" ;done; echo -n $K; }  # U+2800 (braille blank) to prevent kak space char trimming
+		docstring() { for i in $(seq 1 32) ;do echo -n "${F:-⠀}" ;done; [ -z "$F" ] && echo "$K\n⠀" || echo "$K"; }  # NOTE: U+2800 (braille blank) to prevent kak space char trimming
 
-		set -- $1  # <user-mode> [<separator>]
+		set -- $1  # <user-mode> [1 | 2 | 3 | <separator>]
 		# NOTE: multiple separators within a single user-mode list must map unique keys and docstrings (to display as separate lines)
 		case "$2" in
 			'' ) K=· ;;         # U+00b7 default

@@ -73,7 +73,17 @@ bundle kakoune-livedown https://github.com/Delapouite/kakoune-livedown.git %{
 		}
 	}
 
-	hook -once global BufSetOption filetype=markdown livedown-enable
+	define-command toggle-livedown %{
+		if-else %{ [ -z "$kak_opt_livedown" ] } %{
+			livedown-enable
+		} %{
+			livedown-disable
+		}
+	}
+
+	addm %{ meta l : map global buffer l ': toggle-livedown<ret>' -docstring 'livedown' }
+
+	hook -once global WinSetOption filetype=markdown livedown-enable
 	hook       global BufClose     .*                livedown-disable
 } %{
 	sudo npm install -g livedown

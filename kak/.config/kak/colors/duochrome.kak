@@ -284,6 +284,11 @@ set-face window PeneiraFileName                "${attribute}"
 # set-face window PhantomSelection             "${white},${wrap}+F"
 set-face window PhantomSelection               "default,${soft_red}+g"
 
+# .................................................................. reasymotion
+
+set-face window REasymotionBackground          hop_label_head  # BUG: currently not overriding plugin
+set-face window REasymotionForeground          hop_label_head
+
 # ...................................................................... kak-lsp
 
 set-face window InlayHint                      "+d@type"
