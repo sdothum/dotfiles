@@ -99,7 +99,7 @@ abbr cpl 'cp -iLRfv'
 abbr cpr 'cp -rf'
 abbr cpv 'cp -iv'
 abbr gprename 'gprename $PWD'
-abbr h 'head'
+abbr hd 'head'
 abbr m 'pager'
 abbr mv 'mv -i'
 abbr mvf 'mv -f'
@@ -230,14 +230,15 @@ for i in (seq 1 9); abbr \$$i "\$argv[$i]" ;end
 # function ncd; set -l f (/usr/bin/nnn -p - $argv[1]); test -d $f && z $f || z (dirname $f) ;end
 function flirt:cd; test (count $argv) -gt 0 && z $argv; set -l f (flirt); test -d "$f" && z $f || z (dirname $f) ;end
 function flirt:sh; test (count $argv) -gt 0 && z $argv; set -l IFS; set -l f (flirt); test -z "$f" || echo "$f" | vipe | sh ;end
+function fishlog; history $argv | pager ;end
 
 # abbr cd 'z'
 # abbr nd 'ncd'
 abbr dash 'rlwrap -n dash'
 abbr fd 'flirt:cd'
 abbr fh 'flirt:sh'
-abbr hdel 'history delete'
-abbr hi 'hist'
+abbr hdel 'fishlog delete'
+abbr h 'fishlog search'
 abbr hk "kak $HOME/.local/share/fish/fish_history"
 abbr hv "vi $HOME/.local/share/fish/fish_history"
 abbr rl 'rlwrap'
@@ -270,6 +271,7 @@ else
 	abbr di 'dict'
 	abbr ti 'dict -t'
 end
+abbr displaycal 'displaycal3'
 abbr dot 'rlwrap -n dotfiles'
 abbr gif 'nsxiv -a'
 abbr handbrake 'ghb'
