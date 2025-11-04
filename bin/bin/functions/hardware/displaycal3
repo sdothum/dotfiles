@@ -6,20 +6,30 @@
 
 # ............................................................... DisplayCAL-py3
 
+usage() { usage: "$(basename $0) [calibrate | profile], default load color profile"; exit 1; }
+
 ICC=$(find $HOME/.config/color/icc/devices/display -name '*.icc')
 
-ditto displaycal 'note instructions to "calibrate" colormunki by rotating its sensor to the closed position'
-ditto displaycal '.. then opening the sensor before placing it over the center of the colored calibration swatch to continue'
-ditto displaycal 'missing modules will be prompted to be downloaded..'
+case $1 in
+	calibrate )
+		ditto displaycal 'note instructions to "calibrate" colormunki by rotating its sensor to the closed position'
+		ditto displaycal '.. then opening the sensor before placing it over the center of the colored calibration swatch to continue'
+		ditto displaycal 'missing modules will be prompted to be downloaded..'
 
-ditto WARNING displaycal 'center application windows on the screen to position the calibration swatch for colormunki placement'
-ifno 'proceed to calibrate monitor (about 30 minutes)?' && exit
-ditto displaycal 'PAY ATTENTION TO TERM PROMPTS !!!\nthere are several steps to calculate the color profile for the monitor'
+		ditto WARNING displaycal 'center application windows on the screen to position the calibration swatch for colormunki placement'
+		ifno 'proceed to calibrate monitor (about 30 minutes)?' && exit
+		ditto displaycal 'PAY ATTENTION TO TERM PROMPTS !!!\nthere are several steps to calculate the color profile for the monitor'
 
-sleep 5
-[ -e "$ICC" ] && mv -v "$ICC" /tmp
-cd $HOME
-. venv-displaycal/bin/activate
-displaycal
+		sleep 5
+		[ -e "$ICC" ] && mv -v "$ICC" /tmp
+		cd $HOME
+		. venv-displaycal/bin/activate
+		displaycal
+		;;
+	icc       ) echo $ICC ;;
+	profile   ) echo $ICC ;;
+	''        ) dispwin -d1 "$ICC" 2>/dev/null; brightness ;;
+	*         ) usage ;;
+esac
 
 # kak: filetype=sh
