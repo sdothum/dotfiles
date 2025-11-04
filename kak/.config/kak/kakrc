@@ -5,6 +5,9 @@
 
 # Config for Kakoune
 
+# NOTE: keybind mappings have been optimized for the 6x2+3 key georgi split keyboard
+#       using a chorded beakl-wi layout
+
 # runtime env control variables SEE: bin/functions/edit/kak shell script wrapper
 # $UNPLUG   -> nop all bundles
 # $DISPLAY  -> load $DISPLAY (server) dependent bundles

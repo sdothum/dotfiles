@@ -42,10 +42,12 @@ nop bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
 # ............................................................. find and replace
 
 bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
+	define-command commit-edits %{ if %{ [ "$kak_bufname" = '*find*' ] } %{ find-apply-changes }}  # suppesses error message outside of *find* buffer
+
 	# NOTE: <ret> jumps to buffer line
-	addm %{ goto   z  : map global buffer / ': find '                   -docstring "search buffers(:lines)" }
-	addm %{ search z1 : map global select / ': find '                   -docstring "search     —— buffers(:lines),commit edits!" }
-	addm %{ search z2 : map global select = ': find-apply-changes<ret>' -docstring "search     —— buffers(:lines),commit edits!" }
+	addm %{ goto   z  : map global buffer / ': find '             -docstring "search buffers(:lines)" }
+	addm %{ search z1 : map global select / ': find '             -docstring "search     —— buffers(:lines),commit edits!" }
+	addm %{ search z2 : map global select & ': commit-edits<ret>' -docstring "search     —— buffers(:lines),commit edits!" }
 }
 
 # ............................................................. focus selections
