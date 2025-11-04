@@ -6,8 +6,6 @@
 
 # .................................................................... Autostart
 
-ICC=$(find $HOME/.config/color/icc/devices/display -name '*.icc')
-
 restore root
 restore panel
 conky clock auto
@@ -15,9 +13,8 @@ restore unclutter
 rm -f $WME:pavucontrol  # hide pavucontrol SEE: rulerrc
 pulse
 udev
+displaycal3             # load color profile
 
-dispwin -d1 "$ICC" 2>/dev/null
-brightness
 desktop $(chef desktop "DESK")
 [ -e $SESSION/cbonsai ] && cbonsai
 [ -e $SESSION/term    ] && term
