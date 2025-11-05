@@ -21,7 +21,7 @@ if-else %{ [ -z "$DIFF" ] } %{
 		hook global FocusIn    .* change-directory-current-buffer  # BUG: fails on filename with leading dashes
 	}
 } %{
-	define-command change-directory-current-buffer %{ nop }
+	define-command -hidden change-directory-current-buffer %{ nop }
 }
 
 # ................................................................... crosshairs
@@ -41,8 +41,12 @@ nop bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
 
 # ............................................................. find and replace
 
-bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
-	define-command commit-edits %{
+# NOTE: find.kak updated to present "source│ text" result buffer in columnar format for enhanced editing
+
+source "%val{config}/find.kak"
+
+# bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
+	define-command -hidden commit-edits %{
 		if-else %{ [ "$kak_bufname" = '*find*' ] } %{
 			find-apply-changes
 		} %{
@@ -53,11 +57,11 @@ bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
 	}  # suppesses error message outside of *find* buffer
 
 	# NOTE: <ret> jumps to buffer line
-	addm %{ goto   z  : map global buffer '\' ': find '             -docstring "search session" }
-	addm %{ search z1 : map global select '\' ': find '             -docstring "search     —— session,commit edits!" }
-	addm %{ search z2 : map global select &   ': commit-edits<ret>' -docstring "search     —— session,commit edits!" }
-	map global normal '\' ': find ' -docstring "search session"
-}
+	addm %{ goto   z  : map global buffer '\' ': find '             -docstring "search buffers" }
+	addm %{ search z1 : map global select '\' ': find '             -docstring "search     —— buffers,commit edits" }
+	addm %{ search z2 : map global select &   ': commit-edits<ret>' -docstring "search     —— buffers,commit edits" }
+	map global normal '\' ': find ' -docstring "search buffers"
+# }
 
 # ............................................................. focus selections
 
@@ -68,12 +72,12 @@ bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
 	declare-option str focus "off"
 	declare-option int focus_line 0
 
-	define-command focus-message %{
+	define-command -hidden focus-message %{
 		nop %sh{ notify 20 critical "focus selections" "&lt;<b>a-n</b>&gt;,<b>n</b>\t(deselect) then prev,next\n&lt;<b>a-N</b>&gt;,<b>N</b>\t(select)   then prev,next" }
 	}
 
 	# manage focus view to show maximum selections
-	define-command toggle-focus %{
+	define-command -hidden toggle-focus %{
 		if-else %{ [ "$kak_opt_focus" = "on" ] } %{
 			set-option window focus "off"
 			focus-disable
@@ -100,16 +104,16 @@ bundle hop.kak https://github.com/hadronized/hop.kak.git %{
 	evaluate-commands %sh{ hop-kak --init }
 	declare-option str hop_keyset 'heatrsiyoudnmkplf'  # beakl wi layout
 
-	define-command hop-kak %{
+	define-command -hidden hop-kak %{
 		evaluate-commands -no-hooks -- %sh{ hop-kak --keyset "$kak_opt_hop_keyset" --sels "$kak_selections_desc" }
 	}
 
-	define-command hop-kak-sel %{
+	define-command -hidden hop-kak-sel %{
 		execute-keys 'gtGbxs<ret>'
 		hop-kak
 	}
 
-	define-command hop-kak-words %{
+	define-command -hidden hop-kak-words %{
 		execute-keys 'gtGbxs\w+<ret>'
 		hop-kak
 	}
@@ -144,30 +148,30 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 	set-option global peneira_files_command "rg --files --sort=path"  # single threaded --sort is fast enough for my folder organization
 
 	# HACK: multi-client focus switching causes peneira to lose active client buffer directory
-	define-command peneira-resync %{
+	define-command -hidden peneira-resync %{
 		change-directory-current-buffer  # handled by hook FocusIn above, otherwise required
 		buffer *debug*
 		execute-keys ga
 	}
 
 	# Usage: peneira '<input prompt>' %{ <shell command returning list> } %{ <command> %arg{1} }
-	define-command buffers %{
+	define-command -hidden buffers %{
 		peneira-resync
 		# peneira 'buffers: ' %{ printf '%s\n' $kak_quoted_buflist } %{ buffer %arg{1} }  # NOTE: documented usage assumes non-space filenames
 		peneira 'buffers: ' %{ printf '%s\n' "$kak_quoted_buflist" | sed -e "s/' '/\n/g; s/^'//; s/'$//" } %{ buffer %arg{1} }
 	}
 
-	define-command files %{
+	define-command -hidden files %{
 		peneira-resync
 		peneira-files -hide-opened
 	}
 
-	define-command lines %{
+	define-command -hidden lines %{
 		peneira-resync
 		peneira-lines
 	}
 
-	define-command symbols %{
+	define-command -hidden symbols %{
 		peneira-resync
 		peneira-symbols
 	}

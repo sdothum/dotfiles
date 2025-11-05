@@ -399,3 +399,5 @@ set-face window ts_warning                     InlayDiagnosticWarning
 
 	COLORSCHEME
 }
+
+# kak: filetype=kak

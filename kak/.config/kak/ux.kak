@@ -36,8 +36,8 @@ addm %{ heading r2 : map global format r       'x|comment r --<ret>'            
 addm %{ heading u1 : map global format U       'x|comment u =<ret>'                -docstring 'underline  ═══'     }
 addm %{ heading u2 : map global format u       'x|comment u --<ret>'               -docstring 'underline  ━━━'     }
 
-define-command refold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|comment f $kak_opt_autowrap_column<ret>" }}}
-define-command unfold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys 'x|comment F<ret>' }}  # (??) utf-8 sed errors from kak shell
+define-command -hidden refold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|comment f $kak_opt_autowrap_column<ret>" }}}
+define-command -hidden unfold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys 'x|comment F<ret>' }}  # (??) utf-8 sed errors from kak shell
 
 map global normal <c-l> ': comment-line<ret>' -docstring 'comment'  # beakl key position for "#" NOTE: <c-c> unmappable
 
@@ -114,9 +114,9 @@ addm %{ search w1 : map global select m     ': mkd-para<ret>'  -docstring 'markd
 addm %{ search w2 : map global select M     ': mkd-table<ret>'  -docstring 'markdown   —— paragraph,table,code' }
 addm %{ search w3 : map global select <c-m> ': mkd-code<ret>'  -docstring 'markdown   —— paragraph,table,code' }
 
-define-command mkd-para  %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[^|`]<ret>x' }}
-define-command mkd-table %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[|]<ret>x'   }}
-define-command mkd-code  %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[`]<ret>x'   }}
+define-command -hidden mkd-para  %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[^|`]<ret>x' }}
+define-command -hidden mkd-table %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[|]<ret>x'   }}
+define-command -hidden mkd-code  %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[`]<ret>x'   }}
 
 map global normal S 's(?i)' -docstring 'split: iselect:'
 
@@ -131,7 +131,7 @@ map global normal <c-ret> ': enter-user-mode buffer<ret>'  # for find *scratch* 
 addm %{ mode b : map global select <ret> ': enter-user-mode buffer<ret>' -docstring 'buffer user-mode' }
 
 # no sudo-write-all so sync root owned files on buffer switching
-define-command sync %{
+define-command -hidden sync %{
 	# if %{ [ -n "$kak_opt_filetype" ] && $kak_modified } %{ sudo-write }  # BUG: $kak_opt_filetype is null for "if" command (?)
 	# BUG: $kak_opt_filetype is null for %sh{} and root owned files(?)
 	evaluate-commands %sh{ [ "$kak_buffname" != '*scratch*' ] && $kak_modified && echo "sudo-write" || echo "nop" }

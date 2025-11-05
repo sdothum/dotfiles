@@ -57,7 +57,7 @@ bundle kakoune-livedown https://github.com/Delapouite/kakoune-livedown.git %{
 	declare-option str livedown ''
 	set-option global livedown_browser "qutebrowser-instance"
 
-	define-command livedown-enable %{
+	define-command -hidden livedown-enable %{
 		if %{ [ ${kak_bufname##*.} != 'eml' ] } %{  # exclude mail compose
 			set-option global livedown "%val{bufname}"
 			# livedown-start-with-write-on-idle  # NOTE: InsertIdle hook forces char by char "undo" action, instead..
@@ -66,14 +66,14 @@ bundle kakoune-livedown https://github.com/Delapouite/kakoune-livedown.git %{
 		}
 	}
 
-	define-command livedown-disable %{
+	define-command -hidden livedown-disable %{
 		if %{ [ -n "$kak_opt_livedown" ] } %{
 			set-option global livedown ''
 			livedown-stop  # close browser instance
 		}
 	}
 
-	define-command toggle-livedown %{
+	define-command -hidden toggle-livedown %{
 		if-else %{ [ -z "$kak_opt_livedown" ] } %{
 			livedown-enable
 		} %{
