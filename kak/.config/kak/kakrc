@@ -5,8 +5,8 @@
 
 # Config for Kakoune
 
-# NOTE: keybind mappings have been optimized for the 6x2+3 key georgi split keyboard
-#       using a chorded beakl-wi layout
+# NOTE: keybind mappings have been optimized for the 6x2+3 key (24 finger, 6 thumb key)
+#       georgi split keyboard with chorded beakl-wi layout
 
 # runtime env control variables SEE: bin/functions/edit/kak shell script wrapper
 # $UNPLUG   -> nop all bundles
