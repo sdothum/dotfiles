@@ -312,7 +312,7 @@ elif [ "$koreader" ] ;then
 elif [ "$supernote" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat serifless serifed
  	emdash
-	# e_ink grotesque grote I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-extended++ a-double_ d-tailed p-eared y-turn J-descending utf-8
+	e_ink grotesque grote I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-extended++ a-double_ d-tailed p-eared y-turn J-descending utf-8
 	e_ink groteske grote  I-serifed    t-asymmetric-- l-ascending Q-open 1-base   f-extended++ a-double_ d-tailed p-eared y-turn J-descending utf-8
 	# e_ink grotesc  grote  I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-extended++ a-single_ d-tailed p-eared y-turn J-descending utf-8
 	# e_ink krotesq grote I-serifless  t-cross        l-ascending Q-open 1-nobase f-extended++ a-double_ d-tailed p-eared y-turn J-descending utf-8

@@ -481,7 +481,7 @@ cmdopts () {
 			leading=*      ) leading ${1#*=}  || usage ;;                               # line spacing > 1.0
 			noround        ) unset sb ;;
 			quasi-ext*     ) spacing quasi-proportional-extension-only; unset width; cap extended ;;
-			quasi-pro*     ) spacing quasi-proportional; leading 1.2500; space 2; ebook quasi$(echo $family | sed -r 's/.*(Hyper|Mono|Quasi)//'); variant I-serifed; unset baseline ;;
+			quasi-pro*     ) spacing quasi-proportional; leading 1.2500; space 2; ebook quasi$(echo $family | sed -r 's/.*(Hyper|Mono|Quasi)//'); variant I-serifed; unset baseline; f_adjust=42 ;;  # f-desending hack
 			sb=*           ) sb ${1#*=}       || usage ;;                               # side bearing (spacing)
 			shape=*        ) shape ${1#*=}    || usage ;;                               # cell width
 			weight=*       ) tuple=${1#*=}; weight ${tuple%:*} ${tuple#*:} || usage ;;  # custom font weight
@@ -809,7 +809,7 @@ unset adjust baseline capadjust  # no longer applying for koreader and version 3
 
 [ $f_asymmetric  ] && fforge f_asymmetric       ${shape##* } $family  # font mod for asymmetric f
 [ $f_ascending   ] && fforge f_ascending        ${shape##* } $family  # font mod for ascending serifless f
-[ $f_descending  ] && fforge f_descending       ${shape##* } $family  # font mod for descending serifless f
+[ $f_descending  ] && fforge f_descending   $(( ${shape##* } + f_adjust )) $family  # font mod for descending serifless f (with proportional adjustment hack)
 [ $I_descending  ] && fforge I_descending       ${shape##* } $family  # font mod for descending serifless capital I
 [ $i_flipped     ] && fforge i_flipped          ${shape##* } $family  # font mod for flipped serifed i
 [ $l_ascending   ] && fforge l_ascending        ${shape##* } $family  # font mod for ascending serifless l

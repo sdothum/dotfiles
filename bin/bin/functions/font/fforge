@@ -712,9 +712,9 @@ Generate(\$1);
 	for i in $(regular) ;do
 		ditto f_ascending $i
 		case $i in
-			*book* ) Xshift=-26 ;;
-			*bold* ) Xshift=-24 ;;
-			*      ) Xshift=-27 ;;
+			*book* ) Xshift=$(( -26 + ${Xadjust:-0} )) ;;
+			*bold* ) Xshift=$(( -24 + ${Xadjust:-0} )) ;;
+			*      ) Xshift=$(( -27 + ${Xadjust:-0} )) ;;
 		esac
 		fontforge -quiet --script ${LOG}:f_ascending.script $i $Xshift ${Yshift:-6} ${Ydepth:-5}
 	done
@@ -742,7 +742,11 @@ Generate(\$1);
 f_descending() {
 	Yshift=-208
 	Ydepth=32
-	[ $shape -eq 600 ] && { Yshift=-200; Ydepth=36; }  # web font extended cap height
+	case $shape in
+		576 ) ;;
+		600 ) Yshift=-200; Ydepth=36 ;;  # web font extended cap height
+		*   ) Yshift=-200; Ydepth=36; Xadjust=$((  600 - shape )) ;;  # proportional Xshift hack
+	esac
 	f_ascending
 }
 
