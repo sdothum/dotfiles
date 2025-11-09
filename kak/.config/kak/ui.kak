@@ -10,8 +10,8 @@
 
 if-else %{ [ -n "$DISPLAY" ] } %{
 	declare-option str theme 'duochrome'
-	declare-option str mode  'normal'  # initial state
-	declare-option str color ''        # force colorscheme initialization
+	declare-option str mode  ''  # initial state
+	declare-option str color ''  # force colorscheme initialization
 
 	# NOTE: "echo" to clear statusline filename from caplock switching
 
@@ -172,7 +172,7 @@ add-highlighter global/ regex \h+$ 0:Trailing
 # ..................................................................... Kak info
 
 # a minimalist statusline of "mode - column [utf-8] - filename [context]"
-declare-option str spacer ' '
+declare-option str spacer '  '
 if-else %{ [ "$kak_opt_ruler" = " " ] } %{
 	declare-option str colsep ":"
 } %{

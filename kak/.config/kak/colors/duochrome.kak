@@ -102,6 +102,7 @@ evaluate-commands %sh{
 		normal   )
 			background="rgb:${NORMAL}"
 			menu="rgb:${INSERT}"
+			secondary="${light_orange}"
 			comment="$(desaturate ${background})"
 			if [ $lighten ] ;then
 				# cursor="${vivid_cyan}"
@@ -115,6 +116,7 @@ evaluate-commands %sh{
 		capslock )
 			background="rgb:${CAPSLOCK}"
 			menu="rgb:${INSERT}"
+			secondary="${soft_red}"
 			comment="$(desaturate ${background})"
 			if [ $lighten ] ;then
 				if [ "${kak_opt_mode}" = 'normal' ] ;then
@@ -133,6 +135,7 @@ evaluate-commands %sh{
 			background="rgb:${INSERT}"  # insert mode (default non-modal mode)
 			menu="rgb:${NORMAL}"
 			cursor="${vivid_cyan}"
+			secondary="rgb:${CAPSLOCK}"
 			if [ $lighten ] ;then
 				ruler="$(lightness ${background} ${INSERT_:-9})"
 				comment="$(desaturate $(lightness ${background} -18) '5 / 6')"
@@ -154,7 +157,6 @@ evaluate-commands %sh{
 
 	eol="${soft_red}"
 	multi="${soft_red}"
-	secondary="${light_orange}"
 	selection="${dark_cyan}"
 	wrap="${soft_red}"
 
@@ -177,6 +179,7 @@ evaluate-commands %sh{
 
 
 	cat <<-COLORSCHEME
+
 # Syntax highlighting
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -216,12 +219,12 @@ set-face window title                          "${heading}"
 # ................................................................ Builtin faces
 
 set-face window Default                        "${foreground},${background}"
-set-face window PrimarySelection               "${background},${selection}"
-set-face window SecondarySelection             "default,${secondary}"
-set-face window PrimaryCursor                  "default,${cursor}"
-set-face window SecondaryCursor                "default,${multi}"
-set-face window PrimaryCursorEol               "${background},${eol}"
-set-face window SecondaryCursorEol             "${background},${eol}"
+set-face window PrimarySelection               "${background},${selection}+F"
+set-face window SecondarySelection             "default,${secondary}+F"
+set-face window PrimaryCursor                  "default,${cursor}+F"
+set-face window SecondaryCursor                "default,${multi}+F"
+set-face window PrimaryCursorEol               "${background},${eol}+F"
+set-face window SecondaryCursorEol             "${background},${eol}+F"
 
 set-face window LineNumbers                    "${linenr},${background}"
 set-face window LineNumberCursor               "${string},${background}+b"
@@ -286,8 +289,8 @@ set-face window PhantomSelection               "default,${soft_red}+g"
 
 # .................................................................. reasymotion
 
-set-face window REasymotionBackground          hop_label_head  # BUG: currently not overriding plugin
-set-face window REasymotionForeground          hop_label_head
+set-face window REasymotionBackground          "${comment},${background}"
+set-face window REasymotionForeground          "default,${secondary}+F"
 
 # ...................................................................... kak-lsp
 
@@ -397,7 +400,7 @@ set-face window ts_variable_other_member       variable
 set-face window ts_variable_parameter          variable
 set-face window ts_warning                     InlayDiagnosticWarning
 
-	COLORSCHEME
+COLORSCHEME
 }
 
 # kak: filetype=kak

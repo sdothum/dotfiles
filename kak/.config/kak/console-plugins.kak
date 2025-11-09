@@ -3,6 +3,9 @@
 # Kakoune
 # ══════════════════════════════════════════════════════════════════════════════
 
+# WHEN: unloaded plugin testing renders these commnads unavaileble elsewhere SEE: ux.kak
+define-command console-plugins %{ nop }  # USAGE: try %{ console-plugins } catch %{ define-command <command> %{ nop }}
+
 # Ncurses console plugins
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -41,34 +44,42 @@ nop bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
 
 # ............................................................. find and replace
 
-# NOTE: find.kak updated to present "source│ text" result buffer in columnar format for enhanced editing
+# NOTE: find.kak updated to present "source│ text" result buffer in columnar format for enhanced view/edit
+# SEE:  bundle kakoune-find https://github.com/occivink/kakoune-find.git
+source "%val{config}/search.kak"
 
-source "%val{config}/find.kak"
+# SEE: ux.kak buffer management
+define-command -hidden search-hack %{
+	if %{ [ "$kak_bufname" = '*search*' ] } %{
+		set-register / %opt{search_pattern}  # NOTE: restore register for return to *search* buffer
+		execute-keys gh                      # HACK: reposition cursor to colunm 1 to clear buffer:line:column highlight
+	}
+}
 
-# bundle kakoune-find https://github.com/occivink/kakoune-find.git %{
-	define-command -hidden commit-edits %{
-		if-else %{ [ "$kak_bufname" = '*find*' ] } %{
-			find-apply-changes
-		} %{
-			buffer '*find*'
-			echo  # clear any buffer error message
-			if %{ [ "$kak_bufname" = '*find*' ] } %{ info 'redo "<space> &" to commit edits' }
-		}
-	}  # suppesses error message outside of *find* buffer
+define-command -hidden commit-edits %{
+	if-else %{ [ "$kak_bufname" = '*search*' ] } %{
+		search-apply-changes
+	} %{
+		buffer '*search*'
+		echo  # clear any buffer error message
+		if %{ [ "$kak_bufname" = '*search*' ] } %{ info 'redo "<space> &" to commit edits' }
+	}
+}  # suppesses error message outside of *search* buffer
 
-	# NOTE: <ret> jumps to buffer line
-	addm %{ goto   z  : map global buffer '\' ': find '             -docstring "search buffers" }
-	addm %{ search z1 : map global select '\' ': find '             -docstring "search     —— buffers,commit edits" }
-	addm %{ search z2 : map global select &   ': commit-edits<ret>' -docstring "search     —— buffers,commit edits" }
-	map global normal '\' ': find ' -docstring "search buffers"
-# }
+# NOTE: <ret> jumps to buffer line
+addm %{ goto   z  : map global buffer '\' ': search '           -docstring "search buffers" }
+addm %{ search z1 : map global select '\' ': search '           -docstring "search     —— buffers,commit edits" }
+addm %{ search z2 : map global select &   ': commit-edits<ret>' -docstring "search     —— buffers,commit edits" }
+map global normal '\' ': search ' -docstring "search buffers"
 
 # ............................................................. focus selections
 
 bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
-	set-option global focus_context_lines 1
+	declare-option -hidden str focus_sep '━'
 	# force uniform separator highlighting SEE: colors/duochrome
-	set-option global focus_separator '{FocusSeparator}┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄'
+	evaluate-commands %sh{ printf "set-option global focus_separator '{FocusSeparator}"; for i in $(seq 1 132) ;do printf "${kak_opt_focus_sep}" ;done; printf "'" }
+
+	set-option global focus_context_lines 1
 	declare-option str focus "off"
 	declare-option int focus_line 0
 
@@ -188,8 +199,8 @@ bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 	require-module kakpipe
 
 	# HACK: using alpha subsort to overcome "P,p" sort order (cause unknown)
-	addm %{ test p1 : map global buffer p ': kakpipe '    -docstring "pipe    —— *scratch*,(background)" }
-	addm %{ test p2 : map global buffer P ': kakpipe-bg ' -docstring "pipe    —— *scratch*,(background)" }
+	addm %{ test p1 : map global buffer p ': kakpipe '    -docstring "pipe      —— *scratch*,(background)" }
+	addm %{ test p2 : map global buffer P ': kakpipe-bg ' -docstring "pipe      —— *scratch*,(background)" }
 } %{
 	cargo install --path . --root ~/.local
 }
@@ -199,8 +210,10 @@ bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 bundle reasymotion https://github.com/astaugaard/reasymotion.git %{
 	evaluate-commands %sh{ rkak_easymotion start }
 
-	addm %{ goto m1 : map global buffer m ': reasymotion-on-letter-to-word<ret>'   -docstring 'easymotion to word,letter' }
-	addm %{ goto m2 : map global buffer M ': reasymotion-on-letter-to-letter<ret>' -docstring 'easymotion to word,letter' }
+	addm %{ goto m1 : map global buffer m ': reasymotion-on-letter-to-word<ret>'          -docstring 'ezmotion  —— to word,expand to'   }
+	addm %{ goto m2 : map global buffer M ': reasymotion-on-letter-to-word-expand<ret>'   -docstring 'ezmotion  —— to word,expand to'   }
+	addm %{ goto m3 : map global buffer n ': reasymotion-on-letter-to-letter<ret>'        -docstring '⠀         —— to letter,expand to' }
+	addm %{ goto m4 : map global buffer N ': reasymotion-on-letter-to-letter-expand<ret>' -docstring '⠀         —— to letter,expand to' }
 } %{
 	cargo install --path .
 }

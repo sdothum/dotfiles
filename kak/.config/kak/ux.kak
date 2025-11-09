@@ -131,10 +131,12 @@ map global normal <c-ret> ': enter-user-mode buffer<ret>'  # for find *scratch* 
 addm %{ mode b : map global select <ret> ': enter-user-mode buffer<ret>' -docstring 'buffer user-mode' }
 
 # no sudo-write-all so sync root owned files on buffer switching
+try %{ console-plugins } catch %{ define-command sudo-write %{ nop }}  # SEE: console-plugins.kak
+
 define-command -hidden sync %{
 	# if %{ [ -n "$kak_opt_filetype" ] && $kak_modified } %{ sudo-write }  # BUG: $kak_opt_filetype is null for "if" command (?)
 	# BUG: $kak_opt_filetype is null for %sh{} and root owned files(?)
-	evaluate-commands %sh{ [ "$kak_buffname" != '*scratch*' ] && $kak_modified && echo "sudo-write" || echo "nop" }
+	evaluate-commands %sh{ [ "$kak_opt_filetype" != 'scratch' ] && $kak_modified && echo "sudo-write" || echo "nop" }
 }
 
 # ..................................................................... Filetype
@@ -151,9 +153,11 @@ hook global FocusOut .* sync   # over "write" for system files
 
 # ............................................................ Buffer management
 
-map global normal <a-space>     ': sync<ret>: buffer-next<ret>'     -docstring 'next buffer'
-map global normal <a-backspace> ': sync<ret>: buffer-previous<ret>' -docstring 'previous buffer'
-map global normal <a-ret>       ': sync<ret>ga'                     -docstring 'last buffer'
+try %{ console-plugins } catch %{ define-command search-hack %{ nop }}  # SEE: console-plugins.kak
+
+map global normal <a-space>     ': sync<ret>: buffer-next<ret>: search-hack<ret>'     -docstring 'next buffer'
+map global normal <a-backspace> ': sync<ret>: buffer-previous<ret>: search-hack<ret>' -docstring 'previous buffer'
+map global normal <a-ret>       ': sync<ret>ga: search-hack<ret>'                     -docstring 'last buffer'
 
 # USE: .*diff BECAUSE: rc/filetype/mail.kak also maps <ret> causing unexpected *.eml plug error(?)
 hook global WinDisplay .*[.]diff %{
@@ -170,12 +174,12 @@ hook global WinSetOption filetype=diff %{
 }
 
 addm %{ test b  : map global buffer *   ': buffer *debug*<ret>'            -docstring '*debug*' }
-addm %{ file d1 : map global buffer d   ': sync<ret>: delete-buffer<ret>'  -docstring 'delete  —— with save,discard!'  }
-addm %{ file d2 : map global buffer D   ': delete-buffer!<ret>'            -docstring 'delete  —— with save,discard!'  }
+addm %{ file d1 : map global buffer d   ': sync<ret>: delete-buffer<ret>'  -docstring 'delete    —— with save,discard!'  }
+addm %{ file d2 : map global buffer D   ': delete-buffer!<ret>'            -docstring 'delete    —— with save,discard!'  }
 # SEE: kakpipe alpha subsort in xdisplay-plugins
 addm %{ file q  : map global buffer q   ': quit!<ret>'                     -docstring 'quit!' }
-addm %{ file w1 : map global buffer w   ': sync<ret>'                      -docstring 'write   —— save,and quit!' }
-addm %{ file w2 : map global buffer W   ': sync<ret>: quit!'               -docstring 'write   —— save,and quit!' }
+addm %{ file w1 : map global buffer w   ': sync<ret>'                      -docstring 'write     —— save,and quit!' }
+addm %{ file w2 : map global buffer W   ': sync<ret>: quit!'               -docstring 'write     —— save,and quit!' }
 addm %{ file x  : map global buffer x   ': sync<ret>: write-all-quit<ret>' -docstring 'save all and quit' }
 
 map global normal <c-w> ': sync<ret>'       -docstring 'write'

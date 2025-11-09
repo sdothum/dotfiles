@@ -1,0 +1,9 @@
+# WARNING !
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+.kak extensions should be renamed in .deprecated/
+to prevent colorscheme access by kakoune
+
+which may cause unpredictable merge and *override*
+of similarly named theme in the parent colors/ folder !!
+
