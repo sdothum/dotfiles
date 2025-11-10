@@ -40,7 +40,7 @@ If <pattern> is not specified, the content of the main selection is used
 				# merge selections that are on the same line
 				execute-keys '<a-s><a-L><a-;>;'
 				evaluate-commands -save-regs 'c"' -itersel %{
-					set-register c "%val{bufname}:%val{cursor_line}:%val{cursor_column}│䷀"  # NOTE: replace column: with visual separator and column delimeter
+					set-register c "%val{bufname}:%val{cursor_line}:%val{cursor_column}│⁋"  # NOTE: replace column: with visual separator and column delimeter
 					# expand to full line and yank
 					execute-keys -save-regs '' '<semicolon>xHy'
 					# paste context followed by the selection
@@ -54,11 +54,11 @@ If <pattern> is not specified, the content of the main selection is used
 		delete-buffer *search-tmp*
 		edit -scratch *search*
 		execute-keys R
-		execute-keys "%%| column -t -s䷀ -R1 -o'  '<ret>gg"                # ATTN: reformat list into columnar format
+		execute-keys "%%| column -t -s⁋ -R1 -o'  ' -l2<ret>gg"              # ATTN: 2 column limit to restrict delimiter
 		set-option buffer search_current_line 0
 		add-highlighter buffer/ regex "%reg{/}" 0:SecondarySelection
 		# final so that %reg{/} doesn't get highlighted in the header
-		add-highlighter buffer/ regex "^([^\n]+:\d+:\d+│)" 1:comment      # NOTE: highlight source triplet as single field SEE: duochrome theme
+		add-highlighter buffer/ regex "^([^\n]+:\d+:\d+│)" 1:comment        # NOTE: highlight source triplet as single field SEE: duochrome theme
 		add-highlighter buffer/ line '%opt{search_current_line}' default+b  # NOTE: +bold highlight of line returned from after search-jump
 		map buffer normal <ret> :search-jump<ret>
 	}
