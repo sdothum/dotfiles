@@ -745,7 +745,8 @@ f_descending() {
 	case $shape in
 		576 ) ;;
 		600 ) Yshift=-200; Ydepth=36 ;;  # web font extended cap height
-		*   ) Yshift=-200; Ydepth=36; Xadjust=$((  600 - shape )) ;;  # proportional Xshift hack
+		61* ) Yshift=-200; Ydepth=36; Xadjust=$(( 576 - shape )) ;;  # proportional Xshift hack
+		64* ) Yshift=-200; Ydepth=36; Xadjust=$(( 600 - shape )) ;;  # proportional Xshift hack
 	esac
 	f_ascending
 }
