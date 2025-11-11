@@ -44,33 +44,23 @@ nop bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
 
 # ............................................................. find and replace
 
-# NOTE: find.kak updated to present "source│ text" result buffer in columnar format for enhanced view/edit
-# SEE:  bundle kakoune-find https://github.com/occivink/kakoune-find.git
-source "%val{config}/search.kak"
-
-# SEE: ux.kak buffer management
-define-command -hidden search-hack %{
-	if %{ [ "$kak_bufname" = '*search*' ] } %{
-		set-register / %opt{search_pattern}  # NOTE: restore register for return to *search* buffer
-		execute-keys gh                      # HACK: reposition cursor to colunm 1 to clear buffer:line:column highlight
+bundle kakoune-search https://github.com/sdothum/kakoune-search.git %{
+	define-command -hidden commit-edits %{
+		if-else %{ [ "$kak_bufname" = '*search*' ] } %{
+			search-apply-changes
+		} %{
+			buffer '*search*'
+			echo  # clear any buffer error message
+			if %{ [ "$kak_bufname" = '*search*' ] } %{ info 'redo "<space> &" to commit edits' }
+		}
 	}
+
+	# NOTE: <ret> jumps to buffer line
+	addm %{ goto   z  : map global buffer '\' ': search '           -docstring "search buffers" }
+	addm %{ search z1 : map global select '\' ': search '           -docstring "search     —— buffers,commit edits" }
+	addm %{ search z2 : map global select &   ': commit-edits<ret>' -docstring "search     —— buffers,commit edits" }
+	map global normal '\' ': search ' -docstring "search buffers"
 }
-
-define-command -hidden commit-edits %{
-	if-else %{ [ "$kak_bufname" = '*search*' ] } %{
-		search-apply-changes
-	} %{
-		buffer '*search*'
-		echo  # clear any buffer error message
-		if %{ [ "$kak_bufname" = '*search*' ] } %{ info 'redo "<space> &" to commit edits' }
-	}
-}  # suppesses error message outside of *search* buffer
-
-# NOTE: <ret> jumps to buffer line
-addm %{ goto   z  : map global buffer '\' ': search '           -docstring "search buffers" }
-addm %{ search z1 : map global select '\' ': search '           -docstring "search     —— buffers,commit edits" }
-addm %{ search z2 : map global select &   ': commit-edits<ret>' -docstring "search     —— buffers,commit edits" }
-map global normal '\' ': search ' -docstring "search buffers"
 
 # ............................................................. focus selections
 
@@ -210,10 +200,10 @@ bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 bundle reasymotion https://github.com/astaugaard/reasymotion.git %{
 	evaluate-commands %sh{ rkak_easymotion start }
 
-	addm %{ goto m1 : map global buffer m ': reasymotion-on-letter-to-word<ret>'          -docstring 'ezmotion  —— to word,expand to'   }
-	addm %{ goto m2 : map global buffer M ': reasymotion-on-letter-to-word-expand<ret>'   -docstring 'ezmotion  —— to word,expand to'   }
-	addm %{ goto m3 : map global buffer n ': reasymotion-on-letter-to-letter<ret>'        -docstring '⠀         —— to letter,expand to' }
-	addm %{ goto m4 : map global buffer N ': reasymotion-on-letter-to-letter-expand<ret>' -docstring '⠀         —— to letter,expand to' }
+	addm %{ goto m1 : map global buffer m ': reasymotion-on-letter-to-word<ret>'          -docstring 'ezmotion  —— to word,letter'   }
+	addm %{ goto m2 : map global buffer M ': reasymotion-on-letter-to-letter<ret>'        -docstring 'ezmotion  —— to word,letter'   }
+	addm %{ goto m3 : map global buffer n ': reasymotion-on-letter-to-word-expand<ret>'   -docstring '⠀         —— expand to word,letter' }
+	addm %{ goto m4 : map global buffer N ': reasymotion-on-letter-to-letter-expand<ret>' -docstring '⠀         —— expand to word,letter' }
 } %{
 	cargo install --path .
 }

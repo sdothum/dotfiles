@@ -153,11 +153,11 @@ hook global FocusOut .* sync   # over "write" for system files
 
 # ............................................................ Buffer management
 
-try %{ console-plugins } catch %{ define-command search-hack %{ nop }}  # SEE: console-plugins.kak
+try %{ console-plugins } catch %{ define-command search-view %{ nop }}  # SEE: console-plugins.kak, search.kak
 
-map global normal <a-space>     ': sync<ret>: buffer-next<ret>: search-hack<ret>'     -docstring 'next buffer'
-map global normal <a-backspace> ': sync<ret>: buffer-previous<ret>: search-hack<ret>' -docstring 'previous buffer'
-map global normal <a-ret>       ': sync<ret>ga: search-hack<ret>'                     -docstring 'last buffer'
+map global normal <a-space>     ': sync<ret>: buffer-next<ret>: search-view<ret>'     -docstring 'next buffer'
+map global normal <a-backspace> ': sync<ret>: buffer-previous<ret>: search-view<ret>' -docstring 'previous buffer'
+map global normal <a-ret>       ': sync<ret>ga: search-view<ret>'                     -docstring 'last buffer'
 
 # USE: .*diff BECAUSE: rc/filetype/mail.kak also maps <ret> causing unexpected *.eml plug error(?)
 hook global WinDisplay .*[.]diff %{

@@ -8,77 +8,9 @@
 
 # ............................................................. Term colorscheme
 
-if-else %{ [ -n "$DISPLAY" ] } %{
-	declare-option str theme 'duochrome'
-	declare-option str mode  ''  # initial state
-	declare-option str color ''  # force colorscheme initialization
-
-	# NOTE: "echo" to clear statusline filename from caplock switching
-
-	define-command -hidden normal-mode-colorscheme %{
-		set-option window mode "normal"
-		if %{ [ "$kak_opt_color" != "normal" ] } %{
-			trace %{ normal-mode-colorscheme }
-			set-option window color "normal"
-			colorscheme %opt{theme}
-			echo
-		}
-	}
-
-	define-command -hidden insert-mode-colorscheme %{
-		set-option window mode "insert"
-		if %{ [ "$kak_opt_color" != "insert" ] } %{
-			trace %{ insert-mode-colorscheme }
-			set-option window color "insert"
-			colorscheme %opt{theme}
-			echo
-		}
-	}
-
-	define-command -hidden capslock-colorscheme %{
-		if %{ [ "$kak_opt_color" != "capslock" ] } %{
-			trace %{ capslock-colorscheme }
-			set-option window color "capslock"
-			colorscheme %opt{theme}
-			echo
-		}
-	}
-
-# ............................................................... Capslock event
-
-	# (??) capslock colorscheme switching defers until the next keystroke HACK: see sxhkdrc for Caps_Lock trigger
-
-	define-command -hidden capslock-check %{
-		trace %{ capslock-check }
-		if-else %{ capslock } %{
-			capslock-colorscheme
-		} %{
-			if-else %{ [ "$kak_opt_mode" = "insert" ] } %{
-				insert-mode-colorscheme
-			} %{
-				normal-mode-colorscheme
-			}
-		}
-	}
-
-	# window modal/capslock "duo"chrome
-	hook global WinCreate .* %{
-		normal-mode-colorscheme
-		hook window ModeChange (push|pop):.*:insert insert-mode-colorscheme
-		hook window ModeChange (push|pop):insert:.* normal-mode-colorscheme
-		hook window InsertIdle .*                   capslock-check
-		hook window NormalIdle .*                   capslock-check
-		hook window PromptIdle .*                   capslock-check
-	}
-} %{
-
-# .......................................................... Console colorscheme
-
-declare-option str theme %sh{ echo "${COLORSCHEME:-plain}" }
-	colorscheme %opt{theme}
-}
-
-# push %{ alpha : map global select <space> ': normal-mode-colorscheme<ret>' -docstring "%opt{theme}" }
+bundle-theme kakoune-duochrome https://github.com/sdothum/kakoune-duochrome.git
+# modal colorscheme switcher
+bundle kakoune-colorscheme https://github.com/sdothum/kakoune-colorscheme.git
 
 # Info notifier
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -179,10 +111,7 @@ if-else %{ [ "$kak_opt_ruler" = " " ] } %{
 	declare-option str colsep "%opt{ruler} "
 }
 
-# display utf-8 value for non-latin characters (except U+000a linefeed)
-# set-option global modelinefmt '%sh{ capslock && echo "—CAPS— ${kak_opt_spacer} " }{{mode_info}} %opt{spacer} %val{buf_line_count}%opt{colsep}%val{cursor_char_column}%sh{ [ "$kak_cursor_char_value" -lt 32 ] && [ "$kak_cursor_char_value" -ne 10 ] || [ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value" } %opt{spacer} %val{bufname}{{context_info}} [%sh{ [ -z "$kak_opt_filetype" ] && echo "--" || echo "$kak_opt_filetype" }] %opt{spacer} %val{session}(%sh{ echo "$kak_client" | sed -r "s/[^0-9]*(.*)/\1/" }) '
-
-# the above in an easier to decipher format :-) NOTE: continuation lines insert a space into the modeline
+# display utf-8 value for non-latin characters (except U+000a linefeed) NOTE: continuation lines insert a space into the modeline
 set-option global modelinefmt '
 %sh{ capslock && echo "—CAPS— ${kak_opt_spacer}" }
 {{mode_info}}
