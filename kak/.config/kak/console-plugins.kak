@@ -56,7 +56,7 @@ bundle kakoune-search https://github.com/sdothum/kakoune-search.git %{
 	}
 
 	# NOTE: <ret> jumps to buffer line
-	addm %{ goto   z  : map global buffer '\' ': search '           -docstring "search buffers" }
+	addm %{ goto   s  : map global buffer '\' ': search '           -docstring "search buffers" }
 	addm %{ search z1 : map global select '\' ': search '           -docstring "search     —— buffers,commit edits" }
 	addm %{ search z2 : map global select &   ': commit-edits<ret>' -docstring "search     —— buffers,commit edits" }
 	map global normal '\' ': search ' -docstring "search buffers"
@@ -119,8 +119,8 @@ bundle hop.kak https://github.com/hadronized/hop.kak.git %{
 		hop-kak
 	}
 
-	addm %{ goto h1 : map global buffer h '*: hop-kak-sel<ret>' -docstring 'hint *selection,/register' }
-	addm %{ goto h2 : map global buffer H ': hop-kak-sel<ret>'  -docstring 'hint *selection,/register' }
+	addm %{ goto z1 : map global buffer * '*: hop-kak-sel<ret>' -docstring 'ezmotion  —— by *selection,/register' }
+	addm %{ goto z2 : map global buffer / ': hop-kak-sel<ret>'  -docstring 'ezmotion  —— by *selection,/register' }
 } %{
 	cargo install hop-kak
 }
@@ -200,10 +200,10 @@ bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 bundle reasymotion https://github.com/astaugaard/reasymotion.git %{
 	evaluate-commands %sh{ rkak_easymotion start }
 
-	addm %{ goto m1 : map global buffer m ': reasymotion-on-letter-to-word<ret>'          -docstring 'ezmotion  —— to word,letter'   }
-	addm %{ goto m2 : map global buffer M ': reasymotion-on-letter-to-letter<ret>'        -docstring 'ezmotion  —— to word,letter'   }
-	addm %{ goto m3 : map global buffer n ': reasymotion-on-letter-to-word-expand<ret>'   -docstring '⠀         —— expand to word,letter' }
-	addm %{ goto m4 : map global buffer N ': reasymotion-on-letter-to-letter-expand<ret>' -docstring '⠀         —— expand to word,letter' }
+	addm %{ goto z3 : map global buffer m ': reasymotion-on-letter-to-word<ret>'          -docstring '⠀         —— to word,letter'        }
+	addm %{ goto z4 : map global buffer M ': reasymotion-on-letter-to-letter<ret>'        -docstring '⠀         —— to word,letter'        }
+	addm %{ goto z5 : map global buffer n ': reasymotion-on-letter-to-word-expand<ret>'   -docstring '⠀         —— to word,letter expend' }
+	addm %{ goto z6 : map global buffer N ': reasymotion-on-letter-to-letter-expand<ret>' -docstring '⠀         —— to word,letter expend' }
 } %{
 	cargo install --path .
 }

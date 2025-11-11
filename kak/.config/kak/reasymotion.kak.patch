@@ -1,18 +1,31 @@
---- reasymotion.kak	2025-11-09 15:17:13.220504169 -0500
-+++ reasymotion.kak	2025-11-09 15:16:57.388502821 -0500
-@@ -101,13 +101,13 @@
+--- reasymotion.kak	2025-11-11 18:09:34.356850284 -0500
++++ reasymotion.kak	2025-11-11 18:09:07.614485002 -0500
+@@ -100,24 +100,28 @@
+ }
  
  def reasymotion-on-letter-to-word %{
++    info -title 'ezmotion' -- 'Press letter'
      on-key %{
--        reasymotion-select-screen "s\b%val{key}\w*<ret>"
-+        reasymotion-select-screen "s\b%val{key}<ret>"
+         reasymotion-select-screen "s\b%val{key}\w*<ret>"
      }
  }
  
  def reasymotion-on-letter-to-word-expand %{
++    info -title 'ezmotion' -- 'Press letter'
      on-key %{
--        reasymotion-select-screen-expand "s\b%val{key}\w*<ret>"
-+        reasymotion-select-screen-expand "s\b%val{key}<ret>"
+         reasymotion-select-screen-expand "s\b%val{key}\w*<ret>"
      }
  }
  
+ def reasymotion-on-letter-to-letter %{
++    info -title 'ezmotion' -- 'Press letter'
+     on-key %{
+         reasymotion-select-screen "s%val{key}<ret>"
+     }
+ }
+ 
+ def reasymotion-on-letter-to-letter-expand %{
++    info -title 'ezmotion' -- 'Press letter'
+     on-key %{
+         reasymotion-select-screen-expand "s%val{key}<ret>"
+     }
