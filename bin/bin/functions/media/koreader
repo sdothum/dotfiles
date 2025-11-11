@@ -127,7 +127,7 @@ while [ $1 ] ;do
 		b     ) margin=$(token number $2)     && { sdr "bottom margin ${margin}" '/\"copt_b_page_margin\"/s/= [0-9]*,/= '${margin}',/'; }           || usage; resetpages=true ;;
 		%     ) percent=$(token number $2)    && sdr "line spacing ${percent}"% '/\"copt_line_spacing\"/s/= [0-9]*,/= '${percent}',/'               || usage; resetpages=true ;;
 		m     ) sync=$(token binary $2)       && sdr "sync margins ${sync}" '/\"copt_sync_t_b_page_margins\"/s/[01]/'${sync}'/'                     || usage                  ;;
-		l     ) hilite=$(hilite $2)           && sdr "highlight ${hilite}" '/\"drawer\"/s/= \"(invert|lighten)\"/= \"'${hilite}'\"/'                || usage                  ;;
+		l     ) hilite=$(hilite $2)           && sdr "highlight ${hilite}" '/\"[^ ]*drawer\"/s/= \"(invert|lighten)\"/= \"'${hilite}'\"/'           || usage                  ;;
 		d     ) font=$(token word $2)         && font ${font} && header ${font}                                                                     || usage; resetpages=true ;;
 		f     ) font=$(token word $2)         && font ${font}                                                                                       || usage; resetpages=true ;;
 		/     ) font=$(token word $2)         && header ${font}                                                                                     || usage                  ;;

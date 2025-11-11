@@ -320,7 +320,7 @@ elif [ "$supernote" ] ;then
 	# e_ink krotesc grote I-serifless  t-cross        l-ascending Q-open 1-nobase f-extended++ a-single_ d-tailed p-eared y-turn J-descending utf-8
 	# e_ink krotesk grote I-serifed    t-cross        l-ascending Q-open 1-nobase f-extended++ a-double_ d-tailed p-eared y-turn J-descending utf-8
 
-elif [ "$proportional" ] ;then
+elif [ "$proportional" ] ;then  # experimental (unfinished mods to iosevka.v..)
 	cmdopts quasi-pro space=M Q-straight open+ j-flat serifless serifed
  	emdash
 	e_ink protesque grote I-serifless  t-asymmetric-- l-ascending Q-open 1-nobase f-extended++ a-double_ d-tailed p-eared y-turn J-descending utf-8
