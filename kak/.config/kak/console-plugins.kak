@@ -11,7 +11,7 @@ define-command console-plugins %{ nop }  # USAGE: try %{ console-plugins } catch
 
 # ................................................................... auto-pairs
 
-bundle auto-pairs.kak https://github.com/alexherbo2/auto-pairs.kak.git %{
+bundle auto-pairs https://github.com/alexherbo2/auto-pairs.kak.git %{
 	enable-auto-pairs
 }
 
@@ -44,7 +44,7 @@ nop bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
 
 # ............................................................. find and replace
 
-bundle kakoune-search https://github.com/sdothum/kakoune-search.git %{
+bundle search https://github.com/sdothum/search.kak.git %{
 	define-command -hidden commit-edits %{
 		if-else %{ [ "$kak_bufname" = '*search*' ] } %{
 			search-apply-changes
@@ -100,7 +100,7 @@ bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
 
 # .......................................................................... hop
 
-bundle hop.kak https://github.com/hadronized/hop.kak.git %{
+bundle hop https://git.sr.ht/~hadronized/hop.kak %{
 	evaluate-commands %sh{ hop-kak --init }
 	declare-option str hop_keyset 'heatrsiyoudnmkplf'  # beakl wi layout
 
@@ -209,14 +209,14 @@ bundle reasymotion https://github.com/sdothum/reasymotion.git %{
 
 # .................................................................. search docs
 
-bundle search-doc.kak https://github.com/jbomanson/search-doc.kak.git %{
+bundle search-doc https://github.com/jbomanson/search-doc.kak.git %{
 	require-module search-doc
 	alias global sd search-doc
 }
 
 # ..................................................................... smarttab
 
-bundle smarttab.kak https://github.com/andreyorst/smarttab.kak.git %{
+bundle smarttab https://github.com/andreyorst/smarttab.kak.git %{
 	require-module smarttab
 	set-option global softtabstop 3
 

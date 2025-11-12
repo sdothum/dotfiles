@@ -6,11 +6,11 @@
 # Modal UI
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# ............................................................. Term colorscheme
+# ............................................................. Te.kakrm colorscheme
 
-bundle-theme kakoune-duochrome https://github.com/sdothum/kakoune-duochrome.git
+bundle-theme duochrome https://github.com/sdothum/duochrome.kak.git
 # modal colorscheme switcher
-bundle kakoune-colorscheme https://github.com/sdothum/kakoune-colorscheme.git
+bundle colorscheme https://github.com/sdothum/colorscheme.kak.git
 
 # Info notifier
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

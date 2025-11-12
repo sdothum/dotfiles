@@ -62,7 +62,7 @@ bundle kakoune-livedown https://github.com/Delapouite/kakoune-livedown.git %{
 			set-option global livedown "%val{bufname}"
 			# livedown-start-with-write-on-idle  # NOTE: InsertIdle hook forces char by char "undo" action, instead..
 			livedown-start
-			hook -group livedown-idle buffer NormalIdle .* %{ eval -no-hooks write }  # "normal" mode refresh
+			hook -group livedown-idle buffer NormalIdle .* %{ evaluate-commands -no-hooks write }  # "normal" mode refresh
 		}
 	}
 
@@ -91,13 +91,13 @@ bundle kakoune-livedown https://github.com/Delapouite/kakoune-livedown.git %{
 
 # ........................................................................ popup
 
-bundle popup.kak https://github.com/enricozb/popup.kak.git %{
+bundle popup https://github.com/enricozb/popup.kak.git %{
 	evaluate-commands %sh{ kak-popup init }
 }
 
 # ....................................................................... splash
 
-bundle splash.kak https://github.com/Hjagu09/splash.kak.git
+bundle splash https://github.com/Hjagu09/splash.kak.git
 # bundle texture.kak https://github.com/ftonneau/texture.kak.git
 
 # kak: filetype=kak
