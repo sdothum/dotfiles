@@ -6,7 +6,7 @@
 
 # ........................................................... modal pipe actions
 
-usage() { echo "<selection> | $(basename $0) l'eader | t'railer | u'nderline | r'uler [<char>] | \`code | c'ss | f'old <column> | unF'old
+usage() { echo "<selection> | $(basename $0) l'eader | t'railer | U|u'nderline | r'uler [<char>] | \`code | c'ss | f'old <column> | unF'old
 >   where, first word of line is treated as comment symbol
 >          '.' -> default leader/trailer 
 >          '━' -> default (heavy horizontal) underline
@@ -32,6 +32,7 @@ fill() { for i in $(seq $1) ;do echo -n "$2" ;done }
 tab="$(fill $tabwidth " ")"
 
 parse() {
+	[ $(printf %c $1) = 'U' ] && return               # simple underline
 	[ $(echo -n "$line" | wc -w) -gt 1 ] || return 1  # empty or comment symbol only corner case
 	leader=$(echo "$line" | sed -r "s/^([ \t]*).*/\1/")
 	spaces=$(echo "$leader" | sed "s/\t/$tab/g")
@@ -72,6 +73,7 @@ case $action in
 	*F* ) unfold     ;;
 	l*  ) fillchar . ;;
 	t*  ) fillchar . ;;
+	U*  ) fillchar ━ ;;
 	u*  ) fillchar ━ ;;
 	r*  ) fillchar ═ ;;
 	*   ) usage      ;;
@@ -82,6 +84,7 @@ while IFS= read -r line ;do
 	case $action in
 		l* ) echo "$leader$comment $decoration $content" ;;
 		t* ) echo "$leader$comment $content $decoration" ;;
+		U* ) echo "$line"; for i in $(seq 1 $width) ;do printf $fill ;done; echo ;;  # special use case for simple underline
 		u* ) echo "$line"; echo "$leader$comment $decoration" ;;
 		r* ) echo "$line"; echo "$leader$comment $decoration$fill" ;;  # extra fill for lack of parse content
 	esac
