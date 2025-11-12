@@ -6,6 +6,8 @@
 --
 -- override system UI font
 --
+-- ATTN: this patch must be the first patch loaded
+--       hence, the "2--<patch>.lua" naming for load order precedence
 -- NOTE: this does not consistently override widget titles and dictionary lookups
 --       which can result in unusal fontface pairings
 
