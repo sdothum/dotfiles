@@ -56,7 +56,7 @@ bundle kakoune-search https://github.com/sdothum/kakoune-search.git %{
 	}
 
 	# NOTE: <ret> jumps to buffer line
-	addm %{ goto   s : map global buffer '\' ': search '           -docstring "*search* buffers"        }
+	addm %{ goto   s : map global buffer '\' ': search '           -docstring "*search* buffers"       }
 	addm %{ search z : map global select &   ': commit-edits<ret>' -docstring "commit *search* buffer" }
 	map global normal '\' ': search ' -docstring "search buffers"
 }
@@ -196,7 +196,7 @@ bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 
 # .................................................................. Reasymotion
 
-bundle reasymotion https://github.com/astaugaard/reasymotion.git %{
+bundle reasymotion https://github.com/sdothum/reasymotion.git %{
 	evaluate-commands %sh{ rkak_easymotion start }
 
 	addm %{ goto z3 : map global buffer m ': reasymotion-on-letter-to-word<ret>'          -docstring '⠀         —— to word,letter'        }

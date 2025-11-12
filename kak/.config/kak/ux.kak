@@ -11,6 +11,7 @@
 set-option global tabstop 3
 set-option global indentwidth 3
 
+addm %{ mode f : map global select '#' ': enter-user-mode format<ret>' -docstring "format user-mode" }
 map global normal '#' ': enter-user-mode format<ret>'
 
 # ............................................................. Block conversion
@@ -29,12 +30,13 @@ addm %{ comment m  : map global format '`'     'x|comment \`<ret>'              
 
 # ......................................................................... Line
 
-addm %{ heading l1 : map global format l       'x|comment l .<ret>'                -docstring 'leader     ... xxx' }
-addm %{ heading l2 : map global format t       'x|comment t .<ret>'                -docstring 'trailer    xxx ...' }
-addm %{ heading r1 : map global format R       'x|comment r =<ret>'                -docstring 'ruler      ═══'     }
-addm %{ heading r2 : map global format r       'x|comment r --<ret>'               -docstring 'ruler      ━━━'     }
-addm %{ heading u1 : map global format U       'x|comment u =<ret>'                -docstring 'underline  ═══'     }
-addm %{ heading u2 : map global format u       'x|comment u --<ret>'               -docstring 'underline  ━━━'     }
+addm %{ heading l1 : map global format l       'x|comment l .<ret>'                -docstring 'leader      ... xxx' }
+addm %{ heading l2 : map global format t       'x|comment t .<ret>'                -docstring 'trailer     xxx ...' }
+addm %{ heading r1 : map global format R       'x|comment r =<ret>'                -docstring 'ruler       ═══'     }
+addm %{ heading r2 : map global format r       'x|comment r --<ret>'               -docstring 'ruler       ━━━'     }
+addm %{ heading u1 : map global format U       'x|comment u =<ret>'                -docstring 'underline   ═══'     }
+addm %{ heading u2 : map global format u       'x|comment u --<ret>'               -docstring 'underline   ━━━'     }
+addm %{ heading u3 : map global format ^       'x|comment U --<ret>'               -docstring 'underline  ^━━━'     }
 
 define-command -hidden refold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|comment f $kak_opt_autowrap_column<ret>" }}}
 define-command -hidden unfold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys 'x|comment F<ret>' }}  # (??) utf-8 sed errors from kak shell
