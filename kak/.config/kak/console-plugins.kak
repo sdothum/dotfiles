@@ -51,14 +51,13 @@ bundle kakoune-search https://github.com/sdothum/kakoune-search.git %{
 		} %{
 			buffer '*search*'
 			echo  # clear any buffer error message
-			if %{ [ "$kak_bufname" = '*search*' ] } %{ info 'redo "<space> &" to commit edits' }
+			if %{ [ "$kak_bufname" = '*search*' ] } %{ info 'redo "<space> &" to commit *search* buffer' }
 		}
 	}
 
 	# NOTE: <ret> jumps to buffer line
-	addm %{ goto   s  : map global buffer '\' ': search '           -docstring "search buffers" }
-	addm %{ search z1 : map global select '\' ': search '           -docstring "search     —— buffers,commit edits" }
-	addm %{ search z2 : map global select &   ': commit-edits<ret>' -docstring "search     —— buffers,commit edits" }
+	addm %{ goto   s : map global buffer '\' ': search '           -docstring "*search* buffers"        }
+	addm %{ search z : map global select &   ': commit-edits<ret>' -docstring "commit *search* buffer" }
 	map global normal '\' ': search ' -docstring "search buffers"
 }
 
@@ -119,8 +118,8 @@ bundle hop.kak https://github.com/hadronized/hop.kak.git %{
 		hop-kak
 	}
 
-	addm %{ goto z1 : map global buffer * '*: hop-kak-sel<ret>' -docstring 'ezmotion  —— by *selection,/register' }
-	addm %{ goto z2 : map global buffer / ': hop-kak-sel<ret>'  -docstring 'ezmotion  —— by *selection,/register' }
+	addm %{ goto z1 : map global buffer * '*: hop-kak-sel<ret>' -docstring 'ezmotion  —— to *,reg{/}' }
+	addm %{ goto z2 : map global buffer / ': hop-kak-sel<ret>'  -docstring 'ezmotion  —— to *,reg{/}' }
 } %{
 	cargo install hop-kak
 }
@@ -179,7 +178,7 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 
 	addm %{ meta b : map global buffer <ret> ': buffers<ret>' -docstring 'buffers'      }
 	addm %{ goto c : map global buffer c     ': symbols<ret>' -docstring 'ctag symbols' }
-	addm %{ goto g : map global buffer g     ': lines<ret>'   -docstring 'fuzzy goto'   }
+	addm %{ goto f : map global buffer f     ': lines<ret>'   -docstring 'fuzzy goto'   }
 	addm %{ file 1 : map global buffer e     ': files<ret>'   -docstring 'edit file'    }
 }
 
@@ -202,8 +201,8 @@ bundle reasymotion https://github.com/astaugaard/reasymotion.git %{
 
 	addm %{ goto z3 : map global buffer m ': reasymotion-on-letter-to-word<ret>'          -docstring '⠀         —— to word,letter'        }
 	addm %{ goto z4 : map global buffer M ': reasymotion-on-letter-to-letter<ret>'        -docstring '⠀         —— to word,letter'        }
-	addm %{ goto z5 : map global buffer n ': reasymotion-on-letter-to-word-expand<ret>'   -docstring '⠀         —— to word,letter expend' }
-	addm %{ goto z6 : map global buffer N ': reasymotion-on-letter-to-letter-expand<ret>' -docstring '⠀         —— to word,letter expend' }
+	addm %{ goto z5 : map global buffer n ': reasymotion-on-letter-to-word-expand<ret>'   -docstring '⠀         —— to word,letter expand' }
+	addm %{ goto z6 : map global buffer N ': reasymotion-on-letter-to-letter-expand<ret>' -docstring '⠀         —— to word,letter expand' }
 } %{
 	cargo install --path .
 }
