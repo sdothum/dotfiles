@@ -132,15 +132,6 @@ map global normal <c-ret> ': enter-user-mode buffer<ret>'  # for find *scratch* 
 
 addm %{ mode b : map global select <ret> ': enter-user-mode buffer<ret>' -docstring 'buffer user-mode' }
 
-# no sudo-write-all so sync root owned files on buffer switching
-try %{ console-plugins } catch %{ define-command sudo-write %{ nop }}  # SEE: console-plugins.kak
-
-define-command -hidden sync %{
-	# if %{ [ -n "$kak_opt_filetype" ] && $kak_modified } %{ sudo-write }  # BUG: $kak_opt_filetype is null for "if" command (?)
-	# BUG: $kak_opt_filetype is null for %sh{} and root owned files(?)
-	evaluate-commands %sh{ [ "$kak_opt_filetype" != 'scratch' ] && $kak_modified && echo "sudo-write" || echo "nop" }
-}
-
 # ..................................................................... Filetype
 
 # modeline inline context: "# kak: filetype=.." (comment delimiter by filetype)
@@ -155,6 +146,7 @@ hook global FocusOut .* sync   # over "write" for system files
 
 # ............................................................ Buffer management
 
+try %{ console-plugins } catch %{ define-command sudo-write  %{ nop }}  # SEE: console-plugins.kak
 try %{ console-plugins } catch %{ define-command search-view %{ nop }}  # SEE: console-plugins.kak, search.kak
 
 map global normal <a-space>     ': sync<ret>: buffer-next<ret>: search-view<ret>'     -docstring 'next buffer'

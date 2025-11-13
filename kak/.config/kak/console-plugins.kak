@@ -187,10 +187,10 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 		peneira-symbols
 	}
 
-	addm %{ meta b : map global buffer <ret> ': buffers<ret>' -docstring 'buffers'      }
-	addm %{ goto c : map global buffer c     ': symbols<ret>' -docstring 'ctag symbols' }
-	addm %{ goto f : map global buffer f     ': lines<ret>'   -docstring 'fuzzy goto'   }
-	addm %{ file 1 : map global buffer e     ': files<ret>'   -docstring 'edit file'    }
+	addm %{ meta b : map global buffer <ret> ': sync<ret>: buffers<ret>' -docstring 'buffers'      }
+	addm %{ goto c : map global buffer c     ': symbols<ret>'            -docstring 'ctag symbols' }
+	addm %{ goto f : map global buffer f     ': lines<ret>'              -docstring 'fuzzy goto'   }
+	addm %{ file 1 : map global buffer e     ': sync<ret>: files<ret>'   -docstring 'edit file'    }
 }
 
 # ...................................................................... kakpipe
@@ -237,7 +237,12 @@ bundle smarttab https://github.com/andreyorst/smarttab.kak.git %{
 
 # ................................................................... sudo-write
 
-bundle kakoune-sudo-write https://github.com/occivink/kakoune-sudo-write.git
+bundle kakoune-sudo-write https://github.com/occivink/kakoune-sudo-write.git %{
+	# no sudo-write-all so sync root owned files on buffer switching SEE: ux.kak
+	define-command -hidden sync %{
+		if %{ $kak_modified } %{ sudo-write }
+	}
+}
 
 # .................................................................. tree-sitter
 
