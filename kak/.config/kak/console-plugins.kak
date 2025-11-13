@@ -57,6 +57,13 @@ bundle search https://github.com/sdothum/search.kak.git %{
 		}
 	}
 
+	define-command -hidden search-view -docstring 'restore search buffer view' %{
+		if %{ [ "$kak_bufname" = '*search*' ] } %{
+			set-register / %opt{search_pattern}  # NOTE: restore *search* buffer register
+			execute-keys gh                      # HACK: reposition cursor to colunm 1 to clear buffer:line:column highlight
+		}
+	}
+
 	# NOTE: <ret> jumps to buffer line
 	addm %{ find s1 : map global buffer '\' ': search '           -docstring "*search*  —— buffers,again"    }
 	addm %{ find s2 : map global buffer &   ': search-again<ret>' -docstring "*search*  —— buffers,again"    }
