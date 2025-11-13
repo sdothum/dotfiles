@@ -39,7 +39,7 @@ while : ;do
 		-h* | help    ) $KAK -help; usage ;;
 		-B*           ) hyperfine -warmup 10 "$KAK -ui dummy -e quit"; exit ;;
 		-LEXICON      ) DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary; reverse=-r ;;  # push .config dictionary to end of sort list
-		-PROOF        ) export MONOFONT="Iosevka-proof"; export BG='ffead0:-7,fff5e8:9,96f8f8:-12' ;;
+		-PROOF        ) export MONOFONT="Iosevka-proof"; export BG='ffead0:-7,fff5e8:9,96f8f8:-12,fa8c69' ;;
 		-T*           ) export TRACE=/tmp/kak:trace ;;  # trace messages
 		-U*           ) export UNPLUG=true ;;           # kakrc plugins exclusions
 		-C*           ) unset DISPLAY; console=true; export COLORSCHEME=${COLORSCHEME:-default} ;;
