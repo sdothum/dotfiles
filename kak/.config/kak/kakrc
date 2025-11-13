@@ -84,16 +84,20 @@ setm %{ select : focus   }
 gapm %{ select 1         }
 setm %{ select : search  }
 gapm %{ select 2         }
-setm %{ select : paste   }
+setm %{ select : find    }
 gapm %{ select 3         }
+setm %{ select : paste   }
+gapm %{ select 4         }
 setm %{ select : mode    }
 
 setm %{ buffer : meta    }
 gapm %{ buffer 1         }
 setm %{ buffer : goto    }
 gapm %{ buffer 2         }
-setm %{ buffer : test    }
+setm %{ buffer : find    }
 gapm %{ buffer 3         }
+setm %{ buffer : test    }
+gapm %{ buffer 4         }
 setm %{ buffer : file    }
 
 setm %{ format : block   }
