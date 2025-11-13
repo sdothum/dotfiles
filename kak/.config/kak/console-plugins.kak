@@ -46,18 +46,22 @@ nop bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
 
 bundle search https://github.com/sdothum/search.kak.git %{
 	define-command -hidden commit-edits %{
-		if-else %{ [ "$kak_bufname" = '*search*' ] } %{
-			search-apply-changes
+		try %{ search-apply-changes } catch %{ search-again }
+	}
+
+	define-command -hidden search-again %{
+		if-else %{ [ "$kak_opt_search_pattern" ] } %{
+			search %opt{search_pattern}
 		} %{
-			buffer '*search*'
-			echo  # clear any buffer error message
-			if %{ [ "$kak_bufname" = '*search*' ] } %{ info 'redo "<space> &" to commit *search* buffer' }
+			execute-keys %sh{ printf ': search ' }
 		}
 	}
 
 	# NOTE: <ret> jumps to buffer line
-	addm %{ goto   s : map global buffer '\' ': search '           -docstring "*search* buffers"       }
-	addm %{ search z : map global select &   ': commit-edits<ret>' -docstring "commit *search* buffer" }
+	addm %{ goto   s1 : map global buffer '\' ': search '           -docstring "*search*  —— buffers,again"    }
+	addm %{ goto   s2 : map global buffer &   ': search-again<ret>' -docstring "*search*  —— buffers,again"    }
+	addm %{ search z1 : map global select '\' ': search-again<ret>' -docstring "*search*   —— refresh,commit " }
+	addm %{ search z2 : map global select &   ': commit-edits<ret>' -docstring "*search*   —— refresh,commit " }
 	map global normal '\' ': search ' -docstring "search buffers"
 }
 
