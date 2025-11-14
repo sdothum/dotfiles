@@ -67,8 +67,8 @@ bundle search https://github.com/sdothum/search.kak.git %{
 	# NOTE: <ret> jumps to buffer line
 	addm %{ find s1 : map global buffer '\' ': search '           -docstring "*search*  —— buffers,again"    }
 	addm %{ find s2 : map global buffer &   ': search-again<ret>' -docstring "*search*  —— buffers,again"    }
-	addm %{ find z1 : map global select '\' ': search-again<ret>' -docstring "*search*   —— refresh,commit " }
-	addm %{ find z2 : map global select &   ': commit-edits<ret>' -docstring "*search*   —— refresh,commit " }
+	addm %{ find s1 : map global select '\' ': search-again<ret>' -docstring "*search*   —— refresh,commit " }
+	addm %{ find s2 : map global select &   ': commit-edits<ret>' -docstring "*search*   —— refresh,commit " }
 	map global normal '\' ': search ' -docstring "search buffers"
 }
 
@@ -129,8 +129,8 @@ bundle hop https://git.sr.ht/~hadronized/hop.kak %{
 		hop-kak
 	}
 
-	addm %{ goto z1 : map global buffer * '*: hop-kak-sel<ret>' -docstring 'ezmotion  —— to *,reg{/}' }
-	addm %{ goto z2 : map global buffer / ': hop-kak-sel<ret>'  -docstring 'ezmotion  —— to *,reg{/}' }
+	addm %{ find z1 : map global select * '*: hop-kak-sel<ret>' -docstring 'jump       —— to *,reg{/}' }
+	addm %{ find z2 : map global select / ': hop-kak-sel<ret>'  -docstring 'jump       —— to *,reg{/}' }
 } %{
 	cargo install hop-kak
 }
@@ -210,10 +210,10 @@ bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 bundle reasymotion https://github.com/sdothum/reasymotion.git %{
 	evaluate-commands %sh{ rkak_easymotion start }
 
-	addm %{ goto z3 : map global buffer m ': reasymotion-on-letter-to-word<ret>'          -docstring '⠀         —— to word,letter'        }
-	addm %{ goto z4 : map global buffer M ': reasymotion-on-letter-to-letter<ret>'        -docstring '⠀         —— to word,letter'        }
-	addm %{ goto z5 : map global buffer n ': reasymotion-on-letter-to-word-expand<ret>'   -docstring '⠀         —— to word,letter expand' }
-	addm %{ goto z6 : map global buffer N ': reasymotion-on-letter-to-letter-expand<ret>' -docstring '⠀         —— to word,letter expand' }
+	addm %{ find z3 : map global select j ': reasymotion-on-letter-to-word<ret>'          -docstring '⠀          —— to word,letter'        }
+	addm %{ find z4 : map global select J ': reasymotion-on-letter-to-letter<ret>'        -docstring '⠀          —— to word,letter'        }
+	addm %{ find z5 : map global select k ': reasymotion-on-letter-to-word-expand<ret>'   -docstring '⠀          —— to word,letter expand' }
+	addm %{ find z6 : map global select K ': reasymotion-on-letter-to-letter-expand<ret>' -docstring '⠀          —— to word,letter expand' }
 } %{
 	cargo install --path .
 }

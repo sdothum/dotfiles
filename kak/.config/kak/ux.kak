@@ -11,7 +11,7 @@
 set-option global tabstop 3
 set-option global indentwidth 3
 
-addm %{ mode f : map global select '#' ': enter-user-mode format<ret>' -docstring "format user-mode" }
+addm %{ usermode f : map global select '#' ': enter-user-mode format<ret>' -docstring "format user-mode" }
 map global normal '#' ': enter-user-mode format<ret>'
 
 # ............................................................. Block conversion
@@ -23,20 +23,20 @@ addm %{ block   f2 : map global format F       ': unfold<ret>'                  
 
 # ...................................................................... Comment
 
-addm %{ comment c1 : map global format <c-c>   ': comment-line<ret>'               -docstring 'comment,block  (kak)'        }
-addm %{ comment c2 : map global format c       ': comment-block<ret>'              -docstring 'comment,block  (kak)'        }
-addm %{ comment h  : map global format h       'x|comment c<ret>'                  -docstring '/* css */'                   }
-addm %{ comment m  : map global format '`'     'x|comment \`<ret>'                 -docstring 'markdown ``    (code block)' }
+addm %{ remark  c1 : map global format <c-c>   ': comment-line<ret>'               -docstring 'comment,block  (kak)'        }
+addm %{ remark  c2 : map global format c       ': comment-block<ret>'              -docstring 'comment,block  (kak)'        }
+addm %{ remark  h  : map global format h       'x|comment c<ret>'                  -docstring '/* css */'                   }
+addm %{ remark  m  : map global format '`'     'x|comment \`<ret>'                 -docstring 'markdown ``    (code block)' }
 
 # ......................................................................... Line
 
-addm %{ heading l1 : map global format l       'x|comment l .<ret>'                -docstring 'leader      ... xxx' }
-addm %{ heading l2 : map global format t       'x|comment t .<ret>'                -docstring 'trailer     xxx ...' }
-addm %{ heading r1 : map global format R       'x|comment r =<ret>'                -docstring 'ruler       ═══'     }
-addm %{ heading r2 : map global format r       'x|comment r --<ret>'               -docstring 'ruler       ━━━'     }
-addm %{ heading u1 : map global format U       'x|comment u =<ret>'                -docstring 'underline   ═══'     }
-addm %{ heading u2 : map global format u       'x|comment u --<ret>'               -docstring 'underline   ━━━'     }
-addm %{ heading u3 : map global format ^       'x|comment U --<ret>'               -docstring 'underline  ^━━━'     }
+addm %{ section l1 : map global format l       'x|comment l .<ret>'                -docstring 'leader      ... xxx' }
+addm %{ section l2 : map global format t       'x|comment t .<ret>'                -docstring 'trailer     xxx ...' }
+addm %{ section r1 : map global format R       'x|comment r =<ret>'                -docstring 'ruler       ═══'     }
+addm %{ section r2 : map global format r       'x|comment r --<ret>'               -docstring 'ruler       ━━━'     }
+addm %{ section u1 : map global format U       'x|comment u =<ret>'                -docstring 'underline   ═══'     }
+addm %{ section u2 : map global format u       'x|comment u --<ret>'               -docstring 'underline   ━━━'     }
+addm %{ section u3 : map global format ^       'x|comment U --<ret>'               -docstring 'underline  ^━━━'     }
 
 define-command -hidden refold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys %sh{ echo "x|comment f $kak_opt_autowrap_column<ret>" }}}
 define-command -hidden unfold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execute-keys 'x|comment F<ret>' }}  # (??) utf-8 sed errors from kak shell
@@ -103,22 +103,22 @@ map global normal <plus>  '}p'     -docstring 'extend to next paragraph'
 
 # .................................................................... Searching
 
-addm %{ search /1 : map global select (     '<a-/>(?i)'        -docstring 'isearch    —— prev,next' }
-addm %{ search /2 : map global select )     '/(?i)'            -docstring 'isearch    —— prev,next' }
-addm %[ search /3 : map global select '{'   '<a-?>(?i)'        -docstring 'iextend    —— prev,next' ]
-addm %[ search /4 : map global select '}'   '?(?i)'            -docstring 'iextend    —— prev,next' ]
+addm %{ refine /1 : map global select (     '<a-/>(?i)'        -docstring 'isearch    —— prev,next' }
+addm %{ refine /2 : map global select )     '/(?i)'            -docstring 'isearch    —— prev,next' }
+addm %[ refine /3 : map global select '{'   '<a-?>(?i)'        -docstring 'iextend    —— prev,next' ]
+addm %[ refine /4 : map global select '}'   '?(?i)'            -docstring 'iextend    —— prev,next' ]
 
 # .............................................................. Split selection
-
-addm %{ search s1 : map global select s     'x<a-s>s'          -docstring 'split      —— select,iselect' }
-addm %{ search s2 : map global select S     'x<a-s>s(?i)'      -docstring 'split      —— select,iselect' }
-addm %{ search w1 : map global select m     ': mkd-para<ret>'  -docstring 'markdown   —— paragraph,table,code' }
-addm %{ search w2 : map global select M     ': mkd-table<ret>'  -docstring 'markdown   —— paragraph,table,code' }
-addm %{ search w3 : map global select <c-m> ': mkd-code<ret>'  -docstring 'markdown   —— paragraph,table,code' }
 
 define-command -hidden mkd-para  %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[^|`]<ret>x' }}
 define-command -hidden mkd-table %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[|]<ret>x'   }}
 define-command -hidden mkd-code  %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[`]<ret>x'   }}
+
+addm %{ refine s1 : map global select s     'x<a-s>s'          -docstring 'split      —— select,iselect' }
+addm %{ refine s2 : map global select S     'x<a-s>s(?i)'      -docstring 'split      —— select,iselect' }
+addm %{ refine w1 : map global select m     ': mkd-para<ret>'  -docstring 'markdown   —— paragraph,table,code' }
+addm %{ refine w2 : map global select M     ': mkd-table<ret>' -docstring 'markdown   —— paragraph,table,code' }
+addm %{ refine w3 : map global select <c-m> ': mkd-code<ret>'  -docstring 'markdown   —— paragraph,table,code' }
 
 map global normal S 's(?i)' -docstring 'split: iselect:'
 
@@ -130,7 +130,7 @@ set-option global autoreload yes
 map global normal <ret>   ': enter-user-mode buffer<ret>'
 map global normal <c-ret> ': enter-user-mode buffer<ret>'  # for find *scratch* buffer
 
-addm %{ mode b : map global select <ret> ': enter-user-mode buffer<ret>' -docstring 'buffer user-mode' }
+addm %{ usermode b : map global select <ret> ': enter-user-mode buffer<ret>' -docstring 'buffer user-mode' }
 
 # ..................................................................... Filetype
 
@@ -167,7 +167,7 @@ hook global WinSetOption filetype=diff %{
 	add-highlighter buffer/diff-allow-one-trailing-space regex '^ ' 0:Default
 }
 
-addm %{ test b  : map global buffer b   ': buffer *debug*<ret>'            -docstring '*debug* buffer' }
+addm %{ test b  : map global buffer *   ': buffer *debug*<ret>'            -docstring '*debug* buffer' }
 addm %{ file d1 : map global buffer d   ': sync<ret>: delete-buffer<ret>'  -docstring 'delete    —— with save,discard!'  }
 addm %{ file d2 : map global buffer D   ': delete-buffer!<ret>'            -docstring 'delete    —— with save,discard!'  }
 # SEE: kakpipe alpha subsort in xdisplay-plugins
