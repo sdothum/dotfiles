@@ -213,6 +213,7 @@ abbr list "ls -A1 | tr '\n' ' ' | sed 's/ /|/g; s/|\$//'"
 
 # .................................................................. Development
 
+abbr dot 'rlwrap -n dotfiles'
 # abbr ghc 'ghc -dynamic'  # arch repo only
 abbr ghc 'stack ghc'
 abbr ghcc 'stack build'
@@ -241,13 +242,16 @@ abbr hdel 'fishlog delete'
 abbr h 'fishlog search'
 abbr hk "kak $HOME/.local/share/fish/fish_history"
 abbr hv "vi $HOME/.local/share/fish/fish_history"
+abbr ma 'man'
 abbr rl 'rlwrap'
 abbr s 'sudo'
 abbr sh 'bash -norc'
 abbr ss 'sudo su -c fish'  # su otherwise just invokes sh
+abbr uterm 'urxvt -sh 1'
+abbr wl 'wc -l'
 abbr zz 'z -'
 
-# .................................................................. Application
+# ........................................................................... AI
 
 abbr \? 'chatgpt'
 abbr \?\? 'chatgpt -n'  # new conversation
@@ -259,9 +263,17 @@ abbr \@j 'aichat -r julia'
 abbr \@p 'aichat -r python'
 abbr \@r 'aichat -r ruby'
 abbr \@R 'aichat -r rust'
+
+# ................................................................... calc / hex
+
 abbr bc 'bcd'
 abbr calc 'speedcrunch'
 abbr color 'pastel format hex'
+abbr hex 'hexdump -C'
+abbr termhex "window size 1/3; $HOME/bin/functions/shell/termcolors hex"
+
+# ................................................................... dictionary
+
 if exists /usr/bin/sdcv
 	abbr di 'sdcv -wn'
 	abbr dox 'sdcv -uk'
@@ -271,30 +283,31 @@ else
 	abbr di 'dict'
 	abbr ti 'dict -t'
 end
-abbr displaycal 'displaycal3'
-abbr dot 'rlwrap -n dotfiles'
-abbr gif 'nsxiv -a'
-abbr handbrake 'ghb'
-abbr hex 'hexdump -C'
+abbr W 'words'
+
+# ......................................................................... epub
+
 abbr kc 'kconvert'
 abbr kc0 "kconvert css='p { margin: 0 !important; }'"
 abbr kcn 'kconvert noformat'
 abbr kindle 'dmenu econvert azw3'
 abbr eformat 'dmenu econvert reformat'
 abbr kobo 'dmenu econvert epub'
-abbr ma 'man'
+
+# ........................................................................ media
+
+abbr gif 'nsxiv -a'
+abbr handbrake 'ghb'
 abbr md 'lowdown -tterm'
 abbr mdtxt 'lowdown -tterm --term-no-colour'
 abbr miniflux-migrate 'sudo miniflux -c /etc/miniflux.conf -migrate'
 # abbr music '!p ncmpcpp; and ncmpcpp'
-abbr pts 'phoronix-test-suite'
 abbr scrot 'scrot -e "mv \$f /net/photos/batchqueue/"'
-abbr td 'td -i'
-abbr termhex "window size 1/3; $HOME/bin/functions/shell/termcolors hex"
-# abbr todo 'rlwrap -n todo-screen'
-abbr uterm 'urxvt -sh 1'
-abbr W 'words'
-abbr wl 'wc -l'
+
+# ......................................................................... test
+
+abbr displaycal 'displaycal3'
+abbr pts 'phoronix-test-suite'
 
 # ..................................................................... metaflac
 

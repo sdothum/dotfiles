@@ -3,7 +3,7 @@ function fish_prompt --description 'Write out the prompt'
 	set -g RCODE $status
 
 	# console prompt hacks for the anal..
-	if test $TERM = "linux"
+	if test $TERM = "xterm-256color"
 		set -g _warning   'normal'
 		set -g _leader    'red'
 		set -g _error     'red'
@@ -14,19 +14,19 @@ function fish_prompt --description 'Write out the prompt'
 		# set -g _error   'F00'
 		# set -g _bgjob   '03F'
 		# quantum colour palette
-		set -g _warning   'd5b875'  # yellow
-		set -g _leader    'd7956e'  # orange
-		set -g _error     'dd7186'  # red
-		set -g _bgjob     '70ace5'  # blue
+		set -g _warning   yellow
+		set -g _leader    green
+		set -g _error     red
+		set -g _bgjob     cyan
 	end
 	# set -g BLINK (printf "\e[5m")
 	# set -g NOBLINK (printf "\e[25m")
 
 	function glyph
-		if test $TERM = "linux"
-			echo -n "$argv[2]"
-		else
+		if test $TERM = "xterm-256color"
 			echo -n "$argv[1]"
+		else
+			echo -n "$argv[2]"
 		end
 		set_color normal
 	end
@@ -39,7 +39,7 @@ function fish_prompt --description 'Write out the prompt'
 	function bgjobs
 		if jobs -c | grep -E -qv '^(Command|fasd|autojump)'
 			set_color $_bgjob
-			glyph '◔' '+'
+			glyph '✚' '+'
 		else
 			space
 		end
@@ -48,9 +48,7 @@ function fish_prompt --description 'Write out the prompt'
 	function root
 		if test "$USER" = root
 			set_color $_warning
-			# ⚡ takes up 2 byte positions ??
-			# echo -n $BLINK(glyph '⚡' 'z')$NOBLINK
-			echo -n $BLINK(glyph '' 'z')$NOBLINK
+			echo -n $BLINK(glyph '' '?')$NOBLINK
 		else
 			space
 		end

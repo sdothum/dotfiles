@@ -2,7 +2,7 @@ function fish_right_prompt --description 'Write out the right prompt'
 	set -g POSTFIX 0
 	# set -g VERBOSE 0
 
-	if test $TERM = "linux"
+	if test $TERM = "xterm-256color"
 		set -g _info   'red'
 		set -g _loc    'green'
 	else
@@ -14,7 +14,7 @@ function fish_right_prompt --description 'Write out the right prompt'
 	end
 
 	function glyph
-		test $TERM = "linux"
+		test $TERM = "xterm-256color"
 			and echo -n "$argv[2]"
 			or echo -n "$argv[1]"
 	end
@@ -111,7 +111,7 @@ function fish_right_prompt --description 'Write out the right prompt'
 				# echo -n (cmd_duration)
 				echo -n (chrono -time 0 "$CMD_DURATION / 1000")
 				set_color normal
-				test $TERM != "linux"
+				test $TERM != "xterm-256color"
 					and test 0$CMD_DURATION -gt (math "1000 * 10")
 						# and notify 3 low "$history[1]" "Returned $status, took "(cmd_duration)
 						and notify 3 low "$history[1]" "Returned $status, took "(chrono -time 0 "$CMD_DURATION / 1000")
@@ -135,7 +135,7 @@ function fish_right_prompt --description 'Write out the right prompt'
 
 	function timer
 		duration
-			or if test $TERM = "linux"
+			or if test $TERM = "xterm-256color"
 				timequery
 			end
 	end

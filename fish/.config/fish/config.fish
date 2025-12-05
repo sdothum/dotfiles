@@ -47,7 +47,8 @@ set -x PASSWORD_STORE_CLIP_TIME 60
 # ..................................................................... Hardware
 
 # set -x COLEMAK true
-set -x TERM xterm-256color
+test -z $DISPLAY
+or set -x TERM xterm-256color
 
 # ......................................................................... Xorg
 
