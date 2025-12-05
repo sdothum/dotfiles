@@ -85,6 +85,7 @@ bundle kakoune-livedown https://github.com/Delapouite/kakoune-livedown.git %{
 
 	hook -once global WinSetOption filetype=markdown livedown-enable
 	hook       global BufClose     .*                livedown-disable
+	hook       global KakEnd       .*                %{ nop %sh{ xdotool search -onlyvisible -classname "livedown" windowkill }}  # close browser
 } %{
 	sudo npm install -g livedown
 }
