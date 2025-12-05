@@ -33,9 +33,9 @@ echo $@
 usage() {
 	echo "$(basename $0) normal (default) | dyslexic | ebook | expanded | extended  (shapes)
 > utf-8 | english | latin+greek | cyrillic | fluent | ligature <name>  (utf-8)
-> heading | kindle | kobo | menu | proof | webfont   (special)
-> monolexic (default) | atkinson | geometric | jost  (typefaces)
-> altmono | elementary | grote | grotesk | nerdfont  (glyph sets)
+> heading | kindle | kobo[+] | menu | proof | webfont  (special)
+> monolexic (default) | atkinson | geometric | jost    (typefaces)
+> altmono | elementary | grote | grotesk | nerdfont    (glyph sets)
 > capadjust (C G O Q S U)
 
 > book+regular | descenders | double | open[+]
@@ -337,6 +337,7 @@ cmdopts () {
 			heading        ) shape 650; sb 0.8000; leading 1.2500; weight 300 light; ebook monolegible ;;  # web heading
 			kindle         ) leading 1.9; shape $extended; sb 0.6150 ;;
 			kobo           ) leading 1; shape $extended; sb 0.6850 ;;
+			kobo+          ) leading 1; shape $expanded; sb 0.7150 ;;
 			menu           ) leading 1.5000; build=-menu ;;                                                # rofi menu
 			normal         ) shape 500; sb 0.7000 ;;                                                       # normal width
 			# proof        ) leading 2.0000; sb 0.8000; build=${build}-proof ;;                            # for pure writing :)
@@ -357,7 +358,7 @@ cmdopts () {
 			atkinson       ) grotesque; ebook hyperlegible; variant G-toothed J-serifless Q-crossing a-double b-toothed j-serifless m-serifless p-eared u-toothed ampersand at number_sign percent ;;
 			elementary     ) variant I-serifless a-single ;;
 			geometric      ) geometric; cap extended; build=-jost ;;
-			grote          ) cmdopts altmono l-serifless t-asymmetric+ y-straight open+ ;;
+			grote          ) cmdopts altmono l-serifless y-straight open+ ;;
 			grotesk        ) variant I-serifless f-extended ;;
 			jost           ) geometric; cap extended; build=-jost; variant a-double J-descending j-serifless Q-crossing u-toothed ampersand at dollar number_sign percent question ;;
 			monolexic      ) monolexic ;;
@@ -481,7 +482,7 @@ cmdopts () {
 			leading=*      ) leading ${1#*=}  || usage ;;                               # line spacing > 1.0
 			noround        ) unset sb ;;
 			quasi-ext*     ) spacing quasi-proportional-extension-only; unset width; cap extended ;;
-			quasi-pro*     ) spacing quasi-proportional; leading 1.2500; space 2; ebook quasi$(echo $family | sed -r 's/.*(Hyper|Mono|Quasi)//'); variant I-serifed; unset baseline; f_adjust=42 ;;  # f-desending hack
+			quasi-pro*     ) spacing quasi-proportional; leading 1.2500; space 2; ebook quasi$(echo $family | sed -r 's/.*(Hyper|Mono|Quasi)//'); variant I-serifed; unset baseline; f_adjust=42; proportional=-99 ;;  # f-desending hack and random proportional trigger
 			sb=*           ) sb ${1#*=}       || usage ;;                               # side bearing (spacing)
 			shape=*        ) shape ${1#*=}    || usage ;;                               # cell width
 			weight=*       ) tuple=${1#*=}; weight ${tuple%:*} ${tuple#*:} || usage ;;  # custom font weight
@@ -802,7 +803,7 @@ done
 unset adjust baseline capadjust  # no longer applying for koreader and version 3x
 
 [ $q_hook        ] && fforge q_hook                          $family 2>/dev/null
-[ $q_hook_       ] && fforge q_hook_            ${shape##* } $family 2>/dev/null  # hyperlegible font mod for better q
+[ $q_hook_       ] && fforge q_hook_        $(( ${shape##* } + ${proportional:-0} )) $family 2>/dev/null  # hyperlegible font mod for better q
 [ $Q_hook        ] && fforge Q_hook                          $family  # hooked capital Q
 [ $Q_horizontal  ] && fforge Q_horizontal       ${shape##* } $family  # open horizontal capital Q
 [ $Q_custom      ] && fforge Q_custom           ${shape##* } $family  # custom capital Q
@@ -814,7 +815,7 @@ unset adjust baseline capadjust  # no longer applying for koreader and version 3
 [ $i_flipped     ] && fforge i_flipped          ${shape##* } $family  # font mod for flipped serifed i
 [ $l_ascending   ] && fforge l_ascending        ${shape##* } $family  # font mod for ascending serifless l
 [ $T_descending  ] && fforge T_descending       ${shape##* } $family  # font mod for descending capital T
-[ $t_descending  ] && fforge t_descending       ${shape##* } $family  # font mod for descending t
+[ $t_descending  ] && fforge t_descending   $(( ${shape##* } + ${proportional:-0} )) $family  # font mod for descending t
 [ $t_flipped     ] && fforge t_flipped          ${shape##* } $family  # font mod for flipped asymmetric t
 [ $Y_descending  ] && fforge Y_descending       ${shape##* } $family  # font mod for descending capital Y
 [ $FP_descending ] && fforge FP_descending      ${shape##* } $family  # decending caps (experimental)
@@ -823,7 +824,7 @@ unset adjust baseline capadjust  # no longer applying for koreader and version 3
 if [ $ebook ] ;then
 	(( $(echo "$space >= 1.0" | bc -l) )) && fforge punctuation ${emdash:-2} ${shape##* } $family 2>/dev/null; unset width
 	if [ $spacing != 'quasi-proportional' ] ;then
-		fforge ligature $width                                  ${shape##* } $family  # ae width character adjustment
+		fforge ligature $width                                          ${shape##* } $family  # ae width character adjustment
 		[ "$s_I$s_i$s_j$s_l" ] && fforge serifless "$s_I$s_i$s_j$s_l"   ${shape##* } $family  # adjust serifless "I i j l" cell width
 		[ "$S_i$S_J$S_j$S_l" ] && fforge serifed "$S_i$S_J$S_j$S_l"     ${shape##* } $family  # adjust serifed "i J j l" cell width
 		[ "$T_l"             ] && fforge l_tailed "$T_l"                ${shape##* } $family  # adjust tailed "l" cell width

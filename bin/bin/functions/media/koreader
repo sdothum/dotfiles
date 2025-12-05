@@ -12,31 +12,32 @@
 # ATTENTION: tap/double_tap sed "/match/,+count" ranges must include update search items SEE: gestures.lua file
 
 usage() { echo "$(basename $0) [back'up KOReader library]
+> [r'eset pages]
+
 > [1' column]
 > [2' columns]
 > [o'rientation] <rotation>, { 0:portrait (0°), 1:landscape (90°), 2:portrait (180°), 3:landscape (270°) }
 
-> [body f'ont] <font>
-> [d'efault] <font>
-> [header/'footer] <font>
-
+> [=' left/right] <margin>
 > [t'op] <margin>
 > [b'ottom] <margin>
-> [=' left/right] <margin>
-> [sync m'argins] <0|1>
+> [sync top/bottom m'argins] <0|1>
 
-> [font g'amma] <gamma>, { contrast:gamma, 1.0:15, 1.45:25, 1.9:30, 2.5:36 }
-> [font s'ize] <size>
-> [w'ord spacing 100]
 > [%' line spacing] <percent>
+> [w'ord spacing 100]
+
+> [d'efault] <font>
+> [body f'ont] <font>
+> [header/'footer] <font>
+> [font s'ize] <size>
 
 > [highl'ight] <invert|lighten>
 > [-' hyphenation]
 > [soft h'yphenation]
 
+> [font g'amma] <gamma>, { contrast:gamma, 1.0:15, 1.45:25, 1.9:30, 2.5:36 }
 > [i'nverse page turn] <true|false>
-> [p'ath conversion] <kobo|supernote>
-> [r'eset pages]" | usage:
+> [p'ath conversion] <kobo|supernote>" | usage:
 	[ -e $KOBO ] || [ -e $SUPERNOTE ] || ditto note "ensure KOReader device is mounted"
 	exit 1
 }

@@ -9,6 +9,6 @@ database  postgresql
 runit     dinit
 runit     runit-void
 framework ruby
-mouse     xorg-server
+# mouse   xorg-server  # deprecated (logitech trackball replaced with nulea)
 
 # vim: set ft=conf: #

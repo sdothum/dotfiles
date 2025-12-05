@@ -165,7 +165,7 @@ case $action in
 	search     ) xbps-query -Rs $options $package | a $package | pager ;;
 	sync       ) sudo xbps-install $yes $options $package ;;
 	update     ) sudo xbps-install $yes $options -u $package ;;
-	upgrade    ) sudo xbps-install -y -u xbps | grep -q 'is up to date' || exec xb U; sudo xbps-install $options -u; upgrade_actions; xb H ;;  # 2 stage upgrade!
+	upgrade    ) sudo xbps-install -y -u xbps | grep -q 'is up to date' || sudo xbps-install $options -u; upgrade_actions; xb H ;;  # 2 stage upgrade!
 	unhold     ) [ $pkgver ] && { sudo xbps-pkgdb -m unhold $options $package; ditto unhold "$pkgver"; } ;;
 esac
 

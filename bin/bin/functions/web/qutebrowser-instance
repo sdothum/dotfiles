@@ -12,7 +12,8 @@
 #       -s tabs.last_close 'close' to close window on livedown-stop
 # SEE: qutebrowser wrapper template
 
-QUTEBROWSER='/usr/bin/qutebrowser --target private-window --override-restore --temp-basedir --qt-arg name ${name:-livedown}'
+# QUTEBROWSER='/usr/bin/qutebrowser --target private-window --override-restore --temp-basedir --qt-arg name ${name:-livedown}'  # BUG: causes config.py temp dir error on close
+QUTEBROWSER='/usr/bin/qutebrowser --target private-window --override-restore --qt-arg name ${name:-livedown}'
 FONT=${FONT:-charcoal}
 
 size="$(fontsize)pt $FONT"
@@ -44,6 +45,7 @@ settings="
 	-s statusbar.show 'never'
 	-s tabs.show 'never'
 	-s tabs.last_close 'close'
+	-s tabs.tabs_are_windows 'true'
 "
 
 eval $QUTEBROWSER $RUNOPT $settings $startpage 2>/dev/null &
