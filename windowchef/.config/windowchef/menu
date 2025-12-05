@@ -17,7 +17,7 @@ export LEADER='○∘⋯  '
 export FGEDIT='kak WAIT'
 
 X()        { echo "$LEADER$@"; }  # pick list action
-picklist() { sed "s/\^/^$SEP /" | column -s^ -t ; }
+picklist() { sed "s/${COLSEP:-\^}/$SEP /" | column -s${COLSEP:-^} -t ; }
 
 # .................................................................. List macros
 

@@ -10,10 +10,12 @@ restore root
 restore panel
 conky clock auto
 restore unclutter
+displaycal3             # load color profile
+
+imwheel -kill           # set trackball scrollwheel speed
 rm -f $WME:pavucontrol  # hide pavucontrol SEE: rulerrc
 pulse
 udev
-displaycal3             # load color profile
 
 desktop $(chef desktop "DESK")
 [ -e $SESSION/cbonsai ] && cbonsai

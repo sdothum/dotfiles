@@ -113,6 +113,14 @@ class="gimp"
 class="krita"
 	window desktop $(chef desktop "DESK")
 
+class="RapidRAW"
+	window desktop $(chef desktop "DESK") ;\
+	window @RapidRAW size monocle
+
+class="rawtherapee"
+	window desktop $(chef desktop "DESK") ;\
+	window @rawtherapee snap center
+
 # ...................................................................... viewers
 
 class="feh"

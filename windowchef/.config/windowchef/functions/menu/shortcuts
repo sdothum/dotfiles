@@ -6,26 +6,31 @@
 
 # ........................................................... Keybourd shortcuts
 
-# NOTE: in lieu of (python) quikeys no longer being supported
+# NOTE: in lieu of (python) quikeys no longer being( menu su)
+
+export COLSEP=⁋  # NOTE: '^' used for kak split regex SEE: menu (picklist)
 
 shortcuts() {
-echo "/ ^>/dev/null 2>&1
-3 ^>/dev/null
-4 ^2>/dev/null
-g ^grep -E
-a ^[[:alpha:]]
-b ^[a-z]
-c ^[A-Z]
-i ^[[:digit:]]
-. ^[[:punct:]]
-w ^[[:alnum:]]
-s ^¯\(°_o)/¯
-f ^(⊙_☉)
-k ^K1Y 0K4
+echo "^    ⁋[^\\\\n]*
+/    ⁋>/dev/null 2>&1
+3    ⁋>/dev/null
+4    ⁋2>/dev/null
+g    ⁋grep -E
+a    ⁋[[:alpha:]]
+b    ⁋[a-z]
+c    ⁋[A-Z]
+i    ⁋[[:digit:]]
+.    ⁋[[:punct:]]
+w    ⁋[[:alnum:]]
+s    ⁋¯\(°_o)/¯
+f    ⁋(⊙_☉)
+k    ⁋K1Y 0K4
 " | picklist
 }
 
 string=$(shortcuts | rmenu 'Insert' $cmd -no-custom) || exit
+
+[ "${string%%^*}" ] || { xdotool type '[^\n]*'; exit; }  # HACK: to avoid shell globbing of '*'
 
 xdotool type $(echo "$string" | sed "s/.*$SEP //")
 

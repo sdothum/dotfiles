@@ -68,8 +68,7 @@ panel() {
 						cd "$from"
 						TRACKS=$(metaflac | grep "@track" | wc -l)
 					fi
-					# [ $track = $TRACKS ] && unset TRACKS
-					[ $track = $TRACKS ] && TRACKS='‥'
+					[ $track = $TRACKS ] && unset TRACKS
 				fi
 				song="$playing"
 				playing="$(ribbon "$playing")"
@@ -79,7 +78,7 @@ panel() {
 			'[paused]'  ) button="%{F$FAINT}■" ;;      # dimmed :)
 			*           ) [ "$line" = 'CLEAR' ] && printf "%s\n" "%{c} "; continue ;;
 		esac
-		printf "%s\n" "%{c}${artist}${SEP}${album}${SEP}${song}${SEP}${track}␥${TRACKS}  $DURATION ${button} %{F-}${duration}${volume}"
+		printf "%s\n" "%{c}${artist}${SEP}${album}${SEP}${song}${SEP}${track}␥${TRACKS:-‥}  $DURATION ${button} %{F-}${duration}${volume}"
 		[ "$volume" ] && { volsecs=$(( volsecs - 1 )); [ $volsecs -le 0 ] && { unset volume volsecs; rm /tmp/mpc:volume; };}
 	done
 }
