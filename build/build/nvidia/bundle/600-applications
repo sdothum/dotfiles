@@ -33,6 +33,7 @@
   hunspell
   hunspell-en_GB
   hunspell-en_US
+m pyglossary
   sdcv
 ! stow stardict
 

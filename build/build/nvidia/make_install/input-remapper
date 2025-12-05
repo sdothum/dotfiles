@@ -1,0 +1,25 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................... input-remapper
+
+sudo xbps-install -y python3-pydantic gtksourceview4
+
+cd $HOME
+python -m venv venv-input-remapper
+. venv-input-remapper/bin/activate
+pip3 install evdev
+pip3 install dasbus
+pip3 install PyGObject
+pip3 install psutil
+
+cd /home/depot
+exists --repo input-remapper || git clone https://github.com/sezanzeb/input-remapper.git
+
+cd input-remapper
+pip3 install .
+
+# kak: filetype=sh

@@ -33,6 +33,10 @@
   python3-PyQt5  # python plugin dependency
 
 
+= enote
+= ═════
+  eink-template-gen
+
 = photography
 = ═══════════
 # dispcalGUI
@@ -45,6 +49,7 @@ d m displaycal-py3
   gpick
   ImageMagick
 m oculante
+m rapidraw
   resynthesizer
   rawtherapee
 

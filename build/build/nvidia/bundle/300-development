@@ -92,8 +92,10 @@ g rack-test
 
 = rust
 = ════
-  rust
-  cargo
+# rust
+# cargo
+  rustup
+! rustup-init
 ! addpath $HOME/.cargo/bin
 
 

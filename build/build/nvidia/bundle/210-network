@@ -8,7 +8,6 @@
 = ════════════
 # connman
 # cmst      # qt gui for connman
-# gnome-bluetooth
 # ! cfg_install /etc/rc.local $(hostname)
 # wpa-cute  # gui for wpa-supplicant boot install
 # " add 5G network after xorg install
@@ -23,6 +22,19 @@
 d dnsmasq
 ! stow adblock dnsmasq
   inetutils-telnet
+
+
+= bluetooth
+= ═════════
+# gnome-bluetooth
+  bluez
+" agent on
+" scan on
+" pair <MAC address>
+" connect <MAC address>
+" trust <MAC address>
+" devices
+! bluetoothctl
 
 
 = clock

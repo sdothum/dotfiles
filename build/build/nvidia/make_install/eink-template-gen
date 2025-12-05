@@ -1,0 +1,16 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................ eink-template-gen
+
+cd $HOME
+python -m venv venv-eink-template-gen
+. venv-eink-template-gen/bin/activate
+pip3 install eink-template-gen
+
+ln -sf $HOME/venv-eink-template-gen/bin/eink-template-gen $HOME/.local/bin
+
+# kak: filetype=sh

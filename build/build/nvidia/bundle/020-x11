@@ -49,6 +49,8 @@
 # xorg
 # xwallpaper
   arandr
+  imwheel  # nulea trackball scrollwheel dpi
+! stow imwheel
   libva-utils
   lxrandr
   setxkbmap
