@@ -16,6 +16,7 @@
 # $TRACE    -> trace message file
 
 source "%val{config}/bundle/kak-bundle/rc/kak-bundle.kak"
+set-option global bundle_parallel 16
 bundle-noload kak-bundle https://codeberg.org/jdugan6240/kak-bundle
 # if / if-else control structures and user-mode handler
 bundle lambda https://github.com/sdothum/lambda.kak.git
