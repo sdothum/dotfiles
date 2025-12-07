@@ -710,6 +710,34 @@ Select(0u0001);  # temporary cell to avoid modifying original glyph
 Paste();
 Select(0u0001);
 CopyReference();
+# Transform(100,0,0,90,0,0);
+# Move(0,128);
+Transform(100,0,0,89,0,0);
+Move(0,127);
+Select($(utf 'l'));
+Paste();
+Select(0u0001);
+Clear();
+Generate(\$1);
+" >${LOG}:l_ascending.script
+
+	for i in *.ttf ;do
+		ditto l_ascending $i
+		fontforge -quiet --script ${LOG}:l_ascending.script $i
+	done
+}
+
+l_ascendmax() {
+	# create regular descender
+	confirm "l_ascending"
+	echo "
+Open(\$1);
+Select($(utf '|'));
+CopyReference();
+Select(0u0001);  # temporary cell to avoid modifying original glyph
+Paste();
+Select(0u0001);
+CopyReference();
 # Transform(100,0,0,93,0,0);
 # Move(0,133);
 Transform(100,0,0,92,0,0);
@@ -990,6 +1018,7 @@ case $1 in
 	I_descending  ) shape=$2; shift ;;
 	i_flipped     ) shape=$2; shift ;;
 	l_ascending   ) shape=$2; shift ;;
+	l_ascendmax   ) shape=$2; shift ;;
 	l_tailed      ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "l" (tailed)
 	ligature      ) [ $4 ] && { width=$2; shift 2; } || { shape=$2; shift; } ;;  # SEE: iosevka for tricky bits
 	map           ) [ $4 ] && { family=$2; from=$3; to=$4; shift 3; map; exit; } || usage ;;  # pwd commandline only!

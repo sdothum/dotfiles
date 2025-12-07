@@ -6,21 +6,29 @@
 
 # ................................................................. piano stream
 
-# SEE: rulerrc for window management
+# Usage: piano [title]
+# SEE:   rulerrc for window management
 
 BROWSER=qutebrowser-instance
 PIANO=https://p-node.org/piano/
+nano='∏ano - qutebrowser'
 DELAY=0.65
 
-# tuned delays required to work around system dependent qutebrowser url loading
-name=piano ${BROWSER:-qutebrowser} $PIANO
-sleep $DELAY
-xdotool search -sync -onlyvisible -name '∏ano - qutebrowser' windowfocus
-# complete zoom command and execute play button :)
-sleep $DELAY
-xdotool type ':zoom 34'
-xdotool key Return Return
-window '@∏ano - qutebrowser' size 600x300
-window '@∏ano - qutebrowser' snap top left
+if [ -z $1 ] ;then
+	# tuned delays required to work around system dependent qutebrowser url loading
+	name=piano ${BROWSER:-qutebrowser} $PIANO
+	sleep $DELAY
+	xdotool search -sync -onlyvisible -name "$nano" windowfocus
+	# complete zoom command and execute play button :)
+	sleep $DELAY
+	xdotool type ':zoom 34'
+	window '@∏ano - qutebrowser' size 600x300
+	window '@∏ano - qutebrowser' snap top left
+	xdotool search -sync -onlyvisible -name "$nano" windowfocus
+	sleep $DELAY
+	xdotool key Return Tab Return
+else
+	xdotool search -name "$nano" getwindowname | sed "s/ | $nano//"
+fi
 
 # kak: filetype=sh

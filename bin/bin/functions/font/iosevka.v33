@@ -61,7 +61,7 @@ usage() {
 > g-[double|flat|open]
 > i-[hooky|serifed[-]|serifless]
 > j-[flat|serifed|serifless]
-> l-[ascending|bottom|flat|hooky|serifless]
+> l-[ascending[+]|bottom|flat|hooky|serifless]
 > m-[arch[-[-]]|earless[-]|rounded[-]|serifless]
 > p-[eared|serifed]
 > q-[hook[_]|tailed]
@@ -265,6 +265,7 @@ variant() {
 			j-serifed      ) glyph j=flat-hook-serifed;   unset S_j                     ;;
 			j-serifless    ) glyph j=serifless;           unset S_j                     ;;
 			l-ascending    ) glyph l=serifless;           s_l='l'; unset S_l T_l        ;;
+			l-ascending+   ) glyph l=serifless;           s_l='l'; unset S_l T_l        ;;
 			l-bottom       ) glyph l=hooky-bottom;        T_l='l'; unset s_l S_l        ;;
 			l-flat         ) glyph l=flat-tailed;         T_l='l'; unset s_l S_l        ;;
 			l-hooky        ) glyph l=hooky;               S_l='l'; unset s_l T_l        ;;
@@ -435,6 +436,7 @@ cmdopts () {
 			j-serifed      ) variant $1 ;;
 			j-serifless    ) variant $1 ;;
 			l-ascending    ) variant $1 'ASCENDING'; l_ascending=true ;;
+			l-ascending+   ) variant $1 'ASCENDING'; l_ascendmax=true ;;
 			l-bottom       ) variant $1 ;;
 			l-flat         ) variant $1 ;;
 			l-hooky        ) variant $1 ;;
@@ -813,7 +815,8 @@ unset adjust baseline capadjust  # no longer applying for koreader and version 3
 [ $f_descending  ] && fforge f_descending   $(( ${shape##* } + f_adjust )) $family  # font mod for descending serifless f (with proportional adjustment hack)
 [ $I_descending  ] && fforge I_descending       ${shape##* } $family  # font mod for descending serifless capital I
 [ $i_flipped     ] && fforge i_flipped          ${shape##* } $family  # font mod for flipped serifed i
-[ $l_ascending   ] && fforge l_ascending        ${shape##* } $family  # font mod for ascending serifless l
+[ $l_ascending   ] && fforge l_ascending        ${shape##* } $family  # font mod for ascending serifless l (extended f height)
+[ $l_ascendmax   ] && fforge l_ascendmax        ${shape##* } $family  # font mod for ascending serifless l (max height)
 [ $T_descending  ] && fforge T_descending       ${shape##* } $family  # font mod for descending capital T
 [ $t_descending  ] && fforge t_descending   $(( ${shape##* } + ${proportional:-0} )) $family  # font mod for descending t
 [ $t_flipped     ] && fforge t_flipped          ${shape##* } $family  # font mod for flipped asymmetric t
