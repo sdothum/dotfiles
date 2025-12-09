@@ -1,0 +1,24 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Media
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................... repack unzip to epub
+
+# Usage: epubzip [<title - author>]
+usage() { usage: "$(basename $0) <title - author>"; exit 1; }
+
+[ "$1" ] || usage
+[ -d META-INF ] || { ditto META-INF "missing folder"; exit 1; }
+[ -d OEBPS ] || { ditto OEBPS "missing folder"; exit 1; }
+
+book="../${1}.epub"
+ifyes "zip '$book'" || exit
+
+[ -e mimetype ] || echo "application/epub+zip" > mimetype
+zip -0 -X "$book" mimetype      # -0 for no compression on mimetype
+zip -rDX9 "$book" * -x mimetyp  # -9 for max compression
+
+
+# kak: filetype=sh
