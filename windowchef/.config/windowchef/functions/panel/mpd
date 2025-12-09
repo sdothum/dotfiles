@@ -78,8 +78,8 @@ panel() {
 			*           ) [ "$line" = 'CLEAR' ] && printf "%s\n" "%{c} "; continue ;;
 		esac
 
-		if [ -n "$(piano title)" ] ;then  # when streaming piano audio (most often at fresh boot)
-			printf "%s\n" "%{c}$(piano title)"
+		if [ -n "$(piano stream)" ] ;then  # when streaming piano audio (most often at fresh boot)
+			printf "%s\n" "%{c}$(piano stream)"
 		else
 			printf "%s\n" "%{c}${artist}${SEP}${album}${SEP}${song}${SEP}${track}␥${TRACKS:-‥}  $DURATION ${button} %{F-}${duration}${volume}"
 			[ "$volume" ] && { volsecs=$(( volsecs - 1 )); [ $volsecs -le 0 ] && { unset volume volsecs; rm /tmp/mpc:volume; };}
