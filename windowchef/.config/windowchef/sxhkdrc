@@ -339,6 +339,12 @@ super + shift + {comma,period}
 	mpc {prev, next} ;\
 	mpc:settings
 
+super + k
+	xdotool search --onlyvisible --name "∏ano - qutebrowser" windowunmap || xdotool search --name "∏ano - qutebrowser" windowmap || piano
+
+super + ctrl + k
+	xdotool search --name "∏ano - qutebrowser" windowkill
+
 # ......................................................................... http
 
 super + {_,ctrl} + b
@@ -354,9 +360,6 @@ super + h
 
 super + shift + j
 	mapw -u $(winids "org.nicotine_plus.Nicotine") 2>/dev/null && \{ desktop $(desktop) toggle; desktop $(chef desktop "DESK"); \} || xdotool search --classname "org.nicotine_plus.Nicotine" windowmap || \{ nicotine; desktop $(chef desktop "PEER"); \}
-
-super + {_,ctrl} + k
-	xdotool search --onlyvisible --name "∏ano - qutebrowser" {windowunmap, windowkill} || piano
 
 # ......................................................................... yazi
 
