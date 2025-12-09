@@ -30,7 +30,7 @@ if [ -z $1 ] ;then
 	xdotool type ':zoom 50'
 	xdotool key Return Tab Return
 
-	pidwait -f "$PIANO"
+	pidwait -f ".*${PIANO}.*"
 	mpc play
 else
 	xdotool search -name "$NANO" getwindowname | sed "s/ | $NANO//"
