@@ -1,0 +1,456 @@
+return {
+    ["manta"] = {
+        fm = "return {\
+    [\"KOMenu:disabled\"] = {\
+        \"keyboard_layout\",\
+        \"external_keyboard\",\
+        \"font_ui_fallbacks\",\
+        \"time\",\
+        \"units\",\
+        \"device_status_alarm\",\
+        \"charging_led\",\
+        \"autostandby\",\
+        \"autosuspend\",\
+        \"autoshutdown\",\
+        \"pageturn_power\",\
+        \"ignore_sleepcover\",\
+        \"ignore_open_sleepcover\",\
+        \"cover_events\",\
+        \"ignore_battery_optimizations\",\
+        \"mass_storage_settings\",\
+        \"file_ext_assoc\",\
+        \"screenshot\",\
+        \"favorites\",\
+        \"collections\",\
+        \"mass_storage_actions\",\
+        \"wikipedia_lookup\",\
+        \"wikipedia_history\",\
+        \"file_search\",\
+        \"file_search_results\",\
+        \"opds\",\
+        \"quickstart_guide\",\
+        \"about\",\
+        \"auto_frontlight\",\
+        \"battery_statistics\",\
+        \"book_shortcuts\",\
+        \"synchronize_time\",\
+        \"keep_alive\",\
+        \"doc_setting_tweak\",\
+        \"document_metadata_location\",\
+        \"document_metadata_location_move\",\
+        \"document_auto_save\",\
+        \"document_end_action\",\
+        \"language_support\",\
+        \"wikipedia_settings\",\
+        \"read_timer\",\
+        \"exporter\",\
+        \"cloud_storage\",\
+        \"move_to_archive\",\
+        \"wallabag\",\
+        \"news_downloader\",\
+        \"text_editor\",\
+        \"qrclipboard\",\
+        \"frontlight\",\
+        \"night_mode\",\
+        \"screen\",\
+        \"taps_and_gestures\",\
+        \"document\",\
+        \"language\",\
+        \"filebrowser_settings\",\
+        \"show_filter\",\
+        \"sort_by\",\
+        \"reverse_sorting\",\
+        \"sort_mixed\",\
+        \"start_with\",\
+        \"gesture_manager\",\
+        \"gesture_overview\",\
+        \"gesture_intervals\",\
+        \"ignore_hold_corners\",\
+        \"screen_disable_double_tap\",\
+        \"menu_activate\",\
+        \"network_proxy\",\
+        \"network_powersave\",\
+        \"network_restore\",\
+        \"network_before_wifi_action\",\
+        \"network_after_wifi_action\",\
+        \"network_dismiss_scan\",\
+        \"autodim\",\
+        \"screen_rotation\",\
+        \"screen_dpi\",\
+        \"screen_eink_opt\",\
+        \"autowarmth\",\
+        \"color_rendering\",\
+        \"screen_timeout\",\
+        \"fullscreen\",\
+        \"screen_notification\",\
+    },\
+    [\"KOMenu:menu_buttons\"] = {\
+        \"filemanager_settings\",\
+        \"setting\",\
+        \"tools\",\
+        \"search\",\
+        \"plus_menu\",\
+        \"main\",\
+    },\
+    [\"device\"] = {\
+        \"----------------------------\",\
+    },\
+    [\"main\"] = {\
+        \"history\",\
+        \"open_last_document\",\
+        \"----------------------------\",\
+        \"----------------------------\",\
+        \"----------------------------\",\
+        \"ota_update\",\
+        \"help\",\
+        \"----------------------------\",\
+        \"exit_menu\",\
+    },\
+    [\"search\"] = {\
+        \"search_settings\",\
+        \"----------------------------\",\
+        \"dictionary_lookup\",\
+        \"dictionary_lookup_history\",\
+        \"vocabbuilder\",\
+        \"----------------------------\",\
+        \"----------------------------\",\
+        \"find_book_in_calibre_catalog\",\
+        \"----------------------------\",\
+    },\
+    [\"help\"] = {\
+        \"----------------------------\",\
+        \"search_menu\",\
+        \"----------------------------\",\
+        \"report_bug\",\
+        \"----------------------------\",\
+        \"system_statistics\",\
+        \"version\",\
+    },\
+    [\"taps_and_gestures\"] = {\
+        \"----------------------------\",\
+        \"----------------------------\",\
+    },\
+    [\"network\"] = {\
+        \"network_wifi\",\
+        \"network_info\",\
+        \"----------------------------\",\
+        \"ssh\",\
+    },\
+    [\"screen\"] = {\
+        \"screensaver\",\
+        \"----------------------------\",\
+        \"----------------------------\",\
+        \"----------------------------\",\
+        \"----------------------------\",\
+    },\
+    [\"filemanager_settings\"] = {\
+        \"filemanager_display_mode\",\
+        \"----------------------------\",\
+        \"----------------------------\",\
+    },\
+    [\"setting\"] = {\
+        \"----------------------------\",\
+        \"network\",\
+        \"----------------------------\",\
+        \"navigation\",\
+        \"----------------------------\",\
+        \"device\",\
+    },\
+    [\"tools\"] = {\
+        \"calibre\",\
+        \"statistics\",\
+        \"profiles\",\
+        \"----------------------------\",\
+        \"more_tools\",\
+    },\
+    [\"more_tools\"] = {\
+        \"terminal\",\
+        \"----------------------------\",\
+        \"plugin_management\",\
+        \"patch_management\",\
+        \"advanced_settings\",\
+        \"developer_options\",\
+        \"menu_disabler\",\
+    },\
+    [\"document\"] = {\
+    },\
+    [\"navigation\"] = {\
+        \"back_to_exit\",\
+        \"back_in_filemanager\",\
+        \"back_in_reader\",\
+        \"backspace_as_back\",\
+        \"----------------------------\",\
+        \"physical_buttons_setup\",\
+        \"----------------------------\",\
+        \"android_volume_keys\",\
+        \"android_haptic_feedback\",\
+        \"android_back_button\",\
+        \"----------------------------\",\
+        \"opening_page_location_stack\",\
+        \"skim_dialog_position\",\
+    },\
+    [\"plus_menu\"] = {\
+    },\
+    [\"search_settings\"] = {\
+        \"dictionary_settings\",\
+    },\
+}\
+",
+        reader = "return {\
+    [\"KOMenu:menu_buttons\"] = {\
+        \"navi\",\
+        \"typeset\",\
+        \"setting\",\
+        \"tools\",\
+        \"search\",\
+        \"filemanager\",\
+        \"main\",\
+    },\
+    [\"KOMenu:disabled\"] = {\
+        \"keyboard_layout\",\
+        \"external_keyboard\",\
+        \"font_ui_fallbacks\",\
+        \"time\",\
+        \"units\",\
+        \"device_status_alarm\",\
+        \"charging_led\",\
+        \"autostandby\",\
+        \"autosuspend\",\
+        \"autoshutdown\",\
+        \"pageturn_power\",\
+        \"ignore_sleepcover\",\
+        \"ignore_open_sleepcover\",\
+        \"cover_events\",\
+        \"ignore_battery_optimizations\",\
+        \"mass_storage_settings\",\
+        \"file_ext_assoc\",\
+        \"screenshot\",\
+        \"wikipedia_lookup\",\
+        \"wikipedia_history\",\
+        \"translate_current_page\",\
+        \"open_previous_document\",\
+        \"favorites\",\
+        \"collections\",\
+        \"mass_storage_actions\",\
+        \"help\",\
+        \"read_timer\",\
+        \"exporter\",\
+        \"move_to_archive\",\
+        \"wallabag\",\
+        \"news_downloader\",\
+        \"qrclipboard\",\
+        \"frontlight\",\
+        \"night_mode\",\
+        \"network\",\
+        \"screen\",\
+        \"language\",\
+        \"autodim\",\
+        \"screen_rotation\",\
+        \"screen_dpi\",\
+        \"autowarmth\",\
+        \"color_rendering\",\
+        \"screen_timeout\",\
+        \"screen_notification\",\
+        \"network_proxy\",\
+        \"network_powersave\",\
+        \"network_restore\",\
+        \"network_before_wifi_action\",\
+        \"network_after_wifi_action\",\
+        \"network_dismiss_scan\",\
+        \"toggle_bookmark\",\
+        \"hide_nonlinear_flows\",\
+        \"go_to\",\
+        \"skim_to\",\
+        \"autoturn\",\
+        \"go_to_previous_location\",\
+        \"go_to_next_location\",\
+        \"set_render_style\",\
+        \"page_overlap\",\
+        \"speed_reading_module_perception_expander\",\
+        \"djvu_render_mode\",\
+        \"start_content_selection\",\
+        \"auto_frontlight\",\
+        \"battery_statistics\",\
+        \"book_shortcuts\",\
+        \"synchronize_time\",\
+        \"keep_alive\",\
+        \"doc_setting_tweak\",\
+        \"document_metadata_location\",\
+        \"document_auto_save\",\
+        \"document_end_action\",\
+        \"language_support\",\
+        \"partial_rerendering\",\
+        \"wikipedia_settings\",\
+        \"translation_settings\",\
+        \"ignore_hold_corners\",\
+        \"screen_disable_double_tap\",\
+        \"page_turns\",\
+        \"scrolling\",\
+        \"quickstart_guide\",\
+        \"about\",\
+    },\
+    [\"device\"] = {\
+        \"----------------------------\",\
+    },\
+    [\"search\"] = {\
+        \"search_settings\",\
+        \"----------------------------\",\
+        \"dictionary_lookup\",\
+        \"dictionary_lookup_history\",\
+        \"vocabbuilder\",\
+        \"----------------------------\",\
+        \"----------------------------\",\
+        \"----------------------------\",\
+        \"find_book_in_calibre_catalog\",\
+        \"fulltext_search\",\
+        \"fulltext_search_findall_results\",\
+        \"bookmark_search\",\
+    },\
+    [\"main\"] = {\
+        \"history\",\
+        \"----------------------------\",\
+        \"----------------------------\",\
+        \"book_status\",\
+        \"book_info\",\
+        \"----------------------------\",\
+        \"----------------------------\",\
+        \"ota_update\",\
+        \"----------------------------\",\
+        \"exit_menu\",\
+    },\
+    [\"tools\"] = {\
+        \"calibre\",\
+        \"statistics\",\
+        \"progress_sync\",\
+        \"text_editor\",\
+        \"profiles\",\
+        \"----------------------------\",\
+        \"more_tools\",\
+    },\
+    [\"setting\"] = {\
+        \"----------------------------\",\
+        \"----------------------------\",\
+        \"taps_and_gestures\",\
+        \"navigation\",\
+        \"document\",\
+        \"----------------------------\",\
+        \"device\",\
+        \"----------------------------\",\
+        \"status_bar\",\
+    },\
+    [\"screen\"] = {\
+        \"screensaver\",\
+        \"coverimage\",\
+        \"----------------------------\",\
+        \"----------------------------\",\
+        \"screen_eink_opt\",\
+        \"----------------------------\",\
+        \"fullscreen\",\
+        \"----------------------------\",\
+    },\
+    [\"network\"] = {\
+        \"network_wifi\",\
+        \"network_info\",\
+        \"----------------------------\",\
+        \"ssh\",\
+    },\
+    [\"taps_and_gestures\"] = {\
+        \"gesture_manager\",\
+        \"gesture_overview\",\
+        \"gesture_intervals\",\
+        \"----------------------------\",\
+        \"----------------------------\",\
+        \"follow_links\",\
+        \"----------------------------\",\
+        \"menu_activate\",\
+        \"long_press\",\
+    },\
+    [\"typeset\"] = {\
+        \"document_settings\",\
+        \"----------------------------\",\
+        \"style_tweaks\",\
+        \"----------------------------\",\
+        \"change_font\",\
+        \"typography\",\
+        \"----------------------------\",\
+        \"switch_zoom_mode\",\
+        \"----------------------------\",\
+        \"----------------------------\",\
+        \"highlight_options\",\
+        \"selection_text\",\
+        \"panel_zoom_options\",\
+    },\
+    [\"more_tools\"] = {\
+        \"terminal\",\
+        \"----------------------------\",\
+        \"plugin_management\",\
+        \"patch_management\",\
+        \"menu_disabler\",\
+    },\
+    [\"navi_settings\"] = {\
+        \"toc_ticks_level_ignore\",\
+        \"----------------------------\",\
+        \"toc_items_per_page\",\
+        \"toc_items_font_size\",\
+        \"toc_items_show_chapter_length\",\
+        \"toc_items_with_dots\",\
+        \"----------------------------\",\
+        \"toc_alt_toc\",\
+        \"----------------------------\",\
+        \"handmade_toc\",\
+        \"handmade_hidden_flows\",\
+        \"handmade_settings\",\
+        \"----------------------------\",\
+        \"page_map\",\
+        \"bookmarks_settings\",\
+    },\
+    [\"navigation\"] = {\
+        \"back_to_exit\",\
+        \"back_in_filemanager\",\
+        \"back_in_reader\",\
+        \"backspace_as_back\",\
+        \"----------------------------\",\
+        \"physical_buttons_setup\",\
+        \"----------------------------\",\
+        \"android_volume_keys\",\
+        \"android_haptic_feedback\",\
+        \"android_back_button\",\
+        \"----------------------------\",\
+        \"opening_page_location_stack\",\
+        \"skim_dialog_position\",\
+    },\
+    [\"document\"] = {\
+        \"----------------------------\",\
+    },\
+    [\"help\"] = {\
+        \"----------------------------\",\
+        \"search_menu\",\
+        \"----------------------------\",\
+        \"report_bug\",\
+        \"----------------------------\",\
+        \"system_statistics\",\
+        \"version\",\
+    },\
+    [\"filemanager\"] = {\
+    },\
+    [\"navi\"] = {\
+        \"table_of_contents\",\
+        \"bookmarks\",\
+        \"bookmark_browsing_mode\",\
+        \"navi_settings\",\
+        \"----------------------------\",\
+        \"----------------------------\",\
+        \"book_map\",\
+        \"page_browser\",\
+        \"----------------------------\",\
+        \"----------------------------\",\
+    },\
+    [\"search_settings\"] = {\
+        \"dictionary_settings\",\
+        \"----------------------------\",\
+        \"fulltext_search_settings\",\
+    },\
+}\
+",
+    },
+}
