@@ -65,7 +65,7 @@ usage() {
 > m-[arch[-[-]]|earless[-]|rounded[-]|serifless]
 > p-[eared|serifed]
 > q-[hook[_]|tailed]
-> t-[asymmetric[+|-[-]]|cross|descending|flat]
+> t-[asymmetric[+|-[-]]|cross[+]|descending[+]|flat]
 > u-toothed
 > w-asymmetric
 > y-[straight|turn]
@@ -285,6 +285,7 @@ variant() {
 			t-asymmetric+  ) glyph t=hookless-asymmetric-short-neck2                    ;;
 			t-asymmetric-* ) glyph t=hookless-asymmetric-short-neck2                    ;;
 			t-cross        ) glyph t=hookless-short-neck2                               ;;
+			t-cross+       ) glyph t=hookless-short-neck                                ;;
 			t-flat         ) glyph t=flat-hook-short-neck2                              ;;
 			u-toothed      ) glyph u=toothed                                            ;;
 			w-asymmetric   ) glyph w=straight-asymmetric-serifless                      ;;
@@ -459,7 +460,9 @@ cmdopts () {
 			t-asymmetric-  ) variant $1 'FLIPPED'; t_flipped=true; cmdopts i-serifless j-flat l-serifless ;;
 			t-asymmetric-- ) variant $1 'FLIPPED'; t_flipped=true; cmdopts l-hooky ;;
 			t-cross        ) variant $1 ;;
-			t-descending   ) variant t-cross 'DESCENDING'; t_descending=true; baseline=true ;;
+			t-cross+       ) variant $1 ;;
+			t-descending   ) variant t-cross  'DESCENDING'; t_descending=true;  baseline=true ;;
+			t-descending+  ) variant t-cross+ 'DESCENDING'; t_descending_=true; baseline=true ;;
 			t-flat         ) variant $1 ;;
 			u-toothed      ) variant $1 ;;
 			w-asymmetric   ) variant $1 W-asymmetric ;;
@@ -819,6 +822,7 @@ unset adjust baseline capadjust  # no longer applying for koreader and version 3
 [ $l_ascendmax   ] && fforge l_ascendmax        ${shape##* } $family  # font mod for ascending serifless l (max height)
 [ $T_descending  ] && fforge T_descending       ${shape##* } $family  # font mod for descending capital T
 [ $t_descending  ] && fforge t_descending   $(( ${shape##* } + ${proportional:-0} )) $family  # font mod for descending t
+[ $t_descending_ ] && fforge t_descending_  $(( ${shape##* } + ${proportional:-0} )) $family  # font mod for descending t
 [ $t_flipped     ] && fforge t_flipped          ${shape##* } $family  # font mod for flipped asymmetric t
 [ $Y_descending  ] && fforge Y_descending       ${shape##* } $family  # font mod for descending capital Y
 [ $FP_descending ] && fforge FP_descending      ${shape##* } $family  # decending caps (experimental)

@@ -34,7 +34,7 @@ usage() {
 > m-[arch[-[-]]|rounded]
 > p-[eared|serifed]
 > q-hook[_]
-> t-[asymmetric[+|-[-]]|cross|descending|flat]
+> t-[asymmetric[+|-[-]]|cross[+]|descending[+]|flat]
 > y-straight
 
 > 0-[split|cutout]
@@ -182,7 +182,9 @@ cmdopts() {
 			t-asymmetric+  ) t=$1 ;;
 			t-asymmetric-* ) t=$1 ;;
 			t-cross        ) t=$1 ;;
+			t-cross+       ) t=$1 ;;
 			t-descending   ) t=$1 ;;
+			t-descending+  ) t=$1 ;;
 			t-flat         ) t=$1 ;;
 			y-straight     ) y=$1 ;;
 			y-turn         ) y=$1 ;;

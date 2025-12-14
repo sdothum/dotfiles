@@ -674,13 +674,29 @@ T_descending() {
 	descender T_descending '0u0054' 0 $Yshift
 }
 
-t_descending() {
+t_descending() {  # short-neck2
 	# Yshrink=27  # y depth descender
 	# Yshift=-216
 	# Yshrink=9   # partial descender :-)
 	# Yshift=-74
 	Yshrink=8     # descender to cap height length
 	Yshift=-66
+	case $shape in
+		576 ) Xshift=0   ;;
+		600 ) Xshift=0   ;;
+		650 ) Xshift=0   ;;
+		*   ) Xshift=-50 ;;  # proportional
+	esac
+	descender t_descending '0u0074' $Xshift $Yshift  # f descender depth
+}
+
+t_descending_() {  # short-neck
+	# Yshrink=27  # y depth descender
+	# Yshift=-216
+	# Yshrink=9   # partial descender :-)
+	# Yshift=-74
+	Yshrink=5     # descender to cap height length
+	Yshift=-35
 	case $shape in
 		576 ) Xshift=0   ;;
 		600 ) Xshift=0   ;;
@@ -1035,6 +1051,7 @@ case $1 in
 	space         ) space=$2; shift ;;
 	tailed        ) letters=$2; shape=$3; shift 2 ;;                             # "a d" (tailed)
 	t_descending  ) shape=$2; shift ;;
+	t_descending_ ) shape=$2; shift ;;
 	T_descending  ) shape=$2; shift ;;
 	t_flipped     ) shape=$2; shift ;;
 	*weight       ) regular=${1%weight}; fforge=weight; [ "$2" = 'book+regular' ] && { adjust=true; shift; } ;;
