@@ -75,7 +75,7 @@ panel() {
 				[ "${button%►}" = "%{F$ICANDY}" ] && button="%{F$FLASH}►" || button="%{F$ICANDY}►"
 				;;
 			'[paused]'  ) button="%{F$FAINT}■" ;;      # dimmed :)
-			*           ) [ "$line" = 'CLEAR' ] && printf "%s\n" "%{c} "; continue ;;
+			*           ) [ "$line" = 'CLEAR' ] && [ -z "$(piano stream)" ] && { printf "%s\n" "%{c} "; continue; } ;;
 		esac
 
 		if [ -n "$(piano stream)" ] ;then  # when streaming piano audio (most often at fresh boot)

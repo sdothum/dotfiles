@@ -321,11 +321,12 @@ super + ctrl + v
 # NOTE: switch out to DESK desktop after hiding app to avoid attaching new windows to app desktop
 
 super + j
+	piano stop ;\
 	xdotool search --onlyvisible --classname "music" windowunmap && \{ desktop $(desktop) toggle; desktop $(chef desktop "DESK"); \} || \{ music; desktop $(chef desktop "PLAY"); \}
 
 super + ctrl + j
 	mpc toggle ;\
-	mpc | grep -q playing && \{ mpc:settings volume; mpc:settings; \}
+	mpc | grep -q playing && \{ piano stop; mpc:settings volume; mpc:settings; \}
 
 super + {comma,period}
 	mpc volume {-10, +10} ;\
@@ -340,10 +341,10 @@ super + shift + {comma,period}
 	mpc:settings
 
 super + k
-	xdotool search --onlyvisible --name "∏ano - qutebrowser" windowunmap || xdotool search --name "∏ano - qutebrowser" windowmap || piano
+	piano toggle || piano
 
 super + ctrl + k
-	xdotool search --name "∏ano - qutebrowser" windowkill
+	piano stop
 
 # ......................................................................... http
 
