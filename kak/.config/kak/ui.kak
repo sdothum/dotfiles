@@ -77,9 +77,9 @@ hook global WinCreate .* %{
 
 declare-option bool hardwrap false  # SEE: refold
 
-define-command -hidden hardwrap -params 1 %{ autowrap-enable; set-option window hardwrap true; set-option window autowrap_column %arg{1} }
-define-command -hidden softwrap -params ..1 %{ evaluate-commands add-highlighter -override window/wrap wrap -word -indent -marker "'  ↪ '" %arg{@} }  # escape 'quotes' for eval
-define-command -hidden nowrap %{ remove-highlighter window/wrap }
+define-command hardwrap -params 1 %{ autowrap-enable; set-option window hardwrap true; set-option window autowrap_column %arg{1} }
+define-command softwrap -params ..1 %{ autowrap-disable; evaluate-commands add-highlighter -override window/wrap wrap -word -indent -marker "'  ↪ '" %arg{@} }  # escape 'quotes' for eval
+define-command nowrap %{ remove-highlighter window/wrap }
 
 hook global WinSetOption filetype=markdown %{ hardwrap '80' }
 hook global WinSetOption filetype=json     %{ softwrap '-width 250' }

@@ -103,10 +103,12 @@ map global normal <plus>  '}p'     -docstring 'extend to next paragraph'
 
 # .................................................................... Searching
 
-addm %{ refine /1 : map global select (     '<a-/>(?i)'        -docstring 'isearch    —— prev,next' }
-addm %{ refine /2 : map global select )     '/(?i)'            -docstring 'isearch    —— prev,next' }
-addm %[ refine /3 : map global select '{'   '<a-?>(?i)'        -docstring 'iextend    —— prev,next' ]
-addm %[ refine /4 : map global select '}'   '?(?i)'            -docstring 'iextend    —— prev,next' ]
+declare-option bool null false
+addm %{ refine /0 : map global select C     ': set-register / %opt{null}<ret>' -docstring 'clear search register' }
+addm %{ refine /1 : map global select (     '<a-/>(?i)'                        -docstring 'isearch    —— prev,next' }
+addm %{ refine /2 : map global select )     '/(?i)'                            -docstring 'isearch    —— prev,next' }
+addm %[ refine /3 : map global select '{'   '<a-?>(?i)'                        -docstring 'iextend    —— prev,next' ]
+addm %[ refine /4 : map global select '}'   '?(?i)'                            -docstring 'iextend    —— prev,next' ]
 
 # .............................................................. Split selection
 
