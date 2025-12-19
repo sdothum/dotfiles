@@ -31,7 +31,7 @@ ditto "refactoring is not fully tested"
 echo $@
 
 usage() {
-	echo "$(basename $0) normal (default) | dyslexic | ebook | expanded | extended  (shapes)
+	echo "$(basename $0) normal (default) | dyslexic | ebook | expanded | extended | pseudokern  (shapes)
 > utf-8 | english | latin+greek | cyrillic | fluent | ligature <name>  (utf-8)
 > heading | kindle | kobo[+] | menu | proof | webfont  (special)
 > monolexic (default) | atkinson | geometric | jost    (typefaces)
@@ -65,7 +65,7 @@ usage() {
 > m-[arch[-[-]]|earless[-]|rounded[-]|serifless]
 > p-[eared|serifed]
 > q-[hook[_]|tailed]
-> t-[asymmetric[+|-[-]]|cross[+]|descending[+]|flat]
+> t-[asymmetric[+|-[-]]|cross[+]|descending[=+]|flat]
 > u-toothed
 > w-asymmetric
 > y-[straight|turn]
@@ -344,8 +344,9 @@ cmdopts () {
 			normal         ) shape 500; sb 0.7000 ;;                                                       # normal width
 			# proof        ) leading 2.0000; sb 0.8000; build=${build}-proof ;;                            # for pure writing :)
 			proof          ) leading 2.0000; build=${build}-proof ;;
-			# webfont      ) weight 500 medium; initial w; regular=medium ;;  # heavier font for web usage
+			# webfont      ) weight 500 medium; initial w; regular=medium ;;                               # heavier font for web usage
 			webfont        ) leading 1; initial w ;;
+			pseudo*        ) export PSEUDO_KERN=true; space 0.915 ;;                                       # SEE: fforge
 
 			# language
 			cyrillic       ) cyrillic;     ditto char_set "$1" ;;
@@ -461,7 +462,8 @@ cmdopts () {
 			t-asymmetric-- ) variant $1 'FLIPPED'; t_flipped=true; cmdopts l-hooky ;;
 			t-cross        ) variant $1 ;;
 			t-cross+       ) variant $1 ;;
-			t-descending   ) variant t-cross  'DESCENDING'; t_descending=true;  baseline=true ;;
+			t-descending=  ) variant t-cross  'DESCENDING'; t_descending=true;  baseline=true; export T_CAP=true ;;  # SEE: fforge
+			t-descending   ) variant t-cross+ 'DESCENDING'; t_descending=true;  baseline=true ;;
 			t-descending+  ) variant t-cross+ 'DESCENDING'; t_descending_=true; baseline=true ;;
 			t-flat         ) variant $1 ;;
 			u-toothed      ) variant $1 ;;

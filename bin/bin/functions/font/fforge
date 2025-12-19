@@ -62,6 +62,18 @@ XSHIFT=${XSHIFT:--40}  # italic descending capital left side bearing shift
 Yshrink=25.5           # elongation bar percent
 Yshift=-210            # descending capital elongation
 
+if [ $PSEUDO_KERN ] ;then
+	SERIFED=725
+	SERIFLESS=625
+	SERIFED_SHIFT=-30
+	SERIFLESS_SHIFT=-107
+else
+	SERIFED=925
+	SERIFLESS=825
+	SERIFED_SHIFT=10
+	SERIFLESS_SHIFT=50
+fi
+
 confirm()  { [ -e $MAKE_INSTALL ] && ditto "$(basename $0)" "$1" || { ifyes "$1" || exit; }; }
 percent()  { echo "$1 * 100" | bc | cut -d. -f1; }
 regular()  { ls -1 | grep -Ev 'italic|oblique|extended'; }
@@ -127,7 +139,7 @@ SetWidth($width);
 
 # scale serifless "I i j l" cell width
 serifless() {
-	XSHIFT=-50
+	XSHIFT=$SERIFLESS_SHIFT
 	echo "
 Open(\$1);
 " >${LOG}:serifless.script
@@ -150,7 +162,7 @@ Generate(\$1);
 
 # scale serifed "i j l" cell width
 serifed() {
-	XSHIFT=10
+	XSHIFT=$SERIFED_SHIFT
 	echo "
 Open(\$1);
 " >${LOG}:serifed.script
@@ -679,8 +691,17 @@ t_descending() {  # short-neck2
 	# Yshift=-216
 	# Yshrink=9   # partial descender :-)
 	# Yshift=-74
-	Yshrink=8     # descender to cap height length
-	Yshift=-66
+	if [ $T_CAP ] ;then
+		Yshrink=8   # descender to cap height length (exact)
+		Yshift=-66
+		# Yshrink=11
+		# Yshift=-92
+	else
+		Yshrink=12
+		Yshift=-99
+		# Yshrink=13    # half f descender
+		# Yshift=-107
+	fi
 	case $shape in
 		576 ) Xshift=0   ;;
 		600 ) Xshift=0   ;;
@@ -726,10 +747,10 @@ Select(0u0001);  # temporary cell to avoid modifying original glyph
 Paste();
 Select(0u0001);
 CopyReference();
-# Transform(100,0,0,90,0,0);
-# Move(0,128);
-Transform(100,0,0,89,0,0);
-Move(0,127);
+Transform(100,0,0,90,0,0);
+Move(0,128);
+# Transform(100,0,0,89,0,0);
+# Move(0,127);
 Select($(utf 'l'));
 Paste();
 Select(0u0001);
@@ -1044,10 +1065,9 @@ case $1 in
 	Q_hook        ) ;;
 	q_hook_       ) shape=$2; shift ;;
 	Q_horizontal  ) shape=$2; shift ;;
-	quote         ) letters=$2; width=$(( $3 * 825 / 1000));  shift 2 ;;         # percent of quote (left,right,reversed)
-	serifed       ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "i j l" (serifed)
-	serifless     ) letters=$2; width=$(( $3 * 825 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
-	# serifless   ) letters=$2; width=$(( $3 * 845 / 1000));  shift 2 ;;         # percent of "I i j l" (serifless)
+	quote         ) letters=$2; width=$(( $3 * $SERIFLESS / 1000));  shift 2 ;;  # percent of quote (left,right,reversed)
+	serifed       ) letters=$2; width=$(( $3 * $SERIFED / 1000 )); shift 2 ;;    # percent of "i j l" (serifed)
+	serifless   ) letters=$2; width=$(( $3 * $SERIFLESS / 1000));  shift 2 ;;    # percent of "I i j l" (serifless)
 	space         ) space=$2; shift ;;
 	tailed        ) letters=$2; shape=$3; shift 2 ;;                             # "a d" (tailed)
 	t_descending  ) shape=$2; shift ;;
