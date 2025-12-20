@@ -71,7 +71,7 @@ else
 	SERIFED=925
 	SERIFLESS=825
 	SERIFED_SHIFT=10
-	SERIFLESS_SHIFT=50
+	SERIFLESS_SHIFT=-50
 fi
 
 confirm()  { [ -e $MAKE_INSTALL ] && ditto "$(basename $0)" "$1" || { ifyes "$1" || exit; }; }
