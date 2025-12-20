@@ -20,25 +20,40 @@ fi
 
 # ....................................................................... Clocks
 
+DMS=true  # unset for : (colon) time
+
 seconds() { tic=${line#*| }; tic=${tic%|*}; }
 
 tape() {
-	tic=${line#*|}
-	tic=${tic%|*}
-	if [ "${tic%%:*}" -lt 10 ] ;then
-		# hours 0 - 9, cycle aligns on ten second intervals
-		len=11
-		pos=${tic##*:}
-		# pos=$(( ${pos%??} % 10 ))  # (??) crashes in dash (memory leak on arm?)
-		pos=$(echo "${pos%??} % 10" | bc)
-		[ $pos = 0 ] && pos=10
+	tape="${line#*|}"
+	tape="${tape%|*}"
+	if [ $DMS ] ;then
+		if [ "${tape%%;*}" -lt 10 ] ;then
+			len=12
+			pos=${tape##*.}
+			pos=$(echo "${pos%???} % 11" | bc)
+			[ $pos = 0 ] && pos=11
+		else
+			len=13
+			pos=$(( ${pos:-0} + 1 ))
+			[ $pos -gt 11 ] && pos=0
+		fi
+		tic="$(echo "$tape" | tail -c $(( len - pos )))$(echo "$tape" | head -c $pos)"
+		tic="$(echo "$tic" | sed 's/;/°/; s/\./’/; s/,/”/')"
 	else
-		# hours 10 - 12, format string continously cycles
-		len=12
-		pos=$(( ${pos:-0} + 1 ))
-		[ $pos -gt 10 ] && pos=0
+		if [ "${tape%%:*}" -lt 10 ] ;then  # hours 0 - 9, cycle aligns on ten second intervals
+			len=11
+			pos=${tape##*:}
+			# pos=$(( ${pos%??} % 10 ))    # (??) crashes in dash (memory leak on arm?)
+			pos=$(echo "${pos%??} % 10" | bc)
+			[ $pos = 0 ] && pos=10
+		else                              # hours 10 - 12, format string continously cycles
+			len=12
+			pos=$(( ${pos:-0} + 1 ))
+			[ $pos -gt 10 ] && pos=0
+		fi
+		tic="$(echo "$tape" | tail -c $(( len - pos )))$(echo "$tape" | head -c $pos)"
 	fi
-	tic="$(echo "$tic" | tail -c $(( len - pos )))$(echo "$tic" | head -c $pos)"
 }
 
 # ................................................................ Weather watch
@@ -104,11 +119,19 @@ mkfifo $PANEL_FIFO:$fifo
 # note physical linebreaks for each format specification (to accomodate slow processors, notably arm)
 # NOTE: lemonbar %{F..} changed to #{F..} for alpine "clock" (fails on % char, see function currently)
 # NOTE: added time since epoch for race condition trap
-case $TIC in
-	se* ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I:%M %S%p|#{F-}${SEP}%a %-d %b '%y" >$PANEL_FIFO:$fifo & ;;
-	t*  ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I:%M:%S%p|#{F-}${SEP}%a %-d %b '%y" >$PANEL_FIFO:$fifo & ;;
-	*   ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}%-I:%M#{F-} %p|%S|${SEP}%a %-d %b '%y"  >$PANEL_FIFO:$fifo & ;;
-esac
+if [ $DMS ] ;then
+	case $TIC in
+		se* ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I°%M %S%p|#{F-}${SEP}%a %-d %b ’%y"  >$PANEL_FIFO:$fifo & ;;
+		t*  ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I;%M.%S,%p|#{F-}${SEP}%a %-d %b ’%y" >$PANEL_FIFO:$fifo & ;;  # SEE: tape() sed utf-8
+		*   ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}%-I°%M#{F-} %p|%S|${SEP}%a %-d %b ’%y"   >$PANEL_FIFO:$fifo & ;;
+	esac
+else
+	case $TIC in
+		se* ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I:%M %S%p|#{F-}${SEP}%a %-d %b ’%y"  >$PANEL_FIFO:$fifo & ;;
+		t*  ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I:%M:%S%p|#{F-}${SEP}%a %-d %b ’%y"  >$PANEL_FIFO:$fifo & ;;
+		*   ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}%-I:%M#{F-} %p|%S|${SEP}%a %-d %b ’%y"   >$PANEL_FIFO:$fifo & ;;
+	esac
+fi
 
 cat $PANEL_FIFO:$fifo | panel | handlebar &
 

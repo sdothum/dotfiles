@@ -53,9 +53,12 @@ panel() {
 		case ${status%% *} in
 			'[playing]' )
 				T=$(echo $status | cut -d' ' -f3)
-				duration=$(date -d@$(( $(seconds ${T#*/}) - $(seconds ${T%/*}) )) -u +%-H’%M’%S)
-				duration=${duration#0’}  # prune 0 hours
-				duration=${duration#0}   # prune leading zero minutes
+				# duration=$(date -d@$(( $(seconds ${T#*/}) - $(seconds ${T%/*}) )) -u +%-H’%M’%S)
+				# duration=${duration#0’}  # prune 0 hours
+				# duration=${duration#0}   # prune leading zero minutes
+				duration=$(date -d@$(( $(seconds ${T#*/}) - $(seconds ${T%/*}) )) -u +%-H°%M’%S”)
+				duration=${duration#0°}  # prune 0 hours
+				duration=${duration#0’}   # prune leading zero minutes
 				if [ "$line" != "$currently" ] ;then
 					DURATION=$duration  # full play length
 					currently="$line"
