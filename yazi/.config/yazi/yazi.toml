@@ -91,6 +91,7 @@ rules = [
 	{ mime = "text/*", use = [ "edit", "reveal" ] },
 	# Image
 	{ mime = "image/jpeg", use = [ "feh", "oculante", "darktable", "gimp", "krita", "rawtherapee", "reveal" ] },
+	{ mime = "image/png", use = [ "feh", "oculante", "darktable", "gimp", "krita", "rawtherapee", "reveal" ] },
 	{ mime = "image/tiff", use = [ "oculante", "darktable", "gimp", "krita", "rawtherapee", "reveal" ] },
 	{ mime = "image/*", use = [ "open", "reveal" ] },
 	# Media
