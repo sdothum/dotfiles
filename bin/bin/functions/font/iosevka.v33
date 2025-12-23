@@ -111,7 +111,7 @@ symbols() {
 	dollar=through
 	number_sign=upright
 	paren=normal
-	percent=dots
+	percent=rings-segmented-slash
 	question=smooth
 }
 
@@ -209,7 +209,9 @@ variant() {
 			dollar         ) glyph dollar=open                                          ;;
 			number_sign    ) glyph number_sign=slanted                                  ;;
 			paren-flat     ) glyph paren=flat-arc                                       ;;
-			percent        ) glyph percent=rings-continuous-slash                       ;;
+			percent        ) glyph percent=rings-segmented-slash                        ;;
+			percent.       ) glyph percent=dots                                         ;;
+			percent/       ) glyph percent=rings-continuous-slash                       ;;
 			question       ) glyph question=corner                                      ;;
 
 			B-open         ) glyph capital_b=standard-interrupted-serifless             ;;
@@ -479,6 +481,9 @@ cmdopts () {
 			4-open         ) variant $1 ;;
 			4-open+        ) variant $1 ;;
 			paren-flat     ) variant $1 ;;
+			percent        ) variant $1 ;;
+			percent.       ) variant $1 ;;
+			percent/       ) variant $1 ;;
 			asterisk-high  ) variant $1 ;;
 			at-tall        ) variant $1 ;;
 

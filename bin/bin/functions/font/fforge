@@ -63,10 +63,14 @@ Yshrink=25.5           # elongation bar percent
 Yshift=-210            # descending capital elongation
 
 if [ $PSEUDO_KERN ] ;then
-	SERIFED=725
-	SERIFLESS=625
-	SERIFED_SHIFT=-30
-	SERIFLESS_SHIFT=-107
+	# SERIFED=725
+	# SERIFED_SHIFT=-30
+	SERIFED=775
+	SERIFED_SHIFT=-17
+	# SERIFLESS=625
+	# SERIFLESS_SHIFT=-107
+	SERIFLESS=675
+	SERIFLESS_SHIFT=-94
 else
 	SERIFED=925
 	SERIFLESS=825
