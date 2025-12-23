@@ -328,6 +328,9 @@ super + ctrl + j
 	mpc toggle ;\
 	mpc | grep -q playing && \{ piano stop; mpc:settings volume; mpc:settings; \}
 
+super + alt + ctrl + j
+	mpc clear
+
 super + {comma,period}
 	mpc volume {-10, +10} ;\
 	mpc:settings volume
