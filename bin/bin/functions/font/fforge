@@ -9,42 +9,39 @@
 # SEE:     font/iosevka
 #
 # NOTE:    the default cell width for most glyph transformations is (the original Iosevka default)
-# 
+#
 #              shape=576
-#              
+#
 #          individual Xshift values are made for other standard shape values 600, 650 and proportional
 #
 # HISTORY: Iosevka directory and file (naming conventions) changed with version 3x
 
-usage() { 
+usage() {
 	echo "$(basename $0) Q_hook | q_hook
-$(basename $0) baseline      <shape>
-$(basename $0) bookweight    [book+regular]
-$(basename $0) capadjust     <letters>
-$(basename $0) copy <family> <name>, font alias via commandline only
-$(basename $0) f_ascending   <shape>
-$(basename $0) f_asymmetric  <shape>
-$(basename $0) f_descending  <shape>
-$(basename $0) FP_descending <shape>
-$(basename $0) I_descending  <shape>
-$(basename $0) i_flipped     <shape>, experimental
-$(basename $0) l_ascending   <shape>
-$(basename $0) l_tailed      <letters> <shape>
-$(basename $0) ligature      <width>   <shape>
-$(basename $0) map  <family> <glyph> <glyph>, map U+<glyph> via commandline only
-$(basename $0) punctuation   <emdash>  <shape>
-$(basename $0) Q_custom      <shape>
-$(basename $0) q_hook_       <shape>
-$(basename $0) Q_horizontal  <shape>
-$(basename $0) quote         <letters> <shape>
-$(basename $0) serifed       <letters> <shape>
-$(basename $0) serifless     <letters> <shape>
-$(basename $0) space         <space>
-$(basename $0) tailed        <letters> <shape>
-$(basename $0) t_descending  <shape>
-$(basename $0) T_descending  <shape>
-$(basename $0) t_flipped     <shape>
-$(basename $0) Y_descending  <shape>" | usage:
+$(basename $0) baseline                              <shape>
+$(basename $0) bookweight                            [book+regular]
+$(basename $0) capadjust                             <letters>
+$(basename $0) copy                                  <family>  <name>, font alias via commandline only
+$(basename $0) FP_descending                         <shape>
+$(basename $0) f_[ascending|asymmetric|descending]   <shape>
+$(basename $0) I_[descending|spread]                 <shape>
+$(basename $0) i_flipped                             <shape>, experimental
+$(basename $0) l_[ascending|ascendmax]               <shape>
+$(basename $0) l_tailed                              <letters> <shape>
+$(basename $0) ligature                              <width>   <shape>
+$(basename $0) m_straight                            <shape>
+$(basename $0) map                                   <family> <glyph> <glyph>, map U+<glyph> via commandline only
+$(basename $0) punctuation                           <emdash>  <shape>
+$(basename $0) Q_[horizontal|custom]                 <shape>
+$(basename $0) q_hook_                               <shape>
+$(basename $0) quote                                 <letters> <shape>
+$(basename $0) serifed                               <letters> <shape>
+$(basename $0) serifless                             <letters> <shape>
+$(basename $0) space                                 <space>
+$(basename $0) tailed                                <letters> <shape>
+$(basename $0) T_descending                          <shape>
+$(basename $0) t_[descending[_]|flipped]             <shape>
+$(basename $0) Y_descending                          <shape>" | usage:
 	exit 1
 }
 
@@ -82,6 +79,8 @@ confirm()  { [ -e $MAKE_INSTALL ] && ditto "$(basename $0)" "$1" || { ifyes "$1"
 percent()  { echo "$1 * 100" | bc | cut -d. -f1; }
 regular()  { ls -1 | grep -Ev 'italic|oblique|extended'; }
 italic()   { ls -1 | grep -E  'italic'; }
+mfont()    { ls -1 | grep -E  'book|bold'; }
+mweight()  { ls -1 | grep -E  'demilight|regular'; }
 
 basefont() {
 	case $1 in
@@ -313,6 +312,25 @@ Generate(\$1);
 	done
 }
 
+# substitute m straight vertical sides
+m_straight() {
+	# copy char 0u1d0d and paste to char 0u006d
+	echo "
+Open(\$1);
+$(replace $(utf 'm') 0u1d0d)
+# Select($(utf 'm'));
+# Transform(135,00,00,100,00,00);
+# SetWidth($(echo "$shape * 1.5" | bc | cut -d. -f1));
+# ChangeWeight(-100);
+Generate(\$1);
+" >${LOG}:m_straight.script
+
+	for i in *ttf ;do
+		ditto m_straight $i
+		fontforge -quiet --script ${LOG}:m_straight.script $i
+	done
+}
+
 # substitute curly tail q
 q_hook() {
 	# copy char 0u024b and paste to char 0u0071
@@ -459,8 +477,8 @@ RemoveOverlap();
 Q_custom() {
 	# copy char 0u03d8 and paste to char 0u0051
 	# confirm 'Q-custom'  # SEE: iosevka
-	# $(overlay 0u0051 0u0325 $(( $shape / 3 * 4 )) 35)  # circle to cell edge
-	# $(overlay 0u0051 0u0325 $(( $shape / 4 * 5 )) 35)  # circle to glyph edge
+	# $(overlay 0u0051 0u0325 $(( shape / 3 * 4 )) 35)  # circle to cell edge
+	# $(overlay 0u0051 0u0325 $(( shape / 4 * 5 )) 35)  # circle to glyph edge
 	Q_offset() {
 		echo "
 Open(\$1);
@@ -472,7 +490,7 @@ Generate(\$1);
 
 	for i in *ttf ;do
 		ditto Q_custom $i
-		echo $i | grep -E -q 'italic|oblique' && x=-$(( $shape / 13 )) || x=$(( $shape / 10 ))
+		echo $i | grep -E -q 'italic|oblique' && x=-$(( shape / 13 )) || x=$(( shape / 10 ))
 		Q_offset  # offset dependencies
 		fontforge -quiet --script ${LOG}:Q_offset.script $i
 	done
@@ -512,7 +530,7 @@ Move($TSHIFT,0);  # tweak (tail) right side bearing
 tailed() {
 	XSHIFT=18
 	TSHIFT=1
-	width=$(( $shape + $XSHIFT ))
+	width=$(( shape + XSHIFT ))
 	echo "
 Open(\$1);
 " >${LOG}:tailed.script
@@ -601,7 +619,7 @@ Transform(0.0001,0,0,0.0001,0,0);
 CopyReference();
 SelectGlyphsSplines();
 SelectFewer(0u0001);
-PasteWithOffset($xshift,$(( $Yshift - 37)));
+PasteWithOffset($xshift,$(( $Yshift - 37 )));
 Select(0u0001);
 Clear();
 Generate(\$1);
@@ -613,7 +631,7 @@ Generate(\$1);
 	done
 
 	# do similar for italics (though, appears to be unnecessary)
-	xshift=$(( $xshift + $XSHIFT ))
+	xshift=$(( xshift + XSHIFT ))
 	echo "
 Open(\$1);
 Select($(utf '|'));
@@ -625,7 +643,7 @@ Transform(0.0001,0,0,0.0001,0,0);
 CopyReference();
 SelectGlyphsSplines();
 SelectFewer(0u0001);
-PasteWithOffset($xshift,$(( $Yshift - 37)));
+PasteWithOffset($xshift,$(( $Yshift - 37 )));
 Select(0u0001);
 Clear();
 Generate(\$1);
@@ -634,6 +652,61 @@ Generate(\$1);
 	for i in $(italic) ;do
 		ditto baseline:italic $i
 		fontforge -quiet --script ${LOG}:baseline:italic.script $i
+	done
+}
+
+I_spread() {
+	# create regular I_spread
+	confirm "$1"
+	echo "
+Open(\$1);
+Select($(utf '►'));
+Rotate(90);
+# Transform(35,0,0,15,0,0);
+Transform(40,0,0,22,0,0);
+CopyReference();
+Select(0u0001);  # temporary cell to avoid modifying original glyph
+Paste();
+Rotate(180);
+Select(0u0002);
+Paste();
+Select(0u0001);
+CopyReference();
+Select($(utf 'I'));
+PasteWithOffset(Int(Strtod(\$2)),Int(Strtod(\$3)));
+Select(0u0002);
+CopyReference();
+Select($(utf 'I'));
+PasteWithOffset(Int(Strtod(\$2)),Int(Strtod(\$4)));
+RemoveOverlap();
+Select(0u0002);
+Clear();
+Generate(\$1);
+" >${LOG}:I_spread.script
+
+	for i in $(regular) ;do
+		ditto I_spread $i
+		# fontforge -quiet --script ${LOG}:I_spread.script $i 112 668 5  # for shape 576
+		fontforge -quiet --script ${LOG}:I_spread.script $i 88 618 8  # for shape 576
+	done
+
+	# italicize I_spread from regular glyph and shift to left of cell
+	echo "
+Open(\$2);
+Select($(utf 'I'));
+Italic($ANGLE,0,0x0020);  # do not hook f
+Copy();
+Open(\$1);
+Select($(utf 'I'));
+Paste();
+Move($XSHIFT,0);  # adjust for italic side bearing shift towards left 
+SetWidth($shape);
+Generate(\$1);
+" >${LOG}:I_spread:italic.script
+
+	for i in $(italic) ;do
+		ditto I_spread:italic $i
+		fontforge -quiet --script ${LOG}:I_spread:italic.script $i $(basefont $i)
 	done
 }
 
@@ -844,7 +917,7 @@ Generate(\$1);
 " >${LOG}:f_ascending:italic.script
 
 	for i in $(italic) ;do
-		ditto f_flipped:italic $i
+		ditto f_ascending:italic $i
 		fontforge -quiet --script ${LOG}:f_ascending:italic.script $i $(basefont $i)
 	done
 }
@@ -933,7 +1006,7 @@ weight() {
 		done
 
 		# assign book weights as regular (normal)
-		family=${FONT##*/}
+		family=${FONTS##*/}
 		sed -i -e "s/$family ${regular} Version/$family Regular Version/i"       \
 			-e "s/$family[ -]${regular}/$family/i"                                \
 			-e "s/${regular}/Regular/i"                                           \
@@ -1057,10 +1130,12 @@ case $1 in
 	f_descending  ) shape=$2; shift ;;
 	FP_descending ) shape=$2; shift ;;
 	I_descending  ) shape=$2; shift ;;
+	I_spread      ) shape=$2; shift ;;
 	i_flipped     ) shape=$2; shift ;;
 	l_ascending   ) shape=$2; shift ;;
 	l_ascendmax   ) shape=$2; shift ;;
 	l_tailed      ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "l" (tailed)
+	m_straight    ) shape=$2; shift ;;
 	ligature      ) [ $4 ] && { width=$2; shift 2; } || { shape=$2; shift; } ;;  # SEE: iosevka for tricky bits
 	map           ) [ $4 ] && { family=$2; from=$3; to=$4; shift 3; map; exit; } || usage ;;  # pwd commandline only!
 	punctuation   ) emdash=$2; shape=$3; shift 2 ;;
@@ -1069,9 +1144,9 @@ case $1 in
 	Q_hook        ) ;;
 	q_hook_       ) shape=$2; shift ;;
 	Q_horizontal  ) shape=$2; shift ;;
-	quote         ) letters=$2; width=$(( $3 * $SERIFLESS / 1000));  shift 2 ;;  # percent of quote (left,right,reversed)
-	serifed       ) letters=$2; width=$(( $3 * $SERIFED / 1000 )); shift 2 ;;    # percent of "i j l" (serifed)
-	serifless   ) letters=$2; width=$(( $3 * $SERIFLESS / 1000));  shift 2 ;;    # percent of "I i j l" (serifless)
+	quote         ) letters=$2; width=$(( $3 * SERIFLESS / 1000 )); shift 2 ;;  # percent of quote (left,right,reversed)
+	serifed       ) letters=$2; width=$(( $3 * SERIFED / 1000 ));   shift 2 ;;  # percent of "i j l" (serifed)
+	serifless     ) letters=$2; width=$(( $3 * SERIFLESS / 1000 )); shift 2 ;;  # percent of "I i j l" (serifless)
 	space         ) space=$2; shift ;;
 	tailed        ) letters=$2; shape=$3; shift 2 ;;                             # "a d" (tailed)
 	t_descending  ) shape=$2; shift ;;
@@ -1085,9 +1160,9 @@ esac
 shift
 [ $2 ] && usage
 
-FONT=$HOME/.fonts/${1:-Iosevka}
-[ $shape ] && HALF=$(( $shape / 2 ))  # half cell width (SEE: punctuation)
-cd $FONT || usage
+FONTS=$HOME/.local/share/fonts/${1:-Iosevka}
+[ $shape ] && HALF=$(( shape / 2 ))  # half cell width (SEE: punctuation)
+cd $FONTS || usage
 
 $fforge
 

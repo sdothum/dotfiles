@@ -11,6 +11,8 @@
 ditto "major refactoring untested !!"
 ditto "see font/iosevka"
 
+FONTS=$HOME/.local/share/fonts
+
 # ifno "free memory: kill all browsers.." && exit
 # pkill -f ".*http.*"
 
@@ -31,7 +33,7 @@ usage() {
 > d-[tailed|toothless]
 > j-[serifed|serifless]
 > l-[hooky|serifless]
-> m-[arch[-[-]]|rounded]
+> m-[arch[-[-]]|rounded|straight]
 > p-[eared|serifed]
 > q-hook[_]
 > t-[asymmetric[+|-[-]]|cross[+]|descending[+]|flat]
@@ -176,6 +178,7 @@ cmdopts() {
 			m-arch         ) m=$1 ;;
 			m-arch-*       ) m=$1 ;;
 			m-rounded      ) m=$1 ;;
+			m-straight     ) m=$1 ;;
 			p-eared        ) glyph p $1 ;;
 			p-serifed      ) glyph p $1 ;;
 			q-hook         ) q=$1 ;;        # ebook variant
@@ -233,7 +236,7 @@ cmdopts $@  # set commandline options
 ifno "build iosevka.$IOSEVKA font suite" && exit
 
 update() {
-	cd $HOME/.fonts/$2
+	cd $FONTS/$2
 	case $(find . -regextype posix-extended -regex '.*-(normal)*regular(upright)*.ttf') in
 		*normal* ) fonts='*-normalbookupright *-normalbookitalic *-normalboldupright *-normalbolditalic' ;;  # version 3x
 		*        ) fonts='*-book *-bookitalic *-bold *-bolditalic' ;;  # version 1x/2x
@@ -272,7 +275,7 @@ family()  { for i in $@ ;do case $i in family=*) echo ${i#*=}; break ;; esac ;do
 
 wfont()   {
 	iosevka.$IOSEVKA english G-hookless+ y-straight 1-nobase 4-open+ Q-open q-hook $(options $@) i-hooky asterisk-high $emdash
-	cp -fv $HOME/.fonts/$(family $@)/*ttf /srv/http/thedarnedestthing.com/application/public/fonts/
+	cp -fv $FONTS/$(family $@)/*ttf /srv/http/thedarnedestthing.com/application/public/fonts/
 }
 
 if [ "$classic" ] ;then
@@ -289,10 +292,9 @@ elif [ "$mu" ] ;then
 	e_ink tundra Y-descending a-single
 
 elif [ "$test" ] ;then
-	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat l-ascending Q-open 1-nobase f-extended++ a-double_ d-tailed p-eared y-turn J-descending utf-8 serifless serifed pseudokern
+	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat l-ascending Q-open 1-nobase f-extended++ a-double_ d-tailed y-turn J-descending utf-8 serifless serifed pseudokern percent/
  	emdash
-	e_ink zingspiel  grote I-serifless  t-descending
-
+	e_ink gothix     grote I-spread     t-descending m-straight
 elif [ "$quad" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+
  	emdash
@@ -318,13 +320,14 @@ elif [ "$koreader" ] ;then
 	e_ink grotesk grote   I-serifed    t-asymmetric-- l-ascending Q-open 1-nobase f-extended++ a-double_ d-tailed p-eared y-turn J-descending utf-8
 
 elif [ "$supernote" ] ;then
-	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat l-ascending Q-open 1-nobase f-extended++ a-double_ d-tailed p-eared y-turn J-descending utf-8 serifless serifed pseudokern percent/
+	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat l-ascending Q-open 1-nobase f-extended++ a-double_ d-tailed y-turn J-descending utf-8 serifless serifed pseudokern percent/
  	emdash
 	e_ink singspiel  grote I-serifless  t-descending
 	e_ink songspiel  grote I-serifed    t-cross
 	e_ink grotesque  grote I-serifless  t-asymmetric--
-	e_ink groteske   grote  I-serifed   t-asymmetric-- 1-base
-	# e_ink grotesc  grote  I-serifless t-asymmetric-- a-single_
+	e_ink groteske   grote I-serifed    t-asymmetric-- 1-base
+	e_ink gotham     grote I-serifless  t-descending m-straight
+	e_ink gothos     grote I-serifed    t-descending m-straight G-toothed
 
 elif [ "$proportional" ] ;then  # experimental (unfinished mods to iosevka.v..)
 	cmdopts quasi-pro space=M Q-straight open+ j-flat serifless serifed
@@ -378,7 +381,8 @@ else                                      # desktop fonts
 	# NOTE: source code highlighting distinguishes lower case "l" (el) from "|" (bar)
 	cmdopts t-descending j-serifed 1-nobase at-tall l-ascending f-extended++ y-turn J-descending a-double_ d-tailed
 	dfont $leading 1-base  # l-flat
-	[ $HOME/thedarnedestthing.com/application/public/fonts/ ] && cp -v $HOME/.fonts/Iosevka/*ttf $HOME/thedarnedestthing.com/application/public/fonts/
+	[ $HOME/thedarnedestthing.com/application/public/fonts/ ] && cp -v $FONTS/Iosevka/*ttf $HOME/thedarnedestthing.com/application/public/fonts/
+	exit
 	dfont proof    l-ascending I-serifless
 	dfont menu     I-serifed l-ascending
 	dfont dyslexic I-serifed space=2.2 family=qclocktwo l-ascending j-serifless  # conky qclocktwo font
@@ -387,7 +391,7 @@ else                                      # desktop fonts
 	cmdopts quasi-ext open+ serifless serifed
 	emdash
 	e_ink charcoal grote I-serifless l-ascending Q-open 1-nobase a-double_ d-tailed p-eared m-rounded y-turn J-descending t-descending pseudokern
-	[ -d /var/www/localhost/fonts ] && sudo cp -v $HOME/.fonts/charcoal/*ttf /var/www/localhost/fonts/
+	[ -d /var/www/localhost/fonts ] && sudo cp -v $FONTS/charcoal/*ttf /var/www/localhost/fonts/
 fi
 
 # kak: filetype=sh

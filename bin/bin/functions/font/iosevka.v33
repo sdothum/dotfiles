@@ -30,6 +30,8 @@ ditto 'tuples now changed from "option value" pairs to -> option=value'
 ditto "refactoring is not fully tested"
 echo $@
 
+FONTS=$HOME/.local/share/fonts
+
 usage() {
 	echo "$(basename $0) normal (default) | dyslexic | ebook | expanded | extended | pseudokern  (shapes)
 > utf-8 | english | latin+greek | cyrillic | fluent | ligature <name>  (utf-8)
@@ -47,7 +49,7 @@ usage() {
 > D-serifless
 > FP-descending (experimental)
 > G-[corner|hookless[+]|rounded|toothed|toothless]
-> I-[serifed|serifless|descending]
+> I-[serifed|serifless|descending|spread]
 > J-[descending|flat|serifless]
 > Q-[bar|bend|crossing|detached|hook|horizontal|open|straight|tailed|custom]
 > T-descending (includes I-descending)
@@ -62,7 +64,7 @@ usage() {
 > i-[hooky|serifed[-]|serifless]
 > j-[flat|serifed|serifless]
 > l-[ascending[+]|bottom|flat|hooky|serifless]
-> m-[arch[-[-]]|earless[-]|rounded[-]|serifless]
+> m-[arch[-[-]]|earless[-]|rounded[-]|serifless|straight]
 > p-[eared|serifed]
 > q-[hook[_]|tailed]
 > t-[asymmetric[+|-[-]]|cross[+]|descending[=+]|flat]
@@ -392,6 +394,7 @@ cmdopts () {
 			I-descending   ) variant I-serifless 'DESCENDING'; I_descending=true; baseline=true ;;
 			I-serifed      ) variant $1 ;;
 			I-serifless    ) variant $1; initial ;;  # combined minimal stroke glyphs
+			I-spread       ) variant I-serifless 'SPREAD'; I_spread=true ;;
 			J-descending   ) variant $1 ;;
 			J-flat         ) variant $1 ;;
 			J-serifless    ) variant $1 ;;
@@ -453,6 +456,7 @@ cmdopts () {
 			m-rounded      ) variant $1 ;;
 			m-rounded-     ) variant $1 ;;
 			m-serifless    ) variant $1 ;;
+			m-straight     ) variant 'm=STRAIGHT'; m_straight=true ;;
 			p-eared        ) variant $1 ;;
 			p-serifed      ) variant $1 sb 0.7650 ;;         # add air for serif corner
 			q-hook         ) variant 'q=HOOK-TAILED';  q_hook=true; unset q_hook_; baseline=true ;;
@@ -461,7 +465,7 @@ cmdopts () {
 			t-asymmetric   ) variant $1 ;;
 			t-asymmetric+  ) variant $1 ;;
 			t-asymmetric-  ) variant $1 'FLIPPED'; t_flipped=true; cmdopts i-serifless j-flat l-serifless ;;
-			t-asymmetric-- ) variant $1 'FLIPPED'; t_flipped=true; cmdopts l-hooky ;;
+			t-asymmetric-- ) variant $1 'FLIPPED'; t_flipped=true ;;
 			t-cross        ) variant $1 ;;
 			t-cross+       ) variant $1 ;;
 			t-descending=  ) variant t-cross  'DESCENDING'; t_descending=true;  baseline=true; export T_CAP=true ;;  # SEE: fforge
@@ -801,12 +805,12 @@ if [ -z "$ebook" ] || [ $nerdfont ] ;then
 	unset serifless                             # monospace charset
 fi
 
-mkdir -p $HOME/.fonts/$family
-cp -v dist/$family/TTF/* $HOME/.fonts/$family  # v30 directory name change
+mkdir -p $FONTS/$family
+cp -v dist/$family/TTF/* $FONTS/$family  # v30 directory name change
 export ANGLE=-11                               # sight adjusted italics angle
 
 # remove old v27 Iosevka font files
-for i in $HOME/.fonts/$family/*ttf ;do
+for i in $FONTS/$family/*ttf ;do
 	echo $i | grep -q 'normal' || rm $i
 done
 
@@ -824,9 +828,11 @@ unset adjust baseline capadjust  # no longer applying for koreader and version 3
 [ $f_ascending   ] && fforge f_ascending        ${shape##* } $family  # font mod for ascending serifless f
 [ $f_descending  ] && fforge f_descending   $(( ${shape##* } + f_adjust )) $family  # font mod for descending serifless f (with proportional adjustment hack)
 [ $I_descending  ] && fforge I_descending       ${shape##* } $family  # font mod for descending serifless capital I
+[ $I_spread      ] && fforge I_spread           ${shape##* } $family  # font mod for spread serifless capital I
 [ $i_flipped     ] && fforge i_flipped          ${shape##* } $family  # font mod for flipped serifed i
 [ $l_ascending   ] && fforge l_ascending        ${shape##* } $family  # font mod for ascending serifless l (extended f height)
 [ $l_ascendmax   ] && fforge l_ascendmax        ${shape##* } $family  # font mod for ascending serifless l (max height)
+[ $m_straight    ] && fforge m_straight         ${shape##* } $family  # straight vertical (angular vs rounded)
 [ $T_descending  ] && fforge T_descending       ${shape##* } $family  # font mod for descending capital T
 [ $t_descending  ] && fforge t_descending   $(( ${shape##* } + ${proportional:-0} )) $family  # font mod for descending t
 [ $t_descending_ ] && fforge t_descending_  $(( ${shape##* } + ${proportional:-0} )) $family  # font mod for descending t
