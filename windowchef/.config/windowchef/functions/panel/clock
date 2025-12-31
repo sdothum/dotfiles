@@ -25,12 +25,12 @@ DMS=true  # unset for : (colon) time
 seconds() { tic=${line#*| }; tic=${tic%|*}; }
 
 tape() {
-	tape="${line#*|}"
-	tape="${tape%|*}"
+	tic="${line#*|}"
+	tic="${tic%|*}"
 	if [ $DMS ] ;then
-		if [ "${tape%%;*}" -lt 10 ] ;then
+		if [ "${tic%%;*}" -lt 10 ] ;then
 			len=12
-			pos=${tape##*.}
+			pos=${tic##*.}
 			pos=$(echo "${pos%???} % 11" | bc)
 			[ $pos = 0 ] && pos=11
 		else
@@ -38,12 +38,12 @@ tape() {
 			pos=$(( ${pos:-0} + 1 ))
 			[ $pos -gt 11 ] && pos=0
 		fi
-		tic="$(echo "$tape" | tail -c $(( len - pos )))$(echo "$tape" | head -c $pos)"
+		tic="$(echo "$tic" | tail -c $(( len - pos )))$(echo "$tic" | head -c $pos)"
 		tic="$(echo "$tic" | sed 's/;/°/; s/\./’/; s/,/”/')"
 	else
-		if [ "${tape%%:*}" -lt 10 ] ;then  # hours 0 - 9, cycle aligns on ten second intervals
+		if [ "${tic%%:*}" -lt 10 ] ;then  # hours 0 - 9, cycle aligns on ten second intervals
 			len=11
-			pos=${tape##*:}
+			pos=${tic##*:}
 			# pos=$(( ${pos%??} % 10 ))    # (??) crashes in dash (memory leak on arm?)
 			pos=$(echo "${pos%??} % 10" | bc)
 			[ $pos = 0 ] && pos=10
@@ -52,7 +52,7 @@ tape() {
 			pos=$(( ${pos:-0} + 1 ))
 			[ $pos -gt 10 ] && pos=0
 		fi
-		tic="$(echo "$tape" | tail -c $(( len - pos )))$(echo "$tape" | head -c $pos)"
+		tic="$(echo "$tic" | tail -c $(( len - pos )))$(echo "$tic" | head -c $pos)"
 	fi
 }
 
@@ -85,10 +85,10 @@ currently() {
 
 	# update weather every 10 minutes
 	if [ -e $WEATHER ] ;then
-		minute=${line#*:?}    # hh:mm:ss.* -> m:ss.*
-		case ${minute%:*} in  #            -> m
-			0 ) [ $update_weather ] && weather ;;
-			* ) update_weather=true ;;
+		[ $DMS ] && minute=${line#*;?} || minute=${line#*:?}  # hh:mm:ss.* -> m:ss.*
+		case $(printf '%.1s' "$minute") in                    # -> m
+			0 | 5 ) [ $update_weather ] && weather ;;
+			*     ) update_weather=true ;;
 		esac
 	fi
 	[ -s /tmp/${WEATHER##*/} ] && [ "$(cat /tmp/${WEATHER##*/})" != '' ] && current_weather=$(cat /tmp/${WEATHER##*/})  # prevent blanking during update, see weather()
@@ -104,7 +104,7 @@ panel() {
 	while read -r line ;do
 		EPOCH=${line%%^*}
 		currently
-		
+
 		[ $EPOCH ] && printf "%s\n" "%{r}${system}"
 		unset line EPOCH
 	done
