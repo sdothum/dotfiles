@@ -26,7 +26,7 @@ require("bunny"):setup({
 		{ key = "E",          path = "/etc",                                              },
 		{ key = { "e", "d" }, path = "/etc/dinit.d",                                      },
 		{ key = { "e", "r" }, path = "/etc/sv",                                           },
-		{ key = "F",          path = "~/.fonts",                                          },
+		{ key = "F",          path = "~/.local/share/fonts",                              },
 		{ key = "f",          path = "~/bin/functions",                                   },
 		{ key = "H",          path = "/home",                                             },
 		{ key = "I",          path = "~/images/backgrounds",                              },
