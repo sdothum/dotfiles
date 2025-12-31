@@ -29,6 +29,7 @@
 = drawing
 = ═══════
 # inkscape
+  xaos           # fractal generator
   krita
   python3-PyQt5  # python plugin dependency
 
@@ -36,6 +37,7 @@
 = enote
 = ═════
   eink-template-gen
+
 
 = photography
 = ═══════════
