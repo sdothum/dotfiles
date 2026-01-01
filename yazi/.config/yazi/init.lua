@@ -5,8 +5,11 @@
 -- ........................................................................ init
 
 -- last photo shoot
-local day   = io.popen("ls -1 \"/home/photos/sigma_fp/$(date '+%Y')\" | tail -1")
-local snaps = day:read()
+local photos =  "/home/photos/sigma_fp/" .. os.date("%Y/")
+os.execute("test -d " .. photos .. " || mkdir " .. photos)
+local day    = io.popen("ls -1 \"/home/photos/sigma_fp/$(date '+%Y')\" | tail -1")
+local snaps  = day:read()
+if snaps == nil then snaps = "" end
 
 require("bunny"):setup({
 	hops = {
@@ -40,7 +43,7 @@ require("bunny"):setup({
 		{ key = "N",          path = "/net/home/" .. os.getenv("USER"),                   },
 		{ key = "n",          path = "/net/downloads/nicotine",                           },
 		{ key = "o",          path = "/opt",                                              },
-		{ key = "p",          path = "/home/photos/sigma_fp/" .. os.date("%Y/") .. snaps, },
+		{ key = "p",          path = photos .. snaps,                                     },
 		{ key = "r",          path = "/home/library/references",                          },
 		{ key = "S",          path = "~/sandbox",                                         },
 		{ key = "s",          path = "~/stow",                                            },
