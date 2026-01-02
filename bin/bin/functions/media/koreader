@@ -32,8 +32,8 @@ usage() { echo "$(basename $0) [back'up KOReader library]
 > [font s'ize] <size>
 
 > [highl'ight] <invert|lighten>
-> [-' hyphenation]
-> [soft h'yphenation]
+> [h'yphenate]
+> [soft-'hyphenation]
 
 > [font g'amma] <gamma>, { contrast:gamma, 1.0:15, 1.45:25, 1.9:30, 2.5:36 }
 > [i'nverse page turn] <true|false>
@@ -116,8 +116,8 @@ while [ $1 ] ;do
 		u     ) backup;                                                                      shift; continue ;;
 		r     ) resetpages=true;                                                             shift; continue ;;
 		w     ) sdr 'word spacing 100' '/\"copt_word_spacing\".*=/,+2s/= [0-9]*,/= '100',/'; shift; continue ;;
-		h     ) sdr 'hyphenation soft' '/\"hyph_soft_hyphens_only\"/s/= false,/= true,/'; resetpages=true ;;
-		-     ) sdr 'hyphenation'      '/\"hyph_soft_hyphens_only\"/s/= true,/= false,/'; resetpages=true ;;
+		-     ) sdr 'soft-hyphenation' '/\"hyph_soft_hyphens_only\"/s/= false,/= true,/'; resetpages=true ;;
+		h     ) sdr 'hyphenate'        '/\"hyph_soft_hyphens_only\"/s/= true,/= false,/'; resetpages=true ;;
 		1     ) sdr "1 column"         '/\"copt_visible_pages\"/s/= [0-9]*,/= 1,/';       resetpages=true ;;
 		2     ) sdr "2 columns"        '/\"copt_visible_pages\"/s/= [0-9]*,/= 2,/';       resetpages=true ;;
 		p     ) conversion $2                 || usage ;;
@@ -139,8 +139,8 @@ while [ $1 ] ;do
 
 	if [ -e $KOBO ] ;then  # no access to SUPERNOTE koreader internal shared storage
 		case $1 in
-			h     ) settings 'hyphenation soft' '/\"hyph_soft_hyphens_only\"/s/= false,/= true,/'; shift; continue      ;;
-			-     ) settings 'hyphenation'      '/\"hyph_soft_hyphens_only\"/s/= true,/= false,/'; shift; continue      ;;
+			-     ) settings 'soft-hyphenation' '/\"hyph_soft_hyphens_only\"/s/= false,/= true,/'; shift; continue      ;;
+			h     ) settings 'hyphenate'        '/\"hyph_soft_hyphens_only\"/s/= true,/= false,/'; shift; continue      ;;
 			1     ) settings "1 column"         '/\"copt_visible_pages\"/s/= [0-9]*,/= 1,/';       shift; continue      ;;
 			2     ) settings "2 columns"        '/\"copt_visible_pages\"/s/= [0-9]*,/= 2,/';       shift; continue      ;;
 			i     ) settings "inverse page turn ${turn}" '/\"inverse_reading_order\"/s/(true|false)/'${turn}'/'         ;;
@@ -166,7 +166,10 @@ while [ $1 ] ;do
 		# esac
 	fi
 
-	shift 2
+	case $1 in
+		- | h | 1 | 2 ) shift   ;;  # trap supernote action
+		*             ) shift 2 ;;
+	esac
 done
 	
 [ $resetpages ] && sdr 'page recalculation' '/\"doc_pages\"/d; /\"pages\"/d'
