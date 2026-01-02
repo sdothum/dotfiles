@@ -6,10 +6,10 @@
 
 -- last photo shoot
 local photos =  "/home/photos/sigma_fp/" .. os.date("%Y/")
-os.execute("test -d " .. photos .. " || mkdir " .. photos)
+os.execute("test -d " .. photos .. " || mkdir " .. photos)  -- new year rollover
 local day    = io.popen("ls -1 \"/home/photos/sigma_fp/$(date '+%Y')\" | tail -1")
 local snaps  = day:read()
-if snaps == nil then snaps = "" end
+if snaps == nil then snaps = "" end                         -- new year rollover
 
 require("bunny"):setup({
 	hops = {
