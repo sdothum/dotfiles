@@ -18,10 +18,15 @@ ditto georgi "see sdothum chording_engine"
 # mv qmk_firmware qmk_firmware.dennytom
 
 cd $HOME
+git clone https://github.com/qmk/qmk_firmware.git
+cd qmk_firmware
 python -m venv venv-qmk
 . venv-qmk/bin/activate
-qmk-setup
+pip3 install qmk
+qmk setup
+qmk git-submodule
 
+# udev configuration
 sudo mkdir /etc/udev/rules.d
 sudo cp -v $HOME/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
 echo 'TAG=="uaccess", ENV{MAJOR}!="", MODE="0660", GROUP="plugdev"' | sudo tee /etc/udev/rules.d/73-uaccess-group.rules
