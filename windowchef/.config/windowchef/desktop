@@ -9,6 +9,7 @@
 
 # Usage: desktop <msg>
 #          where <msg>: <group> [specific | toggle | close] | last | restone
+#                       add <winid> <group>
 
 # NOTE: waitron group handling deficiencies (quirks) and extensions are handled here
 # HACK: waitron group_toggle/_activate does not restore the group window stack order (focused window)
@@ -16,8 +17,6 @@
 
 [ -e $WME:desktop ] && desktop=$(cat $WME:desktop)
 desktop=${desktop:--1}
-
-group_focus() { echo $1 >$GROUP:$2:focus; }
 
 current() {
 	if [ -e $WME:desktop ] ;then
@@ -72,7 +71,7 @@ desktop() {
 			;;
 
 		*        )
-			[ $desktop -eq $1 ] && { group_focus $(pfw 2>/dev/null) $1; return; }  # trap windowchef autostart initialization errors
+			[ $desktop -eq $1 ] && exec desktop add $(pfw 2>/dev/null) $1  # trap windowchef autostart initialization errors
 			current $1
 			waitron group_activate $1
 			[ -e $GROUP:$1:focus ] && waitron window_focus $(cat $GROUP:$1:focus)         # restore window stack NOTE: this also fixes calibre mouse focus issue!
@@ -102,9 +101,10 @@ plus() {
 case $1 in
 	''      ) echo $desktop ;;
 	restore ) restore       ;;
-	[1-9]   ) desktop $1 $2 ;;        # SEE: chef desktop and rulerrc
+	[1-9]   ) desktop $1 $2 ;;             # SEE: chef desktop and rulerrc
 	last    ) [ -e $WME:desktop:last ] && desktop $(cat $WME:desktop:last) ;;
-	*       ) desktop $(plus $1) ;;	 # -1/+1
+	add     ) echo $2 >$GROUP:$3:focus ;;  # SEE: window desktop and window stack
+	*       ) desktop $(plus $1) ;;	      # -1/+1
 esac
 
 # kak: filetype=sh

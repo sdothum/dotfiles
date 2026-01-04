@@ -12,7 +12,7 @@ desktop=$(desktop)
 waitron group_remove_window
 waitron group_add_window $1
 window group $1 add $winid
-group_focus $winid $1  # see desktop and window stack
+desktop add $winid $1  # see desktop and window stack
 
 # teleport and refocus to window's previous group
 if [ $2 ] ;then
@@ -20,7 +20,7 @@ if [ $2 ] ;then
 	[ $W ] && {
 		desktop $desktop
 		waitron window_focus $W
-		group_focus $W $desktop
+		desktop add $W $desktop
 		exit             # skip original window refocus SEE: window wrapper
 	}
 fi

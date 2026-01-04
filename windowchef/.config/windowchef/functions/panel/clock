@@ -39,7 +39,7 @@ tape() {
 			[ $pos -gt 11 ] && pos=0
 		fi
 		tic="$(echo "$tic" | tail -c $(( len - pos )))$(echo "$tic" | head -c $pos)"
-		tic="$(echo "$tic" | sed 's/;/°/; s/\./’/; s/,/”/')"
+		tic="$(echo "$tic" | sed 's/;/°/; s/\./’/; s/,/” /')"
 	else
 		if [ "${tic%%:*}" -lt 10 ] ;then  # hours 0 - 9, cycle aligns on ten second intervals
 			len=11
