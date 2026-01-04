@@ -8,6 +8,8 @@
 
 usage() { usage: "$(basename $0) <keyboard> <keymap> [steno [nomouse]] [<string> [<string>]] [flash]"; exit 1; }
 
+# NOTE: now configured for python3 virtual environment SEE: venv-qmk/bin/activate below
+
 [ $2 ] || usage
 model=$1
 keymap=$2
@@ -82,6 +84,7 @@ else
 fi
 
 cd $QMK
+. venv-qmk/bin/activate
 [ -d $KEYMAP/common ] && export CPATH=$KEYMAP/common || export CPATH=$KEYMAP
 # make $KBD:$keymap:clean
 echo CPATH=$CPATH
