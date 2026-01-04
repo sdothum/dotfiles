@@ -1,3 +1,4 @@
+import re
 from functools import reduce
 
 strings = []
@@ -241,13 +242,6 @@ def expand_keycode_fnc(DEFINITION):
 		"KP_3", "P3", "KP_4", "P4", "KP_5", "P5", "KP_6", "P6",
 		"KP_7", "P7", "KP_8", "P8", "KP_9", "P9", "KP_0", "P0",
 		"KP_DOT", "PDOT", "KP_EQUAL", "PEQL", "KP_COMMA", "PCMM",
-		"MS_BTN1", "BTN1", "MS_BTN2", "BTN2", "MS_BTN3", "BTN3",
-		"MS_BTN4", "BTN4", "MS_BTN5", "BTN5", "MS_BTN6", "BTN6",
-		"MS_LEFT", "MS_L", "MS_DOWN", "MS_D", "MS_UP", "MS_U",
-		"MS_RIGHT", "MS_R", "MS_WH_UP", "WH_U", "MS_WH_DOWN",
-		"WH_D", "MS_WH_LEFT", "MS_WH_L", "MS_WH_RIGHT", "MS_WH_R",
-		"KC_MS_ACCEL0", "ACL0", "KC_MS_ACCEL1", "ACL1",
-		"KC_MS_ACCEL2", "ACL2"
 		]:
 		return "KC_" + DEFINITION
 	else:
@@ -421,7 +415,7 @@ def add_key(PSEUDOLAYER, KEYCODES_HASH, DEFINITION, output_buffer, index, number
 			elif type == "TO":
 				[output_buffer, index] = TO(PSEUDOLAYER, KEYCODES_HASH, val, output_buffer, index)
 			elif type == "STR":
-				[output_buffer, index, number_of_strings, strings] = STR(PSEUDOLAYER, KEYCODES_HASH, val, output_buffer, index, number_of_strings, strings)
+				[output_buffer, index, number_of_strings, strings] = STR(PSEUDOLAYER, KEYCODES_HASH, re.sub("''", " ", val), output_buffer, index, number_of_strings, strings)
 	return [output_buffer, index, number_of_strings, strings]
 
 def add_leader_combo(DEFINITION, FUNCTION):
