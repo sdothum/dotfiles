@@ -6,6 +6,7 @@
 # ................................................................. yazi wrapper
 
 # Usage: yazi [TMUX | ROOT | XFTP] | [WAIT] [path]
+#             upgrade (all plugins)
 
 export YAZI="/usr/bin/yazi"                 # NOTE: envar is also used in alacrityt/kak wrappers for conditional tweaks
 # export EDITOR=/usr/bin/kak
@@ -29,12 +30,13 @@ esac
 
 export TMUXCONF=$HOME/.tmux.conf  # SEE: tmux_session
 case $1 in
-	ROOT ) tmux_session 'root' sudo -E $YAZI $TAB         ;;
-	TMUX ) tmux_session 'yazi'         $YAZI $TAB         ;;
-	XFTP ) term xftp class=xftp /bin/yazi /net/downloads/http ;;
-	''   ) $termyazi                   $YAZI .            ;;
-	WAIT ) shift; $termyazi WAIT       $YAZI "${MTP:-$@}" ;;  # don't pass WAIT in command string
-	*    ) $termyazi                   $YAZI "${MTP:-$@}" ;;
+	ROOT    ) tmux_session 'root' sudo -E $YAZI $TAB             ;;
+	TMUX    ) tmux_session 'yazi'         $YAZI $TAB             ;;
+	XFTP    ) term xftp class=xftp /bin/yazi /net/downloads/http ;;
+	''      ) $termyazi                   $YAZI .                ;;
+	WAIT    ) shift; $termyazi WAIT       $YAZI "${MTP:-$@}"     ;; # don't pass WAIT in command string
+	upgrade ) ya pkg upgrade                                     ;;
+	*       ) $termyazi                   $YAZI "${MTP:-$@}"     ;;
 esac
 
 # kak: filetype=sh

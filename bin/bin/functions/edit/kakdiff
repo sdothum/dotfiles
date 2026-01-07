@@ -10,15 +10,13 @@ usage() { usage: "$(basename $0) [-b] <file> <reference>"; exit 1; }
 
 KAK=/usr/bin/kak
 [ -e /usr/local/bin/kak ] && KAK=/usr/local/bin/kak
-[ "$1" = '-b' ] && { BOPT=-b; shift; }
+[ "$1" = '-b' ] && { B=-b; BOPT=--show-no-spaces; shift; }
 COLORDIFF=colordiff  # SEE: ~/.colordiffrc
 
 if exists icdiff ;then
 	if [ $(wc -L "$1" | cut -d' ' -f1) -le 1024 ] ;then  # BUG: icdiff line width limit
 		IC=ic
-		# ICOPT='--line-numbers --truncate --tabsize=3 --color-map=add:red_bold,change:red_bold,subtract:red_bold,description:yellow,line-numbers:black_bold,separator:yellow'  # side-by-side
-		# ICOPT='--line-numbers --truncate --tabsize=3 --color-map=add:yellow_bold,change:yellow_bold,subtract:yellow_bold,description:blue_bold,line-numbers:black_bold,separator:yellow_bold'  # side-by-side
-		ICOPT='--line-numbers --truncate --tabsize=3 --color-map=add:red_bold,change:red_bold,subtract:red_bold,description:blue_bold,line-numbers:black_bold,separator:black_bold'  # side-by-side
+		ICOPT="--line-numbers --truncate --tabsize=3 --cols=$(tput cols) $BOPT --color-map=add:red_bold,change:red_bold,subtract:red_bold,description:blue_bold,line-numbers:black_bold,separator:black_bold"  # BUG: cols calculation required (icdiff width detection not working)
 		COLORDIFF=cat
 	fi
 fi
@@ -26,7 +24,7 @@ fi
 
 export DIFF=/tmp/kakdiff:${1##*/}.diff  # NOTE: export DIFF to nop bundle kakoune-cd SEE: kakrc
 trap "rm $DIFF" EXIT
-diff $BOPT -u $1 $2 >$DIFF
+diff $B -u $1 $2 >$DIFF
 
 [ $? -eq 0 ] && exit 0  # SEE: dirdiff
 ditto diff "$1"

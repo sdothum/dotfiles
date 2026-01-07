@@ -34,10 +34,11 @@ while [ "$1" ] ;do
 	case $1 in
 		-1     ) unset IC ICOPT ;;                                        # standard diff (not side-by-side)
 		-s     ) S=true         ;;                                        # splash messages
-		-b     ) w=-w; diffopt='set diffopt+=iwhite'  ;;                  # ignore whitespace
-		-E     ) w=-E; diffopt='set diffopt+=iwhite'  ;;                  # ignore whitespace
-		-Z     ) w=-Z; diffopt='set diffopt+=iwhite'  ;;                  # ignore whitespace
-		-EZ    ) w=-EZ; diffopt='set diffopt+=iwhite' ;;                  # ignore whitespace
+		-b     ) B=-b           ;;                                        # ignore whitespace
+		# -b   ) w=-w; diffopt='set diffopt+=iwhite'  ;;                  # ignore whitespace NOTE: vimdiff deprecated
+		# -E   ) w=-E; diffopt='set diffopt+=iwhite'  ;;                  # ignore whitespace
+		# -Z   ) w=-Z; diffopt='set diffopt+=iwhite'  ;;                  # ignore whitespace
+		# -EZ  ) w=-EZ; diffopt='set diffopt+=iwhite' ;;                  # ignore whitespace
 		-debug ) debug=true; set -x ;;
 		-d     ) FILTER=$DIRDIFF:filter; touch -d "$2" $FILTER; shift ;;  # timestamp filter
 		*      ) break ;;
@@ -107,7 +108,7 @@ while read file <&3 ;do
 		file="${file#./}"
 		[ $title ] || { ditto -t $(basename $0) "$src/$regex    $target" >>$LOG; title=true; }
 		[ -e "${targetfile}" ] || { ditto ERROR notfound "${targetfile}"; ditto ERROR notfound "${targetfile}" >>$LOG; break; }
-		kakdiff "${file}" "${targetfile}"
+		kakdiff $B "${file}" "${targetfile}"
 		case $? in
 			0 ) ditto match "${file}"; [ $S ] && sleep $delay; break ;;
 			1 ) break ;;

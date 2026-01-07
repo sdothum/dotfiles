@@ -64,7 +64,8 @@ fillchar() {
 
 code()   { sed 's/\t/  /g; /^[^ ]/s/$/`/; /^ /s/$/\\`/; s/^/`/; s/^`$/` `/'; exit; }  # wiki markdown backtick code block
 refold() { [ $1 ] && fold -sw $1 || usage; exit; }
-unfold() { tr '\n' '⁋' | iconv -f latin1 -t utf-8 | sed -r 's/ *â *â/⁋/g; s/ â/ /g; s/(.)â/\1 /g; s/ $//g; s/^â/⁋/g; s/⁋/\n\n/g; $a\'''; exit; }  # HACK: utf-8 conversion required for sed (??) tr '\n' '⁋' -> 'â'
+# unfold() { tr '\n' '⁋' | iconv -f latin1 -t utf-8 | sed -r 's/ *â *â/⁋/g; s/ â/ /g; s/(.)â/\1 /g; s/ $//g; s/^â/⁋/g; s/⁋/\n\n/g; $a\'''; exit; }  # NOTE: $a\'' adds a blank line
+unfold() { tr '\n' '⁋' | iconv -f latin1 -t utf-8 | sed -r 's/ *â *â/⁋/g; s/ â/ /g; s/(.)â/\1 /g; s/ $//g; s/^â/⁋/g; s/⁋/\n\n/g '; exit; }          # HACK: utf-8 conversion required for sed (??) tr '\n' '⁋' -> 'â'
 
 case $action in
 	\`* ) code       ;;  # wiki codeblock wrapper
