@@ -97,6 +97,7 @@ g rack-test
   rustup
 ! rustup-init
 ! addpath $HOME/.cargo/bin
+  taplo
 
 
 = web
