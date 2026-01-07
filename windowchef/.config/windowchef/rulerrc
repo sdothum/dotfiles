@@ -56,7 +56,7 @@ class="xftp"
 
 name="yazi"
 	window @yazi size A4 rotate ;\
-	window snap center
+	window @0.1 snap center
 
 # ........................................................................ terms
 
@@ -123,7 +123,10 @@ class="rawtherapee"
 
 # ...................................................................... viewers
 
+# HACK: for yazi photo display requires initial delay to prevent triggering "menu" from sxhkd "toggle wallpaper"
+
 class="feh"
+	sleep 0.1                             ;\
 	xdotool key space                     ;\
 	sleep 0.1 && xdotool key BackSpace    ;\
 	window @feh snap center
