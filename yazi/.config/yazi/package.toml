@@ -1,37 +1,37 @@
 [[plugin.deps]]
 use = "stelcodes/bunny"
-rev = "a0b4e18"
-hash = "7acba2bb504c67dd7f2da135b88aae1b"
+rev = "7137a44"
+hash = "58bfa473bcac8574400e573787954512"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:smart-enter"
-rev = "5eea960"
+rev = "4e55902"
 hash = "56fdabc96fc1f4d53c96eb884b02a5be"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:chmod"
-rev = "5eea960"
-hash = "a030fe48d91b04341ad2fba9be957df"
+rev = "4e55902"
+hash = "8da0b15a97b5dfd13941d1ecc617ac7c"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:diff"
-rev = "5eea960"
-hash = "47865a70cade14a0b9b6bc6a54f16bdb"
+rev = "4e55902"
+hash = "492e4757f332e29f982556bf507e043c"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:smart-paste"
-rev = "5eea960"
-hash = "a8050052e59f3952abe0b3e27a5843de"
+rev = "4e55902"
+hash = "75fd60b2df7115e0a6ca31a6a804d320"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:toggle-pane"
-rev = "5eea960"
-hash = "d6f60c24d8c0cf57a855bf46115b2502"
+rev = "4e55902"
+hash = "8a7c58225816a163a6e8730c0adafbc8"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:smart-filter"
-rev = "2ad42fa"
-hash = "a9d553bd19a3cd7f4eab3abaac5d67ff"
+rev = "4e55902"
+hash = "407d19bc4fb46eff5fa8ff8337644847"
 
 [flavor]
 deps = []

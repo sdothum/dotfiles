@@ -7,6 +7,8 @@
 keymap = [
 	{ on = "<Esc>",            run = "escape",                                            desc = "Exit visual mode, clear selection, or cancel search" },
 	{ on = "<C-[>",            run = "escape",                                            desc = "Exit visual mode, clear selection, or cancel search" },
+	# { on = "q",              run = "quit",                                              desc = "Quit the process" },
+	# { on = "Q",              run = "quit --no-cwd-file",                                desc = "Quit without outputting cwd-file" },
 	{ on = "Q",                run = "quit",                                              desc = "Quit the process" },
 	{ on = "<C-q>",            run = "quit --no-cwd-file",                                desc = "Quit without outputting cwd-file" },
 	{ on = "<C-c>",            run = "close",                                             desc = "Close the current tab, or quit if it's last" },
@@ -110,17 +112,17 @@ keymap = [
 
 	# Sorting
 	{ on = [ ",", "m" ],       run = [ "sort mtime --reverse=no", "linemode mtime" ],     desc = "Sort by modified time" },
-	{ on = [ ",", "M" ],       run = [ "sort mtime --reverse=yes", "linemode mtime" ],    desc = "Sort by modified time (reverse)" },
+	{ on = [ ",", "M" ],       run = [ "sort mtime --reverse", "linemode mtime" ],        desc = "Sort by modified time (reverse)" },
 	{ on = [ ",", "b" ],       run = [ "sort btime --reverse=no", "linemode btime" ],     desc = "Sort by birth time" },
-	{ on = [ ",", "B" ],       run = [ "sort btime --reverse=yes", "linemode btime" ],    desc = "Sort by birth time (reverse)" },
+	{ on = [ ",", "B" ],       run = [ "sort btime --reverse", "linemode btime" ],        desc = "Sort by birth time (reverse)" },
 	{ on = [ ",", "e" ],       run = "sort extension --reverse=no",                       desc = "Sort by extension" },
-	{ on = [ ",", "E" ],       run = "sort extension --reverse=yes",                      desc = "Sort by extension (reverse)" },
+	{ on = [ ",", "E" ],       run = "sort extension --reverse",                          desc = "Sort by extension (reverse)" },
 	{ on = [ ",", "a" ],       run = "sort alphabetical --reverse=no",                    desc = "Sort alphabetically" },
-	{ on = [ ",", "A" ],       run = "sort alphabetical --reverse=yes",                   desc = "Sort alphabetically (reverse)" },
+	{ on = [ ",", "A" ],       run = "sort alphabetical --reverse",                       desc = "Sort alphabetically (reverse)" },
 	{ on = [ ",", "n" ],       run = "sort natural --reverse=no",                         desc = "Sort naturally" },
-	{ on = [ ",", "N" ],       run = "sort natural --reverse=yes",                        desc = "Sort naturally (reverse)" },
+	{ on = [ ",", "N" ],       run = "sort natural --reverse",                            desc = "Sort naturally (reverse)" },
 	{ on = [ ",", "s" ],       run = [ "sort size --reverse=no", "linemode size" ],       desc = "Sort by size" },
-	{ on = [ ",", "S" ],       run = [ "sort size --reverse=yes", "linemode size" ],      desc = "Sort by size (reverse)" },
+	{ on = [ ",", "S" ],       run = [ "sort size --reverse", "linemode size" ],          desc = "Sort by size (reverse)" },
 	{ on = [ ",", "r" ],       run = "sort random --reverse=no",                          desc = "Sort randomly" },
 
 	# Goto
@@ -301,9 +303,8 @@ keymap = [
 	{ on = "p",                run = "paste",                                             desc = "Paste copied characters after the cursor" },
 	{ on = "P",                run = "paste --before",                                    desc = "Paste copied characters before the cursor" },
 
-	# Undo/Redo/Casefy
-	{ on = "u",                run = [ "undo", "casefy lower" ],                          desc = "Undo, or lowercase if in visual mode" },
-	{ on = "U",                run = "casefy upper",                                      desc = "Uppercase" },
+	# Undo/Redo
+	{ on = "u",                run = "undo",                                              desc = "Undo the last operation" },
 	{ on = "<C-r>",            run = "redo",                                              desc = "Redo the last operation" },
 
 	# Help

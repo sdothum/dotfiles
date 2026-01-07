@@ -16,14 +16,18 @@ light = ""
 # : }}}
 
 
+# : App {{{
+
+[app]
+overall = {}
+
+# : }}}
+
+
 # : Manager {{{
 
 [mgr]
 cwd = { fg = "cyan" }
-
-# Hovered
-hovered         = { reversed = true }
-preview_hovered = { underline = true }
 
 # Find
 find_keyword  = { fg = "yellow", bold = true, italic = true, underline = true }
@@ -83,6 +87,17 @@ unset_alt  = { fg = "red", bg = "gray" }
 # : }}}
 
 
+# : Indicator of hovered file {{{
+
+[indicator]
+parent  = { reversed = true }
+current = { reversed = true }
+preview = { underline = true }
+padding = { open = "", close = "" }
+
+# : }}}
+
+
 # : Status bar {{{
 
 [status]
@@ -99,8 +114,8 @@ perm_exec  = { fg = "cyan" }
 
 # Progress
 progress_label  = { bold = true }
-progress_normal = { fg = "blue", bg = "black" }
-progress_error  = { fg = "red", bg = "black" }
+progress_normal = { fg = "green", bg = "gray" }
+progress_error  = { fg = "yellow", bg = "red" }
 
 # : }}}
 
@@ -124,7 +139,7 @@ separator_style = { fg = "darkgray" }
 [confirm]
 border     = { fg = "blue" }
 title      = { fg = "blue" }
-content    = {}
+body       = {}
 list       = {}
 btn_yes    = { reversed = true }
 btn_no     = {}
@@ -202,7 +217,7 @@ icon_command = ""
 [tasks]
 border  = { fg = "blue" }
 title   = {}
-hovered = { fg = "magenta", underline = true }
+hovered = { fg = "magenta", bold = true }
 
 # : }}}
 
@@ -223,32 +238,24 @@ footer  = { fg = "black", bg = "white" }
 
 [filetype]
 rules = [
-	# Images
+	# Image
 	{ mime = "image/*", fg = "yellow" },
-
 	# Media
 	{ mime = "{audio,video}/*", fg = "magenta" },
-
-	# Archives
+	# Archive
 	{ mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", fg = "red" },
-
-	# Documents
+	# Document
 	{ mime = "application/{pdf,doc,rtf}", fg = "cyan" },
-
-	# Empty files
-	# { mime = "inode/empty", fg = "red" },
-
-	# Special files
-	{ name = "*", is = "orphan", bg = "red" },
-	{ name = "*", is = "exec"  , fg = "green" },
-
-	# Dummy files
-	{ name = "*", is = "dummy", bg = "red" },
-	{ name = "*/", is = "dummy", bg = "red" },
-
+	# Virtual file system
+	{ mime = "vfs/{absent,stale}", fg = "darkgray" },
+	# Special file
+	{ url = "*", is = "orphan", bg = "red" },
+	{ url = "*", is = "exec"  , fg = "green" },
+	# Dummy file
+	{ url = "*", is = "dummy", bg = "red" },
+	{ url = "*/", is = "dummy", bg = "red" },
 	# Fallback
-	# { name = "*", fg = "white" },
-	{ name = "*/", fg = "blue" }
+	{ url = "*/", fg = "blue" }
 ]
 
 # : }}}

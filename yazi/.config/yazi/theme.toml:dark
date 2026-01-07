@@ -22,14 +22,18 @@ light           = ""
 # : }}}
 
 
+# : App {{{
+
+[app]
+overall = {}
+
+# : }}}
+
+
 # : Manager {{{
 
 [mgr]
 cwd             = { fg = "cyan" }
-
-# Hovered
-hovered         = { reversed = true }
-preview_hovered = { underline = true }
 
 # Find
 find_keyword    = { fg = "yellow", bold = true, italic = true, underline = true }
@@ -47,7 +51,7 @@ marker_selected = { fg = "lightyellow", bg = "lightyellow" }
 # Count
 count_copied    = { fg = "white", bg = "green" }
 count_cut       = { fg = "white", bg = "red" }
-count_selected  = { fg = "white", bg = "yellow" }
+count_selected  = { fg = "black", bg = "yellow" }
 
 # Border
 border_symbol   = "│"
@@ -66,8 +70,6 @@ active          = { bg = "blue", bold = true }
 inactive        = { fg = "blue", bg = "gray" }
 
 # Separator
-# sep_inner     = { open = "", close = "" }
-# sep_outer     = { open = "", close = "" }
 sep_inner       = { open = "", close = "" }
 sep_outer       = { open = "█", close = "" }
 
@@ -91,14 +93,23 @@ unset_alt       = { fg = "red", bg = "gray" }
 # : }}}
 
 
+# : Indicator of hovered file {{{
+
+[indicator]
+parent          = { reversed = true }
+current         = { reversed = true }
+preview         = { underline = true }
+padding         = { open = "█", close = "█" }
+
+# : }}}
+
+
 # : Status bar {{{
 
 [status]
 overall         = {}
-# sep_left      = { open = "", close = "" }
-# sep_right     = { open = "", close = "" }
 sep_left        = { open = "█", close = "" }
-sep_right       = { open = "", close = "█" }
+sep_right       = { open = "", close = "█" }
 
 # Permissions
 perm_sep        = { fg = "darkgray" }
@@ -109,8 +120,8 @@ perm_exec       = { fg = "cyan" }
 
 # Progress
 progress_label  = { bold = true }
-progress_normal = { fg = "blue", bg = "black" }
-progress_error  = { fg = "red", bg = "black" }
+progress_normal = { fg = "green", bg = "black" }
+progress_error  = { fg = "yellow", bg = "red" }
 
 # : }}}
 
@@ -120,10 +131,8 @@ progress_error  = { fg = "red", bg = "black" }
 [which]
 cols            = 3
 mask            = { bg = "black" }
-# cand            = { fg = "lightcyan" }
-# rest            = { fg = "darkgray" }
 cand            = { fg = "lightcyan", bold = true }
-rest            = { fg = "red", bold = true }
+rest            = { fg = "darkgray" }
 desc            = { fg = "lightmagenta" }
 separator       = "  "
 separator_style = { fg = "darkgray" }
@@ -136,7 +145,7 @@ separator_style = { fg = "darkgray" }
 [confirm]
 border          = { fg = "blue" }
 title           = { fg = "blue" }
-content         = {}
+body            = {}
 list            = {}
 btn_yes         = { reversed = true }
 btn_no          = {}
@@ -235,46 +244,43 @@ footer          = { fg = "black", bg = "white" }
 
 [filetype]
 rules = [
-	# Images
-	# { mime = "image/*", fg = "yellow" },
-	{ mime = "image/*", fg = "white" },
+	# Image
+	{ mime = "image/*", fg = "yellow" },
 
 	# Media
-	# { mime = "{audio,video}/*", fg = "magenta" },
-	{ mime = "{audio,video}/*", fg = "white" },
+	{ mime = "{audio,video}/*", fg = "magenta" },
 
-	# Archives
+	# Archive
 	{ mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", fg = "red" },
 
-	# Documents
-	# { mime = "application/{pdf,doc,rtf}", fg = "cyan" },
-	{ mime = "application/{pdf,doc,rtf}", fg = "white" },
+	# Document
+	{ mime = "application/{pdf,doc,rtf}", fg = "cyan" },
 
-	# Empty files
+	# Virtual file system
+	{ mime = "vfs/{absent,stale}", fg = "white" },
+
+	# Special file
+	{ url = "*", is = "orphan", bg = "red" },
+	{ url = "*", is = "exec", fg = "green", bold = true },
+
+	# Dummy file
+	{ url = "*", is = "dummy", bg = "red" },
+	{ url = "*/", is = "dummy", bg = "red" },
+
+	# Empty file
 	{ mime = "inode/empty", fg = "red" },
-
-	# Special files
-	{ name = "*", is = "orphan", bg = "red" },
-	# { name = "*", is = "exec"  , fg = "green" },
-	{ name = "*", is = "exec"  , fg = "green", bold = true },
-
-	# Dummy files
-	{ name = "*", is = "dummy", bg = "red" },
-	{ name = "*/", is = "dummy", bg = "red" },
 
 	# Broken symbolic link
 	{ name = "*", is = "orphan", fg = "red", crossed = true },
 	{ name = "*/", is = "orphan", fg = "red", crossed = true },
 
-	# Symbolic links
+	# Symbolic link
 	{ name = "*", is = "link", fg = "cyan", bold = true },
 	{ name = "*/", is = "link", fg = "cyan", bold = true },
 
 	# Fallback
-	# # { name = "*", fg = "white" },
-	# { name = "*/", fg = "blue" },
-	{ name = "*", fg = "white" },
-	{ name = "*/", fg = "yellow", bold = true },
+	{ url = "*", fg = "gray" },
+	{ url = "*/", fg = "yellow", bold = true }
 ]
 
 # : }}}
@@ -977,7 +983,6 @@ conds = [
 
 	# Fallback
 	{ if = "dir", text = "" },
-	# { if = "exec", text = "" },
 	{ if = "exec", text = "" },
 	{ if = "!dir", text = "" },
 ]
