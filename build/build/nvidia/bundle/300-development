@@ -67,6 +67,7 @@
   cpanminus           # perl-HTML dependency
   perl-Curses
 d s perl-HTML-Strip
+  rakudo
 
 
 = python
