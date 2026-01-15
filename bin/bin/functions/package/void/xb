@@ -37,7 +37,7 @@ $(basename $0)  [/ | f** | [-]d | h] [<package> | <file>**]
 }
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# NOTE: dynamic (wm script) and init (dinit) symlink changes cause these packages to fail database check
+# NOTE: dynamic (wm script) and init symlink changes cause these packages to fail database check
 IGNORE='pinentry|runit-void'
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
