@@ -87,7 +87,7 @@ deactivated()  { [ -e $GROUP:$1:deactivated ]; }
 # ................................................................... Draw panel
 
 handlebar() {
-	lemonbar -d -n "lemonbar:$fifo"                         \
+	lemonbar -d -n "lemonbar:$fifo" -a 0                             \
 		-g ${panel_width}x$PANEL_HEIGHT+$panel_offsetX+$panel_offsetY \
 		-u $PANEL_UNDERLINE                                           \
 		-f "$PANEL_FONT:size=$fontsize" -F "$DEFAULT_FG" -B "$DEFAULT_BG"
