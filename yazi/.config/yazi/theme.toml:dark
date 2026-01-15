@@ -99,7 +99,7 @@ unset_alt       = { fg = "red", bg = "gray" }
 parent          = { reversed = true }
 current         = { reversed = true }
 preview         = { underline = true }
-padding         = { open = "█", close = "█" }
+padding         = { open = "█", close = "" }
 
 # : }}}
 

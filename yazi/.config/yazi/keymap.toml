@@ -405,7 +405,7 @@ desc = "Diff the selected with the hovered file"
 
 [[mgr.prepend_keymap]]
 on     = "<C-y>"
-run    = ''' shell 'dragon-drop --all --and-exit $@' '''
+run    = "shell -- dragon-drop --all --and-exit -icon-only --on-top %s1"
 desc   = "Drag 'n drop popup"
 
 # ................................................................. smart filter
@@ -453,19 +453,19 @@ desc = "Maximize or restore the preview pane"
 
 [[mgr.prepend_keymap]]
 on     = "T"
-run    = ''' shell --orphan 'term' '''
+run    = "shell --orphan 'term'"
 desc   = "Term window"
 
 # ...................................................... eject removable devices
 
 [[mgr.prepend_keymap]]
 on     = "U"
-run    = ''' shell --orphan 'eeject' '''  # for ereaders
+run    = "shell --orphan 'eeject'"  # for ereaders
 desc   = "Eject removable devices"
 
 # .......................................................... restore yazi window
 
 [[mgr.prepend_keymap]]
 on     = "<C-v>"
-run    = ''' shell 'window size A4 rotate && window snap center' '''
+run    = "shell 'window size A4 rotate && window snap center'"
 desc   = "Resize yazi window"
