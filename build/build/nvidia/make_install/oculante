@@ -5,8 +5,9 @@
 
 # ..................................................................... oculante
 
-sudo xbps-xbps-install nasm
+sudo xbps-install nasm
 
+ditto WARN cmake "downgrade to version 3.x to force ShaderC backend if build fail on spriv"
 cargo install oculante
 
 # vim: set ft=sh: #
