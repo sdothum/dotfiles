@@ -925,8 +925,17 @@ Generate(\$1);
 }
 
 f_descending() {
-	Yshift=-208
-	Ydepth=32
+	if [ $T_DEPTH ] ;then  # currently only tested with shape=576
+		# Yshift=-52
+		# Ydepth=12         # descender to match depth of t_descending (exact)
+		Yshift=-134
+		Ydepth=22
+		# Yshift=-151
+		# Ydepth=24
+	else
+		Yshift=-208
+		Ydepth=32
+	fi
 	case $shape in
 		576 ) ;;
 		600 ) Yshift=-200; Ydepth=36 ;;  # web font extended cap height

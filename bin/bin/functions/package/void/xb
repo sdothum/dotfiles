@@ -139,15 +139,26 @@ downgrade() {
 	sudo xdowngrade $downgrade
 }
 
-installed() { file=$(stat -c '%x %n' $CACHE/$1* 2>/dev/null | sort | tail -1); ditto ${file%% *} $(echo ${file##*/} | sed 's/.xbps.sig2//'); }
-version()   { sed 's|^.*/||; s/^[+a-zA-Z-]*//; s/.x.*//'; }  # trim path*, package name and extension*
-package()   { grep "$1$package-[0-9]*[._][0-9]*"; }         # package name template
-latest()    { package=$(echo $1 | sed 's/-[0-9].*//'); xbps-query -Rs "$package-" | cut -d' ' -f2 | package '^' | version; }
-cached()    { package=$(echo $1 | sed 's/-[0-9].*//'); xb h "$package-" | package '/var/cache/xbps/' | tail -1 | version; }
-status()    { current=$(echo $1 | version); latest=$(latest $1); cached=$(cached $1); [ "$current" != "$latest" ] && echo -n "${CYAN} ${latest}"; [ "$cached" != "$current" ] && echo -n "$NOCOLOR  ($cached)"; }
 scandb()    { sudo xbps-pkgdb -a 2>&1 | grep -Ev "$IGNORE"; }
 check()     { [ $(scandb | wc -l) -eq 0 ] || { scandb; false; } }
 repair()    { for i in $(scandb | cut -d: -f2) ;do sudo xbps-install -fy $i ;done }
+
+installed() { file=$(stat -c '%x %n' $CACHE/$1* 2>/dev/null | sort | tail -1); ditto ${file%% *} $(echo ${file##*/} | sed 's/.xbps.sig2//'); }
+version()   { sed 's|^.*/||; s/^[+a-zA-Z-]*//; s/.x.*//'; }  # trim path*, package name and extension*
+latest()    { xbps-query -Rs "$package-" | cut -d' ' -f2 | grep "^$package-[0-9]" | version; }
+cached()    { find $CACHE -name "$package-*xbps" | grep "$CACHE/$package-[0-9]" | sort -V | tail -1 | sed 's|.*/||; s/.xbps$//' | version; }
+
+status() {
+	current=$(echo $1 | version)
+	package=$(echo $1 | sed 's/-[0-9].*//')
+	latest=$(latest)
+	cached=$(cached)
+	if [ "$cached" != "$current" ] ;then
+		[ "$cached" != "$latest" ] && echo -n "${NOCOLOR}  $cached${CYAN}  (${latest})" || echo -n "${CYAN}  ${latest}"
+	else
+		[ "$cached" != "$latest" ] && echo -n "${CYAN}  (${latest})"
+	fi
+}
 
 case $action in
 	backup     ) rsync -av $CACHE $BACKUP ;;
