@@ -111,7 +111,7 @@ setm %{ format : section  }
 
 # info-notifier %{user-modes} %{<space>   edit\n<ret>     buffer\n#         format}
 nop %sh{ notify 10 user-modes "&lt;<b>space</b>&gt;\tedit\n&lt;<b>ret</b>&gt;\tbuffer\n<b>#</b>\tformat" }
-if %{ [ "$(xdotool getactivewindow getwindowclassname)" != 'aerc' ] %{  # avoid polluting aerc "To" field
+if %{ [ "$(xdotool getactivewindow getwindowclassname)" != 'aerc' ] } %{  # avoid polluting aerc "To" field
 	nop %sh{ sleep 0.2; xdotool key g c }                                # center cursor HACK: refresh stale cursorline at startup
 }
 
