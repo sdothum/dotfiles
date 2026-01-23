@@ -6,13 +6,8 @@
 
 # ........................................................ Unhide hidden windows
 
-finished() { [ $(ls -1 $HIDDEN* 2>/dev/null | wc -l) -eq 0 ]; }
-
-windows() {
-	for i in $(ls -1 $HIDDEN*) ;do
-		sed "s/:/  ^$SEP /" $i
-	done 
-}
+windows()  { for i in $(ls -1 $HIDDEN* 2>/dev/null) ;do sed "s/:/  ^$SEP /" $i ;done  }
+finished() { [ -z "$(windows)" ]; }
 
 finished && exit
 while window=$(windows | column -s^ -t  | rmenu 'raise' -no-custom) || exit ;do

@@ -6,7 +6,7 @@
 
 # ........................................................... Keybourd shortcuts
 
-# NOTE: in lieu of (python) quikeys no longer being( menu su)
+# NOTE: in lieu of quikeys no longer working with python3
 
 export COLSEP=⁋  # NOTE: '^' used for kak split regex SEE: menu (picklist)
 
@@ -28,10 +28,17 @@ k    ⁋K1Y 0K4
 " | picklist
 }
 
-string=$(shortcuts | rmenu 'Insert' $cmd -no-custom) || exit
+string=$(shortcuts | rmenu 'Insert' -no-custom) || exit
 
-[ "${string%%^*}" ] || { xdotool type '[^\n]*'; exit; }  # HACK: to avoid shell globbing of '*'
+[ "${string%%^*}" ] || { xdotool type '[^\n]*'; exit; }             # HACK: to avoid shell globbing of '*'
 
-xdotool type $(echo "$string" | sed "s/.*$SEP //")
+case "${string%% *}" in
+	s | f ) xdotool type $(echo "$string" | sed "s/.*$SEP //")       # non-latin1 characters
+		;;
+	*     )
+		for i in $(echo "$string" | sed "s/.*$SEP //; s/./& /g") ;do  # NOTE: to avoid xdotool type keystroke delay
+			xdotool key $(printf "U%x" "'$i")
+		done ;;
+esac
 
 # kak: filetype=sh

@@ -44,8 +44,7 @@ tape() {
 		if [ "${tic%%:*}" -lt 10 ] ;then  # hours 0 - 9, cycle aligns on ten second intervals
 			len=11
 			pos=${tic##*:}
-			# pos=$(( ${pos%??} % 10 ))    # (??) crashes in dash (memory leak on arm?)
-			pos=$(echo "${pos%??} % 10" | bc)
+			pos=$(( ${pos%??} % 10 ))
 			[ $pos = 0 ] && pos=10
 		else                              # hours 10 - 12, format string continously cycles
 			len=12
@@ -112,8 +111,6 @@ panel() {
 
 # ......................................................................... FIFO
 
-# initialize fifo
-[ -e $PANEL_FIFO:$fifo ] && rm -f $PANEL_FIFO:$fifo
 mkfifo $PANEL_FIFO:$fifo
 
 # note physical linebreaks for each format specification (to accomodate slow processors, notably arm)

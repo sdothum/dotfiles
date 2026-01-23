@@ -31,7 +31,7 @@ vacuum() {
 }
 
 desktop_focus() {
-	winid=$(pfw 2>/dev/null)  # trap windowchef autostart initialization errors
+	winid=$(pfw 2>/dev/null) || return  # trap windowchef autostart initialization errors
 	for i in $(ag --nocolor -l $winid $GROUP:?) ;do
 		echo $winid >$i:focus
 		desktop ${i##*:}

@@ -13,16 +13,14 @@ export PARENT=$(which parent)
 
 export SHELL=/usr/bin/dash
 export XDG_CONFIG_HOME=$HOME/.config
-export ROOT=${ROOT:-/tmp}
 export WM=$(cat $HOME/.windowmanager)
-export WME=$ROOT/$WM
+export WME=${TMP:-/tmp}/$WM
 export GROUP=$WME:group
 export HIDDEN=$WME:hidden
 export WINFO=$WME:window
 export SESSION=$HOME/.session
-export UI=$SESSION/$WM
 
-echo $DISPLAY >$SESSION/display  # for cron notifications, see notify
+echo $DISPLAY >$SESSION/display  # for cron notifications SEE: notify
 
 # .................................................................... WM states
 
@@ -36,9 +34,9 @@ echo $PANEL_FIFO:0 >$PANEL_FIFO  # set by draw panel but needed beforehand
 
 # ............................................................... Session states
 
-# wm states, see gaps
-export DESKTOP=$SESSION/desktop
-export SETROOT=$DESKTOP:setroot
+# wm states SEE: gaps
+export SPANEL=$SESSION/panel
+export SETROOT=$SESSION/setroot
 
 # application states
 export FONTSIZE=$SESSION/fontsize
@@ -50,9 +48,9 @@ export PALETTE=$HOME/images/colors
 export WALLCOLOR=$PALETTE/default
 export COLOR=$WALLCOLOR:color
 export WALLPAPER=$HOME/images/backgrounds/default
-export BACKGROUND=$HOME/images/default  # ln to WALLPAPER or WALLCOLOR, see draw root
+export BACKGROUND=$HOME/images/root  # ln to WALLPAPER or WALLCOLOR SEE: draw root
 
 export BLACKBOARD=$WME:blackboard
-export THEME=$WME:theme
+export THEME=$SPANEL:theme
 
 # kak: filetype=sh

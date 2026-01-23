@@ -10,8 +10,8 @@
 
 remove() {
 	for i in $(ag --nocolor -l $1 $GROUP:*) ;do
-		grep -v $1 $i >$GROUP:swap
-		mv $GROUP:swap $i
+		swap=$(grep -v $1 $i)
+		echo "$swap" >$i
 	done
 	[ $2 ] || rm -f $WINFO:$1  # rm unless add to new group
 }

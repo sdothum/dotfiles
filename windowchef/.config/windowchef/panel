@@ -10,7 +10,6 @@
 # Usage: draw <msg>, see functions/panel
 
 DOTDIR=$(dirname $0)/functions/draw
-SPANEL=$SESSION/panel   # toggle state
 [ -e $SPANEL ] || exit  # no panel
 PANELTOP=$SPANEL:top
 STARTREK=$SPANEL:startrek
@@ -34,7 +33,7 @@ OCCUPIED_FG=$FREE_FG
 
 # initialize (for overlay redraw), see draw root
 # $STARTREK == ['', #<color>, $ACTIVE_FG, ..] 
-[ -s $STARTREK ] && ICANDY="$(cat $STARTREK)" || ICANDY="$DEFAULT_FG"
+[ -s $STARTREK ] && ICANDY="#$(cat $STARTREK)" || ICANDY="$DEFAULT_FG"
 
 transparency() { echo "#$1${2#\#}"; }  # Usage: transparency <amount> #<rrggbb>
 
@@ -86,11 +85,14 @@ deactivated()  { [ -e $GROUP:$1:deactivated ]; }
 
 # ................................................................... Draw panel
 
+# initialize fifo
+mkfifo() { [ -e $1 ] && rm -f $1; /bin/mkfifo $1; }
+
 handlebar() {
 	lemonbar -d -n "lemonbar:$fifo" -a 0                             \
 		-g ${panel_width}x$PANEL_HEIGHT+$panel_offsetX+$panel_offsetY \
 		-u $PANEL_UNDERLINE                                           \
-		-f "$PANEL_FONT:size=$fontsize" -F "$DEFAULT_FG" -B "$DEFAULT_BG"
+		-f "$PANEL_FONT:size=$fontsize" -F "$DEFAULT_FG" -B "$DEFAULT_BG" 2>/dev/null  # (??) invalid color errors.. from transparency?
 }
 
 msg=$1

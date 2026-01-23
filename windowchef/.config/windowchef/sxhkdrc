@@ -94,7 +94,6 @@ super + {_,shift} + i
 
 super + {_,shift} + e
 	waitron {window_stack_toggle, window_focus $(pfw)}
-	
 
 super + w
 	window group remove        ;\
@@ -245,9 +244,7 @@ super + ctrl + shift + space
 # HACK: bypass QT apps to avoid interference with mouse menus
 
 ~button1
-	xdotool getwindowclassname $(pfw) | grep -q -E "calibre|fontmatrix" && exit ;\
-	pfw >$WME:mouse                                                             ;\
-	waitron window_focus $(cat $WME:mouse)
+	waitron window_focus $(pfw)
 
 # ..................................................................... keyboard
 
@@ -291,8 +288,8 @@ super + shift + a
 super + {_,shift} + o
 	menu {scripts, projects}
 
-super + shift + {u,v,colon}
-	menu {passwords, media, system}
+super + shift + {u,v}
+	menu {passwords, media}
 
 super + shift + y
 	menu abook
@@ -310,11 +307,13 @@ super + alt + t
 
 # ....................................................................... system
 
-super + v
-	xdotool search --name btop windowkill || btop
+# NOTE: super + shift + colon == super + colon
 
-super + ctrl + v
-	nvidia_fan toggle
+super + shift + colon
+	menu system
+
+super + ctrl + colon
+	xdotool search --name btop windowkill || btop
 
 # ........................................................................ music
 

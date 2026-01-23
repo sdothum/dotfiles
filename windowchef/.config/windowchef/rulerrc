@@ -151,9 +151,11 @@ class="zathura"
 # ..................................................................... browsers
 
 class="chromium"
+	window desktop $(chef desktop "COMM") ;\
 	window size monocle
 
 class="Firefox"
+	window desktop $(chef desktop "COMM") ;\
 	window size monocle
 
 # don't attach browsers to server groups
@@ -169,7 +171,7 @@ class="qutebrowser"
 # single purpose hangouts browser (for zoom and custom font control) SEE: hangouts script
 
 class="Surf"
-	window '@@cgDIS:T | Gmail' URL tile 4 1 && window desktop $(chef desktop "COMM")
+	window '@@cgDIS:T | ' URL tile 4 1 && window desktop $(chef desktop "COMM")
 
 # ....................................................................... system
 

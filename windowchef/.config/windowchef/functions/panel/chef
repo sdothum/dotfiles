@@ -11,9 +11,9 @@
 # NOTE: this script is executed via "draw panel" SEE: also restore panel
 
 [ $1 ] && panel_offsetY=$1
-panel_len=${panel_len:-275}  # HACK: arbitrary display length (for wide screen monitor)
+panel_len=${panel_len:-275}          # HACK: arbitrary display length (for wide screen monitor)
 
-if [ "$panel_offsetY" = "0" ] ;then   # (??) use of -eq fails comparison
+if [ "$panel_offsetY" = "0" ] ;then  # (??) use of -eq fails comparison
 	SEP="  %{F$INACTIVE_FG}%{F-}  "  # top bar
 else
 	SEP="  %{F$INACTIVE_FG}%{F-}  "  # bottom bar
@@ -41,7 +41,7 @@ active_window() {
 	fi
 	if has_nilgroup ;then
 		if has_hidden ;then
-			title="${title}  -$(nilgroup)"  # group -1 windows
+			title="${title}  -$(nilgroup)"      # group -1 windows
 		else
 			title="${title}${SEP}-$(nilgroup)"  # group -1 windows
 		fi
@@ -65,10 +65,8 @@ panel() {
 
 # ......................................................................... FIFO
 
-# initialize fifo
-[ -e $PANEL_FIFO:$fifo ] && rm -f $PANEL_FIFO:$fifo
 mkfifo $PANEL_FIFO:$fifo
-echo $PANEL_FIFO:$fifo >$PANEL_FIFO  # SEE: refresh_panel
+echo $PANEL_FIFO:$fifo >$PANEL_FIFO            # SEE: refresh_panel
 
 # event driven panel update
 xtitle -sf 'X%s\n' >$PANEL_FIFO:$fifo 2>/dev/null &

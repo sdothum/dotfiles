@@ -92,8 +92,6 @@ panel() {
 
 # ......................................................................... FIFO
 
-# initialize fifo
-[ -e $PANEL_FIFO:$fifo ] && rm -f $PANEL_FIFO:$fifo
 mkfifo $PANEL_FIFO:$fifo
 
 # NOTE: mpc does not output current if the playlist is empty

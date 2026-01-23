@@ -22,7 +22,7 @@ count() {
 
 # ................................................................... Window ids
 
-winids() { wmctrl -l 2>/dev/null | cut -d' ' -f1; }  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
+winids() { wmctrl -l 2>/dev/null | cut -d' ' -f1 | sort; }  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
 
 ids() {
 	case $1 in
