@@ -10,6 +10,9 @@ usage() { usage: "rice $(basename $0) <color>"; }
 
 COLORS=$PALETTE/.theme
 
-[ $1 ] && grep "^$1.$(cat $THEME)" $COLORS | cut -d= -f2 || usage
+case $CHEF in
+	'' ) [ $1 ] && grep "^$1.$(cat $THEME)" $COLORS | cut -d= -f2 || usage ;;
+	*  ) [ $1 ] && grep "^$1.$(LS $THEME)"  $COLORS | cut -d= -f2 || usage ;;
+esac
 
 # kak: filetype=sh

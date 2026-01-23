@@ -6,7 +6,8 @@
 
 # .............................................................. Google hangouts
 
-HANGOUTS=$SESSION/hangouts
+HANGOUTS=${SESSION:-$HOME/.session}/hangouts
+# BROWSER=luakit
 BROWSER=surf
 export NO_PROXY="*"
 URL=$(cat $HANGOUTS)
