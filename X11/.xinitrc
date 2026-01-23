@@ -108,8 +108,9 @@ xexec() {
 	pkill -f "pavucontrol"
 	pkill -f "pulseaudio"
 	export ROOT=${ROOT:-/tmp}
-	mv -f $ROOT/$1.log $ROOT/$1.last.log 2>/dev/null
-	rm -f $ROOT/$1:*
+	mv -f  $ROOT/$1.log $ROOT/$1.last.log 2>/dev/null
+	rm -f  $ROOT/$1:*
+	rm -rf $ROOT/$1/*  # windowchef tree
 	# enable debug trace by referencing log file
 	export TRACE=$ROOT/$1.log
 	# exec ck-launch-session dbus-launch --sh-syntax --exit-with-x11 $1 >$ROOT/$1.log 2>&1
