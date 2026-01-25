@@ -1,4 +1,4 @@
-#!/usr/bin/dash
+#!/usr/bin/bash
 # sdothum - 2016 (c) wtfpl
 
 # Edit
@@ -30,7 +30,18 @@ diff $B -u $1 $2 >$DIFF
 ditto diff "$1"
 
 ${IC}diff ${ICOPT} "$1" "$2" | $COLORDIFF | pager
-ifno "edit ${file}" && exit 1 || $KAK $DIFF $1 $2
-exit 2                  # SEE: dirdiff cycle control
+ifdiff "edit ${file}"
+case $? in
+	0 ) exit 1 ;;
+	1 ) $KAK $DIFF $1 $2; exit 2 ;;  # SEE: dirdiff cycle control
+esac
+
+ifdiff 'copy'
+case $? in
+	2 ) exit 2     ;;
+	3 ) copy $1 $2 ;;
+	4 ) copy $2 $1 ;;
+	5 ) swap $1 $2 ;;
+esac
 
 # kak: filetype=sh

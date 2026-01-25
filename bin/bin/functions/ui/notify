@@ -47,10 +47,11 @@ if [ $console ] ;then
 	[ "$TWO" ] && echo "${color1}==> $ONE\n${color2}  -> $TWO${NOCOLOR}" || echo "${color1}==> $ONE${NOCOLOR}"
 else
 	[ $X ] || { console && exit; }
-	case $CHEF in
-		'' ) [ -e $SESSION/display ] && DISPLAY=$(cat $SESSION/display) ;;  # allow cron jobs to  display to X
-		*  ) [ -e $SESSION/display ] && DISPLAY=$(LS $SESSION/display)  ;;
-	esac
+	# case $CHEF in
+	# 	'' ) [ -e $SESSION/display ] && DISPLAY=$(cat $SESSION/display) ;;  # allow cron jobs to  display to X
+	# 	*  ) [ -e $SESSION/display ] && DISPLAY=$(LS $SESSION/display)  ;;
+	# esac
+	[ -e $SESSION/display ] && DISPLAY=$(cat $SESSION/display)  # allow cron jobs to  display to X
 
 	case $# in
 		1 )

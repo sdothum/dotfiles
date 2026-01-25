@@ -21,7 +21,7 @@ usage() { echo "$(basename $0) [back'up KOReader library]
 > [=' left/right] <margin>
 > [t'op] <margin>
 > [b'ottom] <margin>
-> [sync top/bottom m'argins] <0|1>
+> [sync top/bottom m'argins] <0 | 1>
 
 > [%' line spacing] <percent>
 > [w'ord spacing 100]
@@ -31,13 +31,13 @@ usage() { echo "$(basename $0) [back'up KOReader library]
 > [header/'footer] <font>
 > [font s'ize] <size>
 
-> [highl'ight] <invert|lighten>
+> [highl'ight] <invert | lighten>
 > [h'yphenate]
 > [soft-'hyphenation]
 
 > [font g'amma] <gamma>, { contrast:gamma, 1.0:15, 1.45:25, 1.9:30, 2.5:36 }
-> [i'nverse page turn] <true|false>
-> [p'ath conversion] <kobo|supernote>" | usage:
+> [i'nverse page turn] <true | false>
+> [p'ath conversion] <kobo | supernote>" | usage:
 	[ -e $KOBO ] || [ -e $SUPERNOTE ] || ditto note "ensure KOReader device is mounted"
 	exit 1
 }

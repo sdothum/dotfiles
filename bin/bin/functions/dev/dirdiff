@@ -6,7 +6,7 @@
 
 # ..................................................... Recursive directory diff
 
-usage() { usage: "$(basename $0) [-[1 | s | b | E | Z | EZ | debug]] [-d <date>] <.[/]|[./]source> [<repo|target>] [<regex>]"; exit 1; }
+usage() { usage: "$(basename $0) [-[1 | p | s | b | x | E | Z | EZ | debug]] [-d <date>] <.[/]|[./]source> [<repo|target>] [<regex>]"; exit 1; }
 
 # NOTE: dirdiff quickly highlights project source code changes against a (separate) snapshot directory
 #       ./                    -> do not match source path against target
@@ -18,7 +18,7 @@ usage() { usage: "$(basename $0) [-[1 | s | b | E | Z | EZ | debug]] [-d <date>]
 # SEE: ${T} clauses for explicit source file type handling gymnastics
 
 # ignore='backups|debian|\.history|makepkg|nixos|plugged-custom|qmk_firmware|root|snippets|undo|vps'
-ignore='backups|debian|\.history|makepkg|nixos|plugged-custom|root|snippets|undo|vps'
+ignore='backups|debian|\.history|makepkg|nixos|plugged-custom|snippets|undo|vps'
 
 SNAPSHOT=${SNAPSHOT:-/home/depot/dotfiles}  # default project snapshot
 DIRDIFF=/tmp/dirdiff
@@ -30,15 +30,14 @@ delay=0.001  # match message animation interval
 
 # Runtime ......................................................................
 
+X=true
 while [ "$1" ] ;do
 	case $1 in
 		-1     ) unset IC ICOPT ;;                                        # standard diff (not side-by-side)
+		-p     ) P=true         ;;                                        # pause on match or notfound (to copy file)
 		-s     ) S=true         ;;                                        # splash messages
 		-b     ) B=-b           ;;                                        # ignore whitespace
-		# -b   ) w=-w; diffopt='set diffopt+=iwhite'  ;;                  # ignore whitespace NOTE: vimdiff deprecated
-		# -E   ) w=-E; diffopt='set diffopt+=iwhite'  ;;                  # ignore whitespace
-		# -Z   ) w=-Z; diffopt='set diffopt+=iwhite'  ;;                  # ignore whitespace
-		# -EZ  ) w=-EZ; diffopt='set diffopt+=iwhite' ;;                  # ignore whitespace
+		-x     ) unset X        ;;                                        # do not apply .agignore and ignore filters
 		-debug ) debug=true; set -x ;;
 		-d     ) FILTER=$DIRDIFF:filter; touch -d "$2" $FILTER; shift ;;  # timestamp filter
 		*      ) break ;;
@@ -89,7 +88,11 @@ esac
 # File set .....................................................................
 
 # to handle filenames containing spaces
-[ $T ] && echo "$source" >$FILES || find -L ./ -type f | exclude | grep -E -v $ignore | grep "$regex" >$FILES
+if [ $X ] ;then
+	[ $T ] && echo "$source" >$FILES || find -L ./ -type f | exclude | grep -E -v $ignore | grep "$regex" >$FILES
+else
+	[ $T ] && echo "$source" >$FILES || find -L ./ -type f | grep "$regex" >$FILES
+fi
 [ -s $FILES ] || usage
 src=${source#$HOME/stow/*/}
 src=\~/${src#$HOME/}
@@ -107,7 +110,7 @@ while read file <&3 ;do
 		[ $S ] && clear
 		file="${file#./}"
 		[ $title ] || { ditto -t $(basename $0) "$src/$regex    $target" >>$LOG; title=true; }
-		[ -e "${targetfile}" ] || { ditto ERROR notfound "${targetfile}"; ditto ERROR notfound "${targetfile}" >>$LOG; break; }
+		[ -e "${targetfile}" ] || { ditto ERROR notfound "target: ${targetfile}"; ditto ERROR notfound "${targetfile}" >>$LOG; [ $P ] && ifno "fill missing file" || copy ${file} ${targetfile}; break; }
 		kakdiff $B "${file}" "${targetfile}"
 		case $? in
 			0 ) ditto match "${file}"; [ $S ] && sleep $delay; break ;;
