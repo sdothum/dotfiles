@@ -25,11 +25,12 @@ brighten=-0.025
 modulo=3    # modulo of random number for random desktop wallpaper
 delay=0.25  # frame latency window
 
-# set background image
 pick_image() {
-	# (sleep 0.25; xdotool key Super+g) &
-	# (sleep 0.35; window size moncle) &  # see rulerrc
-	/usr/bin/feh -W 1690 --stretch --thumbnails -X -E 108 -y 192 -B black --cache-thumbnails --scale-down -r --start-at $(lname $WALLPAPER) -A "ln -sf %f $WALLPAPER && xdotool key q" $1 2>/dev/null  # ignore .theme file warnings
+	/usr/bin/feh -W $1 --stretch --thumbnails -X -E 108 -y 192 \
+		-B black --cache-thumbnails --scale-down                \
+		-r --start-at $(lname $2)                               \
+		-A "ln -sf %f $2 && xdotool key q"                      \
+		${2%/*} 2>/dev/null  # ignore .theme file warnings
 }
 
 # ....................................................... Set colored background
@@ -42,9 +43,9 @@ color() {
 		color=$(rand h)
 		rm -f $SETROOT
 	fi
+	[ $blackboard ] || echo $color >$RGB
 	# setroot --blank-color "#$color" 2>/dev/null
 	hsetroot -solid "#$color" 2>/dev/null
-	[ $blackboard ] || echo $color >$COLOR                                       # blackboard reserved for media playback background
 	[ $2 ] || { luminance -$color && echo light >$THEME || echo dark >$THEME; }  # luminance set by menu root
 }
 
@@ -52,7 +53,7 @@ select_color() {
 	notify time=5 low 'Root Background' '<Space>  Show next\n<Enter>  Select color'
 	lname $WALLCOLOR >/dev/null || ln -sf $(find $PALETTE -name '*.png' | head -1) $WALLCOLOR
 	ln -sf $WALLCOLOR $BACKGROUND
-	pick_image $(find $PALETTE -name '*.png')
+	pick_image 960 $WALLCOLOR
 	color $(basename $(readlink -f $WALLCOLOR) .png)
 }
 
@@ -61,21 +62,19 @@ select_color() {
 wallpaper() {
 	[ -e $WALLPAPER ] || ln -sf $(find ${WALLPAPER%/default} -iname '*.png' | head -1) $WALLPAPER
 	ln -sf $WALLPAPER $BACKGROUND
-	rm -f $COLOR
-	rm -f $THEME
+	rm -f $RGB
 	invert_panel notify  # keybind message
 }
 
 select_wallpaper() {
 	notify time=5 low 'Desktop Wallpaper' '<Space>  Show next\n<Enter>  Select image'
 	wallpaper
-	pick_image ${WALLPAPER%/default}/${WALL#.} 2>/dev/null  # ignore .theme file warnings
+	pick_image 1690 $WALLPAPER
 }
 
 shuffle() {
 	ln -sf $(find ${WALLPAPER%/default} -name '*.png' | shuf -n1) $WALLPAPER
-	rm -f $COLOR
-	rm -f $THEME
+	rm -f $RGB
 }
 
 # ...................................................................... Setroot
@@ -112,6 +111,6 @@ root() {
 	[ $XSETROOT = xwallpaper ] && echo "--screen $1 --zoom $WALLPAPER" || echo "-cover $WALLPAPER";
 }
 
-[ $blackboard ] || [ -e $COLOR ] || $XSETROOT $(root 0) &
+[ $blackboard ] || [ -e $RGB ] || $XSETROOT $(root 0) >/dev/null &
 
 # kak: filetype=sh

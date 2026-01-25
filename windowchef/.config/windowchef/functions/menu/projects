@@ -19,12 +19,14 @@ EDITOR=${EDITOR:-kak}
 PROJECTS=$MENU/.projectsrc
 history=$HISTORY/projects
 
+[ -e $PROJECTS ] || echo '<tag>* :: <file glob> | <find ..> | <shell command>' >$PROJECTS
+
 projects() { sed "s/  *::  */^$SEP /" $PROJECTS | mhistory projects | column -s^ -t | sed "2i$(X $EDIT)"; }
 
 while files=$(projects | rmenu 'Edit Project' -no-custom) || exit ;do
 	case ${files#$(X)} in
 		"$EDIT" ) $EDITOR WAIT $PROJECTS $history ;;
-	
+
 		*       )
 			mhistory projects "$(echo $files | sed "s/ *$SEP/^$SEP/")"
 			eval echo ${files#*$SEP} | tr ' ' '\n' | exclude | sort | xargs -r $EDITOR

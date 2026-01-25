@@ -10,10 +10,10 @@
 
 pkill -KILL -f "$WM/panel .*"
 
-[ $1 ] && echo $1 >$SESSION/panel
-[ -e $SESSION/panel ] || exit
+[ $1 ] && echo $1 >$SPANEL
+[ -e $SPANEL ] || exit
+panel=$(cat $SPANEL)
 
-panel=$(cat $SESSION/panel)
 draw panel $panel
 
 # kak: filetype=sh

@@ -280,7 +280,7 @@ super + shift + space
 	menu
 
 super + {_,shift,ctrl} + apostrophe
-	menu {shortcuts, wikis, notes}
+	winid=$(pfw) menu {shortcuts, wikis, notes}
 
 super + shift + a
 	menu reminder

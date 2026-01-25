@@ -9,12 +9,19 @@ export PARENT=$(which parent)
 
 # Usage: . $(which ENV)
 
+# ................................................................... Filesystem
+
+export WM=$(cat $HOME/.windowmanager)
+
+[ -d /dev/shm/$WM ] && rm -rf /dev/shm/$WM
+mkdir /dev/shm/$WM
+
+export WME=/dev/shm/$WM/$WM  # ../windowchef: state file prefix
+
 # .................................................................... Root vars
 
 export SHELL=/usr/bin/dash
 export XDG_CONFIG_HOME=$HOME/.config
-export WM=$(cat $HOME/.windowmanager)
-export WME=${TMP:-/tmp}/$WM
 export GROUP=$WME:group
 export HIDDEN=$WME:hidden
 export WINFO=$WME:window
@@ -34,7 +41,6 @@ echo $PANEL_FIFO:0 >$PANEL_FIFO  # set by draw panel but needed beforehand
 
 # ............................................................... Session states
 
-# wm states SEE: gaps
 export SPANEL=$SESSION/panel
 export SETROOT=$SESSION/setroot
 
@@ -46,7 +52,7 @@ export UNCLUTTER=$SESSION/unclutter
 
 export PALETTE=$HOME/images/colors
 export WALLCOLOR=$PALETTE/default
-export COLOR=$WALLCOLOR:color
+export RGB=$PALETTE:rgb
 export WALLPAPER=$HOME/images/backgrounds/default
 export BACKGROUND=$HOME/images/root  # ln to WALLPAPER or WALLCOLOR SEE: draw root
 

@@ -7,7 +7,8 @@
 # ............................................................... Desktop layout
 
 actions() {
-	echo "q ^Quarters
+	echo "
+q ^Quarters
 d ^Quarters edit
 b ^Quarters browser
 h ^Thirds

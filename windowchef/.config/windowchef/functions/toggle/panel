@@ -6,7 +6,7 @@
 
 # ................................................................. Toggle panel
 
-if [ -e $SESSION/panel:single ] ;then
+if [ -e $SPANEL:single ] ;then
 	xdotool search --onlyvisible --limit 1 --maxdepth 1 --name "lemonbar" windowunmap >/dev/null || xdotool search --limit 1 --maxdepth 1 --name "lemonbar" windowmap >/dev/null
 else
 	xdotool search --onlyvisible --limit 1 --maxdepth 1 --name "lemonbar:topbar" windowunmap >/dev/null || xdotool search --limit 1 --maxdepth 1 --name "lemonbar:topbar" windowmap >/dev/null

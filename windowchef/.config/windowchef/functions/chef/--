@@ -10,8 +10,6 @@
 
 # SEE: draw panel, desktop and sxhkdrc
 
-VACUUM=$WME:chef:vacuum
-
 # not all windows necessarily closed via sxhkd
 vacuum() {
 	chef window ids | cmp --silent $PANEL:winids && return  # ignore initial pass file error
@@ -21,10 +19,9 @@ vacuum() {
 	done
 
 	# HACK: fix rare dangling hidden window pointer (??) creation sequence as yet undetermined
-	wmctrl -l 2>/dev/null | cut -d' ' -f1 >$VACUUM
 	for i in $HIDDEN:* ;do
 		[ "${i##*:}" = '*' ] && break  # no hidden windows
-		grep -q ${i##*:} $VACUUM || { rm $i; removals=true; }
+		grep -q ${i##*:} $PANEL:winids || { rm $i; removals=true; }
 	done
 
 	[ $removals ] && refresh_panel

@@ -11,10 +11,11 @@
 export COLSEP=⁋  # NOTE: '^' used for kak split regex SEE: menu (picklist)
 
 shortcuts() {
-echo "^    ⁋[^\\\\n]*
-/    ⁋>/dev/null 2>&1
-3    ⁋>/dev/null
-4    ⁋2>/dev/null
+echo "
+/    ⁋>/dev/null
+2    ⁋2>/dev/null
+&    ⁋>/dev/null 2>&1
+^    ⁋[^\\\\n]*
 g    ⁋grep -E
 a    ⁋[[:alpha:]]
 b    ⁋[a-z]
@@ -29,6 +30,7 @@ k    ⁋K1Y 0K4
 }
 
 string=$(shortcuts | rmenu 'Insert' -no-custom) || exit
+waitron window_focus ${winid:-$(pfw)}  # refocus active window before menu display SEE: sxhkdrc
 
 [ "${string%%^*}" ] || { xdotool type '[^\n]*'; exit; }             # HACK: to avoid shell globbing of '*'
 

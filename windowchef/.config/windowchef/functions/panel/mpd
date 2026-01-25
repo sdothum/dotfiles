@@ -85,7 +85,7 @@ panel() {
 			printf "%s\n" "%{c}$(piano stream)"
 		else
 			printf "%s\n" "%{c}${artist}${SEP}${album}${SEP}${song}${SEP}${track}␥${TRACKS:-‥}  $DURATION ${button} %{F-}${duration}${volume}"
-			[ "$volume" ] && { volsecs=$(( volsecs - 1 )); [ $volsecs -le 0 ] && { unset volume volsecs; rm /tmp/mpc:volume; };}
+			[ "$volume" ] && { volsecs=$(( volsecs - 1 )); [ $volsecs -le 0 ] && { unset volume volsecs; rm $VOLUME; };}
 		fi
 	done
 }

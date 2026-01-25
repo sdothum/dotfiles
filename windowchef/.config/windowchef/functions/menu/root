@@ -42,7 +42,7 @@ save() {
 while [ $1 ] ;do
 	case $1 in
 		cache ) root ;;
-		save  ) bg=$(cat $COLOR); save; exit ;;
+		save  ) bg=$(cat $RGB); save; exit ;;
 	esac
 	shift
 done
@@ -55,7 +55,7 @@ setroot() {
 	menu
 }
 
-colors() { [ "$menu" ] && echo | mhistory root | sed "1i$menu" || echo | mhistory root | sed "1i$(X $RANDOM)\n$KEEP$(X $VIEWER)\n$(X $COLORS)\n$(X $PICK)\n$(X $UPDATE)"; }
+colors() { [ "$menu" ] && echo | mhistory root | sed "1i$menu" || echo | mhistory root | sed "1i$(X $VIEWER)\n$(X $RANDOM)\n$KEEP$(X $COLORS)\n$(X $PICK)\n$(X $UPDATE)"; }
 
 while color=$(colors | column -s^ -t | rmenu 'Setroot') || exit ;do
 	unset KEEP
@@ -64,11 +64,11 @@ while color=$(colors | column -s^ -t | rmenu 'Setroot') || exit ;do
 		"$PICK"*   ) color=$(grabc 2>/dev/null | cut -d'#' -f2); setroot ;;
 		"$VIEWER"* ) exec draw root restore ;;
 		"$RANDOM"* ) draw root color; KEEP="$(X $SAVE)\n"; sleep $delay ;;
-		"$COLORS"* ) term "colors" WAIT trap pastel list ;;
+		"$COLORS"* ) term "colors" class=palette WAIT trap pastel list ;;
 		"$UPDATE"* ) root ;;
 		"$SAVE"*   ) save; break ;;
 		"$INVERT"* ) draw root invert; sleep $delay; menu ;;
-	
+
 		*\ dark*   |\
 		*\ light*  )
 			bg=$(echo $color | cut -d' ' -f1)
