@@ -1,0 +1,83 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/size $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .............................................................. Set window size
+
+# Usage: window size <height>x<width> | monocle | term | rotate|landscape | <numerator>/<denominator> (of screen width)
+
+ASPECT=4:3  # (photographic) ratio
+
+size() {
+	save_geometry
+	set_geometry
+	[ $4 ] && { width=$3; height=$2; } || { width=$2; height=$3; }
+	[ $height -gt $H ] && { swap=$width; width=$height; height=$swap; }
+	wtp $X $margin $width $height $1  # size from top else bottom may be truncated
+	wmv -a $(( X + width / 2 )) $(( H / 2 )) $1
+}
+
+# ................................................................. Aspect ratio
+
+aspect() {
+	numerator=$1
+	denominator=$2
+	# an arbitrary aspect ratio calculation
+	X=$(echo "scale=2\n$W * $numerator / $denominator - $margin" | bc | cut -d. -f1)
+	Y=$(echo "scale=2\n$X * ${ASPECT%:*} / ${ASPECT#*:}" | bc | cut -d. -f1)
+	[ $Y -lt $H ] || Y=$(echo "scale=2\n$X * ${ASPECT#*:} / ${ASPECT%:*}" | bc | cut -d. -f1)  # fit window to screen
+	size $winid $X $Y
+}
+
+# ...................................................................... Monocle
+
+monocle() {
+	window tile 2 1
+	waitron window_snap middle
+}
+
+# .............................................................. To default term
+
+TERMSIZE=$WME/term
+
+reterm() {
+	save_geometry
+	eval $(xdotool getwindowgeometry --shell $winid | grep -E 'X|Y')
+	if [ ! -e $TERMSIZE ] ;then
+		term TRANSPARENT class=ephemeral  # as unobtrusive as possible :)
+		xdotool search --onlyvisible --sync --classname 'ephemeral'
+		for i in $(xdotool getwindowgeometry --shell $(pfw)|grep -E 'WIDTH|HEIGHT') ;do mkdir -p $TERMSIZE/$i ;done
+		xdotool search --classname 'ephemeral' windowclose
+	fi
+	eval $(ls -l $TERMSIZE)
+	wtp $X $Y $WIDTH $HEIGHT $winid
+	waitron window_focus $winid
+}
+
+# ................................................................... Paper size
+
+paper() {
+	case $1 in
+		A3* ) size $winid 1334 1890 $2 ;;
+		B4* ) size $winid 1123 1587 $2 ;;
+		A4* ) size $winid  945 1334 $2 ;;
+		B5* ) size $winid  794 1123 $2 ;;
+		A5* ) size $winid  665  945 $2 ;;
+		B6* ) size $winid  559  794 $2 ;;
+		A6* ) size $winid  472  665 $2 ;;
+		B7* ) size $winid  397  559 $2 ;;
+	esac
+}
+
+case $1 in
+	mono* ) monocle ;;
+	term  ) reterm  ;;
+	[AB]* ) paper $1 $2                   ;;
+	*/*   ) aspect ${1%/*} ${1#*/}        ;;
+	*x*   ) size $winid ${1%x*} ${1#*x}   ;;
+	*     ) size $winid ${W:-$X} ${H:-$Y} ;;
+esac
+
+# kak: filetype=sh

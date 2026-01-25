@@ -1,0 +1,58 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/extend $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................... Extend window (to screen edge)
+
+# Usage: window extend left | right | near | far | top [left | right] | bottom [left | right]
+
+save_geometry
+set_geometry  # X Y WIDTH HEIGHT
+
+lwidth=$(( X + WIDTH - margin ))
+rwidth=$(( W - X + margin ))
+
+# .......................................................... Extend horizontally
+
+left()  { wtp $margin $Y $lwidth $HEIGHT $(pfw); }
+right() { wtp $X $Y $rwidth $HEIGHT $(pfw); }
+near()  { [ $X -le $(opposite_side) ] && left || right; }
+far()   { [ $X -le $(opposite_side) ] && right || left; }
+
+# ................................................................... Extend top
+
+top() {
+	height=$(( Y + HEIGHT - top ))
+	case $1 in
+		left  ) wtp $margin $top $lwidth $height $(pfw) ;;
+		right ) wtp $X $top $rwidth $height $(pfw) ;;
+		*     ) wtp $X $top $WIDTH $height $(pfw) ;;
+	esac
+}
+
+# ................................................................ Extend bottom
+
+bottom() {
+	height=$(( H - Y + border ))
+	case $1 in
+		left  ) wtp $margin $Y $lwidth $height $(pfw) ;;
+		right ) wtp $X $Y $rwidth $height $(pfw) ;;
+		*     ) wtp $X $Y $WIDTH $height $(pfw) ;;
+	esac
+}
+
+case $1 in
+	''     ) near      ;;  # horizontal axis
+	left   ) left      ;;
+	right  ) right     ;;
+	near   ) near      ;;
+	far    ) far       ;;
+	top    ) top    $2 ;;
+	bottom ) bottom $2 ;;
+esac
+
+waitron window_focus $winid
+
+# kak: filetype=sh

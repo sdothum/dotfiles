@@ -1,0 +1,103 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="menu/econvert $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ...................................................................... E-books
+
+usage() { usage: "$(basename $0) econvert [azw3 | epub | reformat] [default | justify | noformat | poetry | all | css=<css> ] [<file> | '<regex>', default '*epub']"; exit 1; }
+
+em_indent=1.80em  # adjust indent to 3x space per rendering engine (kindle shape 576) see iosevka
+
+# override device/cloud transfer and create kindle/kobo file
+case $1 in
+	azw3     ) format=$1; library=true; shift ;;  # library update
+	epub     ) format=$1; library=true; shift ;;  # epub output hack
+	reformat ) format=$1; library=true; shift ;;  # epub output hack
+esac
+
+# override left justification
+while : ;do
+	case "$1" in
+		css=*   ) css=$1          ;;
+		left    ) option=$1       ;;
+		justify ) option=$1       ;;
+		no*     ) option=noformat ;;  # retain original formatting
+		poetry  ) option=noformat ;;  # retain poetry formatting
+		default ) option=$1       ;;
+		*       ) [ -e "$1" ] || { find . -iname "$1" | grep -q '/' || usage; }; break ;;
+	esac
+	shift
+done
+
+# <regex> autoconvert epubs to awz3
+case "$format" in
+	azw3     )
+		[ "$1"    ] || { find . -iname '*epub'             -exec menu econvert azw3     "$css" $option {} \;; exit; }
+		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert azw3     "$css" $option {} \;; exit; }
+		;;
+	epub     )
+		[ "$1"    ] || { find . -iname '*azw3'             -exec menu econvert epub     "$css" $option {} \;; exit; }
+		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert epub     "$css" $option {} \;; exit; }
+		;;
+	reformat )
+		[ "$1"    ] || { find . -iregex '.*\(azw3\|epub\)' -exec menu econvert reformat "$css" $option {} \;; exit; }
+		[ -e "$1" ] || { find . -iname "$1"                -exec menu econvert reformat "$css" $option {} \;; exit; }
+		format=${1##*\.}
+		reformat=true  # for re-tweaking converted ebooks
+		;;
+esac
+
+file=$1
+name=$(basename "${file%.*}")
+author=${name##* - }
+title=${name% - *}
+[ "${file%/*}" = "$file" ] && folder=./ || folder=${file%/*}/  # library
+
+# ...................................................................... Convert
+
+[ $library ] || { [ -d $KINDLE ] && format=azw3 || format=${format:-mobi}; }
+find /tmp -maxdepth 1 -name "*$format" -exec rm {} \;
+# cloudconvert -f azw3 -o /tmp "$file" >/tmp/cloudconvert.log 2>&1
+# use calibre conversion module
+output="/tmp/${file##*/}"
+output=ebook-convert:ebook  # flatpak ebook-convert cannot not output to path
+
+# [ $option ] || option=$(echo -n "noindent\nleft (ragged-right)\njustify\ndefault" | rmenu 'export options' -no-custom) || break
+CSS="p+p { text-indent: ${em_indent} !important; }"
+case $option in
+	no*     ) unset CSS                  ;;
+	left    ) justify=left               ;;
+	justify ) justify=justify            ;;
+	default ) unset CSS; justify=justify ;;
+esac
+[ $justify ] && justification="--change-justification='$justify'"                                         \
+[ "$css" ] && CSS="$CSS ${css#*=}"
+CSS="--extra-css='$CSS'"
+
+notify low "$title" "Converting to $format..\n--change-justification=${justify:-..inbook justification..}"
+ditto $format "$file"
+
+# ebook-convert "$file" "${output%.*}.epub"  # test image
+# convert even .azw3 to inject folder title and author
+[ -e /usr/bin/ebook-convert ] && ECONVERT=/usr/bin/ebook-convert || ECONVERT='eval flatpak run --command="ebook-convert" --user com.calibre_ebook.calibre'
+
+eval $ECONVERT \"$file\" \"${output%.*}.$format\"                              \
+	$([ $reformat ] && echo || echo "--title=\"$title\" --authors=\"$author\"") \
+	$justification $CSS                                                         \
+	--filter-css=\'font-family, float\'                                         \
+	>/tmp/ebook-convert.log 2>&1 || exit  # suppress plugin initialization warnings
+
+# ........................................................................ Write
+
+# usb, cloud or library update?
+if [ $library ] ;then
+	# find /tmp -maxdepth 1 -name "*$format" -exec mv -f "{}" "$folder" \;
+	mv -f "${output%.*}.$format" "${file%.*}.$format"  # alpine flatpak
+	notify low "$title" "$folder"
+else
+	ditto epub "$(find /tmp -maxdepth 1 -name "*$format")"
+fi
+
+# kak: filetype=sh

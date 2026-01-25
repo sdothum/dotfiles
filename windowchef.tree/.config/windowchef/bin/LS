@@ -1,0 +1,17 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="LS $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ....................................................... List windowchef branch
+
+# Usage: LS <branch>[/<subbranch>]*
+
+case $1 in
+	$WME* ) ls -1 $1 2>/dev/null ;;
+	*     ) ls -1 ${WME:-/tmp/windowchef}/$1 2>/dev/null ;;
+esac
+
+# kak: filetype=sh

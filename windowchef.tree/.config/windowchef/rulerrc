@@ -1,0 +1,189 @@
+# sdothum - 2016 (c) wtfpl
+#
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+#
+# ........................................................................ Rules
+#
+# WARNING: blank lines before first rule requires patched ruler SEE: dotfiles
+
+# Term applications
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ......................................................................... mail
+
+class="aerc"
+	window desktop $(chef desktop "COMM") ;\
+	window @aerc size monocle             ;\
+	sleep 0.3 && xdotool type ':vsplit' && xdotool key Return
+
+# open compose window but raise aerc to complete to/subject fields
+
+class="email"
+	window @email tile 3 2 && window desktop $(chef desktop "COMM") ;\
+	waitron window_stack_toggle
+
+class="compose"
+	window @compose tile 3 2 && window desktop $(chef desktop "COMM")
+
+# ......................................................................... edit
+
+class="kak"
+	window desktop $(chef desktop "CODE")                  ;\
+	N=$(chef window count kak)                             ;\
+	[ $N -lt 4 ] && layout tile 3 kak || layout tile 4 kak ;\
+	[ $N -eq 4 ] && layout fold 4 kak
+
+class="wiki"
+	window desktop $(chef desktop "WIKI") ;\
+	layout tile 3 wiki
+
+# ................................................................. music player
+
+class="music"
+	window desktop $(chef desktop "PLAY") ;\
+	window @music size 1/3 && window @music snap center
+
+# ................................................................. file manager
+
+# paired windows SEE: xftp script
+
+class="cbftp"
+	window @cbftp tile 3 2
+
+class="xftp"
+	window @xftp tile 3 3
+
+name="yazi"
+	window @yazi size A4 rotate ;\
+	window @0.1 snap center
+
+# ........................................................................ terms
+
+class="term"
+	window desktop $(desktop) ;\
+	layout spread 3 term      ;\
+	window snap center vertical
+
+class="palette"
+	window snap center
+
+# GUI applications
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ........................................................................ audio
+
+class="audacious"
+	window desktop $(chef desktop "PLAY") ;\
+	window @audacious snap center
+
+# delay for pavucontrol/pipewire sync SEE: pulse
+
+class="pavucontrol"
+	window desktop $(chef desktop "CHEF")                              ;\
+	window size B6 rotate                                              ;\
+	window snap center                                                 ;\
+	[ -e $WME/pavucontrol ] && exit                                    ;\
+	mkdir -p $WME/pavucontrol                                          ;\
+	xdotool search --onlyvisible --classname "pavucontrol" windowunmap ;\
+	desktop $(chef desktop "DESK")
+
+# ........................................................................ media
+
+class="asunder"
+	window desktop $(chef desktop "CHEF")                                                                    ;\
+	[ -e /tmp/rulerrc:asunder ] && waitron window_stack_toggle || { window size 1/3 && window snap center; } ;\
+	touch /tmp/rulerrc:asunder
+
+class="calibre"
+	window desktop $(chef desktop "DESK") ;\
+	window @calibre snap center
+
+class="org.nicotine_plus.Nicotine"
+	window desktop $(chef desktop "PEER")                                                                                                         ;\
+	[ $(xdotool search --onlyvisible --classname "org.nicotine_plus.Nicotine" | wc -l) -eq 1 ] && window @org.nicotine_plus.Nicotine size monocle ;\
+	window @0.1 snap center
+
+# ......................................................................... draw
+
+class="darktable"
+	window desktop $(chef desktop "DESK") ;\
+	window @darktable snap center
+
+class="gimp"
+	window desktop $(chef desktop "DESK")
+
+class="krita"
+	window desktop $(chef desktop "DESK")
+
+class="RapidRAW"
+	window desktop $(chef desktop "DESK") ;\
+	window @RapidRAW size monocle
+
+class="rawtherapee"
+	window desktop $(chef desktop "DESK") ;\
+	window @rawtherapee snap center
+
+# ...................................................................... viewers
+
+# HACK: for yazi photo display requires initial delay to prevent triggering "menu" from sxhkd "toggle wallpaper"
+
+class="feh"
+	sleep 0.2                             ;\
+	xdotool key space                     ;\
+	sleep 0.1 && xdotool key BackSpace    ;\
+	window @feh snap center
+
+class="foliate"
+	window desktop $(chef desktop "DESK") ;\
+	window size monocle
+
+class="fontmatrix"
+	window desktop $(chef desktop "CODE")
+
+class="mpv"
+	waitron window_maximize
+
+class="oculante"
+	window size monocle
+
+class="zathura"
+	window desktop $(chef desktop "DESK") ;\
+	window tile 3 2
+
+# ..................................................................... browsers
+
+class="chromium"
+	window desktop $(chef desktop "COMM") ;\
+	window size monocle
+
+class="Firefox"
+	window desktop $(chef desktop "COMM") ;\
+	window size monocle
+
+# don't attach browsers to server groups
+
+class="luakit"
+	[ $(desktop) -lt $(chef desktop "CHEF") ] && window desktop $(desktop) || window desktop 1 ;\
+	layout tile 3 luakit
+
+class="qutebrowser"
+	[ $(desktop) -lt $(chef desktop "CHEF") ] && window desktop $(desktop) || window desktop 1 ;\
+	layout tile 3 qutebrowser
+
+# single purpose hangouts browser (for zoom and custom font control) SEE: hangouts script
+
+class="Surf"
+	window '@@cgDIS:T | ' URL tile 4 1 && window desktop $(chef desktop "COMM")
+
+# ....................................................................... system
+
+class="gFTP"
+	window size monocle
+
+class="pcmanfm"
+	window desktop $(chef desktop "DESK") ;\
+	window tile 3
+
+# kak: filetype=sh
+

@@ -1,0 +1,43 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................... Autostart
+
+restore root
+restore panel
+conky clock auto
+restore unclutter
+displaycal3             # load color profile
+
+imwheel -kill           # set trackball scrollwheel speed
+rm -rf $WME/pavucontrol  # hide pavucontrol SEE: rulerrc
+pulse
+udev
+
+desktop $(chef desktop "DESK")
+[ -e $SESSION/cbonsai ] && cbonsai
+[ -e $SESSION/term    ] && term
+
+# issue running as runit service
+if void 'runit' ;then
+	!p nzbget && nzbget --daemon
+	!p sonarr && sudo /bin/su - sonarr -c '/usr/lib/sonarr/Sonarr/Sonarr -s localhost:8989 -no-browser -data=/var/lib/sonarr' >/dev/null 2>&1 &
+fi
+
+exists mpd || exit
+
+sleep 1                 # settle pipewire for mpd server connection
+dbus-run-session mpd /home/shum/.config/mpd/mpd.conf 2>/dev/null                        # NOTE: needs explicit dbus run
+[ -e /tmp/nicotine-plus ] || { make_install nicotine-plus; touch /tmp/nicotine-plus; }  # using nightly build
+
+nicotine -s &
+if [ "$(mpc queued)" ] ;then
+	(sleep 3; mpc play; mpc toggle; mpc toggle; mpc:settings) &  # wm restarts require mpd tickling to connect to pipewire
+else
+	piano  # nano hi resolution stream
+fi
+
+# kak: filetype=sh

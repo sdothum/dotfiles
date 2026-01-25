@@ -1,0 +1,14 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="btop $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .......................................................................... Top
+
+BTOP=/usr/bin/btop
+
+xdotool search --onlyvisible --classname btop windowclose || term btop BLACKBOARD $BTOP
+
+# kak: filetype=sh

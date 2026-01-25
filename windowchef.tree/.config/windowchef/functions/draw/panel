@@ -1,0 +1,23 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="draw/panel $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................... Draw panel
+
+# Usage: draw panel [uno | duo | top | asymmetrical] SEE: also restore panel
+#                   [system | chef | clock | music] [0]
+
+case $1 in
+	system ) panel system $2 ;;  # testing
+	chef   ) panel chef   $2 ;;
+	clock  ) panel clock  $2 ;;
+	music  ) panel mpd    $2 ;;
+	uno    ) panel system  ; panel clock  ; panel chef   ;;  # bottom
+	top    ) panel system 0; panel clock 0; panel chef 0 ;;
+	asym*  ) panel system  ; panel clock  ; panel chef 0; panel mpd 0 ;;  # asymmetrical
+	*      ) panel system  ; panel clock 0; panel chef 0 ;;  # duo symmetry
+esac
+
+# kak: filetype=sh

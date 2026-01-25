@@ -1,0 +1,14 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="cbonsai $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................... Ncurses bonsai
+
+CBONSAI="$HOME/.local/bin/cbonsai -il -t0.125 -w20"
+
+xdotool search --onlyvisible --classname cbonsai windowclose || term cbonsai BLACKBOARD $CBONSAI
+
+# kak: filetype=sh

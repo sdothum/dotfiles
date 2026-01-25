@@ -1,0 +1,14 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="scratchpad $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................... Scratchpad
+
+# Usage: scratchpad [name]
+
+xdotool search --onlyvisible --name ${1:-scratchpad} windowclose || tmux_session ${1:-scratchpad}
+
+# kak: filetype=sh

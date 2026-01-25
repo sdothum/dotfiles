@@ -1,0 +1,93 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="layout/fold $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Tile layout
+
+usage() { usage: "$(basename $0) fold 0 | 1 | 2 | 3 | 4 | 5 [<classname>]"; exit 1; }
+
+winids=$(chef window ids $2)
+instance=0  # window placement sequence
+
+# ........................................................................ Stack
+
+stack() {
+	for i in $winids ;do
+		waitron window_focus $i
+		window size monocle
+	done
+}
+
+# .................................................................... By halves
+
+halves() {
+	for i in $winids ;do
+		waitron window_focus $i
+		case $instance in
+			0 ) window tile 2 1 ;;
+			1 ) window tile 2 2; instance=-1 ;;
+		esac
+		instance=$(( instance + 1 ))
+	done
+}
+
+# .................................................................... By thirds
+
+thirds() {
+	for i in $winids ;do
+		waitron window_focus $i
+		case $instance in
+			2 ) window tile 3 1; instance=-1 ;;
+			0 ) window tile 3 2 ;;
+			1 ) window tile 3 3 ;;
+		esac
+		instance=$(( instance + 1 ))
+	done
+}
+
+# .................................................................. By quarters
+
+quarters() {
+	for i in $winids ;do
+		waitron window_focus $i
+		case $instance in
+			2 ) window tile 4 1 ;;
+			0 ) window tile 4 2 ;;
+			1 ) window tile 4 3 ;;
+			3 ) window tile 4 4; instance=-1 ;;
+		esac
+		instance=$(( instance + 1 ))
+	done
+}
+
+# .................................................................... By fifths
+
+fifths() {
+	for i in $winids ;do
+		waitron window_focus $i
+		case $instance in
+			4 ) window tile 5 1; instance=-1 ;;
+			2 ) window tile 5 2 ;;
+			0 ) window tile 5 3 ;;
+			1 ) window tile 5 4 ;;
+			3 ) window tile 5 5 ;;
+		esac
+		instance=$(( instance + 1 ))
+	done
+}
+
+case "$1" in
+	0 ) layout fold $(min $(echo "$winids" | wc -l) 5) $2 ;;
+	1 ) stack    ;;  # monocle
+	2 ) halves   ;;
+	3 ) thirds   ;;
+	4 ) quarters ;;
+	5 ) fifths   ;;
+	* ) usage ;;
+esac
+
+waitron window_focus ${i:-$winid}
+
+# kak: filetype=sh

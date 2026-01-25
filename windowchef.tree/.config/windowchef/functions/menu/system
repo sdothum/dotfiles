@@ -1,0 +1,27 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="menu/system $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................... System monitor
+
+alpine || JOURNAL="journal ^$SEP inspect\njournal ^$SEP watch\n"
+
+# meta menu menu!
+system=$(previous system)
+system=$(echo "btop\nnvidia fan (toggle)\n${JOURNAL}log ^$SEP inspect\nlog ^$SEP watch\nsystem ^$SEP diagnostic" \
+	| column -s^ -t | rmenu 'System' "$system" -no-custom) || exit
+
+mhistory system "$system"
+case $system in
+	btop*             ) twobop                   ;;
+	nvidia*           ) nvidia_fan toggle        ;;
+	journal*inspect   ) exec menu journals       ;;
+	journal*watch     ) exec menu journals watch ;;
+	log*inspect       ) exec menu logs           ;;
+	log*watch         ) exec menu logs watch     ;;
+	system*diagnostic ) exec menu diagnostic     ;;
+esac
+
+# kak: filetype=sh

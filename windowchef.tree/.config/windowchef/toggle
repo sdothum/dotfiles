@@ -1,0 +1,20 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="toggle $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................ Toggle operations
+
+msg=$1
+[ $msg ] && shift || usage: $0
+if [ -e ${0%/toggle}/functions/toggle/$msg ] ;then
+	. ${0%/toggle}/functions/toggle/$msg $@
+elif winid=$(xdotool search --classname "$1" | head -1) ;then
+	xwininfo -id $winid | grep -q "IsViewable" && mapw -u $winid || mapw -m $winid
+else
+	$@
+fi
+
+# kak: filetype=sh

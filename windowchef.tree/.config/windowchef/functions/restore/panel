@@ -1,0 +1,19 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="restore/panel $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Restore panel
+
+# Usage: restore panel [<panel>]
+
+pkill -KILL -f "$WM/panel .*"
+
+[ $1 ] && echo $1 >$SPANEL
+[ -e $SPANEL ] || exit
+panel=$(cat $SPANEL)
+
+draw panel $panel
+
+# kak: filetype=sh

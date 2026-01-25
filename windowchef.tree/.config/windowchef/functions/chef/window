@@ -1,0 +1,43 @@
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="chef/window $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Window info
+
+# Usage: chef window classname | count [<name>] | ids [<classname> | snapshot]
+
+classname() { xdotool getactivewindow getwindowclassname; }
+
+# ................................................................. Window count
+
+count() {
+	case $1 in
+		'' ) wmctrl -l 2>/dev/null | wc -l ;;
+	#  *  ) wmctrl -l 2>/dev/null | grep -w "$1" | wc -l ;;  # WARNING: can still be fooled by browser url titles
+		*  ) xdotool search --onlyvisible --classname "$1" | wc -l ;;
+	esac
+}
+
+# ................................................................... Window ids
+
+winids() { wmctrl -l 2>/dev/null | cut -d' ' -f1 | sort; }  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
+record() { rm -rf $1/*; for i in $(winids) ;do mkdir -p $1/$i ;done }
+
+ids() {
+	case $1 in
+		'' ) winids ;;
+		*  ) for i in $(winids) ;do [ "$(xdotool getwindowclassname $i)" = $1 ] && echo $i ;done ;;
+	esac
+}
+
+case $1 in
+	classname ) classname        ;;
+	count     ) count $2         ;;
+	ids       ) ids   $2         ;;
+	''        ) winids           ;;
+	snapshot  ) record $SNAPSHOT ;;
+esac
+
+# kak: filetype=sh

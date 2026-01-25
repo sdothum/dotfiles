@@ -1,0 +1,66 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/snap $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Snap windows
+
+# Usage: window snap left | right | 'near | center [left | right | horizontal | vertical] | top [left | right] | bottom [left | right]
+
+save_geometry  # NOTE: comment out to not overwrite window sizing/tiling geometry
+set_geometry   # X Y WIDTH HEIGHT
+
+move()   {
+	# xdotool windowmove $1 $2 $3
+	wtp $1 $2 $WIDTH $HEIGHT $(pfw)
+	waitron window_focus $winid
+}
+
+L=$(( margin ))
+R=$(( W - WIDTH + margin - border * 2 ))
+V=$(( (H - HEIGHT) / 2 + top - border ))
+G=$(( gap / 2 ))  # respect tiling gap at center :)
+
+left()   { move $L $Y; }
+right()  { move $R $Y; }
+near()   { [ $X -le $(opposite_side) ] && left || right; }
+
+center() {
+	case $1 in
+		left  ) move $(( W / 2 + margin - WIDTH - border * 2 - G )) $Y ;;
+		right ) move $(( W / 2 + margin + G )) $Y ;;
+		hori* ) move $(( (W - WIDTH) / 2 + margin - border )) $Y ;;
+		vert* ) move $X $V ;;
+		*     ) move $(( (W - WIDTH) / 2 + margin - border )) $V ;;
+	esac
+}
+
+top()    {
+	case $1 in
+		left  ) move $L $top ;;
+		right ) move $R $top ;;
+ 		*     ) move $X $top ;;
+	esac
+}
+
+bottom() {
+	B=$(( H - HEIGHT + border + 1 ))
+	case $1 in
+		left  ) move $L $B ;;
+		right ) move $R $B ;;
+		*     ) move $X $B ;;
+	esac
+}
+
+case $1 in
+	''     ) near      ;; # nearest left/right edge
+	left   ) left      ;;
+	right  ) right     ;;
+	near   ) near      ;;
+	center ) center $2 ;;
+	top    ) top    $2 ;;
+	bottom ) bottom $2 ;;
+esac
+
+# kak: filetype=sh

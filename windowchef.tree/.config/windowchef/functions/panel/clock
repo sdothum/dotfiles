@@ -1,0 +1,138 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="panel/infobar $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................... Draw panel
+
+# Usage: panel clock [<offset Y>]
+#
+# NOTE: this script is executed via "draw panel" SEE: also restore panel
+
+[ $1 ] && panel_offsetY=$1
+
+if [ "$panel_offsetY" = "0" ] ;then   # (??) use of -eq fails comparison
+	SEP="  %{F$INACTIVE_FG}%{F-}  "  # top bar
+else
+	SEP="  %{F$INACTIVE_FG}%{F-}  "  # bottom bar
+fi
+
+# ....................................................................... Clocks
+
+DMS=true  # unset for : (colon) time
+
+seconds() { tic=${line#*| }; tic=${tic%|*}; }
+
+tape() {
+	tic="${line#*|}"
+	tic="${tic%|*}"
+	if [ $DMS ] ;then
+		if [ "${tic%%;*}" -lt 10 ] ;then
+			len=12
+			pos=${tic##*.}
+			pos=$(echo "${pos%???} % 11" | bc)
+			[ $pos = 0 ] && pos=11
+		else
+			len=13
+			pos=$(( ${pos:-0} + 1 ))
+			[ $pos -gt 11 ] && pos=0
+		fi
+		tic="$(echo "$tic" | tail -c $(( len - pos )))$(echo "$tic" | head -c $pos)"
+		tic="$(echo "$tic" | sed 's/;/°/; s/\./’/; s/,/” /')"
+	else
+		if [ "${tic%%:*}" -lt 10 ] ;then  # hours 0 - 9, cycle aligns on ten second intervals
+			len=11
+			pos=${tic##*:}
+			pos=$(( ${pos%??} % 10 ))
+			[ $pos = 0 ] && pos=10
+		else                              # hours 10 - 12, format string continously cycles
+			len=12
+			pos=$(( ${pos:-0} + 1 ))
+			[ $pos -gt 10 ] && pos=0
+		fi
+		tic="$(echo "$tic" | tail -c $(( len - pos )))$(echo "$tic" | head -c $pos)"
+	fi
+}
+
+# ................................................................ Weather watch
+
+FORECAST=$WME/${WEATHER##*/}
+UTFSLSH='⁄'  # utf-8 slash 0u2044 (filenames may not contain ascii '/' 0u002f)
+
+weather() { unset update_weather; rm -rf $FORECAST; mkdir -p "$FORECAST/$(conky weather panel | sed "s|/|$UTFSLSH|g")" & }
+
+[ -e $WEATHER ] && weather
+
+# ...................................................... Clock & weather refresh
+
+# tic indicator: none (unset), dot, circle, square, bar, tape, seconds
+[ -e $TICKER ] && { TIC=$(cat $TICKER); TIC=${TIC:-tape}; }
+
+currently() {
+	# prevent lemonbar race to catch up (impossible to force race condition to test..)
+	[ ${EPOCH#S} -lt $(date +%s -d "-1 seconds") ] && { unset EPOCH; return; }
+	line="S${line#$EPOCH}"  # restore S record format (sans epoch time)
+
+	line=$(echo "$line" | sed -r 's/#[{]/%{/g; s/(AM|PM)/\L\1/')  # recover lemonbar format strings, see clock below
+
+	unset clock
+	if [ $TIC ] ;then
+		case $TIC in
+			s*  ) seconds ;;
+			t*  ) tape    ;;
+		esac
+		clock="%{F$DEFAULT_FG}$tic%{F-}"
+	fi
+
+	# update weather every 10 minutes
+	if [ -e $WEATHER ] ;then
+		[ $DMS ] && minute=${line#*;?} || minute=${line#*:?}  # hh:mm:ss.* -> m:ss.*
+		case $(printf '%.1s' "$minute") in                    # -> m
+			0 | 5 ) [ $update_weather ] && weather ;;
+			*     ) update_weather=true ;;
+		esac
+	fi
+	[ -s $FORECAST ] && [ "$(ls -1 $FORECAST)" ] && current_weather="$(ls -1 $FORECAST | sed "s/\^/$SEP/g")"  # prevent blanking during update, see weather()
+
+	line="${line%%^*}${current_weather}${line#*^}"
+	line="${line%%|*}${clock}%{F-}${line##*|}"
+	system="%{F$DEFAULT_FG}%{B$DEFAULT_BG}${line#?}%{B-}%{F-}"
+}
+
+# ............................................................... FIFO read loop
+
+panel() {
+	while read -r line ;do
+		EPOCH=${line%%^*}
+		currently
+
+		[ $EPOCH ] && printf "%s\n" "%{r}${system}"
+		unset line EPOCH
+	done
+}
+
+# ......................................................................... FIFO
+
+STREAM=$(mkfifo $FIFO/$msg)  # SEE: panel wrapper
+
+# note physical linebreaks for each format specification (to accomodate slow processors, notably arm)
+# NOTE: lemonbar %{F..} changed to #{F..} for alpine "clock" (fails on % char, see function currently)
+# NOTE: added time since epoch for race condition trap
+if [ $DMS ] ;then
+	case $TIC in
+		se* ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I°%M %S%p|#{F-}${SEP}%a %-d %b ’%y"  >$STREAM & ;;
+		t*  ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I;%M.%S,%p|#{F-}${SEP}%a %-d %b ’%y" >$STREAM & ;;  # SEE: tape() sed utf-8
+		*   ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}%-I°%M#{F-} %p|%S|${SEP}%a %-d %b ’%y"   >$STREAM & ;;
+	esac
+else
+	case $TIC in
+		se* ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I:%M %S%p|#{F-}${SEP}%a %-d %b ’%y"  >$STREAM & ;;
+		t*  ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I:%M:%S%p|#{F-}${SEP}%a %-d %b ’%y"  >$STREAM & ;;
+		*   ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}%-I:%M#{F-} %p|%S|${SEP}%a %-d %b ’%y"   >$STREAM & ;;
+	esac
+fi
+
+cat $STREAM | panel | handlebar &
+
+# kak: filetype=sh

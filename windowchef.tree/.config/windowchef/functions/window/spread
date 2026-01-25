@@ -1,0 +1,42 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/spread $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Spread window
+
+# Usage: window spread <count> <position>
+
+save_geometry
+set_geometry  # X Y WIDTH HEIGHT
+
+spread() {
+	width=$(( (W - ($1 - 1) * gap - border * $1 * 2) / $1 ))
+	offset=$(( (width - WIDTH) / 2 + 1 ))  # offset from screen division edge
+
+	# tweak left/right margins inwards to balance visual spacing across screen :)
+	if [ $(expr $1 % 2) -eq 1 ] && [ $(( $1 / 2 + 1 )) -ne $2 ] || [ $(expr $1 % 2) -eq 0 ] ;then  # not center column
+		tweak=$(( (offset / 2) - border ))
+		[ $2 -le $(( $1 / 2 )) ] && offset=$(( offset + tweak )) || offset=$(( offset - tweak ))
+	fi
+
+	column=$(expr $2 % $1)   # column position left to right
+	[ $column -eq 0 ] && column=$1
+	column=$(( column - 1 ))  # 0 -> left
+
+	X=$(( width * column + margin + border * column * 2 + column * gap + offset ))
+	[ $(( X + WIDTH )) -ge $W ] && X=$(( W - WIDTH + border ))
+	wtp $X $Y $WIDTH $HEIGHT $(pfw)
+}
+
+case $2 in
+	left   ) spread $1  1 ;;
+	right  ) spread $1 $1 ;;
+	center ) spread $1 $(( $1 / 2 + $(expr $1 % 2) )) ;;  # center or center left
+	*      ) spread $1 $2 ;;
+esac
+
+waitron window_focus $winid
+
+# kak: filetype=sh

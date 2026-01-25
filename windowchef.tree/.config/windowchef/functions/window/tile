@@ -1,0 +1,50 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/tile $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Tile window
+
+# Usage: window tile [<count>] <position>
+
+save_geometry
+set_geometry  # X Y WIDTH HEIGHT
+
+height=$(( H - border * 2 ))  # tiles are full vertical panes
+
+# .................................................................... Tile left
+
+left() {
+	width=$(( X + WIDTH - margin ))
+	wtp $margin $top $width $height $(pfw)
+}
+
+# ................................................................... Tile right
+
+right() {
+	width=$(( W - X + margin - border * 2 ))
+	wtp $X $top $width $height $(pfw)
+}
+
+# .................................................................. Tile panels
+
+tile() {
+	width=$(( (W - ($1 - 1) * gap - border * $1 * 2) / $1 ))
+
+	tile=$(expr $2 % $1)   # tile position left to right
+	[ $tile -eq 0 ] && tile=$1
+	tile=$(( tile - 1 ))  # 0 -> left
+
+	wtp $(( width * tile + margin + border * tile * 2 + tile * gap )) $top $width $height $(pfw)
+}
+
+case $1 in
+	left  ) left  ;;
+	right ) right ;;
+	*     ) tile $1 ${2:-$1} ;;
+esac
+
+waitron window_focus $winid
+
+# kak: filetype=sh

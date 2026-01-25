@@ -1,0 +1,14 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="refresh_panel $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Refresh panel
+
+# xtitle -f "X%s" >$(cat $PANEL_FIFO)
+# wmctrl -l | grep -q $(pfw) || waitron window_cycle  # NOTE: clears closed window id on empty desktop
+echo "X" >$FIFO/chef
+
+# kak: filetype=sh

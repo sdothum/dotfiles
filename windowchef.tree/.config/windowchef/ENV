@@ -1,0 +1,61 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# to enable tracing, export TRACE=/tmp/$WM.log in .xinitrc
+export PARENT=$(which parent)
+[ $TRACE ] && CHILD="ENV $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Usage: . $(which ENV)
+
+# ................................................................... Filesystem
+
+export WM=$(cat $HOME/.windowmanager)
+export WME=/dev/shm/$WM
+
+[ -d $WME ] && rm -rf $WME
+mkdir $WME
+
+# .................................................................... Root vars
+
+export SHELL=/usr/bin/dash
+export XDG_CONFIG_HOME=$HOME/.config
+export CHEF=$WME/chef
+export SNAPSHOT=$CHEF/snapshot
+export GROUP=$WME/group
+export HIDDEN=$WME/hidden
+export WINFO=$WME/window
+export SESSION=$HOME/.session
+
+echo $DISPLAY >$SESSION/display  # for cron notifications SEE: notify
+
+# .................................................................... WM states
+
+export PICOM=$WME/picom
+export FORTUNE=$WME/fortune
+
+export PANEL=$WME/panel
+export FIFO=$WME/fifo
+
+# ............................................................... Session states
+
+export SPANEL=$SESSION/panel
+export SETROOT=$SESSION/setroot
+
+# application states
+export FONTSIZE=$SESSION/fontsize
+export UNCLUTTER=$SESSION/unclutter
+
+# ................................................................ WM attributes
+
+export PALETTE=$HOME/images/colors
+export WALLCOLOR=$PALETTE/default
+export RGB=$PALETTE:rgb
+export WALLPAPER=$HOME/images/backgrounds/default
+export BACKGROUND=$HOME/images/root  # ln to WALLPAPER or WALLCOLOR SEE: draw root
+
+export BLACKBOARD=$WME:blackboard
+export THEME=$SPANEL:theme
+
+# kak: filetype=sh

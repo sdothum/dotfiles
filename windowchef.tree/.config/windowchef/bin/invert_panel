@@ -1,0 +1,14 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="invert_panel $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................ Toggle panel contrast
+
+# Usage: invert [notify]
+
+[ $1 ] && notify 15 'Invert Panel Contrast' 'Press <b>Mod-Ctrl-v</b>' || toggle contrast
+
+# kak: filetype=sh

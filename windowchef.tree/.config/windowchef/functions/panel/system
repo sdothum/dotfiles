@@ -1,0 +1,128 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="panel/system $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................... Draw panel
+
+# Usage: panel systembar [<offset Y>]
+#
+# NOTE: this script is executed via "draw panel" SEE: also restore panel
+
+[ $1 ] && panel_offsetY=$1
+
+if [ -e $STARTREK ] ;then
+	# OCCUPIED='■'
+	# FREE='□'
+	# CURRENT='□'   # active and FREE
+	OCCUPIED=''
+	FREE=''
+	CURRENT=''    # active and FREE
+else
+	OCCUPIED='●'
+	FREE='○'
+	CURRENT='◯'     # active and FREE
+fi
+
+cpu_usage=' .00ᵁ'  # avoid line centering jitter on launch
+cpu_temp='__._°'
+cpu_speed='.__ᴳ'
+mem_usage='_._ᴹ'
+
+SEP="${TAG_PAD} %{F$INACTIVE_FG}%{F-}${TAG_PAD#?}"
+
+# ............................................................ Desktops (groups)
+
+desktops() {
+	unset desktops viewscreen
+	for i in $DESKTOPS ;do
+		format="%{B$DEFAULT_BG}"
+
+		# NOTE: visible *ONLY* returns correct value for active desktop
+
+		has_windows $i && ! deactivated $i && icon=$OCCUPIED || { [ $i = $(desktop) ] && icon=$CURRENT || icon=$FREE; }
+
+		if [ $i = $(desktop) ] ;then
+			has_visible $i && format="${format}%{F$ACTIVE_FG}"
+			# deactivated $i && format="${format}%{U$ACTIVE_FG}%{+u}"
+		elif ! has_windows $i ;then
+			format="${format}%{F$FREE_FG}"
+			# deactivated $i && format="${format}%{U$FREE_FG}%{+u}"
+		else
+			format="${format}%{F$INACTIVE_FG}"
+			# deactivated $i && format="${format}%{U$INACTIVE_FG}%{+u}"
+		fi
+		deactivated $i && format="${format}%{U$ACTIVE_FG}%{+u}"
+
+		desktops="${desktops}${TAG_PAD}${format}${icon}%{-u}%{U-}%{B-}%{F-}"
+		viewscreen="${viewscreen} ${format} ${icon}"  # star trek!
+	done
+	[ -e $STAT ] || desktops="${desktops}$TAG_PAD"  # center tags with triple padding, see $stat
+}
+
+# .................................................................... Animation
+
+beacon="▶"
+counter=0   # desktops
+
+currently() {
+	# prevent lemonbar race to catch up (impossible to force race condition to test..)
+	[ ${EPOCH#S} -lt $(date +%s -d "-1 seconds") ] && { unset EPOCH; return; }
+	desktops
+
+	if [ -e $STARTREK ] ;then
+		[ $counter -lt $tagcount ] && counter=$(( counter + 1 )) || counter=1
+
+		set -- ${viewscreen}
+		unset desktops
+		for j in $DESKTOPS ;do
+			[ $j = $counter ] && { deactivated $j && icon="%{F$ICANDY}$OCCUPIED" || { ! has_windows $j && icon="%{F$ICANDY}$beacon" || icon="%{F$ICANDY}$2"; } } || icon=$2
+			desktops="${desktops}${TAG_PAD}$1${icon}%{-u}%{U-}%{B-}%{F-}"
+			shift 2
+		done
+	fi
+}
+
+# ............................................................... FIFO read loop
+
+SPC=" "  # U+00a0 monospace cell width
+
+cpu_stat() { stat="$cpu_usage ${STATPAD}$cpu_speed ${STATPAD}$cpu_temp ${STATPAD}$mem_usage${TAG_PAD}"; }
+# caps()   { capslock && { [ "$CAPS" = "$SPC$SPC$SPC$SPC" ] && CAPS="CAPS" || CAPS="$SPC$SPC$SPC$SPC"; } || unset CAPS; }
+caps()     { capslock && { [ "$CAPS" = "$SPC$SPC$SPC$SPC$SPC$SPC$SPC$SPC" ] && CAPS="CAPSLOCK" || CAPS="$SPC$SPC$SPC$SPC$SPC$SPC$SPC$SPC"; } || unset CAPS; }
+
+panel() {
+	desktops  # initialize
+	while read -r line ;do
+		case $line in
+			S*         ) EPOCH=${line}; caps; currently  ;;
+			U*         ) [ "${line#?}" = '  0%' ] || cpu_usage=${line#?}; cpu_stat ;;  # ignore 0%
+			T*         ) cpu_temp=${line#?};  cpu_stat ;;
+			C*         ) cpu_speed=${line#?}; cpu_stat ;;
+			M*         ) mem_usage=${line#?}; cpu_stat ;;
+		esac
+
+		[ $EPOCH ] && printf "%s\n" "%{c}${desktops}${SEP}${stat}%{U$ACTIVE_FG}%{+u}${CAPS}%{-u}%{U-}"
+		unset line EPOCH
+	done
+}
+
+# ......................................................................... FIFO
+
+STREAM=$(mkfifo $FIFO/$msg)  # SEE: panel wrapper
+
+# desktop panel update
+clock -i 1 -sf "S%s" >$STREAM &
+
+# cpu usage, cpu temperature, memory usage stats
+if [ -e $STAT ] ;then
+	while : ;do echo "U$(cpu_percent)ᵁ" >$STREAM ;done &  # sar cycle >~ 1 second
+	while : ;do echo "C$(cpu_speed)ᴳ"   >$STREAM; sleep 1; done &
+	while : ;do echo "T$(cpu_temp)°"    >$STREAM; sleep 2; done &
+	while : ;do free -h | grep 'Mem:' | sed -r 's/^[^ ]* *[^ ]* *([0-9.]*)Mi.*/\1ᴹ/; s/^[^ ]* *[^ ]* *([0-9.]*)Gi.*/\1ᴹ/; s/^/M/' >$STREAM; sleep 3; done &
+fi
+
+cat $STREAM | panel | handlebar &
+
+# kak: filetype=sh

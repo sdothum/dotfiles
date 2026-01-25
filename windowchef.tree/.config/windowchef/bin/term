@@ -1,0 +1,117 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="term $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ..................................................................... Terminal
+
+# Usage: [kmd=<string>] term [[title=]<title>] [[class=]<class>] [BLACKBOARD | TRANSPARENT | PAPER | OPACITY=<decimal> | <X>x<Y> | VISIBLE | WAIT | FORTUNE]* [[SHELL] <command>]
+#        title (and default name string)
+#        FORTUNE, login notifier message
+#        BLACKBOARD, cinema background mode for omxplayer
+#        VISIBLE, wait for window visibility
+#        WAIT, for process to complete before returning
+#        SHELL <command>, for simpler unquoted command passing
+# Note:  title may not contain spaces, use hyphen or underscore in place
+
+export SHELL=/usr/bin/dash
+options='BLACKBOARD|PAPER|[0-9]+x[0-9]+|VISIBLE|WAIT|FORTUNE|SHELL'
+unset name  # for inadvertant env var conflict usage in calling scripts
+
+# HACK: quikey cannot be spawned by autostart (the way invoked for 2bwm)
+exists qk && { pgrep quikey >/dev/null || qk start; }
+
+case $TERM in
+	alacritty ) ;;
+	st        ) ;;
+	urxvt     ) ;;
+	*         ) TERM=alacritty ;;
+esac
+
+case $TERM in
+	alacritty )
+		TITLE=--title
+		NAME=--class
+		blackboard=blackboard
+		name="$NAME term"  # default class SEE: rulerrc
+		;;
+
+	st        )
+		TITLE=-T
+		NAME=-n
+		blackboard="-bg '$blackboard' -fg '$blackboard' -cr '$blackboard'"
+		font='-f Iosevka'
+		geometry='-g 1024x600+0+0'
+		;;
+
+	urxvt     )
+		TITLE=-title
+		NAME=-name
+		blackboard="-bg '$blackboard' -fg '$blackboard' -cr '$blackboard'"
+		geometry='-geometry 1024x600+0+0'
+		;;
+esac
+
+# menu border calculation
+border() { echo $(( $(chef display height) * 2 / 15 )); }
+theme()  { theme="$theme $@"; }
+
+while : ;do
+	case $1 in
+		''            ) break ;;
+		BLACKBOARD    ) theme $1 ;;
+		TRANSPARENT   ) theme $1 ;;
+		OPACITY=*     ) theme $1 ;;
+		PAPER         ) theme $1 ;;
+		*[0-9]x[0-9]* ) theme $1 ;;
+		FORTUNE       ) touch $FORTUNE:term ;;
+		VISIBLE       ) visible=true ;;
+		WAIT          ) wait=true ;;
+		title=*       ) title=${1#*=}; title="$TITLE $title" ;;
+		class=*       ) class=${1#*=}; name="$NAME $class"   ;;
+
+		SHELL         )
+			shift
+			process=$@
+			[ "$1" ] && cmd="-e $SHELL -c '$@'"
+			break
+			;;
+
+		*          )
+			# first parameter may be title
+			if [ -z "$title" ] ;then
+				if echo $1 | grep -E -qv "$options" ;then
+					# title="$TITLE $(echo $1 | sed 's/ /_/g')"
+					title="$TITLE '$1'"
+				fi
+			else
+				process=$@
+				cmd="-e $@"
+				break
+			fi
+			;;
+	esac
+	shift
+done
+
+[ $TERMBG    ] && theme $TERMBG  # see yazi wrapper
+[ -z "$name" ] && [ "$title" ] && { name="$NAME ${title#$TITLE }"; }
+
+$TERM $theme $font $geometry $title $name $cmd
+
+[ $visible ] && [ "$title" ] && xdotool search --sync --onlyvisible --limit 1 --classname "${title#* }"
+# delay long enough.. then double return kak startup command input (to close command prompt and any popup dialogue)
+[ "$kmd"   ] && { sleep 0.5; xdotool type "$kmd
+
+"; }
+
+# window snap center
+
+[ $wait    ] && {
+	echo "$process" | grep -q '/kak ' && process=".*/kak .*/${process##* /}"  # fix kak session command
+	pidwait -f "$process"
+}
+
+# kak: filetype=sh

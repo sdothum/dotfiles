@@ -1,0 +1,13 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="toggle/background $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................................... Root
+
+menu root
+toggle picom on
+restore panel
+
+# kak: filetype=sh

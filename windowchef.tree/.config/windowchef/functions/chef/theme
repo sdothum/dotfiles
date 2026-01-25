@@ -1,0 +1,11 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="chef/theme $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................... Wallpaper
+
+ls -l $WALLPAPER | awk '{ gsub(".(png|jpg)", ".theme", $NF); print $NF }'
+
+# kak: filetype=sh

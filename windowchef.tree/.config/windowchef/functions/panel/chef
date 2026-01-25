@@ -1,0 +1,76 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="panel/chef $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................... Draw panel
+
+# Usage: panel chef [<offset Y>]
+#
+# NOTE: this script is executed via "draw panel" SEE: also restore panel
+
+[ $1 ] && panel_offsetY=$1
+panel_len=${panel_len:-275}          # HACK: arbitrary display length (for wide screen monitor)
+
+if [ "$panel_offsetY" = "0" ] ;then  # (??) use of -eq fails comparison
+	SEP="  %{F$INACTIVE_FG}%{F-}  "  # top bar
+else
+	SEP="  %{F$INACTIVE_FG}%{F-}  "  # bottom bar
+fi
+
+# ............................................................... Current window
+
+map=$(for i in $(seq 1 $tagcount) ;do echo -n '‧' ;done)
+
+map() { echo "$map" | sed "s/‧/•/$(chef desktop $(chef desktop))"; }
+
+# desktop details NOTE: windowchef does not track window visibility states
+active_window() {
+	title="$(map)  $(chef desktop)"  # current/last group
+	active=$(desktop)
+	if has_windows $active ;then
+		if deactivated $active ;then
+			title="${title}${SEP}%{U$DEFAULT_FG}%{+u}$(visible $active)%{-u}%{U-}"
+		else
+			title="${title}${SEP}$(visible $active)"
+		fi
+	fi
+	if has_hidden ;then
+		title="${title}${SEP}%{U$DEFAULT_FG}%{+u}$(hidden)%{-u}%{U-}"
+	fi
+	if has_nilgroup ;then
+		if has_hidden ;then
+			title="${title}  -$(nilgroup)"      # group -1 windows
+		else
+			title="${title}${SEP}-$(nilgroup)"  # group -1 windows
+		fi
+	fi
+	if has_visible $active || has_nilgroup ;then
+		[ "$(xtitle)" = '' ] && { waitron window_cycle; return; }
+		name=$(xtitle | sed -r "s/^(.)/\u\1/; s/'(.*)'/\1/")  # trap unfocused error messages & discard xtitle quotes
+		[ "$name" ] && name="${SEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}$name%{F-}%{B-}%{F$DEFAULT_FG}"
+		title="${title}${name}"
+	fi
+}
+
+# ............................................................... FIFO read loop
+
+panel() {
+	while read -r line ;do
+		active_window
+		printf "%s\n" "$(echo "%{l}${title}" | cut -c1-$panel_len)"
+	done
+}
+
+# ......................................................................... FIFO
+
+STREAM=$(mkfifo $FIFO/$msg)  # SEE: panel wrapper
+
+# event driven panel update
+xtitle -sf 'X%s\n' >$STREAM 2>/dev/null &
+while : ;do chef -- vacuum; sleep 0.5; done &  # trap mouse focus movements
+
+cat $STREAM | panel | handlebar &
+
+# kak: filetype=sh

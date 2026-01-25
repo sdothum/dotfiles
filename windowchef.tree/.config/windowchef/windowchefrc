@@ -1,0 +1,68 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ...................................................................... Borders
+
+waitron wm_config enable_borders true
+waitron wm_config border_width 12
+# waitron wm_config internal_border_width 11
+waitron wm_config internal_border_width 9
+waitron wm_config color_focused 0x00ffff
+waitron wm_config color_unfocused 0x757575
+waitron wm_config internal_color_focused 0x505050
+waitron wm_config internal_color_unfocused 0x505050
+
+# ......................................................................... Gaps
+
+# waitron wm_config gap_width top 32
+# waitron wm_config gap_width bottom 40
+waitron wm_config gap_width top 36
+waitron wm_config gap_width bottom 39
+# waitron wm_config gap_width left 32
+# waitron wm_config gap_width right 32
+waitron wm_config gap_width left 36
+waitron wm_config gap_width right 36
+waitron wm_config grid_gap_width 12
+
+# ....................................................................... Groups
+
+waitron wm_config groups_nr 10  # SEE: chef desktop and rulerrc for desktop labels
+waitron wm_config sticky_windows false
+
+# .................................................................... Behaviour
+
+waitron wm_config cursor_position center
+waitron wm_config enable_resize_hints true
+waitron wm_config enable_sloppy_focus true
+waitron wm_config enable_last_window_focusing true
+waitron wm_config apply_settings true
+
+# ........................................................................ Mouse
+
+waitron wm_config replay_click_on_focus true
+waitron wm_config pointer_actions move resize_side resize_corner
+waitron wm_config pointer_modifier super
+waitron wm_config click_to_focus any
+
+# ................................................................... State tree
+
+mkdir -p $SNAPSHOT
+mkdir -p $GROUP/-1
+mkdir -p $GROUP/current
+mkdir -p $GROUP/last
+mkdir -p $GROUP:deactivated
+mkdir -p $HIDDEN
+mkdir -p $WINFO:snapshot
+
+# Windowchef is not fully started yet, so assume monitor 0 focus
+mkdir -p $FIFO
+mkfifo $FIFO/chef  # set by draw panel but needed beforehand
+
+# ...................................................................... Startup
+
+autostart
+
+# kak: filetype=sh

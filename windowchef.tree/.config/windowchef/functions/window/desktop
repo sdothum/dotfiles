@@ -1,0 +1,28 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/desktop $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................ Window to desktop
+
+# Usage: window desktop <group> [teleport]
+
+desktop=$(desktop)
+waitron group_remove_window
+waitron group_add_window $1
+window group $1 add $winid
+desktop add $winid $1  # see desktop and window stack
+
+# teleport and refocus to window's previous group
+if [ $2 ] ;then
+	W=$(ls -1 $GROUP/$desktop | head -1)
+	[ $W ] && {
+		desktop $desktop
+		waitron window_focus $W
+		desktop add $W $desktop
+		exit             # skip original window refocus SEE: window wrapper
+	}
+fi
+
+# kak: filetype=sh
