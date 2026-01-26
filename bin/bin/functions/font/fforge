@@ -769,8 +769,10 @@ t_descending() {  # short-neck2
 	# Yshrink=9   # partial descender :-)
 	# Yshift=-74
 	if [ $T_CAP ] ;then
-		Yshrink=7   # descender to cap height length (exact)
+		Yshrink=7       # descender to cap height length (exact) shortneck2
 		Yshift=-58
+		# Yshrink=5     # descender to cap height length (exact) shortneck
+		# Yshift=-41
 		# Yshrink=8
 		# Yshift=-66
 		# Yshrink=11

@@ -355,7 +355,7 @@ cmdopts () {
 			# language
 			cyrillic       ) cyrillic;     ditto char_set "$1" ;;
 			english        ) english_only; ditto char_set "$1" ;;
-			fluent         ) fluent; ditto char_set "$1" ;;
+			fluent         ) fluent;       ditto char_set "$1" ;;
 			latin+greek    ) latin_greek;  ditto char_set "$1" ;;
 			ligature       ) ligature $2  || usage; shift ;;
 			utf*           ) unset exclude_chars ;;
@@ -469,7 +469,7 @@ cmdopts () {
 			t-asymmetric-- ) variant $1 'FLIPPED'; t_flipped=true ;;
 			t-cross        ) variant $1 ;;
 			t-cross+       ) variant $1 ;;
-			t-descending=  ) variant t-cross+ 'DESCENDING'; t_descending=true;  baseline=true; export T_CAP=true ;;  # SEE: fforge
+			t-descending=  ) variant t-cross  'DESCENDING'; t_descending=true;  baseline=true; export T_CAP=true ;;  # SEE: fforge
 			t-descending   ) variant t-cross+ 'DESCENDING'; t_descending=true;  baseline=true ;;
 			t-descending+  ) variant t-cross+ 'DESCENDING'; t_descending_=true; baseline=true ;;
 			t-flat         ) variant $1 ;;
@@ -803,7 +803,7 @@ npm run build -- ttf::$family  # post Verda commits
 if [ -z "$ebook" ] || [ $nerdfont ] ;then
 	ditto mono $mono
 	nerdfont $mono $family                      # insert glyphs
-	unset serifless                             # monospace charset
+	# unset serifless                           # monospace charset
 fi
 
 mkdir -p $FONTS/$family
