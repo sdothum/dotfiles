@@ -9,7 +9,7 @@
 
 # Usage: desktop <msg>
 #          where <msg>: <group> [specific | toggle | close] | last | restone
-#                       add <winid> <group>
+#                <msg>: add <winid> <group>
 
 # NOTE: waitron group handling deficiencies (quirks) and extensions are handled here
 # HACK: waitron group_toggle/_activate does not restore the group window stack order (focused window)
@@ -35,7 +35,7 @@ current() {
 toggle() {
 	if [ -e $GROUP:deactivated/$1 ] ;then
 		waitron group_activate $1
-		waitron window_focus $(window stack $1)
+		waitron window_focus $(ls -1 $GROUP:focus/$1)
 		rm -rf $GROUP:deactivated/$1
 		for i in $(ls -1 $GROUP/$1) ;do [ -e $HIDDEN/$i ] && rmdir $HIDDEN/$i ;done  # NOTE: activating group unhides manually hidden group windows
 		desktop $1
@@ -45,6 +45,7 @@ toggle() {
 		waitron window_focus $winid  # BUG: waitron group_toggle/_deactivate does not deactivate whole group unless the top of the window stack has focus
 		waitron group_deactivate $1
 		mkdir -p $GROUP:deactivated/$1
+		desktop $(ls -1 $GROUP/last)
 	fi
 }
 
@@ -68,8 +69,8 @@ desktop() {
 				window group remove $i            # cleanup
 			done
 			waitron group_remove_all_windows $1  # redundancy trap for unknown group juggling corner cases
-			rm -rf $GROUP/$1
-			rm -rf $GROUP:focus/$1
+			rm -rf $GROUP/$1/*
+			rm -rf $GROUP:focus/$1/*
 			rm -rf $GROUP:deactivated/$1
 			;;
 
@@ -106,7 +107,7 @@ case $1 in
 	restore ) restore       ;;
 	[1-9]   ) desktop $1 $2 ;;       # SEE: chef desktop and rulerrc
 	last    ) [ -e $GROUP/last ] && desktop $(ls -1 $GROUP/last) ;;
-	add     ) [ $3 ] && { rm -rf $GROUP:focus/$3; mkdir -p $GROUP:focus/$3/$2; } ;;  # SEE: window desktop and window stack
+	add     ) [ $3 ] && { rm -rf $GROUP:focus/$3/*; mkdir -p $GROUP:focus/$3/$2; } ;;  # SEE: window desktop and window stack
 	*       ) desktop $(plus $1) ;;  # -1/+1
 esac
 

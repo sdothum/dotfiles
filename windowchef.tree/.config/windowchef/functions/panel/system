@@ -117,9 +117,9 @@ clock -i 1 -sf "S%s" >$STREAM &
 
 # cpu usage, cpu temperature, memory usage stats
 if [ -e $STAT ] ;then
-	while : ;do echo "U$(cpu_percent)ᵁ" >$STREAM ;done &  # sar cycle >~ 1 second
-	while : ;do echo "C$(cpu_speed)ᴳ"   >$STREAM; sleep 1; done &
-	while : ;do echo "T$(cpu_temp)°"    >$STREAM; sleep 2; done &
+	while : ;do echo "U$(cpu_percent)ᵁ" >$STREAM          ;done &  # sar cycle >~ 1 second
+	while : ;do echo "C$(cpu_speed)ᴳ"   >$STREAM; sleep 1 ;done &
+	while : ;do echo "T$(cpu_temp)°"    >$STREAM; sleep 2 ;done &
 	while : ;do free -h | grep 'Mem:' | sed -r 's/^[^ ]* *[^ ]* *([0-9.]*)Mi.*/\1ᴹ/; s/^[^ ]* *[^ ]* *([0-9.]*)Gi.*/\1ᴹ/; s/^/M/' >$STREAM; sleep 3; done &
 fi
 
