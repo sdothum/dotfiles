@@ -58,6 +58,7 @@ vim/.vim/config
 vim/.vim/plugged/vim-duochrome
 weechat
 windowchef
+windowchef.tree
 wyrd
 X11
 xorg
