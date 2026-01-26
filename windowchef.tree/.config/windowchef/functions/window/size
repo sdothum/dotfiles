@@ -51,7 +51,7 @@ reterm() {
 		for i in $(xdotool getwindowgeometry --shell $(pfw)|grep -E 'WIDTH|HEIGHT') ;do mkdir -p $TERMSIZE/$i ;done
 		xdotool search --classname 'ephemeral' windowclose
 	fi
-	eval $(ls -l $TERMSIZE)
+	eval $(ls -1 $TERMSIZE)
 	wtp $X $Y $WIDTH $HEIGHT $winid
 	waitron window_focus $winid
 }
