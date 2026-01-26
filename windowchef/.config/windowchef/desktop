@@ -42,6 +42,7 @@ toggle() {
 		waitron window_focus $winid  # BUG: waitron group_toggle/_deactivate does not deactivate whole group unless the top of the window stack has focus
 		waitron group_deactivate $1
 		touch $GROUP:$1:deactivated
+		desktop $(cat $WME:desktop:last)
 	fi
 }
 

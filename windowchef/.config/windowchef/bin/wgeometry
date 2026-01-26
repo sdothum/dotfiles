@@ -7,13 +7,13 @@
 
 # ................................................... Window geometry management
 
-# Usage: wgeometry [record | restore] <winid>
+# Usage: wgeometry [snapshot | restore] <winid>
 
 # provides window geometry history management
 case $1 in
-	record  ) [ -e $WINFO:${2} ]        && cp $WINFO:${2} $WINFO:${2}:record ;;
-	restore ) [ -e $WINFO:${2}:record ] && cp $WINFO:${2}:record $WINFO:${2} ;;
-	*       ) notify critical 'wgeometry' "$@" ;;
+	snapshot ) [ -e $WINFO:${2} ]          && cp $WINFO:${2} $WINFO:${2}:snapshot ;;
+	restore  ) [ -e $WINFO:${2}:snapshot ] && cp $WINFO:${2}:snapshot $WINFO:${2} ;;
+	*        ) notify critical 'wgeometry' "$@" ;;
 esac
 
 # kak: filetype=sh

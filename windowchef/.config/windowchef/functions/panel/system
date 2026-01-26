@@ -117,9 +117,9 @@ clock -i 1 -sf "S%s" >$PANEL_FIFO:$fifo &
 
 # cpu usage, cpu temperature, memory usage stats
 if [ -e $STAT ] ;then
-	while : ;do echo "U$(cpu_percent)ᵁ" >$PANEL_FIFO:$fifo ;done &  # sar cycle >~ 1 second
-	while : ;do echo "C$(cpu_speed)ᴳ" >$PANEL_FIFO:$fifo; sleep 1; done &
-	while : ;do echo "T$(cpu_temp)°" >$PANEL_FIFO:$fifo; sleep 2; done &
+	while : ;do echo "U$(cpu_percent)ᵁ" >$PANEL_FIFO:$fifo          ;done &  # sar cycle >~ 1 second
+	while : ;do echo "C$(cpu_speed)ᴳ"   >$PANEL_FIFO:$fifo; sleep 1 ;done &
+	while : ;do echo "T$(cpu_temp)°"    >$PANEL_FIFO:$fifo; sleep 2 ;done &
 	while : ;do free -h | grep 'Mem:' | sed -r 's/^[^ ]* *[^ ]* *([0-9.]*)Mi.*/\1ᴹ/; s/^[^ ]* *[^ ]* *([0-9.]*)Gi.*/\1ᴹ/; s/^/M/' >$PANEL_FIFO:$fifo; sleep 3; done &
 fi
 

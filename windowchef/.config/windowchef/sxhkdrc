@@ -108,7 +108,7 @@ super + {_,ctrl} + space
 
 super + alt + space
 	window size term            ;\
-	wgeometry record $(pfw)     ;\
+	wgeometry snapshot $(pfw)   ;\
 	window snap center vertical ;\
 	wgeometry restore $(pfw)
 
@@ -327,17 +327,6 @@ super + ctrl + j
 	mpc toggle ;\
 	mpc | grep -q playing && \{ piano stop; mpc:settings volume; mpc:settings; \}
 
-super + alt + ctrl + j
-	mpc clear
-
-super + {comma,period}
-	mpc volume {-10, +10} ;\
-	mpc:settings volume
-
-super + ctrl + {comma,period}
-	mpc volume {-2, +2} ;\
-	mpc:settings volume
-
 super + shift + {comma,period}
 	mpc {prev, next} ;\
 	mpc:settings
@@ -347,6 +336,21 @@ super + k
 
 super + ctrl + k
 	piano stop
+
+# ................................................................. audio volume
+
+super + {comma,period}
+	mpc volume {-10, +10} ;\
+	mpc:settings volume
+
+super + ctrl + {comma,period}
+	pactl set-sink-volume @DEFAULT_SINK@ {-10%,+10%}
+	# mpc volume {-2, +2} ;\
+	# mpc:settings volume
+
+super + alt + ctrl + j
+	pactl set-sink-mute @DEFAULT_SINK@ toggle
+	# mpc clear
 
 # ......................................................................... http
 
