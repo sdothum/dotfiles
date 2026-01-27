@@ -32,6 +32,7 @@ or set -x PATH $PATH ~/.gem/ruby/(rubyver)/bin ~/.cabal/bin /bin /sbin /usr/sbin
 
 # cli filemanager
 set -x FILEMANAGER yazi
+set -x MANPAGER /usr/bin/kak
 
 # ........................................................... System environment
 
