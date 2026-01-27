@@ -13,7 +13,7 @@ set_geometry   # X Y WIDTH HEIGHT
 
 move()   {
 	# xdotool windowmove $1 $2 $3
-	wtp $1 $2 $WIDTH $HEIGHT $(pfw)
+	wtp $1 $2 $WIDTH $HEIGHT $winid
 	waitron window_focus $winid
 }
 

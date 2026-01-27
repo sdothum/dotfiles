@@ -17,14 +17,14 @@ height=$(( H - border * 2 ))  # tiles are full vertical panes
 
 left() {
 	width=$(( X + WIDTH - margin ))
-	wtp $margin $top $width $height $(pfw)
+	wtp $margin $top $width $height $winid
 }
 
 # ................................................................... Tile right
 
 right() {
 	width=$(( W - X + margin - border * 2 ))
-	wtp $X $top $width $height $(pfw)
+	wtp $X $top $width $height $winid
 }
 
 # .................................................................. Tile panels
@@ -36,7 +36,7 @@ tile() {
 	[ $tile -eq 0 ] && tile=$1
 	tile=$(( tile - 1 ))  # 0 -> left
 
-	wtp $(( width * tile + margin + border * tile * 2 + tile * gap )) $top $width $height $(pfw)
+	wtp $(( width * tile + margin + border * tile * 2 + tile * gap )) $top $width $height $winid
 }
 
 case $1 in

@@ -1,0 +1,64 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="LS $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ....................................................... List windowchef branch
+
+# Usage: LS <branch>[/<subbranch>]*
+
+chefdb() {
+	if [ $2 ] ;then
+		echo $1/$2; ls -1 $1/$2
+	else
+		echo $1; for i in $(ls -1 $1) ;do echo $i; ls -1 $1/$i | sort ;done
+	fi
+}
+
+chefinfo() {
+	if [ $2 ] ;then
+		echo $1/$2; ls -1 $1/$2
+	else
+		echo $1; ls -1 $1
+	fi
+}
+
+hidden() {
+	echo $HIDDEN
+	for i in $(ls -1 $GROUP) ;do
+		window=$(find $HIDDEN -name "$i*")
+		[ "$window" ] || continue
+		[ $i = "$group" ] || { group=$1; echo $i; }
+		echo $window | cut -d' ' -f2
+	done
+}
+
+case $1 in
+	$WME* ) ls -1 $1 2>/dev/null ;;
+	*     )
+		case $1 in
+			group             ) ls -1 $GROUP/$2             2>/dev/null ;;
+			group/current     ) ls -1 $GROUP/current                    ;;
+			group/last        ) ls -1 $GROUP/last                       ;;
+			group:deactivated ) ls -1 $GROUP:deactivated/$2 2>/dev/null ;;
+			group:focus       ) ls -1 $GROUP:focus/$2       2>/dev/null ;;
+			hidden            ) ls -1 $HIDDEN                           ;;
+			window            ) ls -1 $WME/window/$2        2>/dev/null ;;
+			*                 )
+				case $1 in
+					g ) chefdb $GROUP $2                           ;;
+					c ) echo $GROUP/current; ls -1 $GROUP/current  ;;
+					l ) echo $GROUP/last;    ls -1 $GROUP/last     ;;
+					d ) chefinfo $GROUP:deactivated $2             ;;
+					f ) chefdb $GROUP:focus $2                     ;;
+					h ) hidden                                     ;;
+					w ) chefinfo $WME/window $2                    ;;
+					* ) ls -1 $WME/$1                              ;;
+				esac
+		esac
+		;;
+esac
+
+# kak: filetype=sh

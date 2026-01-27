@@ -16,8 +16,8 @@ rwidth=$(( W - X + margin ))
 
 # .......................................................... Extend horizontally
 
-left()  { wtp $margin $Y $lwidth $HEIGHT $(pfw); }
-right() { wtp $X $Y $rwidth $HEIGHT $(pfw); }
+left()  { wtp $margin $Y $lwidth $HEIGHT $winid; }
+right() { wtp $X $Y $rwidth $HEIGHT $winid; }
 near()  { [ $X -le $(opposite_side) ] && left || right; }
 far()   { [ $X -le $(opposite_side) ] && right || left; }
 
@@ -26,9 +26,9 @@ far()   { [ $X -le $(opposite_side) ] && right || left; }
 top() {
 	height=$(( Y + HEIGHT - top ))
 	case $1 in
-		left  ) wtp $margin $top $lwidth $height $(pfw) ;;
-		right ) wtp $X $top $rwidth $height $(pfw) ;;
-		*     ) wtp $X $top $WIDTH $height $(pfw) ;;
+		left  ) wtp $margin $top $lwidth $height $winid ;;
+		right ) wtp $X $top $rwidth $height $winid ;;
+		*     ) wtp $X $top $WIDTH $height $winid ;;
 	esac
 }
 
@@ -37,9 +37,9 @@ top() {
 bottom() {
 	height=$(( H - Y + border ))
 	case $1 in
-		left  ) wtp $margin $Y $lwidth $height $(pfw) ;;
-		right ) wtp $X $Y $rwidth $height $(pfw) ;;
-		*     ) wtp $X $Y $WIDTH $height $(pfw) ;;
+		left  ) wtp $margin $Y $lwidth $height $winid ;;
+		right ) wtp $X $Y $rwidth $height $winid ;;
+		*     ) wtp $X $Y $WIDTH $height $winid ;;
 	esac
 }
 

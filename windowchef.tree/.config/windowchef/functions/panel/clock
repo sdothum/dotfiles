@@ -23,36 +23,26 @@ fi
 DMS=true  # unset for : (colon) time
 
 seconds() { tic=${line#*| }; tic=${tic%|*}; }
-
 ribbon()  { echo "$(echo "$tic" | cut -c $(( pos + 1 ))-)$(echo "$tic" | cut -c 1-$pos)"; }
 
 tape() {
 	tic="${line#*|}"
 	tic="${tic%|*}"
+	pos=$(( ${pos:-0} + 1 ))
 	if [ $DMS ] ;then
 		if [ "${tic%%;*}" -lt 10 ] ;then
-			len=12
-			pos=${tic##*.}
-			pos=$(echo "${pos%???} % 11" | bc)
-			[ $pos = 0 ] && pos=11
-		else
-			len=13
-			pos=$(( ${pos:-0} + 1 ))
 			[ $pos -gt 11 ] && pos=0
+		else
+			[ $pos -gt 12 ] && pos=0
 		fi
-		ribbon | sed 's/;/°/; s/\./’/; s/,/” /'  # double byte utf-8 chars not handled by cut
+		tic=$(ribbon | sed 's/;/°/; s/\./’/; s/,/”/')  # double byte utf-8 chars not handled by cut
 	else
 		if [ "${tic%%:*}" -lt 10 ] ;then  # hours 0 - 9, cycle aligns on ten second intervals
-			len=11
-			pos=${tic##*:}
-			pos=$(( ${pos%??} % 10 ))
-			[ $pos = 0 ] && pos=10
-		else                              # hours 10 - 12, format string continously cycles
-			len=12
-			pos=$(( ${pos:-0} + 1 ))
+			[ $pos -gt  9 ] && pos=0
+		else
 			[ $pos -gt 10 ] && pos=0
 		fi
-		ribbon
+		tic=$(ribbon)
 	fi
 }
 
@@ -81,7 +71,7 @@ currently() {
 	if [ $TIC ] ;then
 		case $TIC in
 			s*  ) seconds ;;
-			t*  ) tic=$(tape)    ;;
+			t*  ) tape    ;;
 		esac
 		clock="%{F$DEFAULT_FG}$tic%{F-}"
 	fi
@@ -122,15 +112,15 @@ STREAM=$(mkfifo $FIFO/$msg)  # SEE: panel wrapper
 # NOTE: added time since epoch for race condition trap
 if [ $DMS ] ;then
 	case $TIC in
-		se* ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I°%M %S%p|#{F-}${SEP}%a %-d %b ’%y"  >$STREAM & ;;
-		t*  ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I;%M.%S,%p|#{F-}${SEP}%a %-d %b ’%y" >$STREAM & ;;  # SEE: tape() sed utf-8
-		*   ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}%-I°%M#{F-} %p|%S|${SEP}%a %-d %b ’%y"   >$STREAM & ;;
+		se* ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I°%M %S%p|#{F-}${SEP}%a %-d %b ’%y"   >$STREAM & ;;
+		t*  ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I;%M.%S, %p|#{F-}${SEP}%a %-d %b ’%y" >$STREAM & ;;  # SEE: tape() sed utf-8
+		*   ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}%-I°%M#{F-} %p|%S|${SEP}%a %-d %b ’%y"    >$STREAM & ;;
 	esac
 else
 	case $TIC in
-		se* ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I:%M %S%p|#{F-}${SEP}%a %-d %b ’%y"  >$STREAM & ;;
-		t*  ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I:%M:%S%p|#{F-}${SEP}%a %-d %b ’%y"  >$STREAM & ;;
-		*   ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}%-I:%M#{F-} %p|%S|${SEP}%a %-d %b ’%y"   >$STREAM & ;;
+		se* ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I:%M %S%p|#{F-}${SEP}%a %-d %b ’%y"   >$STREAM & ;;
+		t*  ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I:%M:%S%p|#{F-}${SEP}%a %-d %b ’%y"   >$STREAM & ;;
+		*   ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}%-I:%M#{F-} %p|%S|${SEP}%a %-d %b ’%y"    >$STREAM & ;;
 	esac
 fi
 
