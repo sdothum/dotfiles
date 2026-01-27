@@ -121,10 +121,10 @@ set -l HUMAN h
 abbr df "df -$HUMAN"
 abbr du "du -$HUMAN -d1"
 abbr dus "/usr/bin/du -hs * | sort -h"
-abbr L 'ls -AL'
 abbr l 'ls -A'
 abbr l1 'ls -1 | print'
 abbr ldot "ls -lAd$HUMAN .* | print"
+abbr lL 'ls -AL'
 abbr ll "ls -lA$HUMAN"
 abbr llr "ls -lAR$HUMAN"
 abbr lr "ls -LAR"
@@ -177,6 +177,7 @@ abbr gaps 'rlwrap -n gaps'
 abbr h: 'ls -l /tmp/herbstluftwm:*'
 abbr hc 'herbstclient'
 abbr herbstluftwm ". $HOME/.config/herbstluftwm/config/ENV"
+abbr L 'chefls'
 abbr qkss 'qk stop; qk start'
 abbr X x
 
