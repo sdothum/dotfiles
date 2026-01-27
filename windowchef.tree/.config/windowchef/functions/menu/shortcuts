@@ -38,8 +38,8 @@ case "${string%% *}" in
 	s | f ) xdotool type $(echo "$string" | sed "s/.*$SEP //")       # non-latin1 characters
 		;;
 	*     )
-		for i in $(echo "$string" | sed "s/.*$SEP //; s/./& /g") ;do  # NOTE: to avoid xdotool type keystroke delay
-			xdotool key $(printf "U%x" "'$i")
+		for i in $(echo "$string" | sed "s/.*$SEP //; s/ /⁋/g; s/./& /g") ;do  # NOTE: to avoid xdotool type keystroke delay
+			[ "$i" = '⁋' ] && xdotool key space || xdotool key $(printf "U%x" "'$i")
 		done ;;
 esac
 

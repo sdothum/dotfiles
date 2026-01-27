@@ -6,7 +6,7 @@
 
 # ........................................................ Unhide hidden windows
 
-windows()  { ls -1 $HIDDEN/* 2>/dev/null | grep -vE '(^|/.*:)$'; }  # remove pathnames and empty lines
+windows()  { ls -1 $HIDDEN/* 2>/dev/null | grep -vE '(^|/.*:)$' | sort; }  # remove pathnames and empty lines
 finished() { [ -z "$(windows)" ]; }
 
 finished && exit

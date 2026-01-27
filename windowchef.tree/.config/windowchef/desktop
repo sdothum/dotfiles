@@ -75,7 +75,7 @@ desktop() {
 			;;
 
 		*        )
-			[ $desktop -eq $1 ] && exec desktop add $(pfw 2>/dev/null) $1          # trap windowchef autostart initialization errors
+			[ $desktop -eq $1 ] && exec desktop add $(pfw 2>/dev/null) $1            # trap windowchef autostart initialization errors
 			current $1
 			waitron group_activate $1
 			[ -e $GROUP:focus/$1 ] && waitron window_focus $(ls -1 $GROUP:focus/$1)  # restore window stack NOTE: this also fixes calibre mouse focus issue!

@@ -35,7 +35,10 @@ hidden() {
 	done
 }
 
+branch() { ls -1 $WME | grep $1; }
+
 case $1 in
+	''    ) ls -1 $WME           ;;
 	$WME* ) ls -1 $1 2>/dev/null ;;
 	*     )
 		case $1 in
@@ -55,7 +58,7 @@ case $1 in
 					f ) chefdb $GROUP:focus $2                     ;;
 					h ) hidden                                     ;;
 					w ) chefinfo $WME/window $2                    ;;
-					* ) ls -1 $WME/$1                              ;;
+					* ) [ $(branch $1 | wc -l) -eq 1 ] && ls -1 $WME/$(branch $1) >/dev/null 2>&1 && { echo $WME/$(branch $1); ls -1 $WME/$(branch $1); } ;;
 				esac
 		esac
 		;;
