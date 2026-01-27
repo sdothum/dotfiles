@@ -9,6 +9,15 @@ define-command console-plugins %{ nop }  # USAGE: try %{ console-plugins } catch
 # Ncurses console plugins
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+# .................................................................. ansi-colors
+
+bundle kak-ansi https://github.com/eraserhd/kak-ansi.git %{
+	hook global WinSetOption man.* %{
+		ansi-enable
+		set-option buffer readonly true
+	}
+}
+
 # ................................................................... auto-pairs
 
 bundle auto-pairs https://github.com/alexherbo2/auto-pairs.kak.git %{
