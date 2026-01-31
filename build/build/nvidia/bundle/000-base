@@ -76,6 +76,7 @@
 # mbuffer
 # mtpfs     # for supernote
 # gvfs-mtp  # for supernote
+# simple-mtpfs
   dosfstools
   exfatprogs
   fuse
