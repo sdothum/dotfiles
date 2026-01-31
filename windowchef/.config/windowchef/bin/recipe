@@ -1,0 +1,23 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="LS $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ....................................................... windowchef ingredients
+
+# Usage: chefstate <path> [<value>]
+#                 where <path> is a branch off $SESSION/windowchef
+
+ingredient=$SESSION/$WM/$1
+
+if [ "$2" ] ;then
+	rm -rf "$ingredient/*"
+	mkdir -p "$ingredient/$2"
+	echo "$2"
+else
+	ls -1 $ingredient 2>/dev/null  # return chef state
+fi
+
+# kak: filetype=sh
