@@ -65,6 +65,9 @@ download = [
 feh = [
 	{ run = 'feh "$1"',         orphan = true, desc = "feh",         for = "linux" },  # SEE: feh wrapper
 ]
+mpv = [
+	{ run = 'mpv "$1"',         orphan = true, desc = "mpv",         for = "linux" },
+]
 oculante = [
 	{ run = 'oculante "$1"',    orphan = true, desc = "oculante",    for = "linux" },
 ]
@@ -93,7 +96,7 @@ rules = [
 	{ mime = "image/tiff",                                                                                  use = [ "oculante", "darktable", "gimp", "krita", "rawtherapee", "reveal" ] },
 	{ mime = "image/*",                                                                                     use = [ "open", "reveal" ] },
 	# Media
-	{ mime = "{audio,video}/*",                                                                             use = [ "play", "reveal" ] },
+	{ mime = "{audio,video}/*",                                                                             use = [ "mpv", "play", "reveal" ] },
 	# Archive
 	{ mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", use = [ "extract", "reveal" ] },
 	# JSON
