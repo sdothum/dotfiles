@@ -4,8 +4,16 @@
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# .................................................................... Wallpaper
+# ............................................................ Wallpaper (theme)
 
-ls -l $WALLPAPER | awk '{ gsub(".(png|jpg)", ".theme", $NF); print $NF }'
+# Usage: chef theme [dark | light]
+
+theme() { recipe -/ theme/root | awk '{ gsub(".(png|jpg)", ".theme", $NF); print $NF }'; }
+
+case $1 in
+	'' ) [ -e "$(theme)" ] && cat $(theme) || return 1 ;;
+	*  ) echo $1 >$(theme) ;;
+esac
+
 
 # kak: filetype=sh

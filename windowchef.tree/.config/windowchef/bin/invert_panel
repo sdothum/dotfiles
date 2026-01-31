@@ -7,7 +7,7 @@
 
 # ........................................................ Toggle panel contrast
 
-# Usage: invert [notify]
+# Usage: invert_panel [notify]
 
 [ $1 ] && notify 15 'Invert Panel Contrast' 'Press <b>Mod-Ctrl-v</b>' || toggle contrast
 

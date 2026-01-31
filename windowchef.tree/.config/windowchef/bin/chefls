@@ -7,7 +7,7 @@
 
 # ....................................................... List windowchef branch
 
-# Usage: LS <branch>[/<subbranch>]*
+# Usage: chef <branch>[/<subbranch>]*
 
 chefdb() {
 	if [ $2 ] ;then

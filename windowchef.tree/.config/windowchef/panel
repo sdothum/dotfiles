@@ -10,15 +10,10 @@
 # Usage: draw <msg>, see functions/panel
 
 DOTDIR=$(dirname $0)/functions/draw
-[ -e $SPANEL ] || exit  # no panel
-PANELTOP=$SPANEL:top
-STARTREK=$SPANEL:startrek
-STAT=$SPANEL:stat
-TICKER=$SPANEL:ticker
-WEATHER=$SPANEL:weather
-
-which lemonbar >/dev/null 2>&1   || exit
+recipe -q panel/format             || exit  # no panel
+which lemonbar >/dev/null 2>&1     || exit
 pstat "lemonbar -d -n lemonbar:$1" && exit
+
 toggle picom on
 
 # .................................................................. Panel theme
@@ -29,10 +24,7 @@ ACTIVE_FG="#$(rice color active)"
 INACTIVE_FG="#$(rice color inactive)"
 FREE_FG="#$(rice color free)"
 OCCUPIED_FG=$FREE_FG
-
-# initialize (for overlay redraw), see draw root
-# $STARTREK == ['', #<color>, $ACTIVE_FG, ..] 
-[ -s $STARTREK ] && ICANDY="#$(cat $STARTREK)" || ICANDY="$DEFAULT_FG"
+STARTREK=$(recipe panel/startrek) && ICANDY="#$STARTREK" || ICANDY="$DEFAULT_FG"
 
 transparency() { echo "#$1${2#\#}"; }  # Usage: transparency <amount> #<rrggbb>
 
@@ -88,7 +80,7 @@ deactivated()  { [ -e $GROUP:deactivated/$1 ]; }
 mkfifo() { [ -e $1 ] && rm -f $1; mkdir -p ${1%/*}; /bin/mkfifo $1; echo $1; }
 
 handlebar() {
-	lemonbar -d -n "lemonbar:$fifo" -a 0                             \
+	lemonbar -d -n "lemonbar:$msg" -a 0                             \
 		-g ${panel_width}x$PANEL_HEIGHT+$panel_offsetX+$panel_offsetY \
 		-u $PANEL_UNDERLINE                                           \
 		-f "$PANEL_FONT:size=$fontsize" -F "$DEFAULT_FG" -B "$DEFAULT_BG" 2>/dev/null  # (??) invalid color errors.. from transparency?

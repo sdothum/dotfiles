@@ -1,11 +1,15 @@
+#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="restore/unclutter $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ............................................................ Restore unclutter
+# ................................................................. Conky colorN
 
-toggle unclutter on
+usage() { usage: "rice $(basename $0) <color>"; }
+
+COLORS=$PALETTE/.theme
+
+[ $1 ] && grep "^$1.$(recipe theme/contrast)" $COLORS | cut -d= -f2 || usage
 
 # kak: filetype=sh

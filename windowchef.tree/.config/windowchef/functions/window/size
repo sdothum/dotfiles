@@ -54,6 +54,7 @@ reterm() {
 	eval $(ls -1 $TERMSIZE)
 	wtp $X $Y $WIDTH $HEIGHT $winid
 	waitron window_focus $winid
+	waitron window_snap middle
 }
 
 # ................................................................... Paper size

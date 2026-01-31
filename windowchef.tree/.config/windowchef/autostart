@@ -6,20 +6,21 @@
 
 # .................................................................... Autostart
 
+sleep 0.25  # allow window environment to settle just enough to avoid dirty (trace) messages in log
 restore root
 restore panel
 conky clock auto
 restore unclutter
-displaycal3             # load color profile
+displaycal3              # load color profile
 
-imwheel -kill           # set trackball scrollwheel speed
+imwheel -kill            # set trackball scrollwheel speed
 rm -rf $WME/pavucontrol  # hide pavucontrol SEE: rulerrc
 pulse
 udev
 
 desktop $(chef desktop "DESK")
-[ -e $SESSION/cbonsai ] && cbonsai
-[ -e $SESSION/term    ] && term
+recipe -q cbonsai && cbonsai
+recipe -q term    && term term $(recipe term)
 
 # issue running as runit service
 if void 'runit' ;then

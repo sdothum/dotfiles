@@ -48,17 +48,16 @@ tape() {
 
 # ................................................................ Weather watch
 
-FORECAST=$WME/${WEATHER##*/}
-UTFSLSH='⁄'  # utf-8 slash 0u2044 (filenames may not contain ascii '/' 0u002f)
+FORECAST=$WME/weather
 
-weather() { unset update_weather; rm -rf $FORECAST; mkdir -p "$FORECAST/$(conky weather panel | sed "s|/|$UTFSLSH|g")" & }
+weather() { unset update_weather; rm -rf $FORECAST; mkdir -p "$FORECAST/$(conky weather panel | utfslash)" & }
 
-[ -e $WEATHER ] && weather
+recipe -q panel/weather && weather
 
 # ...................................................... Clock & weather refresh
 
 # tic indicator: none (unset), dot, circle, square, bar, tape, seconds
-[ -e $TICKER ] && { TIC=$(cat $TICKER); TIC=${TIC:-tape}; }
+TIC=$(recipe panel/ticker) && TIC=${TIC:-tape} || unset TIC
 
 currently() {
 	# prevent lemonbar race to catch up (impossible to force race condition to test..)
@@ -77,7 +76,7 @@ currently() {
 	fi
 
 	# update weather every 10 minutes
-	if [ -e $WEATHER ] ;then
+	if recipe -q panel/weather ;then
 		[ $DMS ] && minute=${line#*;?} || minute=${line#*:?}  # hh:mm:ss.* -> m:ss.*
 		case $(printf '%.1s' "$minute") in                    # -> m
 			0 | 5 ) [ $update_weather ] && weather ;;

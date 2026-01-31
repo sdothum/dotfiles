@@ -22,27 +22,28 @@ delay=3  # invert panel pause
 root()   { find $PALETTE -name '*png' | grep -E '(dark|light)/' | sed -r "s,.*/(.*)/(.*)/(.*).png,\3^$SEP \1 \2," | sort -r -k2 >$HISTORY/root; }
 themes() { find $PALETTE -type d | cut -d/ -f7 | sort -u | grep '[^ ]'; }
 hex()    { echo $1 | grep -E -q '^[0-9A-Fa-f]{6}$'; }
-theme()  { [ $1 = dark ] && echo light >$THEME || echo dark >$THEME; }
+theme()  { [ $1 = dark ] && recipe theme/contrast light || recipe theme/contrast dark; }
 menu()   { menu="$(X $SAVE)\n$(X $INVERT)"; }
 
 save() {
 	[ $hue ] && hue="$hue\n"
 	hue=$(echo "$hue$(themes)" | rmenu 'Colour (name)') || exit
-	contrast=$(cat $THEME)  # see draw root color
+	contrast=$(recipe theme/contrast)  # see draw root color
 	theme $contrast
 	mhistory root "$bg^$SEP $contrast $hue"
-	rice swatch $bg $hue
+	rice swatch $(recipe theme/random:rgb) $hue
 	root
-	ln -sf $PALETTE/$contrast/$hue/$bg.png $WALLCOLOR
-	ln -sf $WALLCOLOR $BACKGROUND
-	notify low 'Background Color' "$bg saved"
+	recipe -/ theme/wallcolor "$PALETTE/$contrast/$hue/$bg.png"
+	recipe theme/root $(recipe theme/wallcolor)
+	notify low 'Background Color' "$(recipe theme/random:rgb) saved"
+	recipe -d theme/random:rgb
 }
 
 # rebuild swatches
 while [ $1 ] ;do
 	case $1 in
 		cache ) root ;;
-		save  ) bg=$(cat $RGB); save; exit ;;
+		save  ) bg=$(recipe theme/random:rgb); save; exit ;;
 	esac
 	shift
 done
@@ -50,13 +51,12 @@ done
 setroot() {
 	draw root color $color
 	bg=$color
-	# overlay conky panel over rmenu screen!
-	draw conky
 	menu
 }
 
-colors() { [ "$menu" ] && echo | mhistory root | sed "1i$menu" || echo | mhistory root | sed "1i$(X $VIEWER)\n$(X $RANDOM)\n$KEEP$(X $COLORS)\n$(X $PICK)\n$(X $UPDATE)"; }
+colors() { [ "$menu" ] && echo | mhistory root | sed "1i$menu" || echo | mhistory root | sed "1i$(X $RANDOM)\n$(X $VIEWER)\n$KEEP$(X $COLORS)\n$(X $PICK)\n$(X $UPDATE)"; }
 
+recipe -q theme/random:rgb && KEEP="$(X $SAVE)\n"
 while color=$(colors | column -s^ -t | rmenu 'Setroot') || exit ;do
 	unset KEEP
 	case ${color#$(X)} in
@@ -74,10 +74,9 @@ while color=$(colors | column -s^ -t | rmenu 'Setroot') || exit ;do
 			bg=$(echo $color | cut -d' ' -f1)
 			theme $(echo $color | cut -d' ' -f3)
 			draw root color $bg $0  # $0 suppress luminance setting, see draw root
-			ln -sf $(find $PALETTE -name $bg.png | head -1) $WALLCOLOR
-			ln -sf $WALLCOLOR $BACKGROUND
+			recipe -/ theme/wallcolor $(find $PALETTE -name $bg.png | head -1)
+			recipe theme/root $(recipe theme/wallcolor)
 			mhistory root "$(echo $color | sed "s/ *$SEP */^$SEP /")"
-			draw conky
 			break
 			;;
 

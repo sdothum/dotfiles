@@ -1,11 +1,19 @@
+#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="restore/unclutter $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ............................................................ Restore unclutter
+# ................................................................. Random color
 
-toggle unclutter on
+usage() { usage: "$(basename $0) randomc [-#]"; exit 1; }
+
+case $1 in
+	''  ) hash='#' ;;
+	-\# ) ;;
+	*   ) usage ;;
+esac
+
+echo "$hash$(od -An -N3 -x /dev/random | sed 's/ 00//; s/ //')"
 
 # kak: filetype=sh

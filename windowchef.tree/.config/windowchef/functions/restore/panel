@@ -10,9 +10,8 @@
 
 pkill -KILL -f "$WM/panel .*"
 
-[ $1 ] && echo $1 >$SPANEL
-[ -e $SPANEL ] || exit
-panel=$(cat $SPANEL)
+panel=$(recipe -e panel/format $1)
+[ "$panel" ] || exit
 
 draw panel $panel
 

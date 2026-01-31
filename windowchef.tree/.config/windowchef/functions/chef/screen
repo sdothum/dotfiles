@@ -12,21 +12,16 @@
 CONFIG=$HOME/.config/$WM/windowchefrc
 VOFFSET=6              # vertical (visual monitor angle) offset for panel:top SEE: draw panel
 
-[ -e $SPANEL:indent ] && indent=$(cat $SPANEL:indent)  # indent margin ratio
-
-chefrc() {
-	[ "${1#* }" = "$1" ] && word=4 || word=5
-	grep "^waitron wm_config $1" $CONFIG | sed 's/  */ /g' | cut -d' ' -f$word
-}
+indent=$(recipe panel/indent)
 
 # replicating windowchef window geometry :)
 parse() {
-	PANEL_HEIGHT=$(chefrc 'gap_width bottom')
-	MARGIN=$(chefrc 'gap_width left')
+	PANEL_HEIGHT=$(recipe 'ui/gap_width bottom')
+	MARGIN=$(recipe 'ui/gap_width left')
 	PANEL_INDENT=$(( MARGIN * ${indent:-4 / 3} ))
-	BORDER=$(chefrc 'border_width')
-	TOP=$(chefrc 'gap_width top')
-	GAP=$(chefrc 'grid_gap_width')
+	BORDER=$(recipe 'ui/border_width')
+	TOP=$(recipe 'ui/gap_width top')
+	GAP=$(recipe 'ui/grid_gap_width')
  }
 
 parse

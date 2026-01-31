@@ -1,0 +1,34 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................... Display brightness
+
+usage() { usage: "$(basename $0) [+-]<percent>"; exit 1; }
+
+min=20
+max=100
+
+brightness() {
+	xrandr --output HDMI-0 --brightness $(echo "scale=2; ${1} / 100" | bc)
+	recipe brightness ${1}
+	notify brightness "${1}%"
+}
+
+level=$(recipe brightness)
+[ $level ] || level=100
+
+[ $1 ] && { echo $1 | grep -q '^[+-]*[0-9]*$' || usage; }
+
+case $1 in
+	'' ) ;;
+	-* ) level=$(( level + $1 )); [ $level -lt $min ] && level=$min ;;
+	+* ) level=$(( level + $1 )); [ $level -gt $max ] && level=$max ;;
+	*  ) level=$1 ;;
+esac
+
+brightness $level
+
+# kak: filetype=sh

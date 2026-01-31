@@ -10,12 +10,10 @@
 #
 # NOTE: this script is executed via "draw panel" SEE: also restore panel
 
+recipe -q panel/system || exit
 [ $1 ] && panel_offsetY=$1
 
-if [ -e $STARTREK ] ;then
-	# OCCUPIED='■'
-	# FREE='□'
-	# CURRENT='□'   # active and FREE
+if [ $STARTREK ] ;then
 	OCCUPIED=''
 	FREE=''
 	CURRENT=''    # active and FREE
@@ -58,7 +56,7 @@ desktops() {
 		desktops="${desktops}${TAG_PAD}${format}${icon}%{-u}%{U-}%{B-}%{F-}"
 		viewscreen="${viewscreen} ${format} ${icon}"  # star trek!
 	done
-	[ -e $STAT ] || desktops="${desktops}$TAG_PAD"  # center tags with triple padding, see $stat
+	desktops="${desktops}$TAG_PAD"  # center tags with triple padding, see $stat
 }
 
 # .................................................................... Animation
@@ -71,7 +69,7 @@ currently() {
 	[ ${EPOCH#S} -lt $(date +%s -d "-1 seconds") ] && { unset EPOCH; return; }
 	desktops
 
-	if [ -e $STARTREK ] ;then
+	if [ $STARTREK ] ;then
 		[ $counter -lt $tagcount ] && counter=$(( counter + 1 )) || counter=1
 
 		set -- ${viewscreen}
@@ -116,12 +114,10 @@ STREAM=$(mkfifo $FIFO/$msg)  # SEE: panel wrapper
 clock -i 1 -sf "S%s" >$STREAM &
 
 # cpu usage, cpu temperature, memory usage stats
-if [ -e $STAT ] ;then
-	while : ;do echo "U$(cpu_percent)ᵁ" >$STREAM          ;done &  # sar cycle >~ 1 second
-	while : ;do echo "C$(cpu_speed)ᴳ"   >$STREAM; sleep 1 ;done &
-	while : ;do echo "T$(cpu_temp)°"    >$STREAM; sleep 2 ;done &
-	while : ;do free -h | grep 'Mem:' | sed -r 's/^[^ ]* *[^ ]* *([0-9.]*)Mi.*/\1ᴹ/; s/^[^ ]* *[^ ]* *([0-9.]*)Gi.*/\1ᴹ/; s/^/M/' >$STREAM; sleep 3; done &
-fi
+while : ;do echo "U$(cpu_percent)ᵁ" >$STREAM          ;done &  # sar cycle >~ 1 second
+while : ;do echo "C$(cpu_speed)ᴳ"   >$STREAM; sleep 1 ;done &
+while : ;do echo "T$(cpu_temp)°"    >$STREAM; sleep 2 ;done &
+while : ;do free -h | grep 'Mem:' | sed -r 's/^[^ ]* *[^ ]* *([0-9.]*)Mi.*/\1ᴹ/; s/^[^ ]* *[^ ]* *([0-9.]*)Gi.*/\1ᴹ/; s/^/M/' >$STREAM; sleep 3; done &
 
 cat $STREAM | panel | handlebar &
 

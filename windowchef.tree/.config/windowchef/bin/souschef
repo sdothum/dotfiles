@@ -135,8 +135,7 @@ case $menu in
 					- ) desktop restore               ;;
 					* ) desktop ${group%% *} specific ;;
 				esac
-
-x;;
+				;;
 			raise  )
 				group=$(echo "$groups" | sed '1i0 last' | pick "raise") || exit
 				[ ${group%% *} = 0 ] && group=last
