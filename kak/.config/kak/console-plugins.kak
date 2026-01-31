@@ -9,13 +9,12 @@ define-command console-plugins %{ nop }  # USAGE: try %{ console-plugins } catch
 # Ncurses console plugins
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# .................................................................. ansi-colors
+# ................................................................ ansi manpages
+
+# NOTE: export MANPAGES='kak -ro'  # readonly
 
 bundle kak-ansi https://github.com/eraserhd/kak-ansi.git %{
-	hook global WinSetOption man.* %{
-		ansi-enable
-		set-option buffer readonly true
-	}
+	hook global BufCreate '/tmp/man\.[a-zA-Z0-9]+' ansi-enable
 }
 
 # ................................................................... auto-pairs
