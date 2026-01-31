@@ -170,7 +170,6 @@ he* )
 	setpath $HOME/.config/herbstluftwm
 	# export ROOT=$HOME/tmp
 	export PANEL_BOTTOM=true
-	export SETROOT=$(cat $HOME/.setroot 2>/dev/null)  # setroot last wallpaper or wall, otherwise random wall
 	. $(which ENV)
 	which xdotool >/dev/null || $TERM &  # initial build install?
 	$TERM &
