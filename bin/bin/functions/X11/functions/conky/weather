@@ -12,15 +12,10 @@ connect || exit
 
 # http://www.weatheroffice.gc.ca/business/index_e.html for city codes
 case $1 in
-	calgary   ) city=ab-52; shift ;;
-	halifax   ) city=ns-19; shift ;;
-	kingston  ) city=on-69; shift ;;
-	nanaimo   ) city=bc-20; shift ;;
-	nelson    ) city=bc-37; shift ;;
-	vancouver ) city=bc-74; shift ;;
-	victoria  ) city=bc-85; shift ;;
-	ottawa    ) city=on-52; shift ;;
-	*         ) city=on-52 ;;
+	calgary  ) city=51.046_-114.057 ;shift ;;
+	kingston ) city=44.236_-76.501  ;shift ;;
+	kelowna  ) city=49.883_-119.483 ;shift ;;
+	*        ) city=45.403_-75.687 ;;  # ottawa
 esac
 
 sep=', '
@@ -30,7 +25,7 @@ case $1 in
 esac
 
 # scrape weather synopsis
-WEATHER=$(curl --silent "https://weather.gc.ca/rss/city/${city}_e.xml?source=ignitionfork")
+WEATHER=$(curl --silent "https://weather.gc.ca/rss/weather/${city}_e.xml")
 if [ $debug ] ;then
 	echo $WEATHER >/tmp/conky:weather
 	echo Weather .. $WEATHER

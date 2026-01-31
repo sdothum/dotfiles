@@ -76,7 +76,7 @@ done
 
 [ $count -gt 1 ] && notify low 'Kakoune' "$count files to edit"
 # snapshot sources (in lieu of persistent undo avalability)
-console || (printf "$files" | xargs -r -d'\n' hgadd) &
+# console || (printf "$files" | xargs -r -d'\n' hgadd) &
 
 # client/server
 if $headless ;then

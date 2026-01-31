@@ -1,19 +1,18 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
-# X11 Desktop
+# Regex
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ................................................................. Random color
+# ........................................................................ Regex
 
-usage() { usage: "$(basename $0) randomc [-#]"; exit 1; }
+# Usage: .. | utfslash [-]
+
+UTFSLSH='⁄'  # utf-8 slash 0u2044 (filenames may not contain ascii '/' 0u002f)
 
 case $1 in
-	''  ) hash='#' ;;
-	-\# ) ;;
-	*   ) usage ;;
+	'' ) sed "s|/|$UTFSLSH|g" ;;
+	*  ) sed "s|$UTFSLSH|/|g" ;;  # restore pathname ascii slashes
 esac
-
-echo "$hash$(od -An -N3 -x /dev/random | sed 's/ 00//; s/ //')"
 
 # kak: filetype=sh
