@@ -6,11 +6,15 @@
 
 # ..................................................................... Fortunes
 
+# Usage: fortune [<heading>]
+
 # preselect default fortune database
 # fortune=chucknorris 
 arch && fortune=all 
 
 # strip off utf-8 characters
-/usr/bin/fortune $fortune | ascii
+f() { /usr/bin/fortune $fortune | ascii; }
+
+[ "$1" ] &&  notify 60 "$1" "$(f)" || f
 
 # kak: filetype=sh

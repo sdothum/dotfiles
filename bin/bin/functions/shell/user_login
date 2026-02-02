@@ -7,10 +7,7 @@
 # ................................................................ Session login
 
 BOOTWM="$SESSION/boot:wm"
-HOLD=60  # fortune time
 
-fortune=/usr/bin/fortune
-	
 # console login check
 if console ;then
 	exists syncthing && find $HOME -iname '*sync-conflict*' -exec rm -v {} \;  # purge syncthing conflicts
@@ -18,22 +15,10 @@ if console ;then
 	if [ -e "$BOOTWM" ] ;then     # SEE: console_login
 		# /usr/bin/udevadm settle  # wait for system init to complete
 		# sleep 1
-		(sleep 300; x $(cat "$BOOTWM")) &         # will not spawn otherwise (alpine requires delay in x)
+		(sleep 300; x $(cat "$BOOTWM")) &  # will not spawn otherwise (alpine requires delay in x)
 	fi
 	# sleep 1
 	# cbonsai -il
-elif [ -e $FORTUNE:term ] ;then
-	# SEE: (herbstluftwm) term
-	trap "rm -f $FORTUNE:term" EXIT
-	if [ ! -e $FORTUNE ] ;then
-		if exists $fortune ;then
-			# su notify to apply user notification (spec)
-			[ $USER = root ] && /usr/bin/su -c "/home/$USER/bin/notify $HOLD critical \"$(fortune)\"" - $USER 2>/dev/null ||
-				notify $HOLD "$(fortune)" 2>/dev/null
-		fi
-		# one fortune is enough
-		[ -e $SESSION/fortune ] && rm -f $FORTUNE || touch $FORTUNE
-	fi
 fi
 
 # kak: filetype=sh
