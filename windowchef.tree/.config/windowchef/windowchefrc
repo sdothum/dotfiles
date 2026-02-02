@@ -52,9 +52,8 @@ mkdir -p $GROUP:deactivated
 mkdir -p $HIDDEN
 mkdir -p $WINFO:snapshot
 
-# Windowchef is not fully started yet, so assume monitor 0 focus
+# allow pseudo (file) writes to yet as undefined $FIFO/<fifo> buffer during startup SEE: panel
 mkdir -p $FIFO
-mkfifo $FIFO/chef  # set by draw panel but needed beforehand
 
 # ...................................................................... Startup
 

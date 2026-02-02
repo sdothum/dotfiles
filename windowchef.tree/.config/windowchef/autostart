@@ -6,6 +6,8 @@
 
 # .................................................................... Autostart
 
+sudo iwconfig wlp9s0 power off  # disable powersave mode (to prevent sleeping connection)
+
 restore root
 conky clock auto
 restore unclutter
@@ -35,7 +37,7 @@ dbus-run-session mpd /home/shum/.config/mpd/mpd.conf 2>/dev/null                
 
 nicotine -s &
 if mpc queued >/dev/null ;then
-	(sleep 3; mpc play; mpc toggle; mpc toggle; mpc:settings) >/dev/null &  # wm restarts require mpd tickling to connect to pipewire
+	(sleep 3; for i in play toggle toggle ;do mpc $i >/dev/null ;done; mpc:settings) &        # mpd tickling required to connect to pipewire
 else
 	piano  # nano hi resolution stream
 fi

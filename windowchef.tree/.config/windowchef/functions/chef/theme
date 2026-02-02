@@ -6,14 +6,13 @@
 
 # ............................................................ Wallpaper (theme)
 
-# Usage: chef theme [dark | light]
+# Usage: chef theme [dark | light], as set in <image> file reference SEE: draw/menu root
 
 theme() { recipe -/ theme/root | awk '{ gsub(".(png|jpg)", ".theme", $NF); print $NF }'; }
 
 case $1 in
-	'' ) [ -e "$(theme)" ] && cat $(theme) || return 1 ;;
-	*  ) echo $1 >$(theme) ;;
+	'' ) [ -e "$(theme)" ] && cat $(theme) || return 1 ;;  # return <image>.theme state
+	*  ) echo $1 >$(theme) ;;                              #    SET <image>.theme state
 esac
-
 
 # kak: filetype=sh
