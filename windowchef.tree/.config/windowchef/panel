@@ -11,7 +11,7 @@
 
 DOTDIR=$(dirname $0)/functions/draw
 recipe -q panel/format             || exit  # no panel
-which lemonbar >/dev/null 2>&1     || exit
+exists lemonbar                    || exit
 pstat "lemonbar -d -n lemonbar:$1" && exit
 
 toggle picom on

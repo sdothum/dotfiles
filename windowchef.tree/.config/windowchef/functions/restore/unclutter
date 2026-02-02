@@ -6,6 +6,6 @@
 
 # ............................................................ Restore unclutter
 
-toggle unclutter on
+recipe -q unclutter && toggle unclutter on || toggle unclutter off
 
 # kak: filetype=sh

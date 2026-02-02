@@ -54,7 +54,7 @@ setroot() {
 	menu
 }
 
-colors() { [ "$menu" ] && echo | mhistory root | sed "1i$menu" || echo | mhistory root | sed "1i$(X $RANDOM)\n$(X $VIEWER)\n$KEEP$(X $COLORS)\n$(X $PICK)\n$(X $UPDATE)"; }
+colors() { [ "$menu" ] && echo | mhistory root | sed "1i$menu" || echo | mhistory root | sed "1i$(X $RANDOM)\n$(X $VIEWER)\n$(X $INVERT)\n$KEEP$(X $COLORS)\n$(X $PICK)\n$(X $UPDATE)"; }
 
 recipe -q theme/random:rgb && KEEP="$(X $SAVE)\n"
 while color=$(colors | column -s^ -t | rmenu 'Setroot') || exit ;do
@@ -67,7 +67,7 @@ while color=$(colors | column -s^ -t | rmenu 'Setroot') || exit ;do
 		"$COLORS"* ) term "colors" class=palette WAIT trap pastel list ;;
 		"$UPDATE"* ) root ;;
 		"$SAVE"*   ) save; break ;;
-		"$INVERT"* ) draw root invert; sleep $delay; menu ;;
+		"$INVERT"* ) toggle contrast; sleep $delay; menu ;;
 
 		*\ dark*   |\
 		*\ light*  )

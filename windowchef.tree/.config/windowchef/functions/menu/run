@@ -19,6 +19,7 @@ stest -dqr -n $CACHE $PATHS && stest -flx $PATHS | sort -u | tee "$CACHE" >/dev/
 # no text prompt message (unique to run vs other menu functions)
 cmd=$(cat $CACHE | mhistory run | rmenu '' -no-custom) || exit
 mhistory run "$cmd"
+recipe -q fortune && fortune "$cmd"
 exec $cmd
 
 

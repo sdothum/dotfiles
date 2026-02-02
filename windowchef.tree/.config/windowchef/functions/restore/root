@@ -14,8 +14,8 @@ case $background in
 		[ $contrast ] && { [ $contrast = light ] && recipe theme/contrast dark || recipe theme/contrast light; }
 		draw root color ${rgb%.png} $(recipe theme/contrast)
 		;;
-	wallpaper ) draw root wallpaper ;;
-	*         ) draw root color     ;;  # random
+	wallpaper ) recipe -q theme/shuffle && draw root shuffle || draw root wallpaper ;;
+	*         ) draw root color ;;  # random
 esac
 
 # kak: filetype=sh

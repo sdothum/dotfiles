@@ -11,7 +11,6 @@
 #        draw root, refresh background if necessary, shuffling if set
 #        draw root color, draw random background color
 #        draw root restore, restore background color
-#        draw root invert, switch contrast
 #        draw root select, select default background and disable shuffling
 #        draw root shuffle, enable random background shuffling
 #        draw root wallpaper, draw background
@@ -66,11 +65,13 @@ select_wallpaper() {
 	notify time=5 low 'Desktop Wallpaper' '<Space>  Show next\n<Enter>  Select image'
 	recipe -/ theme/wallpaper $(pick_image 1690 backgrounds $(recipe -/ theme/wallpaper))
 	wallpaper
+	recipe -d theme/shuffle
 }
 
 shuffle() {
 	recipe -/ theme/wallpaper $(find $IMAGES/backgrounds -name '*.png' | shuf -n1)
 	wallpaper
+	recipe -a theme/shuffle
 }
 
 # ...................................................................... Setroot
@@ -79,7 +80,6 @@ shuffle() {
 case $1 in
 	color     ) color $2 $3  ;;  # $3, see menu root
 	restore   ) select_color ;;
-	invert    ) [ $(recipe theme/contrast) = dark ] && recipe theme/contrast light || recipe theme/contrast dark; chef theme $(recipe theme/contrast) ;;
 	wallpaper ) wallpaper        ;;
 	select    ) select_wallpaper ;;
 	shuffle   ) shuffle          ;;

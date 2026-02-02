@@ -23,7 +23,7 @@ fi
 DMS=true  # unset for : (colon) time
 
 seconds() { tic=${line#*| }; tic=${tic%|*}; }
-ribbon()  { echo "$(echo "$tic" | cut -c $(( pos + 1 ))-)$(echo "$tic" | cut -c 1-$pos)"; }
+ribbon()  { echo "$(echo "$tic" | cut -c $(( pos + 1 ))-)$([ $pos -gt 0 ] && echo "$tic" | cut -c1-$pos)"; }
 
 tape() {
 	tic="${line#*|}"

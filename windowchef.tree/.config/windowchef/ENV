@@ -17,7 +17,7 @@ export WME=/dev/shm/$WM
 [ -d $WME ] && rm -rf $WME
 mkdir $WME
 
-# .................................................................... Root vars
+# ............................................................. Windowchef state
 
 export SHELL=/usr/bin/dash
 export XDG_CONFIG_HOME=$HOME/.config
@@ -27,23 +27,11 @@ export GROUP=$WME/group
 export HIDDEN=$WME/hidden
 export WINFO=$WME/window
 export WMSESSION=$HOME/.session/$WM
+export FIFO=$WME/fifo
 
 recipe display $DISPLAY
 
-# .................................................................... WM states
-
-export PICOM=$WME/picom
-export FORTUNE=$WME/fortune
-
-export FIFO=$WME/fifo
-
-# ............................................................... Session states
-
-# application states
-export FONTSIZE=$WMSESSION/fontsize
-export UNCLUTTER=$WMSESSION/unclutter
-
-# ................................................................ WM attributes
+# ............................................................. Root collections
 
 export IMAGES=$HOME/images
 export PALETTE=$IMAGES/colors

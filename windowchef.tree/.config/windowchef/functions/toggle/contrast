@@ -6,7 +6,8 @@
 
 # ......................................................................... Root
 
-draw root invert
+[ $(recipe theme/contrast) = dark ] && recipe theme/contrast light || recipe theme/contrast dark
+chef theme $(recipe theme/contrast)
 toggle picom on
 restore panel
 

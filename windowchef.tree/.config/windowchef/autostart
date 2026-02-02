@@ -6,15 +6,13 @@
 
 # .................................................................... Autostart
 
-sleep 0.25  # allow window environment to settle just enough to avoid dirty (trace) messages in log
 restore root
-restore panel
 conky clock auto
 restore unclutter
-displaycal3              # load color profile
+displaycal3            # load color profile
 
-imwheel -kill            # set trackball scrollwheel speed
-rm -rf $WME/pavucontrol  # hide pavucontrol SEE: rulerrc
+imwheel -kill          # set trackball scrollwheel speed
+recipe -d pavucontrol  # hide pavucontrol SEE: rulerrc
 pulse
 udev
 
@@ -28,15 +26,16 @@ if void 'runit' ;then
 	!p sonarr && sudo /bin/su - sonarr -c '/usr/lib/sonarr/Sonarr/Sonarr -s localhost:8989 -no-browser -data=/var/lib/sonarr' >/dev/null 2>&1 &
 fi
 
+restore panel  # postponed as long as possible to avoid dirty trace messages
 exists mpd || exit
 
-sleep 1                 # settle pipewire for mpd server connection
+sleep 1        # settle pipewire for mpd server connection
 dbus-run-session mpd /home/shum/.config/mpd/mpd.conf 2>/dev/null                        # NOTE: needs explicit dbus run
 [ -e /tmp/nicotine-plus ] || { make_install nicotine-plus; touch /tmp/nicotine-plus; }  # using nightly build
 
 nicotine -s &
-if [ "$(mpc queued)" ] ;then
-	(sleep 3; mpc play; mpc toggle; mpc toggle; mpc:settings) &  # wm restarts require mpd tickling to connect to pipewire
+if mpc queued >/dev/null ;then
+	(sleep 3; mpc play; mpc toggle; mpc toggle; mpc:settings) >/dev/null &  # wm restarts require mpd tickling to connect to pipewire
 else
 	piano  # nano hi resolution stream
 fi
