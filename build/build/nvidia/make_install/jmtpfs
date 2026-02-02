@@ -1,0 +1,15 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ....................................................................... jmtpfs
+
+mkdir -p $HOME/mtp
+sudo ln -s /sbin/jmtpfs /sbin/mount.jmtpfs
+
+if grep -q 'jmtpfs' /etc/fstab && exit
+echo "jmtpfs $HOME/mtp motog fuse nodev,allow_other,rw,user,noauto,noatime,uid=1000,gid=1000 0 0" | sudo tee -a /etc/fstab
+
+# kak: filetype=sh
