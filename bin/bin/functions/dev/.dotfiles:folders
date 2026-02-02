@@ -11,7 +11,7 @@ corne/qmk_firmware/keyboards/crkbd
 dinit
 dunst
 fish
-fonts/.fonts/Iosevka*
+.local/share/fonts/Iosevka*
 georgi/qmk_firmware/keyboards/gboards/georgi
 georgi/qmk_firmware/users/sdothum/chording_engine
 .gitignore
