@@ -19,6 +19,7 @@ helix/.config/helix/*toml
 helix/.config/helix/snippets
 helix/.config/helix/themes
 herbstluftwm
+imwheel
 kak
 kb-layout-evaluation/layout_evaluation
 kb-layout-evaluation.panda_plot/layout_evaluation
