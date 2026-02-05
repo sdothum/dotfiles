@@ -1,4 +1,4 @@
-# Windowchef tree (experimental)
+# Windowchef tree (supercedes prior file based dsl)
 
 This DSL version stores its group/window states using a directory tree off
 /tmp/windowchef.

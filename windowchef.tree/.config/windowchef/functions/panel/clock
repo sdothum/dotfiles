@@ -79,8 +79,8 @@ currently() {
 	if recipe -q panel/weather ;then
 		[ $DMS ] && minute=${line#*;?} || minute=${line#*:?}  # hh:mm:ss.* -> m:ss.*
 		case $(printf '%.1s' "$minute") in                    # -> m
-			0 | 5 ) [ $update_weather ] && weather ;;
-			*     ) update_weather=true ;;
+			0 ) [ $update_weather ] && weather ;;              # every 10 minutes
+			* ) update_weather=true ;;
 		esac
 	fi
 	[ -s $FORECAST ] && [ "$(ls -1 $FORECAST)" ] && current_weather="$(ls -1 $FORECAST | sed "s/\^/$SEP/g")"  # prevent blanking during update, see weather()

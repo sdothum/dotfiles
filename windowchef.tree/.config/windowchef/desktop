@@ -45,7 +45,7 @@ toggle() {
 		waitron window_focus $winid  # BUG: waitron group_toggle/_deactivate does not deactivate whole group unless the top of the window stack has focus
 		waitron group_deactivate $1
 		mkdir -p $GROUP:deactivated/$1
-		desktop $(ls -1 $GROUP/last)
+		# [ $(ls -1 $GROUP/last) -ne $desktop ] && desktop $(ls -1 $GROUP/last)
 	fi
 }
 

@@ -8,7 +8,7 @@
 # ............................................................ Toggle operations
 
 msg=$1
-[ $msg ] && shift || usage: $0
+[ $msg ] && shift || usage $0
 if [ -e ${0%/toggle}/functions/toggle/$msg ] ;then
 	. ${0%/toggle}/functions/toggle/$msg $@
 elif winid=$(xdotool search --classname "$1" | head -1) ;then

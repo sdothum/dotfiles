@@ -87,11 +87,11 @@ handlebar() {
 }
 
 msg=$1
-[ $msg ] && shift || usage: $0
+[ $msg ] && shift || usage $0
 if [ -e ${0%/panel}/functions/panel/$msg ] ;then
 	. ${0%/panel}/functions/panel/$msg $@
 else
-	usage: $0
+	usage $0 $msg
 fi
 
 # kak: filetype=sh

@@ -10,11 +10,11 @@
 # Usage: chef <msg>, see functions/chef
 
 msg=$1
-[ $msg ] && shift || usage: $0
+[ $msg ] && shift || usage $0
 if [ -e ${0%/chef}/functions/chef/$msg ] ;then
 	. ${0%/chef}/functions/chef/$msg $@
 else
-	usage: $0
+	usage $0 $msg
 fi
 
 # kak: filetype=sh

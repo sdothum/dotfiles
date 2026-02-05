@@ -25,7 +25,7 @@ recipe -q panel/top && top=$panel  # see draw panel
 
 # Windowchef window geometry
 border=$(chef screen window_border)
-winid=$(pfw)
+winid=$(pfw 2>/dev/null) || exit  # trap early window initialization and autostart rulerrc (to hide log chatter)
 # xdotool windowstate --remove fullscreen $winid  # fullscreen negates any attempted window actions
 
 geometry()       { xdotool getwindowgeometry --shell ${1:-$winid}; }             # X Y WIDTH HEIGHT (doesn't include borders)
@@ -73,11 +73,11 @@ if [ "$1" ] && [ -z "${1%%@*}" ] ;then
 fi
 
 msg=$1
-[ $msg ] && shift || usage: $0
+[ $msg ] && shift || usage $0
 if [ -e ${0%/window}/functions/window/$msg ] ;then
 	. ${0%/window}/functions/window/$msg $@
 else
-	usage: $0
+	usage $0 $msg
 fi
 
 mapw -m $winid  # regain focus

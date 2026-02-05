@@ -46,8 +46,8 @@ waitron wm_config click_to_focus any
 
 mkdir -p $SNAPSHOT
 mkdir -p $GROUP/-1
-mkdir -p $GROUP/current
-mkdir -p $GROUP/last
+mkdir -p $GROUP/current/1
+mkdir -p $GROUP/last/-1
 mkdir -p $GROUP:deactivated
 mkdir -p $HIDDEN
 mkdir -p $WINFO:snapshot

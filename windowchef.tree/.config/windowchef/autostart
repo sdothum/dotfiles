@@ -32,7 +32,7 @@ restore panel  # postponed as long as possible to avoid dirty trace messages
 exists mpd || exit
 
 sleep 1        # settle pipewire for mpd server connection
-dbus-run-session mpd /home/shum/.config/mpd/mpd.conf 2>/dev/null                        # NOTE: needs explicit dbus run
+dbus-run-session mpd /home/shum/.config/mpd/mpd.conf 2>/dev/null
 [ -e /tmp/nicotine-plus ] || { make_install nicotine-plus; touch /tmp/nicotine-plus; }  # using nightly build
 
 nicotine -s &

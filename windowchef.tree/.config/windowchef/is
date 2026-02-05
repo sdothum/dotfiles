@@ -10,11 +10,11 @@
 # Usage: is <msg>, see functions/is
 
 msg=$1
-[ $msg ] && shift || usage: $0
+[ $msg ] && shift || usage $0
 if [ -e ${0%/is}/functions/is/$msg ] ;then
 	. ${0%/is}/functions/is/$msg $@
 else
-	usage: $0
+	usage $0 $msg
 fi
 
 # kak: filetype=sh
