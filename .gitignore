@@ -62,8 +62,8 @@
 **/focuswriter
 **/font-manager
 **/fonts/b-rounded
-**/fonts/.fonts/*
-!**/fonts/.fonts/Iosevka*
+**/fonts/.local/*
+!**/fonts/.local/*/Iosevka*
 **/fstab
 **/geany
 **/georgi/qmk_firmware/users/dennytom*
