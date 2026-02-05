@@ -26,6 +26,7 @@
 **/caddy
 **/calcurse
 **/calibre
+**/cbftp
 !*/media/calibre
 **/centerim
 **/chimera.void
@@ -62,6 +63,7 @@
 **/focuswriter
 **/font-manager
 **/fonts/b-rounded
+**/fonts/d-tailed
 **/fonts/.local/share/fonts/*
 !**/fonts/.local/share/fonts/Iosevka*
 **/fstab
@@ -91,6 +93,8 @@
 **/isync
 **/jumanji
 **/kak/bundle
+!**/kak/bundle/duochrome
+**/kak.net
 **/kb-layout-evaluation/characters_stats
 **/kb-layout-evaluation.panda_plot/characters_stats
 **/kb-layout-evaluation.panda_plot/README.md
@@ -101,6 +105,7 @@
 **/klavaro
 **/kobo/**/bin
 **/kobo/**/firmware
+**/kobo/fonts
 **/kobo/.kobo
 **/kobo/kobopatch*
 **/kobo/KoboStuff
