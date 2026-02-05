@@ -40,6 +40,7 @@ bin/bin/functions/mail/notmail
 mime
 miniflux
 mpd
+mpv
 nnn/.config/nnn/plugins/._*
 nnn/.config/nnn/plugins/_*
 picom
