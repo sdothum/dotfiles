@@ -73,6 +73,12 @@ m dyetide
   tmux
 ! stow tmux
 
+
+= text maniputation
+= ═════════════════
+! curl -fsSL https://raw.githubusercontent.com/alecthomas/t/master/install.sh | sh
+
+
 # vim: set ft=conf: #
 
 

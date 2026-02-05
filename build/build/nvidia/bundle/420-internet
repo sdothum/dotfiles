@@ -22,18 +22,18 @@
 
 = file transfer
 = ═════════════
-# sabnzbd  [server]
+# sabnzbd            [server]
 # nicotine+
 # qbittorrent
-m nicotine-plus  # nightly build to minimize soulseek connection disruptions
-  nzbget   [server]
-d m sonarr [server]
-  transmission-gtk
+m nicotine-plus      [server]  # nightly build to minimize soulseek connection disruptions
+  nzbget             [server]
+d m sonarr           [server]
+  transmission-gtk   [server]
 
 
 = proxy
 = ═════
-# squid    [server]
+# squid              [server]
 
 
 = web aggregator
@@ -44,11 +44,11 @@ d m sonarr [server]
 
 = miniflux
 = ════════
-# pgadmin3
-  postgresql
-  postgresql-client
-  postgresql-contrib
-  miniflux
+# pgadmin3           [server]
+  postgresql         [server]
+  postgresql-client  [server]
+  postgresql-contrib [server]
+  miniflux           [server]
 
 
 # vim: set ft=conf: #

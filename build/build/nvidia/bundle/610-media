@@ -7,53 +7,53 @@
 = media server
 = ════════════
 # kodi
-  mpd
+  mpd               [server]
 ! mkdir -p $HOME/.local/state/mpd
 ! mkdir -p $HOME/.config/mpd/playlists
 
 
 = music
 = ═════
-# deadbeef
-  audacious
-  beets
-# cmus
-# cmus-cdio
-# cmus-flac
-# cmus-pulseaudio
-  mpc
-  ncmpcppc
+# deadbeef          [server]
+  audacious         [server]
+  beets             [server]
+# cmus              [server]
+# cmus-cdio         [server]
+# cmus-flac         [server]
+# cmus-pulseaudio   [server]
+  mpc               [server]
+  ncmpcppc          [server]
 ! sudo usermod -aG cdrom $USER
 
 
 = drawing
 = ═══════
-# inkscape
-  xaos           # fractal generator
-  krita
-  python3-PyQt5  # python plugin dependency
+# inkscape          [server]
+  xaos              [server]  # fractal generator
+  krita             [server]
+  python3-PyQt5     [server]  # python plugin dependency
 
 
 = enote
 = ═════
-  eink-template-gen
+  eink-template-gen [server]
 
 
 = photography
 = ═══════════
-# dispcalGUI
-# gmic-gimp
-# gwenview
-  digikam
-d m displaycal-py3
-  exiftool
-  gimp
-  gpick
-  ImageMagick
-m oculante
-m rapidraw
-  resynthesizer
-  rawtherapee
+# dispcalGUI        [server]
+# gmic-gimp         [server]
+# gwenview          [server]
+  digikam           [server]
+d m displaycal-py3  [server]
+  exiftool          [server]
+  gimp              [server]
+  gpick             [server]
+  ImageMagick       [server]
+m oculante          [server]
+m rapidraw          [server]
+  resynthesizer     [server]
+  rawtherapee       [server]
 
 
 = radio
@@ -62,21 +62,21 @@ m rapidraw
 
 = ripping
 = ═══════
-# audacity      [server]
-# cdrdao        [server]
-# handbrake     [server]
-# mkvtoolnix    [server]
-# transcode     [server]
-# xfburn        [server]
-  asunder
-  ffmpeg6
-  flac
-  mediainfo
+# audacity          [server]
+# cdrdao            [server]
+# handbrake         [server]
+# mkvtoolnix        [server]
+# transcode         [server]
+# xfburn            [server]
+  asunder           [server]
+  ffmpeg6           [server]
+  flac              [server]
+  mediainfo         [server]
 
 = video
 = ═════
-  blender
-  mpv
+  blender           [server]
+  mpv               [server]
 
 
 # vim: set ft=conf: #

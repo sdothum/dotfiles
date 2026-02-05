@@ -35,14 +35,14 @@ m ruler        # patch NEWLINE handling
 
 = 2bwm
 = ════
-m 2bwm
-! stow 2bwm
+m 2bwm              [server]
+! stow 2bwm         [server]
 
 
 = herbstluftwm
 = ══════════════
 # herbstluftwm
-! stow herbstluftwm
+! stow herbstluftwm [server]
 
 
 = windowchef

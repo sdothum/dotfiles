@@ -6,22 +6,22 @@
 
 = mpu programmer
 = ══════════════
-  avr-gcc
-  avr-libc
-  avrdude
-  dfu-programmer
-  dfu-util
-  libusb-compat-devel
-  teensy_loader_cli
-  
+  avr-gcc             [server]
+  avr-libc            [server]
+  avrdude             [server]
+  dfu-programmer      [server]
+  dfu-util            [server]
+  libusb-compat-devel [server]
+  teensy_loader_cli   [server]
+
 
 = font editor
 = ═══════════
-  fontforge
-  fonttools
-  nodejs
-  otfcc
-  ttfautohint
+  fontforge           [server]
+  fonttools           [server]
+  nodejs              [server]
+  otfcc               [server]
+  ttfautohint         [server]
 
 
 # vim: set ft=conf: #

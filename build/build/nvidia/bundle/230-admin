@@ -10,12 +10,12 @@
 # foomatic-db-nonfree
 # hplip
 # system-config-printer [server]
-  cups
-  cups-filters
-  ghostscript
-  gsfonts
-  gutenprint
-  libcups
+  cups                  [server]
+  cups-filters          [server]
+  ghostscript           [server]
+  gsfonts               [server]
+  gutenprint            [server]
+  libcups               [server]
 
 
 = database management

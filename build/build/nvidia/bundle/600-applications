@@ -18,10 +18,10 @@
 
 = benchtest
 = ═════════
-  hyperfine
-  libaio-devel    # for phoronix-test-suite run fio
-  SDL SDL_image SDL_mixer
-  phoronix-test-suite
+  hyperfine               [server]
+  libaio-devel            [server]    # for phoronix-test-suite run fio
+  SDL SDL_image SDL_mixer [server]
+  phoronix-test-suite     [server]
 
 
 = dictionary
@@ -40,13 +40,13 @@ m pyglossary
 
 = ebook
 = ═════
-  calibre
+  calibre                 [server]
 
 
 = font manager
 = ════════════
-  fontmanager
-  fontmatrix
+  fontmanager             [server]
+  fontmatrix              [server]
 
 
 = game
@@ -84,7 +84,7 @@ m cbonsai
   nsxiv           # image viewer for nnn imgview
   epdfview
   feh
-m foliate
+m foliate                 [server]
   zathura
   zathura-ps
   zathura-pdf-mupdf

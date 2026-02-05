@@ -65,7 +65,7 @@ m cbftp
   hdparm
   memtest86+
 " memtest installed for boot invocation
-m speedtest
+  speedtest
 
 
 # vim: set ft=conf: #

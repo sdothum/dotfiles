@@ -13,7 +13,6 @@
 # " add 5G network after xorg install
 ! echo noarp | sudo tee -a /etc/dhcpcd.conf
   NetworkManager  # replaces rclocal ip configuration for dinit
-  speedtest
 
 
 = network

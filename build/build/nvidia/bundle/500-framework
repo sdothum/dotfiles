@@ -6,28 +6,28 @@
 
 = sinatra web framework
 = ═════════════════════
-# libuuid-devel  # xapian-ruby dependency
-  g kramdown
-  g mail
-  g rack
-  g sanitize
-  g sinatra
-  g slim
-  g term-ansicolor
-  g thin
-  g xapian-fu
-  zlib-devel     # xapian-ruby dependency
-  g xapian-ruby
+# libuuid-devel    [server]  # xapian-ruby dependency
+  g kramdown       [server]
+  g mail           [server]
+  g rack           [server]
+  g sanitize       [server]
+  g sinatra        [server]
+  g slim           [server]
+  g term-ansicolor [server]
+  g thin           [server]
+  g xapian-fu      [server]
+  zlib-devel       [server]     # xapian-ruby dependency
+  g xapian-ruby    [server]
 
 
 = web server
 = ══════════
-  caddy
+  caddy            [server]
 ! sudo usermod -aG $USER caddy
 ! sudo usermod -aG users caddy
 ! sudo sed -i '/chpst -u caddy/s/-u caddy/-u root/' /etc/sv/caddy/run  # HACK: ownership/permission conflict on void
 
-  g puma
+  g puma           [server]
 
 " configure /srv/http/thedarnedestthing.com/
 ! stow vimwiki thedarnedestthing
