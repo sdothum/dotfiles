@@ -1,14 +1,15 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="window/rotate $@" . $PARENT
+# [ $TRACE ] && CHILD="chef/@hidden $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ................................................................ Rotate window
+# ............................................................. Windowchef check
 
-# Usage: window rotate SEE: window size and window stretch
+# Usage: chef @hidden
 
-eval $(xdotool getwindowgeometry --shell $winid)
-window size ${HEIGHT}x${WIDTH}
+refresh_panel
+chef @desktop
 
 # kak: filetype=sh
+

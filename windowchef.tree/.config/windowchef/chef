@@ -7,7 +7,7 @@
 
 # .......................................................... Windowchef metadata
 
-# Usage: chef <msg>, see functions/chef
+# Usage: chef <msg> SEE: functions/chef
 
 msg=$1
 [ $msg ] && shift || usage $0

@@ -69,7 +69,7 @@ STREAM=$(mkfifo $FIFO/$msg)  # SEE: panel wrapper
 
 # event driven panel update
 xtitle -sf 'X%s\n' >$STREAM 2>/dev/null &
-while : ;do chef -- vacuum; sleep 0.5; done &  # trap mouse focus movements
+while : ;do chef @vacuum; sleep 0.5; done &  # trap mouse focus movements
 
 cat $STREAM | panel | handlebar &
 

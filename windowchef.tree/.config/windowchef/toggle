@@ -7,6 +7,8 @@
 
 # ............................................................ Toggle operations
 
+# Usage: toggle [<msg>] SEE: functions/toggle
+
 msg=$1
 [ $msg ] && shift || usage $0
 if [ -e ${0%/toggle}/functions/toggle/$msg ] ;then

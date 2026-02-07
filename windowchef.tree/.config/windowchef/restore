@@ -7,7 +7,7 @@
 
 # ........................................................... Restore operations
 
-# Usage: restore <msg>, see functions/focus
+# Usage: restore <msg> SEE: functions/focus
 
 msg=$1
 [ $msg ] && shift || usage $0

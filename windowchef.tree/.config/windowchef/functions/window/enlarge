@@ -1,0 +1,56 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/enlarge $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ..................................................... Step up/down window size
+
+# Usage: window enlarge + | - SEE: window size (paper pixel dimensions)
+
+eval $(xdotool getwindowgeometry --shell $winid)
+area=$(( ${HEIGHT#*=} * ${WIDTH#*=} ))
+
+if [ "$1" = '+' ] ;then
+	if [ $area -ge 2521260 ] ;then
+		exit
+	elif [ $area -ge 1782201 ] ;then
+		window size A3
+	elif [ $area -ge 1260630 ] ;then
+		window size B4
+	elif [ $area -ge 891662 ] ;then
+		window size A4
+	elif [ $area -ge 628425 ] ;then
+		window size B5
+	elif [ $area -ge 443846 ] ;then
+		window size A5
+	elif [ $area -ge 313880 ] ;then
+		window size B6
+	elif [ $area -ge 221923 ] ;then
+		window size A6
+	else
+		window size B7
+	fi
+else
+	if [ $area -le 221923 ] ;then
+		exit
+	elif [ $area -le 313880 ] ;then
+		window size B7
+	elif [ $area -le 443846 ] ;then
+		window size A6
+	elif [ $area -le 628425 ] ;then
+		window size B6
+	elif [ $area -le 891662 ] ;then
+		window size A5
+	elif [ $area -le 1260630 ] ;then
+		window size B5
+	elif [ $area -le 1782201 ] ;then
+		window size A4
+	elif [ $area -le 2521260 ] ;then
+		window size B4
+	else
+		window size A3
+	fi
+fi
+
+# kak: filetype=sh

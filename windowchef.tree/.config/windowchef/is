@@ -7,7 +7,7 @@
 
 # .............................................................. Test operations
 
-# Usage: is <msg>, see functions/is
+# Usage: is <msg> SEE: functions/is
 
 msg=$1
 [ $msg ] && shift || usage $0

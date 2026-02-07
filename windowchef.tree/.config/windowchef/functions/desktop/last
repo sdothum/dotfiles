@@ -1,14 +1,13 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="window/rotate $@" . $PARENT
+# [ $TRACE ] && CHILD="desktop/last $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ................................................................ Rotate window
+# ................................................................... Group last
 
-# Usage: window rotate SEE: window size and window stretch
+# Usage: desktop last
 
-eval $(xdotool getwindowgeometry --shell $winid)
-window size ${HEIGHT}x${WIDTH}
+[ -e $GROUP/last ] && desktop $(ls -1 $GROUP/last)
 
 # kak: filetype=sh

@@ -7,7 +7,7 @@
 
 # .............................................................. Draw operations
 
-# Usage: draw <msg>, see functions/draw
+# Usage: draw <msg> SEE: functions/draw
 
 msg=$1
 [ $msg ] && shift || usage $0

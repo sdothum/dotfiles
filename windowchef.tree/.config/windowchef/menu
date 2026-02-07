@@ -7,7 +7,7 @@
 
 # .............................................................. Menu operations
 
-# Usage: menu <msg>, see functions/menu
+# Usage: menu <msg> SEE: functions/menu
 
 export MENU=${MENU:-$(dirname $0)/functions/menu}
 export HISTORY=$MENU/.history

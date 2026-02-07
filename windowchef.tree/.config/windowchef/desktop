@@ -7,19 +7,18 @@
 
 # ............................................................. Group operations
 
-# Usage: desktop <msg>
-#          where <msg>: <group> [specific | toggle | close] | last | restone
-#                <msg>: add <winid> <group>
+# Usage: desktop <msg> SEE: functions/desktop
+#                where, 0-9   -> desktop focus <msg>
+#                       -1/+1 -> desktop focus <msg> (relative)
 
 # NOTE: waitron group handling deficiencies (quirks) and extensions are handled here
 # HACK: waitron group_toggle/_activate does not restore the group window stack order (focused window)
-# SEE:  also chef --
 
 CURRENT=$GROUP/current
 LAST=$GROUP/last
 
 [ -e $CURRENT ] && desktop=$(ls -1 $CURRENT)
-desktop=${desktop:--1}
+desktop=${desktop:-$(desktop)}
 
 current() {
 	if [ -e $CURRENT ] ;then
@@ -30,64 +29,6 @@ current() {
 	mkdir -p $CURRENT/$1
 	refresh_panel
 	notify Group "$1 $(chef desktop)"
-}
-
-toggle() {
-	if [ -e $GROUP:deactivated/$1 ] ;then
-		waitron group_activate $1
-		waitron window_focus $(ls -1 $GROUP:focus/$1)
-		rm -rf $GROUP:deactivated/$1
-		for i in $(ls -1 $GROUP/$1) ;do [ -e $HIDDEN/$i ] && rmdir $HIDDEN/$i ;done  # NOTE: activating group unhides manually hidden group windows
-		desktop $1
-	else
-		winid=$(ls -1 $GROUP/$1 | head -1)
-		[ $winid ] || return
-		waitron window_focus $winid  # BUG: waitron group_toggle/_deactivate does not deactivate whole group unless the top of the window stack has focus
-		waitron group_deactivate $1
-		mkdir -p $GROUP:deactivated/$1
-	fi
-}
-
-desktop() {
-	case $2 in
-		specific )
-			[ $desktop -eq $1 ] || current $1
-			waitron group_activate_specific $1
-			rm -rf $GROUP:deactivated/$1
-			;;
-
-		toggle   )
-			[ $desktop -eq $1 ] || current $1
-			toggle $1
-			;;
-
-		close    )
-			for i in $(ls -1 $GROUP/$1) ;do
-				waitron window_focus $i
-				waitron window_close
-				window group remove $i            # cleanup
-			done
-			waitron group_remove_all_windows $1  # redundancy trap for unknown group juggling corner cases
-			rm -rf $GROUP/$1/*
-			rm -rf $GROUP:focus/$1/*
-			rm -rf $GROUP:deactivated/$1
-			;;
-
-		*        )
-			[ $desktop -eq $1 ] && exec desktop add $(pfw 2>/dev/null) $1            # trap windowchef autostart initialization errors
-			current $1
-			waitron group_activate $1
-			[ -e $GROUP:focus/$1 ] && waitron window_focus $(ls -1 $GROUP:focus/$1)  # restore window stack NOTE: this also fixes calibre mouse focus issue!
-			rm -rf $GROUP:deactivated/$1
-			;;
-	esac
-}
-
-restore() {
-	D=$desktop
-	for i in $(seq 1 $(( $(chef desktop count) - 1 ))) ;do waitron group_activate $i ;done  # except CHEF group
-	rm -rf $GROUP:deactivated
-	waitron window_focus $(ls -1 $GROUP:focus/$D)
 }
 
 plus() {
@@ -101,13 +42,18 @@ plus() {
 	echo $desktop
 }
 
-case $1 in
+msg=$1
+case $msg in
 	''      ) echo $desktop ;;
-	restore ) restore       ;;
-	[1-9]   ) desktop $1 $2 ;;       # SEE: chef desktop and rulerrc
-	last    ) [ -e $GROUP/last ] && desktop $(ls -1 $GROUP/last) ;;
-	add     ) [ $3 ] && { rm -rf $GROUP:focus/$3/*; mkdir -p $GROUP:focus/$3/$2; } ;;  # SEE: window desktop and window stack
-	*       ) desktop $(plus $1) ;;  # -1/+1
+	[1-9]   ) desktop focus $1 ;;          # SEE: chef desktop and rulerrc
+	-* | +* ) desktop focus $(plus $1) ;;  # -1/+1
+	*       )
+		shift
+		if [ -e $(dirname $0)/functions/desktop/$msg ] ;then
+			. $(dirname $0)/functions/desktop/$msg $@
+		else
+			usage $0 $msg
+		fi
 esac
 
 # kak: filetype=sh

@@ -6,7 +6,7 @@
 
 # .............................................................. Set window size
 
-# Usage: window size <height>x<width> | monocle | term | rotate|landscape | <numerator>/<denominator> (of screen width)
+# Usage: window size <height>x<width> | monocle | term | rotate | landscape | <numerator>/<denominator> (of screen width)
 
 ASPECT=4:3  # (photographic) ratio
 

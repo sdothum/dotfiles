@@ -1,14 +1,16 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="window/rotate $@" . $PARENT
+# [ $TRACE ] && CHILD="desktop/specific $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ................................................................ Rotate window
+# ............................................................... Group specific
 
-# Usage: window rotate SEE: window size and window stretch
+# Usage: desktop specific <group>
 
-eval $(xdotool getwindowgeometry --shell $winid)
-window size ${HEIGHT}x${WIDTH}
+[ $desktop -eq $1 ] || current $1
+
+waitron group_activate_specific $1
+rm -rf $GROUP:deactivated/$1
 
 # kak: filetype=sh

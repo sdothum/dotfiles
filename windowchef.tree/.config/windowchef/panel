@@ -7,7 +7,7 @@
 
 # ................................................................... Draw panel
 
-# Usage: draw <msg>, see functions/panel
+# Usage: draw <msg> SEE: functions/panel
 
 DOTDIR=$(dirname $0)/functions/draw
 recipe -q panel/format             || exit  # no panel
