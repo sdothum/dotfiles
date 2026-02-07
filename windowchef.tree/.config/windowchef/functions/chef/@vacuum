@@ -16,7 +16,7 @@ done
 
 # HACK: fix rare dangling hidden window pointer (??) creation sequence as yet undetermined
 for i in $(ls -1 $HIDDEN) ;do
-	[ -e $SNAPSHOT/$i ] || { rmdir $HIDDEN/$i; removals=true; }
+	[ -e $SNAPSHOT/$i ] || { rm -rf $HIDDEN/$i; removals=true; }
 done
 
 [ $removals ] && refresh_panel
