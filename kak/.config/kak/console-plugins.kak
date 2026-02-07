@@ -13,8 +13,13 @@ define-command console-plugins %{ nop }  # USAGE: try %{ console-plugins } catch
 
 # NOTE: export MANPAGES='kak -ro'  # readonly
 
+declare-option bool kakman false
+
 bundle kak-ansi https://github.com/eraserhd/kak-ansi.git %{
-	hook global BufCreate '/tmp/man\.[a-zA-Z0-9]+' ansi-enable
+	hook global BufCreate '/tmp/man\.[a-zA-Z0-9]+' %{
+		ansi-enable
+		set-option global kakman true
+	}
 }
 
 # ................................................................... auto-pairs
