@@ -141,7 +141,6 @@
 **/.mcabber
 **/mpd/.config/mpd/*
 !**/mpd/.config/mpd/*.conf
-**/mpv
 **/msmtp
 **/music
 **/mutt
