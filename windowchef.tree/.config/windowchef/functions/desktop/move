@@ -1,0 +1,17 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="desktop/move $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................... Group move (winid)
+
+# Usage: desktop move <winid> <group>
+
+ls -1 $GROUP/$2/$1 2>/dev/null && exit
+
+desktop remove $1 to
+mkdir -p $GROUP/$2/$1
+# desktop add $2 $1
+
+# kak: filetype=sh

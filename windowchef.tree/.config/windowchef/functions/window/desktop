@@ -11,8 +11,8 @@
 desktop=$(desktop)
 waitron group_remove_window
 waitron group_add_window $1
-window group $1 add $winid
-desktop add $1 $winid  # see desktop and window stack
+desktop move $winid $1
+desktop add $1 $winid
 
 # teleport and refocus to window's previous group
 if [ $2 ] ;then

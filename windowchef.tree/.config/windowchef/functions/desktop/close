@@ -11,7 +11,7 @@
 for i in $(ls -1 $GROUP/$1) ;do
 	waitron window_focus $i
 	waitron window_close
-	window group remove $i            # cleanup
+	desktop remove $i                 # cleanup
 done
 
 waitron group_remove_all_windows $1  # redundancy trap for unknown group juggling corner cases

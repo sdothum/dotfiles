@@ -96,7 +96,7 @@ super + {_,shift} + e
 	waitron {window_stack_toggle, window_focus $(pfw)}
 
 super + w
-	window group remove        ;\
+	desktop remove             ;\
 	waitron window_close       ;\  # (??) doesn't completely close windows that leave dangling frames
 	waitron window_focus_last  ;\  # NOTE: some apps take longer to be removed from chef stack
 	refresh_panel                  # for last visible window removal
