@@ -8,10 +8,10 @@
 
 # Usage: chef @vacuum
 
-[ "$(chef window)" = "$(ls -1 $SNAPSHOT)" ] && return  # ignore initial pass file error
+[ "$(chef window)" = "$(find $SNAPSHOT -maxdepth 1 -mindepth 1 -type d -printf "%f\n" | sort)" ] && return  # ignore initial pass file error
 chef window snapshot                                   # current winids
 for i in $(ls -1 $GROUP/$(desktop)) ;do
-	[ -e $SNAPSHOT/$i ] || { window group remove $i; removals=true; }
+	[ -e $SNAPSHOT/$i ] || { VACUUM=true window group remove $i; removals=true; }
 done
 
 # HACK: fix rare dangling hidden window pointer (??) creation sequence as yet undetermined
