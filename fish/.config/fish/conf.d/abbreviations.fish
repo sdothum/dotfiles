@@ -122,7 +122,8 @@ abbr df "df -$HUMAN"
 abbr du "du -$HUMAN -d1"
 abbr dus "/usr/bin/du -hs * | sort -h"
 abbr l 'ls -A'
-abbr l1 'ls -1 | print'
+abbr l1 'ls -1'
+abbr l1p 'ls -1 | print'
 abbr ldot "ls -lAd$HUMAN .* | print"
 abbr lL 'ls -AL'
 abbr ll "ls -lA$HUMAN"
