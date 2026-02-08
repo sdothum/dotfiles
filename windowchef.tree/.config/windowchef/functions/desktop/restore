@@ -8,7 +8,7 @@
 
 # Usage: desktop restore
 
-D=$desktop
+D=$(ls -1 $CURRENT)
 
 for i in $(seq 1 $(( $(chef desktop count) - 1 ))) ;do  # except CHEF group
 	waitron group_activate $i

@@ -6,11 +6,11 @@
 
 # ............................................................. Group add window
 
-# Usage: desktop add <group> <winid>
+# Usage: desktop add <group> [<winid>]
 
-[ $2 ] || exit 1
+W=${2:-$(pfw 2>/dev/null)} || return  # trap empty desktop at startup
 
 rm -rf $GROUP:focus/$1/*
-mkdir -p $GROUP:focus/$1/$2  # SEE: window desktop
+mkdir -p $GROUP:focus/$1/${2:-$W)}
 
 # kak: filetype=sh

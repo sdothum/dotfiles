@@ -90,7 +90,7 @@ super + ctrl + 0
 
 super + {_,shift} + i
 	{window hide, menu unhide} ;\
-	chef @hidden
+	chef @desktop
 
 super + {_,shift} + e
 	waitron {window_stack_toggle, window_focus $(pfw)}

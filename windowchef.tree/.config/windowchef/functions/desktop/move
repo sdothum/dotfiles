@@ -1,5 +1,5 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="desktop/move $@" . $PARENT
+# [ $TRACE ] && CHILD="desktop/move $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════

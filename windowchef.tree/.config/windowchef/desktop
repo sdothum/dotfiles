@@ -17,23 +17,16 @@
 CURRENT=$GROUP/current
 LAST=$GROUP/last
 
-[ -e $CURRENT ] && desktop=$(ls -1 $CURRENT)
-desktop=${desktop:-$(desktop)}
-
 current() {
-	if [ -e $CURRENT ] ;then
-		[ "$(ls -1 $CURRENT)" = "$(ls -1 $LAST)" ] || { rm -rf $LAST; mv $CURRENT $LAST; }
-	else
-		mkdir -p $LAST/$desktop
-	fi
+	[ "$(ls -1 $CURRENT)" = "$(ls -1 $LAST)" ] || { rm -rf $LAST; mv $CURRENT $LAST; }
 	mkdir -p $CURRENT/$1
 	refresh_panel
 	notify Group "$1 $(chef desktop)"
 }
 
 plus() {
+	desktop=$(( $(ls -1 $CURRENT) + $1 ))
 	tagcount=$(chef desktop count)
-	desktop=$(( desktop + $1 ))
 	if [ $desktop -gt $tagcount ] ;then
 		desktop=1
 	elif [ $desktop -lt 1 ] ;then
@@ -44,7 +37,7 @@ plus() {
 
 msg=$1
 case $msg in
-	''      ) echo $desktop ;;
+	''      ) ls -1 $CURRENT ;;
 	[1-9]   ) desktop focus $1 ;;          # SEE: chef desktop and rulerrc
 	-* | +* ) desktop focus $(plus $1) ;;  # -1/+1
 	*       )

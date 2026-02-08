@@ -9,7 +9,7 @@
 # Usage: desktop toggle <group>
 
 D=${1:-$(desktop)}
-[ $desktop -eq "$D" ] || current "$D"
+[ $(ls -1 $CURRENT) -eq "$D" ] || current "$D"
 
 if [ -e $GROUP:deactivated/$D ] ;then
 	waitron group_activate $D

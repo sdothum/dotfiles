@@ -44,7 +44,7 @@ waitron wm_config click_to_focus any
 
 # ................................................................... State tree
 
-mkdir -p $SNAPSHOT/
+mkdir -p $SNAPSHOT
 mkdir -p $GROUP/-1
 mkdir -p $GROUP/current/1
 mkdir -p $GROUP/last/-1

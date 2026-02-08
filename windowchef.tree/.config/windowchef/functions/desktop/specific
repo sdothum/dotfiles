@@ -8,7 +8,7 @@
 
 # Usage: desktop specific <group>
 
-[ $desktop -eq $1 ] || current $1
+[ $(ls -1 $CURRENT) -eq $1 ] || current $1
 
 waitron group_activate_specific $1
 rm -rf $GROUP:deactivated/$1

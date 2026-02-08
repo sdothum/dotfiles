@@ -8,7 +8,7 @@
 
 # Usage: desktop focus <group>
 
-[ $desktop -eq $1 ] && exec desktop add $1 $(pfw 2>/dev/null)              # trap windowchef autostart initialization errors
+[ $(ls -1 $CURRENT) -eq $1 ] && exec desktop add $1  # ${pfw}
 
 current $1
 waitron group_activate $1

@@ -8,19 +8,22 @@
 
 # Usage: chef @vacuum
 
-[ "$(chef window)" = "$(find $SNAPSHOT -maxdepth 1 -mindepth 1 -type d -printf "%f\n" | sort)" ] && return  # ignore initial pass file error
-chef window snapshot                                   # current winids
-for i in $(ls -1 $GROUP/$(desktop)) ;do
-	[ -e $SNAPSHOT/$i ] || { desktop remove $i; removals=true; }
-done
+vacuum() {
+	chef window snapshot  # current winids
+	for i in $(ls -1 $GROUP/$(desktop)) ;do
+		[ -e $SNAPSHOT/$i ] || { desktop remove $i; removals=true; }
+	done
 
-# HACK: fix rare dangling hidden window pointer (??) creation sequence as yet undetermined
-for i in $(ls -1 $HIDDEN) ;do
-	[ -e $SNAPSHOT/$i ] || { rm -rf $HIDDEN/$i; removals=true; }
-done
+	# HACK: fix rare dangling hidden window pointer (??) creation sequence as yet undetermined
+	for i in $(ls -1 $HIDDEN) ;do
+		[ -e $SNAPSHOT/$i ] || { rm -rf $HIDDEN/$i; removals=true; }
+	done
+}
 
-[ $removals ] && refresh_panel
+[ "$(chef window)" = "$(find $SNAPSHOT -maxdepth 1 -mindepth 1 -type d -printf "%f\n" | sort)" ] || vacuum
+
 chef @desktop
+[ $removals ] && refresh_panel
 
 # kak: filetype=sh
 
