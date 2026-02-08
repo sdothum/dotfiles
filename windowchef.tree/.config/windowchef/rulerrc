@@ -154,11 +154,11 @@ class="zathura"
 # ..................................................................... browsers
 
 class="chromium"
-	window desktop $(chef desktop "COMM") ;\
+	window desktop $(chef desktop "DESK") ;\
 	window size monocle
 
 class="Firefox"
-	window desktop $(chef desktop "COMM") ;\
+	window desktop $(chef desktop "DESK") ;\
 	window size monocle
 
 # don't attach browsers to server groups
@@ -182,7 +182,7 @@ class="gFTP"
 	window size monocle
 
 class="pcmanfm"
-	window desktop $(chef desktop "DESK") ;\
+	window desktop $(chef desktop "CHEF") ;\
 	window tile 3
 
 # kak: filetype=sh
