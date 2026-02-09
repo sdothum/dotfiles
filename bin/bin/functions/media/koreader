@@ -24,18 +24,19 @@ usage() { echo "$(basename $0) [back'up KOReader library]
 > [sync top/bottom m'argins] <0 | 1>
 
 > [%' line spacing] <percent>
-> [w'ord spacing 100]
+> [word spacing '100']
 
 > [d'efault] <font>
 > [body f'ont] <font>
 > [header/'footer] <font>
 > [font s'ize] <size>
+> [font w'eight] <weight>
 
 > [highl'ight] <invert | lighten>
 > [h'yphenate]
 > [soft-'hyphenation]
 
-> [font g'amma] <gamma>, { contrast:gamma, 1.0:15, 1.45:25, 1.9:30, 2.5:36 }
+> [font g'amma] <gamma>, { contrast:gamma, 1.0:15, 1.45:25, 1.9:30, 2.5:36, 4.0:43 }
 > [i'nverse page turn] <true | false>
 > [p'ath conversion] <kobo | supernote>" | usage:
 	[ -e $KOBO ] || [ -e $SUPERNOTE ] || ditto note "ensure KOReader device is mounted"
@@ -115,7 +116,7 @@ while [ $1 ] ;do
 	case $1 in
 		u     ) backup;                                                                      shift; continue ;;
 		r     ) resetpages=true;                                                             shift; continue ;;
-		w     ) sdr 'word spacing 100' '/\"copt_word_spacing\".*=/,+2s/= [0-9]*,/= '100',/'; shift; continue ;;
+		100   ) sdr 'word spacing 100' '/\"copt_word_spacing\".*=/,+2s/= [0-9]*,/= '100',/'; shift; continue ;;
 		-     ) sdr 'soft-hyphenation' '/\"hyph_soft_hyphens_only\"/s/= false,/= true,/'; resetpages=true ;;
 		h     ) sdr 'hyphenate'        '/\"hyph_soft_hyphens_only\"/s/= true,/= false,/'; resetpages=true ;;
 		1     ) sdr "1 column"         '/\"copt_visible_pages\"/s/= [0-9]*,/= 1,/';       resetpages=true ;;
@@ -133,6 +134,7 @@ while [ $1 ] ;do
 		f     ) font=$(token word $2)         && font ${font}                                                                                       || usage; resetpages=true ;;
 		/     ) font=$(token word $2)         && header ${font}                                                                                     || usage                  ;;
 		s     ) size=$(token decimal $2)      && sdr "font size ${size}" '/\"copt_font_size\"/s/= [0-9.]*,/= '${size}',/'                           || usage                  ;;
+		w     ) weight=$(token decimal $2)    && sdr "font weight ${weight}" '/\"copt_font_base_weight\"/s/= [0-9.]*,/= '${weight}',/'              || usage                  ;;
 		g     ) gamma=$(token number $2)      && sdr "font gamma ${gamma}" '/\"copt_font_gamma\"/s/= [0-9]*,/= '${gamma}',/'                        || usage                  ;;
 		*     ) usage ;;
 	esac
@@ -171,7 +173,7 @@ while [ $1 ] ;do
 		*             ) shift 2 ;;
 	esac
 done
-	
+
 [ $resetpages ] && sdr 'page recalculation' '/\"doc_pages\"/d; /\"pages\"/d'
 
 [ "$SDR" ] || usage
