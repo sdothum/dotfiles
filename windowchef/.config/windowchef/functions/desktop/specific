@@ -1,13 +1,16 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="window/stack $@" . $PARENT
+# [ $TRACE ] && CHILD="desktop/specific $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ........................................................... Manage group stack
+# ............................................................... Group specific
 
-# Usage: window stack <group>
+# Usage: desktop specific <group>
 
-cat $GROUP:$1:focus  # return top of stack
+[ $(ls -1 $CURRENT) -eq $1 ] || current $1
+
+waitron group_activate_specific $1
+rm -rf $GROUP:deactivated/$1
 
 # kak: filetype=sh

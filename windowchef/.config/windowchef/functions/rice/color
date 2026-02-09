@@ -1,20 +1,14 @@
-#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
-# X11 Desktop
+# Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ................................................................. Conky colorN
 
-usage() { usage: "rice $(basename $0) <color>"; }
+usage() { usage: "$(basename $0) <color>"; }
 
 COLORS=$PALETTE/.theme
 
-# case $CHEF in
-# 	'' ) [ $1 ] && grep "^$1.$(cat $THEME)" $COLORS | cut -d= -f2 || usage ;;
-# 	*  ) [ $1 ] && grep "^$1.$(LS $THEME)"  $COLORS | cut -d= -f2 || usage ;;
-# esac
-
-[ $1 ] && grep "^$1.$(cat $THEME)" $COLORS | cut -d= -f2 || usage
+[ $1 ] && grep "^$1.$(recipe theme/contrast)" $COLORS | cut -d= -f2 || usage
 
 # kak: filetype=sh

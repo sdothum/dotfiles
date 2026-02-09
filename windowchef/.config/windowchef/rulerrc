@@ -83,8 +83,8 @@ class="pavucontrol"
 	window desktop $(chef desktop "CHEF")                              ;\
 	window size B6 rotate                                              ;\
 	window snap center                                                 ;\
-	[ -e $WME:pavucontrol ] && exit                                    ;\
-	touch $WME:pavucontrol                                             ;\
+	recipe -q pavucontrol && exit                                      ;\
+	recipe -a pavucontrol                                              ;\
 	xdotool search --onlyvisible --classname "pavucontrol" windowunmap ;\
 	desktop $(chef desktop "DESK")
 
@@ -129,7 +129,7 @@ class="rawtherapee"
 # HACK: for yazi photo display requires initial delay to prevent triggering "menu" from sxhkd "toggle wallpaper"
 
 class="feh"
-	sleep 0.2                             ;\
+	sleep 0.25                            ;\
 	xdotool key space                     ;\
 	sleep 0.1 && xdotool key BackSpace    ;\
 	window @feh snap center
@@ -154,11 +154,11 @@ class="zathura"
 # ..................................................................... browsers
 
 class="chromium"
-	window desktop $(chef desktop "COMM") ;\
+	window desktop $(chef desktop "DESK") ;\
 	window size monocle
 
 class="Firefox"
-	window desktop $(chef desktop "COMM") ;\
+	window desktop $(chef desktop "DESK") ;\
 	window size monocle
 
 # don't attach browsers to server groups
@@ -182,7 +182,7 @@ class="gFTP"
 	window size monocle
 
 class="pcmanfm"
-	window desktop $(chef desktop "DESK") ;\
+	window desktop $(chef desktop "CHEF") ;\
 	window tile 3
 
 # kak: filetype=sh

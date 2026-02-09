@@ -8,18 +8,20 @@
 
 # Usage: [silent=true] toggle unclutter [on | off]
 
+exists unclutter || exit
+
 on() {
 	# unclutter (original) doesn't play nice with X, so give it some initialization time
 	# (sleep 1 && unclutter -idle 1 -jitter 2 -root) &
 	# unclutter-xfixes
 	pstat unclutter || unclutter --timeout 1 --jitter 2 --exclude-root --ignore-scrolling --fork
-	touch $UNCLUTTER
+	recipe -a unclutter
 	[ $silent ] || notify low 'Unclutter On' 'Ignore mouse'  # see conky clock
 }
 
 off() (
 	killall -KILL unclutter 2>/dev/null
-	rm -f $UNCLUTTER
+	recipe -d unclutter
 	notify low 'Unclutter Off' 'Follow mouse'
 )
 

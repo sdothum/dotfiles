@@ -7,7 +7,7 @@
 
 # .............................................................. Desktop layouts
 
-# Usage: layout <msg>, see functions/layout
+# Usage: layout <msg> SEE: functions/layout
 
 geometry()      { xdotool getwindowgeometry --shell ${1:-$winid}; }  # X Y WIDTH HEIGHT (doesn't include borders)
 set_geometry()  { eval $(geometry $1); }
@@ -16,11 +16,11 @@ save_geometry() { geometry $1 >$WINFO:${1:-$winid}; }                # for rever
 winid=$(pfw)
 
 msg=$1
-[ $msg ] && shift || usage: $0
+[ $msg ] && shift || usage $0
 if [ -e ${0%/layout}/functions/layout/$msg ] ;then
 	. ${0%/layout}/functions/layout/$msg $@
 else
-	usage: $0
+	usage $0 $msg
 fi
 
 # kak: filetype=sh

@@ -11,8 +11,8 @@
 
 # provides window geometry history management
 case $1 in
-	snapshot ) [ -e $WINFO:${2} ]          && cp $WINFO:${2} $WINFO:${2}:snapshot ;;
-	restore  ) [ -e $WINFO:${2}:snapshot ] && cp $WINFO:${2}:snapshot $WINFO:${2} ;;
+	snapshot ) [ -e $WINFO/${2} ]          && rm -rf $WINFO:snapshot/${2}; cp $WINFO/${2} $WINFO:snapshot/${2} ;;
+	restore  ) [ -e $WINFO:snapshot/${2} ] && rm -rf $WINFO/${2};          cp $WINFO:snapshot/${2} $WINFO/${2} ;;
 	*        ) notify critical 'wgeometry' "$@" ;;
 esac
 

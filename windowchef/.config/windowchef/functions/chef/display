@@ -1,5 +1,5 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="chef/display $@" . $PARENT
+# [ $TRACE ] && CHILD="chef/display $@" . $PARENT
 
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════

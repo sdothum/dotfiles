@@ -1,0 +1,18 @@
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="chef/@desktop $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................. Windowchef check
+
+# Usage: chef @desktop
+
+winid=$(pfw 2>/dev/null) || return  # trap empty desktop at startup
+
+D=$(find $GROUP -name $winid | cut -d/ -f6)
+[ $D ] || return                    # trap unregisterd (yet) window
+[ $D = $(ls -1 $GROUP/current) ] || { desktop add ${D:-1} $winid; desktop $D; }
+
+# kak: filetype=sh
+

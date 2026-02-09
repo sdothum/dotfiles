@@ -7,7 +7,7 @@
 
 # .............................................................. Menu operations
 
-# Usage: menu <msg>, see functions/menu
+# Usage: menu <msg> SEE: functions/menu
 
 export MENU=${MENU:-$(dirname $0)/functions/menu}
 export HISTORY=$MENU/.history
@@ -46,7 +46,7 @@ msg=${1:-run}
 if [ -e ${0%/menu}/functions/menu/$msg ] ;then
 	. ${0%/menu}/functions/menu/$msg $@
 else
-	usage: $0
+	usage $0 $msg
 fi
 
 # kak: filetype=sh

@@ -23,7 +23,7 @@ fi
 DMS=true  # unset for : (colon) time
 
 seconds() { tic=${line#*| }; tic=${tic%|*}; }
-ribbon()  { echo "$(echo "$tic" | cut -c $(( pos + 1 ))-)$(echo "$tic" | cut -c 1-$pos)"; }
+ribbon()  { echo "$(echo "$tic" | cut -c $(( pos + 1 ))-)$([ $pos -gt 0 ] && echo "$tic" | cut -c1-$pos)"; }
 
 tape() {
 	tic="${line#*|}"
@@ -48,14 +48,16 @@ tape() {
 
 # ................................................................ Weather watch
 
-weather() { unset update_weather; conky weather panel | sed "s/\^/$SEP/g" >/tmp/${WEATHER##*/} & }
+FORECAST=$WME/weather
 
-[ -e $WEATHER ] && weather
+weather() { unset update_weather; rm -rf $FORECAST; mkdir -p "$FORECAST/$(conky weather panel | utfslash)" & }
+
+recipe -q panel/weather && weather
 
 # ...................................................... Clock & weather refresh
 
 # tic indicator: none (unset), dot, circle, square, bar, tape, seconds
-[ -e $TICKER ] && { TIC=$(cat $TICKER); TIC=${TIC:-tape}; }
+TIC=$(recipe panel/ticker) && TIC=${TIC:-tape} || unset TIC
 
 currently() {
 	# prevent lemonbar race to catch up (impossible to force race condition to test..)
@@ -74,14 +76,14 @@ currently() {
 	fi
 
 	# update weather every 10 minutes
-	if [ -e $WEATHER ] ;then
+	if recipe -q panel/weather ;then
 		[ $DMS ] && minute=${line#*;?} || minute=${line#*:?}  # hh:mm:ss.* -> m:ss.*
 		case $(printf '%.1s' "$minute") in                    # -> m
-			0 | 5 ) [ $update_weather ] && weather ;;
-			*     ) update_weather=true ;;
+			0 ) [ $update_weather ] && weather ;;              # every 10 minutes
+			* ) update_weather=true ;;
 		esac
 	fi
-	[ -s /tmp/${WEATHER##*/} ] && [ "$(cat /tmp/${WEATHER##*/})" != '' ] && current_weather=$(cat /tmp/${WEATHER##*/})  # prevent blanking during update, see weather()
+	[ -s $FORECAST ] && [ "$(ls -1 $FORECAST)" ] && current_weather="$(ls -1 $FORECAST | sed "s/\^/$SEP/g")"  # prevent blanking during update, see weather()
 
 	line="${line%%^*}${current_weather}${line#*^}"
 	line="${line%%|*}${clock}%{F-}${line##*|}"
@@ -102,25 +104,25 @@ panel() {
 
 # ......................................................................... FIFO
 
-mkfifo $PANEL_FIFO:$fifo
+STREAM=$(mkfifo $FIFO/$msg)  # SEE: panel wrapper
 
 # note physical linebreaks for each format specification (to accomodate slow processors, notably arm)
 # NOTE: lemonbar %{F..} changed to #{F..} for alpine "clock" (fails on % char, see function currently)
 # NOTE: added time since epoch for race condition trap
 if [ $DMS ] ;then
 	case $TIC in
-		se* ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I°%M %S%p|#{F-}${SEP}%a %-d %b ’%y"   >$PANEL_FIFO:$fifo & ;;
-		t*  ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I;%M.%S, %p|#{F-}${SEP}%a %-d %b ’%y" >$PANEL_FIFO:$fifo & ;;  # SEE: tape() sed utf-8
-		*   ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}%-I°%M#{F-} %p|%S|${SEP}%a %-d %b ’%y"    >$PANEL_FIFO:$fifo & ;;
+		se* ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I°%M %S%p|#{F-}${SEP}%a %-d %b ’%y"   >$STREAM & ;;
+		t*  ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I;%M.%S, %p|#{F-}${SEP}%a %-d %b ’%y" >$STREAM & ;;  # SEE: tape() sed utf-8
+		*   ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}%-I°%M#{F-} %p|%S|${SEP}%a %-d %b ’%y"    >$STREAM & ;;
 	esac
 else
 	case $TIC in
-		se* ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I:%M %S%p|#{F-}${SEP}%a %-d %b ’%y"   >$PANEL_FIFO:$fifo & ;;
-		t*  ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I:%M:%S%p|#{F-}${SEP}%a %-d %b ’%y"   >$PANEL_FIFO:$fifo & ;;
-		*   ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}%-I:%M#{F-} %p|%S|${SEP}%a %-d %b ’%y"    >$PANEL_FIFO:$fifo & ;;
+		se* ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I:%M %S%p|#{F-}${SEP}%a %-d %b ’%y"   >$STREAM & ;;
+		t*  ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I:%M:%S%p|#{F-}${SEP}%a %-d %b ’%y"   >$STREAM & ;;
+		*   ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}%-I:%M#{F-} %p|%S|${SEP}%a %-d %b ’%y"    >$STREAM & ;;
 	esac
 fi
 
-cat $PANEL_FIFO:$fifo | panel | handlebar &
+cat $STREAM | panel | handlebar &
 
 # kak: filetype=sh

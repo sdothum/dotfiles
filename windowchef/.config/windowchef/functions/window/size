@@ -6,7 +6,7 @@
 
 # .............................................................. Set window size
 
-# Usage: window size <height>x<width> | monocle | term | rotate|landscape | <numerator>/<denominator> (of screen width)
+# Usage: window size <height>x<width> | monocle | term | desktop | <numerator>/<denominator> (of screen width)
 
 ASPECT=4:3  # (photographic) ratio
 
@@ -40,7 +40,7 @@ monocle() {
 
 # .............................................................. To default term
 
-TERMSIZE=$WME:term:geometry
+TERMSIZE=$WME/term
 
 reterm() {
 	save_geometry
@@ -48,36 +48,38 @@ reterm() {
 	if [ ! -e $TERMSIZE ] ;then
 		term TRANSPARENT class=ephemeral  # as unobtrusive as possible :)
 		xdotool search --onlyvisible --sync --classname 'ephemeral'
-		xdotool getwindowgeometry --shell $(pfw)|grep -E 'WIDTH|HEIGHT' >$TERMSIZE
+		for i in $(xdotool getwindowgeometry --shell $(pfw)|grep -E 'WIDTH|HEIGHT') ;do mkdir -p $TERMSIZE/$i ;done
 		xdotool search --classname 'ephemeral' windowclose
 	fi
-	eval $(cat $TERMSIZE)
+	eval $(ls -1 $TERMSIZE)
 	wtp $X $Y $WIDTH $HEIGHT $winid
 	waitron window_focus $winid
+	waitron window_snap middle
 }
 
 # ................................................................... Paper size
 
 paper() {
 	case $1 in
-		A3* ) size $winid 1334 1890 $2 ;;
-		B4* ) size $winid 1123 1587 $2 ;;
-		A4* ) size $winid  945 1334 $2 ;;
-		B5* ) size $winid  794 1123 $2 ;;
-		A5* ) size $winid  665  945 $2 ;;
-		B6* ) size $winid  559  794 $2 ;;
-		A6* ) size $winid  472  665 $2 ;;
-		B7* ) size $winid  397  559 $2 ;;
+		A3* ) size $winid 1334 1890 $2 ;;  # 2521260 (pixel area)
+		B4* ) size $winid 1123 1587 $2 ;;  # 1782201
+		A4* ) size $winid  945 1334 $2 ;;  # 1260630
+		B5* ) size $winid  794 1123 $2 ;;  #  891662
+		A5* ) size $winid  665  945 $2 ;;  #  628425
+		B6* ) size $winid  559  794 $2 ;;  #  443846
+		A6* ) size $winid  472  665 $2 ;;  #  313880
+		B7* ) size $winid  397  559 $2 ;;  #  221923
 	esac
 }
 
 case $1 in
-	mono* ) monocle ;;
-	term  ) reterm  ;;
-	[AB]* ) paper $1 $2                   ;;
-	*/*   ) aspect ${1%/*} ${1#*/}        ;;
-	*x*   ) size $winid ${1%x*} ${1#*x}   ;;
-	*     ) size $winid ${W:-$X} ${H:-$Y} ;;
+	mono* ) monocle     ;;
+	term  ) reterm      ;;
+	[AB]* ) paper $1 $2 ;;
+	*/*   ) aspect ${1%/*} ${1#*/}      ;;
+	*x*   ) size $winid ${1%x*} ${1#*x} ;;
+	desk* ) size $winid $W $H; waitron window_snap middle             ;;
+	*     ) size $winid ${W:-$X} ${H:-$Y}; waitron window_snap middle ;;
 esac
 
 # kak: filetype=sh

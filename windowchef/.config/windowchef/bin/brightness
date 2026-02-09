@@ -1,24 +1,23 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
-# Hardware
+# Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ........................................................... Display brightness
 
 usage() { usage: "$(basename $0) [+-]<percent>"; exit 1; }
 
-LEVEL=$SESSION/brightness
 min=20
 max=100
 
 brightness() {
 	xrandr --output HDMI-0 --brightness $(echo "scale=2; ${1} / 100" | bc)
-	echo ${1} >$LEVEL
+	recipe brightness ${1}
 	notify brightness "${1}%"
 }
 
-[ -e $LEVEL ] && level=$(cat $LEVEL)
+level=$(recipe brightness)
 [ $level ] || level=100
 
 [ $1 ] && { echo $1 | grep -q '^[+-]*[0-9]*$' || usage; }

@@ -6,19 +6,16 @@
 
 # .............................................................. Root background
 
-# see play
-[ -e $BLACKBOARD ] && exec blackboard  # reset spine before restore, see blackboard
-
-background=$(cat $SETROOT 2>/dev/null)
-
+background=$(recipe theme/setroot)
 case $background in
 	color     )
-		color=$(find $PALETTE -iname $(cat $RGB).png | cut -d/ -f6)
-		[ $color ] && { [ $color = light ] && echo dark >$THEME || echo light >$THEME; }
-		draw root color $(cat $RGB 2>/dev/null) $(cat $THEME 2>/dev/null) ;;
-
-	wallpaper ) draw root wallpaper ;;
-	*         ) draw root color ;;
+		contrast=$(recipe -/ theme/wallcolor | cut -d/ -f6)
+		rgb=$(recipe -/ theme/wallcolor | cut -d/ -f8)
+		[ $contrast ] && { [ $contrast = light ] && recipe theme/contrast dark || recipe theme/contrast light; }
+		draw root color ${rgb%.png} $(recipe theme/contrast)
+		;;
+	wallpaper ) recipe -q theme/shuffle && draw root shuffle || draw root wallpaper ;;
+	*         ) draw root color ;;  # random
 esac
 
 # kak: filetype=sh

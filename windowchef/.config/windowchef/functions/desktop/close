@@ -1,0 +1,22 @@
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="desktop/close $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Group close
+
+# Usage: desktop close <group>
+
+for i in $(ls -1 $GROUP/$1) ;do
+	waitron window_focus $i
+	waitron window_close
+	desktop remove $i                 # cleanup
+done
+
+waitron group_remove_all_windows $1  # redundancy trap for unknown group juggling corner cases
+rm -rf $GROUP/$1/*
+rm -rf $GROUP:focus/$1/*
+rm -rf $GROUP:deactivated/$1
+
+# kak: filetype=sh

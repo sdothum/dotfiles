@@ -6,13 +6,7 @@
 
 # .................................................................... Font size
 
-# SEE: urxvt wrapper, draw panel, theme.vim
-
-SESSION=${SESSION:-$HOME/.session}  # for root invocation
-FONTSIZE=$SESSION/fontsize
-
-[ -e $FONTSIZE ] && size=$(cat $FONTSIZE)
-[ $size ] && exec echo $size
+# SEE: editor / browser / term / windowmanager wrappers
 
 # fugly adjust font for various displays and video cards on this local network
 
@@ -27,6 +21,7 @@ elif laptop       ;then size=9
 else                    size=10
 fi
 
+size=$(recipe -c fontsize $size)
 echo $size
 
 # kak: filetype=sh

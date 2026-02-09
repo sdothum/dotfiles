@@ -92,7 +92,7 @@ panel() {
 
 # ......................................................................... FIFO
 
-mkfifo $PANEL_FIFO:$fifo
+STREAM=$(mkfifo $FIFO/$msg)  # SEE: panel wrapper
 
 # NOTE: mpc does not output current if the playlist is empty
 while : ;do
@@ -102,8 +102,8 @@ while : ;do
 		*  ) echo "$current" ;;
 	esac
 	sleep 1
-done >$PANEL_FIFO:$fifo &
+done >$STREAM &
 
-cat $PANEL_FIFO:$fifo | panel | handlebar &
+cat $STREAM | panel | handlebar &
 
 # kak: filetype=sh

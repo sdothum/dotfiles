@@ -9,7 +9,7 @@
 
 # Usage: souschef [group | window [<action>]]
 
-TREE=/tmp/souschef:tree
+TREE=$WME/souschef:tree
 > $TREE
 
 tree() { echo -n "$1 / " | tee -a $TREE >/dev/null; }
@@ -20,17 +20,20 @@ pick() {
 	echo $pick  # echo returns single spaced words
 }
 
-mactions="group
+mactions="
+group
 window
 "
 
-gactions="close
+gactions="
+close
 filter
 raise
 toggle
 "
 
-wactions="beam
+wactions="
+beam
 column
 draw
 form
@@ -39,7 +42,8 @@ snap
 tile
 "
 
-columns="3:1   left
+columns="
+3:1   left
 3:2
 3:3
 4:1
@@ -48,7 +52,8 @@ columns="3:1   left
 4:4   right
 "
 
-tiles="0   fill
+tiles="
+0   fill
 1   monocle
 2   halves
 3   thirds
@@ -56,7 +61,8 @@ tiles="0   fill
 5   fifths
 "
 
-regions="+   center
+regions="
++   center
 a   left
 d   right
 j   top
@@ -70,7 +76,8 @@ y   bottom  left
 z   bottom  right
 "
 
-formats="-   term
+formats="
+-   term
 c   B4  rotate
 d   A4
 f   A4  rotate
@@ -86,7 +93,8 @@ q   B7
 s   B7  rotate
 "
 
-directions="a   tile    left
+directions="
+a   tile    left
 c   tile    right
 d   top
 j   left
@@ -164,7 +172,7 @@ case $menu in
 			form   )
 				size=$(echo "$formats" | pick "size") || exit
 				window size ${size#* }
-				wgeometry record $(pfw)  # window snap overwrites window size geometry history
+				wgeometry snapshot $(pfw)  # window snap overwrites window size geometry history
 				window snap center vertical
 				wgeometry restore $(pfw)
 				;;

@@ -6,7 +6,7 @@
 
 # .................................................................. Window info
 
-# Usage: chef window classname | count [<name>] | ids [<classname>]
+# Usage: chef window classname | count [<name>] | ids [<classname> | snapshot]
 
 classname() { xdotool getactivewindow getwindowclassname; }
 
@@ -23,6 +23,7 @@ count() {
 # ................................................................... Window ids
 
 winids() { wmctrl -l 2>/dev/null | cut -d' ' -f1 | sort; }  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
+record() { rm -rf $1/*; for i in $(winids) ;do mkdir -p $1/$i ;done }
 
 ids() {
 	case $1 in
@@ -32,9 +33,11 @@ ids() {
 }
 
 case $1 in
-	classname ) classname ;;
-	count     ) count $2  ;;
-	ids       ) ids   $2  ;;
+	classname ) classname        ;;
+	count     ) count $2         ;;
+	ids       ) ids   $2         ;;
+	''        ) winids           ;;
+	snapshot  ) record $SNAPSHOT ;;
 esac
 
 # kak: filetype=sh

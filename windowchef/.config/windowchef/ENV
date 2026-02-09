@@ -12,51 +12,28 @@ export PARENT=$(which parent)
 # ................................................................... Filesystem
 
 export WM=$(cat $HOME/.windowmanager)
+export WME=/dev/shm/$WM
 
-[ -d /dev/shm/$WM ] && rm -rf /dev/shm/$WM
-mkdir /dev/shm/$WM
+[ -d $WME ] && rm -rf $WME
+mkdir $WME
 
-export WME=/dev/shm/$WM/$WM  # ../windowchef: state file prefix
-
-# .................................................................... Root vars
+# ............................................................. Windowchef state
 
 export SHELL=/usr/bin/dash
 export XDG_CONFIG_HOME=$HOME/.config
-export GROUP=$WME:group
-export HIDDEN=$WME:hidden
-export WINFO=$WME:window
-export SESSION=$HOME/.session
+export CHEF=$WME/chef
+export SNAPSHOT=$CHEF/snapshot
+export GROUP=$WME/group
+export HIDDEN=$WME/hidden
+export WINFO=$WME/window
+export WMSESSION=$HOME/.session/$WM
+export FIFO=$WME/fifo
 
-echo $DISPLAY >$SESSION/display  # for cron notifications SEE: notify
+recipe display $DISPLAY
 
-# .................................................................... WM states
+# ............................................................. Root collections
 
-export PICOM=$WME:picom
-export FORTUNE=$WME:fortune
-
-export PANEL=$WME:panel
-export PANEL_FIFO=${PANEL_FIFO:-${PANEL}-fifo}
-# Windowchef is not fully started yet, so assume monitor 0 focus
-echo $PANEL_FIFO:0 >$PANEL_FIFO  # set by draw panel but needed beforehand
-
-# ............................................................... Session states
-
-export SPANEL=$SESSION/panel
-export SETROOT=$SESSION/setroot
-
-# application states
-export FONTSIZE=$SESSION/fontsize
-export UNCLUTTER=$SESSION/unclutter
-
-# ................................................................ WM attributes
-
-export PALETTE=$HOME/images/colors
-export WALLCOLOR=$PALETTE/default
-export RGB=$PALETTE:rgb
-export WALLPAPER=$HOME/images/backgrounds/default
-export BACKGROUND=$HOME/images/root  # ln to WALLPAPER or WALLCOLOR SEE: draw root
-
-export BLACKBOARD=$WME:blackboard
-export THEME=$SPANEL:theme
+export IMAGES=$HOME/images
+export PALETTE=$IMAGES/colors
 
 # kak: filetype=sh

@@ -1,0 +1,21 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="desktop/remove $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................... Group remove (winid)
+
+# Usage: desktop remove [<winid>
+
+winid=${1:-$(pfw)}
+
+for i in $(find $GROUP -name $winid) ;do
+	rmdir $i
+done
+
+for i in $(find $GROUP:deactivated -name $winid) ;do
+	rmdir $i
+done
+
+# kak: filetype=sh

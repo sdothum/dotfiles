@@ -10,18 +10,19 @@
 
 desktop=$(desktop)
 waitron group_remove_window
+rmdir $GROUP/$desktop/$winid
 waitron group_add_window $1
-window group $1 add $winid
-desktop add $winid $1  # see desktop and window stack
+mkdir -p $GROUP/$1/$winid
+desktop add $1 $winid
 
 # teleport and refocus to window's previous group
 if [ $2 ] ;then
-	W=$(head -1 $GROUP:$desktop)
+	W=$(ls -1 $GROUP/$desktop | head -1)
 	[ $W ] && {
 		desktop $desktop
 		waitron window_focus $W
-		desktop add $W $desktop
-		exit             # skip original window refocus SEE: window wrapper
+		desktop add $desktop $W
+		exit  # skip original window refocus SEE: window wrapper
 	}
 fi
 

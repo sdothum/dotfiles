@@ -6,7 +6,8 @@
 
 # .................................................................. Hide action
 
-echo "$(desktop) $winid:$(wname $winid)" >$HIDDEN:$winid  # SEE: menu unhide
+rm -rf $HIDDEN/$winid
+mkdir -p $HIDDEN/$winid/"$(desktop) $winid ^$(wname $winid | sed "s/^'//; s/'$//")"  # SEE: menu unhide
 save_geometry
 mapw -u $winid
 waitron window_focus_last

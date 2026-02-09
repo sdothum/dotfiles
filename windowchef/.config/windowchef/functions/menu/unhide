@@ -6,16 +6,16 @@
 
 # ........................................................ Unhide hidden windows
 
-windows()  { for i in $(ls -1 $HIDDEN* 2>/dev/null) ;do sed "s/:/  ^$SEP /" $i ;done  }
+windows()  { ls -1 $HIDDEN/* 2>/dev/null | grep -vE '(^|/.*:)$' | sort; }  # remove pathnames and empty lines
 finished() { [ -z "$(windows)" ]; }
 
 finished && exit
-while window=$(windows | column -s^ -t  | rmenu 'raise' -no-custom) || exit ;do
+while window=$(windows | sed "s/\^/&$SEP /" | column -s^ -t  | rmenu 'raise' -no-custom) || exit ;do
 	winid=$(echo $window | cut -d' ' -f2)
 	mapw -m $winid
 	waitron window_focus $winid
-	window revert      # to last position
-	rm $HIDDEN:$winid  # see window hide
+	window revert          # to last position
+	rm -rf $HIDDEN/$winid  # see window hide
 	finished && break
 done
 

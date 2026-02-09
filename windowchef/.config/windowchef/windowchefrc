@@ -7,25 +7,20 @@
 # ...................................................................... Borders
 
 waitron wm_config enable_borders true
-waitron wm_config border_width 12
-# waitron wm_config internal_border_width 11
-waitron wm_config internal_border_width 9
-waitron wm_config color_focused 0x00ffff
-waitron wm_config color_unfocused 0x757575
-waitron wm_config internal_color_focused 0x505050
-waitron wm_config internal_color_unfocused 0x505050
+waitron wm_config border_width $(recipe -c ui/border_width 12)
+waitron wm_config internal_border_width $(recipe -c ui/internal_border_width 9)
+waitron wm_config color_focused 0x$(recipe -c ui/color_focused 00ffff)
+waitron wm_config color_unfocused 0x$(recipe -c ui/color_unfocused 757575)
+waitron wm_config internal_color_focused 0x$(recipe -c ui/internal_color_focused 505050)
+waitron wm_config internal_color_unfocused 0x$(recipe -c ui/internal_color_unfocused 505050)
 
 # ......................................................................... Gaps
 
-# waitron wm_config gap_width top 32
-# waitron wm_config gap_width bottom 40
-waitron wm_config gap_width top 36
-waitron wm_config gap_width bottom 39
-# waitron wm_config gap_width left 32
-# waitron wm_config gap_width right 32
-waitron wm_config gap_width left 36
-waitron wm_config gap_width right 36
-waitron wm_config grid_gap_width 12
+waitron wm_config gap_width top $(recipe -c 'ui/gap_width top' 36)
+waitron wm_config gap_width bottom $(recipe -c 'ui/gap_width bottom' 39)
+waitron wm_config gap_width left $(recipe -c 'ui/gap_width left' 36)
+waitron wm_config gap_width right $(recipe -c 'ui/gap_width right' 36)
+waitron wm_config grid_gap_width $(recipe -c ui/grid_gap_width 12)
 
 # ....................................................................... Groups
 
@@ -46,6 +41,21 @@ waitron wm_config replay_click_on_focus true
 waitron wm_config pointer_actions move resize_side resize_corner
 waitron wm_config pointer_modifier super
 waitron wm_config click_to_focus any
+
+# ................................................................... State tree
+
+mkdir -p $SNAPSHOT
+mkdir -p $GROUP/-1
+mkdir -p $GROUP/current/1
+mkdir -p $GROUP/last/-1
+mkdir -p $GROUP:deactivated
+mkdir -p $HIDDEN
+mkdir -p $WINFO:snapshot
+
+# allow pseudo (file) writes to yet as undefined $FIFO/<fifo> buffer during startup SEE: panel
+mkdir -p $FIFO
+
+# ...................................................................... Startup
 
 autostart
 

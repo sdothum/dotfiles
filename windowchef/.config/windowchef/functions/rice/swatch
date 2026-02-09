@@ -1,7 +1,6 @@
-#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
-# X11 Desktop
+# Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ................................................................. Color swatch
@@ -12,11 +11,11 @@
 size=180x180
 
 if [ $2 ] ;then
-	swatch=$PALETTE/$(cat $THEME)/$2
+	swatch=$PALETTE/$(recipe theme/contrast)/$2
 	mkdir -p $swatch || exit 1
-	convert -size $size xc:"#$1" $swatch/$1.png
+	magick -size $size xc:"#$1" $swatch/$1.png
 else
-	convert -size $size xc:"#$1" $PALETTE/$1.png
+	magick -size $size xc:"#$1" $PALETTE/$1.png
 fi
 
 # kak: filetype=sh

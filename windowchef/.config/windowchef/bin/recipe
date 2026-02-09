@@ -5,19 +5,27 @@
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ....................................................... windowchef ingredients
+# ................................................. windowchef persistent states
 
-# Usage: chefstate <path> [<value>]
-#                 where <path> is a branch off $SESSION/windowchef
+# Usage: recipe [-a | -d | -q | -/] <path>
+#                    [-c | -e | -/] <path> <value>
 
-ingredient=$SESSION/$WM/$1
-
-if [ "$2" ] ;then
-	rm -rf "$ingredient/*"
-	mkdir -p "$ingredient/$2"
-	echo "$2"
-else
-	ls -1 $ingredient 2>/dev/null  # return chef state
-fi
+case "$1" in
+	-a ) mkdir -p $WMSESSION/$2 ;;                           # add to (without clear) branch
+	-c ) recipe "$2" || { recipe "$2" "$3"; echo "$3"; } ;;  # return value or set (with echo) otherwise
+	-d ) rm -rf $WMSESSION/$2 ;;                             # delete branch
+	-e ) recipe "$2" "$3" && [ "$3" ] && echo "$3" ;;        # set with echo
+	-q ) recipe "$2" >/dev/null ;;                           # quiet test
+	-/ ) [ "$3" ] && recipe "$2" "$(echo "$3" | utfslash)" || recipe "$2" | utfslash - ;;  # add utf-8 / return ascii slashes
+	*  )                                                     # set or return branch (or error code)
+		branch="$WMSESSION/$1"
+		if [ "$2" ] ;then
+			rm -rf $branch/*
+			mkdir -p "$branch/$2"
+		else
+			ls -1 "$branch" 2>/dev/null || return 1  # return chef state
+		fi
+		;;
+esac
 
 # kak: filetype=sh

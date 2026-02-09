@@ -27,7 +27,7 @@ spread() {
 
 	X=$(( width * column + margin + border * column * 2 + column * gap + offset ))
 	[ $(( X + WIDTH )) -ge $W ] && X=$(( W - WIDTH + border ))
-	wtp $X $Y $WIDTH $HEIGHT $(pfw)
+	wtp $X $Y $WIDTH $HEIGHT $winid
 }
 
 case $2 in

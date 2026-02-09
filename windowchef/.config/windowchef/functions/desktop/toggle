@@ -1,0 +1,28 @@
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="desktop/toggle $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Toggle group
+
+# Usage: desktop toggle <group>
+
+D=${1:-$(desktop)}
+[ $(ls -1 $CURRENT) -eq "$D" ] || current "$D"
+
+if [ -e $GROUP:deactivated/$D ] ;then
+	waitron group_activate $D
+	waitron window_focus $(ls -1 $GROUP:focus/$D)
+	rm -rf $GROUP:deactivated/$D
+	for i in $(ls -1 $GROUP/$D) ;do [ -e $HIDDEN/$i ] && rmdir $HIDDEN/$i ;done  # NOTE: activating group unhides manually hidden group windows
+	desktop $D
+else
+	winid=$(ls -1 $GROUP/$D | head -1)
+	[ $winid ] || return
+	waitron window_focus $winid  # BUG: waitron group_toggle/_deactivate does not deactivate whole group unless the top of the window stack has focus
+	waitron group_deactivate $D
+	mkdir -p $GROUP:deactivated/$D
+fi
+
+# kak: filetype=sh

@@ -7,7 +7,7 @@
 
 # ..................................................................... Terminal
 
-# Usage: [kmd=<string>] term [[title=]<title>] [[class=]<class>] [BLACKBOARD | TRANSPARENT | PAPER | OPACITY=<decimal> | <X>x<Y> | VISIBLE | WAIT | FORTUNE]* [[SHELL] <command>]
+# Usage: [kmd=<string>] term [[title=]<title>] [[class=]<class>] [BLACKBOARD | TRANSPARENT | PAPER | OPACITY=<decimal> | <X>x<Y> | VISIBLE | WAIT | FORTUNE[=<heading>]]* [[SHELL] <command>]
 #        title (and default name string)
 #        FORTUNE, login notifier message
 #        BLACKBOARD, cinema background mode for omxplayer
@@ -66,9 +66,9 @@ while : ;do
 		OPACITY=*     ) theme $1 ;;
 		PAPER         ) theme $1 ;;
 		*[0-9]x[0-9]* ) theme $1 ;;
-		FORTUNE       ) touch $FORTUNE:term ;;
+		FORTUNE*      ) fortune="${1#*=}"; fortune "${fortune:-term}" ;;
 		VISIBLE       ) visible=true ;;
-		WAIT          ) wait=true ;;
+		WAIT          ) wait=true    ;;
 		title=*       ) title=${1#*=}; title="$TITLE $title" ;;
 		class=*       ) class=${1#*=}; name="$NAME $class"   ;;
 

@@ -7,7 +7,7 @@
 
 # ............................................................ Window operations
 
-# Usage: window <msg>,      SEE: functions/window
+# Usage: window <msg>       SEE: functions/window
 #               @<delay> <msg>
 #               @[<class> | <name>] [URL] <msg>
 #                    where, @   wait for delay time or visible window
@@ -21,19 +21,20 @@ top=$(chef screen top)            # windowchefrc panel height is default bottom 
 gap=$(chef screen gap)
 W=$(( $(chef display width) - margin * 2 ))
 H=$(( $(chef display height) - panel - top ))
-[ -e $SPANEL:top ] && top=$panel  # see draw panel
+recipe -q panel/top && top=$panel  # see draw panel
 
 # Windowchef window geometry
 border=$(chef screen window_border)
-winid=$(pfw)
+winid=$(pfw 2>/dev/null) || return  # trap empty desktop at startup
 # xdotool windowstate --remove fullscreen $winid  # fullscreen negates any attempted window actions
 
 geometry()       { xdotool getwindowgeometry --shell ${1:-$winid}; }             # X Y WIDTH HEIGHT (doesn't include borders)
 set_geometry()   { eval $(geometry ${1:-$winid}); }
-cat_geometry()   { [ -e $WINFO:$winid ] && eval $(cat $WINFO:$winid) || exit 1; }
-save_geometry()  { geometry $1 >$WINFO:${1:-$winid}; }                           # for revert
+cat_geometry()   { [ -e $WINFO/$winid ] && eval $(ls -1 $WINFO/$winid) || exit 1; }
+save_geometry()  { rm -rf $WINFO/${1:-$winid}; for x in $(geometry ${1:-$winid}) ;do mkdir -p $WINFO/${1:-$winid}/$x ;done }  # for revert
 opposite_side()  { echo $(( width + margin * 2 - (X + WIDTH + border * 2) )); }  # for nearest edge SEE: window snap / stretch
-windowfocus_by() { xdotool search -sync -onlyvisible -$1 "$xname" windowfocus; }
+windowfocus_by() { xdotool search -sync -onlyvisible -$1 "$xname" behave %@ windowmap windowraise; }
+windowfocus_id() { xdotool windowmap $1; xdotool windowraise $1; }
 xname_is()       { xdotool getwindow$1 $winid | grep -q "$xname"; }
 
 # ..................................................................... X Y size
@@ -49,7 +50,8 @@ draw() {
 # do we need to wait longer for window creation?
 if [ "$1" ] && [ -z "${1%%@*}" ] ;then
 	case $1 in
-		@[0-9.]* ) sleep ${1#@} ;;
+		@0x*     ) windowfocus_id ${1#@} ;;
+		@[0-9.]* ) sleep ${1#@}          ;;
 
 		*        )
 			xname="${1#@}"
@@ -73,11 +75,11 @@ if [ "$1" ] && [ -z "${1%%@*}" ] ;then
 fi
 
 msg=$1
-[ $msg ] && shift || usage: $0
+[ $msg ] && shift || usage $0
 if [ -e ${0%/window}/functions/window/$msg ] ;then
 	. ${0%/window}/functions/window/$msg $@
 else
-	usage: $0
+	usage $0 $msg
 fi
 
 mapw -m $winid  # regain focus

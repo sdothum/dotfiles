@@ -1,19 +1,36 @@
-## Windowchef dsl wrapper
+# Windowchef tree (supercedes prior file based dsl)
 
-This codebase is now superceeded by windowchef.tree in this repository.
+This DSL version stores its group/window states using a directory tree off
+/dev/shm/windowchef (versus /tmp) for maximum performance.
 
-Functionally, both were initially identical but window.tree has since added
-additional window manipulation functionality (and concurrent updates to the
-sxhkdrc keybinds) and, more importantly, cleanup of the issues introduced
-into the flat file version during its extensions, cut abruptly in favour of the tree structure
-deployment.
+It provides a nicer at-a-glance profile of the session structure and simplifies
+group/state management via its "pointer" structure, as well as,
+maintenance/debugging of the code.
 
-The move to using a /dev/shm (for maximum performance) located tree structure
-was done purely as an exercise to simplify some of the group/window management
-processes -- a directory tree versus flat files of content, being more easily
-inspected for (debugging and tuning) the wm's operating state.
+The architectural migration also benefitted the inevitable code cleanup, optimization and refactoring
+of the codebase.
 
-As the flat file codebase lost focus to the tree codebase, it drifted out of functional alignment
--- though, at departure, the group/windowing functionality had already been
-stable for quite some time. Changes were more frequently concerned with
-personal workflow application rules and hotkey bindings.
+Essentially, shell
+
+`echo >file`
+`cat file`
+`grep file`
+
+statements/logic have been replaced with
+
+`mkdir path`
+`ls path`
+`(glob) path or find path`
+
+structures, simplifying group window management in particular.
+
+Performance wise, it is mostly a wash, though, this will be system dependent
+on hardware. The directory tree version of this Windowchef dsl is best served
+by utilizing the fast tmpfs of
+
+`/dev/shm`
+
+The *echo >file* is faster by a hair
+technically than *mkdir path* (command execution, barely) but gains are made with group updates
+on the tree structure data versus file content manipulation for the same.
+
