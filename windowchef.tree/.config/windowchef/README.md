@@ -1,20 +1,26 @@
 # Windowchef tree (supercedes prior file based dsl)
 
 This DSL version stores its group/window states using a directory tree off
-/tmp/windowchef.
+/dev/shm/windowchef (versus /tmp) for maximum performance.
 
 It provides a nicer at-a-glance profile of the session structure and simplifies
-some group/state management via its "pointer" structure.
+group/state management via its "pointer" structure, as well as,
+maintenance/debugging of the code.
+
+The architectural migration also benefitted the inevitable code cleanup, optimization and refactoring
+of the codebase.
 
 Essentially, shell
 
 `echo >file`
 `cat file`
+`grep file`
 
 statements have been replaced with
 
 `mkdir path`
 `ls path`
+`(glob) path or find path`
 
 statements, simplifying group window management in particular.
 
