@@ -17,6 +17,7 @@ shift 2
 
 case $model in
 	chimera ) KBD=chimera_ergo_42 ;;
+	chocofi ) KBD=crkbd ;;
 	corne   ) KBD=crkbd ;;
 	georgi  ) KBD='gboards/georgi' ;;
 	*       ) KBD=$model ;;
@@ -31,7 +32,7 @@ JSON=$KEYBOARD/keymaps/$keymap/*.json
 CONFIG=$KEYMAP/config.h
 MAKEFILE=$KEYMAP/rules.mk
 SOURCE=$STOW/$model/${KEYMAP#$ROOT/}
-[ $(find $SOURCE -name '*.json' | wc -l) -gt 0 ] && chording_engine=/home/shum/stow/georgi/qmk_firmware/users/sdothum/chording_engine
+[ $(find $SOURCE -name '*.json' | wc -l) -gt 0 ] && chording_engine=/home/shum/stow/$model/qmk_firmware/users/sdothum/chording_engine
 
 [ -d $SOURCE ] || { ditto $keymap 'keymap not found'; usage; }
 ditto "$KEYBOARD" "$keymap"
@@ -91,6 +92,7 @@ echo CPATH=$CPATH
 case $model in
 	chimera ) [ "$1" = flash ] && CPATH=$CPATH make $KBD:$keymap:avrdude  || make $KBD:$keymap ;;
 	corne   ) [ "$1" = flash ] && CPATH=$CPATH make $KBD:$keymap:avrdude  || make $KBD:$keymap ;;
+	chocofi ) [ "$1" = flash ] && CPATH=$CPATH make $KBD:$keymap:avrdude  || make $KBD:$keymap ;;
 	splito* ) [ "$1" = flash ] && CPATH=$CPATH make $KBD:$keymap:dfu      || make $KBD:$keymap ;;
 	planck  ) [ "$1" = flash ] && CPATH=$CPATH make $KBD/rev1:$keymap:dfu || make $KBD/rev1:$keymap ;;  # rev1 board
 	*       ) [ "$1" = flash ] && CPATH=$CPATH make $KBD:$keymap:dfu      || make $KBD:$keymap ;;

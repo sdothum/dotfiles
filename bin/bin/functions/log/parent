@@ -20,6 +20,6 @@ parent() {
 		echo "                  $proc" | sed -r 's/.*(..................)$/\1/'
 }
 
-echo "$(date "+%M'%S\"")  $(parent) -> $CHILD" >>$TRACE
+echo "$(date "+%-H°%M’%S”")  $(parent) -> $CHILD" >>$TRACE
 
 # kak: filetype=sh

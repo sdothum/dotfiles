@@ -29,8 +29,8 @@ IFS=$(printf "${SEP}")  # NOTE: change separator from space to "\n" to handle bo
 [ "$1" ] && set -- $(echo $@ | sed -r "s/\.(epub|azw3|mobi) */.\1${SEP}/g") || set -- $(echo *.epub | sed "s/\.epub */.epub${SEP}/g")
 while [ $# -gt 0 ] ;do
 	if [ "$1" ] ;then  # (??) above IFS "set --" injects empty $vars
-		eval menu econvert azw3 $css $option \"$1\"  # kindle
-		eval menu econvert epub $css $option \"$1\"  # koreader
+		eval econvert azw3 $css $option \"$1\"  # kindle
+		eval econvert epub $css $option \"$1\"  # koreader
 	fi
 	shift
 done
