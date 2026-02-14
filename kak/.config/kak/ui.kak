@@ -82,7 +82,7 @@ define-command softwrap -params ..1 %{ autowrap-disable; evaluate-commands add-h
 define-command nowrap %{ remove-highlighter window/wrap }
 
 hook global WinSetOption filetype=markdown %{ hardwrap '80' }
-hook global WinSetOption filetype=json     %{ softwrap '-width 250' }
+hook global WinSetOption filetype=json     %{ softwrap '-width 275' }
 hook global WinSetOption filetype=(sh|c|cpp|fish|go|javascript|latex|lua|perl|python|ruby|rust|toml|typescript) softwrap
 hook global WinSetOption .*(conf|config|log|rc|text|txt) softwrap
 
