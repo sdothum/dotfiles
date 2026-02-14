@@ -40,6 +40,11 @@
 ! addpath $HOME/go/bin
 
 
+= json
+= ════
+! pip3 install --user --break-system-packages json-linter
+
+
 = java
 = ════
   nodejs
