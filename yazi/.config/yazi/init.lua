@@ -44,6 +44,7 @@ require("bunny"):setup({
 		{ key = "n",          path = "/net/downloads/nicotine",                           },
 		{ key = "o",          path = "/opt",                                              },
 		{ key = "p",          path = photos .. snaps,                                     },
+		{ key = "q",          path = "~/qmk_firmware/keyboards",                          },
 		{ key = "r",          path = "/home/library/references",                          },
 		{ key = "S",          path = "~/sandbox",                                         },
 		{ key = { "s", "." }, path = "~/.session",                                        },
