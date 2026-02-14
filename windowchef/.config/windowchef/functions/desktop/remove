@@ -6,7 +6,7 @@
 
 # ......................................................... Group remove (winid)
 
-# Usage: desktop remove [<winid>
+# Usage: desktop remove [<winid>]
 
 winid=${1:-$(pfw)}
 

@@ -11,7 +11,7 @@
 # NOTE: this script is executed via "draw panel" SEE: also restore panel
 
 [ $1 ] && panel_offsetY=$1
-panel_len=${panel_len:-275}          # HACK: arbitrary display length (for wide screen monitor)
+panel_len=${panel_len:-200}          # HACK: arbitrary display length (for wide screen monitor)
 
 if [ "$panel_offsetY" = "0" ] ;then  # (??) use of -eq fails comparison
 	SEP="  %{F$INACTIVE_FG}%{F-}  "  # top bar
