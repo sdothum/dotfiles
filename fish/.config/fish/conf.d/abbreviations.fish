@@ -291,8 +291,9 @@ abbr W 'words'
 
 # ......................................................................... epub
 
-abbr kc 'kconvert'
+abbr kc 'kconvert noformat'
 abbr kc0 "kconvert css='p { margin: 0 !important; }'"
+abbr kcf 'kconvert format'
 abbr kcn 'kconvert noformat'
 abbr kindle 'dmenu econvert azw3'
 abbr eformat 'dmenu econvert reformat'
