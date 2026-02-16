@@ -927,13 +927,16 @@ Generate(\$1);
 }
 
 f_descending() {
-	if [ $T_DEPTH ] ;then  # currently only tested with shape=576
+	if [ $T_DEPTH ] ;then     # currently only tested with shape=576
 		# Yshift=-52
-		# Ydepth=12         # descender to match depth of t_descending (exact)
+		# Ydepth=12            # descender to match depth of t_descending (exact)
 		Yshift=-134
 		Ydepth=22
 		# Yshift=-151
 		# Ydepth=24
+	elif [ $BASELINE ] ;then  # currently only tested with shape=576
+		Yshift=6
+		Ydepth=5
 	else
 		Yshift=-208
 		Ydepth=32

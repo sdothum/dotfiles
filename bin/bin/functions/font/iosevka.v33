@@ -429,7 +429,8 @@ cmdopts () {
 			f-extended     ) variant $1 ;;                   # unolexic (homage to universal grotesk)
 			f-extended+    ) variant $1 ;;                   # unolexic (homage to universal grotesk)
 			f-extended++   ) variant f-flat+ 'DESCENDING'; f_descending=true ;;
-			f-extended+=   ) variant f-flat+ 'DESCENDING'; f_descending=true; export T_DEPTH=true ;;  # SEE: fforge
+			f-extended+=   ) variant f-flat+ 'DESCENDING'; f_descending=true; export T_DEPTH=true  ;;  # SEE: fforge
+			f-extended_    ) variant f-flat+ 'DESCENDING'; f_descending=true; export BASELINE=true ;;  # SEE: fforge
 			f-flat         ) variant $1 ;;
 			f-flat+        ) variant $1 ;;
 			f-flat++       ) variant f-flat+ 'ASCENDING'; f_ascending=true ;;

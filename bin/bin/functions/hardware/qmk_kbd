@@ -92,7 +92,7 @@ echo CPATH=$CPATH
 case $model in
 	chimera ) [ "$1" = flash ] && CPATH=$CPATH make $KBD:$keymap:avrdude  || make $KBD:$keymap ;;
 	corne   ) [ "$1" = flash ] && CPATH=$CPATH make $KBD:$keymap:avrdude  || make $KBD:$keymap ;;
-	chocofi ) [ "$1" = flash ] && CPATH=$CPATH make $KBD:$keymap:avrdude  || make $KBD:$keymap ;;
+	chocofi ) [ "$1" = flash ] && CPATH=$CPATH qmk flash -kb crkbd/rev1 -km $keymap -e CONVERT_TO=promicro_rp2040 || qmk compile -kb crkbd/rev1 -km $keymap -e CONVERT_TO=promicro_rp2040 ;;
 	splito* ) [ "$1" = flash ] && CPATH=$CPATH make $KBD:$keymap:dfu      || make $KBD:$keymap ;;
 	planck  ) [ "$1" = flash ] && CPATH=$CPATH make $KBD/rev1:$keymap:dfu || make $KBD/rev1:$keymap ;;  # rev1 board
 	*       ) [ "$1" = flash ] && CPATH=$CPATH make $KBD:$keymap:dfu      || make $KBD:$keymap ;;

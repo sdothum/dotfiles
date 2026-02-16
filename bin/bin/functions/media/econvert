@@ -75,7 +75,7 @@ case $option in
 esac
 [ $justify ] && justification="--change-justification='$justify'"                                         \
 [ "$css" ] && CSS="$CSS ${css#*=}"
-CSS="--extra-css='$CSS'"
+[ "$CSS" ] && CSS="--extra-css='$CSS'"
 
 notify low "$title" "Converting to $format..\n--change-justification=${justify:-..inbook justification..}"
 ditto $format "$file"

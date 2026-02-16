@@ -9,6 +9,7 @@
 # Usage: [dropcap=<class>] kconvert [<format>|css=<css>]* <epub>*
 
 SEP='⁋'
+option=noformat
 
 # SEE: econvert
 while : ;do
@@ -16,6 +17,7 @@ while : ;do
 		css=*    ) css="\"$1\""    ;; # BECAUSE: protect spaces within $<var> (css statement)
 		default  ) option=default  ;;
 		justify  ) option=justify  ;;
+		format   ) unset option    ;;
 		noformat ) option=noformat ;;
 		poetry   ) option=noformat ;; # retain poetry formatting
 		all      ) option=all      ;;
