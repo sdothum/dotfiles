@@ -1,0 +1,407 @@
+{
+	"keys": [
+		"TOP1" , "TOP2" , "TOP3" , "TOP4" , "TOP5" , "TOP6" ,            "TOP7" , "TOP8" , "TOP9" , "TOP10" , "TOP11" , "TOP12" ,
+		"MID1" , "MID2" , "MID3" , "MID4" , "MID5" , "MID6" ,            "MID7" , "MID8" , "MID9" , "MID10" , "MID11" , "MID12" ,
+		"BOT1" , "BOT2" , "BOT3" , "BOT4" , "BOT5" , "BOT6" ,            "BOT7" , "BOT8" , "BOT9" , "BOT10" , "BOT11" , "BOT12" ,
+											"THU1" , "THU2" , "THU3" ,            "THU4" , "THU5" , "THU6"
+	],
+	"parameters": {
+		"_comment": "tighten leader_timeout from 750 to counter unexpected ',.' -> ';' autorepeat",
+		"layout_function_name": "LAYOUT_split_3x6_3",
+		"chord_timeout": 100,
+		"dance_timeout": 100,
+		"leader_timeout": 450,
+		"tap_timeout": 50,
+		"command_max_length": 5,
+		"leader_max_length": 5,
+		"dynamic_macro_max_length": 20,
+		"string_max_length": 24,
+		"long_press_multiplier": 3,
+		"default_pseudolayer": "BEAKL"
+	},
+	"layers": [
+		{
+			"type": "auto"
+		}
+	],
+	"chord_sets": [
+		{
+			"name": "rows",
+			"chords": [
+				["TOP1"]         , ["TOP2"]         , ["TOP3"]         , ["TOP4"]         , ["TOP5"]         , ["TOP6"]         ,            ["TOP7"]         , ["TOP8"]         , ["TOP9"]         , ["TOP10"]          , ["TOP11"]          , ["TOP12"]          ,
+				["TOP1", "MID1"] , ["TOP2", "MID2"] , ["TOP3", "MID3"] , ["TOP4", "MID4"] , ["TOP5", "MID5"] , ["TOP6", "MID6"] ,            ["TOP7", "MID7"] , ["TOP8", "MID8"] , ["TOP9", "MID9"] , ["TOP10", "MID10"] , ["TOP11", "MID11"] , ["TOP12", "MID12"] ,
+				["MID1"]         , ["MID2"]         , ["MID3"]         , ["MID4"]         , ["MID5"]         , ["MID6"]         ,            ["MID7"]         , ["MID8"]         , ["MID9"]         , ["MID10"]          , ["MID11"]          , ["MID12"]          ,
+				["BOT1"]         , ["BOT2"]         , ["BOT3"]         , ["BOT4"]         , ["BOT5"]         , ["BOT6"]         ,            ["BOT7"]         , ["BOT8"]         , ["BOT9"]         , ["BOT10"]          , ["BOT11"]          , ["BOT12"]          ,
+																							["THU1"]         , ["THU2"]         , ["THU3"]         ,            ["THU4"]         , ["THU5"]         , ["THU6"]
+			]
+		}
+	],
+	"pseudolayers": [
+		{
+			"name": "ALWAYS_ON",
+			"chords": [
+				{
+					"type": "visual",
+					"chord": [
+						" " , " " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " , " " ,
+						" " , " " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " , " " ,
+						" " , " " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " , " " ,
+						" " , " " , "X" , " " , " " , " " ,            " " , " " , " " , "X" , " " , " " ,
+												" " , " " , " " ,            " " , " " , " "
+					],
+					"keycode": "CLEAR_KB"
+				},
+				{
+					"type": "visual",
+					"chord": [
+						" " , " " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " , " " ,
+						" " , " " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " , " " ,
+						" " , " " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " , " " ,
+						" " , "X" , " " , " " , " " , " " ,            " " , " " , " " , " " , "X" , " " ,
+												" " , " " , " " ,            " " , " " , " "
+					],
+					"keycode": "CMD"
+				}
+			]
+		},
+		{
+			"name": "BEAKL",
+			"chords": [
+				{
+					"type": "chord_set",
+					"set": "rows",
+					"keycodes": [
+						" " , ":"              , "Y"              , "O"              , "U"              , "-"                    ,            "G"       , "D"           , "N"           , "M"           , "X"           , " " ,
+						" " , "KK(Q, LALT)"    , "KK(H, LCTL)"    , "KK(E, LGUI)"    , "KK(A, LSFT)"    , "W"                    ,            "C"       , "KK(T, RSFT)" , "KK(R, RGUI)" , "KK(S, RCTL)" , "KK(Z, RALT)" , " " ,
+						" " , "J"              , ","              , "."              , "K"              , "'"                    ,            "B"       , "P"           , "L"           , "F"           , "V"           , " " ,
+						" " , "MK(LGUI, LCTL)" , "MK(LALT, LCTL)" , "MK(LALT, LGUI)" , "MK(LALT, LSFT)" , "MK(LALT, LCTL, LGUI)" ,            "DF(NUM)" , "CAPS"        , "DF(SYM)"     , "DF(NAV)"     , "DF(MOUSE)"   , " " ,
+																				  " "              , " "              , " "                    ,            " "       , " "           , " "
+					]
+				},
+				{
+					"type": "visual_array",
+					"_comment": "a+w chord -> 'A' BECAUSE: a+shift chord is indistinguishable from shift+t",
+					"_comment": "    NOTE: do not assign e+a chord -> 'A' SEE: sxhkdrc super+shift keymaps",
+					"_comment": "str(;) (??) avoids random (sloppy fingering) autorepeat of ',.' -> ';'",
+					"keys": ["TOP2" , "MID2" , "TOP3" , "MID3" , "TOP4" , "MID4" , "TOP5" , "MID5" , "TOP6" , "MID6" , "TOP8" , "MID8"],
+					"dictionary": [
+						["X" , " " , " " , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "STR(;)" ],
+						["X" , " " , "X" , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "STR(::)"],
+						["X" , "X" , " " , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "STR(Q)" ],
+						[" " , "X" , " " , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "STR(J)" ],
+						[" " , " " , "X" , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "STR(Y)" ],
+						[" " , " " , "X" , "X" , " " , " " , " " , " " , " " , " " , "X" , "X" , "STR(H)" ],
+						[" " , " " , " " , "X" , " " , " " , " " , " " , " " , " " , "X" , "X" , "?"      ],
+						[" " , " " , " " , "X" , " " , "X" , " " , " " , " " , " " , " " , " " , "STR(;)" ],
+						[" " , " " , " " , " " , "X" , " " , " " , " " , " " , " " , "X" , "X" , "STR(O)" ],
+						[" " , " " , " " , " " , "X" , "X" , " " , " " , " " , " " , "X" , "X" , "STR(E)" ],
+						[" " , " " , " " , " " , " " , "X" , " " , " " , " " , " " , "X" , "X" , "!"      ],
+						[" " , " " , " " , " " , " " , " " , "X" , " " , " " , " " , "X" , "X" , "STR(U)" ],
+						[" " , " " , " " , " " , " " , " " , "X" , "X" , "X" , "X" , " " , " " , "STR(A)" ],
+						[" " , " " , " " , " " , " " , " " , " " , "X" , " " , " " , "X" , "X" , "STR(K)" ],
+						[" " , " " , " " , " " , " " , " " , " " , " " , "X" , " " , "X" , "X" , "_"      ],
+						[" " , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "X" , "X" , "STR(W)" ],
+						[" " , " " , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "X" , "\""     ]
+					]
+				},
+				{
+					"type": "visual_array",
+					"_comment": "c+t chord -> 'T' FOR: reducing (left+right left) 'shift+t ..' to (right left) hand 'T' bigram",
+					"_comment": "    NOTE: do not assign t+r chord -> 'T' SEE: of sxhkdrc super+shift keymaps",
+					"keys": ["TOP5" , "MID5" , "TOP7" , "MID7" , "TOP8" , "MID8" , "TOP9" , "MID9" , "TOP10" , "MID10" , "TOP11" , "MID11"],
+					"dictionary": [
+						["X" , "X" , "X" , " " , " " , " " , " " , " " , " " , " " , " " , " " , "STR(G)"],
+						["X" , "X" , "X" , "X" , " " , " " , " " , " " , " " , " " , " " , " " , "STR(C)"],
+						["X" , "X" , " " , "X" , " " , " " , " " , " " , " " , " " , " " , " " , "STR(B)"],
+						["X" , "X" , " " , " " , "X" , " " , " " , " " , " " , " " , " " , " " , "STR(D)"],
+						["X" , "X" , " " , " " , "X" , "X" , " " , " " , " " , " " , " " , " " , "STR(T)"],
+						[" " , " " , "X" , "X" , "X" , "X" , " " , " " , " " , " " , " " , " " , "STR(T)"],
+						["X" , "X" , " " , " " , " " , "X" , " " , " " , " " , " " , " " , " " , "STR(P)"],
+						["X" , "X" , " " , " " , " " , " " , "X" , " " , " " , " " , " " , " " , "STR(N)"],
+						["X" , "X" , " " , " " , " " , " " , "X" , "X" , " " , " " , " " , " " , "STR(R)"],
+						["X" , "X" , " " , " " , " " , " " , " " , "X" , " " , " " , " " , " " , "STR(L)"],
+						["X" , "X" , " " , " " , " " , " " , " " , " " , "X" , " " , " " , " " , "STR(M)"],
+						["X" , "X" , " " , " " , " " , " " , " " , " " , "X" , "X" , " " , " " , "STR(S)"],
+						["X" , "X" , " " , " " , " " , " " , " " , " " , " " , "X" , " " , " " , "STR(F)"],
+						["X" , "X" , " " , " " , " " , " " , " " , " " , " " , " " , "X" , " " , "STR(X)"],
+						["X" , "X" , " " , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "STR(Z)"],
+						["X" , "X" , " " , " " , " " , " " , " " , " " , " " , " " , " " , "X" , "STR(V)"]
+					]
+				},
+				{
+					"type": "visual_array",
+					"_comment": "sloppy pinkie bigram",
+					"keys": ["TOP2" , "MID2" , "TOP3" , "MID3"],
+					"dictionary": [
+						["X" , "X" , "X" , "X" , "STR(qu)"]
+					]
+				},
+				{
+					"type": "visual_array",
+					"keys": ["TOP2" , "MID3" , "MID4" , "TOP5" , "MID5" , "TOP8" , "MID8" , "THU4" , "THU5"],
+					"dictionary": [
+						["X" , " " , " " , " " , " " , " " , " " , "X" , " " , "M(cap, KC_COLN, KC_ENTER)"],
+						["X" , " " , " " , " " , " " , "X" , "X" , "X" , " " , "M(cap, KC_SCLN, KC_ENTER)"],
+						[" " , "X" , " " , " " , " " , " " , " " , "X" , " " , "M(cap, KC_COMM, KC_ENTER)"],
+						[" " , "X" , " " , " " , " " , "X" , "X" , "X" , " " , "M(cap, KC_QUES, KC_ENTER)"],
+						[" " , " " , "X" , " " , " " , " " , " " , "X" , " " , "M(cap, KC_DOT,  KC_ENTER)"],
+						[" " , " " , "X" , " " , " " , "X" , "X" , "X" , " " , "M(cap, KC_EXLM, KC_ENTER)"],
+						[" " , " " , " " , "X" , "X" , " " , " " , "X" , " " , "M(cap, KC_NO,   KC_ENTER)"],
+						["X" , " " , " " , " " , " " , " " , " " , " " , "X" , "M(cap, KC_COLN, KC_SPC)"  ],
+						["X" , " " , " " , " " , " " , "X" , "X" , " " , "X" , "M(cap, KC_SCLN, KC_SPC)"  ],
+						[" " , "X" , " " , " " , " " , " " , " " , " " , "X" , "M(cap, KC_COMM, KC_SPC)"  ],
+						[" " , "X" , " " , " " , " " , "X" , "X" , " " , "X" , "M(cap, KC_QUES, KC_SPC)"  ],
+						[" " , " " , "X" , " " , " " , " " , " " , " " , "X" , "M(cap, KC_DOT,  KC_SPC)"  ],
+						[" " , " " , "X" , " " , " " , "X" , "X" , " " , "X" , "M(cap, KC_EXLM, KC_SPC)"  ],
+						[" " , " " , " " , "X" , "X" , " " , " " , " " , "X" , "M(cap, KC_NO,   KC_SPC)"  ]
+					]
+				},
+				{
+					"type": "visual_array",
+					"keys": ["TOP5" , "MID5" , "THU1" , "THU2" , "THU3" , "THU5" , "THU6" , "TOP8" , "BOT8"],
+					"dictionary": [
+						["X" , "X" , " " , " " , " " , " " , "X" , " " , " " , "BSPC" ],
+						["X" , "X" , " " , " " , "X" , " " , " " , " " , " " , "ENTER"],
+						[" " , " " , "X" , "X" , " " , " " , " " , " " , " " , "DEL"  ],
+						[" " , " " , " " , " " , " " , "X" , "X" , " " , " " , "DEL"  ],
+						[" " , " " , " " , " " , " " , "X" , " " , "X" , "X" , "SPC"  ]
+					]
+				},
+				{
+					"type": "visual_array",
+					"keys": ["THU1" , "THU2" , "THU3" , "THU4" , "THU5" , "THU6"],
+					"dictionary": [
+						["X" , " " , " " , " " , " " , " " , "KL(ESC,   FNC)"  ],
+						[" " , "X" , " " , " " , " " , " " , "KL(I,     REGEX)"],
+						[" " , " " , "X" , " " , " " , " " , "KL(TAB,   NUM)"  ],
+						[" " , " " , " " , "X" , " " , " " , "KL(ENTER, NAV)"  ],
+						[" " , " " , " " , " " , "X" , " " , "KL(SPC,   SYM)"  ],
+						[" " , " " , " " , " " , " " , "X" , "KL(BSPC,  MOUSE)"]
+					]
+				}
+			]
+		},
+		{
+			"name": "CAPS",
+			"chords": [
+				{
+					"type": "chord_set",
+					"set": "rows",
+					"keycodes": [
+						" " , ":"              , "MK(LSFT, Y)"    , "MK(LSFT, O)"    , "MK(LSFT, U)"    , "-"                    ,            "MK(LSFT, G)" , "MK(LSFT, D)" , "MK(LSFT, N)" , "MK(LSFT, M)" , "MK(LSFT, X)" , " " ,
+						" " , "MK(LSFT, Q)"    , "MK(LSFT, H)"    , "MK(LSFT, E)"    , "MK(LSFT, A)"    , "MK(LSFT, W)"          ,            "MK(LSFT, C)" , "MK(LSFT, T)" , "MK(LSFT, R)" , "MK(LSFT, S)" , "MK(LSFT, Z)" , " " ,
+						" " , "MK(LSFT, J)"    , ","              , "."              , "MK(LSFT, K)"    , "'"                    ,            "MK(LSFT, B)" , "MK(LSFT, P)" , "MK(LSFT, L)" , "MK(LSFT, F)" , "MK(LSFT, V)" , " " ,
+						" " , "MK(LGUI, LCTL)" , "MK(LALT, LCTL)" , "MK(LALT, LGUI)" , "MK(LALT, LSFT)" , "MK(LALT, LCTL, LGUI)" ,            "DF(NUM)"     , " "           , "DF(SYM)"     , "DF(NAV)"     , "DF(MOUSE)"   , " " ,
+																				  "CLEAR_KB"       , "MK(LSFT, I)"    , " "                    ,            " "           , " "           , " "
+					]
+				}
+			]
+		},
+		{
+			"name": "REGEX",
+			"chords": [
+				{
+					"type": "chord_set",
+					"_comment": "modifiers for kak (editor) map",
+					"set": "rows",
+					"keycodes": [
+						" " , " "            , " "    , " " , " " , " " ,            "*" , "["    , "^"   , "]"    , " " , " " ,
+						" " , "LALT"         , "LCTL" , " " , " " , " " ,            "?" , "LPRN" , "$"   , "RPRN" , " " , " " ,
+						" " , "MO(QUICKEYS)" , " "    , " " , " " , " " ,            "|" , "{"    , "#"   , "}"    , " " , " " ,
+						" " , " "            , " "    , " " , " " , " " ,            " " , " "    , " "   , " "    , " " , " " ,
+																  " " , " " , " " ,            " " , "\\"   , "DEL"
+					]
+				},
+				{
+					"type": "visual_array",
+					"keys": ["TOP7" , "TOP8"],
+					"dictionary": [
+						["X" , "X" , "STR(.*)"]
+					]
+				}
+			]
+		},
+		{
+			"name": "SYM",
+			"chords": [
+				{
+					"type": "chord_set",
+					"_comment": "modifiers for kak (editor) map",
+					"set": "rows",
+					"keycodes": [
+						" " , " " , "." , "*" , "&" , "+"  ,            " " , " " , " " , " "    , " "    , " " ,
+						" " , " " , "`" , "~" , "/" , "|"  ,            " " , " " , " " , "RCTL" , "RALT" , " " ,
+						" " , " " , "<" , ">" , "%" , "@"  ,            " " , " " , " " , " "    , " "    , " " ,
+						" " , " " , " " , " " , " " , " "  ,            " " , " " , " " , " "    , " "    , " " ,
+											   " " , "=" , "\\" ,            " " , " " , " "
+					]
+				},
+				{
+					"type": "visual_array",
+					"_comment": "STR('') -> space, SEE: chord.py",
+					"keys": ["MID2" , "MID3" , "TOP4" , "MID4" , "TOP5" , "MID5"],
+					"dictionary": [
+						["X" , "X" , " " , " " , " " , " " , "STR(''<-'')" ],
+						[" " , " " , " " , "X" , " " , "X" , "STR(''->'')" ],
+						[" " , " " , "X" , " " , "X" , " " , "STR(''AND'')"],
+						[" " , " " , "X" , "X" , "X" , "X" , "STR(~/)"     ]
+					]
+				},
+				{
+					"type": "visual_array",
+					"keys": ["THU1" , "THU2"],
+					"dictionary": [
+						["X" , "X" , "STR(!=)"]
+					]
+				}
+			]
+		},
+		{
+			"name": "SYMBOL",
+			"chords": [
+				{
+					"type": "chord_set",
+					"set": "rows",
+					"keycodes": [
+						" " , " "            , "." , "*"        , "&" , "+"  ,            "*" , "["    , "^"   , "]"    , " " , " " ,
+						" " , " "            , "`" , "~"        , "/" , "|"  ,            "?" , "LPRN" , "$"   , "RPRN" , " " , " " ,
+						" " , "MO(QUICKEYS)" , "<" , ">"        , "%" , "@"  ,            "|" , "{"    , "#"   , "}"    , " " , " " ,
+						" " ,            " " , " " , " "        , " " , " "  ,            " " , " "    , " "   , " "    , " " , " " ,
+															  "CLEAR_KB" , "=" , "\\" ,            " " , "SPC"  , "DEL"
+					]
+				},
+				{
+					"type": "visual_array",
+					"keys": ["MID2" , "MID3" , "TOP4" , "MID4" , "TOP5" , "MID5"],
+					"dictionary": [
+						["X" , "X" , " " , " " , " " , " " , "STR(''<-'')" ],
+						[" " , " " , " " , "X" , " " , "X" , "STR(''->'')" ],
+						[" " , " " , "X" , " " , "X" , " " , "STR(''AND'')"],
+						[" " , " " , "X" , "X" , "X" , "X" , "STR(~/)"     ]
+					]
+				},
+				{
+					"type": "visual_array",
+					"keys": ["THU1" , "THU2"],
+					"dictionary": [
+						["X" , "X" , "STR(!=)"]
+					]
+				}
+			]
+		},
+		{
+			"name": "NUM",
+			"chords": [
+				{
+					"type": "chord_set",
+					"set": "rows",
+					"keycodes": [
+						" " , " "              , "A"              , "B"              , "AS(C)"          , " "                    ,            "/"   , "4"    , "5" , "9" , "*" , " " ,
+						" " , "LALT"           , "KK(D, LCTL)"    , "KK(E, LGUI)"    , "KK(F, LSFT)"    , " "                    ,            "."   , "1"    , "2" , "3" , "-" , " " ,
+						" " , "MO(QUICKEYS)"   , "<"              , "KL(>,REGEX)"    , "SPC"            , " "                    ,            ","   , "8"    , "6" , "7" , "+" , " " ,
+						" " , "MK(LGUI, LCTL)" , "MK(LALT, LCTL)" , "MK(LALT, LGUI)" , "MK(LALT, LSFT)" , "MK(LALT, LCTL, LGUI)" ,            " "   , "CAPS" , " " , " " , " " , " " ,
+																				  "CLEAR_KB"       , " "              , " "                    ,            "\\"  , "0"    , "="
+					]
+				},
+				{
+					"type": "visual_array",
+					"keys": ["TOP7" , "MID7" , "TOP8" , "MID8"],
+					"dictionary": [
+						["X" , " " , "X" , " " , ":"],
+						[" " , "X" , " " , "X" , ";"]
+					]
+				},
+				{
+					"type": "visual_array",
+					"keys": ["MID5" , "THU5"],
+					"dictionary": [
+						["X" , "X" , "STR(0x)"]
+					]
+				}
+			]
+		},
+		{
+			"name": "QUICKEYS",
+			"chords": [
+				{
+					"type": "chord_set",
+					"set": "rows",
+					"keycodes": [
+						" " , " " , " " , " " , " " , " " ,            " " , "HOME"           , " "    , "END"             , " " , " " ,
+						" " , " " , " " , " " , " " , " " ,            " " , "MK(LCTL, LEFT)" , " "    , "MK(LCTL, RIGHT)" , " " , " " ,
+						" " , " " , " " , " " , " " , " " ,            " " , "LEFT"           , " "    , "RIGHT"           , " " , " " ,
+						" " , " " , " " , " " , " " , " " ,            " " , " "              , " "    , " "               , " " , " " ,
+												" " , " " , " " ,            " " , "SPC"            , "BSPC"
+					]
+				},
+				{
+					"type": "visual_array",
+					"keys": ["THU5" , "THU6"],
+					"dictionary": [
+						["X" , "X" , "DEL"]
+					]
+				}
+			]
+		},
+		{
+			"name": "FNC",
+			"chords": [
+				{
+					"type": "chord_set",
+					"set": "rows",
+					"keycodes": [
+						" " , " "    , " "    , " "    , " "    , " " ,            " " , "F4" , "F5" , "F9" , "F12" , " " ,
+						" " , "LALT" , "LCTL" , "LGUI" , "LSFT" , " " ,            " " , "F1" , "F2" , "F3" , "F11" , " " ,
+						" " , " "    , " "    , " "    , " "    , " " ,            " " , "F8" , "F6" , "F7" , "F10" , " " ,
+						" " , " "    , " "    , " "    , " "    , " " ,            " " , " "  , " "  , " "  , " "   , " " ,
+						  								" "    , " "    , " " ,            " " ,  " " ,  " "
+					]
+				}
+			]
+		},
+		{
+			"name": "NAV",
+			"chords": [
+				{
+					"type": "chord_set",
+					"set": "rows",
+					"keycodes": [
+						" " , " "           , " "           , "MK(LCTL, LSFT, C)" , "MK(LCTL, LSFT, V)" , " " ,            " " , "HOME"           , "UP"   , "END"             , "PGUP" , " " ,
+						" " , "LALT"        , "LCTL"        , "LGUI"              , "LSFT"              , " " ,            " " , "MK(LCTL, LEFT)" , " "    , "MK(LCTL, RIGHT)" , " "    , " " ,
+						" " , "MK(LCTL, Z)" , "MK(LCTL, X)" , "MK(LCTL, C)"       , "MK(LCTL, V)"       , " " ,            " " , "LEFT"           , "DOWN" , "RIGHT"           , "PGDN" , " " ,
+						" " , " "           , " "           , " "                 , " "                 , " " ,            " " , " "              , " "    , " "               , " "    , " " ,
+																		  "CLEAR_KB"          , " "                 , " " ,            " " , " "              , " "
+					]
+				},
+				{
+					"type": "visual_array",
+					"keys": ["TOP5" , "MID5" , "TOP6" , "MID6"],
+					"dictionary": [
+						["X" , " " , "X" , " " , "STR(SECRET)"],
+						[" " , "X" , " " , "X" , "STR(PUBLIC)"]
+					]
+				}
+			]
+		},
+		{
+			"name": "MOUSE",
+			"chords": [
+				{
+					"type": "chord_set",
+					"set": "rows",
+					"keycodes": [
+						" " , " "    , " "       , " "         , " "       , " " ,            " " , "MS_WHLL" , "MS_UP"   , "MS_WHLR" , "MS_WHLU" , " " ,
+						" " , "LALT" , "LCTL"    , "LGUI"      , "LSFT"    , " " ,            " " , " "       , " "       , " "       , " "       , " " ,
+						" " , " "    , "MS_BTN3" , "MS_BTN2"   , "MS_BTN1" , " " ,            " " , "MS_LEFT" , "MS_DOWN" , "MS_RGHT" , "MS_WHLD" , " " ,
+						" " , " "    , " "       , " "         , " "       , " " ,            " " , " "       , " "       , " "       , " "       , " " ,
+															"CLEAR_KB " , " "       , " " ,            " " , " "       , " "
+					]
+				}
+			]
+		}
+	],
+	"leader_sequences": [],
+	"extra_code": "void cap(const struct Chord* self) {\n switch (*self->state) {\n case ACTIVATED:\n tap_key(self->value1);\n tap_key(self->value2);\n break;\n case DEACTIVATED:\n current_pseudolayer = CAPS;\n *self->state = IN_ONE_SHOT;\n break;\n case FINISHED:\n case PRESS_FROM_ACTIVE:\n current_pseudolayer = CAPS;\n a_key_went_through = false;\n break;\n case RESTART:\n if (a_key_went_through) {\n current_pseudolayer = self->pseudolayer;\n } else {\n *self->state = IN_ONE_SHOT;\n }\n }\n }\n",
+	"extra_dependencies": []
+}
+
