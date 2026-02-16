@@ -5,6 +5,7 @@ bin
 bspwm
 build
 chimera/qmk_firmware/keyboards/chimera_ergo_42
+chocofi/qmk_firmware/keyboards/crkbd
 chording_engine
 colordiff
 conky
