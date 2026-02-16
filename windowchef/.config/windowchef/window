@@ -26,9 +26,9 @@ recipe -q panel/top && top=$panel  # see draw panel
 # Windowchef window geometry
 border=$(chef screen window_border)
 winid=$(pfw 2>/dev/null) || return  # trap empty desktop at startup
-# xdotool windowstate --remove fullscreen $winid  # fullscreen negates any attempted window actions
+# xdotool windowstate -remove fullscreen $winid  # fullscreen negates any attempted window actions
 
-geometry()       { xdotool getwindowgeometry --shell ${1:-$winid}; }             # X Y WIDTH HEIGHT (doesn't include borders)
+geometry()       { xdotool getwindowgeometry -shell ${1:-$winid}; }             # X Y WIDTH HEIGHT (doesn't include borders)
 set_geometry()   { eval $(geometry ${1:-$winid}); }
 cat_geometry()   { [ -e $WINFO/$winid ] && eval $(ls -1 $WINFO/$winid) || exit 1; }
 save_geometry()  { rm -rf $WINFO/${1:-$winid}; for x in $(geometry ${1:-$winid}) ;do mkdir -p $WINFO/${1:-$winid}/$x ;done }  # for revert

@@ -9,7 +9,7 @@
 
 # Usage: layout <msg> SEE: functions/layout
 
-geometry()      { xdotool getwindowgeometry --shell ${1:-$winid}; }  # X Y WIDTH HEIGHT (doesn't include borders)
+geometry()      { xdotool getwindowgeometry -shell ${1:-$winid}; }  # X Y WIDTH HEIGHT (doesn't include borders)
 set_geometry()  { eval $(geometry $1); }
 save_geometry() { geometry $1 >$WINFO:${1:-$winid}; }                # for revert
 

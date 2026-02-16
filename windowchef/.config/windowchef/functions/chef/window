@@ -16,7 +16,7 @@ count() {
 	case $1 in
 		'' ) wmctrl -l 2>/dev/null | wc -l ;;
 	#  *  ) wmctrl -l 2>/dev/null | grep -w "$1" | wc -l ;;  # WARNING: can still be fooled by browser url titles
-		*  ) xdotool search --onlyvisible --classname "$1" | wc -l ;;
+		*  ) xdotool search -onlyvisible -classname "$1" | wc -l ;;
 	esac
 }
 

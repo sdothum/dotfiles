@@ -8,7 +8,7 @@
 
 # Usage: window enlarge + | - SEE: window size (paper pixel dimensions)
 
-eval $(xdotool getwindowgeometry --shell $winid)
+eval $(xdotool getwindowgeometry -shell $winid)
 area=$(( ${HEIGHT#*=} * ${WIDTH#*=} ))
 
 if [ "$1" = '+' ] ;then

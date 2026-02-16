@@ -101,7 +101,7 @@ done
 
 $TERM $theme $font $geometry $title $name $cmd
 
-[ $visible ] && [ "$title" ] && xdotool search --sync --onlyvisible --limit 1 --classname "${title#* }"
+[ $visible ] && [ "$title" ] && xdotool search -sync -onlyvisible -limit 1 -classname "${title#* }"
 # delay long enough.. then double return kak startup command input (to close command prompt and any popup dialogue)
 [ "$kmd"   ] && { sleep 0.5; xdotool type "$kmd
 

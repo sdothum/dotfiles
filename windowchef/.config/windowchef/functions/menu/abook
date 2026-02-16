@@ -100,7 +100,7 @@ while : ;do
 		"$PASTE"     )
 			clipboard "$addresses"
 			cpu arm && sleep 2  # allow application to regain focus
-			xdotool type --delay 0 "$addresses"
+			xdotool type -delay 0 "$addresses"
 			break
 			;;
 

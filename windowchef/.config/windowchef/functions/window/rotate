@@ -8,7 +8,7 @@
 
 # Usage: window rotate SEE: window size and window stretch
 
-eval $(xdotool getwindowgeometry --shell $winid)
+eval $(xdotool getwindowgeometry -shell $winid)
 window size ${HEIGHT}x${WIDTH}
 
 # kak: filetype=sh

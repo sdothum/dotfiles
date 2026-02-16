@@ -306,7 +306,7 @@ super + ctrl + Return
 	term
 
 super + alt + t
-	for i in $(xdotool search --onlyvisible --classname "term") ;do xdotool windowactivate --sync $i; window desktop $(chef desktop "CODE") teleport ;done
+	for i in $(xdotool search -onlyvisible -classname "term") ;do xdotool windowactivate -sync $i; window desktop $(chef desktop "CODE") teleport ;done
 
 # ....................................................................... system
 
@@ -316,7 +316,7 @@ super + shift + colon
 	menu system
 
 super + ctrl + colon
-	xdotool search --name btop windowkill || btop
+	xdotool search -name btop windowkill || btop
 
 # ........................................................................ music
 
@@ -324,7 +324,7 @@ super + ctrl + colon
 
 super + j
 	piano stop ;\
-	xdotool search --onlyvisible --classname "music" windowunmap && \{ desktop toggle $(desktop); desktop $(chef desktop "DESK"); \} || \{ music; desktop $(chef desktop "PLAY"); \}
+	xdotool search -onlyvisible -classname "music" windowunmap && \{ desktop toggle $(desktop); desktop $(chef desktop "DESK"); \} || \{ music; desktop $(chef desktop "PLAY"); \}
 
 super + ctrl + j
 	mpc toggle ;\
@@ -364,29 +364,29 @@ super + shift + b
 	layout fold 3 qutebrowser
 
 super + h
-	xdotool search --onlyvisible --classname "Surf" windowclose || hangouts
+	xdotool search -onlyvisible -classname "hangouts" windowunmap || xdotool search -classname "hangouts" windowmap  || hangouts
 
 # NOTE: nicotine leaves dangling child window frames SEE: winids
 
 super + shift + j
-	mapw -u $(winids "org.nicotine_plus.Nicotine") 2>/dev/null && \{ desktop toggle $(desktop); desktop $(chef desktop "DESK"); \} || xdotool search --classname "org.nicotine_plus.Nicotine" windowmap || \{ nicotine; desktop $(chef desktop "PEER"); \}
+	mapw -u $(winids "org.nicotine_plus.Nicotine") 2>/dev/null && \{ desktop toggle $(desktop); desktop $(chef desktop "DESK"); \} || xdotool search -classname "org.nicotine_plus.Nicotine" windowmap || \{ nicotine; desktop $(chef desktop "PEER"); \}
 
 # ......................................................................... yazi
 
 super + x
-	xdotool search --onlyvisible --name yazi windowclose || yazi TMUX
+	xdotool search -onlyvisible -name yazi windowclose || yazi TMUX
 
 super + ctrl + x
 	notify critical 0 yazi '<b>root</b> user' ;\
-	xdotool search --onlyvisible --name root windowclose || yazi ROOT
+	xdotool search -onlyvisible -name root windowclose || yazi ROOT
 
 # ......................................................................... user
 
 super + shift + ctrl + j
-	xdotool search --classname "Asunder" windowkill && rm -f /tmp/rulerrc:asunder || asunder
+	xdotool search -classname "Asunder" windowkill && rm -f /tmp/rulerrc:asunder || asunder
 
 super + y
-	xdotool search --onlyvisible --classname aerc windowclose || aerc
+	xdotool search -onlyvisible -classname aerc windowunmap || xdotool search -classname aerc windowmap || aerc
 
 # kak: filetype=sh
 

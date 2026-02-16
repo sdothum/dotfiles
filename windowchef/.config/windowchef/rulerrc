@@ -80,12 +80,12 @@ class="audacious"
 # delay for pavucontrol/pipewire sync SEE: pulse
 
 class="pavucontrol"
-	window desktop $(chef desktop "CHEF")                              ;\
-	window size B6 rotate                                              ;\
-	window snap center                                                 ;\
-	recipe -q pavucontrol && exit                                      ;\
-	recipe -a pavucontrol                                              ;\
-	xdotool search --onlyvisible --classname "pavucontrol" windowunmap ;\
+	window desktop $(chef desktop "CHEF")                            ;\
+	window size B6 rotate                                            ;\
+	window snap center                                               ;\
+	recipe -q pavucontrol && exit                                    ;\
+	recipe -a pavucontrol                                            ;\
+	xdotool search -onlyvisible -classname "pavucontrol" windowunmap ;\
 	desktop $(chef desktop "DESK")
 
 # ........................................................................ media
@@ -100,8 +100,8 @@ class="calibre"
 	window @calibre snap center
 
 class="org.nicotine_plus.Nicotine"
-	window desktop $(chef desktop "PEER")                                                                                                         ;\
-	[ $(xdotool search --onlyvisible --classname "org.nicotine_plus.Nicotine" | wc -l) -eq 1 ] && window @org.nicotine_plus.Nicotine size monocle ;\
+	window desktop $(chef desktop "PEER")                                                                                                       ;\
+	[ $(xdotool search -onlyvisible -classname "org.nicotine_plus.Nicotine" | wc -l) -eq 1 ] && window @org.nicotine_plus.Nicotine size monocle ;\
 	window @0.1 snap center
 
 # ......................................................................... draw
@@ -174,7 +174,8 @@ class="qutebrowser"
 # single purpose hangouts browser (for zoom and custom font control) SEE: hangouts script
 
 class="Surf"
-	window '@@cgDIS:T | ' URL tile 4 1 && window desktop $(chef desktop "COMM")
+	xdotool search -sync -onlyvisible -name '@cgDIS:T | ' set_window -classname 'hangouts' -class 'hangouts' ;\
+	window '@hangouts' URL tile 4 1 && window desktop $(chef desktop "COMM")
 
 # ....................................................................... system
 
