@@ -34,7 +34,7 @@ define-command -hidden cursor-mode %{
 		set-option global scrolloff %sh{ printf '%s,30' $(( $kak_window_height / 2 )) }  # centered cursor (row) for "freehand writing"
 		set-option window typewriter false
 	} %{
-		set-option global scrolloff 5,15
+		set-option global scrolloff 0,15  # set to 0 row offset to prevent top/bottom mouse selection jitter
 		set-option window typewriter true
 	}
 }
