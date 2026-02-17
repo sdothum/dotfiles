@@ -97,10 +97,15 @@ backup()   {
 	elif [ -e $SUPERNOTE ] ;then
 		ifno "backup supernote" && return
 		/usr/bin/rsync -av --info=progress2 --ignore-errors --exclude='lost+found' --delete $SUPERNOTE /home/SUPERNOTE/SSD/
+		adb devices || { ditto adb "supernote koreader files not copied to stow"; exit 1; }
 		ditto backup "history.lua"
 		adb pull sdcard/koreader/history.lua /home/SUPERNOTE/SSD/Download/history.lua  # for koreader:supernote2kobo
+		adb pull sdcard/koreader/settings.reader.lua /home/SUPERNOTE/SSD/Download/settings.reader.lua
+		adb pull sdcard/koreader/settings/profiles.lua /home/SUPERNOTE/SSD/Download/profiles.lua
+		adb pull sdcard/koreader/settings.reader.lua $HOME/stow/supernote/koreader/settings.reader.lua
+		adb pull sdcard/koreader/settings/profiles.lua $HOME/stow/supernote/koreader/profiles.lua
 		sync && adb disconnect  # to prevent busy mtp device
-		pkill adb
+		pkill adb >/dev/null
 	fi
 	unset BACKUP
 }
