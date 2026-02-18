@@ -34,7 +34,7 @@ define-command -hidden cursor-mode %{
 		set-option global scrolloff %sh{ printf '%s,30' $(( $kak_window_height / 2 )) }  # centered cursor (row) for "freehand writing"
 		set-option window typewriter false
 	} %{
-		set-option global scrolloff 0,15  # set to 0 row offset to prevent top/bottom mouse selection jitter
+		set-option global scrolloff 0,10  # set to 0 row offset to prevent top/bottom mouse selection jitter
 		set-option window typewriter true
 	}
 }
@@ -45,8 +45,12 @@ map global normal <down> 'vjj' -docstring 'scroll down one row'
 
 addm %{ focus t : map global select t   ': cursor-mode<ret>'  -docstring "typewriter scroll" }
 
-hook global WinSetOption filetype=markdown %{ set-option window typewriter true }
-hook global WinDisplay .* %{ cursor-mode }
+# hook global WinSetOption filetype=markdown %{ set-option window typewriter true }
+# hook global WinDisplay .* %{ cursor-mode }
+hook global WinCreate .* %{
+	hook window ModeChange (push|pop):.*:insert %{ set-option window typewriter true;  cursor-mode }
+	hook window ModeChange (push|pop):insert:.* %{ set-option window typewriter false; cursor-mode }
+}
 
 # UI
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
