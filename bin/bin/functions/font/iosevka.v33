@@ -41,7 +41,7 @@ usage() {
 > capadjust (C G O Q S U)
 
 > book+regular | descenders | double | open[+]
-> emdash=<decimal> 
+> emdash=<decimal>
 > family=<name>
 > serifless | serifed
 > space=[M|<decimal>]
