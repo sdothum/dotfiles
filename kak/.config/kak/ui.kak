@@ -26,42 +26,27 @@ define-command -hidden info-notifier -params 2 %{
 
 # .................................................................... Scrolling
 
-declare-option int typewriter 0          # mode 0,1 (window/typewriter) set to -1 to disable startup default
+declare-option int typewriter 1  # set to 0 to disable startup default
 
-define-command -hidden typewriter -params ..1 %{
-	if %{ [ "$kak_opt_typewriter" -ge 0 ] } %{
-		if-else %{ [ "$1" = 'on' ] } %{
-			set-option window typewriter 0  # command completion toggles state
-		} %{
-			if %{ [ "$1" = 'off' ] } %{
-				set-option window typewriter 1
-			}
-		}
-
-		# toggle typewriter mode
-		if-else %{ [ "$kak_opt_typewriter" = 0 ] } %{
-			set-option global scrolloff %sh{ printf '%s,30' $(( $kak_window_height / 2 )) }  # centered cursor (row) for "freehand writing"
-			set-option window typewriter 1
-		} %{
-			set-option global scrolloff 0,10  # set to 0 row offset to prevent top/bottom mouse selection jitter
-			set-option window typewriter 0
-		}
+define-command -hidden typewriter-on %{
+	if %{ [ "$kak_opt_typewriter" -gt 0 ] } %{
+		set-option window scrolloff %sh{ printf '%s,30' $(( $kak_window_height / 2 )) }  # centered cursor row for typing with visual context
 	}
 }
 
-define-command -hidden typewriter-toggle %{
-	if-else %{ [ "$kak_opt_typewriter" = -1 ] } %{
-		set-option window typewriter 0
-	} %{
-		set-option window typewriter -1
+define-command -hidden typewriter-off %{
+	if %{ [ "$kak_opt_typewriter" -gt 0 ] } %{
+		set-option window scrolloff 0,10  # set to 0 row offset to prevent top/bottom mouse selection jitter
 	}
 }
+
+define-command -hidden typewriter-toggle %{ set-option window typewriter %sh{ [ "$kak_opt_typewriter" -gt 0 ] && echo 0 || echo 1 } }
 
 addm %{ focus t : map global select t ": typewriter-toggle<ret>" -docstring "typewriter input (toggle)" }
 
 hook global WinCreate .* %{
-	hook window ModeChange (push|pop):.*:insert %{ typewriter 'on'  }
-	hook window ModeChange (push|pop):insert:.* %{ typewriter 'off' }
+	hook window ModeChange (push|pop):.*:insert %{ typewriter-on  }
+	hook window ModeChange (push|pop):insert:.* %{ typewriter-off }
 }
 
 # more granular scrolling than <c-d> and <c-u> while holding visual cursor position within screen
