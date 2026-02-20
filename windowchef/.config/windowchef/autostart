@@ -21,6 +21,7 @@ udev
 desktop $(chef desktop "DESK")
 recipe -q cbonsai && cbonsai
 recipe -q term    && term term $(recipe term)
+recipe -q ping    && SCROLLING=0 term ping class=ping $(recipe ping)
 
 # issue running as runit service
 if void 'runit' ;then

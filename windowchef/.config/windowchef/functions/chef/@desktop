@@ -11,8 +11,8 @@
 winid=$(pfw 2>/dev/null) || return  # trap empty desktop at startup
 
 D=$(find $GROUP -name $winid | cut -d/ -f6)
-[ -e "$GROUP/$D" ] || return                  # trap unregisterd (yet) window
-[ "$D" = "$(ls -1 $GROUP/current)" ] || { desktop add ${D:-1} $winid; desktop $D; }
+[ "$D" ] || return                  # trap unregisterd (yet) window
+[ "$D" = "$(ls -1 $GROUP/current)" ] || { desktop add $D $winid; desktop $D; }
 
 # kak: filetype=sh
 

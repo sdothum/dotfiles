@@ -34,24 +34,24 @@ SEP="${TAG_PAD} %{F$INACTIVE_FG}%{F-}${TAG_PAD#?}"
 
 desktops() {
 	unset desktops viewscreen
-	for i in $DESKTOPS ;do
+	for d in $DESKTOPS ;do
 		format="%{B$DEFAULT_BG}"
 
 		# NOTE: visible *ONLY* returns correct value for active desktop
 
-		has_windows $i && ! deactivated $i && icon=$OCCUPIED || { [ $i = $(desktop) ] && icon=$CURRENT || icon=$FREE; }
+		has_windows $d && ! deactivated $d && icon=$OCCUPIED || { [ $d = $(desktop) ] && icon=$CURRENT || icon=$FREE; }
 
-		if [ $i = $(desktop) ] ;then
-			has_visible $i && format="${format}%{F$ACTIVE_FG}"
-			# deactivated $i && format="${format}%{U$ACTIVE_FG}%{+u}"
-		elif ! has_windows $i ;then
+		if [ "$d" = "$(desktop)" ] ;then
+			has_visible $d && format="${format}%{F$ACTIVE_FG}"
+			# deactivated $d && format="${format}%{U$ACTIVE_FG}%{+u}"
+		elif ! has_windows $d ;then
 			format="${format}%{F$FREE_FG}"
-			# deactivated $i && format="${format}%{U$FREE_FG}%{+u}"
+			# deactivated $d && format="${format}%{U$FREE_FG}%{+u}"
 		else
 			format="${format}%{F$INACTIVE_FG}"
-			# deactivated $i && format="${format}%{U$INACTIVE_FG}%{+u}"
+			# deactivated $d && format="${format}%{U$INACTIVE_FG}%{+u}"
 		fi
-		deactivated $i && format="${format}%{U$ACTIVE_FG}%{+u}"
+		deactivated $d && format="${format}%{U$ACTIVE_FG}%{+u}"
 
 		desktops="${desktops}${TAG_PAD}${format}${icon}%{-u}%{U-}%{B-}%{F-}"
 		viewscreen="${viewscreen} ${format} ${icon}"  # star trek!

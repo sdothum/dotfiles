@@ -186,5 +186,11 @@ class="pcmanfm"
 	window desktop $(chef desktop "CHEF") ;\
 	window tile 3
 
+class="ping"
+	window desktop $(chef desktop "CHEF")                              ;\
+	window '@ping' snap top left                                       ;\
+	sleep 5 && xdotool search -onlyvisible -classname ping windowunmap ;\
+	notify 'Interface refresh' "$(recipe ping)"
+
 # kak: filetype=sh
 
