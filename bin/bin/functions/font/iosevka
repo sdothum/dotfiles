@@ -17,7 +17,7 @@ FONTS=$HOME/.local/share/fonts
 # pkill -f ".*http.*"
 
 usage() {
-	echo "$(basename $0) ebook | kindle | kobo[+] | koreader | supernote | proportional
+	echo "$(basename $0) ebook | kindle | kobo[+] | koreader | supernote | proportional | cities
 > cyrillic | fluent | latin+greek | utf-8
 > classic | coding | quad | mu | serifless | serifed | trio | web
 > altmono | book+regular | expanded | grote | open[+]
@@ -105,6 +105,7 @@ cmdopts() {
 	while [ $1 ] ;do
 		case $1 in
 			# shapes
+			cities         ) cities=true     ;;
 			ebook          ) ebook=true      ;;
 			kindle         ) ereader=$1      ;;
 			kobo*          ) ereader=$1      ;;
@@ -167,6 +168,7 @@ cmdopts() {
 			d-toothless    ) glyph d $1 ;;  # with p-eared
 			f-extended     ) f=$1 ;;        # unolexic (homage to universal grotesk)
 			f-extended++   ) f=$1 ;;        # unolexic (homage to universal grotesk)
+			f-extended+=   ) f=$1 ;;
 			f-flat++       ) f=$1 ;;
 			i-serifless    ) i=$1 ;;
 			j-flat         ) j=$1 ;;
@@ -297,6 +299,13 @@ elif [ "$test" ] ;then
 	e_ink ottawa     grote I-serifless  t-descending=         m-straight f-extended+= t-cross+ y-turn
 	# e_ink gotham     grote I-serifless  t-cross              m-straight f-extended_
 	# e_ink gothos     grote I-serifed    t-cross+              m-straight G-toothed
+elif [ "$cities" ] ;then
+	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat l-ascending Q-open 1-nobase f-extended+= a-double_ d-tailed y-turn J-descending utf-8 serifless serifed pseudokern percent/
+ 	emdash
+	e_ink montreal   grote I-serifless  t-descending= y-turn
+	e_ink toronto    grote I-serifless  t-asymmetric-- y-turn
+	e_ink gotham     grote I-serifless  t-cross  m-straight f-extended_
+	e_ink ottawa     grote I-serifless  t-descending= m-straight f-extended+= y-turn
 elif [ "$quad" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+
  	emdash
