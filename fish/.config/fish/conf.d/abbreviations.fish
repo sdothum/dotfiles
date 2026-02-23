@@ -246,7 +246,7 @@ abbr hdel 'fishlog delete'
 abbr h 'fishlog search'
 abbr hk "kak $HOME/.local/share/fish/fish_history"
 abbr hv "vi $HOME/.local/share/fish/fish_history"
-abbr ma 'man'
+abbr ma "env MANPAGER='/usr/bin/kak -ro' term man man"
 abbr rl 'rlwrap'
 abbr s 'sudo'
 abbr sh 'bash -norc'
