@@ -1,0 +1,6 @@
+# Some kernel modules must be loaded before starting device manager
+# Load them by looking at the output of the equivalent of `kmod static-nodes`
+
+type       = scripted
+command    = /etc/dinit.d/early/scripts/modules-early.sh
+depends-on = early-prepare.target

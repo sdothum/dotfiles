@@ -1,0 +1,7 @@
+# device monitor; it facilitates device dependencies
+
+type = process
+command = /etc/dinit.d/early/helpers/devmon
+depends-on = early-devd
+depends-ms = early-dev-settle
+smooth-recovery = yes
