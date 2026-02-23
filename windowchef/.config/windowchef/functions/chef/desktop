@@ -15,7 +15,7 @@ index() { echo "$GROUPS" | tr ' ' '\n' | grep -n $1 | cut -d: -f1; }  # NOTE: as
 
 
 case $1 in
-	''    ) label $(ls -1 $GROUP/current) ;;
+	''    ) label $(ls -1 $GROUP/current 2>/dev/null) || return ;;  # trap empty desktop at startup
 	[1-9] ) label $1 ;;
 	count ) echo $(( $(index "''") - 1 )) ;;
 	*     ) index=$(index $1); [ $index ] && echo $index || notify critical Group "<b>$1</b> invalid\nSee rulerrc" ;;
