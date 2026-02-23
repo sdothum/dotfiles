@@ -120,7 +120,7 @@ return {
         },
     },
     ["27@12.0:219%"] = {
-        ["b_page_margin"] = 33,
+        ["b_page_margin"] = 32,
         ["block_rendering_mode"] = 3,
         ["embedded_css"] = true,
         ["embedded_fonts"] = true,
@@ -170,7 +170,7 @@ return {
         ["smooth_scaling"] = false,
         ["status_line"] = 0,
         ["sync_t_b_page_margins"] = false,
-        ["t_page_margin"] = 39,
+        ["t_page_margin"] = 40,
         ["view_mode"] = "page",
         ["visible_pages"] = 1,
         ["word_expansion"] = 0,
