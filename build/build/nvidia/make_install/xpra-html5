@@ -1,0 +1,17 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. xpra server
+
+sudo xbps-install -y xpra libcap-devel
+
+cd /home/depot
+exists --repo xpra-html5 || git clone https://github.com/Xpra-org/xpra-html5.git
+
+cd xpra-html5
+sudo ./setup.py install
+
+# kak: filetype=sh

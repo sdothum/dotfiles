@@ -1,0 +1,28 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ chimera-dinit
+
+CHIMERA=$HOME/stow/dinit/etc/dinit.d.@chimera
+
+sudo xbps-install -y libkmod-devel libcap-devel console-setup
+
+cd /home/depot
+exists --repo dinit-chimera || git clone https://github.com/chimera-linux/dinit-chimera.git
+
+cd dinit-chimera
+meson setup build
+sudo ninja -C build install
+
+# update void (glibc) services
+sudo cp -v $CHIMERA/early/scripts/* /usr/lib/dinit.d/early/scripts/
+
+[ -e ${CHIMERA#*dinit} ] && exit
+sudo cp -rv $CHIMERA /etc
+sudo rm /etc/dinit.d
+sudo ln -s ${CHIMERA#*dinit} /etc/dinit.d
+
+# kak: filetype=sh

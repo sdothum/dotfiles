@@ -12,9 +12,7 @@
 ! original -f /sbin/shutdown
   metalog
 ! sudo mkdir /var/log/dinit
-" symlink /etc/dinit.d with stow/dinit services
-" symlink /sbin/init to dinit
-  libkmod-devel  # for chimera-dinit meson build
+m chimera-dinit  # supercedes above runit-dinit
 
 
 = runit
@@ -26,8 +24,8 @@
 = ═════
 # gst-libav
   gst-plugins-base1
-  gst-plugins-good1
-  gst-plugins-ugly1
+  gst-plugins-chimera-good1
+  -plugins-ugly1
   gstreamer1
   gstreamer-vaapi
   libmediainfo
