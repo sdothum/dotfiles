@@ -8,10 +8,13 @@
 
 # Usage: nicotine [-s]
 
-[ -e /usr/bin/nicotine ] && exec /usr/bin/nicotine $@ 2>/dev/null
-
-# nightly build
-cd /home/depot/nicotine-plus
-./nicotine $@ 2>/dev/null
+if pgrep -f '/usr/bin/xpra .*nicotine' >/dev/null ;then
+	name=nicotine qutebrowser-instance http://localhost:14500/
+else
+	[ -e /usr/bin/nicotine ] && exec /usr/bin/nicotine $@ 2>/dev/null
+	# nightly build
+	cd /home/depot/nicotine-plus
+	./nicotine $@ 2>/dev/null
+fi
 
 # kak: filetype=sh
