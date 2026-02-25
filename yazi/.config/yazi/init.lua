@@ -37,6 +37,7 @@ require("bunny"):setup({
 		{ key = "k",          path = "~/.config/kak",                                     },
 		{ key = "L",          path = "/home/library/calibre",                             },
 		{ key = { "l", "b" }, path = "/usr/local/bin",                                    },
+		{ key = { "l", "l" }, path = "/usr/lib",                                          },
 		{ key = { "l", "s" }, path = "/usr/local/share",                                  },
 		{ key = "M",          path = "/home/music",                                       },
 		{ key = "m",          path = "/net/media/videos",                                 },
