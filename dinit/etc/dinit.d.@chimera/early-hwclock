@@ -1,8 +1,0 @@
-# Set system time from hardware clock
-
-type         = scripted
-command      = /etc/dinit.d/early/scripts/clock.sh hwclock start
-stop-command = /etc/dinit.d/early/scripts/clock.sh hwclock stop
-depends-on   = early-devd
-depends-on   = early-prepare.target
-waits-for    = early-root-rw.target

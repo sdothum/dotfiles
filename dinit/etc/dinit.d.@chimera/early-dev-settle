@@ -1,6 +1,0 @@
-# Wait until all queued device events have been processed
-
-type       = scripted
-command    = /etc/dinit.d/early/scripts/dev.sh settle
-depends-on = early-devd
-depends-on = early-dev-trigger

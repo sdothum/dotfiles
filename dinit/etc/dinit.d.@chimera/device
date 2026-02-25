@@ -1,6 +1,0 @@
-# device prerequisite
-
-type = process
-command = /etc/dinit.d/early/helpers/devclient $1 4
-depends-on = early-devmon
-ready-notification = pipefd:4

@@ -1,6 +1,0 @@
-# Set up cgroup mounts
-
-type       = scripted
-command    = /etc/dinit.d/early/scripts/cgroups.sh
-depends-on = early-kernel-env
-depends-on = early-pseudofs

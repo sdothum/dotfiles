@@ -1,6 +1,0 @@
-# Set up env vars from the kernel
-
-type       = scripted
-command    = /etc/dinit.d/early/scripts/kernel-env.sh
-options    = pass-cs-fd
-depends-on = early-pseudofs
