@@ -99,6 +99,15 @@ class="calibre"
 	window desktop $(chef desktop "DESK") ;\
 	window @calibre snap center
 
+# xpra browser access
+
+class="nicotine"
+	window desktop $(chef desktop "PEER")                                                           ;\
+	xdotool search -onlyvisible -classname "nicotine" windowactivate && window '@nicotine' size monocle ;\
+	window @0.1 snap center
+
+# direct client access
+
 class="org.nicotine_plus.Nicotine"
 	window desktop $(chef desktop "PEER")                                                                                                       ;\
 	[ $(xdotool search -onlyvisible -classname "org.nicotine_plus.Nicotine" | wc -l) -eq 1 ] && window @org.nicotine_plus.Nicotine size monocle ;\

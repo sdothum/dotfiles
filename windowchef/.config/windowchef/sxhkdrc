@@ -369,7 +369,8 @@ super + h
 # NOTE: nicotine leaves dangling child window frames SEE: winids
 
 super + shift + j
-	mapw -u $(winids "org.nicotine_plus.Nicotine") 2>/dev/null && \{ desktop toggle $(desktop); desktop $(chef desktop "DESK"); \} || xdotool search -classname "org.nicotine_plus.Nicotine" windowmap || \{ nicotine; desktop $(chef desktop "PEER"); \}
+	xdotool search -onlyvisible -classname nicotine windowunmap || xdotool search -classname nicotine windowmap || \{ nicotine; desktop $(chef desktop "PEER"); \}
+	# mapw -u $(winids "org.nicotine_plus.Nicotine") 2>/dev/null && \{ desktop toggle $(desktop); desktop $(chef desktop "DESK"); \} || xdotool search -classname "org.nicotine_plus.Nicotine" windowmap || \{ nicotine; desktop $(chef desktop "PEER"); \}
 
 # ......................................................................... yazi
 
