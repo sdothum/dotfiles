@@ -152,6 +152,7 @@ systemd() {
 	exit
 }
 
-void 'dinit' && dinit $@ || exists runit && runit $@ || exists dinit && dinit $@ || exists openrc && openrc $@ || exists s6 && s6 $@ || systemd $@
+# void 'dinit' && dinit $@ || exists runit && runit $@ || exists dinit && dinit $@ || exists openrc && openrc $@ || exists s6 && s6 $@ || systemd $@
+grep -q 'dinit' /sbin/init && dinit $@ || exists runit && runit $@ || exists dinit && dinit $@ || exists openrc && openrc $@ || exists s6 && s6 $@ || systemd $@
 
 # kak: filetype=sh

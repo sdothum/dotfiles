@@ -105,7 +105,8 @@ if console ;then
 	cpu arm && { tmout ifyes 'sync with watchman' && wsync || wsync -s; }
 
 	exists dinit && while : ;do
-		sv status udev-settle | grep -q STARTED && break
+		sv status udev-settle      2>/dev/null | grep -q STARTED && break  # runit based dinit.d
+		sv status early-dev-settle 2>/dev/null | grep -q STARTED && break  # chimera dinit.d
 		[ $notice ] || ditto WARN dinit "waiting for udev-settle"
 		notice=true
 		echo -n .
