@@ -1,5 +1,1 @@
-type            = process
-command         = /usr/bin/haveged -F -w 1024 -v 1
-smooth-recovery = true
-logfile         = /var/log/dinit/haveged.log
-after           = login.target
+../haveged

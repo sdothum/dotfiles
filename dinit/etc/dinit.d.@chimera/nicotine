@@ -1,0 +1,6 @@
+type            = process
+command         = /usr/bin/xpra start :100 --start=nicotine --bind-tcp=:14500 --html=on --daemon=no
+smooth-recovery = yes
+logfile         = /var/log/dinit/nicotine.log
+after           = login.target
+depends-on      = network

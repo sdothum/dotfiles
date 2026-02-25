@@ -1,10 +1,9 @@
 #!/bin/sh
 
 case "$1" in
-    start) exec /usr/bin/udevd --daemon ;;
-    stop) udevadm control -e && exit 0 ;;
-    settle) exec udevadm settle ;;
-    trigger) exec udevadm trigger --action=add ;;
+	start   ) /usr/bin/udevd --daemon      ;;
+	stop    ) udevadm control -e           ;;
+	settle  ) udevadm settle               ;;
+	trigger ) udevadm trigger --action=add ;;
 esac
 
-exit 1
