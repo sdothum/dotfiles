@@ -1,0 +1,12 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Sysadmin
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................... crontab backup
+
+mkdir -p $STOW/crontab/$(hostname)/var/spool/cron
+crontab -l | tee $STOW/crontab/$(hostname)/var/spool/cron/$USER
+
+# kak: filetype=sh

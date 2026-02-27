@@ -70,7 +70,7 @@ runit() {
 }
 
 dinit() {
-	usage() { usage: "$(basename $0) list | [disable | enable | start | stop [--force] | restart | status | check | log] <service>"; exit 1; }
+	usage() { usage: "$(basename $0) list | [@ | disable | enable | start | stop [--force] | restart | status | check | log] <service>"; exit 1; }
 
 	sv() { eval sudo dinitctl $@; }
 
@@ -84,7 +84,8 @@ dinit() {
 
 	# configure dinit daemon
 	case $1 in
-		''      ) sv list; ls; usage ;;
+		''      ) sv list | grep -v '\] early-'; ls; usage ;;
+		'@'     ) sv list | pager; ls; usage ;;
 		disable ) sv $1 $2    ;;
 		enable  ) sv $1 $2    ;;
 		start   ) sv $1 $2    ;;
