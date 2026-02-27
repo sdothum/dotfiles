@@ -6,12 +6,18 @@
 
 # .................................................................. xpra server
 
-sudo xbps-install -y xpra libcap-devel
+# sudo xbps-install -y xpra python3-Cython python3-xdg xxHash-devel libxkbfile-devel libXres-devel liblz4-devel python3-gobject-devel
+
+# cd /home/depot
+# exists --repo xpra || git clone https://github.com/Xpra-org/xpra.git
+
+# cd xpra
+# sudo ./setup.py install
 
 cd /home/depot
 exists --repo xpra-html5 || git clone https://github.com/Xpra-org/xpra-html5.git
 
-cd xpra-html5
+cd ../xpra-html5
 sudo ./setup.py install
 
 # kak: filetype=sh

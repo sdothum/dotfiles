@@ -22,12 +22,12 @@
 
 = file transfer
 = ═════════════
+# m nicotine-plus    [server]  # nightly build to minimize soulseek connection disruptions
+#   xpra             [server]  # for browser nicotine service (versus direct client)
+# m xpra-html5       [server]
 # sabnzbd            [server]
 # nicotine+
 # qbittorrent
-m nicotine-plus      [server]  # nightly build to minimize soulseek connection disruptions
-  xpra               [server]  # for browser nicotine service (versus direct client)
-m xpra-html5         [server]
   nzbget             [server]
 d m sonarr           [server]
   transmission-gtk   [server]

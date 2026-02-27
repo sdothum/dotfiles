@@ -1,0 +1,23 @@
+# container packages
+# sdothum - 2016 (c) wtfpl
+
+# see bundle_install
+
+
+= docker
+= ══════
+  docker
+  docker-compose
+! modprobe kvm
+! sudo usermod -aG kvm $USER
+! sudo usermod -aG docker $USER
+! sudo usermod -aG $USER docker
+
+
+= containers
+= ══════════
+! docker pull sirjmann92/nicotineplus-proper [server]
+! stow nicotine
+
+
+# vim: set ft=conf: #
