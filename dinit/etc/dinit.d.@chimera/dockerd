@@ -1,0 +1,6 @@
+type               = process
+command            = /usr/bin/dockerd
+depends-on         = network
+logfile            = /var/log/dinit/dockerd-daemon.log
+smooth-recovery    = yes
+# socket-listen    = /var/run/docker.sock

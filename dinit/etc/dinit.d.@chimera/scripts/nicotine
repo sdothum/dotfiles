@@ -1,0 +1,7 @@
+#!/bin/sh
+# sdothum - 2016 (c) wtfpl
+
+cd /home/shum/docker/sirjmann92:nicotineplus-proper
+sudo -u shum docker compose up
+
+# kak: filetype=sh
