@@ -33,7 +33,7 @@ set_geometry()   { eval $(geometry ${1:-$winid}); }
 cat_geometry()   { [ -e $WINFO/$winid ] && eval $(ls -1 $WINFO/$winid) || exit 1; }
 save_geometry()  { rm -rf $WINFO/${1:-$winid}; for x in $(geometry ${1:-$winid}) ;do mkdir -p $WINFO/${1:-$winid}/$x ;done }  # for revert
 opposite_side()  { echo $(( width + margin * 2 - (X + WIDTH + border * 2) )); }  # for nearest edge SEE: window snap / stretch
-windowfocus_by() { xdotool search -sync -onlyvisible -$1 "$xname" behave %@ windowmap windowraise; }
+windowfocus_by() { xdotool search -sync -onlyvisible -$1 "$(escape $xname)" behave %@ windowmap windowraise; }
 windowfocus_id() { xdotool windowmap $1; xdotool windowraise $1; }
 xname_is()       { xdotool getwindow$1 $winid | grep -q "$xname"; }
 
@@ -46,7 +46,7 @@ draw() {
 	[ $HGT -gt $HEIGHT ] && { swap=$WID; WID=$HGT; HGT=$swap; }
 	wtp $X $Y $WID $HGT $1
 }
-
+set -x
 # do we need to wait longer for window creation?
 if [ "$1" ] && [ -z "${1%%@*}" ] ;then
 	case $1 in
