@@ -77,7 +77,32 @@ source "%val{config}/ui.kak"
 source "%val{config}/ux.kak"
 
 # inline admonitions
-declare-option str admonition "\s(((?i)(add(ed|ition)|att(n|ention)|(be)*cause|bu[gt]|deprecated|donot|ex(ample)*|for|hack|hint|hist(ory)*|important|note|see|tip|(to)*do|unknown|us(ag)*e|warn(ing)*|when|where):)|\([?][?]+\))\s"
+declare-option str admonition %sh{ echo "\s(((?i)(
+add(ed|ition)
+|att(n|ention)
+|(be)*cause
+|bu[gt]
+|deprecated
+|do(not)*
+|ex(ample)*
+|for
+|hack
+|hint
+|hist(ory)*
+|important
+|note
+|remedy
+|see
+|tip
+|todo
+|(un)*known
+|us(ag)*e
+|warn(ing)*
+|when
+|where
+):)
+|\([?][?]*\)
+)\s" | tr -d '\n' }
 hook -once global WinSetOption filetype=.* %{ add-highlighter global/ regex %opt{admonition} 1:WrapMarker }  # select field 1: (vs 0:) to not hilight the colon :)
 
 # build visually organized user-mode lists
