@@ -2,6 +2,7 @@
 # sdothum - 2016 (c) wtfpl
 
 cd /home/shum/docker/sirjmann92:nicotineplus-proper
+sleep 1  # pause for name resolution
 sudo -u shum docker compose up
 
 # kak: filetype=sh

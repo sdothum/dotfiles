@@ -5,4 +5,4 @@ smooth-recovery = yes
 logfile         = /var/log/dinit/nicotine.log
 after           = login.target
 depends-on      = dockerd
-depends-on      = network
+depends-on      = NetworkManager
