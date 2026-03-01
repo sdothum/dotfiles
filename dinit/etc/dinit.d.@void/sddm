@@ -3,5 +3,5 @@
 type            = process
 command         = /etc/dinit.d/scripts/sddm
 smooth-recovery = true
-depends-on      = dbusd
+depends-on      = dbus
 depends-on      = loginready

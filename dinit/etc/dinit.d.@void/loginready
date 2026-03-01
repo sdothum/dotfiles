@@ -5,5 +5,5 @@ restart    = false
 options    = runs-on-console
 
 depends-on = rcboot
-after      = dbusd
+after      = dbus
 after      = metalog
