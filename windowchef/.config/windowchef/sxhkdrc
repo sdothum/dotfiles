@@ -366,10 +366,10 @@ super + shift + b
 super + h
 	xdotool search -onlyvisible -classname "hangouts" windowunmap || xdotool search -classname "hangouts" windowmap  || hangouts
 
-# NOTE: nicotine leaves dangling child window frames SEE: winids
+# NOTE: nicotine (direct gui -- not docker browser) leaves dangling child window frames SEE: winids
 
 super + shift + j
-	xdotool search -onlyvisible -classname nicotine windowunmap || xdotool search -classname nicotine windowmap || \{ nicotine; desktop $(chef desktop "PEER"); \}
+	xdotool search -onlyvisible -name nicotine windowunmap || xdotool search -name nicotine windowmap || \{ nicotine; desktop $(chef desktop "PEER"); \}
 	# mapw -u $(winids "org.nicotine_plus.Nicotine") 2>/dev/null && \{ desktop toggle $(desktop); desktop $(chef desktop "DESK"); \} || xdotool search -classname "org.nicotine_plus.Nicotine" windowmap || \{ nicotine; desktop $(chef desktop "PEER"); \}
 
 # ......................................................................... yazi
