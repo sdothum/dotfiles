@@ -12,6 +12,8 @@
 ! sudo usermod -aG kvm $USER
 ! sudo usermod -aG docker $USER
 ! sudo usermod -aG $USER docker
+! sudo chown -R root:docker /opt/containerd
+! sudo chmod -R 775 /opt/containerd
 
 
 = containers
