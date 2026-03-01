@@ -6,4 +6,4 @@ smooth-recovery = yes
 logfile         = /var/log/dinit/nicotine.log
 after           = loginready
 depends-on      = dockerd
-depends-on      = dns
+depends-on      = nslookup

@@ -1,5 +1,0 @@
-type         = scripted
-command      = /etc/dinit.d/scripts/dns
-stop-command = /etc/dinit.d/scripts/dns stop
-restart      = true
-depends-on   = NetworkManager
