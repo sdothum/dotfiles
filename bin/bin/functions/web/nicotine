@@ -10,6 +10,8 @@
 
 if pgrep -f '/usr/bin/nicotine --isolated' >/dev/null ;then
 	name=nicotine qutebrowser-instance http://localhost:6565/  # docker server
+elif sv status dockerd 2>&1 | grep -q '^Service:' ;then
+	notify critical nicotine "sevice not started"
 else
 	[ -e /usr/bin/nicotine ] && exec /usr/bin/nicotine $@ 2>/dev/null
 	# nightly build
