@@ -8,7 +8,6 @@
 
 # Usage: [dropcap=<class>] kconvert [<format>|css=<css>]* <epub>*
 
-SEP='⁋'
 option=noformat
 
 # SEE: econvert
@@ -26,16 +25,18 @@ while : ;do
 	shift
 done
 
-# SAVEIFS=$IFS
-IFS=$(printf "${SEP}")  # NOTE: change separator from space to "\n" to handle book titles
-[ "$1" ] && set -- $(echo $@ | sed -r "s/\.(epub|azw3|mobi) */.\1${SEP}/g") || set -- $(echo *.epub | sed "s/\.epub */.epub${SEP}/g")
-while [ $# -gt 0 ] ;do
-	if [ "$1" ] ;then  # (??) above IFS "set --" injects empty $vars
-		eval econvert azw3 $css $option \"$1\"  # kindle
-		eval econvert epub $css $option \"$1\"  # koreader
+books() {
+	if [ "$1" ] ;then
+		echo $@ | sed -r "s/\.(epub|azw3|mobi) */.\1/g"
+	else
+		ls -1 *.epub | sed "s/\.epub */.epub/g"
 	fi
-	shift
+}
+
+books | while read book ;do
+	echo $book
+	econvert azw3 $css $option "$book"  # kindle
+	econvert epub $css $option "$book"  # koreader
 done
-# IFS=$SAVEIFS
 
 # kak: filetype=sh
