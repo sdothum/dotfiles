@@ -101,8 +101,10 @@ backup()   {
 		ditto backup "history.lua"
 		adb pull sdcard/koreader/history.lua /home/SUPERNOTE/SSD/Download/history.lua  # for koreader:supernote2kobo
 		adb pull sdcard/koreader/settings.reader.lua /home/SUPERNOTE/SSD/Download/settings.reader.lua
+		adb pull sdcard/koreader/settings/gestures.lua /home/SUPERNOTE/SSD/Download/gestures.lua
 		adb pull sdcard/koreader/settings/profiles.lua /home/SUPERNOTE/SSD/Download/profiles.lua
 		adb pull sdcard/koreader/settings.reader.lua $HOME/stow/supernote/koreader/settings.reader.lua
+		adb pull sdcard/koreader/settings/gestures.lua $HOME/stow/supernote/koreader/gestures.lua
 		adb pull sdcard/koreader/settings/profiles.lua $HOME/stow/supernote/koreader/profiles.lua
 		sync && adb disconnect  # to prevent busy mtp device
 		pkill adb >/dev/null

@@ -30,6 +30,7 @@ case $1 in
 		xdotool search -sync -onlyvisible -name "$NANO" windowfocus
 		xdotool type ':zoom 50'
 		xdotool key Return Tab Return
+		xdotool search -sync -onlyvisible -name "$NANO" set_window -classname 'nano'
 
 		pidwait -f ".*${PIANO}.*"
 		mpc play
