@@ -24,5 +24,15 @@ sudo cp -v $CHIMERA/early/scripts/* /usr/lib/dinit.d/early/scripts/
 sudo cp -rv $CHIMERA /etc
 sudo rm /etc/dinit.d
 sudo ln -s ${CHIMERA#*dinit} /etc/dinit.d
+sudo cp -v /bin/dinit /bin/dinit.chimera
+
+echo "/var/log/dinit/*.log {
+   compress
+   rotate 4
+   weekly
+   missingok
+   notifempty
+}
+" | sudo tee /etc/logrotate.d/dinit.logrotate
 
 # kak: filetype=sh
