@@ -248,6 +248,7 @@ super + ctrl + shift + space
 
 ~button1
 	waitron window_focus $(pfw)
+	# xdotool key Escape
 
 # ..................................................................... keyboard
 

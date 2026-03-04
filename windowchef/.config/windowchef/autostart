@@ -19,9 +19,11 @@ pulse
 udev
 
 desktop $(chef desktop "DESK")
-recipe -q cbonsai && cbonsai
-recipe -q term    && { title="$(recipe term)"; term "${title%% *}" $(recipe term); }
-recipe -q ping    && SCROLLING=0 term 'ping' class=ping $(recipe ping)
+# replaced by .session/windowchef/autostart/<command>*
+# recipe -q cbonsai && cbonsai
+# recipe -q term    && { title="$(recipe term)"; term "${title%% *}" $(recipe term); }
+# recipe -q ping    && SCROLLING=0 term 'ping' class=ping $(recipe ping)
+recipe autostart | while read cmd ;do sleep 1; eval $cmd ;done
 
 # issue running as runit service
 if void 'runit' ;then

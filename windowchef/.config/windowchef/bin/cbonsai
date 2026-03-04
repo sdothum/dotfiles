@@ -7,7 +7,11 @@
 
 # ............................................................... Ncurses bonsai
 
-CBONSAI="$HOME/.local/bin/cbonsai -il -t0.125 -w20"
+# Usage: cbonsai [single]
+
+[ $1 ] || repeat=-iw15
+
+CBONSAI="$HOME/.local/bin/cbonsai -l -t0.125 $repeat"
 
 xdotool search -onlyvisible -classname cbonsai windowclose || term cbonsai BLACKBOARD $CBONSAI
 
