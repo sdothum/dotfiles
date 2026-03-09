@@ -34,7 +34,6 @@ books() {
 }
 
 books | while read book ;do
-	echo $book
 	econvert azw3 $css $option "$book"  # kindle
 	econvert epub $css $option "$book"  # koreader
 done
