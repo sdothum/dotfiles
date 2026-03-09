@@ -272,7 +272,7 @@ return {
         ["tap_right_bottom_corner"] = {
             ["profile_exec_26x225%"] = true,
             ["profile_exec_27x217%"] = true,
-            ["profile_exec_28x207%"] = true,
+            ["profile_exec_28x210%"] = true,
             ["profile_exec_29x202%"] = true,
             ["profile_exec_30x194%"] = true,
             ["settings"] = {
@@ -281,7 +281,7 @@ return {
                 ["order"] = {
                     [1] = "profile_exec_26x225%",
                     [2] = "profile_exec_27x217%",
-                    [3] = "profile_exec_28x207%",
+                    [3] = "profile_exec_28x210%",
                     [4] = "profile_exec_29x202%",
                     [5] = "profile_exec_30x194%",
                 },

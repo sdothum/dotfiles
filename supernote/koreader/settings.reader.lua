@@ -273,7 +273,7 @@ return {
     ["larger_tap_area_to_follow_links"] = true,
     ["last_migration_date"] = 20250929,
     ["lastdir"] = "/storage/6F7D-F921/Calibre/books",
-    ["lastfile"] = "/storage/6F7D-F921/Calibre/books/Rachel Joyce/The Unlikely Pilgrimage of Harold Fry - Rachel Joyce.epub",
+    ["lastfile"] = "/storage/6F7D-F921/Calibre/books/Cheon Seon-ran/A Thousand Blues - Cheon Seon-ran.epub",
     ["link_prefer_footnote"] = true,
     ["menu_search_string"] = "font",
     ["night_mode"] = false,
