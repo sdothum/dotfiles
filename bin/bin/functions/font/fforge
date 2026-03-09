@@ -500,7 +500,7 @@ Generate(\$1);
 punctuation() {
 	width=$(percent $emdash)
 	confirm "${emdash}x width emdash"
-	
+
 	echo "
 Open(\$1);
 Select($(utf '—'));  # emdash

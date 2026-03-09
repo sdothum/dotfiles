@@ -20,7 +20,7 @@ usage() { usage: "$(basename $0) [-[1 | p | s | b | x | E | Z | EZ | debug]] [-d
 # ignore='backups|debian|\.history|makepkg|nixos|plugged-custom|qmk_firmware|root|snippets|undo|vps'
 ignore='backups|debian|\.history|makepkg|nixos|plugged-custom|snippets|undo|vps'
 
-SNAPSHOT=${SNAPSHOT:-/home/depot/dotfiles}  # default project snapshot
+DOTFILES=${DOTFILES:-/home/depot/dotfiles}  # default project snapshot
 DIRDIFF=/tmp/dirdiff
 FILES=$DIRDIFF:files
 LOG=$DIRDIFF.log
@@ -60,7 +60,7 @@ target=${target%/.}
 [ -d "$source" ] && { cd "$source" >/dev/null; source=${PWD}; path="$source"; } || { T=f; path="${PWD}/${source#$HOME}"; [ "$P" ] && path="${path#*./}"; unset S; }
 
 # find matching source directory in target repo
-TARGET=${target:-$SNAPSHOT}  # unprovided target defaults to dotfile repo
+TARGET=${target:-$DOTFILES}  # unprovided target defaults to dotfile repo
 [ -L $TARGET ] && L=-L       # WARNING: find will fail on errant recursive links
 target=$(find $L $TARGET -type ${T:-d} -regex ".*${path#*$P}" | head -1)
 [ -${T:-d} "$target" ] || target=$(find $L $TARGET -type ${T:-d} -regex ".*${path#*/stow}" | head -1)
