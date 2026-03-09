@@ -7,8 +7,8 @@
 ## tmpfiles.sh
 
 - stub (exit 0)
-- cannot build sd-tmpfiles on void glibc
-- sd-tmpfiles is systemd related, hence, ignored
+- sd-tools does not build on void glibc without updating with missing header files
+- sd-tmpfiles is systemd tmpfile manager daemon, hence, ignored
 - NOTE: a number of services are systemd related (but simply exit 0)
 
 ## early-devices.target

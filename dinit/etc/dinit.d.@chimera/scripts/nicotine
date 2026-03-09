@@ -10,10 +10,12 @@ case $1 in
 			sleep 1
 		done
 		# (??) init startup often causes nicotine server reconnects REMEDY: restarting service
+		# exec docker --config /home/shum/.docker compose up
 		sudo -u shum docker compose up
 		;;
 	stop )
-		sudo -u shum docker compose stop
+		# exec docker compose stop
+		sudo -u shum docker compose stop || exit 0  # HACK: suppress inconsequential docker reporting
 		;;
 esac
 

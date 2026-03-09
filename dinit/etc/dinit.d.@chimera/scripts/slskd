@@ -2,6 +2,7 @@
 # sdothum - 2016 (c) wtfpl
 
 export DOTNET_BUNDLE_EXTRACT_BASE_DIR=/var/tmp/slskd
+# exec /opt/slskd/slskd --config /home/shum/.local/share/slskd/slskd.yml
 sudo -u shum /opt/slskd/slskd
 
 # kak: filetype=sh
