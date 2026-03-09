@@ -6,6 +6,8 @@
 
 = dinit
 = ═════
+# elogind        # turnstile requirement?
+# turnstile
   dinit
 ! original -f /sbin/halt
 ! original -f /sbin/runit-init

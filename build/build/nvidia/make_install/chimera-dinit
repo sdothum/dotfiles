@@ -18,21 +18,44 @@ meson setup build
 sudo ninja -C build install
 
 # update void (glibc) services
-sudo cp -v $CHIMERA/early/scripts/* /usr/lib/dinit.d/early/scripts/
+# sudo cp -v $CHIMERA/early/scripts/* /usr/lib/dinit.d/early/scripts/
+
+# no sd-tmpfiles (systemd)
+echo "#!/bin/sh
+
+exit 0  # NOTE: void does not use a tmpfile manager daemon
+" | sudo tee /usr/lib/dinit.d/early/scripts/tmpfiles.sh
+
+# udev
+echo -e "#!/bin/sh
+
+case "\$1" in
+\tstart   ) /usr/bin/udevd --daemon      ;;
+\tstop    ) udevadm control -e           ;;
+\tsettle  ) udevadm settle               ;;
+\ttrigger ) udevadm trigger --action=add ;;
+esac
+" | sudo tee /usr/lib/dinit.d/early/scripts/dev.sh
+
+# logfile rotation
+echo -e "/var/log/dinit/*.log {
+\tcompress
+\trotate 4
+\tweekly
+\tmissingok
+\tnotifempty
+}
+" | sudo tee /etc/logrotate.d/dinit.logrotate
+
+# cosmetic init message cleanup
+sudo sed -i '/^echo "Checking root file system/s/^/# /; /^fsck -C/s,$, >/dev/null,' /usr/lib/dinit.d/early/scripts/root-fsck.sh
+sudo sed -i '/^fsck -A -R -C/s,$, >/dev/null,' /usr/lib/dinit.d/early/scripts/fs-fsck.sh
 
 [ -e ${CHIMERA#*dinit} ] && exit
+
 sudo cp -rv $CHIMERA /etc
 sudo rm /etc/dinit.d
 sudo ln -s ${CHIMERA#*dinit} /etc/dinit.d
 sudo cp -v /bin/dinit /bin/dinit.chimera
-
-echo "/var/log/dinit/*.log {
-   compress
-   rotate 4
-   weekly
-   missingok
-   notifempty
-}
-" | sudo tee /etc/logrotate.d/dinit.logrotate
 
 # kak: filetype=sh
