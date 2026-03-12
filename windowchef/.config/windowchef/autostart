@@ -15,7 +15,7 @@ displaycal3            # load color profile
 
 imwheel -kill          # set trackball scrollwheel speed
 recipe -d pavucontrol  # hide pavucontrol SEE: rulerrc
-pulse
+void 'runit' && pulse  # optional
 udev
 
 desktop $(chef desktop "DESK")
@@ -25,7 +25,7 @@ desktop $(chef desktop "DESK")
 # recipe -q ping    && SCROLLING=0 term 'ping' class=ping $(recipe ping)
 recipe autostart | while read cmd ;do sleep 1; eval $cmd ;done
 
-# issue running as runit service
+# if not booting with dinit.. (issue running as runit service)
 if void 'runit' ;then
 	!p nzbget && nzbget --daemon
 	!p sonarr && sudo /bin/su - sonarr -c '/usr/lib/sonarr/Sonarr/Sonarr -s localhost:8989 -no-browser -data=/var/lib/sonarr' >/dev/null 2>&1 &
@@ -35,12 +35,10 @@ restore panel  # postponed as long as possible to avoid dirty trace messages
 exists mpd || exit
 
 sleep 1        # settle pipewire for mpd server connection
-dbus-run-session mpd /home/shum/.config/mpd/mpd.conf 2>/dev/null
+void 'runit' && dbus-run-session mpd /home/shum/.config/mpd/mpd.conf 2>/dev/null
 
-# [ -e /tmp/nicotine-plus ] || { make_install nicotine-plus; touch /tmp/nicotine-plus; }  # using nightly build
-# SEE: docker compose
-# xpra start :100 --start=nicotine --bind-tcp=:14500 --html=on --daemon=no --pulseaudio=no --webcam=no &
-[ -e /tmp/nicotine ] || (sleep 5; sv restart nicotine; touch /tmp/nicotine) &  # HACK: to avoid init reconnects to slsknet server (cause unknown)
+# [ -e /tmp/nicotine-plus ] || { make_install nicotine-plus; touch /tmp/nicotine-plus; }  # for nightly build
+[ -e /tmp/nicotine ] || (sleep 9; sv -u restart nicotine; touch /tmp/nicotine) &  # HACK: to avoid init reconnects to slsknet server (cause unknown)
 
 if mpc queued >/dev/null ;then
 	(sleep 3; for i in play toggle toggle ;do mpc $i >/dev/null ;done; mpc:settings) &        # mpd tickling required to connect to pipewire
