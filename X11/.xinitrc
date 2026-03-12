@@ -1,6 +1,7 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
+
 # X11 Initialization
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -85,14 +86,19 @@ DEFAULTSESSION=windowchef
 
 # ...................................................................... Display
 
-# tv_over() { xrandr --output $1 --off --output HDMI1 --primary --mode $2 --rate 60 --dpi 96; }
-tv_over() { xrandr --output $1 --mode $2 --rate 60 --dpi 96; }
+tv_over() { xrandr $OFF --output $1 --primary --mode $2 --rate 60 --dpi 96; }
+
+interface=${interface:-$(interface dp || interface hdmi)}           # DEBUG: env interface=<interface> x
+case $interface in
+	DP*   ) OFF="--output $(interface hdmi) --off"  || unset OFF ;;  # FOR: multiple interfaces to a single monitor
+	HDMI* ) OFF="--output $(interface dp) --off"    || unset OFF ;;
+esac
 
 case $(hostname) in
 	# luna ) xrandr --output DVI-D-1 --mode 1680x1050 --output HDMI-1 --primary --mode 1920x1080 --rate 60 --left-of DVI-D-1 --dpi 96 ;;
 	luna ) xrandr --output HDMI-1 --mode 1920x1080  --rate 60 --dpi 96 ;;
 	lumen) hdmi && tv_over LVDS1 1920x1080 ;;
-	motu ) hdmi && tv_over HDMI-0 3440x1440 ;;
+	motu ) tv_over ${interface:-HDMI-0} 3440x1440 ;;
 esac
 # pulseeffects --gapplication-service &
 
@@ -194,6 +200,8 @@ wmi*) xexec wmii ;;
 wi* )
 	setpath $HOME/.config/windowchef
 	. $(which ENV)
+
+tvover ${interface:-HDMI-0} 3440x14440
 	sxhkd -c $HOME/.config/windowchef/sxhkdrc &
 	ruler -i -c $HOME/.config/windowchef/rulerrc &
 	# $TERM &              # NOTE: windowchef cannot properly manage windows opened before it!
