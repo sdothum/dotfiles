@@ -9,6 +9,7 @@
 # Usage: nicotine [-s]
 
 if pgrep -f '/usr/bin/nicotine --isolated' >/dev/null ;then
+	# NOTE: service restart to avoid init reconnects SEE: windowchef autostart
 	name=nicotine qutebrowser-instance http://localhost:6565/  # docker server
 elif sv status dockerd 2>&1 | grep -q '^Service:' ;then
 	notify critical nicotine "sevice not started"

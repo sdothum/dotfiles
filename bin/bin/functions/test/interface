@@ -1,0 +1,26 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Test
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................ digital interface
+
+# Usage: interface [hdmi | dp | displayport | <interface>]
+
+connected() { xrandr 2>/dev/null | grep "^${1}[^ ]* connected" | cut -d' ' -f1; }
+
+INTERFACE=$(echo $1| tr '[:lower:]' '[:upper:]' | sed 's/DISPLAYPORT/DP/')
+interface() {
+	case $INTERFACE in
+		''    ) connected ''         ;;
+		HDMI* ) connected $INTERFACE ;;
+		DP*   ) connected $INTERFACE ;;
+		*     ) connected ${1}       ;;
+	esac | head -1  # NOTE: active interface defaults to card port order if <interface>.*
+}
+
+interface=$(interface $1)
+[ "$interface" ] && echo $interface || exit 1
+
+# kak: filetype=sh
