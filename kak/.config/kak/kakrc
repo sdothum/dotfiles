@@ -81,7 +81,8 @@ declare-option str admonition %sh{ echo "\s(((?i)(
 add(ed|ition)
 |att(n|ention)
 |(be)*cause
-|bu[gt]
+|(de)*bug
+|but
 |deprecated
 |do(not)*
 |ex(ample)*
@@ -91,8 +92,10 @@ add(ed|ition)
 |hist(ory)*
 |important
 |note
+|option(al)*
 |remedy
 |see
+|test(ing)*
 |tip
 |todo
 |(un)*known
