@@ -51,6 +51,9 @@ echo -e "/var/log/dinit/*.log {
 sudo sed -i '/^echo "Checking root file system/s/^/# /; /^fsck -C/s,$, >/dev/null,' /usr/lib/dinit.d/early/scripts/root-fsck.sh
 sudo sed -i '/^fsck -A -R -C/s,$, >/dev/null,' /usr/lib/dinit.d/early/scripts/fs-fsck.sh
 
+# backup dinit "init"
+sudo cp -v /sbin/init /sbin/init.@dinit
+
 [ -e ${CHIMERA#*dinit} ] && exit
 
 sudo cp -rv $CHIMERA /etc

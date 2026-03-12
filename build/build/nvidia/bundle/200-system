@@ -6,8 +6,6 @@
 
 = dinit
 = ═════
-# elogind        # turnstile requirement?
-# turnstile
   dinit
 ! original -f /sbin/halt
 ! original -f /sbin/runit-init
@@ -15,6 +13,9 @@
   metalog
 ! sudo mkdir /var/log/dinit
 m chimera-dinit  # supercedes above runit-dinit
+  turnstile
+! sudo sed -i 's/runit/dinit/' /etc/turnstile/turnstiled.conf
+
 
 
 = runit
