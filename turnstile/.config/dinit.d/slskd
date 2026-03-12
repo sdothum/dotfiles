@@ -1,0 +1,4 @@
+type            = process
+command         = /etc/dinit.d/scripts/slskd
+smooth-recovery = yes
+logfile         = /home/shum/.local/state/log/dinit/slskd.log

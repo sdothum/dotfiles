@@ -1,0 +1,4 @@
+type            = process
+command         = /usr/bin/nzbget --server --option OutputMode=loggable -c /home/shum/.nzbget
+smooth-recovery = yes
+logfile         = /home/shum/.local/state/log/dinit/nzbget.log

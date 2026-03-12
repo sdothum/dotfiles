@@ -1,0 +1,7 @@
+#!/bin/sh
+# sdothum - 2016 (c) wtfpl
+
+export DOTNET_BUNDLE_EXTRACT_BASE_DIR=/var/tmp/slskd
+/opt/slskd/slskd
+
+# kak: filetype=sh

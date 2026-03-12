@@ -1,0 +1,5 @@
+type            = process
+command         = dbus-run-session /usr/bin/mpd /home/shum/.config/mpd/mpd.conf
+smooth-recovery = true
+log-type        = buffer
+
