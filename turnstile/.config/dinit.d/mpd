@@ -1,5 +1,7 @@
 type            = process
-command         = dbus-run-session /usr/bin/mpd /home/shum/.config/mpd/mpd.conf
+command         = /usr/bin/mpd --no-daemon /home/shum/.config/mpd/mpd.conf
+depends-on      = dbus
+depends-on      = pipewire
 smooth-recovery = true
 log-type        = buffer
 

@@ -1,5 +1,6 @@
 type            = process
 command         = /home/shum/.config/dinit.d/scripts/nicotine
 stop-command    = /home/shum/.config/dinit.d/scripts/nicotine stop
+depends-on      = dbus
 smooth-recovery = yes
 logfile         = /home/shum/.local/state/log/dinit/nicotine.log

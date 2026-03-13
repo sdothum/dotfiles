@@ -1,6 +1,0 @@
-type            = process
-command         = /usr/bin/wireplumber
-smooth-recovery = true
-depends-on      = pipewire
-log-type        = buffer
-
