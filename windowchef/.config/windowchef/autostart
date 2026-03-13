@@ -41,7 +41,7 @@ void 'runit' && dbus-run-session mpd /home/shum/.config/mpd/mpd.conf 2>/dev/null
 [ -e /tmp/nicotine ] || (sleep 9; sv -u restart nicotine; touch /tmp/nicotine) &  # HACK: to avoid init reconnects to slsknet server (cause unknown)
 
 if mpc queued >/dev/null ;then
-	(sleep 3; for i in play toggle toggle ;do mpc $i >/dev/null ;done; mpc:settings) &        # mpd tickling required to connect to pipewire
+	void 'runit' && (sleep 3; for i in play toggle toggle ;do mpc $i >/dev/null ;done; mpc:settings) &        # mpd tickling required to connect to pipewire
 else
 	piano  # nano hi resolution stream
 fi
