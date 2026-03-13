@@ -123,6 +123,6 @@ switch tag $DESK
 # autocutsel leaves a small square of black pixels in the bottom right corner
 # void && (xdotool search --sync --onlyvisible --name autocutsel windowunmap) &
 
-qk start
+# qk start  # deprecated (not python3 compatible)
 
 # kak: filetype=sh

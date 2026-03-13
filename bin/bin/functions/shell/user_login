@@ -19,6 +19,7 @@ if console ;then
 	fi
 	# sleep 1
 	# cbonsai -il
+	void 'dinit' && exists mpd && mpc play
 fi
 
 # kak: filetype=sh

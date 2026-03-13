@@ -70,16 +70,27 @@ runit() {
 }
 
 dinit() {
-	usage() { usage: "[user=<user>] $(basename $0) list | [@ | disable | enable | start | stop [--force] | restart | status | check | log] <service>"; exit 1; }
+	usage() {
+		echo "$(basename $0) [-u] list | @
+> [-u] [disable | enable | start | stop [--force] | restart | status | check | log] <service>" | usage:
+		exit 1
+	}
 
 	sv() { eval $super dinitctl $user $@; }
 
 	ls() {
 		services=$(sv list)
-		[ -L /etc/dinit.d ] && L=-L
-		for i in $(find $L $svroot/dinit.d -maxdepth 1 -type f -exec basename {} \; | sort) ;do
+		for i in $(find -L $svroot/dinit.d -maxdepth 1 -type f -exec basename {} \; | sort) ;do
 			echo "$services" | grep -q $i || echo $i
 		done | columns
+	}
+
+	logfile() {
+		if grep -q logfile $svroot/dinit.d/$1 ;then
+			sudo cat $(grep logfile $svroot/dinit.d/$1 | cut -d= -f2)
+		else
+			ditto $1 "no service logfile"
+		fi
 	}
 
 	# configure dinit daemon
@@ -94,7 +105,7 @@ dinit() {
 		restart ) sv $1 $2    ;;
 		status  ) sv $1 $2    ;;
 		check   ) sv status $2 | grep -q 'State: STARTED' ;;
-		log     ) sudo cat /var/log/dinit/$2.log | pager ;;
+		log     ) logfile $2 | pager ;;
 		*       ) sv status $1; usage ;;
 	esac
 	exit
