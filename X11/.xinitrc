@@ -38,8 +38,8 @@ autocutsel -selection PRIMARY -fork &
 # Enable automounting removable devices
 exists udiskie && udiskie --automount --notify --no-tray &
 alpine && /usr/libexec/pipewire-launcher
-pipewire >/dev/null 2>&1 &  # see windowschef autostart for mpd server
-clipit -d &                 # for webkit selections
+void 'runit' && pipewire >/dev/null 2>&1 &  # see windowschef autostart for mpd server
+clipit -d &                                 # for webkit selections
 
 # # ........................................................................ D-Bus
 
