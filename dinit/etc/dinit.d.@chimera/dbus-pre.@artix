@@ -1,6 +1,0 @@
-type         = scripted
-command      = /etc/dinit.d/scripts/dbus-pre
-# stop-command = /bin/bash /usr/lib/artix/sv-cg.sh down dbus
-after        = local.target
-restart      = false
-
