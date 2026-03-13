@@ -14,8 +14,7 @@
 ! sudo mkdir /var/log/dinit
 m chimera-dinit  # supercedes above runit-dinit
   turnstile
-! sudo sed -i 's/runit/dinit/' /etc/turnstile/turnstiled.conf
-
+! sudo sed -i -r '/^backend *=/s/=.*/= dinit/; /^(linger|manage_rundir) *=/s/=.*/= yes/' /etc/turnstile/turnstiled.conf
 
 
 = runit

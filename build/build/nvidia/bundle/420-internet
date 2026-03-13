@@ -30,6 +30,11 @@
 # qbittorrent
   nzbget             [server]
 d m sonarr           [server]
+! sudo useradd sonarr
+! sudo usermod -aG shum sonarr
+! sudo usermod -aG users sonarr
+! sudo chown -R $USER:users /var/lib/sonarr
+! sudo chown -R $USER:users /net/media/videos
   transmission-gtk   [server]
 
 

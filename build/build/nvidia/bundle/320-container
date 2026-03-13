@@ -18,8 +18,11 @@
 
 = containers
 = ══════════
-! docker pull sirjmann92/nicotineplus-proper [server]
+# ! docker pull sirjmann92/nicotineplus-proper [server]
 ! stow nicotine
+
+# ! docker pull linuxserver/docker-sonarr      [server]
+! stow sonarr
 
 
 # vim: set ft=conf: #
