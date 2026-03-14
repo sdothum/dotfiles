@@ -1,6 +1,6 @@
 # dbus session bus user service
 
 type               = process
-command            = /home/shum/.config/dinit.d/scripts/dbus --print-address=3
-ready-notification = pipefd:3
+command            = /home/shum/.config/dinit.d/scripts/dbus --print-address=4
+ready-notification = pipefd:4
 
