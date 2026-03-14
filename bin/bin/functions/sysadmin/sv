@@ -6,6 +6,49 @@
 
 # ......................................................... Init service wrapper
 
+dinit() {
+	usage() {
+		echo "$(basename $0) [-u] list | @
+> [-u] [disable | enable | start | stop [--force] | restart | status | check | log] <service>" | usage:
+		exit 1
+	}
+
+	sv() { eval $super dinitctl $user $@; }
+
+	ls() {
+		services=$(sv list)
+		for i in $(find -L $svroot/dinit.d -maxdepth 1 -type f -exec basename {} \; | sort) ;do
+			echo "$services" | grep -q $i || echo $i
+		done | columns
+	}
+
+	logfile() {
+		if grep -q logfile $svroot/dinit.d/$2 ;then
+			sudo $1 $(grep logfile $svroot/dinit.d/$2 | cut -d= -f2)
+		else
+			ditto $2 "no service logfile"
+		fi
+	}
+
+	# configure dinit daemon
+	[ "$1" = -u ] && { user=--user; svroot=$HOME/.config; shift; } || { super=sudo; svroot=/etc; }
+	case $1 in
+		''      ) sv list | grep -v '\] early-'; ls; usage ;;
+		'@'     ) sv list | pager; ls; usage ;;
+		disable ) sv $1 $2    ;;
+		enable  ) sv $1 $2    ;;
+		start   ) sv $1 $2    ;;
+		stop    ) sv $1 $2 $3 ;;  # [$2] == --force
+		restart ) sv $1 $2    ;;
+		status  ) sv $1 $2    ;;
+		check   ) sv status $2 | grep -q 'State: STARTED' ;;
+		log     ) logfile cat $2 | pager ;;
+		watch   ) logfile 'tail -f' $2   ;;
+		*       ) sv status $1; usage    ;;
+	esac
+	exit
+}
+
 openrc() {
 	usage() { usage: "$(basename $0) [add | delete | show | start | stop | restart | status | list] <service> [runlevel]"; exit 1; }
 
@@ -65,48 +108,6 @@ runit() {
 		start   |\
 		up      ) enabled && $SV up $service; status ;;
 		*       ) enabled && status || usage ;;
-	esac
-	exit
-}
-
-dinit() {
-	usage() {
-		echo "$(basename $0) [-u] list | @
-> [-u] [disable | enable | start | stop [--force] | restart | status | check | log] <service>" | usage:
-		exit 1
-	}
-
-	sv() { eval $super dinitctl $user $@; }
-
-	ls() {
-		services=$(sv list)
-		for i in $(find -L $svroot/dinit.d -maxdepth 1 -type f -exec basename {} \; | sort) ;do
-			echo "$services" | grep -q $i || echo $i
-		done | columns
-	}
-
-	logfile() {
-		if grep -q logfile $svroot/dinit.d/$1 ;then
-			sudo cat $(grep logfile $svroot/dinit.d/$1 | cut -d= -f2)
-		else
-			ditto $1 "no service logfile"
-		fi
-	}
-
-	# configure dinit daemon
-	[ "$1" = -u ] && { user=--user; svroot=$HOME/.config; shift; } || { super=sudo; svroot=/etc; }
-	case $1 in
-		''      ) sv list | grep -v '\] early-'; ls; usage ;;
-		'@'     ) sv list | pager; ls; usage ;;
-		disable ) sv $1 $2    ;;
-		enable  ) sv $1 $2    ;;
-		start   ) sv $1 $2    ;;
-		stop    ) sv $1 $2 $3 ;;  # [$2] == --force
-		restart ) sv $1 $2    ;;
-		status  ) sv $1 $2    ;;
-		check   ) sv status $2 | grep -q 'State: STARTED' ;;
-		log     ) logfile $2 | pager ;;
-		*       ) sv status $1; usage ;;
 	esac
 	exit
 }
