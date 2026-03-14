@@ -2,4 +2,5 @@ type         = scripted
 command      = /etc/dinit.d/scripts/nslookup
 stop-command = /etc/dinit.d/scripts/nslookup stop
 restart      = true
+logfile      = /var/log/dinit/nslookup.log
 depends-on   = NetworkManager

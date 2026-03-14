@@ -4,16 +4,25 @@
 server=google.com
 interface=wlp9s0
 
+timestamp() { date "+%y-%m-%d %H:%M:%S│  $@"; }
+
+iftickle() {
+	ifconfig $interface down
+	ifconfig $interface up
+	timestamp "interface: down..up"
+}
+
 ifcheck() {
 	while : ;do
 		speed=$(ping -c1 $server 2>/dev/null | grep 'time=' | sed -r 's/.*time=(.*)\..* ms/\1/')
-		[ ${speed:-100} -ge 100 ] && { ifconfig $interface down; ifconfig $interface up; }
+		[ ${speed:-100} -ge 100 ] && iftickle
 		sleep 10
 	done &
 }
 
 case $1 in
 	''   )
+		timestamp "starting on $interface: $server"
 		for i in $(seq 1 100) ;do
 			ping -c1 $server >/dev/null 2>&1 && { ifcheck; exit 0; }
 			sleep 0.1
