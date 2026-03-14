@@ -1,7 +1,7 @@
 # all device events have been processed
 
-type = internal
-# depends-on: early-devd
-# depends-ms: early-devmon
-waits-for: early-devd
-waits-for: early-devmon
+type         = internal
+# depends-on = early-devd
+# depends-ms = early-devmon
+waits-for    = early-devd
+waits-for    = early-devmon

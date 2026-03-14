@@ -3,6 +3,7 @@
 These files are based on the initial work by [summrum/void_dinit](https://github.com/summrum/void_dinit).
 
 The initial service files have been modified were necessary to run on my system. Notably the "network" service did not meet my needs and has been rewritten.
+
 ## udev
 
 Of particular note is the change of the "depends-on" udev-settle to "waits-for" udev-trigger for the "console-setup" and "filesystems" services. (The appropriate lines are commented out).
@@ -24,3 +25,14 @@ Other than the official [Dinit](https://davmac.org/projects/dinit/) project page
 Even with the udev-settle time, Runit (and by virtue of this dinit cloning of the service structure) is plenty fast (and faster than most other distros).
 
 Again, **USE AT YOUR OWN RISK**.
+
+## Chimera dinit
+
+This dinit.d organization has been **SUPERCEDED** by the **dinit.d.@chimere**
+branch and is no longer actively maintained.
+
+It offers greater granularity (requires git install) and utilized **turnstile**
+for additional user service management (many of the services have been
+relocated to ".config/dinit.d") and persistent availability.
+
+Also, services have been adjusted for better system management/performance.
