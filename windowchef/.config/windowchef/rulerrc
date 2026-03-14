@@ -80,12 +80,10 @@ class="audacious"
 # delay for pavucontrol/pipewire sync SEE: pulse
 
 class="pavucontrol"
-	window desktop $(chef desktop "CHEF")                            ;\
-	window size B6 rotate                                            ;\
-	window snap center                                               ;\
-	recipe -q pavucontrol && exit                                    ;\
-	recipe -a pavucontrol                                            ;\
-	xdotool search -onlyvisible -classname "pavucontrol" windowunmap ;\
+	window desktop $(chef desktop "CHEF")                                                  ;\
+	window size B6 rotate                                                                  ;\
+	window snap center                                                                     ;\
+	recipe pavucontrol && xdotool search -onlyvisible -classname "pavucontrol" windowunmap ;\
 	desktop $(chef desktop "DESK")
 
 # ........................................................................ media
