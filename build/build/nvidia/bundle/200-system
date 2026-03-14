@@ -15,6 +15,11 @@
 m chimera-dinit  # supercedes above runit-dinit
   turnstile
 ! sudo sed -i -r '/^backend *=/s/=.*/= dinit/; /^(linger|manage_rundir) *=/s/=.*/= yes/' /etc/turnstile/turnstiled.conf
+# REMEDY: shutdown pam_elogind error messages with seatd (and pam_rundir) session management
+  seatd
+  pam_rundir
+! sudo sed -i '/pam_elogind/s/^/# /' /etc/pam.d/system-login
+! sudo sed -i '/pam_elogind/s/^/# /; $asession required pam_rundir.so' /etc/pam.d/turnstiled
 
 
 = runit
