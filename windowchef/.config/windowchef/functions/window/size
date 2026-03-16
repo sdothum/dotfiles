@@ -57,18 +57,30 @@ reterm() {
 	waitron window_snap middle
 }
 
+# ................................................................. Display size
+
+addgap() { echo $(( $1 + gap )) $(( $2 + gap )); }
+
+display() {
+	case $1 in
+		1080* ) size $winid $(addgap 1920 1080) $2 ;;  # 2073600 (pixel area)
+		720*  ) size $winid $(addgap 1280  720) $2 ;;  #  921600
+		480*  ) size $winid $(addgap  720  480) $2 ;;  #  345600
+	esac
+}
+
 # ................................................................... Paper size
 
 paper() {
 	case $1 in
-		A3* ) size $winid 1334 1890 $2 ;;  # 2521260 (pixel area)
-		B4* ) size $winid 1123 1587 $2 ;;  # 1782201
-		A4* ) size $winid  945 1334 $2 ;;  # 1260630
-		B5* ) size $winid  794 1123 $2 ;;  #  891662
-		A5* ) size $winid  665  945 $2 ;;  #  628425
-		B6* ) size $winid  559  794 $2 ;;  #  443846
-		A6* ) size $winid  472  665 $2 ;;  #  313880
-		B7* ) size $winid  397  559 $2 ;;  #  221923
+		A3* ) size $winid $(addgap 1334 1890) $2 ;;  # 2521260 (pixel area)
+		B4* ) size $winid $(addgap 1123 1587) $2 ;;  # 1782201
+		A4* ) size $winid $(addgap  945 1334) $2 ;;  # 1260630
+		B5* ) size $winid $(addgap  794 1123) $2 ;;  #  891662
+		A5* ) size $winid $(addgap  665  945) $2 ;;  #  628425
+		B6* ) size $winid $(addgap  559  794) $2 ;;  #  443846
+		A6* ) size $winid $(addgap  472  665) $2 ;;  #  313880
+		B7* ) size $winid $(addgap  397  559) $2 ;;  #  221923
 	esac
 }
 
@@ -76,6 +88,7 @@ case $1 in
 	mono* ) monocle     ;;
 	term  ) reterm      ;;
 	[AB]* ) paper $1 $2 ;;
+	*p    ) display $1  ;;
 	*/*   ) aspect ${1%/*} ${1#*/}      ;;
 	*x*   ) size $winid ${1%x*} ${1#*x} ;;
 	desk* ) size $winid $W $H; waitron window_snap middle             ;;

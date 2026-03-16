@@ -1,0 +1,32 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/enlarge $@" . $PARENT
+
+# Windowchef
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................... Step up/down tv size
+
+# Usage: window enlarge + | - SEE: window size (paper pixel dimensions)
+
+eval $(xdotool getwindowgeometry -shell $winid)
+area=$(( (${HEIGHT#*=} - gap) * (${WIDTH#*=} - gap) ))
+
+if [ "$1" = '+' ] ;then
+	if   [ $area -ge 921600 ] ;then
+		window size 1080p
+	elif [ $area -ge 345600 ] ;then
+		window size 720p
+	else
+		window size 480p
+	fi
+else
+	if   [ $area -le 921600 ] ;then
+		window size 480p
+	elif [ $area -le 2073600 ] ;then
+		window size 720p
+	else
+		window size 1080p
+	fi
+fi
+
+# kak: filetype=sh

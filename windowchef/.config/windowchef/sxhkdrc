@@ -107,7 +107,10 @@ super + {_,ctrl} + space
 	waitron {window_ver_maximize, window_hor_maximize}
 
 super + alt + {space,BackSpace}
-	window enlarge {+,-}
+	window tvsize {+,-}
+
+super + alt + shift + {space,BackSpace}
+	window papersize {+,-}
 
 super + alt + Return
 	window size term            ;\
