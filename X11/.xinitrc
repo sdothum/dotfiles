@@ -90,8 +90,9 @@ tv_over() { xrandr $OFF --output $1 --primary --mode $2 --rate 60 --dpi 96; }
 
 interface=${interface:-$(interface dp || interface hdmi)}           # DEBUG: env interface=<interface> x
 case $interface in
-	DP*   ) OFF="--output $(interface hdmi) --off"  || unset OFF ;;  # FOR: multiple interfaces to a single monitor
-	HDMI* ) OFF="--output $(interface dp) --off"    || unset OFF ;;
+# DP*   ) OFF="--output $(interface hdmi) --off" || unset OFF; RGB='--set "Broadcast RGB" "Full"' ;;  # FOR: multiple interfaces to a single monitor
+	DP*   ) OFF="--output $(interface hdmi) --off" || unset OFF ;;  # FOR: multiple interfaces to a single monitor
+	HDMI* ) OFF="--output $(interface dp) --off"   || unset OFF ;;
 esac
 
 case $(hostname) in
@@ -102,7 +103,7 @@ case $(hostname) in
 esac
 # pulseeffects --gapplication-service &
 
-gpu nvidia && nvidia_fan
+gpu nvidia && { nvidia_fan; nvidia-settings -a CurrentMetaMode='DP-0: 3440x1440 { ViewPortIn=3440x1440, ViewPortOut=3440x1440+0+0, HDMIArgbRange=Full}'; }
 
 # ............................................................... Window manager
 
