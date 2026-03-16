@@ -175,7 +175,8 @@ addm %{ test b  : map global buffer *   ': buffer *debug*<ret>'            -docs
 addm %{ file d1 : map global buffer d   ': sync<ret>: delete-buffer<ret>'  -docstring 'delete    —— with save,discard!'  }
 addm %{ file d2 : map global buffer D   ': delete-buffer!<ret>'            -docstring 'delete    —— with save,discard!'  }
 # SEE: kakpipe alpha subsort in xdisplay-plugins
-addm %{ file q  : map global buffer q   ': quit!<ret>'                     -docstring 'quit!' }
+addm %{ file q1 : map global buffer q   ': quit!<ret>'                     -docstring 'quit      —— !,with discard' }
+addm %{ file q2 : map global buffer Q   ': quit!<ret>'                     -docstring 'quit      —— !,with discard' }
 addm %{ file w1 : map global buffer w   ': sync<ret>'                      -docstring 'write     —— save,and quit!' }
 addm %{ file w2 : map global buffer W   ': sync<ret>: quit!'               -docstring 'write     —— save,and quit!' }
 addm %{ file x  : map global buffer x   ': sync<ret>: write-all-quit<ret>' -docstring 'save all and quit' }
