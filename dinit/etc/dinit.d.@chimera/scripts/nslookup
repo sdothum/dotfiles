@@ -3,7 +3,7 @@
 
 server=google.com
 interface=wlp9s0
-threshold=100  # minimum ping expectancy (ms)
+latency=100  # minimum acceptable (ms)
 
 timestamp() { date "+%y-%m-%d %H:%M:%S│  $@"; }
 
@@ -16,7 +16,7 @@ iftickle() {
 ifcheck() {
 	while : ;do
 		speed=$(ping -c1 $server 2>/dev/null | grep 'time=' | sed -r 's/.*time=([0-9]*).*/\1/')
-		[ ${speed:-$threshold} -ge $threshold ] && iftickle
+		[ ${speed:-$latency} -ge $latency ] && iftickle
 		sleep 10
 	done &
 }
