@@ -14,15 +14,13 @@ case $1 in
 	on  )
 		conky clock stop
 		[ -e $BLACKBOARD ] || blackboard  # bypass blackboard toggling if already on
-		# hdmi && pulse                   # check hdmi audio
+		# interface -q hdmi && pulse         # check hdmi audio
 		;;
-	
 	off )
 		conky clock auto
 		pstat 'menu (media|movies|series)' || restore root
 		# xdotool key Ctrl+space          # clear potential pulse message
 		;;
-	
 	*   ) usage ;;
 esac
 

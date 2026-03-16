@@ -6,9 +6,11 @@
 
 # ............................................................ digital interface
 
-# Usage: interface [hdmi | dp | displayport | <interface>]
+# Usage: interface [-q] [hdmi | dp | displayport | <interface>]
 
 connected() { xrandr 2>/dev/null | grep "^${1}[^ ]* connected" | cut -d' ' -f1; }
+
+[ "$1" = '-q' ] && { quiet=true; shift; }
 
 INTERFACE=$(echo $1| tr '[:lower:]' '[:upper:]' | sed 's/DISPLAYPORT/DP/')
 interface() {
@@ -21,6 +23,6 @@ interface() {
 }
 
 interface=$(interface $1)
-[ "$interface" ] && echo $interface || exit 1
+[ "$interface" ] && { [ $quiet ] || echo $interface; exit 0; } || exit 1
 
 # kak: filetype=sh

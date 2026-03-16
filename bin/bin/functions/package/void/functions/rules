@@ -8,6 +8,7 @@ gpg       pinentry-gtk
 database  postgresql
 runit     dinit
 runit     runit-void
+turnstile turnstile
 framework ruby
 # mouse   xorg-server  # deprecated (logitech trackball replaced with nulea)
 
