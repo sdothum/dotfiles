@@ -9,6 +9,7 @@
 sudo xbps-install -y glibc-devel gtk+3-devel libXxf86vm-devel pkg-config python3-devel
 
 cd $HOME
+[ -e venv-displaycal ] && rm -rf venv-displaycal
 python -m venv venv-displaycal
 . venv-displaycal/bin/activate
 pip3 install displaycal
