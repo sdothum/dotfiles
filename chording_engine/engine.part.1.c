@@ -164,3 +164,5 @@ void tap_key(int16_t keycode) {
 	wait_ms(TAP_TIMEOUT);
 	key_out(keycode);
 }
+
+// kak: filetype=c

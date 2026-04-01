@@ -303,7 +303,7 @@ void clear(const struct Chord* self);
 void string_in(const struct Chord* self) {
 	if (*self->state == ACTIVATED) {
 		char buffer[STRING_MAX_LENGTH];
-		strcpy_P(buffer, (char*)PGM_READ_WORD(&(strings[self->value1])));
+		strcpy_P(buffer, (char*) pgm_read_ptr(&(strings[self->value1])));
 		send_string(buffer);
 		// clear(self);  // this clears STR+raise issue BUT raises layer immediately after STR
 		tap_key(KC_NO);  // clear layer key (down) tap value on STR+raise
@@ -324,3 +324,5 @@ void reset(const struct Chord* self) {
 		reset_keyboard_kb();
 	}
 }
+
+// kak: filetype=c

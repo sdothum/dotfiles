@@ -457,3 +457,5 @@ def secret_chord(PSEUDOLAYER, ACTION, INPUT_STRING, data, output_buffer, index, 
 	hash = hash[3:]
 	if hash != "":
 		return add_key(PSEUDOLAYER, hash, ACTION, output_buffer, index, number_of_strings, strings)
+
+# kak: filetype=py

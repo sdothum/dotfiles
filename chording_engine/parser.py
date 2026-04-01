@@ -13,6 +13,9 @@ newline_separator = (lambda x, y: str(x) + "\n" + str(y))
 
 def add_includes(data):
 	output_buffer = ""
+	output_buffer += "#include <stdint.h>\n"
+	output_buffer += "#include <stdio.h>\n"
+
 	if not ("do_not_include_QMK" in data["parameters"] and data["parameters"]["do_not_include_QMK"] == True):
 		output_buffer += "#include QMK_KEYBOARD_H\n"
 	if len(data["extra_dependencies"]) > 0:
@@ -52,14 +55,14 @@ def add_parameters(data):
 	return output_buffer + "\n"
 
 def add_keycodes(data):
-	output_buffer = "#define PGM_READ_WORD(addr) ((uint64_t *)(addr))\n\n"
+	output_buffer = ""
 
 	if not len(data["keys"]) == len(set(data["keys"])):
 		raise Exception("The keys must have unique names")
 
 	for key, counter in zip(data["keys"], range(0, len(data["keys"]))):
 		# output_buffer += "#define H_" + key + " ((HASH_TYPE) 1 << " + str(counter) + ")\n"
-		output_buffer += "#define H_" + key + " ((int64_t) 1ULL << " + str(counter) + ")\n"
+		output_buffer += "#define H_" + key + " ((uint64_t) 1ULL << " + str(counter) + ")\n"
 	output_buffer += "\n"
 
 	output_buffer += "enum internal_keycodes {\n"
@@ -213,9 +216,9 @@ def main():
 		print(strings)
 		keyboard_part_1 = parse_strings_for_chords(data, strings)
 
-		engine_part_1 = open("engine.part.1", "r").read()
-		engine_part_2 = open("engine.part.2", "r").read() + "\n"
-		engine_part_3 = open("engine.part.3", "r").read()
+		engine_part_1 = open("engine.part.1.c", "r").read()
+		engine_part_2 = open("engine.part.2.c", "r").read() + "\n"
+		engine_part_3 = open("engine.part.3.c", "r").read()
 
 		output_buffer = keyboard_part_0
 		output_buffer += engine_part_1
