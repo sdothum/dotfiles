@@ -77,7 +77,7 @@ source "%val{config}/ui.kak"
 source "%val{config}/ux.kak"
 
 # inline admonitions
-declare-option str admonition %sh{ echo "\s(((?i)(
+declare-option str admonition %sh{ echo "[\s\"'](((?i)(
 add(ed|ition)
 |att(n|ention)
 |(be)*cause
