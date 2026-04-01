@@ -39,7 +39,7 @@ usage() {
 > t-[asymmetric[+|-[-]]|cross[+]|descending[+]|flat]
 > y-straight
 
-> 0-[split|cutout]
+> 0-[split|tall|cutout]
 > at-tall
 > paren-flat
 > percent[.|/]
@@ -198,6 +198,7 @@ cmdopts() {
 
 			0-cutout       ) zero=$1    ;;
 			0-split        ) zero=$1    ;;
+			0-tall         ) zero=$1    ;;
 			1-nobase       ) one=$1     ;;
 			4-open+        ) four=$1    ;;
 			at-tall        ) at=$1      ;; # source code variant
@@ -298,7 +299,7 @@ elif [ "$test" ] ;then
 	dfont dyslexic I-serifed space=2.2 family=qclocktwo l-ascending j-serifless m-straight  # conky qclocktwo font
 
 elif [ "$cities" ] ;then
-	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat l-ascending Q-open 1-nobase f-extended+= a-double_ d-tailed y-turn J-descending utf-8 serifless serifed pseudokern percent/
+	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat l-ascending Q-open 1-nobase f-extended+= a-double_ d-tailed y-turn J-descending utf-8 serifless serifed pseudokern percent/ 0-tall
  	emdash
 	e_ink nagoya     grote I-serifless  t-asymmetric-- m-straight y-turn
 	e_ink gotham     grote I-serifless  t-cross+       m-straight f-extended_
@@ -374,7 +375,7 @@ elif [ $family ] ;then                    # custom e-ink font (non-published)
 	e_ink ${family#*=}
 
 elif [ $web ] ;then                       # www fonts
-	unset cap; emdash; cmdopts t-descending l-ascending Q-open 1-nobase a-double_ p-eared m-rounded y-turn j-serifed J-descending f-extended++ percent/
+	unset cap; emdash; cmdopts t-descending l-ascending Q-open 1-nobase a-double_ p-eared m-rounded y-turn j-serifed J-descending f-extended++ percent/ 0-tall
 	wfont heading  quasi-ext space=1.100 webfont serifless serifed family=wMonolegible l-ascending q-hook_ d-tailed pseudokern pseudokern
 	wfont dyslexic quasi-ext             webfont serifless serifed I-serifless l-ascending f-flat++ family=wMonolexic q-hook_ d-tailed pseudokern
 	wfont dyslexic quasi-ext space=1.125 webfont I-serifless J-serifless family=wCaps d-tailed pseudokern
@@ -389,7 +390,7 @@ else                                      # desktop fonts
 	unset space
 	# cmdopts t-asymmetric-- j-serifed 1-nobase at-tall l-hooky f-flat++ y-turn
 	# NOTE: source code highlighting distinguishes lower case "l" (el) from "|" (bar)
-	cmdopts t-descending j-serifed 1-nobase at-tall l-ascending f-extended++ y-turn J-descending a-double_ d-tailed
+	cmdopts t-descending j-serifed 1-nobase at-tall l-ascending f-extended++ y-turn J-descending a-double_ d-tailed 0-tall
 	dfont $leading 1-base  # l-flat
 	[ $HOME/thedarnedestthing.com/application/public/fonts/ ] && cp -v $FONTS/Iosevka/*ttf $HOME/thedarnedestthing.com/application/public/fonts/
 	dfont proof    l-ascending I-serifless

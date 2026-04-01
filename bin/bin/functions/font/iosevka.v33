@@ -72,7 +72,7 @@ usage() {
 > w-asymmetric
 > y-[straight|turn]
 
-> 0-[split|cutout]
+> 0-[split|tall|cutout]
 > 1-[[no]base|flat]
 > 4-open[+]
 > asterisk-high
@@ -198,6 +198,7 @@ variant() {
 		case $o in
 			0-cutout       ) glyph zero=reverse-slashed-cutout                          ;;
 			0-split        ) glyph zero=reverse-slashed-split                           ;;
+			0-tall         ) glyph zero=tall-reverse-slashed                            ;;
 			1-base         ) glyph one=base                                             ;;
 			1-nobase       ) glyph one=no-base                                          ;;
 			1-flat         ) glyph one=no-base-flat-top-serif                           ;;
@@ -482,6 +483,7 @@ cmdopts () {
 
 			0-cutout       ) variant $1 ;;
 			0-split        ) variant $1 ;;
+			0-tall         ) variant $1 ;;
 			1-base         ) variant $1 ;;
 			1-nobase       ) variant $1 ;;
 			1-flat         ) variant $1 ;;

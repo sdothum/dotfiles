@@ -1,0 +1,26 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Office
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .......................................................... stardict conversion
+
+usage() { usage: "$(basename $0) <input/stardict.ifo>"; exit 1; }
+
+# strip out html (so MUpdf uses custom KOReader font)
+[ -z "${1##*ifo}" ] || [ -f "$1" ] || usage
+IFO=${1##*/}
+XML=${1%/*}.xml
+[ -e "$XML" ] && rm -rf $XML
+mkdir -p $XML
+cd $HOME
+. venv-pyglossary/bin/activate
+
+cd -
+pyglossary $1 $XML/${IFO%.ifo}.xml --read-format="Stardict" --write-format="StardictTextual"
+cd $XML
+stardict-text2bin ${IFO%.ifo}.xml $IFO
+ditto $(basename $(pwd)) "$(ls -lAh)"
+
+# kak: filetype=sh

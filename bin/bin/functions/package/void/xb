@@ -25,11 +25,12 @@ $(basename $0)  B | C | H | I | U
 >  H    held (list)
 >  I    installed (count)
 >  U    upgrade system
-$(basename $0)  [/ | f** | [-]d | h] [<package> | <file>**]
+$(basename $0)  [/ | f** | [-]d | h | I | r] [<package> | <file>**] | i
 >  / .. search (package and description)
 >  f .. find (file)
 >  d .. depends on
->  h .. history
+>  h .. history (package)
+>  i .. history
 >  I .. installed (package)
 >  r .. required by
 >    .. query" | usage:
@@ -98,19 +99,21 @@ case $1 in
 	f  ) action=file ;;
 	d  ) action=dependson ;;
 	h  ) action=history ;;
+	i  ) action=incremental ;;
 	r  ) action=requiredby ;;
 	?  ) usage ;;
 	*  ) action=query; set -- 0 $@ ;;  # preserve argv stack
 esac
 
 shift; [ $1 ] || case $action in
-	backup  ) ;;
-	check   ) ;;
-	held    ) ;;
-	history ) ;;
-	count   ) ;;
-	upgrade ) ;;
-	*       ) usage ;;
+	backup      ) ;;
+	check       ) ;;
+	held        ) ;;
+	history     ) ;;
+	incremental ) ;;
+	count       ) ;;
+	upgrade     ) ;;
+	*           ) usage ;;
 esac
 
 options=" $@"
@@ -127,8 +130,16 @@ upgrade_actions() {
 }
 
 history() {
-	xilog | grep $(xilog | tail -1 | awk '{ print $3 }') | pager
-	ifno 'full history' || xilog | tac | less
+	if [ $1 ] ;then
+		xilog | grep $(xilog | tail -1 | awk '{ print $3 }') | pager
+		ifno 'full history' || xilog | tac | less
+	else
+		clear
+		for i in $(xilog | awk '{ print $3 }' | sort -u -r) ;do
+			[ $started ] && { ifyes "$i" || break; } || { echo -e "${YELLOW}last upgrade $i$NOCOLOR\n"; started=true; }
+			xilog | grep $i | pager
+		done
+	fi
 }
 
 downgrade() {
@@ -161,25 +172,26 @@ status() {
 }
 
 case $action in
-	backup     ) rsync -av $CACHE $BACKUP ;;
-	check      ) ditto xbps 'checking database..'; check || ifno "reinstall (ERROR) packages" || repair ;;  # suppress hash mismatch (bash redirect syntax)
-	count      ) ditto installed "$(xbps-query -l $options | wc -l) packages" ;;
-	dependson  ) ditto "$package" "depends on.."; for i in $(xbps-query -x $package | sed 's/>=.*//; s/-[0-9].*/-/') ;do installed $i ;done | sort ;;
-	downgrade  ) downgrade $@ ;;  # downgrade must include package dependencies
-	file       ) xlocate $package ;;
-	force      ) sudo xbps-install -f $yes $options $package ;;
-	held       ) for i in $(xbps-query --list-hold-pkgs) ;do ditto held "$i $(status $i)" ;done | column -t ;;
-	history    ) if [ $package ] ;then [ $(ls -l $CACHE/$package* 2>/dev/null | wc -l) -gt 0 ] && for i in $CACHE/$package*xbps ;do installed ${i##*/} ;done | sort ;else history ;fi ;;
-	hold       ) [ $pkgver ] && { sudo xbps-pkgdb -m hold $options $package; xb H; [ -e $ITERATE ] || xb C; } ;;
-	installed  ) xbps-query -l $options | grep '^ii' | cut -d' ' -f2- | sed -r "s/^([^ ]*)/${yellow}\1${NOCOLOR}/" | grep "$@" ;;
-	query      ) [ $options ] && xbps-query -R $options $package | pager || xbps-query -Rs $options "$package" | a $package | pager ;;
-	remove     ) sudo xbps-remove $recursive $options $package ;;
-	requiredby ) ditto "$package" "required by.."; xbps-query -X $package ;;
-	search     ) xbps-query -Rs $options $package | a $package | pager ;;
-	sync       ) sudo xbps-install $yes $options $package ;;
-	update     ) sudo xbps-install $yes $options -u $package ;;
-	upgrade    ) sudo xbps-install -y -u xbps | grep -q 'is up to date' || sudo xbps-install $options -u; upgrade_actions; xb H ;;  # 2 stage upgrade!
-	unhold     ) [ $pkgver ] && { sudo xbps-pkgdb -m unhold $options $package; ditto unhold "$pkgver"; } ;;
+	backup      ) rsync -av $CACHE $BACKUP ;;
+	check       ) ditto xbps 'checking database..'; check || ifno "reinstall (ERROR) packages" || repair ;;  # suppress hash mismatch (bash redirect syntax)
+	count       ) ditto installed "$(xbps-query -l $options | wc -l) packages" ;;
+	dependson   ) ditto "$package" "depends on.."; for i in $(xbps-query -x $package | sed 's/>=.*//; s/-[0-9].*/-/') ;do installed $i ;done | sort ;;
+	downgrade   ) downgrade $@ ;;  # downgrade must include package dependencies
+	file        ) xlocate $package ;;
+	force       ) sudo xbps-install -f $yes $options $package ;;
+	held        ) for i in $(xbps-query --list-hold-pkgs) ;do ditto held "$i $(status $i)" ;done | column -t ;;
+	history     ) if [ $package ] ;then [ $(ls -l $CACHE/$package* 2>/dev/null | wc -l) -gt 0 ] && for i in $CACHE/$package*xbps ;do installed ${i##*/} ;done | sort ;else history list ;fi ;;
+	hold        ) [ $pkgver ] && { sudo xbps-pkgdb -m hold $options $package; xb H; [ -e $ITERATE ] || xb C; } ;;
+	incremental ) history ;;
+	installed   ) xbps-query -l $options | grep '^ii' | cut -d' ' -f2- | sed -r "s/^([^ ]*)/[*] ${GREEN}\1${NOCOLOR}/" | grep "$@" ;;
+	query       ) [ $options ] && xbps-query -R $options $package | pager || xbps-query -Rs $options "$package" | a $package | pager ;;
+	remove      ) sudo xbps-remove $recursive $options $package ;;
+	requiredby  ) ditto "$package" "required by.."; xbps-query -X $package ;;
+	search      ) xbps-query -Rs $options $package | a $package | pager ;;
+	sync        ) sudo xbps-install $yes $options $package ;;
+	update      ) sudo xbps-install $yes $options -u $package ;;
+	upgrade     ) sudo xbps-install -y -u xbps | grep -q 'is up to date' || sudo xbps-install $options -u; upgrade_actions; xb H ;;  # 2 stage upgrade!
+	unhold      ) [ $pkgver ] && { sudo xbps-pkgdb -m unhold $options $package; ditto unhold "$pkgver"; } ;;
 esac
 
 # kak: filetype=sh

@@ -6,7 +6,7 @@
 
 # ................................................................. QMK firmware
 
-usage() { usage: "$(basename $0) <keyboard> <keymap> [steno [nomouse]] [<string> [<string>]] [flash]"; exit 1; }
+usage() { usage: "[compile=true] $(basename $0) <keyboard> <keymap> [steno [nomouse]] [<string> [<string>]] [flash]"; exit 1; }
 
 # NOTE: now configured for python3 virtual environment SEE: venv-qmk/bin/activate below
 
@@ -38,6 +38,8 @@ SOURCE=$STOW/$model/${KEYMAP#$ROOT/}
 ditto "$KEYBOARD" "$keymap"
 # ifno 'sync qmk_firmware repo' || { cd $QMK; rm -rf $KEYBOARD; git pull origin master; }
 
+if [ -z $compile ] ;then  # NOTE: bypass direct to compile keymap.c
+
 # update keymap from stow repo
 mkdir -p $KEYMAP 2>/dev/null
 rsync -av --exclude .deprecated $SOURCE $KEYBOARD/keymaps/
@@ -47,6 +49,7 @@ rsync -av --exclude .deprecated $SOURCE $KEYBOARD/keymaps/
 
 # chording engine? generate keymap.c from json
 if [ $chording_engine ] ;then
+	ditto json "$chording_engine"
 	case $1 in
 		'' | flash ) ;;
 		*          ) sed -i "s/STR(SECRET)/STR($1)/" $JSON; shift ;;
@@ -82,6 +85,11 @@ else
 		'' | flash ) sed -i "/#define PUBLIC_STRING/c#define PUBLIC_STRING \"$(cat $HOME/.forward)\"" $CONFIG ;;
 		*          ) sed -i "/#define PUBLIC_STRING/c#define PUBLIC_STRING \"$1\"" $CONFIG; shift ;;
 	esac
+fi
+
+else  # NOTE: bypass direct to compile keymap.c
+	shift $#
+	set -- flash
 fi
 
 cd $QMK
