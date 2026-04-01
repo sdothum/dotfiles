@@ -10,20 +10,22 @@ sudo iwconfig wlp9s0 power off  # disable powersave mode (to prevent sleeping co
 
 restore root
 conky clock auto
+dunst &
 restore unclutter
 displaycal3            # load color profile
-
 imwheel -kill          # set trackball scrollwheel speed
-recipe -d pavucontrol  # hide pavucontrol SEE: rulerrc
-void 'runit' && pulse  # optional
+
 udev
+void 'runit' && pulse || { sv -u check pipewire || pulse; }
 
 desktop $(chef desktop "DESK")
 # replaced by .session/windowchef/autostart/<command>*
 # recipe -q cbonsai && cbonsai
 # recipe -q term    && { title="$(recipe term)"; term "${title%% *}" $(recipe term); }
 # recipe -q ping    && SCROLLING=0 term 'ping' class=ping $(recipe ping)
+recipe -a pavucontrol  # hide pavucontrol SEE: rulerrc
 recipe autostart | while read cmd ;do sleep 1; eval $cmd ;done
+recipe -d pavucontrol
 
 # if not booting with dinit.. (issue running as runit service)
 if void 'runit' ;then
@@ -32,16 +34,18 @@ if void 'runit' ;then
 fi
 
 restore panel  # postponed as long as possible to avoid dirty trace messages
-exists mpd || exit
-
-sleep 1        # settle pipewire for mpd server connection
-void 'runit' && dbus-run-session mpd /home/shum/.config/mpd/mpd.conf 2>/dev/null
 
 # [ -e /tmp/nicotine-plus ] || { make_install nicotine-plus; touch /tmp/nicotine-plus; }  # for nightly build
 [ -e /tmp/nicotine ] || (sleep 10; sv -u restart nicotine; touch /tmp/nicotine) &  # HACK: to avoid init reconnects to slsknet server (cause unknown)
+exists mpd || exit
+exit
 
-if mpc queued >/dev/null ;then
-	void 'runit' && (sleep 3; for i in play toggle toggle ;do mpc $i >/dev/null ;done; mpc:settings) &        # mpd tickling required to connect to pipewire
+sleep 1        # settle pipewire for mpd server connection
+MPDCFG=$XDG_CONFIG_HOME/mpd/mpd.conf
+void 'runit' && dbus-run-session mpd $MPDCFG 2>/dev/null || { sv -u check mpd || dbus-run-session mpd $MPDCFG 2>/dev/null; }
+
+if [ "$(mpc queued)" ] ;then
+	void 'runit' && (sleep 3; for i in play toggle toggle ;do mpc $i >/dev/null ;done; mpc:settings) &  # mpd tickling required to connect to pipewire
 else
 	piano  # nano hi resolution stream
 fi

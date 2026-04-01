@@ -29,7 +29,8 @@ STARTREK=$(recipe panel/startrek) && ICANDY="#$STARTREK" || ICANDY="$DEFAULT_FG"
 transparency() { echo "#$1${2#\#}"; }  # Usage: transparency <amount> #<rrggbb>
 
 # panel font
-PANEL_FONT=monograffic  # NOTE: this font does not have NerdFont glyphs (not a pure monospaced font)
+# PANEL_FONT=$(recipe panel/font) || PANEL_FONT=monograffic  # NOTE: this font does not have NerdFont glyphs (not a pure monospaced font)
+PANEL_FONT=$(recipe panel/font) || PANEL_FONT=Iosevka
 PANEL_UNDERLINE=2       # thickness
 
 # panel symbols (tag numbers option dropped to simplify colour assignments)
