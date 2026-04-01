@@ -1,13 +1,13 @@
 {
 	"keys": [
-		"TOP1" , "TOP2" , "TOP3" , "TOP4" , "TOP5" , "TOP6" ,            "TOP7" , "TOP8" , "TOP9" , "TOP10" , "TOP11" , "TOP12" ,
-		"MID1" , "MID2" , "MID3" , "MID4" , "MID5" , "MID6" ,            "MID7" , "MID8" , "MID9" , "MID10" , "MID11" , "MID12" ,
-		"BOT1" , "BOT2" , "BOT3" , "BOT4" , "BOT5" , "BOT6" ,            "BOT7" , "BOT8" , "BOT9" , "BOT10" , "BOT11" , "BOT12" ,
-											"THU1" , "THU2" , "THU3" ,            "THU4" , "THU5" , "THU6"
+		"TOP2" , "TOP3" , "TOP4" , "TOP5" , "TOP6" ,            "TOP7" , "TOP8" , "TOP9" , "TOP10" , "TOP11" ,
+		"MID2" , "MID3" , "MID4" , "MID5" , "MID6" ,            "MID7" , "MID8" , "MID9" , "MID10" , "MID11" ,
+		"BOT2" , "BOT3" , "BOT4" , "BOT5" , "BOT6" ,            "BOT7" , "BOT8" , "BOT9" , "BOT10" , "BOT11" ,
+								"THU1" , "THU2" , "THU3" ,            "THU4" , "THU5" , "THU6"
 	],
 	"parameters": {
 		"_comment": "tighten leader_timeout from 750 to counter unexpected ',.' -> ';' autorepeat",
-		"layout_function_name": "LAYOUT_split_3x6_3",
+		"layout_function_name": "LAYOUT_split_3x5_3",
 		"chord_timeout": 100,
 		"dance_timeout": 100,
 		"leader_timeout": 450,
@@ -22,17 +22,27 @@
 	"layers": [
 		{
 			"type": "auto"
+		},
+		{
+			"type": "manual",
+			"_comment": "OPTIONAL: for physical keyswitch testing (table must use QMK keycode names)",
+			"keycodes": [
+				"KC_COLON" , "KC_Y"     , "KC_O"    , "KC_U" , "KC_MINUS" ,            "KC_G"   , "KC_D"   , "KC_N"    , "KC_M" , "KC_X" ,
+				"KC_Q"     , "KC_H"     , "KC_E"    , "KC_A" , "KC_W"     ,            "KC_C"   , "KC_T"   , "KC_R"    , "KC_S" , "KC_Z" ,
+				"KC_J"     , "KC_COMMA" , "KC_DOT"  , "KC_K" , "KC_QUOTE" ,            "KC_B"   , "KC_P"   , "KC_L"    , "KC_F" , "KC_V" ,
+												  "KC_LSFT" , "KC_I" , "KC_BSPC"  ,            "KC_ENT" , "KC_SPC" , "KC_RSFT"
+			]
 		}
 	],
 	"chord_sets": [
 		{
 			"name": "rows",
 			"chords": [
-				["TOP1"]         , ["TOP2"]         , ["TOP3"]         , ["TOP4"]         , ["TOP5"]         , ["TOP6"]         ,            ["TOP7"]         , ["TOP8"]         , ["TOP9"]         , ["TOP10"]          , ["TOP11"]          , ["TOP12"]          ,
-				["TOP1", "MID1"] , ["TOP2", "MID2"] , ["TOP3", "MID3"] , ["TOP4", "MID4"] , ["TOP5", "MID5"] , ["TOP6", "MID6"] ,            ["TOP7", "MID7"] , ["TOP8", "MID8"] , ["TOP9", "MID9"] , ["TOP10", "MID10"] , ["TOP11", "MID11"] , ["TOP12", "MID12"] ,
-				["MID1"]         , ["MID2"]         , ["MID3"]         , ["MID4"]         , ["MID5"]         , ["MID6"]         ,            ["MID7"]         , ["MID8"]         , ["MID9"]         , ["MID10"]          , ["MID11"]          , ["MID12"]          ,
-				["BOT1"]         , ["BOT2"]         , ["BOT3"]         , ["BOT4"]         , ["BOT5"]         , ["BOT6"]         ,            ["BOT7"]         , ["BOT8"]         , ["BOT9"]         , ["BOT10"]          , ["BOT11"]          , ["BOT12"]          ,
-																							["THU1"]         , ["THU2"]         , ["THU3"]         ,            ["THU4"]         , ["THU5"]         , ["THU6"]
+				["TOP2"]         , ["TOP3"]         , ["TOP4"]         , ["TOP5"]         , ["TOP6"]         ,            ["TOP7"]         , ["TOP8"]         , ["TOP9"]         , ["TOP10"]          , ["TOP11"]          ,
+				["TOP2", "MID2"] , ["TOP3", "MID3"] , ["TOP4", "MID4"] , ["TOP5", "MID5"] , ["TOP6", "MID6"] ,            ["TOP7", "MID7"] , ["TOP8", "MID8"] , ["TOP9", "MID9"] , ["TOP10", "MID10"] , ["TOP11", "MID11"] ,
+				["MID2"]         , ["MID3"]         , ["MID4"]         , ["MID5"]         , ["MID6"]         ,            ["MID7"]         , ["MID8"]         , ["MID9"]         , ["MID10"]          , ["MID11"]          ,
+				["BOT2"]         , ["BOT3"]         , ["BOT4"]         , ["BOT5"]         , ["BOT6"]         ,            ["BOT7"]         , ["BOT8"]         , ["BOT9"]         , ["BOT10"]          , ["BOT11"]          ,
+																  ["THU1"]         , ["THU2"]         , ["THU3"]         ,            ["THU4"]         , ["THU5"]         , ["THU6"]
 			]
 		}
 	],
@@ -43,22 +53,22 @@
 				{
 					"type": "visual",
 					"chord": [
-						" " , " " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " , " " ,
-						" " , " " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " , " " ,
-						" " , " " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " , " " ,
-						" " , " " , "X" , " " , " " , " " ,            " " , " " , " " , "X" , " " , " " ,
-												" " , " " , " " ,            " " , " " , " "
+						" " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " ,
+						" " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " ,
+						" " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " ,
+						" " , "X" , " " , " " , " " ,            " " , " " , " " , "X" , " " ,
+												" " , " " ,            " " , " " , " "
 					],
 					"keycode": "CLEAR_KB"
 				},
 				{
 					"type": "visual",
 					"chord": [
-						" " , " " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " , " " ,
-						" " , " " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " , " " ,
-						" " , " " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " , " " ,
-						" " , "X" , " " , " " , " " , " " ,            " " , " " , " " , " " , "X" , " " ,
-												" " , " " , " " ,            " " , " " , " "
+						" " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " ,
+						" " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " ,
+						" " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " ,
+						"X" , " " , " " , " " , " " ,            " " , " " , " " , " " , "X" ,
+												" " , " " ,            " " , " " , " "
 					],
 					"keycode": "CMD"
 				}
@@ -69,13 +79,14 @@
 			"chords": [
 				{
 					"type": "chord_set",
+					"_comment": "SEE: chord.py for keyname acronyms and aliases",
 					"set": "rows",
 					"keycodes": [
-						" " , ":"              , "Y"              , "O"              , "U"              , "-"                    ,            "G"       , "D"           , "N"           , "M"           , "X"           , " " ,
-						" " , "KK(Q, LALT)"    , "KK(H, LCTL)"    , "KK(E, LGUI)"    , "KK(A, LSFT)"    , "W"                    ,            "C"       , "KK(T, RSFT)" , "KK(R, RGUI)" , "KK(S, RCTL)" , "KK(Z, RALT)" , " " ,
-						" " , "J"              , ","              , "."              , "K"              , "'"                    ,            "B"       , "P"           , "L"           , "F"           , "V"           , " " ,
-						" " , "MK(LGUI, LCTL)" , "MK(LALT, LCTL)" , "MK(LALT, LGUI)" , "MK(LALT, LSFT)" , "MK(LALT, LCTL, LGUI)" ,            "DF(NUM)" , "CAPS"        , "DF(SYM)"     , "DF(NAV)"     , "DF(MOUSE)"   , " " ,
-																				  " "              , " "              , " "                    ,            " "       , " "           , " "
+						":"    , "Y"              , "O"              , "U"              , "-"                    ,            "G"              , "D"            , "N"               , "M"           , "X"    ,
+						"Q"    , "KK(H, LCTL)"    , "KK(E, LGUI)"    , "KK(A, LSFT)"    , "W"                    ,            "C"              , "KK(T, RSFT)"  , "KK(R, RGUI)"     , "KK(S, RCTL)" , "Z"    ,
+						"J"    , ","              , "."              , "K"              , "'"                    ,            "B"              , "P"            , "L"               , "F"           , "V"    ,
+						"LALT" , "MK(LALT, LCTL)" , "MK(LALT, LGUI)" , "MK(LALT, LSFT)" , "MK(LALT, LCTL, LGUI)" ,            "DF(NUM)"        , "CAPS"         , "DF(SYM)"         , "DF(NAV)"     , "RALT" ,
+															 "KL(ESC, FNC)"   , "KL(I, REGEX)"   , "KL(TAB, NUM)"         ,            "KL(ENTER, NAV)" , "KL(SPC, SYM)" , "KL(BSPC, MOUSE)"
 					]
 				},
 				{
@@ -165,18 +176,6 @@
 						[" " , " " , "X" , "X" , " " , " " , " " , "DEL"  ],
 						[" " , " " , " " , " " , " " , "X" , "X" , "DEL"  ]
 					]
-				},
-				{
-					"type": "visual_array",
-					"keys": ["THU1" , "THU2" , "THU3" , "THU4" , "THU5" , "THU6"],
-					"dictionary": [
-						["X" , " " , " " , " " , " " , " " , "KL(ESC,   FNC)"  ],
-						[" " , "X" , " " , " " , " " , " " , "KL(I,     REGEX)"],
-						[" " , " " , "X" , " " , " " , " " , "KL(TAB,   NUM)"  ],
-						[" " , " " , " " , "X" , " " , " " , "KL(ENTER, NAV)"  ],
-						[" " , " " , " " , " " , "X" , " " , "KL(SPC,   SYM)"  ],
-						[" " , " " , " " , " " , " " , "X" , "KL(BSPC,  MOUSE)"]
-					]
 				}
 			]
 		},
@@ -187,11 +186,11 @@
 					"type": "chord_set",
 					"set": "rows",
 					"keycodes": [
-						" " , ":"              , "MK(LSFT, Y)"    , "MK(LSFT, O)"    , "MK(LSFT, U)"    , "-"                    ,            "MK(LSFT, G)" , "MK(LSFT, D)" , "MK(LSFT, N)" , "MK(LSFT, M)" , "MK(LSFT, X)" , " " ,
-						" " , "MK(LSFT, Q)"    , "MK(LSFT, H)"    , "MK(LSFT, E)"    , "MK(LSFT, A)"    , "MK(LSFT, W)"          ,            "MK(LSFT, C)" , "MK(LSFT, T)" , "MK(LSFT, R)" , "MK(LSFT, S)" , "MK(LSFT, Z)" , " " ,
-						" " , "MK(LSFT, J)"    , ","              , "."              , "MK(LSFT, K)"    , "'"                    ,            "MK(LSFT, B)" , "MK(LSFT, P)" , "MK(LSFT, L)" , "MK(LSFT, F)" , "MK(LSFT, V)" , " " ,
-						" " , "MK(LGUI, LCTL)" , "MK(LALT, LCTL)" , "MK(LALT, LGUI)" , "MK(LALT, LSFT)" , "MK(LALT, LCTL, LGUI)" ,            "DF(NUM)"     , " "           , "DF(SYM)"     , "DF(NAV)"     , "DF(MOUSE)"   , " " ,
-																				  "CLEAR_KB"       , "MK(LSFT, I)"    , " "                    ,            " "           , " "           , " "
+						":"           , "MK(LSFT, Y)"    , "MK(LSFT, O)"    , "MK(LSFT, U)"    , "-"                    ,            "MK(LSFT, G)"    , "MK(LSFT, D)"  , "MK(LSFT, N)" , "MK(LSFT, M)" , "MK(LSFT, X)" ,
+						"MK(LSFT, Q)" , "MK(LSFT, H)"    , "MK(LSFT, E)"    , "MK(LSFT, A)"    , "MK(LSFT, W)"          ,            "MK(LSFT, C)"    , "MK(LSFT, T)"  , "MK(LSFT, R)" , "MK(LSFT, S)" , "MK(LSFT, Z)" ,
+						"MK(LSFT, J)" , ","              , "."              , "MK(LSFT, K)"    , "'"                    ,            "MK(LSFT, B)"    , "MK(LSFT, P)"  , "MK(LSFT, L)" , "MK(LSFT, F)" , "MK(LSFT, V)" ,
+						"LALT"        , "MK(LALT, LCTL)" , "MK(LALT, LGUI)" , "MK(LALT, LSFT)" , "MK(LALT, LCTL, LGUI)" ,            "DF(NUM)"        , "CLEAR_KB"     , "DF(SYM)"     , "DF(NAV)"     , "RALT"        ,
+																	  "KL(ESC, FNC)"   , "KL(I, REGEX)"   , "KL(TAB, NUM)"         ,            "KL(ENTER, NAV)" , "KL(SPC, SYM)" , "KL(BSPC, MOUSE)"
 					]
 				}
 			]
@@ -204,11 +203,11 @@
 					"_comment": "modifiers for kak (editor) map",
 					"set": "rows",
 					"keycodes": [
-						" " , " "            , " "    , " " , " " , " " ,            "*" , "["    , "^"   , "]"    , " " , " " ,
-						" " , "LALT"         , "LCTL" , " " , " " , " " ,            "?" , "LPRN" , "$"   , "RPRN" , " " , " " ,
-						" " , "MO(QUICKEYS)" , " "    , " " , " " , " " ,            "|" , "{"    , "#"   , "}"    , " " , " " ,
-						" " , " "            , " "    , " " , " " , " " ,            " " , " "    , " "   , " "    , " " , " " ,
-																  " " , " " , " " ,            " " , "\\"   , "DEL"
+						" "            , " "    , " " , " " , " " ,            "*" , "["    , "^"   , "]"    , " " ,
+						"LALT"         , "LCTL" , " " , " " , " " ,            "?" , "LPRN" , "$"   , "RPRN" , " " ,
+						"MO(QUICKEYS)" , " "    , " " , " " , " " ,            "|" , "{"    , "#"   , "}"    , " " ,
+						" "            , " "    , " " , " " , " " ,            " " , " "    , " "   , " "    , " " ,
+														  " " , " " , " " ,            " " , "\\"   , "DEL"
 					]
 				},
 				{
@@ -228,11 +227,11 @@
 					"_comment": "modifiers for kak (editor) map",
 					"set": "rows",
 					"keycodes": [
-						" " , " " , "." , "*" , "&" , "+"  ,            " " , " " , " " , " "    , " "    , " " ,
-						" " , " " , "`" , "~" , "/" , "|"  ,            " " , " " , " " , "RCTL" , "RALT" , " " ,
-						" " , " " , "<" , ">" , "%" , "@"  ,            " " , " " , " " , " "    , " "    , " " ,
-						" " , " " , " " , " " , " " , " "  ,            " " , " " , " " , " "    , " "    , " " ,
-											   " " , "=" , "\\" ,            " " , " " , " "
+						" " , "." , "*" , "&" , "+"  ,            " " , " " , " " , " "    , " "    ,
+						" " , "`" , "~" , "/" , "|"  ,            " " , " " , " " , "RCTL" , " "    ,
+						" " , "<" , ">" , "%" , "@"  ,            " " , " " , " " , " "    , " "    ,
+						" " , " " , " " , " " , " "  ,            " " , " " , " " , " "    , "RALT" ,
+										" " , "=" , "\\" ,            " " , " " , " "
 					]
 				},
 				{
@@ -262,11 +261,11 @@
 					"type": "chord_set",
 					"set": "rows",
 					"keycodes": [
-						" " , " "            , "." , "*"        , "&" , "+"  ,            "*" , "["    , "^"   , "]"    , " " , " " ,
-						" " , " "            , "`" , "~"        , "/" , "|"  ,            "?" , "LPRN" , "$"   , "RPRN" , " " , " " ,
-						" " , "MO(QUICKEYS)" , "<" , ">"        , "%" , "@"  ,            "|" , "{"    , "#"   , "}"    , " " , " " ,
-						" " ,            " " , " " , " "        , " " , " "  ,            " " , " "    , " "   , " "    , " " , " " ,
-															  "CLEAR_KB" , "=" , "\\" ,            " " , "SPC"  , "DEL"
+						" "            , "." , "*"        , "&" , "+"  ,            "*" , "["    , "^"   , "]"    , " " ,
+						" "            , "`" , "~"        , "/" , "|"  ,            "?" , "LPRN" , "$"   , "RPRN" , " " ,
+						"MO(QUICKEYS)" , "<" , ">"        , "%" , "@"  ,            "|" , "{"    , "#"   , "}"    , " " ,
+						" "            , " " , " "        , " " , " "  ,            " " , " "    , " "   , " "    , " " ,
+													  "CLEAR_KB" , "=" , "\\" ,            " " , "SPC"  , "DEL"
 					]
 				},
 				{
@@ -295,11 +294,11 @@
 					"type": "chord_set",
 					"set": "rows",
 					"keycodes": [
-						" " , " "              , "A"              , "B"              , "AS(C)"          , " "                    ,            "/"   , "4"    , "5" , "9" , "*" , " " ,
-						" " , "LALT"           , "KK(D, LCTL)"    , "KK(E, LGUI)"    , "KK(F, LSFT)"    , " "                    ,            "."   , "1"    , "2" , "3" , "-" , " " ,
-						" " , "MO(QUICKEYS)"   , "<"              , "KL(>,REGEX)"    , "SPC"            , " "                    ,            ","   , "8"    , "6" , "7" , "+" , " " ,
-						" " , "MK(LGUI, LCTL)" , "MK(LALT, LCTL)" , "MK(LALT, LGUI)" , "MK(LALT, LSFT)" , "MK(LALT, LCTL, LGUI)" ,            " "   , "CAPS" , " " , " " , " " , " " ,
-																				  "CLEAR_KB"       , " "              , " "                    ,            "\\"  , "0"    , "="
+						" "            , "A"              , "B"              , "AS(C)"          , " "                    ,            "/"   , "4"    , "5" , "9" , "*" ,
+						" "            , "KK(D, LCTL)"    , "KK(E, LGUI)"    , "KK(F, LSFT)"    , " "                    ,            "."   , "1"    , "2" , "3" , "-" ,
+						"MO(QUICKEYS)" , "<"              , "KL(>,REGEX)"    , "SPC"            , " "                    ,            ","   , "8"    , "6" , "7" , "+" ,
+						"LALT"         , "MK(LALT, LCTL)" , "MK(LALT, LGUI)" , "MK(LALT, LSFT)" , "MK(LALT, LCTL, LGUI)" ,            " "   , "CAPS" , " " , " " , " " ,
+																		"CLEAR_KB"       , " "              , " "                    ,            "\\"  , "0"    , "="
 					]
 				},
 				{
@@ -326,11 +325,11 @@
 					"type": "chord_set",
 					"set": "rows",
 					"keycodes": [
-						" " , " " , " " , " " , " " , " " ,            " " , "HOME"           , " "    , "END"             , " " , " " ,
-						" " , " " , " " , " " , " " , " " ,            " " , "MK(LCTL, LEFT)" , " "    , "MK(LCTL, RIGHT)" , " " , " " ,
-						" " , " " , " " , " " , " " , " " ,            " " , "LEFT"           , " "    , "RIGHT"           , " " , " " ,
-						" " , " " , " " , " " , " " , " " ,            " " , " "              , " "    , " "               , " " , " " ,
-												" " , " " , " " ,            " " , "SPC"            , "BSPC"
+						" " , " " , " " , " " , " " ,            " " , "HOME"           , " "    , "END"             , " " ,
+						" " , " " , " " , " " , " " ,            " " , "MK(LCTL, LEFT)" , " "    , "MK(LCTL, RIGHT)" , " " ,
+						" " , " " , " " , " " , " " ,            " " , "LEFT"           , " "    , "RIGHT"           , " " ,
+						" " , " " , " " , " " , " " ,            " " , " "              , " "    , " "               , " " ,
+										" " , " " , " " ,            " " , "SPC"            , "BSPC"
 					]
 				},
 				{
@@ -349,11 +348,11 @@
 					"type": "chord_set",
 					"set": "rows",
 					"keycodes": [
-						" " , " "    , " "    , " "    , " "    , " " ,            " " , "F4" , "F5" , "F9" , "F12" , " " ,
-						" " , "LALT" , "LCTL" , "LGUI" , "LSFT" , " " ,            " " , "F1" , "F2" , "F3" , "F11" , " " ,
-						" " , " "    , " "    , " "    , " "    , " " ,            " " , "F8" , "F6" , "F7" , "F10" , " " ,
-						" " , " "    , " "    , " "    , " "    , " " ,            " " , " "  , " "  , " "  , " "   , " " ,
-						  								" "    , " "    , " " ,            " " ,  " " ,  " "
+						" "    , " "    , " "    , " "    , " " ,            " " , "F4" , "F5" , "F9" , "F12" ,
+						"LALT" , "LCTL" , "LGUI" , "LSFT" , " " ,            " " , "F1" , "F2" , "F3" , "F11" ,
+						" "    , " "    , " "    , " "    , " " ,            " " , "F8" , "F6" , "F7" , "F10" ,
+						" "    , " "    , " "    , " "    , " " ,            " " , " "  , " "  , " "  , " "   ,
+						  						" "    , " "    , " " ,            " " ,  " " ,  " "
 					]
 				}
 			]
@@ -365,11 +364,11 @@
 					"type": "chord_set",
 					"set": "rows",
 					"keycodes": [
-						" " , " "           , " "           , "MK(LCTL, LSFT, C)" , "MK(LCTL, LSFT, V)" , " " ,            " " , "HOME"           , "UP"   , "END"             , "PGUP" , " " ,
-						" " , "LALT"        , "LCTL"        , "LGUI"              , "LSFT"              , " " ,            " " , "MK(LCTL, LEFT)" , " "    , "MK(LCTL, RIGHT)" , " "    , " " ,
-						" " , "MK(LCTL, Z)" , "MK(LCTL, X)" , "MK(LCTL, C)"       , "MK(LCTL, V)"       , " " ,            " " , "LEFT"           , "DOWN" , "RIGHT"           , "PGDN" , " " ,
-						" " , " "           , " "           , " "                 , " "                 , " " ,            " " , " "              , " "    , " "               , " "    , " " ,
-																		  "CLEAR_KB"          , " "                 , " " ,            " " , " "              , " "
+						" "           , " "           , "MK(LCTL, LSFT, C)" , "MK(LCTL, LSFT, V)" , " " ,            " " , "HOME"           , "UP"   , "END"             , "PGUP" ,
+						"LALT"        , "LCTL"        , "LGUI"              , "LSFT"              , " " ,            " " , "MK(LCTL, LEFT)" , " "    , "MK(LCTL, RIGHT)" , " "    ,
+						"MK(LCTL, Z)" , "MK(LCTL, X)" , "MK(LCTL, C)"       , "MK(LCTL, V)"       , " " ,            " " , "LEFT"           , "DOWN" , "RIGHT"           , "PGDN" ,
+						" "           , " "           , " "                 , " "                 , " " ,            " " , " "              , " "    , " "               , " "    ,
+																  "CLEAR_KB"          , " "                 , " " ,            " " , " "              , " "
 					]
 				},
 				{
@@ -389,18 +388,18 @@
 					"type": "chord_set",
 					"set": "rows",
 					"keycodes": [
-						" " , " "    , " "       , " "         , " "       , " " ,            " " , "MS_WHLL" , "MS_UP"   , "MS_WHLR" , "MS_WHLU" , " " ,
-						" " , "LALT" , "LCTL"    , "LGUI"      , "LSFT"    , " " ,            " " , " "       , " "       , " "       , " "       , " " ,
-						" " , " "    , "MS_BTN3" , "MS_BTN2"   , "MS_BTN1" , " " ,            " " , "MS_LEFT" , "MS_DOWN" , "MS_RGHT" , "MS_WHLD" , " " ,
-						" " , " "    , " "       , " "         , " "       , " " ,            " " , " "       , " "       , " "       , " "       , " " ,
-															"CLEAR_KB " , " "       , " " ,            " " , " "       , " "
+						" "    , " "       , " "         , " "       , " " ,            " " , "MS_WHLL" , "MS_UP"   , "MS_WHLR" , "MS_WHLU" ,
+						"LALT" , "LCTL"    , "LGUI"      , "LSFT"    , " " ,            " " , " "       , " "       , " "       , " "       ,
+						" "    , "MS_BTN3" , "MS_BTN2"   , "MS_BTN1" , " " ,            " " , "MS_LEFT" , "MS_DOWN" , "MS_RGHT" , "MS_WHLD" ,
+						" "    , " "       , " "         , " "       , " " ,            " " , " "       , " "       , " "       , " "       ,
+													"CLEAR_KB " , " "       , " " ,            " " , " "       , " "
 					]
 				}
 			]
 		}
 	],
 	"leader_sequences": [],
-	"extra_code": "void cap(const struct Chord* self) {\n switch (*self->state) {\n case ACTIVATED:\n tap_key(self->value1);\n tap_key(self->value2);\n break;\n case DEACTIVATED:\n current_pseudolayer = CAPS;\n *self->state = IN_ONE_SHOT;\n break;\n case FINISHED:\n case PRESS_FROM_ACTIVE:\n current_pseudolayer = CAPS;\n a_key_went_through = false;\n break;\n case RESTART:\n if (a_key_went_through) {\n current_pseudolayer = self->pseudolayer;\n } else {\n *self->state = IN_ONE_SHOT;\n }\n }\n }\n",
+	"extra_code": "void cap(const struct Chord* self) {\n\tswitch (*self->state) {\n\tcase ACTIVATED:\n\t\ttap_key(self->value1);\n\t\ttap_key(self->value2);\n\t\tbreak;\n\tcase DEACTIVATED:\n\t\tcurrent_pseudolayer = CAPS;\n\t\t*self->state = IN_ONE_SHOT;\n\t\tbreak;\n\tcase FINISHED:\n\tcase PRESS_FROM_ACTIVE:\n\t\tcurrent_pseudolayer = CAPS;\n\t\ta_key_went_through = false;\n\t\tbreak;\n\tcase RESTART:\n\t\tif (a_key_went_through) {\n\t\t\tcurrent_pseudolayer = self->pseudolayer;\n\t\t} else {\n\t\t\t*self->state = IN_ONE_SHOT;\n\t\t}\n\t}\n}",
 	"extra_dependencies": []
 }
 
