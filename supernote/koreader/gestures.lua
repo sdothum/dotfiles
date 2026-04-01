@@ -275,6 +275,7 @@ return {
             ["profile_exec_28x210%"] = true,
             ["profile_exec_29x202%"] = true,
             ["profile_exec_30x194%"] = true,
+            ["profile_exec_31x189%"] = true,
             ["settings"] = {
                 ["always_active"] = true,
                 ["anchor_quickmenu"] = true,
@@ -284,6 +285,7 @@ return {
                     [3] = "profile_exec_28x210%",
                     [4] = "profile_exec_29x202%",
                     [5] = "profile_exec_30x194%",
+                    [6] = "profile_exec_31x189%",
                 },
                 ["show_as_quickmenu"] = true,
             },
