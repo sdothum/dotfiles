@@ -51,6 +51,12 @@ if regular ~= "NotoSans-Regular.ttf" then
 		end
 	end
 
+	for k, v in pairs(Font.fallbacks) do
+		if v == "NotoSans-Regular.ttf" then
+			Font.fallbacks[k] = regular
+		end
+	end
+
 	-- HACK: use screen dpi setting to reduce overall system UI proportions
 	if regular == bold then        -- setting UI font to custom Iosevka font
 		for k, v in pairs(Font.sizemap) do
