@@ -73,10 +73,10 @@
 					"type": "chord_set",
 					"set": "rows",
 					"keycodes": [
-						"DF(FNC)" ,           ":",           "Y",           "O",           "U", "-",        "G",           "D",           "N",            "M",           "X", "DF(SYMBOL)",
-						"TO(1)"   , "KK(Q, LALT)", "KK(H, LCTL)", "KK(E, LGUI)", "KK(A, LSFT)", "W",        "C", "KK(T, RSFT)", "KK(R, RGUI)",  "KK(S, RCTL)", "KK(Z, RALT)",    "DF(NAV)",
-						"CAPS"    ,           "J",           ",",           ".",           "K", "'",        "B",           "P",           "L",            "F",           "V",    "DF(NUM)",
-																							 " ",           " ", " ",        " ",           " ",           " "
+						"DF(FNC)" ,           ":",           "Y",            "O",            "U",            "-",        "G",                         "D",               "N",            "M",           "X", "DF(SYMBOL)",
+						"TO(1)"   , "KK(Q, LALT)", "KK(H, LCTL)",  "KK(E, LGUI)",  "KK(A, LSFT)",            "W",        "C",               "KK(T, RSFT)",     "KK(R, RGUI)",  "KK(S, RCTL)", "KK(Z, RALT)",    "DF(NAV)",
+						"CAPS"    ,           "J",           ",",            ".",            "K",            "'",        "B",                         "P",               "L",            "F",           "V",    "DF(NUM)",
+																				"KL(ESC, FNC)", "KL(I, REGEX)", "KL(TAB, NUM)",        "KL(ENTER, NAV)", "KL(SPC, SYM)", "KL(BSPC, MOUSE)"
 					]
 				},
 				{
@@ -165,18 +165,6 @@
 						["X", "X", " ", " ", "X", " ", " ", "ENTER"],
 						[" ", " ", "X", "X", " ", "X", "X",   "DEL"],
 						[" ", " ", " ", " ", " ", "X", "X",   "DEL"]
-					]
-				},
-				{
-					"type": "visual_array",
-					"keys": ["THU1", "THU2", "THU3", "THU4", "THU5", "THU6"],
-					"dictionary": [
-						["X", " ", " ", " ", " ", " ",    "KL(ESC, FNC)"],
-						[" ", "X", " ", " ", " ", " ",    "KL(I, REGEX)"],
-						[" ", " ", "X", " ", " ", " ",    "KL(TAB, NUM)"],
-						[" ", " ", " ", "X", " ", " ",  "KL(ENTER, NAV)"],
-						[" ", " ", " ", " ", "X", " ",    "KL(SPC, SYM)"],
-						[" ", " ", " ", " ", " ", "X", "KL(BSPC, MOUSE)"]
 					]
 				}
 			]
