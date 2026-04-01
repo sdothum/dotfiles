@@ -1,0 +1,21 @@
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................... stardict-tools
+
+sudo xbps-install -y gettext-devel libmariadbclient-devel pcre-devel
+
+cd /home/depot
+exists --repo stardict-3 || git clone https://github.com/huzheng001/stardict-3.git
+
+cd stardict-3
+./autogen.sh
+./configure --disable-dict
+make
+
+cd tools/src
+sudo cp -v stardict-bin2text stardict-text2bin  /usr/local/bin/
+
+# vim: set ft=sh: #

@@ -26,14 +26,15 @@
 
 = dictionary
 = ══════════
-# dictd
+# dictd  # for dictzip pyglossary conversions
+# m pyglossary
+# m stardict-tools
   aspell
   aspell-en
   dict
   hunspell
   hunspell-en_GB
   hunspell-en_US
-m pyglossary
   sdcv
 ! stow stardict
 
