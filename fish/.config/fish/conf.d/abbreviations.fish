@@ -35,6 +35,7 @@ if alpine
 	abbr svt 'sv stop'
 else if void 'dinit'
 	abbr svc 'dinit-check'
+	# abbr svc 'sv check'
 	abbr svd 'sv disable'
 	abbr sve 'sv enable'
 	abbr svs 'sv start'
@@ -45,6 +46,7 @@ else if void 'dinit'
 	abbr svw 'sv watch'
 	abbr usv 'sv -u'
 	abbr usvc 'dinit-check --user'
+	# abbr usvc 'sv -u check'  # quiet bool test for scripts
 	abbr usvd 'sv -u disable'
 	abbr usve 'sv -u enable'
 	abbr usvs 'sv -u start'
@@ -86,6 +88,7 @@ abbr umount 'sudo umount'
 # ....................................................................... System
 
 abbr blame 'systemd-analyze blame'
+abbr dmesg 'sudo dmesg'
 abbr font-manager 'font-manager;  rm -f ~/.fonts.conf'
 abbr fontmatrix 'fontmatrix;  rm -f ~/.fonts.conf'
 abbr gtop 'glances'
@@ -263,7 +266,7 @@ abbr hdel 'fishlog delete'
 abbr h 'fishlog search'
 abbr hk "kak $HOME/.local/share/fish/fish_history"
 abbr hv "vi $HOME/.local/share/fish/fish_history"
-abbr man "env MANPAGER='/usr/bin/kak -ro' term man man"
+abbr man "env MANPAGER='/usr/bin/kak -ro' term manpage man"
 abbr rl 'rlwrap'
 abbr s 'sudo'
 abbr sh 'bash -norc'
