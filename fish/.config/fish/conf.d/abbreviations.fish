@@ -102,6 +102,11 @@ abbr time '/usr/bin/time -p'
 abbr traceroute 'mtr --report -c 1'
 abbr who 'command w'
 
+# ....................................................................... Volume
+
+abbr mpvol 'mpc volume'
+abbr pavol 'pactl set-sink-volume @DEFAULT_SINK@'
+
 # ......................................................................... File
 
 function b; bat (find -iname $argv[1]) ;end
