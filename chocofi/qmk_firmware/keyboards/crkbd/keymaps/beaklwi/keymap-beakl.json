@@ -57,7 +57,7 @@
 						" " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " ,
 						" " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " ,
 						" " , "X" , " " , " " , " " ,            " " , " " , " " , "X" , " " ,
-												" " , " " ,            " " , " " , " "
+										" " , " " , " " ,            " " , " " , " "
 					],
 					"keycode": "CLEAR_KB"
 				},
@@ -68,7 +68,7 @@
 						" " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " ,
 						" " , " " , " " , " " , " " ,            " " , " " , " " , " " , " " ,
 						"X" , " " , " " , " " , " " ,            " " , " " , " " , " " , "X" ,
-												" " , " " ,            " " , " " , " "
+										" " , " " , " " ,            " " , " " , " "
 					],
 					"keycode": "CMD"
 				}
@@ -85,7 +85,7 @@
 						":"    , "Y"              , "O"              , "U"              , "-"                    ,            "G"              , "D"            , "N"               , "M"           , "X"    ,
 						"Q"    , "KK(H, LCTL)"    , "KK(E, LGUI)"    , "KK(A, LSFT)"    , "W"                    ,            "C"              , "KK(T, RSFT)"  , "KK(R, RGUI)"     , "KK(S, RCTL)" , "Z"    ,
 						"J"    , ","              , "."              , "K"              , "'"                    ,            "B"              , "P"            , "L"               , "F"           , "V"    ,
-						"LALT" , "MK(LALT, LCTL)" , "MK(LALT, LGUI)" , "MK(LALT, LSFT)" , "MK(LALT, LCTL, LGUI)" ,            "DF(NUM)"        , "CAPS"         , "DF(SYM)"         , "DF(NAV)"     , "RALT" ,
+						"LALT" , "MK(LALT, LCTL)" , "MK(LALT, LGUI)" , "MK(LALT, LSFT)" , "MK(LALT, LCTL, LGUI)" ,            "DF(NUM)"        , "DF(CAPS)"     , "DF(SYM)"         , "DF(NAV)"     , "RALT" ,
 															 "KL(ESC, FNC)"   , "KL(I, REGEX)"   , "KL(TAB, NUM)"         ,            "KL(ENTER, NAV)" , "KL(SPC, SYM)" , "KL(BSPC, MOUSE)"
 					]
 				},
