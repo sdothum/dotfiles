@@ -21,6 +21,7 @@ current() {
 	[ "$(ls -1 $CURRENT)" = "$(ls -1 $LAST)" ] || { rm -rf $LAST; mv $CURRENT $LAST; }
 	mkdir -p $CURRENT/$1
 	refresh_panel
+	dunstctl close-all
 	notify Group "$1 $(chef desktop)"
 }
 

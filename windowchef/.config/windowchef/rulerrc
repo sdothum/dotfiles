@@ -86,7 +86,7 @@ class="pavucontrol"
 	window desktop $(chef desktop "CHEF")                                                     ;\
 	window size B6 rotate                                                                     ;\
 	window snap center                                                                        ;\
-	recipe -q pavucontrol && xdotool search -onlyvisible -classname "pavucontrol" windowunmap ;\
+	recipe -q pavucontrol:hide && xdotool search -onlyvisible -classname "pavucontrol" windowunmap ;\
 	desktop $(chef desktop "DESK")
 
 # ........................................................................ media
@@ -178,6 +178,10 @@ class="qutebrowser"
 	layout tile 3 qutebrowser
 
 # single purpose hangouts browser (for zoom and custom font control) SEE: hangouts script
+
+class="luakit"
+	xdotool search -sync -onlyvisible -name 'Maaike Hum - ' set_window -classname 'hangouts' -class 'hangouts' ;\
+	window '@hangouts' URL tile 4 1 && window desktop $(chef desktop "COMM")
 
 class="Surf"
 	xdotool search -sync -onlyvisible -name '@cgDIS:T | ' set_window -classname 'hangouts' -class 'hangouts' ;\

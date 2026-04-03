@@ -331,8 +331,7 @@ super + j
 	xdotool search -onlyvisible -classname "music" windowunmap && \{ desktop toggle $(desktop); desktop $(chef desktop "DESK"); \} || \{ music; desktop $(chef desktop "PLAY"); \}
 
 super + ctrl + j
-	mpc toggle ;\
-	mpc | grep -q playing && \{ piano stop; mpc:settings volume; mpc:settings; \}
+	mpc toggle ;\	mpc | grep -q playing && \{ piano stop; mpc:settings volume; mpc:settings; \}
 
 super + shift + {comma,period}
 	mpc {prev, next} ;\
@@ -351,9 +350,9 @@ super + {comma,period}
 	mpc:settings volume
 
 super + ctrl + {comma,period}
-	pactl set-sink-volume @DEFAULT_SINK@ {-10%,+10%}
-	# mpc volume {-2, +2} ;\
-	# mpc:settings volume
+	pactl set-sink-volume @DEFAULT_SINK@ {-10%,+10%} ;\
+	dunstctl close-all                               ;\
+	notify "wp:volume" "$(wpctl get-volume @DEFAULT_SINK@ | sed -r 's/.*:(.*)/\1 * 100/' | bc | cut -d. -f1)%"
 
 super + alt + ctrl + j
 	pactl set-sink-mute @DEFAULT_SINK@ toggle

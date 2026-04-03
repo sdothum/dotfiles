@@ -7,25 +7,21 @@
 # .................................................................... Autostart
 
 sudo iwconfig wlp9s0 power off  # disable powersave mode (to prevent sleeping connection)
-
 restore root
 conky clock auto
 dunst &
 restore unclutter
-displaycal3            # load color profile
-imwheel -kill          # set trackball scrollwheel speed
+displaycal3                     # load color profile
+imwheel -kill                   # set trackball scrollwheel speed
 
 udev
 void 'runit' && pulse || { sv -u check pipewire || pulse; }
 
 desktop $(chef desktop "DESK")
-# replaced by .session/windowchef/autostart/<command>*
-# recipe -q cbonsai && cbonsai
-# recipe -q term    && { title="$(recipe term)"; term "${title%% *}" $(recipe term); }
-# recipe -q ping    && SCROLLING=0 term 'ping' class=ping $(recipe ping)
-recipe -a pavucontrol  # hide pavucontrol SEE: rulerrc
+# startup desktop app commands replaced by .session/windowchef/autostart/<command>*
+recipe -a pavucontrol:hide  # hide initial instance of pavucontrol SEE: rulerrc
 recipe autostart | while read cmd ;do sleep 1; eval $cmd ;done
-recipe -d pavucontrol
+recipe -d pavucontrol:hide
 
 # if not booting with dinit.. (issue running as runit service)
 if void 'runit' ;then
