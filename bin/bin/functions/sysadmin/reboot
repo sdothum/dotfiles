@@ -16,6 +16,11 @@ if [ -z $1 ] ;then
 fi
 
 if console ;then
+	ditto dinit "manual stop time exception circumvention.."
+	sv stop openntpd
+	sv stop dhcpcd
+	sv stop early-binfmt
+	sv stop turnstiled
 	trap "tput cnorm; exit" INT  # restore cursor on break
 	printf "\r\33[2K\n"          # clear shell prompt leader SEE: x script
 	tput civis                   # hide cursor

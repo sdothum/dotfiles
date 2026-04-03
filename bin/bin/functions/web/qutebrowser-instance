@@ -14,7 +14,7 @@
 
 # QUTEBROWSER='/usr/bin/qutebrowser --target private-window --override-restore --temp-basedir --qt-arg name ${name:-livedown}'  # BUG: causes config.py temp dir error on close
 QUTEBROWSER='/usr/bin/qutebrowser --target private-window --override-restore --qt-arg name ${name:-livedown}'
-FONT=${FONT:-charcoal}
+FONT=${FONT:-ottawa}
 
 size="$(fontsize)pt $FONT"
 startpage="$@"

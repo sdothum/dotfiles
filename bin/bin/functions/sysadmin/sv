@@ -8,7 +8,7 @@
 
 dinit() {
 	usage() {
-		echo "$(basename $0) [-u] list | @
+		echo "$(basename $0) [-u] [list | @ (system)]
 > [-u] [disable | enable | start | stop [--force] | restart | status | check | log] <service>" | usage:
 		exit 1
 	}
