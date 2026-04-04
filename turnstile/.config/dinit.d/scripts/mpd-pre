@@ -1,0 +1,6 @@
+#!/bin/sh
+# sdothum - 2016 (c) wtfpl
+
+STATE=$HOME/.local/state/dinit.d/mpd
+
+[ -e $STATE ] || mkdir -p $STATE
