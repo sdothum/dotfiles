@@ -3,4 +3,5 @@
 
 STATE=$HOME/.local/state/dinit.d/mpd
 
+# for mpd restart state
 [ -e $STATE ] || mkdir -p $STATE
