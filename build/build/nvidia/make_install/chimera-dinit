@@ -38,7 +38,15 @@ esac
 " | sudo tee /usr/lib/dinit.d/early/scripts/dev.sh
 
 # logfile rotation
-echo -e "/var/log/dinit/*.log {
+echo -e "/var/log/dinit.d/*.log {
+\tcompress
+\trotate 4
+\tweekly
+\tmissingok
+\tnotifempty
+}
+
+$HOME/.local/state/dinit.d/log/*.log {
 \tcompress
 \trotate 4
 \tweekly
@@ -46,6 +54,9 @@ echo -e "/var/log/dinit/*.log {
 \tnotifempty
 }
 " | sudo tee /etc/logrotate.d/dinit.logrotate
+
+sudo mkdir -p /var/log/dinit.d
+mkdir $HOME/.local/state/dinit.d/log
 
 # cosmetic init message cleanup
 sudo sed -i '/^echo "Checking root file system/s/^/# /; /^fsck -C/s,$, >/dev/null,' /usr/lib/dinit.d/early/scripts/root-fsck.sh
