@@ -1,0 +1,14 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Media
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. audio volume
+
+# Usage: wp:volume [clear]
+
+[ "$1" ] && dunstctl close-all  # SEE: sxhkdrc
+notify "wp:volume" "$(wpctl get-volume @DEFAULT_SINK@ | sed -r 's/.*:(.*)/\1 * 100/' | bc | cut -d. -f1)%"
+
+# kak: filetype=sh
