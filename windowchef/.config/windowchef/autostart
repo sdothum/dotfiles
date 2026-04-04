@@ -13,6 +13,7 @@ dunst &
 restore unclutter
 displaycal3                     # load color profile
 imwheel -kill                   # set trackball scrollwheel speed
+wp:volume
 
 udev
 void 'runit' && pulse || { sv -u check pipewire || pulse; }

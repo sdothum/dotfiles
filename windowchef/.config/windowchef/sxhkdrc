@@ -351,12 +351,10 @@ super + {comma,period}
 
 super + ctrl + {comma,period}
 	pactl set-sink-volume @DEFAULT_SINK@ {-10%,+10%} ;\
-	dunstctl close-all                               ;\
-	notify "wp:volume" "$(wpctl get-volume @DEFAULT_SINK@ | sed -r 's/.*:(.*)/\1 * 100/' | bc | cut -d. -f1)%"
+	wp:volume clear
 
 super + alt + ctrl + j
 	pactl set-sink-mute @DEFAULT_SINK@ toggle
-	# mpc clear
 
 # ......................................................................... http
 
