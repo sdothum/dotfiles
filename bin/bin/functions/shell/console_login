@@ -24,6 +24,10 @@ if [ $USER != root ] ;then
 		# SERVER=$(grep 10.1.0.10 /etc/hosts | awk '{ print $2 }')
 		rm -fr $HOME/tmp/*  # is $TMPDIR.. but just in case it's not initialized :-o
 
+		# turnstiled
+		void 'dinit' && sv -u
+		[ -d $SESSION/windowchef ] && touch $SESSION/windowchef/autostart:oneshot  # SEE: windowchef/autostart
+
 		# assign deadline scheduler to SSD boot drive
 		if [ $(hostname) = $SERVER ] ;then
 			if [ ! -e /tmp/ssd:scheduler ] ;then

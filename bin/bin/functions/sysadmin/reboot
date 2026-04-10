@@ -9,6 +9,7 @@
 # Usage: reboot [noprompt]
 
 delay=7  # reboot delay window
+PREHALT=$HOME/.config/dinit.d/halt.d 2>/dev/null
 
 if [ -z $1 ] ;then
 	ifno 'reboot kernel' && exit
@@ -16,11 +17,9 @@ if [ -z $1 ] ;then
 fi
 
 if console ;then
-	ditto dinit "manual stop time exception circumvention.."
-	sv stop openntpd
-	sv stop dhcpcd
-	sv stop early-binfmt
-	sv stop turnstiled
+	echo
+	# HACK: stop services that cause halt "stop time" exception messages
+	void 'dinit' && [ -d "$PREHALT" ] && ls -1 $PREHALT | sort | while read service ;do sv stop --force $service ;done
 	trap "tput cnorm; exit" INT  # restore cursor on break
 	printf "\r\33[2K\n"          # clear shell prompt leader SEE: x script
 	tput civis                   # hide cursor

@@ -6,15 +6,15 @@
 
 # .............................................................. Google hangouts
 
-HANGOUTS=${SESSION:-$HOME/.session}/hangouts
-# BROWSER=luakit
-BROWSER=surf
+BROWSER=luakit
+# BROWSER=surf
 export NO_PROXY="*"
-URL=$(cat $HANGOUTS)
+URL=$(recipe -/ hangouts)
+CSS="-C $(dirname $0)/.hangouts:stylesheet.css"
 
 case $BROWSER in
 	luakit ) luakit "$URL" & ;;
-	surf   ) surf -z1.15 -C $(dirname $0)/.hangouts:stylesheet.css "$URL" & ;;
+	surf   ) surf -z1.15 $CSS "$URL" & ;;
 	*      ) WIDTH=800 DELAY=1.5 qutebrowser "$URL" & ;;
 esac
 

@@ -36,7 +36,7 @@ usage() {
 > m-[arch[-[-]]|rounded|straight]
 > p-[eared|serifed]
 > q-hook[_]
-> t-[asymmetric[+|-[-]]|cross[+]|descending[+]|flat]
+> t-[asymmetric[+|-[-]]|cross[+]|descending[+[=]]|flat]
 > y-straight
 
 > 0-[split|tall|cutout]
@@ -192,6 +192,7 @@ cmdopts() {
 			t-cross+       ) t=$1 ;;
 			t-descending   ) t=$1 ;;
 			t-descending+  ) t=$1 ;;
+			t-descending=+ ) t=$1 ;;
 			t-flat         ) t=$1 ;;
 			y-straight     ) y=$1 ;;
 			y-turn         ) y=$1 ;;
@@ -375,9 +376,9 @@ elif [ $family ] ;then                    # custom e-ink font (non-published)
 	e_ink ${family#*=}
 
 elif [ $web ] ;then                       # www fonts
-	unset cap; emdash; cmdopts t-descending l-ascending Q-open 1-nobase a-double_ p-eared m-rounded y-turn j-serifed J-descending f-extended++ percent/ 0-tall
+	unset cap; emdash; cmdopts t-descending=+ l-ascending Q-open 1-nobase a-double_ p-eared m-rounded y-turn j-serifed J-descending f-extended+= percent/ 0-tall m-straight
 	wfont heading  quasi-ext space=1.100 webfont serifless serifed family=wMonolegible l-ascending q-hook_ d-tailed pseudokern pseudokern
-	wfont dyslexic quasi-ext             webfont serifless serifed I-serifless l-ascending f-flat++ family=wMonolexic q-hook_ d-tailed pseudokern
+	wfont dyslexic quasi-ext             webfont serifless serifed I-serifless l-ascending f-extended+= family=wMonolexic q-hook_ d-tailed pseudokern
 	wfont dyslexic quasi-ext space=1.125 webfont I-serifless J-serifless family=wCaps d-tailed pseudokern
 	wfont expanded quasi-pro space=1     webfont I-serifed sb=1 l-serifless family=wQuasilexic d-tailed q-hook_
 

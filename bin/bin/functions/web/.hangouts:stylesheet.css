@@ -1,15 +1,27 @@
+@-moz-document url-prefix("http") {
+
 * { word-break: break-word !important; }
 
-c-wiz * { max-width: 576px !important; }
+c-wiz * { max-width: 600px !important; }  /* fit A5 paper width */
 
-/* google chat input field */
+/* input field */
 
 d-view div div div div div div div div div div div div { font-family: ottawa,monospace !important; }
 
-/* google chat sidebar */
+/* sidebar */
 
 body div div div div div { font-family: ottawa,monospace !important; }
 
-/* google chat account */
+/* contact */
 
-div span span span span span span { font-family: ottawa,monospace !important; }
+button div span span span span span { font-family: ottawa,monospace !important; font-size: 10.25pt!important; font-weight: 600 !important; letter-spacing: 1px !important; }
+
+/* time */
+
+c-wiz div div div div div div div div div div div  div div div div div div div span { font-family: ottawa,monospace !important; font-size: 7.15pt!important; font-weight: 400 !important; }
+
+/* message */
+
+c-wiz div div div div div div div div div div div  div div div div div div div div { font-family: ottawa,monospace !important; font-size: 10pt!important; font-weight: 500 !important; line-height: 1.65em !important; }
+
+}
