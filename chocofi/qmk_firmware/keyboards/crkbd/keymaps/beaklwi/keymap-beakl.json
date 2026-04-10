@@ -86,7 +86,7 @@
 						"Q"    , "KK(H, LCTL)"    , "KK(E, LGUI)"    , "KK(A, LSFT)"    , "W"                    ,            "C"              , "KK(T, RSFT)"  , "KK(R, RGUI)"     , "KK(S, RCTL)" , "Z"    ,
 						"J"    , ","              , "."              , "K"              , "'"                    ,            "B"              , "P"            , "L"               , "F"           , "V"    ,
 						"LALT" , "MK(LALT, LCTL)" , "MK(LALT, LGUI)" , "MK(LALT, LSFT)" , "MK(LALT, LCTL, LGUI)" ,            "DF(NUM)"        , "DF(CAPS)"     , "DF(SYM)"         , "DF(NAV)"     , "RALT" ,
-															 "KL(ESC, FNC)"   , "KL(I, REGEX)"   , "KL(TAB, NUM)"         ,            "KL(ENTER, NAV)" , "KL(SPC, SYM)" , "KL(BSPC, MOUSE)"
+															 "KL(ESC, FKEY)"  , "KL(I, REGEX)"   , "KL(TAB, NUM)"         ,            "KL(ENTER, NAV)" , "KL(SPC, SYM)" , "KL(BSPC, MOUSE)"
 					]
 				},
 				{
@@ -190,7 +190,7 @@
 						"MK(LSFT, Q)" , "MK(LSFT, H)"    , "MK(LSFT, E)"    , "MK(LSFT, A)"    , "MK(LSFT, W)"          ,            "MK(LSFT, C)"    , "MK(LSFT, T)"  , "MK(LSFT, R)" , "MK(LSFT, S)" , "MK(LSFT, Z)" ,
 						"MK(LSFT, J)" , ","              , "."              , "MK(LSFT, K)"    , "'"                    ,            "MK(LSFT, B)"    , "MK(LSFT, P)"  , "MK(LSFT, L)" , "MK(LSFT, F)" , "MK(LSFT, V)" ,
 						"LALT"        , "MK(LALT, LCTL)" , "MK(LALT, LGUI)" , "MK(LALT, LSFT)" , "MK(LALT, LCTL, LGUI)" ,            "DF(NUM)"        , "CLEAR_KB"     , "DF(SYM)"     , "DF(NAV)"     , "RALT"        ,
-																	  "KL(ESC, FNC)"   , "KL(I, REGEX)"   , "KL(TAB, NUM)"         ,            "KL(ENTER, NAV)" , "KL(SPC, SYM)" , "KL(BSPC, MOUSE)"
+																	  "KL(ESC, FKEY)"  , "KL(I, REGEX)"   , "KL(TAB, NUM)"         ,            "KL(ENTER, NAV)" , "KL(SPC, SYM)" , "KL(BSPC, MOUSE)"
 					]
 				}
 			]
@@ -342,7 +342,7 @@
 			]
 		},
 		{
-			"name": "FNC",
+			"name": "FKEY",
 			"chords": [
 				{
 					"type": "chord_set",
