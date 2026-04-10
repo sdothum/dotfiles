@@ -86,7 +86,7 @@ DEFAULTSESSION=windowchef
 
 # ...................................................................... Display
 
-tv_over() { xrandr $OFF --output $1 --primary --mode $2 --rate 60 --dpi 96; }
+set_display() { xrandr $OFF --output $1 --primary --mode $2 --rate 60 --dpi 96 --set TearFree on; }
 
 interface=${interface:-$(interface dp || interface hdmi)}           # DEBUG: env interface=<interface> x
 case $interface in
@@ -98,8 +98,8 @@ esac
 case $(hostname) in
 	# luna ) xrandr --output DVI-D-1 --mode 1680x1050 --output HDMI-1 --primary --mode 1920x1080 --rate 60 --left-of DVI-D-1 --dpi 96 ;;
 	luna ) xrandr --output HDMI-1 --mode 1920x1080  --rate 60 --dpi 96 ;;
-	lumen) hdmi && tv_over LVDS1 1920x1080 ;;
-	motu ) tv_over ${interface:-HDMI-0} 3440x1440 ;;
+	lumen) hdmi && set_display LVDS1 1920x1080 ;;
+	motu ) set_display ${interface:-HDMI-0} 3440x1440 ;;
 esac
 # pulseeffects --gapplication-service &
 
