@@ -16,6 +16,7 @@ require("bunny"):setup({
 		{ key = "/",          path = "/",                                                 },
 		{ key = "~",          path = "~",                                                 },
 		{ key = { ".", "c" }, path = "~/.config",                                         },
+		{ key = { ".", "d" }, path = "~/.local/state/dinit.d",                            },
 		{ key = { ".", "l" }, path = "~/.local",                                          },
 		{ key = { ".", "s" }, path = "~/.session",                                        },
 		{ key = "B",          path = "/bin",                                              },
