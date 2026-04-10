@@ -162,26 +162,23 @@ class="Firefox"
 	window desktop $(chef desktop "DESK") ;\
 	window size monocle
 
-# don't attach browsers to server groups
-
-class="luakit"
-	[ $(desktop) -lt $(chef desktop "CHEF") ] && window desktop $(desktop) || window desktop 1 ;\
-	layout tile 3 luakit
-
 # qutebrowser crash window
 
 name="Whoops!"
 	xdotool search -sync -onlyvisible -name 'Whoops!' windowclose
 
+# BUG: qutebrowser can fail to render so avoid tiling rule
+
 class="qutebrowser"
 	[ $(desktop) -lt $(chef desktop "CHEF") ] && window desktop $(desktop) || window desktop 1 ;\
-	layout tile 3 qutebrowser
+	xdotool search -onlyvisible -class 'qutebrowser' && layout tile 3 qutebrowser
 
 # single purpose hangouts browser (for zoom and custom font control) SEE: hangouts script
 
 class="luakit"
 	xdotool search -sync -onlyvisible -name 'Maaike Hum - ' set_window -classname 'hangouts' -class 'hangouts' ;\
-	window '@hangouts' URL tile 4 1 && window desktop $(chef desktop "COMM")
+	window '@hangouts' URL size A5 && window desktop $(chef desktop "COMM")                                    ;\
+	window '@hangouts' spread left
 
 class="Surf"
 	xdotool search -sync -onlyvisible -name '@cgDIS:T | ' set_window -classname 'hangouts' -class 'hangouts' ;\

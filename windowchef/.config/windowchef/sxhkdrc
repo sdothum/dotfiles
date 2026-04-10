@@ -168,7 +168,7 @@ super + {_,shift} + r
 
 super + {t,s}
 	side="{left, right}" ;\
-	[ "$(chef window classname)"  = "term" ] && window spread 3 $side || window snap $side
+	[ "$(chef window classname)"  = "term" ] && window spread $side || window snap $side
 
 # ......................................................................... tile
 

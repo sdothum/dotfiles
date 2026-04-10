@@ -184,7 +184,7 @@ case $menu in
 				snap=$(echo "$regions" | pick "to") || exit
 				snap=${snap#* }
 				case $snap in
-					left | right ) [ "$(chef window classname)"  = "term" ] && window spread 3 $snap || window snap $snap ;;
+					left | right ) [ "$(chef window classname)"  = "term" ] && window spread $snap || window snap $snap ;;
 					*            ) window snap ${snap} ;;
 				esac
 				;;
