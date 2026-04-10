@@ -62,6 +62,8 @@ m wmutils
 ! cfg_install /etc/X11/xorg.conf.d/10-keyboard.conf
 ! cfg_install /etc/X11/xorg.conf.d/10-libinput.conf
 ! sudo ln -s /usr/share/X11/xorg.conf.d/40-libinput.conf /etc/X11/xorg.conf.d/
+! original /etc/X11/xorg.conf
+! gpu nvidia && { sudo rm /etc/X11/xorg.conf; sudo ln -s $STOW/xorg/desktop/etc/X11/xorg.conf /etc/X11/; }
 
 
 # vim: set ft=conf: #
