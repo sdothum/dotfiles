@@ -10,7 +10,7 @@
 		"layout_function_name": "LAYOUT_split_3x5_3",
 		"chord_timeout": 100,
 		"dance_timeout": 100,
-		"leader_timeout": 450,
+		"leader_timeout": 750,
 		"tap_timeout": 50,
 		"command_max_length": 5,
 		"leader_max_length": 5,
