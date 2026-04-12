@@ -106,11 +106,11 @@ map global normal <plus>  '}p'     -docstring 'extend to next paragraph'
 # .................................................................... Searching
 
 declare-option bool null false
-addm %{ refine /0 : map global select C     ': set-register / %opt{null}<ret>' -docstring 'clear search register' }
-addm %{ refine /1 : map global select (     '<a-/>(?i)'                        -docstring 'isearch    —— prev,next' }
-addm %{ refine /2 : map global select )     '/(?i)'                            -docstring 'isearch    —— prev,next' }
-addm %[ refine /3 : map global select '{'   '<a-?>(?i)'                        -docstring 'iextend    —— prev,next' ]
-addm %[ refine /4 : map global select '}'   '?(?i)'                            -docstring 'iextend    —— prev,next' ]
+addm %{ refine /0 : map global select <minus> ': set-register / %opt{null}<ret>' -docstring 'clear search register' }
+addm %{ refine /1 : map global select (       '<a-/>(?i)'                        -docstring 'isearch    —— prev,next' }
+addm %{ refine /2 : map global select )       '/(?i)'                            -docstring 'isearch    —— prev,next' }
+addm %[ refine /3 : map global select '{'     '<a-?>(?i)'                        -docstring 'iextend    —— prev,next' ]
+addm %[ refine /4 : map global select '}'     '?(?i)'                            -docstring 'iextend    —— prev,next' ]
 
 # .............................................................. Split selection
 
@@ -125,6 +125,18 @@ addm %{ refine w2 : map global select M     ': mkd-table<ret>' -docstring 'markd
 addm %{ refine w3 : map global select <c-m> ': mkd-code<ret>'  -docstring 'markdown   —— paragraph,table,code' }
 
 map global normal S 's(?i)' -docstring 'split: iselect:'
+
+# Printing
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# .............................................................. Print selection
+
+define-command -hidden print %{
+	if %{ [ "${kak_selection_desc%%.*}" = "$(echo ${kak_selection_desc#*,} | cut -d. -f1)" ] } %{ execute-keys '\%' }
+	execute-keys %sh{ echo "<a-|> expand -i -t3 | nl -ba -w4 -v${kak_selection_desc%%.*} | paps --font='Iosevka 10' --wrap=word --bottom-margin=8 --top-margin=8 --left-margin=4 --right-margin=4 | lp >/dev/null<ret>;" }
+}
+
+addm %{ meta v : map global buffer p ': print<ret>' -docstring 'print (selection)' }
 
 # Buffers
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

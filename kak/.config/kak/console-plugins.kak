@@ -79,9 +79,9 @@ bundle search https://github.com/sdothum/search.kak.git %{
 
 	# NOTE: <ret> jumps to buffer line
 	addm %{ find s1 : map global buffer '\' ': search '           -docstring "*search*  —— buffers,again"    }
-	addm %{ find s2 : map global buffer &   ': search-again<ret>' -docstring "*search*  —— buffers,again"    }
+	addm %{ find s2 : map global buffer @   ': search-again<ret>' -docstring "*search*  —— buffers,again"    }
 	addm %{ find s1 : map global select '\' ': search-again<ret>' -docstring "*search*   —— refresh,commit " }
-	addm %{ find s2 : map global select &   ': commit-edits<ret>' -docstring "*search*   —— refresh,commit " }
+	addm %{ find s2 : map global select C   ': commit-edits<ret>' -docstring "*search*   —— refresh,commit " }
 	map global normal '\' ': search ' -docstring "search buffers"
 }
 
@@ -212,8 +212,8 @@ bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 	require-module kakpipe
 
 	# HACK: using alpha subsort to overcome "P,p" sort order (cause unknown)
-	addm %{ test p1 : map global buffer p ': kakpipe '    -docstring "pipe      —— *scratch*,(background)" }
-	addm %{ test p2 : map global buffer P ': kakpipe-bg ' -docstring "pipe      —— *scratch*,(background)" }
+	addm %{ test p1 : map global buffer | ': kakpipe '    -docstring "pipe      —— *scratch*,(background)" }
+	addm %{ test p2 : map global buffer & ': kakpipe-bg ' -docstring "pipe      —— *scratch*,(background)" }
 } %{
 	cargo install --path . --root ~/.local
 }
