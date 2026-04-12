@@ -1,3 +1,4 @@
+// engine.part.3.c
 
 // HASH_TYPE uint64_t keycode_hash assumed (for > 32 key board)
 
@@ -6,7 +7,7 @@ bool are_hashed_keycodes_in_sound(HASH_TYPE keycodes_hash, HASH_TYPE sound) {
 }
 
 uint8_t keycode_to_index(uint16_t keycode) {
-	return keycode - FIRST_INTERNAL_KEYCODE;
+	return (uint8_t) ((HASH_TYPE) keycode - FIRST_INTERNAL_KEYCODE);
 }
 
 void sound_keycode_array(uint16_t keycode) {
@@ -246,7 +247,7 @@ void process_ready_chords(void) {
 }
 
 void deactivate_active_chords(uint16_t keycode) {
-	HASH_TYPE hash = (HASH_TYPE) 1ULL << (keycode - SAFE_RANGE);
+	HASH_TYPE hash = (HASH_TYPE) 1ULL << ((HASH_TYPE) keycode - SAFE_RANGE);
 	bool broken;
 	struct Chord chord_storage;
 	struct Chord* chord_ptr;
@@ -332,7 +333,7 @@ void process_leader(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-	if (keycode < FIRST_INTERNAL_KEYCODE || keycode > LAST_INTERNAL_KEYCODE) {
+	if ((HASH_TYPE) keycode < FIRST_INTERNAL_KEYCODE || (HASH_TYPE) keycode > LAST_INTERNAL_KEYCODE) {
 		return true;
 	}
 
