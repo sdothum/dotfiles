@@ -391,8 +391,8 @@ else                                      # desktop fonts
 	unset space
 	# cmdopts t-asymmetric-- j-serifed 1-nobase at-tall l-hooky f-flat++ y-turn
 	# NOTE: source code highlighting distinguishes lower case "l" (el) from "|" (bar)
-	cmdopts t-descending j-serifed 1-nobase at-tall l-ascending f-extended++ y-turn J-descending a-double_ d-tailed 0-tall
-	dfont $leading 1-base  # l-flat
+	cmdopts t-descending=+ j-serifed 1-nobase at-tall l-ascending f-extended+= y-turn J-descending a-double_ d-tailed 0-tall
+	# dfont $leading 1-base m-straight  # l-flat
 	[ $HOME/thedarnedestthing.com/application/public/fonts/ ] && cp -v $FONTS/Iosevka/*ttf $HOME/thedarnedestthing.com/application/public/fonts/
 	dfont proof    l-ascending I-serifless
 	dfont menu     I-serifed l-ascending
@@ -400,9 +400,9 @@ else                                      # desktop fonts
 	dfont dyslexic I-serifed quasi-extension space=1.125 family=monograffic serifless serifed l-ascending  # panel/dunst font
 
 	cmdopts quasi-ext open+ serifless serifed
-	cmdopts t-descending j-serifed 1-nobase at-tall l-ascending f-extended++ y-turn J-descending a-double_ d-tailed
+	cmdopts t-descending=+ j-serifed 1-nobase at-tall l-ascending f-extended+= y-turn J-descending a-double_ d-tailed
 	emdash
-	e_ink charcoal grote I-serifless l-ascending Q-open 1-nobase a-double_ d-tailed p-eared m-rounded y-turn J-descending t-descending=+ pseudokern
+	e_ink charcoal grote I-serifless l-ascending Q-open 1-nobase a-double_ d-tailed p-eared m-straight y-turn J-descending t-descending=+ pseudokern
 	[ -d /var/www/localhost/fonts ] && sudo cp -v $FONTS/charcoal/*ttf /var/www/localhost/fonts/
 fi
 
