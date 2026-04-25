@@ -60,8 +60,10 @@ name="yazi"
 
 # ........................................................................ terms
 
+# handle resizing multiple opened manpages
+
 name="manpage"
-	window @manpage size B5
+	for i in $(wmctrl -l | grep 'manpage' | cut -d' ' -f1) ;do window @$i size B5 ;done
 
 class="term"
 	window desktop $(desktop) ;\
@@ -83,9 +85,9 @@ class="audacious"
 # delay for pavucontrol/pipewire sync SEE: pulse
 
 class="pavucontrol"
-	window desktop $(chef desktop "CHEF")                                                     ;\
-	window size B6 rotate                                                                     ;\
-	window snap center                                                                        ;\
+	window desktop $(chef desktop "CHEF")                                                          ;\
+	window size B6 rotate                                                                          ;\
+	window snap center                                                                             ;\
 	recipe -q pavucontrol:hide && xdotool search -onlyvisible -classname "pavucontrol" windowunmap ;\
 	desktop $(chef desktop "DESK")
 
@@ -130,9 +132,9 @@ class="rawtherapee"
 # HACK: for yazi photo display requires initial delay to prevent triggering "menu" from sxhkd "toggle wallpaper"
 
 class="feh"
-	sleep 0.25                            ;\
-	xdotool key space                     ;\
-	sleep 0.1 && xdotool key BackSpace    ;\
+	sleep 0.25                         ;\
+	xdotool key space                  ;\
+	sleep 0.1 && xdotool key BackSpace ;\
 	window @feh snap center
 
 class="foliate"
@@ -142,8 +144,17 @@ class="foliate"
 class="fontmatrix"
 	window desktop $(chef desktop "CODE")
 
+# handle video and youtube streaming SEE: qutebrowser config.py
+
 class="mpv"
-	waitron window_maximize
+	xdotool search -sync -onlyvisible -name '\- \- mpv' set_window -classname 'youtube' -class 'youtube' ;\
+	window @youtube size 1080p                                                                           ;\
+	xdotool search -sync -onlyvisible -classname 'youtube' windowactivate                                ;\
+	window snap center                                                                                   ;\
+	pkill -f "xdotool search -sync -onlyvisible -name '\- \- mpv'"
+
+class="mpv"
+	window @$(pfw) snap center
 
 class="oculante"
 	window size monocle
@@ -176,7 +187,7 @@ class="qutebrowser"
 # single purpose hangouts browser (for zoom and custom font control) SEE: hangouts script
 
 class="luakit"
-	xdotool search -sync -onlyvisible -name 'Maaike Hum - ' set_window -classname 'hangouts' -class 'hangouts' ;\
+	xdotool search -sync -onlyvisible -name "$(recipe hangouts/name)" set_window -classname 'hangouts' -class 'hangouts' ;\
 	window '@hangouts' URL size A5 && window desktop $(chef desktop "COMM")                                    ;\
 	window '@hangouts' spread left
 
