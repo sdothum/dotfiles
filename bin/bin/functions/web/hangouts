@@ -9,7 +9,7 @@
 BROWSER=luakit
 # BROWSER=surf
 export NO_PROXY="*"
-URL=$(recipe -/ hangouts)
+URL=$(recipe -/ hangouts/url)
 CSS="-C $(dirname $0)/.hangouts:stylesheet.css"
 
 case $BROWSER in

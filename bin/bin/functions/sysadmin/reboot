@@ -8,7 +8,7 @@
 
 # Usage: reboot [noprompt]
 
-delay=7  # reboot delay window
+delay=5  # reboot delay window
 PREHALT=$HOME/.config/dinit.d/halt.d 2>/dev/null
 
 if [ -z $1 ] ;then
@@ -16,10 +16,15 @@ if [ -z $1 ] ;then
 	ifno "passive (delayed) boot into default window manager" && rm -f $SESSION/boot:wm || echo $WM >$SESSION/boot:wm
 fi
 
+# HACK: stop services that cause halt "stop time" exception messages
+prehalt() {
+	ditto dinit 'halt.d "stop time" exceptions'
+	ls -1 $PREHALT | sort | while read service ;do sv stop --force $service ;done
+}
+
 if console ;then
 	echo
-	# HACK: stop services that cause halt "stop time" exception messages
-	void 'dinit' && [ -d "$PREHALT" ] && ls -1 $PREHALT | sort | while read service ;do sv stop --force $service ;done
+	void 'dinit' && [ -d "$PREHALT" ] && prehalt
 	trap "tput cnorm; exit" INT  # restore cursor on break
 	printf "\r\33[2K\n"          # clear shell prompt leader SEE: x script
 	tput civis                   # hide cursor

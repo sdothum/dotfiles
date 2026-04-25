@@ -296,8 +296,9 @@ elif [ "$mu" ] ;then
 	e_ink tundra Y-descending a-single
 
 elif [ "$test" ] ;then
-	cmdopts t-descending j-serifed 1-nobase at-tall l-ascending f-extended++ y-turn J-descending a-double_ d-tailed
-	dfont dyslexic I-serifed space=2.2 family=qclocktwo l-ascending j-serifless m-straight  # conky qclocktwo font
+	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat l-ascending Q-open 1-nobase f-extended+= a-double_ d-tailed y-turn J-descending utf-8 serifless serifed pseudokern percent/ 0-tall
+ 	emdash
+	e_ink gotham     grote I-serifless  t-cross+       m-straight f-extended_ J-serifless
 
 elif [ "$cities" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat l-ascending Q-open 1-nobase f-extended+= a-double_ d-tailed y-turn J-descending utf-8 serifless serifed pseudokern percent/ 0-tall
@@ -391,8 +392,8 @@ else                                      # desktop fonts
 	unset space
 	# cmdopts t-asymmetric-- j-serifed 1-nobase at-tall l-hooky f-flat++ y-turn
 	# NOTE: source code highlighting distinguishes lower case "l" (el) from "|" (bar)
-	cmdopts t-descending=+ j-serifed 1-nobase at-tall l-ascending f-extended+= y-turn J-descending a-double_ d-tailed 0-tall
-	# dfont $leading 1-base m-straight  # l-flat
+	cmdopts t-descending=+ j-serifed 1-nobase at-tall l-ascending f-extended+= y-turn J-descending a-double_ d-tailed 0-tall m-straight
+	dfont $leading 1-base m-straight  # l-flat
 	[ $HOME/thedarnedestthing.com/application/public/fonts/ ] && cp -v $FONTS/Iosevka/*ttf $HOME/thedarnedestthing.com/application/public/fonts/
 	dfont proof    l-ascending I-serifless
 	dfont menu     I-serifed l-ascending

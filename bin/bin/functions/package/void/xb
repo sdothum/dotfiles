@@ -43,7 +43,7 @@ IGNORE='pinentry|runit-void'
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 CACHE=/var/cache/xbps
-BACKUP=/net/depot/
+BACKUP=/net${CACHE%/*}/
 ITERATE=/tmp/xb:iterate
 XBDIR=$(dirname $0)
 ACTIONS=$XBDIR/functions/rules  # tuple: <action> <package> -> file: function/<action>, SEE: upgrade_check and upgrade_actions
@@ -172,7 +172,7 @@ status() {
 }
 
 case $action in
-	backup      ) rsync -av $CACHE $BACKUP ;;
+	backup      ) sudo mkdir -p $BACKUP; sudo chown -R $USER:$USER $BACKUP; rsync -av $CACHE $BACKUP ;;
 	check       ) ditto xbps 'checking database..'; check || ifno "reinstall (ERROR) packages" || repair ;;  # suppress hash mismatch (bash redirect syntax)
 	count       ) ditto installed "$(xbps-query -l $options | wc -l) packages" ;;
 	dependson   ) ditto "$package" "depends on.."; for i in $(xbps-query -x $package | sed 's/>=.*//; s/-[0-9].*/-/') ;do installed $i ;done | sort ;;

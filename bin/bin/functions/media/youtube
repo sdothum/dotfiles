@@ -1,0 +1,30 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Media
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ...................................................................... youtube
+
+# Usage: youtube [-d] <url>
+
+if [ $1 = '-d' ] ;then
+	cd /net/media/videos/youtube/
+	notify 60 "youtube" "downloading..\n$2"
+	yt-dlp "$2"
+	notify "youtube" "$2\ncompleted"
+	exit
+fi
+
+# stream youtube to mpv (to remove ads)
+# yt-dlp -o - "$1" | mpv --x11-name=youtube -
+WID=$(pfw)
+notify 10 "youtube" "loading..\n$1"
+window hide
+
+videomode on
+yt-dlp -o - "$1" | mpv -
+videomode off
+
+# restore browser page
+mapw -m $WID
