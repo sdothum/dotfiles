@@ -271,7 +271,7 @@ abbr hdel 'fishlog delete'
 abbr h 'fishlog search'
 abbr hk "kak $HOME/.local/share/fish/fish_history"
 abbr hv "vi $HOME/.local/share/fish/fish_history"
-abbr man "env MANPAGER='/usr/bin/kak -ro' term manpage man"
+abbr man 'manpage'
 abbr rl 'rlwrap'
 abbr s 'sudo'
 abbr sh 'bash -norc'
@@ -323,6 +323,7 @@ abbr kcn 'kconvert noformat'
 abbr kindle 'dmenu econvert azw3'
 abbr eformat 'dmenu econvert reformat'
 abbr kobo 'dmenu econvert epub'
+abbr zlib 'zlib -d /net/downloads/http'
 
 # ........................................................................ media
 
