@@ -106,7 +106,7 @@ map global normal <plus>  '}p'     -docstring 'extend to next paragraph'
 # .................................................................... Searching
 
 declare-option bool null false
-addm %{ refine /0 : map global select <minus> ': set-register / %opt{null}<ret>' -docstring 'clear search register' }
+addm %{ refine /0 : map global select <minus> ': set-register / %opt{null}<ret>' -docstring 'clear search register'   }
 addm %{ refine /1 : map global select (       '<a-/>(?i)'                        -docstring 'isearch    —— prev,next' }
 addm %{ refine /2 : map global select )       '/(?i)'                            -docstring 'isearch    —— prev,next' }
 addm %[ refine /3 : map global select '{'     '<a-?>(?i)'                        -docstring 'iextend    —— prev,next' ]
@@ -133,10 +133,10 @@ map global normal S 's(?i)' -docstring 'split: iselect:'
 
 define-command -hidden print %{
 	if %{ [ "${kak_selection_desc%%.*}" = "$(echo ${kak_selection_desc#*,} | cut -d. -f1)" ] } %{ execute-keys '\%' }
-	execute-keys %sh{ echo "<a-|> expand -i -t3 | nl -ba -w4 -v${kak_selection_desc%%.*} | paps --font='Iosevka 10' --wrap=word --bottom-margin=8 --top-margin=8 --left-margin=4 --right-margin=4 | lp >/dev/null<ret>;" }
+	execute-keys %sh{ echo "<a-|> expand -i -t3 | nl -ba -w4 -v${kak_selection_desc%%.*} | paps --font='Iosevka 10' --wrap=word --bottom-margin=2 --top-margin=4 --left-margin=2 --right-margin=4 | lp >/dev/null<ret>;" }  # no header applied BECAUSE: paps --header does not respect --font
 }
 
-addm %{ meta v : map global buffer p ': print<ret>' -docstring 'print (selection)' }
+addm %{ meta v : map global buffer p ': print<ret>' -docstring 'print [selection]' }
 
 # Buffers
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -183,7 +183,7 @@ hook global WinSetOption filetype=diff %{
 	add-highlighter buffer/diff-allow-one-trailing-space regex '^ ' 0:Default
 }
 
-addm %{ test b  : map global buffer *   ': buffer *debug*<ret>'            -docstring '*debug* buffer' }
+addm %{ test b  : map global buffer *   ': buffer *debug*<ret>'            -docstring '*debug* buffer'                   }
 addm %{ file d1 : map global buffer d   ': sync<ret>: delete-buffer<ret>'  -docstring 'delete    —— with save,discard!'  }
 addm %{ file d2 : map global buffer D   ': delete-buffer!<ret>'            -docstring 'delete    —— with save,discard!'  }
 # SEE: kakpipe alpha subsort in xdisplay-plugins
@@ -191,7 +191,7 @@ addm %{ file q1 : map global buffer q   ': quit!<ret>'                     -docs
 addm %{ file q2 : map global buffer Q   ': quit!<ret>'                     -docstring 'quit      —— !,with discard' }
 addm %{ file w1 : map global buffer w   ': sync<ret>'                      -docstring 'write     —— save,and quit!' }
 addm %{ file w2 : map global buffer W   ': sync<ret>: quit!'               -docstring 'write     —— save,and quit!' }
-addm %{ file x  : map global buffer x   ': sync<ret>: write-all-quit<ret>' -docstring 'save all and quit' }
+addm %{ file x  : map global buffer x   ': sync<ret>: write-all-quit<ret>' -docstring 'save all and quit'           }
 
 map global normal <c-w> ': sync<ret>'       -docstring 'write'
 map global insert <c-w> '<esc>: sync<ret>i' -docstring 'write'

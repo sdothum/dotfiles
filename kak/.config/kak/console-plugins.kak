@@ -81,7 +81,7 @@ bundle search https://github.com/sdothum/search.kak.git %{
 	addm %{ find s1 : map global buffer '\' ': search '           -docstring "*search*  —— buffers,again"    }
 	addm %{ find s2 : map global buffer @   ': search-again<ret>' -docstring "*search*  —— buffers,again"    }
 	addm %{ find s1 : map global select '\' ': search-again<ret>' -docstring "*search*   —— refresh,commit " }
-	addm %{ find s2 : map global select C   ': commit-edits<ret>' -docstring "*search*   —— refresh,commit " }
+	addm %{ find s2 : map global select @   ': commit-edits<ret>' -docstring "*search*   —— refresh,commit " }
 	map global normal '\' ': search ' -docstring "search buffers"
 }
 
