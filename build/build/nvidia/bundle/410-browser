@@ -6,13 +6,14 @@
 
 = browser
 = ═══════
-# luakit
 # lynx
 # torbrowser-launcher
 # vimb
   chromium
   elinks
   firefox
+  luakit
+! stow luakit
   qutebrowser
 ! stow qutebrowser
   surf
@@ -23,6 +24,7 @@
 = ═════════════
 # chromium-widevine  # required for netflix (qutebrowser and chromium)
 # youtube-dl
+  yt-dlp
 
 
 # vim: set ft=conf: #

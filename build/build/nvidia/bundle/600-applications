@@ -42,6 +42,7 @@
 = ebook
 = ═════
   calibre                 [server]
+! go install github.com/heartleo/zlib/cmd/zlib@latest
 
 
 = font manager
