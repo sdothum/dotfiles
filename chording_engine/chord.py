@@ -1,3 +1,5 @@
+# chord.py
+
 import re
 from functools import reduce
 
@@ -39,7 +41,7 @@ def new_chord(on_pseudolayer, keycodes_hash, has_counter, value1, value2, functi
 	if has_counter:
 		output_buffer += "uint8_t counter_" + str(index) + " = 0;\n"
 		counter_link = "&counter_" + str(index)
-	output_buffer += "const struct Chord chord_" + str(index) + " PROGMEM = {" + keycodes_hash + ", " + on_pseudolayer + ", &state_" + str(index) + ", " + counter_link + ", " + str(value1) + ", " + str(value2) + ", " + function + "};\n"
+	output_buffer += "CHORD chord_" + str(index) + " PROGMEM = {" + keycodes_hash + ", " + on_pseudolayer + ", &state_" + str(index) + ", " + counter_link + ", " + str(value1) + ", " + str(value2) + ", " + function + "};\n"
 	index += 1
 	return [output_buffer, index]
 
@@ -249,7 +251,7 @@ def expand_keycode_fnc(DEFINITION):
 
 def MK(on_pseudolayer, keycodes_hash, definition, output_buffer, index):
 	l = len(definition.split(', '))
-	output_buffer += "void function_" + str(index) + "(const struct Chord* self) {\n"
+	output_buffer += "void function_" + str(index) + "(CHORD* self) {\n"
 	output_buffer += "	switch (*self->state) {\n"
 	output_buffer += "		case ACTIVATED:\n"
 	for i in range(0, l):
@@ -278,7 +280,7 @@ def MK(on_pseudolayer, keycodes_hash, definition, output_buffer, index):
 
 def D(on_pseudolayer, keycodes_hash, DEFINITION, output_buffer, index):
 	l = len(DEFINITION.split(','))
-	output_buffer += "void function_" + str(index) + "(const struct Chord* self) {\n"
+	output_buffer += "void function_" + str(index) + "(CHORD* self) {\n"
 	output_buffer += "	switch (*self->state) {\n"
 	output_buffer += "		case ACTIVATED:\n"
 	output_buffer += "			*self->counter = *self->counter + 1;\n"

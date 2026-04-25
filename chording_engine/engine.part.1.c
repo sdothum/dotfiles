@@ -1,3 +1,4 @@
+
 // engine.part.1.c
 
 enum chord_states {
@@ -16,6 +17,8 @@ enum chord_states {
 	IN_ONE_SHOT
 };
 
+#define CHORD const struct Chord
+
 struct Chord {
 	uint64_t keycodes_hash;
 	uint8_t pseudolayer;
@@ -23,7 +26,7 @@ struct Chord {
 	uint8_t* counter;
 	uint16_t value1;
 	uint8_t value2;
-	void (*function) (const struct Chord*);
+	void (*function) (CHORD*);
 };
 
 uint8_t current_pseudolayer = DEFAULT_PSEUDOLAYER;
@@ -167,3 +170,4 @@ void tap_key(int16_t keycode) {
 }
 
 // kak: filetype=c
+

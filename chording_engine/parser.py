@@ -1,9 +1,11 @@
+# parser.py
+
 #!/usr/bin/env python3
 
 # parsing order (and return values) fixed for STR
 
 import json
-from functools import reduce 
+from functools import reduce
 from chord import *
 import sys
 
@@ -163,7 +165,7 @@ def parse_chords(data):
 				[keyboard_part_2, number_of_chords, number_of_strings, strings] = add_key(name, keycodes, chord["keycode"], keyboard_part_2, number_of_chords, number_of_strings, strings)
 	keyboard_part_2 += "\n"
 
-	keyboard_part_2 += "const struct Chord* const list_of_chords[] PROGMEM = {\n"
+	keyboard_part_2 += "CHORD* const list_of_chords[] PROGMEM = {\n"
 	keyboard_part_2 += "	" + reduce(comma_separator, ["&chord_" + str(i) for i in range(0, number_of_chords)]) + "\n"
 	keyboard_part_2 += "};\n"
 	keyboard_part_2 += "\n"
@@ -196,7 +198,7 @@ def parse_strings_for_chords(data, strings):
 	keyboard_part_1 += "\n"
 	keyboard_part_1 += "const char * const strings[] PROGMEM = {\n"
 	if len(strings) > 0:
-		keyboard_part_1 += "	" + reduce(comma_separator, ["string_" + str(i) for i in range(0, len(strings))]) 
+		keyboard_part_1 += "	" + reduce(comma_separator, ["string_" + str(i) for i in range(0, len(strings))])
 	keyboard_part_1 += "\n};\n"
 
 	return keyboard_part_1
@@ -224,7 +226,7 @@ def main():
 		output_buffer += engine_part_1
 
 		if len(data["extra_code"]) > 0:
-			output_buffer += data["extra_code"] + "\n"
+			output_buffer += data["extra_code"] + "\n\n"
 
 		output_buffer += keyboard_part_1
 		output_buffer += engine_part_2
@@ -236,3 +238,5 @@ def main():
 
 if __name__ == "__main__":
 	main()
+
+# kak: filetype=py

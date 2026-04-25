@@ -1,6 +1,7 @@
+
 // engine.part.2.c
 
-void single_dance(const struct Chord* self) {
+void single_dance(CHORD* self) {
 	switch (*self->state) {
 		case ACTIVATED:
 			key_in(self->value1);
@@ -17,7 +18,7 @@ void single_dance(const struct Chord* self) {
 	}
 }
 
-void key_layer_dance(const struct Chord* self) {
+void key_layer_dance(CHORD* self) {
 	switch (*self->state) {
 		case ACTIVATED:
 			current_pseudolayer = self->value2;
@@ -36,7 +37,7 @@ void key_layer_dance(const struct Chord* self) {
 	}
 }
 
-void key_mod_dance(const struct Chord* self) {
+void key_mod_dance(CHORD* self) {
 	switch (*self->state) {
 		case ACTIVATED:
 			key_in(self->value2);
@@ -55,7 +56,7 @@ void key_mod_dance(const struct Chord* self) {
 	}
 }
 
-void key_key_dance(const struct Chord* self) {
+void key_key_dance(CHORD* self) {
 	switch (*self->state) {
 		case ACTIVATED:
 			break;
@@ -75,7 +76,7 @@ void key_key_dance(const struct Chord* self) {
 	}
 }
 
-void autoshift_dance_impl(const struct Chord* self) {
+void autoshift_dance_impl(CHORD* self) {
 	switch (*self->state) {
 		case ACTIVATED:
 			*self->counter = 0;
@@ -105,7 +106,7 @@ void autoshift_dance_impl(const struct Chord* self) {
 	}
 }
 
-void autoshift_dance(const struct Chord* self) {
+void autoshift_dance(CHORD* self) {
 	if (autoshift_mode) {
 		autoshift_dance_impl(self);
 	} else {
@@ -113,14 +114,14 @@ void autoshift_dance(const struct Chord* self) {
 	}
 }
 
-void autoshift_toggle(const struct Chord* self){
+void autoshift_toggle(CHORD* self){
 	if (*self->state == ACTIVATED) {
 		autoshift_mode = !autoshift_mode;
 		*self->state = IDLE;
 	}
 }
 
-void temp_pseudolayer(const struct Chord* self) {
+void temp_pseudolayer(CHORD* self) {
 	switch (*self->state) {
 		case ACTIVATED:
 			current_pseudolayer = self->value1;
@@ -137,7 +138,7 @@ void temp_pseudolayer(const struct Chord* self) {
 	}
 }
 
-void temp_pseudolayer_alt(const struct Chord* self) {
+void temp_pseudolayer_alt(CHORD* self) {
 	switch (*self->state) {
 		case ACTIVATED:
 			current_pseudolayer = self->value1;
@@ -154,28 +155,28 @@ void temp_pseudolayer_alt(const struct Chord* self) {
 	}
 }
 
-void perm_pseudolayer(const struct Chord* self) {
+void perm_pseudolayer(CHORD* self) {
 	if (*self->state == ACTIVATED) {
 		current_pseudolayer = self->value1;
 		*self->state = IDLE;
 	}
 }
 
-void switch_layer(const struct Chord* self) {
+void switch_layer(CHORD* self) {
 	if (*self->state == ACTIVATED) {
 		layer_move(self->value1);
 		*self->state = IDLE;
 	}
 }
 
-void lock(const struct Chord* self) {
+void lock(CHORD* self) {
 	if (*self->state == ACTIVATED) {
 		lock_next = true;
 		*self->state = IDLE;
 	}
 }
 
-void one_shot_key(const struct Chord* self) {
+void one_shot_key(CHORD* self) {
 	switch (*self->state) {
 		case ACTIVATED:
 			break;
@@ -199,7 +200,7 @@ void one_shot_key(const struct Chord* self) {
 	}
 }
 
-void one_shot_layer(const struct Chord* self) {
+void one_shot_layer(CHORD* self) {
 	switch (*self->state) {
 		case ACTIVATED:
 			break;
@@ -223,7 +224,7 @@ void one_shot_layer(const struct Chord* self) {
 	}
 }
 
-void command(const struct Chord* self) {
+void command(CHORD* self) {
 	if (*self->state == ACTIVATED) {
 		command_mode++;
 		*self->state = IDLE;
@@ -238,14 +239,14 @@ bool identical(uint16_t* buffer1, uint16_t* buffer2) {
 	return same;
 }
 
-void leader(const struct Chord* self) {
+void leader(CHORD* self) {
 	if (*self->state == ACTIVATED) {
 		in_leader_mode = true;
 		*self->state = IDLE;
 	}
 }
 
-void dynamic_macro_record(const struct Chord* self) {
+void dynamic_macro_record(CHORD* self) {
 	if (*self->state == ACTIVATED) {
 		for (int i = 0; i < DYNAMIC_MACRO_MAX_LENGTH; i++) {
 			dynamic_macro_buffer[i] = 0;
@@ -255,7 +256,7 @@ void dynamic_macro_record(const struct Chord* self) {
 	}
 }
 
-void dynamic_macro_next(const struct Chord* self) {
+void dynamic_macro_next(CHORD* self) {
 	if (*self->state == ACTIVATED) {
 		if (dynamic_macro_mode && dynamic_macro_ind < DYNAMIC_MACRO_MAX_LENGTH) {
 			dynamic_macro_buffer[dynamic_macro_ind] = 0;
@@ -265,7 +266,7 @@ void dynamic_macro_next(const struct Chord* self) {
 	}
 }
 
-void dynamic_macro_end(const struct Chord* self) {
+void dynamic_macro_end(CHORD* self) {
 	if (*self->state == ACTIVATED) {
 		if (dynamic_macro_mode) {
 			dynamic_macro_mode = false;
@@ -274,7 +275,7 @@ void dynamic_macro_end(const struct Chord* self) {
 	}
 }
 
-void dynamic_macro_play(const struct Chord* self) {
+void dynamic_macro_play(CHORD* self) {
 	if (*self->state == ACTIVATED) {
 		int ind_start = 0;
 		while (ind_start < DYNAMIC_MACRO_MAX_LENGTH) {
@@ -299,14 +300,14 @@ void dynamic_macro_play(const struct Chord* self) {
 	}
 }
 
-void clear(const struct Chord* self);
+void clear(CHORD* self);
 
-void string_in(const struct Chord* self) {
+void string_in(CHORD* self) {
 	if (*self->state == ACTIVATED) {
 		char buffer[STRING_MAX_LENGTH];
 		strcpy_P(buffer, (char*) pgm_read_ptr(&(strings[self->value1])));
 		send_string(buffer);
-		// clear(self);  // this clears STR+raise issue BUT raises layer immediately after STR
+		clear(self);     // (??) this clears STR+raise issue BUT raises layer immediately after STR
 		tap_key(KC_NO);  // clear layer key (down) tap value on STR+raise
 	}
 }
@@ -320,10 +321,11 @@ void reset_keyboard_kb(void){
 	reset_keyboard();
 }
 
-void reset(const struct Chord* self) {
+void reset(CHORD* self) {
 	if (*self->state == ACTIVATED) {
 		reset_keyboard_kb();
 	}
 }
 
 // kak: filetype=c
+
