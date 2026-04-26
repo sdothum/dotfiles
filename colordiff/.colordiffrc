@@ -7,7 +7,7 @@ banner=no
 # to a file, it detects this and does not colour-highlight
 # To make the patch file *include* colours, change the option
 # below to 'yes'
-color_patches=no
+color_patches=yes
 # Sometimes it can be useful to specify which diff command to
 # use: that can be specified here
 diff_cmd=diff
@@ -24,7 +24,7 @@ diff_cmd=diff
 #
 plain=off
 # oldtext=source newtext=target, see dirdiff
-newtext=darkblue
+newtext=cyan
 oldtext=white
-diffstuff=darkyellow
-cvsstuff=cyan
+diffstuff=yellow
+cvsstuff=blue
