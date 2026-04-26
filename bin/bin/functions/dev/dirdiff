@@ -37,6 +37,7 @@ while [ "$1" ] ;do
 		-p     ) P=true         ;;                                        # pause on match or notfound (to copy file)
 		-s     ) S=true         ;;                                        # splash messages
 		-b     ) B=-b           ;;                                        # ignore whitespace
+		-w     ) B=-w           ;;                                        # ignore ALL whitespace
 		-x     ) unset X        ;;                                        # do not apply .agignore and ignore filters
 		-debug ) debug=true; set -x ;;
 		-d     ) FILTER=$DIRDIFF:filter; touch -d "$2" $FILTER; shift ;;  # timestamp filter
