@@ -1,14 +1,13 @@
 
 // engine.part.3.c
-
-// HASH_TYPE uint64_t keycode_hash assumed (for > 32 key board)
+// NOTE: 64bit HASH_TYPE for handling up to 64 key keyboards
 
 bool are_hashed_keycodes_in_sound(HASH_TYPE keycodes_hash, HASH_TYPE sound) {
 	return (keycodes_hash & sound) == keycodes_hash;
 }
 
 uint8_t keycode_to_index(uint16_t keycode) {
-	return (uint8_t) (keycode - FIRST_INTERNAL_KEYCODE);
+	return keycode - FIRST_INTERNAL_KEYCODE;
 }
 
 void sound_keycode_array(uint16_t keycode) {

@@ -1,5 +1,6 @@
 
 // engine.part.2.c
+// NOTE: 64bit HASH_TYPE for handling up to 64 key keyboards
 
 void single_dance(CHORD* self) {
 	switch (*self->state) {
@@ -307,7 +308,7 @@ void string_in(CHORD* self) {
 		char buffer[STRING_MAX_LENGTH];
 		strcpy_P(buffer, (char*) pgm_read_ptr(&(strings[self->value1])));
 		send_string(buffer);
-		clear(self);     // (??) this clears STR+raise issue BUT raises layer immediately after STR
+		// clear(self);  // (??) this clears STR+raise issue BUT raises layer immediately after STR
 		tap_key(KC_NO);  // clear layer key (down) tap value on STR+raise
 	}
 }

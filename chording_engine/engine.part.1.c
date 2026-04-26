@@ -1,5 +1,6 @@
 
 // engine.part.1.c
+// NOTE: 64bit HASH_TYPE for handling up to 64 key keyboards
 
 enum chord_states {
 	IDLE,

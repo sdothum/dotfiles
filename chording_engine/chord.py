@@ -1,4 +1,8 @@
+#!/usr/bin/env python3
+
 # chord.py
+#
+# NOTE: 64bit HASH_TYPE for handling up to 64 key keyboards
 
 import re
 from functools import reduce
@@ -250,7 +254,7 @@ def expand_keycode_fnc(DEFINITION):
 		return DEFINITION
 
 def MK(on_pseudolayer, keycodes_hash, definition, output_buffer, index):
-	l = len(definition.split(', '))
+	l = len(definition.split(','))
 	output_buffer += "void function_" + str(index) + "(CHORD* self) {\n"
 	output_buffer += "	switch (*self->state) {\n"
 	output_buffer += "		case ACTIVATED:\n"

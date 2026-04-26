@@ -1,6 +1,7 @@
-# parser.py
-
 #!/usr/bin/env python3
+
+# parser.py
+# NOTE: 64bit HASH_TYPE for handling up to 64 key keyboards
 
 # parsing order (and return values) fixed for STR
 
