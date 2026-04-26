@@ -248,7 +248,7 @@ def expand_keycode_fnc(DEFINITION):
 		return DEFINITION
 
 def MK(on_pseudolayer, keycodes_hash, definition, output_buffer, index):
-	l = len(definition.split(', '))
+	l = len(definition.split(','))
 	output_buffer += "void function_" + str(index) + "(const struct Chord* self) {\n"
 	output_buffer += "    switch (*self->state) {\n"
 	output_buffer += "        case ACTIVATED:\n"
