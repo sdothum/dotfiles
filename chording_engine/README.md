@@ -3,7 +3,8 @@
 
 - Fix obsoleted keycode names (QMK #defines)
 - Fix STR key action string pointers
-- Convert for ARM to handle keyboards with > 32 keys (up to 64)
+- Convert to handle keyboards with > 32 keys (up to 64)
+- Below is the documentation from dennytom..
 
 # README
 

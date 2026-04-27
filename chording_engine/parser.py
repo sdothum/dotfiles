@@ -2,6 +2,10 @@
 
 # parser.py
 # NOTE: 64bit HASH_TYPE for handling up to 64 key keyboards
+#
+#       As above, a maximum keyboard of 64 keys can be handled by this parser.
+#       While this may seem a limitation.. anyone using a keyboard with more
+#       than 64 keys is probably not pursuing an ergonomic keyboard layout :-)
 
 # parsing order (and return values) fixed for STR
 
@@ -31,6 +35,9 @@ def add_parameters(data):
 	output_buffer = ""
 
 	number_of_keys = len(data["keys"])
+
+	pgm_read_word = "pgm_read_word"
+	hash_shift = "1"
 	if number_of_keys <= 8:
 		hash_type = "uint8_t"
 	elif number_of_keys <= 16:
@@ -39,6 +46,8 @@ def add_parameters(data):
 		hash_type = "uint32_t"
 	elif number_of_keys <= 64:
 		hash_type = "uint64_t"
+		hash_shift = "1ULL"
+		pgm_read_word = "pgm_read_ptr"
 	else:
 		raise Exception("The engine currently supports only up to 64 keys.")
 
@@ -52,6 +61,8 @@ def add_parameters(data):
 	output_buffer += "#define STRING_MAX_LENGTH " + str(data["parameters"]["string_max_length"]) + "\n"
 	output_buffer += "#define LEADER_MAX_LENGTH " + str(data["parameters"]["leader_max_length"]) + "\n"
 	output_buffer += "#define HASH_TYPE " + hash_type + "\n"
+	output_buffer += "#define HASH_KEYCODE (" + hash_type + ") " + hash_shift + "\n"
+	output_buffer += "#define PGM_READ_WORD " + pgm_read_word + "\n"
 	output_buffer += "#define NUMBER_OF_KEYS " + str(len(data["keys"])) + "\n"
 	output_buffer += "#define DEFAULT_PSEUDOLAYER " + data["parameters"]["default_pseudolayer"] + "\n"
 
@@ -64,8 +75,7 @@ def add_keycodes(data):
 		raise Exception("The keys must have unique names")
 
 	for key, counter in zip(data["keys"], range(0, len(data["keys"]))):
-		# output_buffer += "#define H_" + key + " ((HASH_TYPE) 1 << " + str(counter) + ")\n"
-		output_buffer += "#define H_" + key + " ((uint64_t) 1ULL << " + str(counter) + ")\n"
+		output_buffer += "#define H_" + key + " (HASH_KEYCODE << " + str(counter) + ")\n"
 	output_buffer += "\n"
 
 	output_buffer += "enum internal_keycodes {\n"

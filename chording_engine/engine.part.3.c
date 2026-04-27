@@ -18,7 +18,7 @@ void sound_keycode_array(uint16_t keycode) {
 
 void silence_keycode_hash_array(HASH_TYPE keycode_hash) {
 	for (int i = 0; i < NUMBER_OF_KEYS; i++) {
-		bool index_in_hash = ((HASH_TYPE) 1ULL << i) & keycode_hash;
+		bool index_in_hash = (HASH_KEYCODE << i) & keycode_hash;
 		if (index_in_hash) {
 			uint8_t current_val = keycodes_buffer_array[i];
 			keycodes_buffer_array[i] = 0;
@@ -34,7 +34,7 @@ void silence_keycode_hash_array(HASH_TYPE keycode_hash) {
 
 bool are_hashed_keycodes_in_array(HASH_TYPE keycode_hash) {
 	for (int i = 0; i < NUMBER_OF_KEYS; i++) {
-		bool index_in_hash = ((HASH_TYPE) 1ULL << i) & keycode_hash;
+		bool index_in_hash = (HASH_KEYCODE << i) & keycode_hash;
 		bool index_in_array = (bool) keycodes_buffer_array[i];
 		if (index_in_hash && !index_in_array) {
 			return false;
@@ -49,7 +49,7 @@ void kill_one_shots(void) {
 	struct Chord* chord;
 
 	for (int i = 0; i < NUMBER_OF_CHORDS; i++) {
-		chord_ptr = (struct Chord*) pgm_read_ptr (&list_of_chords[i]);
+		chord_ptr = (struct Chord*) PGM_READ_WORD (&list_of_chords[i]);
 		memcpy_P(&chord_storage, chord_ptr, sizeof(struct Chord));
 		chord = &chord_storage;
 
@@ -69,7 +69,7 @@ void process_finished_dances(void) {
 	struct Chord* chord;
 
 	for (int i = 0; i < NUMBER_OF_CHORDS; i++) {
-		chord_ptr = (struct Chord*) pgm_read_ptr (&list_of_chords[i]);
+		chord_ptr = (struct Chord*) PGM_READ_WORD (&list_of_chords[i]);
 		memcpy_P(&chord_storage, chord_ptr, sizeof(struct Chord));
 		chord = &chord_storage;
 
@@ -118,7 +118,7 @@ void remove_subchords(void) {
 	struct Chord* chord;
 
 	for (int i = 0; i < NUMBER_OF_CHORDS; i++) {
-		chord_ptr = (struct Chord*) pgm_read_ptr (&list_of_chords[i]);
+		chord_ptr = (struct Chord*) PGM_READ_WORD (&list_of_chords[i]);
 		memcpy_P(&chord_storage, chord_ptr, sizeof(struct Chord));
 		chord = &chord_storage;
 
@@ -135,7 +135,7 @@ void remove_subchords(void) {
 				continue;
 			}
 
-			chord_ptr_2 = (struct Chord*) pgm_read_ptr (&list_of_chords[j]);
+			chord_ptr_2 = (struct Chord*) PGM_READ_WORD (&list_of_chords[j]);
 			memcpy_P(&chord_storage_2, chord_ptr_2, sizeof(struct Chord));
 			chord_2 = &chord_storage_2;
 
@@ -163,12 +163,12 @@ void process_ready_chords(void) {
 		struct Chord* chord;
 
 		for (int i = 0; i < NUMBER_OF_CHORDS; i++) {
-			chord_ptr = (struct Chord*) pgm_read_ptr (&list_of_chords[i]);
+			chord_ptr = (struct Chord*) PGM_READ_WORD (&list_of_chords[i]);
 			memcpy_P(&chord_storage, chord_ptr, sizeof(struct Chord));
 			chord = &chord_storage;
 
 			// if the chord does not contain the first keycode
-			bool contains_first_keycode = ((HASH_TYPE) 1ULL << first_keycode_index) & chord->keycodes_hash;
+			bool contains_first_keycode = (HASH_KEYCODE << first_keycode_index) & chord->keycodes_hash;
 			if (!contains_first_keycode) {
 				continue;
 			}
@@ -202,7 +202,7 @@ void process_ready_chords(void) {
 		// execute logic
 		// this should be only one chord
 		for (int i = 0; i < NUMBER_OF_CHORDS; i++) {
-			chord_ptr = (struct Chord*) pgm_read_ptr (&list_of_chords[i]);
+			chord_ptr = (struct Chord*) PGM_READ_WORD (&list_of_chords[i]);
 			memcpy_P(&chord_storage, chord_ptr, sizeof(struct Chord));
 			chord = &chord_storage;
 
@@ -247,14 +247,14 @@ void process_ready_chords(void) {
 }
 
 void deactivate_active_chords(uint16_t keycode) {
-	HASH_TYPE hash = (HASH_TYPE) 1ULL << (keycode - SAFE_RANGE);
+	HASH_TYPE hash = HASH_KEYCODE << (keycode - SAFE_RANGE);
 	bool broken;
 	struct Chord chord_storage;
 	struct Chord* chord_ptr;
 	struct Chord* chord;
 
 	for (int i = 0; i < NUMBER_OF_CHORDS; i++) {
-		chord_ptr = (struct Chord*) pgm_read_ptr (&list_of_chords[i]);
+		chord_ptr = (struct Chord*) PGM_READ_WORD (&list_of_chords[i]);
 		memcpy_P(&chord_storage, chord_ptr, sizeof(struct Chord));
 		chord = &chord_storage;
 
@@ -380,7 +380,7 @@ void clear(CHORD* self) {
 		struct Chord* chord;
 
 		for (int i = 0; i < NUMBER_OF_CHORDS; i++) {
-			chord_ptr = (struct Chord*) pgm_read_ptr (&list_of_chords[i]);
+			chord_ptr = (struct Chord*) PGM_READ_WORD (&list_of_chords[i]);
 			memcpy_P(&chord_storage, chord_ptr, sizeof(struct Chord));
 			chord = &chord_storage;
 
