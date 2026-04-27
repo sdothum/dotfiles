@@ -145,15 +145,15 @@
 						["X", " ", " ", " ", " ", "X", "X", "X", " ", "M(cap, KC_SCLN, KC_ENTER)"],
 						[" ", "X", " ", " ", " ", " ", " ", "X", " ", "M(cap, KC_COMM, KC_ENTER)"],
 						[" ", "X", " ", " ", " ", "X", "X", "X", " ", "M(cap, KC_QUES, KC_ENTER)"],
-						[" ", " ", "X", " ", " ", " ", " ", "X", " ",  "M(cap, KC_DOT, KC_ENTER)"],
+						[" ", " ", "X", " ", " ", " ", " ", "X", " ", "M(cap, KC_DOT,  KC_ENTER)"],
 						[" ", " ", "X", " ", " ", "X", "X", "X", " ", "M(cap, KC_EXLM, KC_ENTER)"],
-						[" ", " ", " ", "X", "X", " ", " ", "X", " ",   "M(cap, KC_NO, KC_ENTER)"],
-						["X", " ", " ", " ", " ", " ", " ", " ", "X",   "M(cap, KC_COLN, KC_SPC)"],
-						["X", " ", " ", " ", " ", "X", "X", " ", "X",   "M(cap, KC_SCLN, KC_SPC)"],
-						[" ", "X", " ", " ", " ", " ", " ", " ", "X",   "M(cap, KC_COMM, KC_SPC)"],
-						[" ", "X", " ", " ", " ", "X", "X", " ", "X",   "M(cap, KC_QUES, KC_SPC)"],
-						[" ", " ", "X", " ", " ", " ", " ", " ", "X",    "M(cap, KC_DOT, KC_SPC)"],
-						[" ", " ", "X", " ", " ", "X", "X", " ", "X",   "M(cap, KC_EXLM, KC_SPC)"]
+						[" ", " ", " ", "X", "X", " ", " ", "X", " ", "M(cap, KC_NO,   KC_ENTER)"],
+						["X", " ", " ", " ", " ", " ", " ", " ", "X", "M(cap, KC_COLN,   KC_SPC)"],
+						["X", " ", " ", " ", " ", "X", "X", " ", "X", "M(cap, KC_SCLN,   KC_SPC)"],
+						[" ", "X", " ", " ", " ", " ", " ", " ", "X", "M(cap, KC_COMM,   KC_SPC)"],
+						[" ", "X", " ", " ", " ", "X", "X", " ", "X", "M(cap, KC_QUES,   KC_SPC)"],
+						[" ", " ", "X", " ", " ", " ", " ", " ", "X", "M(cap, KC_DOT,    KC_SPC)"],
+						[" ", " ", "X", " ", " ", "X", "X", " ", "X", "M(cap, KC_EXLM,   KC_SPC)"]
 					]
 				},
 				{
@@ -176,10 +176,10 @@
 					"type": "chord_set",
 					"set": "rows",
 					"keycodes": [
-						" ",                 ":", "MK(KC_LSFT, KC_Y)", "MK(KC_LSFT, KC_O)", "MK(KC_LSFT, KC_U)",                 "-",        "MK(KC_LSFT, KC_G)", "MK(KC_LSFT, KC_D)", "MK(KC_LSFT, KC_N)",  "MK(KC_LSFT, KC_M)", "MK(KC_LSFT, KC_X)", " ",
-						" ", "MK(KC_LSFT, KC_Q)", "MK(KC_LSFT, KC_H)", "MK(KC_LSFT, KC_E)", "MK(KC_LSFT, KC_A)", "MK(KC_LSFT, KC_W)",        "MK(KC_LSFT, KC_C)", "MK(KC_LSFT, KC_T)", "MK(KC_LSFT, KC_R)",  "MK(KC_LSFT, KC_S)", "MK(KC_LSFT, KC_Z)", " ",
-						" ", "MK(KC_LSFT, KC_J)",                 ",",                 ".", "MK(KC_LSFT, KC_K)",                 "'",        "MK(KC_LSFT, KC_B)", "MK(KC_LSFT, KC_P)", "MK(KC_LSFT, KC_L)",  "MK(KC_LSFT, KC_F)", "MK(KC_LSFT, KC_V)", " ",
-																											" ", "MK(KC_LSFT, KC_I)",                 " ",        " "                ,                 " ",                 " "
+						" ", ":"     , "STR(Y)", "STR(O)", "STR(U)", "-"     ,        "STR(G)", "STR(D)", "STR(N)",  "STR(M)", "STR(X)", " ",
+						" ", "STR(Q)", "STR(H)", "STR(E)", "STR(A)", "STR(W)",        "STR(C)", "STR(T)", "STR(R)",  "STR(S)", "STR(Z)", " ",
+						" ", "STR(J)", ","     , "."     , "STR(K)", "'"     ,        "STR(B)", "STR(P)", "STR(L)",  "STR(F)", "STR(V)", " ",
+														 " "     , "STR(I)", " "     ,        " "     , " "     , " "
 					]
 				},
 				{
