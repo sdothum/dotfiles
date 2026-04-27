@@ -1,4 +1,5 @@
 {
+	"_comment": "NOTE: tabstop 3 for visually aligned formatting",
 	"keys": [
 		"TOP2" , "TOP3" , "TOP4" , "TOP5" , "TOP6" ,            "TOP7" , "TOP8" , "TOP9" , "TOP10" , "TOP11" ,
 		"MID2" , "MID3" , "MID4" , "MID5" , "MID6" ,            "MID7" , "MID8" , "MID9" , "MID10" , "MID11" ,
@@ -25,12 +26,13 @@
 		},
 		{
 			"type": "manual",
-			"_comment": "OPTIONAL: for physical keyswitch testing (table must use QMK keycode names)",
+			"_comment": "EXAMPLE: for physical keyswitch testing (table must use QMK keycode names)",
+			"_comment": "NOTE: 'manual' layer MUST match physical 'keys' layout",
 			"keycodes": [
-				"KC_COLON" , "KC_Y"     , "KC_O"    , "KC_U" , "KC_MINUS" ,            "KC_G"   , "KC_D"   , "KC_N"    , "KC_M" , "KC_X" ,
-				"KC_Q"     , "KC_H"     , "KC_E"    , "KC_A" , "KC_W"     ,            "KC_C"   , "KC_T"   , "KC_R"    , "KC_S" , "KC_Z" ,
-				"KC_J"     , "KC_COMMA" , "KC_DOT"  , "KC_K" , "KC_QUOTE" ,            "KC_B"   , "KC_P"   , "KC_L"    , "KC_F" , "KC_V" ,
-												  "KC_LSFT" , "KC_I" , "KC_BSPC"  ,            "KC_ENT" , "KC_SPC" , "KC_RSFT"
+				"KC_COLON"     , "KC_Y"         , "KC_O"         , "KC_U"         , "KC_MINUS" ,            "KC_G"   , "KC_D"         , "KC_N"         , "KC_M"         , "KC_X"         ,
+				"LALT_T(KC_Q)" , "LCTL_T(KC_H)" , "LGUI_T(KC_E)" , "LSFT_T(KC_A)" , "KC_W"     ,            "KC_C"   , "RSFT_T(KC_T)" , "RGUI_T(KC_R)" , "RCTL_T(KC_S)" , "RALT_T(KC_Z)" ,
+				"KC_J"         , "KC_COMMA"     , "KC_DOT"       , "KC_K"         , "KC_QUOTE" ,            "KC_B"   , "KC_P"         , "KC_L"         , "KC_F"         , "KC_V"         ,
+															 "KC_ESC"       , "KC_I"         , "KC_TAB"   ,            "KC_ENT" , "KC_SPC"       , "KC_BSPC"
 			]
 		}
 	],
@@ -49,6 +51,7 @@
 	"pseudolayers": [
 		{
 			"name": "ALWAYS_ON",
+			"_comment": "NOTE: 'visual' layers MUST match physical 'keys' layout (will cause irregular keyboard behaviour otherwise)",
 			"chords": [
 				{
 					"type": "visual",
@@ -90,7 +93,7 @@
 				{
 					"type": "visual_array",
 					"_comment": "a+w chord -> 'A' BECAUSE: a+shift chord is indistinguishable from shift+t",
-					"_comment": "    NOTE: do not assign e+a chord -> 'A' SEE: sxhkdrc super+shift keymaps",
+					"_comment": "NOTE: do not assign e+a chord -> 'A' SEE: sxhkdrc super+shift keymaps",
 					"_comment": "str(;) (??) avoids random (sloppy fingering) autorepeat of ',.' -> ';'",
 					"keys": ["TOP2" , "MID2" , "TOP3" , "MID3" , "TOP4" , "MID4" , "TOP5" , "MID5" , "TOP6" , "MID6" , "TOP8" , "MID8"],
 					"dictionary": [
@@ -115,8 +118,8 @@
 				},
 				{
 					"type": "visual_array",
-					"_comment": "c+t chord -> 'T' FOR: reducing (left+right left) 'shift+t ..' to (right left) hand 'T' bigram",
-					"_comment": "    NOTE: do not assign t+r chord -> 'T' SEE: of sxhkdrc super+shift keymaps",
+					"_comment": "c+t chord -> 'T' FOR: reducing (lefvisually +righed formattingft) 'shift+t ..' to (right left) hand 'T' bigram",
+					"_comment": "NOTE: do not assign t+r chord -> 'T' SEE: of sxhkdrc super+shift keymaps",
 					"keys": ["TOP5" , "MID5" , "TOP7" , "MID7" , "TOP8" , "MID8" , "TOP9" , "MID9" , "TOP10" , "MID10" , "TOP11" , "MID11"],
 					"dictionary": [
 						["X" , "X" , "X" , " " , " " , " " , " " , " " , " " , " " , " " , " " , "STR(G)"],
@@ -147,6 +150,7 @@
 				},
 				{
 					"type": "visual_array",
+					"_comment": "NOTE: M(fn, val1, val2) parms are not translated by chord.py, as they need not be keycodes",
 					"keys": ["TOP2" , "MID3" , "MID4" , "TOP5" , "MID5" , "TOP8" , "MID8" , "THU4" , "THU5"],
 					"dictionary": [
 						["X" , " " , " " , " " , " " , " " , " " , "X" , " " , "M(cap, KC_COLN, KC_ENTER)"],
@@ -183,7 +187,7 @@
 				{
 					"type": "chord_set",
 					"_comment": "SEE:  M(cap, .. , ..) capitalization chords",
-					"_comment": "NOTE: STR(..) replaces MK(LSFT, ..) as cleaner short form",
+					"_comment": "NOTE: STR(..) replaces MK(LSFT, ..) as cleaner code efficient short form",
 					"set": "rows",
 					"keycodes": [
 						":"      , "STR(Y)" , "STR(O)" , "STR(U)" , "-"      ,            "STR(G)" , "STR(D)" , "STR(N)" , "STR(M)" , "STR(X)" ,
@@ -294,11 +298,11 @@
 					"type": "chord_set",
 					"set": "rows",
 					"keycodes": [
-						" "            , "A"             , "B"             , "AS(C)"         , " "                  ,            "/"        , "4"    , "5"          , "9"       , "*"    ,
-						" "            , "KK(D,LCTL)"    , "KK(E,LGUI)"    , "KK(F,LSFT)"    , " "                  ,            "."        , "1"    , "2"          , "3"       , "-"    ,
-						"MO(QUICKEYS)" , "<"             , "KL(>,REGEX)"   , "SPC"           , " "                  ,            ","        , "8"    , "6"          , "7"       , "+"    ,
-						"LALT"         , "MK(LALT,LCTL)" , "MK(LALT,LGUI)" , "MK(LALT,LSFT)" , "MK(LALT,LCTL,LGUI)" ,            "CLEAR_KB" , "CAPS" , "DF(SYMBOL)" , "DF(NAV)" , "RALT" ,
-																	  "CLEAR_KB"      , " "             , "TAB"                ,            "\\"       , "0"    , "="
+						" "            , "A"             , "B"             , "AS(C)"         , " "                  ,            "/"        , "4"    , "5" , "9" , "*"    ,
+						" "            , "KK(D,LCTL)"    , "KK(E,LGUI)"    , "KK(F,LSFT)"    , " "                  ,            "."        , "1"    , "2" , "3" , "-"    ,
+						"MO(QUICKEYS)" , "<"             , "KL(>,REGEX)"   , "SPC"           , " "                  ,            ","        , "8"    , "6" , "7" , "+"    ,
+						"LALT"         , "MK(LALT,LCTL)" , "MK(LALT,LGUI)" , "MK(LALT,LSFT)" , "MK(LALT,LCTL,LGUI)" ,            "CLEAR_KB" , "CAPS" , " " , " " , "RALT" ,
+																	  "CLEAR_KB"      , "MO(REGEX)"     , "TAB"                ,            "\\"       , "0"    , "="
 					]
 				},
 				{

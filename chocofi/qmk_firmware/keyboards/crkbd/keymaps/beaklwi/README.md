@@ -1,9 +1,10 @@
 # # BEAKL Wi Georgi Layout
 
-This keymap is using a custom chording engine. Head out to (DennyTom) user space to find the source files and details.
+This keymap is using a custom chording engine to generate the QMK keymap.c
+source file. SEE: the "chording engine" in this repository.
 
 To make a real keymap from the JSON file, run 
 
 ```sh
-python3 parser.py keymap_def.json keymap.c
+python3 parser.py your_keymap.json keymap.c
 ```
