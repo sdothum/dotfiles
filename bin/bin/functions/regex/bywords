@@ -1,0 +1,15 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Regex
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ..................................................................... by words
+
+# Usage: stdin | bywords [<count>]
+
+n=5  # default number of quoted comma separated words
+
+tr ',' '\n' | sed 's/[ \t]//g; /^$/d' | sort | sed 's/$/,/' | xargs -n ${1:-$n} | sed -r 's/([^ ]*),/"\1",/g'
+
+# kak: filetype=sh
