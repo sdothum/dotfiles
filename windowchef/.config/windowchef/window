@@ -28,14 +28,29 @@ border=$(chef screen window_border)
 winid=$(pfw 2>/dev/null) || return  # trap empty desktop at startup
 # xdotool windowstate -remove fullscreen $winid  # fullscreen negates any attempted window actions
 
-geometry()       { xdotool getwindowgeometry -shell ${1:-$winid}; }             # X Y WIDTH HEIGHT (doesn't include borders)
-set_geometry()   { eval $(geometry ${1:-$winid}); }
-cat_geometry()   { [ -e $WINFO/$winid ] && eval $(ls -1 $WINFO/$winid) || exit 1; }
-save_geometry()  { rm -rf $WINFO/${1:-$winid}; for x in $(geometry ${1:-$winid}) ;do mkdir -p $WINFO/${1:-$winid}/$x ;done }  # for revert
-opposite_side()  { echo $(( width + margin * 2 - (X + WIDTH + border * 2) )); }  # for nearest edge SEE: window snap / stretch
-windowfocus_by() { xdotool search -sync -onlyvisible -$1 "$(escape $xname)" windowactivate; }
-windowfocus_id() { xdotool windowmap $1; xdotool windowraise $1; }
-xname_is()       { xdotool getwindow$1 $winid | grep -q "$xname"; }
+geometry()        { xdotool getwindowgeometry -shell ${1:-$winid}; }             # X Y WIDTH HEIGHT (doesn't include borders)
+set_geometry()    { eval $(geometry ${1:-$winid}); }
+cat_geometry()    { [ -e $WINFO/$winid ] && eval $(ls -1 $WINFO/$winid) || exit 1; }
+rec_geometry()    { [ -e $WINFO/tmp ] || exit; rm -rf $WINFO/${1:-$winid}; mv $WINFO/tmp $WINFO/${1:-$winid}; exit; }
+
+save_geometry()   {
+	rm -rf $WINFO/tmp
+	for x in $(geometry ${1:-$winid}) ;do
+		mkdir -p $WINFO/tmp/$x
+	done
+}
+
+revert_geometry() {
+	[ -d $WINFO/${1:-$winid} ] || rec_geometry ${1:-$winid}
+	for x in $(geometry ${1:-$winid}) ;do
+		[ $(find $WINFO/tmp -name "$x") ] || rec_geometry ${1:-$winid}
+	done
+}
+
+opposite_side()   { echo $(( width + margin * 2 - (X + WIDTH + border * 2) )); }  # for nearest edge SEE: window snap / stretch
+windowfocus_by()  { xdotool search -sync -onlyvisible -$1 "$(escape $xname)" windowactivate; }
+windowfocus_id()  { xdotool windowmap $1; xdotool windowraise $1; }
+xname_is()        { xdotool getwindow$1 $winid | grep -q "$xname"; }
 
 # ..................................................................... X Y size
 
@@ -82,6 +97,7 @@ else
 	usage $0 $msg
 fi
 
-mapw -m $winid  # regain focus
+revert_geometry  # revert geometry history
+mapw -m $winid   # regain focus
 
 # kak: filetype=sh
