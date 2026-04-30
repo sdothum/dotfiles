@@ -13,19 +13,19 @@ area=$(( (${HEIGHT#*=} - gap) * (${WIDTH#*=} - gap) ))
 
 if [ "$1" = '+' ] ;then
 	if   [ $area -ge 921600 ] ;then
-		window size 1080p
+		window -- size 1080p
 	elif [ $area -ge 345600 ] ;then
-		window size 720p
+		window -- size 720p
 	else
-		window size 480p
+		window -- size 480p
 	fi
 else
 	if   [ $area -le 921600 ] ;then
-		window size 480p
+		window -- size 480p
 	elif [ $area -le 2073600 ] ;then
-		window size 720p
+		window -- size 720p
 	else
-		window size 1080p
+		window -- size 1080p
 	fi
 fi
 

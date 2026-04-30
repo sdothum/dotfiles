@@ -7,17 +7,20 @@
 
 # ............................................................ Window operations
 
-# Usage: window <msg>       SEE: functions/window
+# Usage: window [--] <msg>   SEE: functions/window
 #               @<delay> <msg>
 #               @[<class> | <name>] [URL] <msg>
-#                    where, @   wait for delay time or visible window
+#                    where, --  chained window actions require ignoring intermediate window geometry history
+#                           @   wait for delay time or visible window
 #                           URL indicates the spawned window name is a URL (even if <class> is defined)
 #                           SEE: web/qutebrowser-instance, windowchef/rulerrc
+
+[ "$1" = '--' ] && { postpone_revert_history=true; shift; }
 
 # usable screen dimensions
 margin=$(chef screen margin)
 panel=$(chef screen panel)
-top=$(chef screen top)            # windowchefrc panel height is default bottom gap_width
+top=$(chef screen top)             # windowchefrc panel height is default bottom gap_width
 gap=$(chef screen gap)
 W=$(( $(chef display width) - margin * 2 ))
 H=$(( $(chef display height) - panel - top ))
@@ -28,12 +31,12 @@ border=$(chef screen window_border)
 winid=$(pfw 2>/dev/null) || return  # trap empty desktop at startup
 # xdotool windowstate -remove fullscreen $winid  # fullscreen negates any attempted window actions
 
-geometry()        { xdotool getwindowgeometry -shell ${1:-$winid}; }             # X Y WIDTH HEIGHT (doesn't include borders)
-set_geometry()    { eval $(geometry ${1:-$winid}); }
-cat_geometry()    { [ -e $WINFO/$winid ] && eval $(ls -1 $WINFO/$winid) || exit 1; }
-rec_geometry()    { [ -e $WINFO/tmp ] || exit; rm -rf $WINFO/${1:-$winid}; mv $WINFO/tmp $WINFO/${1:-$winid}; exit; }
+geometry()     { xdotool getwindowgeometry -shell ${1:-$winid}; }  # X Y WIDTH HEIGHT (doesn't include borders)
+set_geometry() { eval $(geometry ${1:-$winid}); }
+cat_geometry() { [ -e $WINFO/$winid ] && eval $(ls -1 $WINFO/$winid) || exit 1; }
+rec_geometry() { rm -rf $WINFO/${1:-$winid}; cp -R $WINFO/tmp $WINFO/${1:-$winid}; exit; }
 
-save_geometry()   {
+snapshot_geometry() {
 	rm -rf $WINFO/tmp
 	for x in $(geometry ${1:-$winid}) ;do
 		mkdir -p $WINFO/tmp/$x
@@ -41,22 +44,23 @@ save_geometry()   {
 }
 
 revert_geometry() {
-	[ -d $WINFO/${1:-$winid} ] || rec_geometry ${1:-$winid}
+	[ -e $WINFO/tmp ] || exit
+	[ -e $WINFO/${1:-$winid} ] || rec_geometry ${1:-$winid}
 	for x in $(geometry ${1:-$winid}) ;do
 		[ $(find $WINFO/tmp -name "$x") ] || rec_geometry ${1:-$winid}
 	done
 }
 
-opposite_side()   { echo $(( width + margin * 2 - (X + WIDTH + border * 2) )); }  # for nearest edge SEE: window snap / stretch
-windowfocus_by()  { xdotool search -sync -onlyvisible -$1 "$(escape $xname)" windowactivate; }
-windowfocus_id()  { xdotool windowmap $1; xdotool windowraise $1; }
-xname_is()        { xdotool getwindow$1 $winid | grep -q "$xname"; }
+opposite_side()  { echo $(( width + margin * 2 - (X + WIDTH + border * 2) )); }  # for nearest edge SEE: window snap / stretch
+windowfocus_by() { xdotool search -sync -onlyvisible -$1 "$(escape $xname)" windowactivate; }
+windowfocus_id() { xdotool windowmap $1; xdotool windowraise $1; }
+xname_is()       { xdotool getwindow$1 $winid | grep -q "$xname"; }
 
 # ..................................................................... X Y size
 
 # draw <winid> <width> <height> [rotate]
 draw() {
-	save_geometry
+	snapshot_geometry
 	[ $4 ] && { WID=$3; HGT=$2; } || { WID=$2; HGT=$3; }
 	[ $HGT -gt $HEIGHT ] && { swap=$WID; WID=$HGT; HGT=$swap; }
 	wtp $X $Y $WID $HGT $1
@@ -97,7 +101,7 @@ else
 	usage $0 $msg
 fi
 
-revert_geometry  # revert geometry history
-mapw -m $winid   # regain focus
+[ $postpone_revert_history ] || revert_geometry  # for 'window revert' geometry history
+mapw -m $winid  # regain focus
 
 # kak: filetype=sh

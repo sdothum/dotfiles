@@ -8,7 +8,7 @@
 
 # Usage: window tile [<count>] <position>
 
-save_geometry
+snapshot_geometry
 set_geometry  # X Y WIDTH HEIGHT
 
 height=$(( H - border * 2 ))  # tiles are full vertical panes

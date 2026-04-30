@@ -11,7 +11,7 @@
 ASPECT=4:3  # (photographic) ratio
 
 size() {
-	save_geometry
+	snapshot_geometry
 	set_geometry
 	[ $4 ] && { width=$3; height=$2; } || { width=$2; height=$3; }
 	[ $height -gt $H ] && { swap=$width; width=$height; height=$swap; }
@@ -34,7 +34,7 @@ aspect() {
 # ...................................................................... Monocle
 
 monocle() {
-	window tile 2 1
+	window -- tile 2 1
 	waitron window_snap middle
 }
 
@@ -43,7 +43,7 @@ monocle() {
 TERMSIZE=$WME/term
 
 reterm() {
-	save_geometry
+	snapshot_geometry
 	eval $(xdotool getwindowgeometry -shell $winid | grep -E 'X|Y')
 	if [ ! -e $TERMSIZE ] ;then
 		term TRANSPARENT class=ephemeral  # as unobtrusive as possible :)
@@ -67,7 +67,7 @@ display() {
 		720*  ) size $winid $(addgap 1280  720) $2 ;;  #  921600
 		480*  ) size $winid $(addgap  720  480) $2 ;;  #  345600
 	esac
-	window @$winid snap center
+	window -- @$winid snap center
 }
 
 # ................................................................... Paper size

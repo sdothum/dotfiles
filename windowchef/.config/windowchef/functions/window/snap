@@ -8,7 +8,7 @@
 
 # Usage: window snap left | right | 'near | center [left | right | horizontal | vertical] | top [left | right] | bottom [left | right]
 
-save_geometry  # NOTE: comment out to not overwrite window sizing/tiling geometry
+snapshot_geometry  # NOTE: comment out to not overwrite window sizing/tiling geometry
 set_geometry   # X Y WIDTH HEIGHT
 
 move()   {

@@ -8,7 +8,7 @@
 
 # Usage: window extend left | right | near | far | top [left | right] | bottom [left | right]
 
-save_geometry
+snapshot_geometry
 set_geometry  # X Y WIDTH HEIGHT
 
 lwidth=$(( X + WIDTH - margin ))

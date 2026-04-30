@@ -10,7 +10,7 @@
 #                      <position> -> fit by window width
 # NOTE:  use "window snap center" for centering
 
-save_geometry
+snapshot_geometry
 set_geometry  # X Y WIDTH HEIGHT
 
 case $2 in
