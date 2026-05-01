@@ -88,7 +88,7 @@ DEFAULTSESSION=windowchef
 
 set_display() { xrandr $OFF --output $1 --primary --mode $2 --rate 60 --dpi 96 --set TearFree on; }
 
-interface=${interface:-$(interface dp || interface hdmi)}           # DEBUG: env interface=<interface> x
+interface=${interface:-$(interface dp || interface hdmi)}          # DEBUG: env interface=<interface> x
 case $interface in
 # DP*   ) OFF="--output $(interface hdmi) --off" || unset OFF; RGB='--set "Broadcast RGB" "Full"' ;;  # FOR: multiple interfaces to a single monitor
 	DP*   ) OFF="--output $(interface hdmi) --off" || unset OFF ;;  # FOR: multiple interfaces to a single monitor
