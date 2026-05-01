@@ -2,7 +2,7 @@
 # sdothum - 2016 (c) wtfpl
 # SEE: xb, .xb_actions
 
-keep=3  # last n kernels
+keep=6  # last n kernels
 
 # prune kernel versions
 prune() {

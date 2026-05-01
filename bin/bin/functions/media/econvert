@@ -79,6 +79,7 @@ esac
 
 notify low "$title" "Converting to $format..\n--change-justification=${justify:-..inbook justification..}"
 ditto $format "$file"
+echo "$file" | grep -q '  ' && ditto ERROR econvert 'filename must be single spaced.. check author name'
 
 # ebook-convert "$file" "${output%.*}.epub"  # test image
 # convert even .azw3 to inject folder title and author
