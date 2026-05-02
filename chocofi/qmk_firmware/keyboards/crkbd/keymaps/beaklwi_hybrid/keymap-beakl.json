@@ -7,7 +7,7 @@
 								"THU1" , "THU2" , "THU3" ,            "THU4" , "THU5" , "THU6"
 	],
 	"parameters": {
-		"_comment": "tighten leader_timeout from 750 to counter unexpected ',.' -> ';' autorepeat (??) Georgi only?",
+		"_comment": "tighten leader_timeout from 750 to counter unexpected ',.' -> ';' autorepeat",
 		"layout_function_name": "LAYOUT_split_3x5_3",
 		"chord_timeout": 100,
 		"dance_timeout": 100,
@@ -83,10 +83,10 @@
 					"_comment": "SEE: chord.py for keyname acronyms and aliases",
 					"set": "rows",
 					"keycodes": [
-						"LALT" , "Y"             , "O"             , "U"             , "-"                  ,            "G"             , "D"           , "N"              , "M"          , "RALT" ,
-						"Q"    , "KK(H,LCTL)"    , "KK(E,LGUI)"    , "KK(A,LSFT)"    , "W"                  ,            "C"             , "KK(T,RSFT)"  , "KK(R,RGUI)"     , "KK(S,RCTL)" , "X"    ,
-						"J"    , ","             , "."             , "K"             , "'"                  ,            "B"             , "P"           , "L"              , "F"          , "V"    ,
-						":"    , "MK(LALT,LCTL)" , "MK(LALT,LGUI)" , "MK(LALT,LSFT)" , "MK(LALT,LCTL,LGUI)" ,            "DF(NUM)"       , "CAPS"        , "DF(SYMBOL)"     , "DF(NAV)"    , "Z"    ,
+						"Q"    , "Y"             , "O"             , "U"             , "-"                  ,            "G"             , "D"           , "N"              , "M"          , "X"    ,
+						"J"    , "KK(H,LCTL)"    , "KK(E,LGUI)"    , "KK(A,LSFT)"    , "W"                  ,            "C"             , "KK(T,RSFT)"  , "KK(R,RGUI)"     , "KK(S,RCTL)" , "V"    ,
+						":"    , ","             , "."             , "K"             , "'"                  ,            "B"             , "P"           , "L"              , "F"          , "Z"    ,
+						"LALT" , "MK(LALT,LCTL)" , "MK(LALT,LGUI)" , "MK(LALT,LSFT)" , "MK(LALT,LCTL,LGUI)" ,            "DF(NUM)"       , "CAPS"        , "DF(SYMBOL)"     , "DF(NAV)"    , "RALT" ,
 															"KL(ESC,FKEY)"  , "KL(I,REGEX)"   , "KL(TAB,NUM)"        ,            "KL(ENTER,NAV)" , "KL(SPC,SYM)" , "KL(BSPC,MOUSE)"
 					]
 				},
@@ -95,54 +95,54 @@
 					"_comment": "a+w chord -> 'A' BECAUSE: a+shift chord is indistinguishable from shift+t",
 					"_comment": "NOTE: do not assign e+a chord -> 'A' SEE: sxhkdrc super+shift keymaps",
 					"_comment": "str(;) (??) avoids random (sloppy fingering) autorepeat of ',.' -> ';'",
-					"keys": ["BOT2" , "MID2" , "TOP3" , "MID3" , "TOP4" , "MID4" , "TOP5" , "MID5" , "TOP6" , "MID6" , "TOP8" , "MID8"],
+					"keys": ["BOT2" , "TOP2" , "MID2" , "TOP3" , "MID3" , "TOP4" , "MID4" , "TOP5" , "MID5" , "TOP6" , "MID6" , "TOP8" , "MID8"],
 					"dictionary": [
-						["X" , " " , " " , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "STR(;)" ],
-						["X" , "X" , " " , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "STR(J)" ],
-						[" " , "X" , " " , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "STR(Q)" ],
-						[" " , " " , "X" , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "STR(Y)" ],
-						[" " , " " , "X" , "X" , " " , " " , " " , " " , " " , " " , "X" , "X" , "STR(H)" ],
-						[" " , " " , " " , "X" , " " , " " , " " , " " , " " , " " , "X" , "X" , "?"      ],
-						[" " , " " , " " , "X" , " " , "X" , " " , " " , " " , " " , " " , " " , "STR(;)" ],
-						[" " , " " , " " , " " , "X" , " " , " " , " " , " " , " " , "X" , "X" , "STR(O)" ],
-						[" " , " " , " " , " " , "X" , "X" , " " , " " , " " , " " , "X" , "X" , "STR(E)" ],
-						[" " , " " , " " , " " , " " , "X" , " " , " " , " " , " " , "X" , "X" , "!"      ],
-						[" " , " " , " " , " " , " " , " " , "X" , " " , " " , " " , "X" , "X" , "STR(U)" ],
-						[" " , " " , " " , " " , " " , " " , "X" , "X" , "X" , "X" , " " , " " , "STR(A)" ],
-						[" " , " " , " " , " " , " " , " " , " " , "X" , " " , " " , "X" , "X" , "STR(K)" ],
-						[" " , " " , " " , " " , " " , " " , " " , " " , "X" , " " , "X" , "X" , "_"      ],
-						[" " , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "X" , "X" , "STR(W)" ],
-						[" " , " " , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "X" , "\""     ]
+						[" " , "X" , " " , " " , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "STR(Q)" ],
+						[" " , " " , "X" , " " , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "STR(J)" ],
+						["X" , " " , "X" , " " , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "STR(:)" ],
+						[" " , " " , " " , "X" , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "STR(Y)" ],
+						[" " , " " , " " , "X" , "X" , " " , " " , " " , " " , " " , " " , "X" , "X" , "STR(H)" ],
+						[" " , " " , " " , " " , "X" , " " , " " , " " , " " , " " , " " , "X" , "X" , "?"      ],
+						[" " , " " , " " , " " , "X" , " " , "X" , " " , " " , " " , " " , " " , " " , "STR(;)" ],
+						[" " , " " , " " , " " , " " , "X" , " " , " " , " " , " " , " " , "X" , "X" , "STR(O)" ],
+						[" " , " " , " " , " " , " " , "X" , "X" , " " , " " , " " , " " , "X" , "X" , "STR(E)" ],
+						[" " , " " , " " , " " , " " , " " , "X" , " " , " " , " " , " " , "X" , "X" , "!"      ],
+						[" " , " " , " " , " " , " " , " " , " " , "X" , " " , " " , " " , "X" , "X" , "STR(U)" ],
+						[" " , " " , " " , " " , " " , " " , " " , "X" , "X" , "X" , "X" , " " , " " , "STR(A)" ],
+						[" " , " " , " " , " " , " " , " " , " " , " " , "X" , " " , " " , "X" , "X" , "STR(K)" ],
+						[" " , " " , " " , " " , " " , " " , " " , " " , " " , "X" , " " , "X" , "X" , "_"      ],
+						[" " , " " , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "X" , "X" , "STR(W)" ],
+						[" " , " " , " " , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "X" , "\""     ]
 					]
 				},
 				{
 					"type": "visual_array",
 					"_comment": "c+t chord -> 'T' FOR: reducing (lefvisually +righed formattingft) 'shift+t ..' to (right left) hand 'T' bigram",
 					"_comment": "NOTE: do not assign t+r chord -> 'T' SEE: of sxhkdrc super+shift keymaps",
-					"keys": ["TOP5" , "MID5" , "TOP7" , "MID7" , "TOP8" , "MID8" , "TOP9" , "MID9" , "TOP10" , "MID10" , "BOT11" , "MID11"],
+					"keys": ["TOP5" , "MID5" , "TOP7" , "MID7" , "TOP8" , "MID8" , "TOP9" , "MID9" , "TOP10" , "MID10" , "TOP11" , "MID11" , "BOT11"],
 					"dictionary": [
-						["X" , "X" , "X" , " " , " " , " " , " " , " " , " " , " " , " " , " " , "STR(G)"],
-						["X" , "X" , "X" , "X" , " " , " " , " " , " " , " " , " " , " " , " " , "STR(C)"],
-						["X" , "X" , " " , "X" , " " , " " , " " , " " , " " , " " , " " , " " , "STR(B)"],
-						["X" , "X" , " " , " " , "X" , " " , " " , " " , " " , " " , " " , " " , "STR(D)"],
-						["X" , "X" , " " , " " , "X" , "X" , " " , " " , " " , " " , " " , " " , "STR(T)"],
-						[" " , " " , "X" , "X" , "X" , "X" , " " , " " , " " , " " , " " , " " , "STR(T)"],
-						["X" , "X" , " " , " " , " " , "X" , " " , " " , " " , " " , " " , " " , "STR(P)"],
-						["X" , "X" , " " , " " , " " , " " , "X" , " " , " " , " " , " " , " " , "STR(N)"],
-						["X" , "X" , " " , " " , " " , " " , "X" , "X" , " " , " " , " " , " " , "STR(R)"],
-						["X" , "X" , " " , " " , " " , " " , " " , "X" , " " , " " , " " , " " , "STR(L)"],
-						["X" , "X" , " " , " " , " " , " " , " " , " " , "X" , " " , " " , " " , "STR(M)"],
-						["X" , "X" , " " , " " , " " , " " , " " , " " , "X" , "X" , " " , " " , "STR(S)"],
-						["X" , "X" , " " , " " , " " , " " , " " , " " , " " , "X" , " " , " " , "STR(F)"],
-						["X" , "X" , " " , " " , " " , " " , " " , " " , " " , " " , "X" , " " , "STR(Z)"],
-						["X" , "X" , " " , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "STR(V)"],
-						["X" , "X" , " " , " " , " " , " " , " " , " " , " " , " " , " " , "X" , "STR(X)"]
+						["X" , "X" , "X" , " " , " " , " " , " " , " " , " " , " " , " " , " " , " " , "STR(G)"],
+						["X" , "X" , "X" , "X" , " " , " " , " " , " " , " " , " " , " " , " " , " " , "STR(C)"],
+						["X" , "X" , " " , "X" , " " , " " , " " , " " , " " , " " , " " , " " , " " , "STR(B)"],
+						["X" , "X" , " " , " " , "X" , " " , " " , " " , " " , " " , " " , " " , " " , "STR(D)"],
+						["X" , "X" , " " , " " , "X" , "X" , " " , " " , " " , " " , " " , " " , " " , "STR(T)"],
+						[" " , " " , "X" , "X" , "X" , "X" , " " , " " , " " , " " , " " , " " , " " , "STR(T)"],
+						["X" , "X" , " " , " " , " " , "X" , " " , " " , " " , " " , " " , " " , " " , "STR(P)"],
+						["X" , "X" , " " , " " , " " , " " , "X" , " " , " " , " " , " " , " " , " " , "STR(N)"],
+						["X" , "X" , " " , " " , " " , " " , "X" , "X" , " " , " " , " " , " " , " " , "STR(R)"],
+						["X" , "X" , " " , " " , " " , " " , " " , "X" , " " , " " , " " , " " , " " , "STR(L)"],
+						["X" , "X" , " " , " " , " " , " " , " " , " " , "X" , " " , " " , " " , " " , "STR(M)"],
+						["X" , "X" , " " , " " , " " , " " , " " , " " , "X" , "X" , " " , " " , " " , "STR(S)"],
+						["X" , "X" , " " , " " , " " , " " , " " , " " , " " , "X" , " " , " " , " " , "STR(F)"],
+						["X" , "X" , " " , " " , " " , " " , " " , " " , " " , " " , "X" , " " , " " , "STR(X)"],
+						["X" , "X" , " " , " " , " " , " " , " " , " " , " " , " " , " " , "X" , " " , "STR(V)"],
+						["X" , "X" , " " , " " , " " , " " , " " , " " , " " , " " , " " , "X" , "X" , "STR(Z)"]
 					]
 				},
 				{
 					"type": "visual_array",
 					"_comment": "sloppy pinkie bigram",
-					"keys": ["MID2" , "TOP5"],
+					"keys": ["TOP2" , "TOP3"],
 					"dictionary": [
 						["X" , "X" , "STR(qu)"]
 					]
@@ -150,7 +150,7 @@
 				{
 					"type": "visual_array",
 					"_comment": "NOTE: M(fn, val1, val2) parms are not translated by chord.py, as they need not be keycodes",
-					"keys": ["BOT2" , "MID3" , "MID4" , "TOP5" , "MID5" , "TOP8" , "MID8" , "THU4" , "THU5"],
+					"keys": ["TOP2" , "MID3" , "MID4" , "TOP5" , "MID5" , "TOP8" , "MID8" , "THU4" , "THU5"],
 					"dictionary": [
 						["X" , " " , " " , " " , " " , " " , " " , "X" , " " , "M(cap, KC_COLN, KC_ENTER)"],
 						["X" , " " , " " , " " , " " , "X" , "X" , "X" , " " , "M(cap, KC_SCLN, KC_ENTER)"],
@@ -189,10 +189,10 @@
 					"_comment": "NOTE: STR(..) replaces MK(LSFT, ..) as cleaner code efficient short form",
 					"set": "rows",
 					"keycodes": [
-						" "      , "STR(Y)" , "STR(O)" , "STR(U)" , "-"      ,            "STR(G)" , "STR(D)" , "STR(N)" , "STR(M)" , " "      ,
-						"STR(Q)" , "STR(H)" , "STR(E)" , "STR(A)" , "STR(W)" ,            "STR(C)" , "STR(T)" , "STR(R)" , "STR(S)" , "STR(X)" ,
-						"STR(J)" , ","      , "."      , "STR(K)" , "'"      ,            "STR(B)" , "STR(P)" , "STR(L)" , "STR(F)" , "STR(V)" ,
-						":"      , " "      , " "      , " "      , " "      ,            " "      , " "      , " "      , " "      , "STR(Z)" ,
+						"STR(Q)" , "STR(Y)" , "STR(O)" , "STR(U)" , "-"      ,            "STR(G)" , "STR(D)" , "STR(N)" , "STR(M)" , "STR(X)" ,
+						"STR(J)" , "STR(H)" , "STR(E)" , "STR(A)" , "STR(W)" ,            "STR(C)" , "STR(T)" , "STR(R)" , "STR(S)" , "STR(V)" ,
+						":"      , ","      , "."      , "STR(K)" , "'"      ,            "STR(B)" , "STR(P)" , "STR(L)" , "STR(F)" , "STR(Z)" ,
+						" "      , " "      , " "      , " "      , " "      ,            " "      , " "      , " "      , " "      , " "      ,
 													 " "      , " "      , " "      ,            " "      , " "      , " "
 					]
 				}
@@ -206,10 +206,10 @@
 					"_comment": "modifiers for kak (editor) map",
 					"set": "rows",
 					"keycodes": [
-						"LALT"         , " "    , " " , " " , " " ,            "*" , "["    , "^"   , "]"    , " " ,
+						" "            , " "    , " " , " " , " " ,            "*" , "["    , "^"   , "]"    , " " ,
 						"MO(QUICKEYS)" , "LCTL" , " " , " " , " " ,            "?" , "LPRN" , "$"   , "RPRN" , " " ,
 						" "            , " "    , " " , " " , " " ,            "|" , "{"    , "#"   , "}"    , " " ,
-						" "            , " "    , " " , " " , " " ,            " " , " "    , " "   , " "    , " " ,
+						"LALT"         , " "    , " " , " " , " " ,            " " , " "    , " "   , " "    , " " ,
 														  " " , " " , " " ,            " " , "\\"   , "DEL"
 					]
 				},
@@ -230,10 +230,10 @@
 					"_comment": "modifiers for kak (editor) map",
 					"set": "rows",
 					"keycodes": [
-						" " , "." , "*" , "&" , "+"  ,            " " , " " , " " , " "    , "RALT" ,
+						" " , "." , "*" , "&" , "+"  ,            " " , " " , " " , " "    , " "    ,
 						" " , "`" , "~" , "/" , "|"  ,            " " , " " , " " , "RCTL" , " "    ,
 						" " , "<" , ">" , "%" , "@"  ,            " " , " " , " " , " "    , " "    ,
-						" " , " " , " " , " " , " "  ,            " " , " " , " " , " "    , " "    ,
+						" " , " " , " " , " " , " "  ,            " " , " " , " " , " "    , "RALT" ,
 										" " , "=" , "\\" ,            " " , " " , " "
 					]
 				},
@@ -264,10 +264,10 @@
 					"type": "chord_set",
 					"set": "rows",
 					"keycodes": [
-						"LALT"         , "."          , "*"        , "&" , "+"  ,            "*"       , "["    , "^"        , "]"             , "RALT" ,
+						" "            , "."          , "*"        , "&" , "+"  ,            "*"       , "["    , "^"        , "]"             , " "    ,
 						"MO(QUICKEYS)" , "KK(`,LCTL)" , "~"        , "/" , "|"  ,            "?"       , "LPRN" , "$"        , "KK(RPRN,LCTL)" , " "    ,
 						" "            , "<"          , ">"        , "%" , "@"  ,            "|"       , "{"    , "#"        , "}"             , " "    ,
-						" "            , " "          , " "        , " " , " "  ,            "DF(NUM)" , " "    , "CLEAR_KB" , "DF(NAV)"       , " "    ,
+						"LALT"         , " "          , " "        , " " , " "  ,            "DF(NUM)" , " "    , "CLEAR_KB" , "DF(NAV)"       , "RALT" ,
 																  "CLEAR_KB" , "=" , "\\" ,            "ENTER"   , "SPC"  , "DEL"
 					]
 				},
@@ -297,10 +297,10 @@
 					"type": "chord_set",
 					"set": "rows",
 					"keycodes": [
-						"LALT"         , "A"             , "B"             , "AS(C)"         , " "                  ,            "/"        , "4"    , "5" , "9" , "*"  ,
+						" "            , "A"             , "B"             , "AS(C)"         , " "                  ,            "/"        , "4"    , "5" , "9" , "*"  ,
 						"MO(QUICKEYS)" , "KK(D,LCTL)"    , "KK(E,LGUI)"    , "KK(F,LSFT)"    , " "                  ,            "."        , "1"    , "2" , "3" , "-"  ,
 						" "            , "<"             , "KL(>,REGEX)"   , "SPC"           , " "                  ,            ","        , "8"    , "6" , "7" , "NO" ,
-						" "            , "MK(LALT,LCTL)" , "MK(LALT,LGUI)" , "MK(LALT,LSFT)" , "MK(LALT,LCTL,LGUI)" ,            "CLEAR_KB" , "CAPS" , " " , " " , "+"  ,
+						"LALT"         , "MK(LALT,LCTL)" , "MK(LALT,LGUI)" , "MK(LALT,LSFT)" , "MK(LALT,LCTL,LGUI)" ,            "CLEAR_KB" , "CAPS" , " " , " " , "+"  ,
 																	  "CLEAR_KB"      , "MO(REGEX)"     , "TAB"                ,            "\\"       , "0"    , "="
 					]
 				},
@@ -351,10 +351,10 @@
 					"type": "chord_set",
 					"set": "rows",
 					"keycodes": [
-						"LALT" , " "    , " "    , " "    , " " ,            " " , "F4" , "F5" , "F9" , " "   ,
-						" "    , "LCTL" , "LGUI" , "LSFT" , " " ,            " " , "F1" , "F2" , "F3" , "F12" ,
-						" "    , " "    , " "    , " "    , " " ,            " " , "F8" , "F6" , "F7" , "F11" ,
-						" "    , " "    , " "    , " "    , " " ,            " " , " "  , " "  , " "  , "F10" ,
+						" "    , " "    , " "    , " "    , " " ,            " " , "F4" , "F5" , "F9" , "F12" ,
+						" "    , "LCTL" , "LGUI" , "LSFT" , " " ,            " " , "F1" , "F2" , "F3" , "F11" ,
+						" "    , " "    , " "    , " "    , " " ,            " " , "F8" , "F6" , "F7" , "F10" ,
+						"LALT" , " "    , " "    , " "    , " " ,            " " , " "  , " "  , " "  , " "   ,
 						  						" "    , " "    , " " ,            " " ,  " " ,  " "
 					]
 				}
@@ -367,10 +367,10 @@
 					"type": "chord_set",
 					"set": "rows",
 					"keycodes": [
-						"LALT"       , " "             , "MK(LCTL, LSFT,C)" , "MK(LCTL,LSFT,V)" , " "                  ,            " "       , "HOME"          , "UP"         , "END"            , "PGUP" ,
+						" "          , " "             , "MK(LCTL, LSFT,C)" , "MK(LCTL,LSFT,V)" , " "                  ,            " "       , "HOME"          , "UP"         , "END"            , "PGUP" ,
 						"MK(LCTL,Z)" , "LCTL"          , "LGUI"             , "LSFT"            , " "                  ,            " "       , "MK(LCTL,LEFT)" , " "          , "MK(LCTL,RIGHT)" , "PGDN" ,
 						" "          , "MK(LCTL,X)"    , "MK(LCTL,C)"       , "MK(LCTL,V)"      , " "                  ,            " "       , "LEFT"          , "DOWN"       , "RIGHT"          , " "    ,
-						" "          , "MK(LALT,LCTL)" , "MK(LALT,LGUI)"    , "MK(LALT,LSFT)"   , "MK(LALT,LCTL,LGUI)" ,            "DF(NUM)" , " "             , "DF(SYMBOL)" , "CLEAR_KB"       , " "    ,
+						"LALT"       , "MK(LALT,LCTL)" , "MK(LALT,LGUI)"    , "MK(LALT,LSFT)"   , "MK(LALT,LCTL,LGUI)" ,            "DF(NUM)" , " "             , "DF(SYMBOL)" , "CLEAR_KB"       , "RALT" ,
 																	"CLEAR_KB"         , " "               , " "                  ,            " "       , " "             , " "
 					]
 				},
@@ -391,10 +391,10 @@
 					"type": "chord_set",
 					"set": "rows",
 					"keycodes": [
-						"LALT" , " "       , " "         , " "       , " " ,            " " , "MS_WHLL" , "MS_UP"   , "MS_WHLR" , "MS_WHLU" ,
+						" "    , " "       , " "         , " "       , " " ,            " " , "MS_WHLL" , "MS_UP"   , "MS_WHLR" , "MS_WHLU" ,
 						" "    , "LCTL"    , "LGUI"      , "LSFT"    , " " ,            " " , " "       , " "       , " "       , "MS_WHLD" ,
 						" "    , "MS_BTN3" , "MS_BTN2"   , "MS_BTN1" , " " ,            " " , "MS_LEFT" , "MS_DOWN" , "MS_RGHT" , " "       ,
-						" "    , " "       , " "         , " "       , " " ,            " " , " "       , " "       , " "       , " "       ,
+						"LALT" , " "       , " "         , " "       , " " ,            " " , " "       , " "       , " "       , " "       ,
 													"CLEAR_KB " , " "       , " " ,            " " , " "       , " "
 					]
 				}
