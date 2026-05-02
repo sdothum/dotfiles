@@ -92,6 +92,7 @@
 				},
 				{
 					"type": "visual_array",
+					"_comment": "WARNING: remove this section if touch typing speed triggers unwanted capitalizations",
 					"_comment": "a+w chord -> 'A' BECAUSE: a+shift chord is indistinguishable from shift+t",
 					"_comment": "NOTE: do not assign e+a chord -> 'A' SEE: sxhkdrc super+shift keymaps",
 					"_comment": "str(;) (??) avoids random (sloppy fingering) autorepeat of ',.' -> ';'",
@@ -117,6 +118,7 @@
 				},
 				{
 					"type": "visual_array",
+					"_comment": "WARNING: remove this section if touch typing speed triggers unwanted capitalizations",
 					"_comment": "c+t chord -> 'T' FOR: reducing (lefvisually +righed formattingft) 'shift+t ..' to (right left) hand 'T' bigram",
 					"_comment": "NOTE: do not assign t+r chord -> 'T' SEE: of sxhkdrc super+shift keymaps",
 					"keys": ["TOP5" , "MID5" , "TOP7" , "MID7" , "TOP8" , "MID8" , "TOP9" , "MID9" , "TOP10" , "MID10" , "TOP11" , "MID11"],
