@@ -391,7 +391,7 @@ super + y
 	xdotool search -onlyvisible -classname aerc windowunmap || xdotool search -classname aerc windowmap || aerc
 
 alt + super + ctrl + space
-	kak /tmp/scratchpad:$(date '+%y%m%d%H%M%S').txt
+	kak -PROOF $HOME/diary/$(date '+%Y-%m-%d').mkd
 
 # kak: filetype=sh
 
