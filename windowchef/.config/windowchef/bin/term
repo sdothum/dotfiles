@@ -1,4 +1,4 @@
-!/usr/bin/dash
+#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="term $@" . $PARENT
 
@@ -109,9 +109,9 @@ $TERM $theme $font $geometry $title $name $cmd
 
 # window snap center
 
-[ $wait    ] && {
-	echo "$process" | grep -q '/kak ' && process=".*/kak .*/${process##* /}"  # fix kak session command
-	pidwait -f "$process"
+[ $wait ] && {
+	echo "$process" | grep -q '/kak ' && process="${process##*/kak }"  # fix kak session command
+	pidwait -f "$TERM.*${process}"
 }
 
 # kak: filetype=sh
