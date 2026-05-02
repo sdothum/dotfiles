@@ -220,8 +220,9 @@ bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 
 # .................................................................. Reasymotion
 
-bundle reasymotion https://github.com/sdothum/reasymotion.git %{
-	evaluate-commands %sh{ rkak_easymotion start }
+nop bundle reasymotion https://github.com/sdothum/reasymotion.git %{
+	# suppress environment variable error opening new file SEE: sxhkdrc scratchpad 
+	evaluate-commands %sh{ rkak_easymotion start 2>/dev/null }
 
 	addm %{ find z3 : map global select j ': reasymotion-on-letter-to-word<ret>'          -docstring '⠀          —— to word,letter'        }
 	addm %{ find z4 : map global select J ': reasymotion-on-letter-to-letter<ret>'        -docstring '⠀          —— to word,letter'        }

@@ -108,16 +108,6 @@ highlight.groups = [
 # TODO
 
 # awk
-[language.awk.grammar]
-url = "https://github.com/Beaglefoot/tree-sitter-awk"
-pin = "8eaa762d05cc67c0e2cc53a0a71750b3c16733c2"
-path = "src"
-compile = "cc"
-compile_args = ["-c", "-fpic", "../scanner.c", "../parser.c", "-I", ".."]
-compile_flags = ["-O3"]
-link = "cc"
-link_args = ["-shared", "-fpic", "scanner.o", "parser.o", "-o", "awk.so"]
-link_flags = ["-O3"]
 
 [language.awk.queries]
 url = "https://github.com/helix-editor/helix"
