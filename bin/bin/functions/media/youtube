@@ -10,9 +10,9 @@
 
 if [ $1 = '-d' ] ;then
 	cd /net/media/videos/youtube/
-	notify 60 "youtube" "downloading..\n$2"
+	notify 10 "youtube" "downloading..\n$2"
 	yt-dlp "$2"
-	notify "youtube" "$2\ncompleted"
+	notify critical 10 "youtube" "$2\ncompleted"
 	exit
 fi
 
