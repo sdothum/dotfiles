@@ -250,6 +250,12 @@ body .header {
 	padding-right: 5px;
 }
 
+#page-header-title {
+	font-size: 1.85em;
+	font-weight: bold;
+	letter-spacing: 0.5px;
+}
+
 .page-header>h1 {
 	padding-bottom: 10px;
 }
