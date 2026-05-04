@@ -94,6 +94,7 @@ case $interface in
 	DP*   ) OFF="--output $(interface hdmi) --off" || unset OFF ;;  # FOR: multiple interfaces to a single monitor
 	HDMI* ) OFF="--output $(interface dp) --off"   || unset OFF ;;
 esac
+ditto interface "$OFF"
 
 case $(hostname) in
 	# luna ) xrandr --output DVI-D-1 --mode 1680x1050 --output HDMI-1 --primary --mode 1920x1080 --rate 60 --left-of DVI-D-1 --dpi 96 ;;
