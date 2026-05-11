@@ -48,6 +48,7 @@ nnn/.config/nnn/plugins/._*
 nnn/.config/nnn/plugins/_*
 picom
 planck/qmk_firmware/keyboards/planck
+pre-halt.d
 quikey/.local/share/quikey/*.json
 README.md
 rofi
