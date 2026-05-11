@@ -20,11 +20,12 @@ sudo ninja -C build install
 # update void (glibc) services
 # sudo cp -v $CHIMERA/early/scripts/* /usr/lib/dinit.d/early/scripts/
 
-# no sd-tmpfiles (systemd)
-echo "#!/bin/sh
+exit_zero() {
+	sudo sed -i "1aexit 0  # NOTE: disabled for this Voidlinux installation" /usr/lib/dinit.d/early/scripts/$1
+}
 
-exit 0  # NOTE: void does not use a tmpfile manager daemon
-" | sudo tee /usr/lib/dinit.d/early/scripts/tmpfiles.sh
+exit_zero tmpfiles.sh
+exit_zero binfmt.sh
 
 # udev
 echo -e "#!/bin/sh
