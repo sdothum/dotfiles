@@ -57,7 +57,7 @@ sxhkd
 supernote/koreader
 tmux
 tt-rss
-turnstile
+turnstile/.config/dinit.d
 vim
 vim/.vim/after
 vim/.vim/config
