@@ -9,7 +9,7 @@
 # Usage: reboot [noprompt]
 
 delay=5  # reboot delay window
-PREHALT=$HOME/.config/dinit.d/halt.d 2>/dev/null
+PREHALT=$HOME/.config/dinit.d/pre-halt.d 2>/dev/null
 
 if [ -z $1 ] ;then
 	ifno 'reboot kernel' && exit
@@ -17,9 +17,12 @@ if [ -z $1 ] ;then
 fi
 
 # HACK: stop services that cause halt "stop time" exception messages
+# NOTE: background processes take advantage of reboot count down delay :-)
 prehalt() {
-	ditto dinit 'halt.d "stop time" exceptions'
-	ls -1 $PREHALT | sort | while read service ;do sv stop --force $service ;done
+	ls -1 $PREHALT | sort | while read service ;do
+		ditto pre-halt.d "$service"
+		sv stop --force $service &
+	done
 }
 
 if console ;then

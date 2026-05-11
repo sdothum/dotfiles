@@ -17,9 +17,7 @@ if [ "$1" ] ;then  # mail app hook
 	notify 60 Email "Complete <b>Recipients:</b> and <b>Subject:</b> before composing email"
 	class=email offsetY=1 kak ID=draft WAIT $@
 else  # email scratchpad
-	file=$(mktemp)
-	mv $file $file.eml
-	class=compose kak -PROOF ID=draft $file.eml
+	class=compose kak -PROOF ID=draft $HOME/drafts/$(date '+%Y-%m-%d').eml
 fi
 
 # kak: filetype=sh

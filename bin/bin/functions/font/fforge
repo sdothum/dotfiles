@@ -934,10 +934,10 @@ f_descending() {
 	elif [ $T_DEPTH ] ;then     # currently only tested with shape=576
 		# Yshift=-52
 		# Ydepth=12            # descender to match depth of t_descending (exact)
-		# Yshift=-134
-		# Ydepth=22
-		Yshift=-126
-		Ydepth=21
+		Yshift=-134
+		Ydepth=22
+		# Yshift=-126
+		# Ydepth=21
 		# Yshift=-110
 		# Ydepth=20
 		# Yshift=-151
