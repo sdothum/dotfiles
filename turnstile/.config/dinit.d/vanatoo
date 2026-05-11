@@ -1,3 +1,0 @@
-type         = scripted
-command      = /home/shum/bin/functions/hardware/vanatoo
-restart      = false

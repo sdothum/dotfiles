@@ -1,3 +1,0 @@
-type = scripted
-command = /home/shum/.config/dinit.d/scripts/mpd-pre
-
