@@ -1,0 +1,8 @@
+type            = process
+command         = /usr/bin/mpd --no-daemon /home/shum/.config/mpd/mpd.conf
+depends-on      = mpd-pre
+depends-on      = dbus
+depends-on      = pipewire
+smooth-recovery = true
+log-type        = buffer
+

@@ -1,0 +1,5 @@
+type       = process
+command    = /usr/bin/pipewire
+depends-on = dbus
+log-type   = buffer
+
