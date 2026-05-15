@@ -24,6 +24,7 @@
 **/byobu
 **/.cache
 **/caddy
+!**/dinit.d.@*/caddy
 **/calcurse
 **/calibre
 **/cbftp
@@ -36,6 +37,7 @@
 **/cmus
 **/compton
 **/config
+!**/dinit.d.@*/config
 **/corne.void
 **/crontab
 **/default
@@ -47,6 +49,7 @@
 **/dmenu/.d
 !**/dmenu/notes
 **/dnsmasq
+!**/dinit.d.@*/dnsmasq
 **/documents
 **/drafts
 **/dwb
@@ -120,6 +123,7 @@
 **/*.log
 **/logrotate
 **/lsyncd
+!**/dinit.d.@*/lsyncd
 **/lua
 **/luakit
 **/luakit/bookmarks*
