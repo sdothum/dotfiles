@@ -18,11 +18,11 @@
 
 = containers
 = ══════════
-# ! docker pull sirjmann92/nicotineplus-proper [server]
-! stow nicotine
-
-# ! docker pull linuxserver/docker-sonarr      [server]
-! stow sonarr
+# SEE: stow/turnstiled
+! sv -u start nicotine
+! sv -u start sonarr
+! sv -u start thelounge
+" docker exec -it --user node thelounge thelounge add <user>
 
 
 # vim: set ft=conf: #

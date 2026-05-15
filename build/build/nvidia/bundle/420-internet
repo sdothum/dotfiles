@@ -38,6 +38,16 @@ d m sonarr           [server]
   transmission-gtk   [server]
 
 
+= irc
+= ═══
+# znc
+# weechat
+# weechat-perl
+# weechat-python
+  soju
+  halloy
+
+
 = proxy
 = ═════
 # squid              [server]

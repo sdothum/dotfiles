@@ -1,0 +1,55 @@
+# sdothum - 2016 (c) wtfpl
+
+# Post_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .......................................................................... znc
+
+# add server networks on znc webpage before connecting to servers
+# znc install adds freenode by default for #znc
+ditto INFO "listen on port 7000, username/password znc/znc
+sv identity with:
+/msg nickserv register <password> <email>
+or if already registered..
+/msg nickserv identify <password>
+enable sasl with:
+/msg *sasl Mechanism PLAIN
+/msg *sasl Set <nick> <password>
+
+# libera
+# irc.libera.chat +6697
+/join ##astronomy,#archlinux,#archlinux-arm,#archlinux-offtopic,#arduino,#atom,#amd
+/join #bash,#bspwm,#btrfs
+/join #compton,#conky,#css,#picom
+/join #darktable,#dcraw,#deskthority,#digikam,#dinit
+/join #emacs,#geekhack,#git,#github
+/join #haskell,#herbstluftwm
+/join ##javascript,##linux,#latex,#lesswrong,#lisp
+/join ##math,#Mechboards
+/join #neovim,#nginx,#nixos,#notmuch,#nvidia
+/join #ocaml,#papyros,#passenger,##politics,#python
+/join #qutebrowser,##reddit-hockey,#raspberrypi,#rawtherapee,#ruby
+/join #sinatra,#sup
+/join #vim,#weechat,#znc
+/join #voidlinux,#xbps
+
+# gitter
+# irc.gitter.im +6667 <password>
+/join #syl20bnr/spacemacs
+
+# oftc
+# irc.oftc.net +6697
+/join #bcachefs,#bitlbee,#fish,#suckless
+/join #alpine-linux,#chimera-linux
+
+# rizon
+# irc.rizon.net +6697
+/join #anime-planet.com,#haruhichan,#rice
+"
+
+sudo mkdir /var/lib/znc
+sudo chown znc:znc /var/lib/znc
+sudo -u znc znc -d /var/lib/znc --makeconf
+server && sv enable znc || ditto INFO run "sv up znc"
+
+# vim: set ft=sh: #

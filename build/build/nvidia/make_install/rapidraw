@@ -8,10 +8,16 @@
 sudo xbps-install -y npm libwebkit2gtk41-devel
 
 cd /home/depot
-exists --repo RapidRaw || git clone https://github.com/CyberTimon/RapidRAW.git --recurse-submodules
+if exists --repo RapidRaw ;then
+	cd RapidRAW
+	git pull --recurse-submodules
+else
+	git clone https://github.com/CyberTimon/RapidRAW.git --recurse-submodules
+	cd RapidRAW
+fi
 
-cd RapidRaw
 npm install
-# npm start  # update install on first launch
+ditto rapidraw "launching to update..\nexit on completion"
+npm start
 
 # vim: set ft=sh: #

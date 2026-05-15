@@ -1,0 +1,46 @@
+#motu sdothum - 2016 (c) wtfpl
+
+# Post_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................................ soju
+
+MKCERT=$HOME/.local/share/mkcert
+DOMAIN=soju.local
+
+sudo xbps-install -y go nss
+go install filippo.io/mkcert@latest
+sudo update-ca-certificates
+
+ditto soju "generating TLS certificate..\nadd ${DOMAIN} to /etc/hosts"
+rm $MKCERT/*
+sudo rm /etc/soju/*.pem
+cd $MKCERT
+$HOME/go/bin/mkcert -install
+$HOME/go/bin/mkcert ${DOMAIN} localhost 127.0.0.1
+
+sudo chown _soju:_soju ${DOMAIN}*.pem
+sudo chmod 600 ${DOMAIN}*.pem
+sudo mv -i ${DOMAIN}*.pem /etc/soju/
+
+if grep -q "^listen ircs:// *$" /etc/soju/config ;then
+	# configure soju
+	sudo -u _soju sojudb -config /etc/soju/config create-user soju -admin  # NOTE: prompts for password
+
+	echo -e "$(grep -v '^listen' /etc/soju/config)
+	listen ircs://:6697
+	listen unix+admin:///run/soju/admin.sock
+	tls /etc/soju/${DOMAIN}+2.pem /etc/soju/${DOMAIN}+2-key.pem
+	hostname $(hostname)
+	" | sudo tee /etc/soju/config
+else
+	ditto soju "check /etc/sojo/config.."
+	cat /etc/soju/config
+fi
+
+# sudo sojuctl user run soju network create -name libera -addr irc.libera.chat -nick $(cat $HOME/.sojunick) -pass $(cat $HOME/.sojupass)
+ditto soju "/msg BouncerServ network create -addr <hostname>[:<port>] [-name <name>]"
+ditto soju "/msg BouncerServ network create -addr irc.libera.chat:6697 -name libera"
+ditto soju "/msg BouncerServ network create -addr irc.oftc.net:6697 -name oftc"
+
+# vim: set ft=sh: #
