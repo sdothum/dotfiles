@@ -1,0 +1,11 @@
+#!/bin/sh
+# sdothum - 2016 (c) wtfpl
+
+cd /home/shum/docker/thelounge
+
+case $1 in
+	''   ) docker compose up   ;;
+	stop ) docker compose stop ;;
+esac
+
+# kak: filetype=sh
