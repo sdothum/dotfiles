@@ -23,36 +23,10 @@ unset name  # for inadvertant env var conflict usage in calling scripts
 # HACK: quikey cannot be spawned by autostart (the way invoked for 2bwm)
 exists qk && { pgrep quikey >/dev/null || qk start; }
 
-case $TERM in
-	alacritty ) ;;
-	st        ) ;;
-	urxvt     ) ;;
-	*         ) TERM=alacritty ;;
-esac
-
-case $TERM in
-	alacritty )
-		TITLE=--title
-		NAME=--class
-		blackboard=blackboard
-		name="$NAME term"  # default class SEE: rulerrc
-		;;
-
-	st        )
-		TITLE=-T
-		NAME=-n
-		blackboard="-bg '$blackboard' -fg '$blackboard' -cr '$blackboard'"
-		font='-f Iosevka'
-		geometry='-g 1024x600+0+0'
-		;;
-
-	urxvt     )
-		TITLE=-title
-		NAME=-name
-		blackboard="-bg '$blackboard' -fg '$blackboard' -cr '$blackboard'"
-		geometry='-geometry 1024x600+0+0'
-		;;
-esac
+TITLE=--title
+NAME=--class
+blackboard=blackboard
+name="$NAME term"  # default class SEE: rulerrc
 
 # menu border calculation
 border() { echo $(( $(chef display height) * 2 / 15 )); }
@@ -99,7 +73,7 @@ done
 [ $TERMBG    ] && theme $TERMBG  # see yazi wrapper
 [ -z "$name" ] && [ "$title" ] && { name="$NAME ${title#$TITLE }"; }
 
-$TERM $theme $font $geometry $title $name $cmd
+alacritty $theme $font $geometry $title $name $cmd
 
 [ $visible ] && [ "$title" ] && xdotool search -sync -onlyvisible -limit 1 -classname "${title#* }"
 # delay long enough.. then double return kak startup command input (to close command prompt and any popup dialogue)
@@ -111,7 +85,7 @@ $TERM $theme $font $geometry $title $name $cmd
 
 [ $wait ] && {
 	echo "$process" | grep -q '/kak ' && process="${process##*/kak }"  # fix kak session command
-	pidwait -f "$TERM.*${process}"
+	pidwait -f "alacritty.*${process}"
 }
 
 # kak: filetype=sh
