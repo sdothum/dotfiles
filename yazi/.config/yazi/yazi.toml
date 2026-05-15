@@ -80,6 +80,9 @@ gimp = [
 krita = [
 	{ run = 'krita "$1"',       orphan = true, desc = "krita",       for = "linux" },
 ]
+rapidraw = [
+	{ run = 'rapidraw "$1"', orphan = true, desc = "rapidraw", for = "linux" },
+]
 rawtherapee = [
 	{ run = 'rawtherapee "$1"', orphan = true, desc = "rawtherapee", for = "linux" },
 ]
@@ -91,9 +94,9 @@ rules = [
 	# Text
 	{ mime = "text/*",                                                                                      use = [ "edit", "reveal" ] },
 	# Image
-	{ mime = "image/jpeg",                                                                                  use = [ "feh", "oculante", "darktable", "gimp", "krita", "rawtherapee", "reveal" ] },
-	{ mime = "image/png",                                                                                   use = [ "feh", "oculante", "darktable", "gimp", "krita", "rawtherapee", "reveal" ] },
-	{ mime = "image/tiff",                                                                                  use = [ "oculante", "darktable", "gimp", "krita", "rawtherapee", "reveal" ] },
+	{ mime = "image/jpeg",                                                                                  use = [ "feh", "oculante", "darktable", "gimp", "krita", "rapidraw", "rawtherapee", "reveal" ] },
+	{ mime = "image/png",                                                                                   use = [ "feh", "oculante", "darktable", "gimp", "krita", "rapidraw", "rawtherapee", "reveal" ] },
+	{ mime = "image/tiff",                                                                                  use = [ "oculante", "darktable", "gimp", "krita", "rapidraw", "rawtherapee", "reveal" ] },
 	{ mime = "image/*",                                                                                     use = [ "open", "reveal" ] },
 	# Media
 	{ mime = "{audio,video}/*",                                                                             use = [ "mpv", "play", "reveal" ] },
