@@ -58,7 +58,6 @@ supernote/koreader
 tmux
 tt-rss
 turnstiled
-turnstiled/.config/dinit.d/pre-halt.d
 vim
 vim/.vim/after
 vim/.vim/config

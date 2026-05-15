@@ -1,0 +1,19 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Web
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................... thelounge
+
+# Usage: thelounge
+
+URL=http://localhost:9000/  # docker server
+
+if pgrep -f '/usr/local/bin/thelounge start' >/dev/null ;then
+	name=thelounge qutebrowser-instance "$URL"
+elif sv -u status thelounge 2>&1 | grep -q 'STARTED' ;then
+	notify critical thelounge "sevice not started"
+fi
+
+# kak: filetype=sh

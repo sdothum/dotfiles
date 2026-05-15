@@ -8,8 +8,11 @@
 
 # Usage: reboot [noprompt]
 
-delay=5  # reboot delay window
+# NOTE: reboot from console is not initialized with WM environment
+DELAY="$SESSION/$(cat $HOME/.windowmanager)/reboot/delay"
 PREHALT=$HOME/.config/dinit.d/pre-halt.d 2>/dev/null
+
+[ -d $DELAY ] && delay=$(ls -1 $DELAY) || delay=5  # reboot delay window
 
 if [ -z $1 ] ;then
 	ifno 'reboot kernel' && exit
@@ -27,11 +30,11 @@ prehalt() {
 
 if console ;then
 	echo
-	void 'dinit' && [ -d "$PREHALT" ] && prehalt
+	[ $delay -gt 0 ] && void 'dinit' && [ -d "$PREHALT" ] && prehalt
 	trap "tput cnorm; exit" INT  # restore cursor on break
 	printf "\r\33[2K\n"          # clear shell prompt leader SEE: x script
 	tput civis                   # hide cursor
-	for i in $(seq $delay | tac) ;do
+	[ $delay -gt 0 ] && for i in $(seq $delay | tac) ;do
 		ditto -ne reboot "in $i seconds.."
 		sleep 1
 	done

@@ -6,7 +6,7 @@
 
 # ...................................................................... Browser
 
-# Usage: qutebrowser-instance <url>  # SEE: kakrc livedown
+# Usage: [name=..] qutebrowser-instance <url>  # SEE: kakrc livedown
 #
 # NOTE: --temp-basedir to create separate instance of qutebrowser
 #       -s tabs.last_close 'close' to close window on livedown-stop
@@ -51,9 +51,15 @@ settings="
 eval $QUTEBROWSER $RUNOPT $settings $startpage 2>/dev/null &
 
 case "${name:-livedown}" in
-	livedown ) window @livedown URL tile 3 && waitron window_cycle_in_group ;;  # focus editor
-	sonarr   ) window @sonarr   URL size monocle; window desktop $(chef desktop "PEER") ;;
-	nicotine ) window '@Nicotine+ - qutebrowser' URL size monocle; window desktop $(chef desktop "PEER") ;;
+	livedown  ) window '@livedown'  URL tile 3 && waitron window_cycle_in_group             ;;  # focus editor
+	sonarr    ) window '@sonarr'    URL size monocle; window desktop $(chef desktop "PEER") ;;
+	nicotine  ) window '@nicotine'  URL size monocle; window desktop $(chef desktop "PEER") ;;
+	thelounge )  # NOTE: docker connection eludes rulerrc timing
+		xdotool search -sync -onlyvisible -name "The Lounge - qutebrowser" set_window -classname 'thelounge' -class 'thelounge'
+		window '@thelounge' URL size B5
+		window '@thelounge' desktop $(chef desktop "COMM")
+		window '@thelounge' spread right
+		;;
 esac
 
 # kak: filetype=sh

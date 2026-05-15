@@ -17,7 +17,7 @@ swap() {
 		sudo mv $target $hold
 		sudo mv $destination $target
 		sudo mv $hold $destination
-		ditto swap "$destination  <<-- -->>  $target" 
+		ditto swap "$destination  <<- ->>  $target" 
 	fi
 }
 
