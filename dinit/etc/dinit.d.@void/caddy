@@ -1,0 +1,6 @@
+type            = process
+command         = /usr/bin/caddy run --config /etc/caddy/Caddyfile
+working-dir     = /var/lib/caddy
+smooth-recovery = true
+logfile         = /var/log/dinit/caddy.log
+waits-for       = loginready
