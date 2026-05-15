@@ -2,5 +2,5 @@ type            = process
 command         = /usr/local/bin/pwrstatd &
 stop-command    = pkill -9 pwrstatd
 smooth-recovery = true
-logfile         = /var/log/dinit/powerpanel.log
+logfile         = /var/log/dinit.d/powerpanel.log
 after           = login.target

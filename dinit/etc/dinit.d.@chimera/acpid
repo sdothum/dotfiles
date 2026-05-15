@@ -1,4 +1,4 @@
 type       = process
 command    = /usr/bin/acpid -f
-logfile    = /var/log/dinit/acpid.log
+logfile    = /var/log/dinit.d/acpid.log
 depends-on = early-fs-local.target

@@ -3,5 +3,5 @@ command         = /etc/dinit.d/scripts/postgres
 run-as          = postgres
 smooth-recovery = true
 term-signal     = INT
-logfile         = /var/log/dinit/postgres.log
+logfile         = /var/log/dinit.d/postgres.log
 waits-for       = login.target

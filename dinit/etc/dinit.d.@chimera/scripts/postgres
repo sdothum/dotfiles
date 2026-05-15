@@ -1,8 +1,9 @@
 #!/bin/sh
 # sdothum - 2016 (c) wtfpl
-. /etc/runit/functions
 
+. /etc/runit/functions
 . /etc/psql16/default/postgresql
+
 PGDATA="$PGROOT/data"
 
 if [ "$PGROOT" != "/var/lib/postgresql16" ]; then

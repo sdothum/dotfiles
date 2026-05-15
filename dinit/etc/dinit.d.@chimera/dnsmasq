@@ -1,5 +1,5 @@
 type            = process
 command         = /usr/bin/dnsmasq -k --enable-dbus -u dnsmasq -g dnsmasq
 smooth-recovery = true
-logfile         = /var/log/dinit/dnsmasq.log
+logfile         = /var/log/dinit.d/dnsmasq.log
 depends-on      = dbus

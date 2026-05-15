@@ -1,5 +1,6 @@
 type       = process
 command    = /usr/bin/turnstiled
-logfile    = /var/log/turnstiled.log
+logfile    = /var/log/dinit.d/turnstiled.log
 before     = login.target
 depends-on = local.target
+depends-on = seatd

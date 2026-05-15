@@ -1,5 +1,5 @@
 type       = scripted
 command    = /etc/dinit.d/scripts/dbus-setup
 restart    = false
-logfile    = /var/log/dinit/dbus-daemon.log
+logfile    = /var/log/dinit.d/dbus-daemon.log
 after      = local.target

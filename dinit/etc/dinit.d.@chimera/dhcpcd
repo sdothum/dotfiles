@@ -1,5 +1,6 @@
 type       = process
 command    = /usr/sbin/dhcpcd -B -M
-logfile    = /var/log/dinit/dhcpcd.log
+logfile    = /var/log/dinit.d/dhcpcd.log
 restart    = false
 waits-for  = pre-local.target
+depends-on = NetworkManager

@@ -1,8 +1,8 @@
 -- sdothum - 2016 (c) wtfpl
 
 settings {
-  logfile                   = "/var/log/dinit/lsyncd.log",
-  statusFile                = "/var/log/dinit/lsyncd-status.log",
+  logfile                   = "/var/log/dinit.d/lsyncd.log",
+  statusFile                = "/var/log/dinit.d/lsyncd-status.log",
   statusInterval            = 20,
   insist                    = true,
   maxProcesses              = 1

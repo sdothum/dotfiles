@@ -2,6 +2,6 @@ type               = process
 command            = /usr/bin/dbus-daemon --system --nofork --nopidfile --print-address=4
 before             = login.target
 depends-on         = dbus-setup
-logfile            = /var/log/dinit/dbus-daemon.log
+logfile            = /var/log/dinit.d/dbus-daemon.log
 smooth-recovery    = no
 ready-notification = pipefd:4
