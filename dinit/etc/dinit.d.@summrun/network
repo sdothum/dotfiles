@@ -1,7 +1,0 @@
-# Service to check for network connectivity
-
-type       = internal
-restart    = false
-waits-for  = early-filesystems
-waits-for  = rcboot
-depends-on = NetworkManager
