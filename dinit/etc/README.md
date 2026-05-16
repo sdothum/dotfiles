@@ -26,10 +26,9 @@ not utilize a systemd like tmpfile manager. It can fail a boot, otherwise.
 - if the **binfmt.sh** service script causes reboot/shutdown issues, it can be stubbed to
 "exit 0" to avoid its call to its **helper** executable. i have not tested whether this is cleared
 by installing Void's **binfmt-support** package or whether this is kernel
-version specific. It has occurred rarely on my Void installation but to
-avoid it completely while maintaining maximum fidelity to the Chimera dinit stack, my
-reboot script stops the service before initiating a reboot, until i find need
-of binfmt.
+version specific. If retained and random issues occur, the service can be
+stopped prior to rebooting instead to prevent any potential prolonged delays -- my reboot script provided the option to do so in
+order to preserve fidelity to the Chimera dinit stack.
 
 SEE the dinit.d.@chimera/early/scripts directory and copy these scripts to
 /usr/lib/dinit.d/early/scripts/
