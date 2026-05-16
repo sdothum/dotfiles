@@ -17,6 +17,7 @@
 " grab usrid 1001 for rw permission to nfs/sonarr
 ! sudo useradd sonarr
 ! sudo usermod -aG sonarr shum
+! sudo usermod -aG input shum
 
 
 = hostname
