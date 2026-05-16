@@ -1130,10 +1130,34 @@ article .item-meta {
 		font-size: .95em;
 		clear: both;
 		float: right;
-		margin-top: 0.35em !important;
-		opacity: 0.7;
+		margin-top: -13px !important;
+		margin-bottom: -6px !important;
+		opacity: .7;
 		transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1),
 			background-color 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+	}
+
+	.entry-item .item-meta .item-meta-info {
+		float: left;
+		font-size: 11.1px;
+		margin: 6px 0 -6px !important;
+		color: black !important;
+		opacity: 1 !important;
+	}
+
+	.entry-item .item-meta .item-meta-info .item-meta-info-title {
+		white-space: nowrap !important;
+		overflow: hidden !important;
+		text-overflow: ellipsis !important;
+		width: 140px !important;
+	}
+
+	.item-meta .item-meta-info .item-meta-info-title::after {
+		display: none;
+	}
+
+	.entry-item .item-meta .item-meta-icons {
+		margin-top: -25px !important;
 	}
 
 	/*
@@ -1174,14 +1198,9 @@ article .item-meta {
 		margin-bottom: 0 !important;
 		margin-top: 0 !important;
 	}
-	
-	.item-meta .item-meta-info {
-		display: none !important;
-	}
 
-	article .item-meta {
-		margin-top: 16px !important;
-		margin-bottom: 0 !important;
+	.item-meta .item-meta-info-timestamp {
+		display: none !important;
 	}
 	
 	.item-meta .item-meta-icons {
