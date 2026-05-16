@@ -1127,10 +1127,10 @@ article .item-meta {
 	}
 
 	.item-meta .item-meta-info {
-		font-size: .95em;
+		font-size: 1.20em;
 		clear: both;
 		float: right;
-		margin-top: -13px !important;
+		margin-top: -15px !important;
 		margin-bottom: -6px !important;
 		opacity: .7;
 		transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1),
@@ -1202,11 +1202,11 @@ article .item-meta {
 	.item-meta .item-meta-info-timestamp {
 		display: none !important;
 	}
-	
+
 	.item-meta .item-meta-icons {
 		margin-left: 160px !important;
 	}
-	
+
 	.item-meta .item-meta-icons * {
 		padding-top: 2px !important;
 	}
