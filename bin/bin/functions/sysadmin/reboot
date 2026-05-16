@@ -30,7 +30,7 @@ prehalt() {
 
 if console ;then
 	echo
-	[ $delay -gt 0 ] && void 'dinit' && [ -d "$PREHALT" ] && prehalt
+	void 'dinit' && [ -d "$PREHALT" ] && prehalt
 	trap "tput cnorm; exit" INT  # restore cursor on break
 	printf "\r\33[2K\n"          # clear shell prompt leader SEE: x script
 	tput civis                   # hide cursor
