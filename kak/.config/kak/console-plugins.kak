@@ -232,6 +232,14 @@ nop bundle reasymotion https://github.com/sdothum/reasymotion.git %{
 	cargo install --path .
 }
 
+# .............................................................. render markdown
+
+bundle render-markdown https://github.com/kmafeni04/render-markdown.kak.git %{
+	hook global WinSetOption filetype=markdown %{
+		render-markdown-enable
+	}
+}
+
 # .................................................................. search docs
 
 bundle search-doc https://github.com/jbomanson/search-doc.kak.git %{
