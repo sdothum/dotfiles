@@ -180,7 +180,20 @@
 }
 
 nav #header-menu {
-	padding: 10px 0 8px;
+	padding: 10px 0 21px;
+}
+
+#header-menu li:nth-child(7) {
+	padding-right: 0;
+}
+
+#header-menu li:nth-last-child(1) {
+	display: none;
+}
+
+#header-menu {
+	margin-left: auto !important;
+	margin-right: 0;
 }
 
 .logo a,
