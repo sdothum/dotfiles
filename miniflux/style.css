@@ -214,8 +214,9 @@ nav #header-menu {
 	opacity: 1;
 }
 
+.logo:hover *,
 .logo a span:hover{
-	color: var(--color-red);
+	color: var(--color-red) !important;
 }
 
 nav {
@@ -484,7 +485,6 @@ body .item {
 
 .item-meta .item-meta-icons {
 	clear: both;
-	float: right;
 	/* margin-top: -1.85em; */
 	padding-top: 1.45em !important;
 	opacity: 0.7;
@@ -499,6 +499,20 @@ body .item {
 
 .item-meta .item-meta-icons .icon {
 	margin-top: -1px;
+}
+
+.item-meta .item-meta-icons li:nth-child(3) {
+	margin-right: 0 !important;
+}
+
+.item-meta .item-meta-icons li:nth-child(4) {
+	display: none !important;
+}
+
+.item-meta .item-meta-icons {
+	float: right;
+	margin-left: auto !important;
+	margin-right: 0 !important;
 }
 
 .entry {
