@@ -12,13 +12,12 @@
 CONFIG=$HOME/.config/$WM/windowchefrc
 VOFFSET=6              # vertical (visual monitor angle) offset for panel:top SEE: draw panel
 
-indent=$(recipe panel/indent)
-
 # replicating windowchef window geometry :)
 parse() {
 	PANEL_HEIGHT=$(recipe 'ui/gap_width bottom')
 	MARGIN=$(recipe 'ui/gap_width left')
-	PANEL_INDENT=$(( MARGIN * ${indent:-4 / 3} ))
+	PANEL_INDENT=$(recipe panel/indent)
+	PANEL_INDENT=${PANEL_INDENT:-$MARGIN}
 	BORDER=$(recipe 'ui/border_width')
 	TOP=$(recipe 'ui/gap_width top')
 	GAP=$(recipe 'ui/grid_gap_width')
