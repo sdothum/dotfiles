@@ -20,13 +20,14 @@ if [ -z $1 ] ;then
 	ifno "passive (delayed) boot into default window manager" && rm -f $SESSION/boot:wm || echo $WM >$SESSION/boot:wm
 fi
 
-# HACK: stop services that cause halt "stop time" exception messages
+# HACK: stop services that cause halt "stop time" exception messages (or appear to STOPPD twice!)
 # NOTE: background processes take advantage of reboot count down delay :-)
 prehalt() {
 	ls -1 $HOME/.config/dinit.d/pre-halt.d 2>/dev/null | sort | while read service ;do
 		ditto pre-halt.d "$service"
-		sv stop --force $service &
+		(sv stop $service 2>/dev/null || sv stop --force $service) &
 	done
+	sleep 0.1
 }
 
 if console ;then
