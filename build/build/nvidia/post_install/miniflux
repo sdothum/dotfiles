@@ -6,7 +6,7 @@
 
 # ..................................................................... miniflux
 
-VERSION=16
+void 'dinit' && . /etc/dinit.d/config/postgres.env || VERSION=18
 
 POSTGRESQL=postgresql$VERSION
 # HTTP=nginx
