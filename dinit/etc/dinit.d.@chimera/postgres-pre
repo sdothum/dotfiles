@@ -1,0 +1,4 @@
+type            = scripted
+command         = /etc/dinit.d/scripts/postgres-pre
+logfile         = /var/log/dinit.d/postgres.log
+depends-on      = network.target

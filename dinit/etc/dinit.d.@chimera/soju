@@ -3,7 +3,7 @@ command         = /usr/bin/soju
 smooth-recovery = true
 logfile         = /var/log/dinit.d/soju.log
 run-as          = _soju
-depends-on      = soju-setup
+depends-on      = soju-pre
 depends-on      = network.target
 before          = login.target
 

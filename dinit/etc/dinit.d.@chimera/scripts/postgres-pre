@@ -1,0 +1,22 @@
+#!/bin/sh
+# sdothum - 2016 (c) wtfpl
+
+. /etc/dinit.d/config/postgres.env
+
+. /etc/runit/functions
+. /etc/psql${VERSION}/default/postgresql
+
+PGDATA="$PGROOT/data"
+
+if [ "$PGROOT" != "/var/lib/postgresql${VERSION}" ]; then
+	msg "Creating symlink /var/lib/postgresql${VERSION} -> $PGROOT"
+	ln -sf "$PGROOT" /var/lib/postgresql${VERSION}
+fi
+
+if [ ! -d "$PGDATA" ]; then
+	mkdir -p "$PGDATA" || exit 1
+	chown -R postgres:postgres "$PGDATA"
+	chmod 0700 "$PGDATA"
+fi
+
+# kak: filetype=sh

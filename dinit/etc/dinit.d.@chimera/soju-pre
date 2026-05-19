@@ -1,0 +1,5 @@
+type       = scripted
+command    = /etc/dinit.d/scripts/soju-pre
+restart    = false
+logfile    = /var/log/dinit.d/soju.log
+after      = local.target
