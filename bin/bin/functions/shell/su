@@ -5,11 +5,23 @@
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ........................................................................... su
-
-alpine || SU=/usr
+alpine && SUDO=doas || SU=/usr
 
 # manually pass ssh env to su session (SEE: prompt shum)
 [ "$SSH_CLIENT" ] && echo $SSH_CLIENT >/tmp/.ssh_client
-$SU/bin/su $@
+
+# quote -c <command..> string to handle command spaces
+while [ "$1" ] ;do
+	if [ $quote ] ;then
+		_="'"
+		unset quote
+	fi
+	[ "$1" = '-c' ] && quote=true
+	options="$options $_$1$_"
+	unset _
+	shift
+done
+
+eval ${SUDO:-sudo} $SU/bin/su $options
 
 # kak: filetype=sh
