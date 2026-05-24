@@ -6,12 +6,20 @@
 
 # ..................................................................... miniflux
 
-void 'dinit' && . /etc/dinit.d/config/postgres.env || VERSION=18
+if void 'dinit' ;then
+	. /etc/dinit.d/config/postgres.env
+	POSTGRESQL=postgres
+	sv stop postgres
+	sv stop postgres-pre
+else
+	VERSION=18
+	POSTGRESQL=postgresql$VERSION
+fi
+export PGDATA=/var/lib/postgresql${VERSION}/data
 
-POSTGRESQL=postgresql$VERSION
 # HTTP=nginx
 HTTP=caddy
-FONT=adrift  # my ebook font :)
+FONT=ottawa  # my ebook font :)
 
 sv enable $POSTGRESQL
 sv start $POSTGRESQL
@@ -24,12 +32,21 @@ create database miniflux;
 grant all privileges on database miniflux to miniflux;
 \connect miniflux;
 create extension hstore;
-" >/tmp/miniflux:postgres
+" >/tmp/miniflux:postgres.sql
 
 
-sed -i "/export PGDATA=/s|=.*|=/var/lib/$POSTGRESQL/data|" $HOME/.profile
-grep -q 'export PGDATA=' $HOME/.profile || sed -i "1iexport PGDATA=/var/lib/$POSTGRESQL/data" $HOME/.profile
-sudo -u postgres psql </tmp/miniflux:postgres
+if ! grep -q PGDATA $HOME/.profile ;then
+	sed -i "/export PGDATA=/s|=.*|=$PGDATA|" $HOME/.profile
+	grep -q 'export PGDATA=' $HOME/.profile || sed -i "1iexport PGDATA=$PGDATA" $HOME/.profile
+fi
+sudo mkdir -p $PGDATA
+sudo chown -R postgres:postgres ${PGDATA%/data}
+
+# NOTE: postgres socket is erroneously not found from shell script (??) cause unknown
+ditto postgres "execute the following in a new terminal before continuing.."
+ditto postgres "sudo -u postgres psql --echo-all -f /tmp/miniflux:postgres.sql"
+ifno "complete miniflux install.." && exit
+
 # sudo sed -i '/^local *all *all *trust/s/trust/md5/' /var/lib/$POSTGRESQL/data/pg_hba.conf
 sv restart $POSTGRESQL
 sleep 5  # wait for database to come back up
@@ -37,6 +54,8 @@ sleep 5  # wait for database to come back up
 # high polling low batch for reddit throttle
 # HACK: user/password changed from postgres/secret (on miniflux documentation)
 echo "
+BASE_URL=http://10.1.0.11
+INTEGRATION_ALLOW_PRIVATE_NETWORKS=1
 LOG_DATE_TIME=yes
 LISTEN_ADDR=127.0.0.1:8080
 DATABASE_URL=user=miniflux password=miniflux dbname=miniflux sslmode=disable
@@ -46,8 +65,8 @@ POLLING_PARSING_ERROR_LIMIT=0
 POLLING_SCHEDULER=round_robin
 BATCH_SIZE=10
 CLEANUP_FREQUENCY_HOURS=1
-CLEANUP_ARCHIVE_UNREAD_DAYS=7
-CLEANUP_ARCHIVE_READ_DAYS=7
+CLEANUP_ARCHIVE_UNREAD_DAYS=3
+CLEANUP_ARCHIVE_READ_DAYS=3
 CLEANUP_REMOVE_SESSIONS_DAYS=9999
 " | sudo tee /etc/miniflux.conf
 
@@ -57,12 +76,12 @@ miniflux.app -c /etc/miniflux.conf -migrate
 miniflux.app -c /etc/miniflux.conf -create-admin
 
 sudo rm -f /etc/$HTTP/http.d/miniflux.*
-stow $HTTP/miniflux
+# stow $HTTP/miniflux
 sv restart $HTTP
 sv enable miniflux
 sv start miniflux
 
 sudo mkdir -pv /var/www/localhost/fonts
-sudo cp -v $HOME/.fonts/$FONT/*.ttf /var/www/localhost/fonts
+sudo cp -v $HOME/.local/share/fonts/$FONT/*.ttf /var/www/miniflux/fonts
 
 # kak: filetype=sh
