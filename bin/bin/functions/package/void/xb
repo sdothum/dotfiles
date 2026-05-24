@@ -39,7 +39,7 @@ $(basename $0)  [/ | f** | [-]d | h | I | r] [<package> | <file>**] | i
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # NOTE: dynamic (wm script) and init symlink changes cause these packages to fail database check
-IGNORE='pinentry|runit-void'
+IGNORE='pinentry|runit-void|runit|turnstile'
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 CACHE=/var/cache/xbps

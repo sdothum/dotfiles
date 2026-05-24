@@ -6,7 +6,20 @@
 
 # ................................................................... Postgresql
 
-usage() { usage: "$(basename $0) [check | upgrade]* <version old> <version new>"; exit 1; }
+usage() { usage: "$(basename $0) [check | upgrade]* <old version> <new version>"; miniflux; exit 1; }
+
+miniflux() {
+	ditto miniflux "${yellow}# to upgrade postgres version..
+		sv stop miniflux
+		sv stop postgres
+		$(basename $0) check   <old version> <new version>
+		${yellow}# clean up any reported database issues..
+		$(basename $0) upgrade <old version> <new version>
+		echo 'VERSION=<new version>' | sudo tee /etc/dinit.d/config/postgres.env
+		sv start postgres
+		sv start miniflux
+	"
+}
 
 case $1 in
 	c* ) action=check; shift ;;
@@ -26,10 +39,10 @@ cd $WORKING
 sudo chown postgres:postgres $WORKING
 
 sudo -u postgres /lib/psql$2/bin/pg_upgrade \
-  --old-bindir=/lib/psql$1/bin              \
-  --new-bindir=/lib/psql$2/bin              \
-  --old-datadir=/var/lib/postgresql$1/data  \
-  --new-datadir=/var/lib/postgresql$2/data  \
-  --$action
+	--old-bindir=/lib/psql$1/bin             \
+	--new-bindir=/lib/psql$2/bin             \
+	--old-datadir=/var/lib/postgresql$1/data \
+	--new-datadir=/var/lib/postgresql$2/data \
+	--$action
 
 # kak: filetype=sh

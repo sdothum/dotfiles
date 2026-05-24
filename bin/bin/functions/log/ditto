@@ -58,7 +58,7 @@ annotate() {
 	done
 }
 
-echo "$message" | sed '/^$/d' | { [ $justify ] && justify || annotate; }  # omit blank lines
+echo "$message" | sed '/^[[:blank:]]*$/d' | { [ $justify ] && justify || annotate; }  # omit blank lines
 unset leader
 
 # kak: filetype=sh

@@ -22,6 +22,6 @@ while [ "$1" ] ;do
 	shift
 done
 
-eval ${SUDO:-sudo} $SU/bin/su $options
+eval ${SUDO:-sudo} rlwrap -n $SU/bin/su $options
 
 # kak: filetype=sh

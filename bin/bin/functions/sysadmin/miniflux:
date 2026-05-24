@@ -1,0 +1,52 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Sysadmin
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................... miniflux trial
+
+usage() { usage: "$(basename $0) -csp | +csp"; exit 1; }
+
+. /etc/dinit.d/config/postgres.env
+PGVSN=postgresql$VERSION
+
+OLD=2.2          # /var/lib postgresql miniflux version ids
+NEW=2.3
+OLDFLUX=2.2.4_1  # miniflux void package version
+
+postgres() {
+	cd /var/lib
+	sudo ls -l $PGVSN | grep -q "$1" && { ditto miniflux "already at v$1"; usage; }
+	sv stop miniflux
+	sv stop postgres
+	sudo rm $PGVSN
+	sudo ln -s $PGVSN.miniflux.v$1 $PGVSN
+	sv start postgres
+	cd -
+}
+
+old_miniflux() {
+	postgres $OLD
+	xb D miniflux-${OLDFLUX}.x86_64
+	xb H miniflux
+}
+
+new_miniflux() {
+	postgres $NEW
+	xb -H miniflux
+	xb U miniflux
+}
+
+case $1 in
+	-csp ) old_miniflux ;;
+	+csp ) new_miniflux ;;
+	*    ) usage ;;
+esac
+
+sv stop caddy
+sudo kak WAIT /etc/caddy/http.d/miniflux.caddy
+sv start caddy
+sv start miniflux
+
+# kak: filetype=sh

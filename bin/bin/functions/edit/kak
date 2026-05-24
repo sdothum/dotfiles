@@ -90,7 +90,7 @@ console || [ $console ] && { printf "$files" | sort $reverse | xargs -d'\n' $KAK
 
 title=$(echo "$1" | sed 's|\.\/||g; s| [^ ]*/||; s/ .*/.../g')
 [ $count -gt 1 ] && title="$title($count)"
-XARGS=/tmp/kak:xargs
+XARGS=$(mktemp --suffix=@kak)  # (??) mktemp TEMPLATE (eg kak-XXXXXX) is problematic
 
 # NOTE: kak -e 'db *stdin*' to remove *stdin* scratch buffer created by "xargs kak"
 

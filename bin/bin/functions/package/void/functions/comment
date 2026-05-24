@@ -3,9 +3,9 @@
 # SEE: xb, .xb_actions
 
 KAK=$HOME/.config/kak
-PATCH=$KAK/comment.patch
+PATCH=$KAK/comment.kak.patch
 
-patch $KAK/autoload/rc/comment.kak $PATCH
+sudo patch $KAK/autoload/rc/tools/comment.kak $PATCH
 ditto INFO kak 'verify changes to autoload/rc/comment.kak'
 cat $PATCH
 
