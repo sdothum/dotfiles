@@ -1,7 +1,8 @@
 #!/bin/sh
 # sdothum - 2016 (c) wtfpl
 
-server=google.com
+# server=google.com
+server=0.ca.pool.ntp.org
 interface=wlp9s0
 latency=100  # minimum acceptable (ms)
 

@@ -3,4 +3,4 @@ command         = /usr/bin/caddy run --config /etc/caddy/Caddyfile
 working-dir     = /var/lib/caddy
 smooth-recovery = true
 logfile         = /var/log/dinit.d/caddy.log
-waits-for       = login.target
+depends-on      = network.target
