@@ -36,7 +36,6 @@ restore panel  # postponed as long as possible to avoid dirty trace messages
 # [ -e /tmp/nicotine-plus ] || { make_install nicotine-plus; touch /tmp/nicotine-plus; }  # for nightly build
 [ -e /tmp/nicotine ] || (sleep 10; sv -u restart nicotine; touch /tmp/nicotine) &  # HACK: to avoid init reconnects to slsknet server (cause unknown)
 exists mpd || exit
-exit
 
 sleep 1        # settle pipewire for mpd server connection
 MPDCFG=$XDG_CONFIG_HOME/mpd/mpd.conf
