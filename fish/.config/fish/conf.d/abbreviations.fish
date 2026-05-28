@@ -200,7 +200,7 @@ abbr w 'which'
 
 abbr cl 'clear;  setterm -cursor on'
 abbr cursor 'setterm -cursor on'
-abbr gaps 'rlwrap -n gaps'
+abbr gaps 'rlwrap -Nn gaps'
 abbr h: 'ls -l /tmp/herbstluftwm:*'
 abbr hc 'herbstclient'
 abbr herbstluftwm ". $HOME/.config/herbstluftwm/config/ENV"
@@ -242,7 +242,7 @@ abbr list "ls -A1 | tr '\n' ' ' | sed 's/ /|/g; s/|\$//'"
 
 # .................................................................. Development
 
-abbr dot 'rlwrap -n dotfiles'
+abbr dot 'rlwrap -Nn dotfiles'
 # abbr ghc 'ghc -dynamic'  # arch repo only
 abbr ghc 'stack ghc'
 abbr ghcc 'stack build'
@@ -264,7 +264,7 @@ function fishlog; history $argv | pager ;end
 
 # abbr cd 'z'
 # abbr nd 'ncd'
-abbr dash 'rlwrap -n dash'
+abbr dash 'rlwrap -Nn dash'
 abbr fd 'flirt:cd'
 abbr fh 'flirt:sh'
 abbr hdel 'fishlog delete'
