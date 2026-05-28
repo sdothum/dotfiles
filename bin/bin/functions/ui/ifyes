@@ -6,7 +6,12 @@
 
 # .................................................................. Affirmative
 
+# Usage: ifyes [-c] <message>
+
 sig=${sig:--TERM}
+
+# clear prompt?
+[ "$1" = '-c' ] && { clear='printf "\r$(tput el)\n"'; shift; } || clear='echo; echo'
 
 # if yes && ..
 underline ${YELLOW}$@
@@ -14,8 +19,11 @@ underline ${YELLOW}$@
 while : ;do
 	printf "${TEAL}continue? ${GREEN}[Yes]${NOCOLOR}/no/abort : "
 	# using bash's extended read functionality (over dash) for single character input
+	stty -echo
+	stty cbreak
 	IFS= read -rn1 CONTINUE
-	echo
+	stty sane
+	eval $clear
 	case $CONTINUE in
 		''   ) exit 0 ;;
 		[yY] ) exit 0 ;;
