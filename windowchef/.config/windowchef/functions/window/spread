@@ -6,37 +6,37 @@
 
 # ................................................................ Spread window
 
-# Usage: window spread <columns> <position>, where position is left | right | <column>
-#                      <position> -> fit by window width
-# NOTE:  use "window snap center" for centering
+# Usage: window spread <columns> <position> [top | bottom], where position is left | right | <column>
+#                      <position> [top | bottom] -> fit by window width
 
 snapshot_geometry
 set_geometry  # X Y WIDTH HEIGHT
 
-case $2 in
-	'' ) cols=$(( W / (WIDTH + gap) )); pos=$1 ;;
-	*  ) cols=$1; pos=$2 ;;
-esac
+while [ $1 ] ;do
+	case $1 in
+		[0-9]* ) [ $cols ] && Xpos=$1 || cols=$1 ;;
+		left   ) Xpos=$1 ;;
+		right  ) Xpos=$1 ;;
+		center ) Xpos=$1 ;;
+		top    ) Ypos=$1 ;;
+		bottom ) Ypos=$1 ;;
+		*      ) notify critical window/spread "invalid argument $1"; exit 1 ;;
+	esac
+	shift
+done
 
-case $pos in
-	left  ) pos=1     ;;
-	right ) pos=$cols ;;
-esac
+cols=${cols:-$(( W / (WIDTH + gap) ))}  # fit by window width
 
-# NOTE: "tweak * cols + 1" is a rounding adjustment for X position calculation
-case $cols in
-	5 ) tweak=4  ;;
-	4 ) tweak=6  ;;
-	3 ) tweak=8  ;;
-	2 ) tweak=12 ;;
-	* ) tweak=1  ;;
+case $Xpos in
+	left  ) Xpos=1     ;;
+	right ) Xpos=$cols ;;
 esac
 
 spread() {
-	width=$(( (W - (cols - 1) * gap - tweak * cols + 1) / cols ))  # SEE: above
-	offset=$(( (width - WIDTH) / 2 + 1 ))  # offset from column edge
+	width=$(( (W - (cols - 1) * gap) / cols ))
+	offset=$(( (width - WIDTH) / 2 - border ))  # offset from column edge
 
-	column=$(expr $pos % $cols)   # column position left to right
+	column=$(expr $Xpos % $cols)   # column Xposition left to right
 	[ $column -eq 0 ] && column=$cols
 	column=$(( column - 1 ))  # 0 -> left
 
@@ -45,11 +45,26 @@ spread() {
 	wtp $X $Y $WIDTH $HEIGHT $winid
 }
 
-case $pos in
+case $Xpos in
 	left   ) spread $cols  1    ;;
 	right  ) spread $cols $cols ;;
-	center ) pos=$(( $cols / 2 + $(expr $cols % 2) )); spread $cols $pos ;;  # center or center left
-	*      ) spread $cols $pos  ;;
+	center ) Xpos=$(( $cols / 2 + $(expr $cols % 2) )); spread $cols $Xpos ;;  # center or center left
+	*      ) spread $cols $Xpos  ;;
+esac
+
+float() {
+	height=$(( (H - gap) / 2 ))
+	offset=$(( (height - HEIGHT) / 2 - border ))  # offset from row edge
+
+	Y=$(( height * $1 + panel + gap / 2 + offset ))
+	[ $Y -lt $panel ] && Y=$panel
+	wtp $X $Y $WIDTH $HEIGHT $winid
+}
+
+case $Ypos in
+	top    ) float 0 ;;  # row 0
+	bottom ) float 1 ;;
+	*      ) window -- snap center vertical ;;
 esac
 
 waitron window_focus $winid

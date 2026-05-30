@@ -67,8 +67,7 @@ name="manpage"
 
 class="term"
 	window desktop $(desktop) ;\
-	layout spread 3 term      ;\
-	window snap center vertical
+	layout spread 3 term
 
 class="palette"
 	window snap center
@@ -188,7 +187,7 @@ class="qutebrowser"
 class="luakit"
 	xdotool search -sync -onlyvisible -name "$(recipe hangouts/name)" set_window -classname 'hangouts' -class 'hangouts' ;\
 	window '@hangouts' URL size 690x1080 && window desktop $(chef desktop "COMM")                                        ;\
-	window '@hangouts' snap center vertical && window '@hangouts' spread left
+	window '@hangouts' spread left
 
 class="Surf"
 	xdotool search -sync -onlyvisible -name '@cgDIS:T | ' set_window -classname 'hangouts' -class 'hangouts' ;\
