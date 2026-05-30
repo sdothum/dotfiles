@@ -14,7 +14,7 @@ VOFFSET=6              # vertical (visual monitor angle) offset for panel:top SE
 
 # replicating windowchef window geometry :)
 parse() {
-	PANEL_HEIGHT=$(recipe 'ui/gap_width bottom')
+	PANEL_HEIGHT=$(recipe -c panel/height $(recipe 'ui/gap_width top'))
 	MARGIN=$(recipe 'ui/gap_width left')
 	PANEL_INDENT=$(recipe -c panel/indent $(recipe 'ui/gap_width left'))
 	BORDER=$(recipe 'ui/border_width')

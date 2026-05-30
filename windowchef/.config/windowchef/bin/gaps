@@ -15,9 +15,9 @@ usage() {
 > ${GREEN}tuples:${cyan} w'idth | internal W'idth <border>
 >         f'ocused | internal F'ocused | u'nfocused | internal U'nfocused <color>
 >         t'op | b'ottom | l'eft | r'ight | g'rid <gap>
->         p'anel <indent>
->         where, border/gap/indent: <pixel>  count
->                color:             <rrggbb> hex${NOCOLOR}" | usage:
+>         h'eight | i'ndent <panel>
+>         where, border/gap/height/indent: <pixel>  count
+>                color:                    <rrggbb> hex${NOCOLOR}" | usage:
 }
 
 # SEE: windowchefrc
@@ -34,6 +34,7 @@ snapshot() {
 	gap_width_left=$(recipe 'ui/gap_width left')
 	gap_width_right=$(recipe 'ui/gap_width right')
 	grid_gap_width=$(recipe ui/grid_gap_width)
+	panel_height=$(recipe panel/height)
 	panel_indent=$(recipe panel/indent)
 }
 
@@ -50,6 +51,7 @@ recover() {
 	recipe 'ui/gap_width left' $gap_width_left
 	recipe 'ui/gap_width right' $gap_width_right
 	recipe ui/grid_gap_width $grid_gap_width
+	recipe panel/height $panel_height
 	recipe panel/indent $panel_indent
 
 	config
@@ -69,7 +71,8 @@ settings() {
 	gap width ${ORANGE}l${NOCOLOR}eft           "$(recipe 'ui/gap_width left')"
 	gap width ${ORANGE}r${NOCOLOR}ight          "$(recipe 'ui/gap_width right')"
 	${ORANGE}g${NOCOLOR}rid gap width           "$(recipe ui/grid_gap_width)"
-	${ORANGE}p${NOCOLOR}anel indent             "$(recipe panel/indent)"
+	panel ${ORANGE}h${NOCOLOR}eight             "$(recipe panel/height)"
+	panel ${ORANGE}i${NOCOLOR}ndent             "$(recipe panel/indent)"
 "
 }
 
@@ -79,14 +82,15 @@ snapshot
 # semi-dynamic rice tweaking
 config() {
 	windowchefrc refresh
-	pkill -f 'draw panel'
-	restore panel
+	[ $panel ] && { pkill -f 'draw panel'; restore panel; }
+	return 0
 }
 
 color() { pastel format hex $value >/dev/null 2>&1; }
 
 while : ;do
 	settings
+	unset panel
 
 	read -p '> ' config
 	[ "$config" ] || break
@@ -115,7 +119,8 @@ while : ;do
 		l ) recipe 'ui/gap_width left' $value; recipe 'ui/gap_width right' $value ;;
 		r ) recipe 'ui/gap_width right' $value ;;
 		g ) recipe ui/grid_gap_width $value ;;
-		p ) recipe panel/indent $value ;;
+		h ) recipe panel/height $value; panel=true ;;
+		i ) recipe panel/indent $value; panel=true ;;
 		* ) usage; continue ;;
 	esac
 
