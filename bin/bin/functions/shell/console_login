@@ -60,7 +60,7 @@ if [ $USER != root ] ;then
 		# gtd calendar
 		echo
 		exists remind && reminder
-		rm -rf $HOME/tmp/*
+		sudo rm -rf $HOME/tmp/*  # include root created files
 
 		if cpu arm ;then
 			nohup arm_clock >/dev/null 2>&1 &
