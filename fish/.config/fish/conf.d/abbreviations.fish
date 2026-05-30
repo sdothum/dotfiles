@@ -34,7 +34,7 @@ if alpine
 	abbr svs 'sv start'
 	abbr svt 'sv stop'
 else if void 'dinit'
-	abbr svc 'dinit-check'
+	abbr svc 'sudo dinit-check'
 	# abbr svc 'sv check'
 	abbr svd 'sv disable'
 	abbr sve 'sv enable'
@@ -200,7 +200,7 @@ abbr w 'which'
 
 abbr cl 'clear;  setterm -cursor on'
 abbr cursor 'setterm -cursor on'
-abbr gaps 'rlwrap -Nn gaps'
+abbr gaps 'rlwrap -Nn gaps; restore panel'  # (??) recover panel lost by gaps
 abbr h: 'ls -l /tmp/herbstluftwm:*'
 abbr hc 'herbstclient'
 abbr herbstluftwm ". $HOME/.config/herbstluftwm/config/ENV"
