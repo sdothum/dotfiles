@@ -3,4 +3,5 @@ command    = /usr/sbin/dhcpcd -B -M
 logfile    = /var/log/dinit.d/dhcpcd.log
 restart    = false
 waits-for  = pre-local.target
-depends-on = NetworkManager
+depends-on = pre-network.target
+before     = network.target

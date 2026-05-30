@@ -5,4 +5,4 @@ smooth-recovery = true
 term-signal     = INT
 logfile         = /var/log/dinit.d/postgres.log
 depends-on      = postgres-pre
-waits-for       = login.target
+before          = login.target

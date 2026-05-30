@@ -3,3 +3,5 @@ command         = /usr/bin/NetworkManager -d
 smooth-recovery = true
 logfile         = /var/log/dinit.d/NetworkManager.log
 depends-on      = dbus
+depends-on      = pre-network.target
+before          = network.target

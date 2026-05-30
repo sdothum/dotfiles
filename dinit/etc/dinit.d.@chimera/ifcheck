@@ -3,4 +3,4 @@ command      = /etc/dinit.d/scripts/ifcheck
 stop-command = /etc/dinit.d/scripts/ifcheck stop
 restart      = true
 logfile      = /var/log/dinit.d/ifcheck.log
-depends-on   = NetworkManager
+depends-on   = network.target

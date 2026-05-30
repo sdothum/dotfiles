@@ -1,6 +1,6 @@
 type            = process
-command         = lsyncd -nodaemon /etc/dinit.d/config/lsyncd.lua
+command         = /usr/bin/lsyncd -nodaemon /etc/dinit.d/config/lsyncd.lua
 smooth-recovery = true
 logfile         = /var/log/dinit.d/lsyncd.log
 after           = login.target
-depends-on      = network
+depends-on      = network.target
