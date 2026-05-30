@@ -9,8 +9,7 @@
 # Usage: restore panel [<panel>]
 
 pkill -KILL -f "$WM/panel .*"
-[ $1 ] || recipe -q panel/format || exit
-
-draw panel $(recipe -e panel/format $1)
+sleep 0.1
+draw panel ${1:-$(recipe -e panel/format)}
 
 # kak: filetype=sh

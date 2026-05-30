@@ -4,16 +4,18 @@
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
+# Usage: windowchefrc refresh SEE: gaps
+
 # ...................................................................... Borders
 
-waitron wm_config enable_borders           true
+waitron wm_config enable_borders           $(recipe -c ui/enable_borders true)
 waitron wm_config border_width             $(recipe -c ui/border_width 12)
 waitron wm_config internal_border_width    $(recipe -c ui/internal_border_width 9)
 
 waitron wm_config color_focused            0x$(recipe -c ui/color_focused 00ffff)
 waitron wm_config color_unfocused          0x$(recipe -c ui/color_unfocused 757575)
 waitron wm_config internal_color_focused   0x$(recipe -c ui/internal_color_focused 505050)
-waitron wm_config internal_color_unfocused 0x$(recipe -c ui/internal_color_unfocused 505050)
+waitron wm_config internal_color_unfocused 0x$(recipe -c ui/internal_color_unfocused $(recipe ui/internal_color_focused))
 
 # ......................................................................... Gaps
 
@@ -22,6 +24,8 @@ waitron wm_config gap_width bottom $(recipe -c 'ui/gap_width bottom' 39)
 waitron wm_config gap_width left   $(recipe -c 'ui/gap_width left' 36)
 waitron wm_config gap_width right  $(recipe -c 'ui/gap_width right' $(recipe 'ui/gap_width left'))
 waitron wm_config grid_gap_width   $(recipe -c ui/grid_gap_width 12)
+
+[ $1 ] && exit
 
 # ....................................................................... Groups
 

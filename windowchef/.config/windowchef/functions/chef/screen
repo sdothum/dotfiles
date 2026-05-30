@@ -16,8 +16,7 @@ VOFFSET=6              # vertical (visual monitor angle) offset for panel:top SE
 parse() {
 	PANEL_HEIGHT=$(recipe 'ui/gap_width bottom')
 	MARGIN=$(recipe 'ui/gap_width left')
-	PANEL_INDENT=$(recipe panel/indent)
-	PANEL_INDENT=${PANEL_INDENT:-$MARGIN}
+	PANEL_INDENT=$(recipe -c panel/indent $(recipe 'ui/gap_width left'))
 	BORDER=$(recipe 'ui/border_width')
 	TOP=$(recipe 'ui/gap_width top')
 	GAP=$(recipe 'ui/grid_gap_width')
