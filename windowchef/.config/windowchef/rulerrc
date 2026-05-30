@@ -65,6 +65,10 @@ name="yazi"
 name="manpage"
 	for i in $(wmctrl -l | grep 'manpage' | cut -d' ' -f1) ;do window @$i size B5 ;done
 
+class="scratch"
+	window desktop $(desktop) ;\
+	layout spread zigzag 6 scratch
+
 class="term"
 	window desktop $(desktop) ;\
 	layout spread 3 term
