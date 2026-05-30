@@ -72,11 +72,11 @@ map global normal <a-D>   '<a-l><a-d>'   -docstring 'delete to end of line (not 
 
 # ........................................................................ Paste
 
-map global normal |       'x| '          -docstring "pipe (select) replace"
+map global normal |       'x|rlwrap '    -docstring "pipe (select) replace"
 map global normal <c-p>   ':<space>yank-ring-previous<ret>'
 map global normal <c-n>   ':<space>yank-ring-next<ret>'
 
-addm %{ paste p0 : map global select | 'i <esc>h|' -docstring "pipe insert" }
+addm %{ paste p0 : map global select | 'i <esc>h|rlwrap ' -docstring "pipe insert" }
 
 # .................................................................... Clipboard
 
