@@ -1,0 +1,96 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# X11 System
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ..................................................................... Terminal
+
+# Usage: alacritty [BLACKBOARD | TRANSPARENT | PAPER | <X>x<Y>]* <option>*
+
+export SHELL=/usr/bin/fish
+
+size=$(fontsize)
+background='#263238'
+foreground='#eaeaea'
+opacity=0.935
+# proof=tnue  # unset to increase font size for writing focus (versus coding density)
+
+if [ "$MONOFONT" ] ;then
+	if [ "$MONOFONT" = "Iosevka-proof" ] ;then
+		size=$(fontsize proof)  # SEE: compose, menu wikis/notes
+		offsetY=0                        # NOTE: these adjustment values tuned for 4K display size 9
+		paddingY=4
+		paddingX=5
+	else
+		offsetY=1             # for current desktop frame settings (yes, anal i know :)
+	fi
+fi
+
+[ "$SCROLLING" ] || SCROLLING=10000  # set envar to 0 to disable history
+
+if recipe -q term ;then
+	columns=$(recipe term | cut -dx -f1)
+	lines=$(recipe term | cut -dx -f2)
+else
+	[ $(chef display height) -ge 1440 ] && { columns=130; lines=28; } || { columns=120; lines=20; }
+fi
+
+while : ;do
+	case "$1" in
+		BLACKBOARD    ) background='#000000'; foreground='#000000'   ;;
+		TRANSPARENT   ) opacity=0; export PS1=; SHELL=/usr/bin/sh    ;;  # blank out shell prompt
+		PAPER         ) foreground=$background; background='#f7f3ee' ;;  # helix background
+		OPACITY=*     ) opacity=${1#*=} ;;
+		*[0-9]x[0-9]* ) columns=${1%x*}; lines=${1#*x} ;;
+		*             ) break ;;
+	esac
+	shift
+done
+
+# tweak window margins by fontsize
+case $size in
+	8  ) paddingX=${paddingX:-8}; paddingY=${paddingY:-8}; offsetX=0; offsetY=${offsetY:-1}   ;;
+	9  ) paddingX=${paddingX:-9}; paddingY=${paddingY:-9}; offsetX=0; offsetY=${offsetY:-2}   ;;
+	11 ) paddingX=${paddingX:-12}; paddingY=${paddingY:-12}; offsetX=0; offsetY=${offsetY:-3} ;;
+	*  ) paddingX=${paddingX:-12}; paddingY=${paddingY:-12}; offsetX=0; offsetY=${offsetY:-0} ;;
+esac
+[ $YAZI ] && offsetY=0  # Y font offset may affect status bar pixel level highlighting (SEE: yazi wrapper)
+
+echo "$@" | grep -E -q '[-](t|title)' || title="--title alacritty"
+
+# quantum colour theme :)
+/usr/bin/alacritty --option                        \
+	"font.normal.family='${MONOFONT:-Iosevka}'"     \
+	"font.size=$size"                               \
+	"window.padding.x=$paddingX"                    \
+	"window.padding.y=$paddingY"                    \
+	"window.opacity=$opacity"                       \
+	"font.offset.x=$offsetX"                        \
+	"font.offset.y=$offsetY"                        \
+	"colors.draw_bold_text_with_bright_colors=true" \
+	"colors.primary.background='$background'"       \
+	"colors.primary.foreground='$foreground'"       \
+	"colors.normal.black='#000000'"                 \
+	"colors.normal.red='#d54e53'"                   \
+	"colors.normal.green='#b9ca4a'"                 \
+	"colors.normal.yellow='#e6c547'"                \
+	"colors.normal.blue='#7aa6da'"                  \
+	"colors.normal.magenta='#c397d8'"               \
+	"colors.normal.cyan='#70c0ba'"                  \
+	"colors.normal.white='#eaeaea'"                 \
+	"colors.bright.black='#666666'"                 \
+	"colors.bright.red='#ff3334'"                   \
+	"colors.bright.green='#9ec400'"                 \
+	"colors.bright.yellow='#e7c547'"                \
+	"colors.bright.blue='#7aa6da'"                  \
+	"colors.bright.magenta='#b77ee0'"               \
+	"colors.bright.cyan='#54ced6'"                  \
+	"colors.bright.white='#ffffff'"                 \
+	"window.dimensions.columns=$columns"            \
+	"window.dimensions.lines=$lines"                \
+	"scrolling.history=$SCROLLING"                  \
+	$title                                          \
+	$@ &
+
+# kak: filetype=sh
