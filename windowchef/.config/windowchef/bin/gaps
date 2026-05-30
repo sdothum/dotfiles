@@ -38,19 +38,19 @@ snapshot() {
 }
 
 recover() {
-	recipe -q ui/enable_borders $enable_borders
-	recipe -q ui/border_width $border_width
-	recipe -q ui/internal_border_width $internal_border_width
-	recipe -q ui/color_focused $color_focused
-	recipe -q ui/color_unfocused $color_unfocused
-	recipe -q ui/internal_color_focused $internal_color_focused
-	recipe -q ui/internal_color_unfocused $internal_color_unfocused
-	recipe -q 'ui/gap_width top' $gap_width_top
-	recipe -q 'ui/gap_width bottom' $gap_width_bottom
-	recipe -q 'ui/gap_width left' $gap_width_left
-	recipe -q 'ui/gap_width right' $gap_width_right
-	recipe -q ui/grid_gap_width $grid_gap_width
-	recipe -q panel/indent $panel_indent
+	recipe ui/enable_borders $enable_borders
+	recipe ui/border_width $border_width
+	recipe ui/internal_border_width $internal_border_width
+	recipe ui/color_focused $color_focused
+	recipe ui/color_unfocused $color_unfocused
+	recipe ui/internal_color_focused $internal_color_focused
+	recipe ui/internal_color_unfocused $internal_color_unfocused
+	recipe 'ui/gap_width top' $gap_width_top
+	recipe 'ui/gap_width bottom' $gap_width_bottom
+	recipe 'ui/gap_width left' $gap_width_left
+	recipe 'ui/gap_width right' $gap_width_right
+	recipe ui/grid_gap_width $grid_gap_width
+	recipe panel/indent $panel_indent
 
 	config
 }
