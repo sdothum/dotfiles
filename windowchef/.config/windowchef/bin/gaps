@@ -57,19 +57,19 @@ recover() {
 
 settings() {
 	echo "
-	enable_borders           "$(recipe ui/enable_borders)"
-	border_width             "$(recipe ui/border_width)"
-	internal_border_width    "$(recipe ui/internal_border_width)"
-	color_focused            "$(recipe ui/color_focused)"
-	color_unfocused          "$(recipe ui/color_unfocused)"
-	internal_color_focused   "$(recipe ui/internal_color_focused)"
-	internal_color_unfocused "$(recipe ui/internal_color_unfocused)"
-	gap_width_top            "$(recipe 'ui/gap_width top')"
-	gap_width_bottom         "$(recipe 'ui/gap_width bottom')"
-	gap_width_left           "$(recipe 'ui/gap_width left')"
-	gap_width_right          "$(recipe 'ui/gap_width right')"
-	grid_gap_width           "$(recipe ui/grid_gap_width)"
-	panel_indent             "$(recipe panel/indent)"
+	${ORANGE}-${NOCOLOR}enable borders          "$(recipe ui/enable_borders)"
+	border ${ORANGE}w${NOCOLOR}idth             "$(recipe ui/border_width)"
+	internal border ${ORANGE}W${NOCOLOR}idth    "$(recipe ui/internal_border_width)"
+	color ${ORANGE}f${NOCOLOR}ocused            "$(recipe ui/color_focused)"
+	color ${ORANGE}u${NOCOLOR}nfocused          "$(recipe ui/color_unfocused)"
+	internal color ${ORANGE}F${NOCOLOR}ocused   "$(recipe ui/internal_color_focused)"
+	internal color ${ORANGE}U${NOCOLOR}nfocused "$(recipe ui/internal_color_unfocused)"
+	gap width ${ORANGE}t${NOCOLOR}op            "$(recipe 'ui/gap_width top')"
+	gap width ${ORANGE}b${NOCOLOR}ottom         "$(recipe 'ui/gap_width bottom')"
+	gap width ${ORANGE}l${NOCOLOR}eft           "$(recipe 'ui/gap_width left')"
+	gap width ${ORANGE}r${NOCOLOR}ight          "$(recipe 'ui/gap_width right')"
+	${ORANGE}g${NOCOLOR}rid gap width           "$(recipe ui/grid_gap_width)"
+	${ORANGE}p${NOCOLOR}anel indent             "$(recipe panel/indent)"
 "
 }
 
@@ -110,9 +110,9 @@ while : ;do
 		F ) recipe ui/color_unfocused $value ;;
 		u ) recipe ui/internal_color_focused $value ;;
 		U ) recipe ui/internal_color_unfocused $value ;;
-		t ) recipe 'ui/gap_width top' $value ;;
+		t ) recipe 'ui/gap_width top' $value; recipe 'ui/gap_width bottom' $value ;;  # NOTE: sets balanced margins by default
 		b ) recipe 'ui/gap_width bottom' $value ;;
-		l ) recipe 'ui/gap_width left' $value; recipe 'ui/gap_width right' $value ;;  # NOTE: sets balanced margins by default
+		l ) recipe 'ui/gap_width left' $value; recipe 'ui/gap_width right' $value ;;
 		r ) recipe 'ui/gap_width right' $value ;;
 		g ) recipe ui/grid_gap_width $value ;;
 		p ) recipe panel/indent $value ;;

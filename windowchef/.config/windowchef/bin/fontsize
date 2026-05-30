@@ -6,6 +6,8 @@
 
 # .................................................................... Font size
 
+# Usage: fontsize [proof]
+
 # SEE: editor / browser / term / windowmanager wrappers
 
 # fugly adjust font for various displays and video cards on this local network
@@ -21,7 +23,7 @@ elif laptop       ;then size=9
 else                    size=10
 fi
 
-size=$(recipe -c fontsize $size)
+size=$(recipe -c fontsize/${1:-default} $size)
 echo $size
 
 # kak: filetype=sh

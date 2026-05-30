@@ -48,8 +48,8 @@ esac
 PANEL_HEIGHT=$(chef screen panel)
 PANEL_INDENT=$(chef screen indent)  # assumes equal left/right screen margins
 
-fontsize=$(fontsize)
-[ $scaledown ] && fontsize=$(( fontsize - 1 ))
+fontsize=$(fontsize panel)
+# [ $scaledown ] && fontsize=$(echo "$fontsize - 1.0" | bc )
 width=$(chef display width)
 
 panel_offsetY=$(( $(chef display height) - PANEL_HEIGHT ))  # bottombar (topbar = 0)
