@@ -26,7 +26,7 @@ pick_image() {
 	/usr/bin/feh -W $1 --stretch --thumbnails -X -E 108 -y 192 \
 		-B black --cache-thumbnails --scale-down                \
 		-r --start-at ${3:-$IMAGES}                             \
-		-A "xdotool key q && echo %f"                           \
+		-A "xdotool key q && echo %F"                           \
 		$IMAGES/$2 2>/dev/null  # ignore .theme file warnings
 }
 

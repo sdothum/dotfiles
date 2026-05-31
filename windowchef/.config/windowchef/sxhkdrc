@@ -307,7 +307,7 @@ super + {_,shift} + Return
 	scratchpad {scratchy, itchy}
 
 super + ctrl + Return
-	term class=scratch
+	term
 
 super + alt + t
 	for i in $(xdotool search -onlyvisible -classname "term") ;do xdotool windowactivate -sync $i; window desktop $(chef desktop "CODE") teleport ;done

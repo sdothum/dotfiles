@@ -6,7 +6,7 @@
 
 # ............................................................... Spread windows
 
-# Usage: layout spread [zigzag] <count> <name>
+# Usage: layout spread [pairs] <columns> <name>
 
 linear() {
 	pos=$(expr $pos % $1)   # position left to right
@@ -20,19 +20,18 @@ linear() {
 	esac | cut -d' ' -f$pos
 }
 
-zig() {
-	[ $(expr $pos % 2) -eq 1 ] && row=top || row=bottom  # position top to bottom, left to right
+matrix() {
+	[ $(expr $pos % 2) -eq 1 ] && row=top || row=bottom  # position top to bottom..
 	pos=$(( (pos + 1) / 2 ))
-	echo $(linear $1) $row
+	echo $(linear $1) $row                               # left to right
 }
 
 case $1 in
-	zig* )
+	pair* )
 		pos=$(chef window count $3)
-		zag=$(( ($2 + 1) / 2 ))
-		window spread $zag $(zig $zag)
+		window spread $2 $(matrix $2)
 		;;
-	*    )
+	*     )
 		pos=$(chef window count $2)
 		window spread $1 $(linear $1)
 		;;

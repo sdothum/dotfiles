@@ -7,7 +7,8 @@
 # ................................................................ Spread window
 
 # Usage: window spread <columns> <position> [top | bottom], where position is left | right | <column>
-#                      <position> [top | bottom] -> fit by window width
+#                                <position> [top | bottom], where columns is calculated to fit by window width
+# NOTE: window is subsequently positioned vertically, centered (default), top or bottom spread
 
 snapshot_geometry
 set_geometry  # X Y WIDTH HEIGHT

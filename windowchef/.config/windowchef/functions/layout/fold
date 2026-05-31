@@ -6,9 +6,9 @@
 
 # .................................................................. Tile layout
 
-usage() { usage: "$(basename $0) fold 0 | 1 | 2 | 3 | 4 | 5 [<classname>]"; exit 1; }
+usage() { usage: "$(basename $0) fold [pairs] 0 | 1 | 2 | 3 | 4 | 5 [<classname>]"; exit 1; }
 
-winids=$(chef window ids $2)
+winids=$(chef window ids ${3:-$2})
 instance=0  # window placement sequence
 
 # ........................................................................ Stack
@@ -20,6 +20,17 @@ stack() {
 	done
 }
 
+stack_matrix() {
+	for i in $winids ;do
+		waitron window_focus $i
+		case $instance in
+			0 ) window spread 1 1 top    ;;
+			1 ) window spread 1 1 bottom ; instance=-1  ;;
+		esac
+		instance=$(( instance + 1 ))
+	done
+}
+
 # .................................................................... By halves
 
 halves() {
@@ -27,7 +38,20 @@ halves() {
 		waitron window_focus $i
 		case $instance in
 			0 ) window tile 2 1 ;;
-			1 ) window tile 2 2; instance=-1 ;;
+			1 ) window tile 2 2 ; instance=-1 ;;
+		esac
+		instance=$(( instance + 1 ))
+	done
+}
+
+halves_matrix() {
+	for i in $winids ;do
+		waitron window_focus $i
+		case $instance in
+			0 ) window spread 2 1 top    ;;
+			1 ) window spread 2 1 bottom ;;
+			2 ) window spread 2 2 top    ;;
+			3 ) window spread 2 2 bottom ; instance=-1 ;;
 		esac
 		instance=$(( instance + 1 ))
 	done
@@ -39,9 +63,24 @@ thirds() {
 	for i in $winids ;do
 		waitron window_focus $i
 		case $instance in
-			2 ) window tile 3 1; instance=-1 ;;
+			2 ) window tile 3 1 ; instance=-1 ;;
 			0 ) window tile 3 2 ;;
 			1 ) window tile 3 3 ;;
+		esac
+		instance=$(( instance + 1 ))
+	done
+}
+
+thirds_matrix() {
+	for i in $winids ;do
+		waitron window_focus $i
+		case $instance in
+			4 ) window spread 3 1 top    ;;
+			5 ) window spread 3 1 bottom ; instance=-1 ;;
+			0 ) window spread 3 2 top    ;;
+			1 ) window spread 3 2 bottom ;;
+			2 ) window spread 3 3 top    ;;
+			3 ) window spread 3 3 bottom ;;
 		esac
 		instance=$(( instance + 1 ))
 	done
@@ -54,9 +93,26 @@ quarters() {
 		waitron window_focus $i
 		case $instance in
 			2 ) window tile 4 1 ;;
-			0 ) window tile 4 2 ;;
-			1 ) window tile 4 3 ;;
-			3 ) window tile 4 4; instance=-1 ;;
+			1 ) window tile 4 2 ;;
+			0 ) window tile 4 3 ;;
+			3 ) window tile 4 4 ; instance=-1 ;;
+		esac
+		instance=$(( instance + 1 ))
+	done
+}
+
+quarters_matrix() {
+	for i in $winids ;do
+		waitron window_focus $i
+		case $instance in
+			6 ) window spread 4 1 top    ;;
+			7 ) window spread 4 1 bottom ; instance=-1 ;;
+			2 ) window spread 4 2 top    ;;
+			3 ) window spread 4 2 bottom ;;
+			0 ) window spread 4 3 top    ;;
+			1 ) window spread 4 3 bottom ;;
+			4 ) window spread 4 4 top    ;;
+			5 ) window spread 4 4 bottom ;;
 		esac
 		instance=$(( instance + 1 ))
 	done
@@ -68,7 +124,7 @@ fifths() {
 	for i in $winids ;do
 		waitron window_focus $i
 		case $instance in
-			4 ) window tile 5 1; instance=-1 ;;
+			4 ) window tile 5 1 ; instance=-1 ;;
 			2 ) window tile 5 2 ;;
 			0 ) window tile 5 3 ;;
 			1 ) window tile 5 4 ;;
@@ -78,16 +134,51 @@ fifths() {
 	done
 }
 
+fifths_matrix() {
+	for i in $winids ;do
+		waitron window_focus $i
+		case $instance in
+			8 ) window spread 5 1 top    ;;
+			9 ) window spread 5 1 bottom ; instance=-1 ;;
+			4 ) window spread 5 2 top    ;;
+			5 ) window spread 5 2 bottom ;;
+			0 ) window spread 5 3 top    ;;
+			1 ) window spread 5 3 bottom ;;
+			2 ) window spread 5 4 top    ;;
+			3 ) window spread 5 4 bottom ;;
+			6 ) window spread 5 5 top    ;;
+			7 ) window spread 5 5 bottom ;;
+		esac
+		instance=$(( instance + 1 ))
+	done
+}
+
+# ........................................................... Fold across screen
+
 case "$1" in
-	0 ) layout fold $(min $(echo "$winids" | wc -l) 5) $2 ;;
-	1 ) stack    ;;  # monocle
-	2 ) halves   ;;
-	3 ) thirds   ;;
-	4 ) quarters ;;
-	5 ) fifths   ;;
-	* ) usage ;;
+	pair* )
+		shift; case "$1" in
+			0 ) layout fold pairs $(min $(echo "$winids" | wc -l) 5) $2 ;;
+			1 ) stack_matrix    ;;
+			2 ) halves_matrix   ;;
+			3 ) thirds_matrix   ;;
+			4 ) quarters_matrix ;;
+			5 ) fifths_matrix   ;;
+			* ) usage ;;
+		esac
+		;;
+	*    )
+		case "$1" in
+			0 ) layout fold $(min $(echo "$winids" | wc -l) 5) $2 ;;
+			1 ) stack    ;;  # monocle
+			2 ) halves   ;;
+			3 ) thirds   ;;
+			4 ) quarters ;;
+			5 ) fifths   ;;
+			* ) usage ;;
+		esac
 esac
 
-waitron window_focus ${i:-$winid}
+waitron window_focus $winid
 
 # kak: filetype=sh
