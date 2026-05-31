@@ -121,6 +121,13 @@ xexec() {
 	rm -rf $ROOT/$1/*  # windowchef tree
 	# enable debug trace by referencing log file
 	export TRACE=$ROOT/$1.log
+
+	# NOTE: these settings to prevent mouse lag (event queueing) appear to disable mounse completely!
+	# nvidia-settings -a [gpu:0]/UnidirectionalSyncToDisplayDevice=0
+	# nvidia-settings -a [gpu:0]/OglVideoSync=0
+	# nvidia-settings -a [gpu:0]/ForceCompositionPipeline=0
+	# nvidia-settings -a [gpu:0]/ForceFullCompositionPipeline=0
+	
 	# exec ck-launch-session dbus-launch --sh-syntax --exit-with-x11 $1 >$ROOT/$1.log 2>&1
 	exec $1 >$ROOT/$1.log 2>&1
 }
