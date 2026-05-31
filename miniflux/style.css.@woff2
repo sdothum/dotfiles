@@ -1156,6 +1156,10 @@ article .item-meta {
 		margin-bottom: -2px;
 	}
 
+	.feed-item .item-meta-info * {
+		display: none;
+	}
+
 	.item-meta .item-meta-icons {
 		float: left;
 		font-size: 1em;
@@ -1247,12 +1251,21 @@ article .item-meta {
 	}
 
 	.item-meta .item-meta-icons * {
-		padding-top: 2px !important;
+		padding-top: 0!important;
+	}
+
+	.feed-item .item-meta-icons * {
+		display: block !importanxt;
+		margin-top: 2px !important;
+		padding: 0 !important;
+	}
+
+	.item-meta-icons .item-meta-icons-edit {
+		display: none !important;
 	}
 
 	.item-meta .item-meta-icons .item-meta-icons-entries,
-	.item-meta .item-meta-icons .item-meta-icons-feeds,
-	.item-meta .item-meta-icons .item-meta-icons-edit {
+	.item-meta .item-meta-icons .item-meta-icons-feeds {
 		display: none !important;
 	}
 
