@@ -1,0 +1,11 @@
+# NOTE: conflicts with nvidia drivers (??) only allows hdmi video
+
+Section "InputClass"
+    Identifier "Nulea M505 Trackball"
+    MatchIsPointer "on"
+    MatchDeviceProduct "Nulea M505"
+    Option "AccelerationProfile" "-1"
+    Option "AccelerationScheme" "none"
+    Option "ConstantDeceleration" "1"
+EndSection
+
