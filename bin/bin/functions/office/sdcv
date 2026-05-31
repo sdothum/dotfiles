@@ -65,14 +65,15 @@ th() {
 	fi
 }
 
+[ "$1" = '-th' ] && { shift; th $@ | pager; exit; }
+
 case $1 in
 	-wn  ) shift; eval $WORDNET $@ | sed '1,5d' ;;
-	-th  ) shift; th $@ ;;
 	-uk  ) shift; eval $OXFORD  $@ | sed '1d' ;;
 	-di* ) shift; eval $DICT    $@ | sed '1d' ;;
 	-ud* ) shift; eval $URBAN   $@ | sed '1d' | elinks -dump | sed 's/^.*\[0m //' ;;
 	-et* ) shift; eval $ETYM    $@ | sed "1,3d; s/<dd>/<br><br><dd>/" | elinks -dump ;;
 	*    ) $SDCV -c $@ ;;
-esac | sed "s|<br />[ \t]*|\n |g" | sed -z 's/\n\n\n/\n/g' | pager  # null (-z) line terminator to remove '\n\n\n'
+esac | sed "s|<br />[ \t]*|\n |g" | sed -z 's/\n\n\n/\n/g' | cat <(ditto dictionary "$2") - | fold -sw $(tput cols) | pager  # null (-z) line terminator to remove '\n\n\n'
 
 # kak: filetype=sh
