@@ -252,7 +252,7 @@
 				},
 				{
 					"type": "visual_array",
-					"keys": ["THU1" , "THU2"],
+					"keys": ["MID4" , "THU2"],
 					"dictionary": [
 						["X" , "X" , "STR(!=)"]
 					]
@@ -285,7 +285,7 @@
 				},
 				{
 					"type": "visual_array",
-					"keys": ["THU1" , "THU2"],
+					"keys": ["MID4" , "THU2"],
 					"dictionary": [
 						["X" , "X" , "STR(!=)"]
 					]
