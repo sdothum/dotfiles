@@ -4,4 +4,4 @@ type       = internal
 restart    = false
 waits-for  = early-prepare.target
 waits-for  = pre-local.target
-depends-on = NetworkManager
+# depends-on = NetworkManager
