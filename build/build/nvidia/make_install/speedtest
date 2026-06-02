@@ -12,7 +12,8 @@ rm -f *tgz
 
 eval $(curl 'https://www.speedtest.net/apps/cli#linux-flyout' | sed -r 's|.*(https://install.speedtest.net/app/cli/ookla-speedtest-[0-9.]*-linux-x86_64.tgz).*|wget "\1"|' | grep wget)
 tar -xvf *tgz
-cp speedtest $HOME/.local/bin/
+chmod 755 speedtest
+sudo cp -i speedtest /usr/local/bin/
 sudo cp speedtest.5 /usr/share/man/man5
 
 # vim: set ft=sh: #
