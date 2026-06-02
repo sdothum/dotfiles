@@ -9,6 +9,6 @@
 console && exec /usr/bin/man $@
 export BG='ffead0:-7,fff5e8:-7,ffcdd6:-5,fa8c69'
 export MANPAGER='/usr/bin/kak -ro'
-term manpage man $@
+term manpage class=manpage man $@
 
 # kak: filetype=sh

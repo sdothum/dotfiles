@@ -8,7 +8,7 @@
 
 # ..................................................................... Notifier
 
-usage() { usage: "$(basename $0) [time=<seconds> | [:]<seconds> | console | X | low|warning | normal | critical | blackboard]* [<color>] \"<summary>\" [[<color>] \"<body>\"]"; exit 1; }
+usage() { usage: "$(basename $0) [time=<seconds> | [:]<seconds> | console | trace | X | low|warning | normal | critical | blackboard]* [<color>] \"<summary>\" [[<color>] \"<body>\"]"; exit 1; }
 
 SESSION=${SESSION:-$HOME/.session}
 LOG=/tmp/notify.log
@@ -24,6 +24,7 @@ while : ;do
 		time=*  ) expire="--expire-time=$(( ${1#time=} * 1000 ))" ;;
 		:*      ) expire="--expire-time=$(( ${1#:} * 1000 ))" ;;
 		cons*   ) console=true ;;
+		trace   ) recipe -q trace || exit ;;  # trace messages only
 		X       ) X=true ;;
 		low    |\
 		norm*  |\

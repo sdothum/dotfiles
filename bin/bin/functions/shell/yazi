@@ -30,8 +30,8 @@ esac
 
 export TMUXCONF=$HOME/.tmux.conf  # SEE: tmux_session
 case $1 in
-	ROOT    ) tmux_session 'root' sudo -E $YAZI $TAB             ;;
-	TMUX    ) tmux_session 'yazi'         $YAZI $TAB             ;;
+	ROOT    ) tmux_session class=yazi 'root' sudo -E $YAZI $TAB             ;;
+	TMUX    ) tmux_session class=yazi 'yazi'         $YAZI $TAB             ;;
 	XFTP    ) term xftp class=xftp /bin/yazi /net/downloads/http ;;
 	''      ) $termyazi                   $YAZI .                ;;
 	WAIT    ) shift; $termyazi WAIT       $YAZI "${MTP:-$@}"     ;; # don't pass WAIT in command string
