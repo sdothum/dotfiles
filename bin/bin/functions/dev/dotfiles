@@ -141,7 +141,7 @@ case $1 in
 	redo    |\
 	undo    )
 		git reset --soft HEAD~
-		ifno "continue w/o rlwrap" || dotfiles
+		ifno "continue w/o rlwrap history" || dotfiles
 		;;
 
 	reset   ) git reset ;;
