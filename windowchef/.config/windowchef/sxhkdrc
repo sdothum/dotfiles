@@ -130,11 +130,27 @@ super + shift + {t,s}
 super + {_,shift} + z
 	waitron {window_monocle, window_maximize}
 
-# ......................................................................... swap
+# ......................................................................... tile
 
-alt + super + {Left,Down,Up,Right}
-	W=$(pfw)                               ;\
-	window swap {west, south, north, east} ;\
+super + 2
+	window size monocle
+
+super + {5,6,3}
+	window tile 3 {1, 2, 3}
+
+super + {4,8,7,9}
+	window tile 4 {1, 2, 3, 4}
+
+# ....................................................................... layout
+
+super + shift + {0,1,2,3,4,5}
+	W=$(pfw)                                                ;\
+	layout fold {0, 1, 2, 3, 4, 5} $(chef window classname) ;\
+	waitron window_focus $W
+
+super + shift + ctrl + 0
+	W=$(pfw)                                                ;\
+	layout fold 0                                           ;\
 	waitron window_focus $W
 
 # ......................................................................... move
@@ -170,28 +186,10 @@ super + {t,s}
 	side="{left, right}" ;\
 	[ "$(chef window classname)"  = "term" ] && window spread $side || window snap $side
 
-# ......................................................................... tile
+# ......................................................................... swap
 
-super + 2
-	window size monocle
-
-super + {5,6,3}
-	window tile 3 {1, 2, 3}
-
-super + {4,8,7,9}
-	window tile 4 {1, 2, 3, 4}
-
-# ....................................................................... layout
-
-super + shift + {0,1,2,3,4,5}
-	W=$(pfw)                                                ;\
-	layout fold {0, 1, 2, 3, 4, 5} $(chef window classname) ;\
-	waitron window_focus $W
-
-super + shift + ctrl + 0
-	W=$(pfw)                                                ;\
-	layout fold 0                                           ;\
-	waitron window_focus $W
+alt + super + {Left,Down,Up,Right}
+	window swap {west, south, north, east}
 
 # Groups
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

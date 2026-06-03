@@ -12,7 +12,6 @@ snapshot_geometry  # NOTE: comment out to not overwrite window sizing/tiling geo
 set_geometry   # X Y WIDTH HEIGHT
 
 move()   {
-	# xdotool windowmove $1 $2 $3
 	# wtp $1 $2 $WIDTH $HEIGHT $winid
 	waitron window_focus $winid
 	waitron window_move_absolute $1 $2
@@ -55,7 +54,7 @@ bottom() {
 }
 
 case $1 in
-	''     ) near      ;; # nearest left/right edge
+	''     ) near      ;;  # nearest left/right edge
 	left   ) left      ;;
 	right  ) right     ;;
 	near   ) near      ;;

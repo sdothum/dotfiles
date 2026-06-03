@@ -60,6 +60,7 @@ xname_is()       { xdotool getwindow$1 $winid | grep -q "$xname"; }
 
 # NOTE: waitron replacement for wtp (wmutils) avoids async display timing issues
 wtp() {
+	# wtp X Y width height winid (as in wmutils)
 	waitron window_focus $5
 	waitron window_move_absolute $1 $2
 	waitron window_resize_absolute $3 $4
@@ -72,6 +73,8 @@ draw() {
 	[ $HGT -gt $HEIGHT ] && { swap=$WID; WID=$HGT; HGT=$swap; }
 	wtp $X $Y $WID $HGT $1
 }
+
+# .................................................................... @<map on>
 
 # do we need to wait longer for window creation?
 if [ "$1" ] && [ -z "${1%%@*}" ] ;then
@@ -99,6 +102,8 @@ if [ "$1" ] && [ -z "${1%%@*}" ] ;then
 	winid=$(pfw)
 	shift
 fi
+
+# ................................................................ window action
 
 msg=$1
 [ $msg ] && shift || usage $0

@@ -4,7 +4,7 @@
 # Windowchef
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ................................................................. Shift window
+# .............................................................. Shift by window
 
 # Usage: window shift left | right | up | down (of window edge)
 
@@ -12,10 +12,10 @@ set_geometry  # X Y WIDTH HEIGHT
 snapshot_geometry
 
 case $1 in
-	left  ) xdotool windowmove -relative $winid -$(( WIDTH + border * 2 )) 0  ;;
-	right ) xdotool windowmove -relative $winid  $(( WIDTH + border * 2 )) 0  ;;
-	up    ) xdotool windowmove -relative $winid 0 -$(( HEIGHT + border * 2 )) ;;
-	down  ) xdotool windowmove -relative $winid 0  $(( HEIGHT + border * 2 )) ;;
+	left  ) waitron window_move -$(( WIDTH + border * 2 )) 0  ;;
+	right ) waitron window_move  $(( WIDTH + border * 2 )) 0  ;;
+	up    ) waitron window_move 0 -$(( HEIGHT + border * 2 )) ;;
+	down  ) waitron window_move 0  $(( HEIGHT + border * 2 )) ;;
 esac
 
 waitron window_focus $winid
