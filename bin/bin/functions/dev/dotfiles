@@ -38,7 +38,7 @@ find . -name '*.syncthing.hsts.tmp' -exec rm {} \;
 sudo find . -name '.uuid' -exec rm {} \;
 find -regex '.*\/\.[^\]+\.kak\.[^.][^.][^.][^.][^.][^.]' -exec mv -v {} /tmp/ \;
 
-for i in /etc/dinit.d.@* ;do /usr/bin/rsync -avq $i $STOW/dinit/etc/ ;done
+for i in /etc/dinit.d.@* ;do /usr/bin/rsync -avq --delete $i $STOW/dinit/etc/ ;done
 
 init() {
 	git init
