@@ -1,6 +1,0 @@
-type         = scripted
-command      = /etc/dinit.d/scripts/ifheartbeat
-stop-command = /etc/dinit.d/scripts/ifheartbeat stop
-restart      = true
-logfile      = /var/log/dinit.d/ifheartbeat.log
-depends-on   = network.target
