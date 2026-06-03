@@ -29,7 +29,7 @@ k    ⁋K1Y 0K4
 " | picklist
 }
 
-string=$(shortcuts | rmenu 'Insert' -no-custom) || exit
+string=$(shortcuts | rmenu 'Insert' -no-custom -auto-select) || exit
 waitron window_focus ${winid:-$(pfw)}  # refocus active window before menu display SEE: sxhkdrc
 
 [ "${string%%^*}" ] || { xdotool type '[^\n]*'; exit; }             # HACK: to avoid shell globbing of '*'

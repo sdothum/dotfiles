@@ -13,7 +13,7 @@ usage() {
 	echo "$(basename $0) (interative mode.. <Return> to exit)
 > ${GREEN}toggle:${cyan} -'borders
 > ${GREEN}tuples:${cyan} w'idth | internal W'idth <border>
->         f'ocused | internal F'ocused | u'nfocused | internal U'nfocused <color>
+>         f'ocused | u'nfocused | internal F'ocused | internal U'nfocused <color>
 >         t'op | b'ottom | l'eft | r'ight | g'rid <gap>
 >         h'eight | i'ndent <panel>
 >         where, border/gap/height/indent: <pixel>  count
@@ -100,8 +100,8 @@ while : ;do
 	case $attr in
 		- ) [ $(recipe ui/enable_borders) = 'true' ] && value=false || value=true ;;
 		f ) color $value || { usage; continue; } ;;
-		F ) color $value || { usage; continue; } ;;
 		u ) color $value || { usage; continue; } ;;
+		F ) color $value || { usage; continue; } ;;
 		U ) color $value || { usage; continue; } ;;
 		* ) echo $value | grep -q '[^0-9]' && { usage; continue; } ;;
 	esac
@@ -111,8 +111,8 @@ while : ;do
 		w ) recipe ui/border_width $value ;;
 		W ) recipe ui/internal_border_width $value ;;
 		f ) recipe ui/color_focused $value ;;
-		F ) recipe ui/color_unfocused $value ;;
-		u ) recipe ui/internal_color_focused $value ;;
+		u ) recipe ui/color_unfocused $value ;;
+		F ) recipe ui/internal_color_focused $value ;;
 		U ) recipe ui/internal_color_unfocused $value ;;
 		t ) recipe 'ui/gap_width top' $value; recipe 'ui/gap_width bottom' $value ;;  # NOTE: sets balanced margins by default
 		b ) recipe 'ui/gap_width bottom' $value ;;

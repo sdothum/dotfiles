@@ -8,19 +8,24 @@
 
 # Usage: window swap left | right | up | down (of window edge)
 
-snapshot_geometry  # X Y WIDTH HEIGHT
+# NOTE: preset window history (rec_geometry) for swap reference
+snapshot_geometry $winid  # X Y WIDTH HEIGHT
+rec_geometry $winid
 
-waitron window_cardinal_focus $1
+waitron window_cardinal_focus $1 2>/dev/null || { notify window "swap $@"; exit 1; }
 wid=$(pfw)
-# echo $wid $winid >>/tmp/debug
 [ "$wid" = "$winid" ] && exit  # no adjacent window
 
-snapshot_geometry $wid
+snapshot_geometry $wid  # X Y WIDTH HEIGHT
+rec_geometry $wid
+
 set_geometry $wid
 wtp $X $Y $WIDTH $HEIGHT $winid
 
 cat_geometry $winid
-wtp $X $Y $WIDTH $HEIGHT $wid
 waitron window_focus $wid
+wtp $X $Y $WIDTH $HEIGHT $wid
+
+exit  # to avoid "window" (parent) history management of window snapshot (history already recorded above)
 
 # kak: filetype=sh

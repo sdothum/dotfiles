@@ -77,7 +77,7 @@ z   bottom  right
 "
 
 formats="
--   term
+x   term
 c   B4  rotate
 d   A4
 f   A4  rotate
@@ -149,6 +149,7 @@ case $menu in
 		esac
 		;;
 	window )
+		W=$(pfw)  # rmenu overlay can shift window focus
 		[ $action ] || action=$(echo "$wactions" | pick "window") || exit
 		tree "$action"
 		case $action in
@@ -158,11 +159,13 @@ case $menu in
 				;;
 			column )
 				column=$(echo "$columns" | pick "tile : column") || exit
+				waitron window_focus $W
 				column=${column%% *}
 				window tile ${column%:*} ${column#*:}
 				;;
 			draw   )
 				extend=$(echo "$directions" | pick "direction") || exit
+				waitron window_focus $W
 				extend=${extend#* }
 				case ${extend%% *} in
 					tile ) window ${extend}        ;;
@@ -171,10 +174,9 @@ case $menu in
 				;;
 			form   )
 				size=$(echo "$formats" | pick "size") || exit
+				waitron window_focus $W
 				window size ${size#* }
-				wgeometry snapshot $(pfw)  # window snap overwrites window size geometry history
-				window snap center vertical
-				wgeometry restore $(pfw)
+				# window -- snap center vertical  # preserve size history
 				;;
 			group  )
 				group=$(echo "$groups" | pick "group") || exit
@@ -182,15 +184,16 @@ case $menu in
 				;;
 			snap   )
 				snap=$(echo "$regions" | pick "to") || exit
+				waitron window_focus $W
 				snap=${snap#* }
 				case $snap in
-					left | right ) [ "$(chef window classname)"  = "term" ] && window spread $snap || window snap $snap ;;
+					left | right ) [ "$(chef window classname)"  = "term" ] && window spread $snap || window snap $snap
+					;;
 					*            ) window snap ${snap} ;;
 				esac
 				;;
 			tile   )
 				tile=$(echo "$tiles" | pick "by") || exit
-				W=$(pfw)
 				layout fold ${tile%% *} $(chef window classname)
 				waitron window_focus $W
 				;;

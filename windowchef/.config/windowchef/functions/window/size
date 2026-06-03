@@ -15,8 +15,8 @@ size() {
 	set_geometry
 	[ $4 ] && { width=$3; height=$2; } || { width=$2; height=$3; }
 	[ $height -gt $H ] && { swap=$width; width=$height; height=$swap; }
+	waitron window_focus $1
 	wtp $X $margin $width $height $1  # size from top else bottom may be truncated
-	wmv -a $(( X + width / 2 )) $(( H / 2 )) $1
 }
 
 # ................................................................. Aspect ratio
@@ -52,9 +52,8 @@ reterm() {
 		xdotool search -classname 'ephemeral' windowclose
 	fi
 	eval $(ls -1 $TERMSIZE)
-	wtp $X $Y $WIDTH $HEIGHT $winid
 	waitron window_focus $winid
-	waitron window_snap middle
+	wtp $X $Y $WIDTH $HEIGHT $winid
 }
 
 # ................................................................. Display size

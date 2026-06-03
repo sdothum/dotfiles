@@ -14,7 +14,7 @@ on() {
 	# unclutter (original) doesn't play nice with X, so give it some initialization time
 	# (sleep 1 && unclutter -idle 1 -jitter 2 -root) &
 	# unclutter-xfixes
-	pstat unclutter || unclutter --timeout 1 --jitter 2 --exclude-root --ignore-scrolling --fork
+	pstat unclutter || unclutter --timeout 3 --jitter 2 --exclude-root --ignore-scrolling --fork
 	recipe -a unclutter
 	[ $silent ] || notify low 'Unclutter On' 'Ignore mouse'  # see conky clock
 }

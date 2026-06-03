@@ -43,7 +43,10 @@ spread() {
 
 	X=$(( width * column + margin + column * gap + offset ))
 	[ $X -lt $margin ] && X=$margin
-	wtp $X $Y $WIDTH $HEIGHT $winid
+	notify trace spread "$X $Y $WIDTH $HEIGHT $winid"
+	waitron window_focus $winid
+	# wtp $X $Y $WIDTH $HEIGHT $winid
+	waitron window_move_absolute $X $Y
 }
 
 case $Xpos in
@@ -57,15 +60,16 @@ float() {
 	height=$(( (H - gap) / 2 ))
 	offset=$(( (height - HEIGHT) / 2 - border ))  # offset from row edge
 
-	Y=$(( height * $1 + panel + gap / 2 + offset ))
-	[ $Y -lt $panel ] && Y=$panel
-	wtp $X $Y $WIDTH $HEIGHT $winid
+	Y=$(( height * $1 + top + gap / 2 + offset ))
+	[ $Y -lt $top ] && Y=$top
+	# wtp $X $Y $WIDTH $HEIGHT $winid
+	waitron window_move_absolute $X $Y
 }
 
 case $Ypos in
 	top    ) float 0 ;;  # row 0
 	bottom ) float 1 ;;
-	*      ) window -- snap center vertical ;;
+	*      ) window -- @$winid snap center vertical ;;
 esac
 
 waitron window_focus $winid
