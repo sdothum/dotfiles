@@ -127,7 +127,8 @@ xexec() {
 	# nvidia-settings -a [gpu:0]/OglVideoSync=0
 	# nvidia-settings -a [gpu:0]/ForceCompositionPipeline=0
 	# nvidia-settings -a [gpu:0]/ForceFullCompositionPipeline=0
-	
+	nvidia-settings -a "SyncToVBlank=0" -a "AllowFlipping=0" -a "ConformantTextureClamping=0" -a "GLShowGraphicsVisualIndicator=0"
+
 	# exec ck-launch-session dbus-launch --sh-syntax --exit-with-x11 $1 >$ROOT/$1.log 2>&1
 	exec $1 >$ROOT/$1.log 2>&1
 }
