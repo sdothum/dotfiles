@@ -140,7 +140,7 @@ case $1 in
 
 	redo    |\
 	undo    )
-		git reset --soft HEAD~
+		# git reset --soft HEAD~
 		dotfiles
 		;;
 

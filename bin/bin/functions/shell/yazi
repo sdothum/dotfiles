@@ -13,7 +13,7 @@ export YAZI="/usr/bin/yazi"                 # NOTE: envar is also used in alacri
 export EDITOR=kak  # wrapper checks whether attached to yazi (for bulk file renaming)
 THEME=$HOME/.config/yazi/theme.toml
 TAB=/net/downloads/http                     # default tmux directory
-console || termyazi='term yazi'             # console mode or X11 window
+console || termyazi='term yazi class=yazi'  # console mode or X11 window
 
 # sloppy mtp automount
 mtp mount && { [ "$1" ] || MTP=$HOME/mtp; }
