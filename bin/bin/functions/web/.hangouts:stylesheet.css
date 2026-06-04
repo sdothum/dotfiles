@@ -25,3 +25,7 @@ c-wiz div div div div div div div div div div div  div div div div div div div s
 c-wiz div div div div div div div div div div div  div div div div div div div div { font-family: ottawa,monospace !important; font-size: 10pt!important; font-weight: 500 !important; line-height: 1.65em !important; }
 
 }
+
+/* annoying google chat connection warning popup */
+
+div[role="alert"] { display: none !important; }
