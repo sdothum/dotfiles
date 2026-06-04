@@ -92,8 +92,16 @@ super + {_,shift} + i
 	{window hide, menu unhide} ;\
 	chef @desktop
 
-super + {_,shift} + e
-	waitron {window_stack_toggle, window_focus $(pfw)}
+# NOTE: mouse position determines window focus of stack
+# HACK: center mouse to increase probability of hidden window focus
+
+super + e
+	eval $(xdotool getwindowgeometry -shell $(pfw))              ;\
+	xdotool mousemove $(( X + WIDTH / 2 )) $(( Y + HEIGHT / 2 )) ;\
+	waitron window_stack_toggle
+
+super + shift + e
+	waitron window_stack_toggle
 
 super + w
 	desktop remove             ;\

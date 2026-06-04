@@ -127,6 +127,6 @@ while : ;do
 	config
 done
 
-ifno 'save .session' && recover || ditto gaps "saved :-)"
+ifno 'keep settings' && recover || ditto gaps "saved :-)"
 
 # kak: filetype=sh
