@@ -104,10 +104,9 @@ super + shift + e
 	waitron window_stack_toggle
 
 super + w
-	desktop remove             ;\
-	waitron window_close       ;\  # (??) doesn't completely close windows that leave dangling frames
-	waitron window_focus_last  ;\  # NOTE: some apps take longer to be removed from chef stack
-	refresh_panel                  # for last visible window removal
+	desktop remove                           ;\
+	waitron window_close . window_focus_last ;\  # NOTE: some apps take longer to be removed from chef stack
+	refresh_panel                                # for last visible window removal
 
 # ....................................................................... resize
 

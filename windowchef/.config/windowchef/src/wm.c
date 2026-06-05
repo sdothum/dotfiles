@@ -190,6 +190,7 @@ static void ipc_window_cardinal_focus(uint32_t *);
 static void ipc_window_focus(uint32_t *);
 static void ipc_window_focus_last(uint32_t *);
 static void ipc_window_stack_toggle(uint32_t *);
+static void ipc_window_hide(uint32_t *);
 static void ipc_group_add_window(uint32_t *);
 static void ipc_group_remove_window(uint32_t *);
 static void ipc_group_remove_all_windows(uint32_t *);
@@ -797,6 +798,17 @@ set_focused(struct client *client)
 }
 
 /*
+ * Hide (unmap) window.
+ */
+
+static void
+window_hide(struct client *client)
+{
+	xcb_unmap_window(conn, client->window);
+	xcb_flush(conn);
+}
+
+/*
  * Focus last best focus (in a valid group, mapped, etc)
  */
 
@@ -931,7 +943,7 @@ teleport_window(xcb_window_t win, int16_t x, int16_t y)
 static void
 move_window(xcb_window_t win, int16_t x, int16_t y)
 {
-	int16_t win_x, win_y;
+	int16_t win_x = 0, win_y = 0;
 	uint16_t win_w, win_h;
 
 	if (!is_mapped(win) || win == scr->root)
@@ -2833,6 +2845,7 @@ register_ipc_handlers(void)
 	ipc_handlers[IPCWindowFocus]           = ipc_window_focus;
 	ipc_handlers[IPCWindowFocusLast]       = ipc_window_focus_last;
 	ipc_handlers[IPCWindowStackToggle]     = ipc_window_stack_toggle;
+	ipc_handlers[IPCWindowHide]            = ipc_window_hide;
 	ipc_handlers[IPCGroupAddWindow]        = ipc_group_add_window;
 	ipc_handlers[IPCGroupRemoveWindow]     = ipc_group_remove_window;
 	ipc_handlers[IPCGroupRemoveAllWindows] = ipc_group_remove_all_windows;
@@ -3179,6 +3192,15 @@ ipc_window_focus(uint32_t *d)
 
 	if (client != NULL)
 		set_focused(client);
+}
+
+static void
+ipc_window_hide(uint32_t *d)
+{
+	struct client *client = find_client(&d[0]);
+
+	if (client != NULL)
+		window_hide(focused_win);
 }
 
 static void

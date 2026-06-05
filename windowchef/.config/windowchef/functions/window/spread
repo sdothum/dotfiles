@@ -44,9 +44,7 @@ spread() {
 	X=$(( width * column + margin + column * gap + offset ))
 	[ $X -lt $margin ] && X=$margin
 	notify trace spread "$X $Y $WIDTH $HEIGHT $winid"
-	waitron window_focus $winid
-	# wtp $X $Y $WIDTH $HEIGHT $winid
-	waitron window_move_absolute $X $Y
+	waitron window_focus $winid . window_move_absolute $X $Y
 }
 
 case $Xpos in
@@ -62,7 +60,6 @@ float() {
 
 	Y=$(( height * $1 + top + gap / 2 + offset ))
 	[ $Y -lt $top ] && Y=$top
-	# wtp $X $Y $WIDTH $HEIGHT $winid
 	waitron window_move_absolute $X $Y
 }
 

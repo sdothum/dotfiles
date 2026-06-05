@@ -11,8 +11,9 @@
 [ $(ls -1 $CURRENT) -eq $1 ] && exec desktop add $1  # ${pfw}
 
 current $1
-waitron group_activate $1
-[ -e $GROUP:focus/$1 ] && waitron window_focus $(ls -1 $GROUP:focus/$1)  # restore window stack NOTE: this also fixes calibre mouse focus issue!
+
+ # restore window stack NOTE: this also fixes calibre mouse focus issue!
+ [ -e $GROUP:focus/$1 ] && waitron group_activate $1 . window_focus $(ls -1 $GROUP:focus/$1) || waitron group_activate $1
 
 rm -rf $GROUP:deactivated/$1
 

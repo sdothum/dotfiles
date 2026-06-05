@@ -23,7 +23,6 @@ set_geometry $wid
 wtp $X $Y $WIDTH $HEIGHT $winid
 
 cat_geometry $winid
-waitron window_focus $wid
 wtp $X $Y $WIDTH $HEIGHT $wid
 
 exit  # to avoid "window" (parent) history management of window snapshot (history already recorded above)

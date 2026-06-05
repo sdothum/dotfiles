@@ -79,7 +79,7 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>waitron</code> [-hv] <var>command</var> [<var>args</var>...]</p>
+<p><code>waitron</code> [-hv] <var>command</var> [<var>args</var>..] [ . <var>command</var> [<var>args</var>..] ]*</p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
@@ -92,6 +92,7 @@ anything on <code>stdout</code>.</p>
 <dl>
 <dt class="flush"><code>-h</code></dt><dd><p>  Print usage.</p></dd>
 <dt class="flush"><code>-v</code></dt><dd><p>  Print version information.</p></dd>
+<dt class="flush"><code>. (dot)</code></dt><dd><p>  Chain waitron &lt;command&gt; [&lt;args..&gt;]</p></dd>
 </dl>
 
 
@@ -152,6 +153,8 @@ anything on <code>stdout</code>.</p>
 <dt><code>window_focus_last</code></dt><dd><p>  Focus the window that was focused before the currently focused window.</p></dd>
 <dt><code>window_cardinal_focus</code> <var>DIRECTION</var></dt><dd><p>  Focus the closest window in a direction, relative to the currently
   focused window. Does nothing if there is no window focused.</p></dd>
+<dt><code>window_hide</code> <var>id</var></dt><dd><p>  Hide (unmap) window by <var>id</var>. The <var>id</var> can be found using <span class="man-ref">pfw<span class="s">(1)</span></span> or <span class="man-ref">lsw<span class="s">(1)</span></span> from
+  <a href="https://github.com/wmutils/core/">wmutils</a>.</p></dd>
 <dt><code>window_stack_toggle</code></dt><dd><p>  Set the window to either the top (viewable) or bottom of the stack depending on
   where it is now. Does nothing if there is no window focused.</p>
 
@@ -260,7 +263,7 @@ are:</p>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'>Windowchef</li>
-    <li class='tc'>June 2024</li>
+    <li class='tc'>June 2026</li>
     <li class='tr'>waitron(1)</li>
   </ol>
 

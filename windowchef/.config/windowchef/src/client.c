@@ -75,6 +75,7 @@ static struct Command c[] = {
 	{ "window_focus"               , IPCWindowFocus                   ,  1 , fn_hex      } ,
 	{ "window_focus_last"          , IPCWindowFocusLast               ,  0 , NULL        } ,
 	{ "window_stack_toggle"        , IPCWindowStackToggle             ,  0 , NULL        } ,
+	{ "window_hide"                , IPCWindowHide                    ,  1 , fn_hex      } ,
 	{ "group_add_window"           , IPCGroupAddWindow                ,  1 , fn_naturals } ,
 	{ "group_remove_window"        , IPCGroupRemoveWindow             ,  0 , NULL        } ,
 	{ "group_remove_all_windows"   , IPCGroupRemoveAllWindows         ,  1 , fn_naturals } ,
@@ -435,29 +436,17 @@ version(void)
 	exit(EXIT_SUCCESS);
 }
 
-int main(int argc, char **argv)
+// perform waition command
+
+static void
+waitron(int argc, char **argv)
 {
-	int i;
-	int command_argc;
-	char **command_argv;
-
-	if (argc == 1) {
-		usage(argv[0], EXIT_FAILURE);
-	} else if (argc > 1) {
-		if (strcmp(argv[1], "-h") == 0)
-			usage(argv[0], EXIT_SUCCESS);
-		else if (strcmp(argv[1], "-v") == 0)
-			version();
-	}
-
-	init_xcb(&conn);
-
-	/* argc - program name - command to send */
-	command_argc = argc - 2;
-	command_argv = argv + 2;
+	int i = 0;
+	int command_argc = argc - 1;
+	char **command_argv = argv + 1;
 
 	i = 0;
-	while (i < NR_IPC_COMMANDS && strcmp(argv[1], c[i].string_command) != 0)
+	while (i < NR_IPC_COMMANDS && strcmp(argv[0], c[i].string_command) != 0)
 		i++;
 
 	if (i < NR_IPC_COMMANDS) {
@@ -473,9 +462,36 @@ int main(int argc, char **argv)
 	} else {
 		errx(EXIT_FAILURE, "no such command");
 	}
+}
+
+int main(int argc, char **argv) {
+	int cmd_argv = 1;  // expected waitron command (after executable name argv[0])
+
+	if (argc == 1) {
+		usage(argv[0], EXIT_FAILURE);
+	} else if (argc > 1) {
+		if (strcmp(argv[1], "-h") == 0)
+			usage(argv[0], EXIT_SUCCESS);
+		else if (strcmp(argv[1], "-v") == 0)
+			version();
+	}
+
+	init_xcb(&conn);
+
+	for (int i = 1; i <= argc; i++) {
+		// parse to end of argv or chained command (separated by '.')
+		if (i == argc || strcmp(argv[i], ".") == 0) {
+			int cmd_argc = i - cmd_argv;
+			if (cmd_argc > 0) {
+				waitron(cmd_argc, &argv[cmd_argv]);
+			}
+			cmd_argv = i + 1;  // skip over '.'
+		}
+	}
 
 	if (conn != NULL)
 		xcb_disconnect(conn);
 
 	return 0;
 }
+

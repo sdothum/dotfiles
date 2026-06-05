@@ -15,7 +15,7 @@
 #                           URL indicates the spawned window name is a URL (even if <class> is defined)
 #                           SEE: web/qutebrowser-instance, windowchef/rulerrc
 
-[ "$1" = '--' ] && { postpone_revert_history=true; shift; }
+[ "$1" = '--' ] && { nested_window_action=true; shift; }
 
 # usable screen dimensions
 margin=$(chef screen margin)
@@ -43,7 +43,7 @@ snapshot_geometry() {
 	done
 }
 
-revert_geometry() {
+save_original_geometry() {
 	[ -e $WINFO/tmp ] || exit
 	[ -e $WINFO/${1:-$winid} ] || { rec_geometry ${1:-$winid}; exit; }
 	for x in $(geometry ${1:-$winid}) ;do
@@ -61,9 +61,7 @@ xname_is()       { xdotool getwindow$1 $winid | grep -q "$xname"; }
 # NOTE: waitron replacement for wtp (wmutils) avoids async display timing issues
 wtp() {
 	# wtp X Y width height winid (as in wmutils)
-	waitron window_focus $5
-	waitron window_move_absolute $1 $2
-	waitron window_resize_absolute $3 $4
+	waitron window_focus $5 . window_move_absolute $1 $2 . window_resize_absolute $3 $4
 }
 
 # draw <winid> <width> <height> [rotate]
@@ -113,7 +111,8 @@ else
 	usage $0 $msg
 fi
 
-[ $postpone_revert_history ] || revert_geometry  # for 'window revert' geometry history
-mapw -m $winid  # regain focus
+[ $nested_window_action ] || save_original_geometry  # for 'window revert' geometry history
+
+waitron window_focus $winid  # regain focus
 
 # kak: filetype=sh

@@ -9,8 +9,7 @@
 # Usage: desktop close <group>
 
 for i in $(ls -1 $GROUP/$1) ;do
-	waitron window_focus $i
-	waitron window_close
+	waitron window_focus $i . window_close
 	desktop remove $i                 # cleanup
 done
 
