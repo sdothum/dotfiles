@@ -13,7 +13,7 @@ $(NAME): ruler.c lex.yy.c y.tab.c
 	$(CC) $^ $(CFLAGS) $(LDFLAGS) -DNAME=\"$(NAME)\" -DVERSION=\"$(VERSION)\" -o ruler
 
 %.tab.c %.tab.h: parser.y
-	$(YACC) $<
+	$(YACC) $< -Wno-yacc
 
 lex.yy.c: scanner.l
 	$(LEX) $<
