@@ -27,4 +27,4 @@ yt-dlp -o - "$1" | mpv -
 videomode off
 
 # restore browser page
-mapw -m $WID
+waitron window_focus $WID
