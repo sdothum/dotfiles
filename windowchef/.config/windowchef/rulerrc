@@ -7,7 +7,7 @@
 #
 # WARNING: blank lines before first rule requires patched ruler SEE: dotfiles
 #
-# TODO:    handle #comment lines NOT starting on column 1
+# FIXED:   patched ruler handling of #comment lines NOT starting on column 1
 
 # Term applications
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
