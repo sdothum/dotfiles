@@ -21,7 +21,10 @@ void 'runit' && pulse || { sv -u check pipewire || pulse; }
 desktop $(chef desktop "DESK")
 # startup desktop app commands replaced by .session/windowchef/autostart/<command>*
 recipe -a pavucontrol:hide     # hide initial instance of pavucontrol SEE: rulerrc
-recipe -q autostart:oneshot && recipe autostart | while read cmd ;do sleep 1; eval $cmd ;done
+recipe -q autostart:oneshot && recipe autostart | while read cmd ;do
+	sleep 0.1
+	eval $cmd &
+done
 # recipe -d autostart:oneshot  # SEE: console_login
 recipe -d pavucontrol:hide
 
