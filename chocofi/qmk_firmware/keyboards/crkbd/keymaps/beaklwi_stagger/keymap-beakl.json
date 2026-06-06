@@ -299,11 +299,11 @@
 					"type": "chord_set",
 					"set": "rows",
 					"keycodes": [
-						"LALT"         , "A"             , "B"             , "AS(C)"         , " "                  ,            "/"        , "4"    , "5" , "9" , "*"  ,
-						"MO(QUICKEYS)" , "KK(D,LCTL)"    , "KK(E,LGUI)"    , "KK(F,LSFT)"    , " "                  ,            "."        , "1"    , "2" , "3" , "-"  ,
-						" "            , "<"             , "KL(>,REGEX)"   , "SPC"           , " "                  ,            ","        , "8"    , "6" , "7" , "NO" ,
-						" "            , "MK(LALT,LCTL)" , "MK(LALT,LGUI)" , "MK(LALT,LSFT)" , "MK(LALT,LCTL,LGUI)" ,            "CLEAR_KB" , "CAPS" , " " , " " , "+"  ,
-																	  "CLEAR_KB"      , "MO(REGEX)"     , "TAB"                ,            "\\"       , "0"    , "="
+						"LALT"         , "A"             , "B"             , "AS(C)"         , " "                  ,            "/"        , "4"          , "5" , "9" , "*"  ,
+						"MO(QUICKEYS)" , "KK(D,LCTL)"    , "KK(E,LGUI)"    , "KK(F,LSFT)"    , " "                  ,            "."        , "KK(1,RSFT)" , "2" , "3" , "-"  ,
+						" "            , "<"             , "KL(>,REGEX)"   , "SPC"           , " "                  ,            ","        , "8"          , "6" , "7" , "NO" ,
+						" "            , "MK(LALT,LCTL)" , "MK(LALT,LGUI)" , "MK(LALT,LSFT)" , "MK(LALT,LCTL,LGUI)" ,            "CLEAR_KB" , "CAPS"       , " " , " " , "+"  ,
+																	  "CLEAR_KB"      , "MO(REGEX)"     , "TAB"                ,            "\\"       , "0"          , "="
 					]
 				},
 				{
