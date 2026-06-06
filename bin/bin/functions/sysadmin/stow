@@ -41,7 +41,7 @@ case $1 in
 			cd $(dir $1) 2>/dev/null || usage
 			[ -d $(pkg $1) ]         || usage
 			ls -1 $(pkg $1) | grep -E -q 'etc|opt|root|usr|var' && { target=/; super=sudo; } || target=$HOME
-			$super /usr/bin/stow -v -t $target -S --ignore=.deprecated $(pkg $1)
+			$super /usr/bin/stow -v -t $target -S --ignore=.deprecated --ignore=git $(pkg $1)  # ignore git folder repos
 			shift
 		done
 		;;

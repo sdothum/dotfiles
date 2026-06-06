@@ -1,4 +1,4 @@
-#!/usr/bin/dash
+#!/usr/bin/bash
 # sdothum - 2016 (c) wtfpl
 
 # Dev
@@ -6,23 +6,30 @@
 
 # ................................................................. Create patch
 
-usage() { usage: "$(basename 0) @xbps | [<original>] <new>"; }
+usage() { echo "$(basename $0) @<old> | [<original>] <new>
+> where, @<old> is the "old" extension, typically the package manager of the distribution
+>        e.g. @xbps for voidlinux
+>             @apk for alpine, etc.
+>             ${BROWN}SEE:${cyan} original (script)" | usage:
+	exit 1
+} 
 
 [ "$1" ] || usage
 
 diff2patch() {
+	clear
 	original=$1
-	[ "$2" ] && new=$2 || original=${original}.@xbps
-	diff -u $original ${new:-${original%.@xbps}} >${new:-${original%.@xbps}}.patch
+	[ "$2" ] && new=$2 || original=${original}.@$OLD
+	diff -u $original ${new:-${original%.@$OLD}} >${new:-${original%.@$OLD}}.patch
 
-	# swacp filenames if ${original}.@xbps
-	[ "$2" ] || sed -i -r '/^--- /s/.@xbps//; /^\+\+\+ /s/^([^ ]* [^ ]*)\t/\1.update\t/' ${new:-${original%.@xbps}}.patch
-	cat $1.patch | colordiff | $PAGER
+	# swacp filenames if ${original}.@$OLD
+	[ "$2" ] || sed -i -r '/^--- /s/.@$OLD//; /^\+\+\+ /s/^([^ ]* [^ ]*)\t/\1.update\t/' ${new:-${original%.@$OLD}}.patch
+	cat $1.patch | colordiff | cat <(ditto diff2patch "${1%.@$OLD}") - | $PAGER
 }
 
 case $1 in
-	@xbps ) PAGER=less; for i in *.@xbps ;do ditto diff2patch "${i%.@xbps}"; diff2patch ${i%.@xbps} ;done ;;
-	*     ) PAGER=${PAGER:-pager}; diff2patch $@ ;;
+	@* ) OLD=${1#@}; PAGER=less; for i in *.@$OLD ;do diff2patch ${i%.@$OLD} ;done ;;
+	*  ) PAGER=${PAGER:-pager}; diff2patch $@ ;;
 esac
 
 # kak: filetype=sh

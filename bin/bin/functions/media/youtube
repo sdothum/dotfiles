@@ -22,8 +22,12 @@ WID=$(pfw)
 notify 10 "youtube" "loading..\n$1"
 window hide
 
+# NOTE: long streams can hang requiring closing mpv manually (??) cause unknown
+# HACK: stream in background and wait on mpv (to close automatically or manually) to cleanup potential dangling yt-dlp
 videomode on
-yt-dlp -o - "$1" | mpv -
+yt-dlp -o - "$1" | mpv - &
+pidwait -f 'mpv -'
+killall -q -q yt-dlp
 videomode off
 
 # restore browser page
