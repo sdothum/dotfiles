@@ -1,6 +1,20 @@
---- ruler.c	2024-06-29 09:12:15.765360217 -0400
-+++ ruler.c.update	2024-06-29 15:37:16.925155723 -0400
-@@ -388,8 +388,10 @@
+--- ruler.c.@xbps	2024-06-29 09:12:15.765360217 -0400
++++ ruler.c.update	2026-06-06 05:46:24.297738124 -0400
+@@ -19,6 +19,13 @@
+ #include "asprintf.h"
+ #include "ruler.h"
+ 
++static const char *atom_names[] = {
++	"WM_NAME",
++	"WM_CLASS",
++	"WM_WINDOW_ROLE",
++	"_NET_WM_WINDOW_TYPE"
++};
++
+ extern FILE * yyin;
+ 
+ struct list *last_d = NULL;
+@@ -388,8 +395,10 @@
  			if (atom_name != NULL) {
  				if (i == 0)
  					sprintf(str, "%s", atom_name);
@@ -13,7 +27,7 @@
  			}
  
  			free(atom_name);
-@@ -902,7 +904,7 @@
+@@ -902,7 +911,7 @@
  	if (parse_file(xdg_cfg_path) == 1 && no_of_configs == 0)
  		errx(1, "couldn't open config file '%s' (%s). No other config files supplied, exiting", xdg_cfg_path, strerror(errno));
  	free(xdg_cfg_path);

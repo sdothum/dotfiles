@@ -19,6 +19,13 @@
 #include "asprintf.h"
 #include "ruler.h"
 
+static const char *atom_names[] = {
+	"WM_NAME",
+	"WM_CLASS",
+	"WM_WINDOW_ROLE",
+	"_NET_WM_WINDOW_TYPE"
+};
+
 extern FILE * yyin;
 
 struct list *last_d = NULL;

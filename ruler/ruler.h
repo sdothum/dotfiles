@@ -25,13 +25,6 @@ enum {
 	NR_ATOMS
 };
 
-static const char *atom_names[] = {
-	"WM_NAME",
-	"WM_CLASS",
-	"WM_WINDOW_ROLE",
-	"_NET_WM_WINDOW_TYPE"
-};
-
 #define DMSG(fmt, ...) if (_debug) { fprintf(stderr, fmt, ##__VA_ARGS__); }
 
 typedef char * command_t;
