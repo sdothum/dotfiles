@@ -6,7 +6,8 @@
 
 # ...................................................... Random string generator
 
-# Usage: rand [ a | l | u | pw ][ n ] | [ h | H ][ # ] [<width>]
+# Usage: rand [ a | l | u | pw ][ n ] | [[ # ] [ h | H ]] [<width>]
+#  NOTE: '#' must be escaped (\backslash) or within 'quotes'
 
 while [ $1 ] ;do
 	case $1 in
@@ -20,13 +21,13 @@ while [ $1 ] ;do
 		un     ) pattern='A-Z0-9'    ;;
 		h      ) pattern='0-9a-f'; width=6              ;;
 		H      ) pattern='0-9A-F'; width=6              ;;
-		h\#    ) pattern='0-9a-f'; width=6; echo -n '#' ;;
-		H\#    ) pattern='0-9A-F'; width=6; echo -n '#' ;;
+		\#H    ) pattern='0-9A-F'; width=6; echo -n '#' ;;
+		\#*    ) pattern='0-9a-f'; width=6; echo -n '#' ;;
 		p*     ) pattern='a-zA-Z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~' ;;  # OWASP password special characters
 	esac
 	shift
 done
 
-tr -dc ${pattern:-0-9} </dev/urandom | head -c ${width:-5}
+tr -dc ${pattern:-0-9} </dev/urandom | head -c ${width:-8}
 
 # kak: filetype=sh

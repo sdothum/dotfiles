@@ -58,9 +58,10 @@ esac
 [ $YAZI ] && offsetY=0  # Y font offset may affect status bar pixel level highlighting (SEE: yazi wrapper)
 
 echo "$@" | grep -E -q '[-](t|title)' || title="--title alacritty"
+SOCKET=/tmp/alacritty-$(rand).sock
 
 # quantum colour theme :)
-/usr/bin/alacritty --option                        \
+/usr/bin/alacritty --socket $SOCKET --option       \
 	"font.normal.family='${MONOFONT:-Iosevka}'"     \
 	"font.size=$size"                               \
 	"window.padding.x=$paddingX"                    \
