@@ -1,0 +1,4 @@
+
+	# nop # NOTE: freezing kak-lsp at v17.2.1 for now due to change from TOML file for kak-lsp configuraton
+	cargo install --locked --force --path .
+	# cargo install kak-lsp
