@@ -96,7 +96,9 @@
 **/isync
 **/jumanji
 **/kak/bundle
+!**/kak/bundle/colorscheme/colorscheme.kak
 !**/kak/bundle/duochrome/duochrome.kak
+!**/kak/bundle/lambda/lambda.kak
 **/kak.net
 **/kb-layout-evaluation/characters_stats
 **/kb-layout-evaluation.panda_plot/characters_stats
