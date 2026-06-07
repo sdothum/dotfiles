@@ -8,7 +8,7 @@
 
 # ...................................................................... kak-lsp
 
-bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
+nop bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 	# diff kak-lsp.toml $HOME/.config/kak/kak-lsp/kak-lsp.toml.unmarksman
 	set-option global lsp_snippet_support false
 	nop evaluate-commands %sh{ kak-lsp -s $kak_session --kakoune }

@@ -142,9 +142,15 @@ setm %{ format : section  }
 # info-notifier %{user-modes} %{<space>   edit\n<ret>     buffer\n#         format}
 nop %sh{ notify 10 user-modes "&lt;<b>space</b>&gt;\tedit\n&lt;<b>ret</b>&gt;\tbuffer\n<b>#</b>\tformat" }
 
-hook -once global WinSetOption .* %{
-	if %{ [ "$(xdotool getactivewindow getwindowclassname)" != 'aerc' ] && [ "$kak_opt_kakman" = false ] } %{  # avoid polluting aerc "To" field
-		nop %sh{ sleep 0.2; xdotool key g c }  # center cursor HACK: refresh stale cursorline at startup
+# HACK: sync-terminal-bg doesn't take effect on first invocation with socket/window_id options SEE: colorscheme.kak
+
+hook global WinCreate ^[^*].* %{  # ignore scratch buffers NOTE: will cause peneira commands to fail
+	nop %sh{
+		if [ "$(xdotool getactivewindow getwindowclassname)" != 'aerc' ] ;then  # avoid polluting aerc "To" field
+			xdotool key i Escape
+			# move cursor for HACK: refresh stale cursorline at startup
+			[ "$kak_history_id" -eq 1 ] && xdotool key j || xdotool key g c
+		fi
 	}
 }
 
