@@ -93,7 +93,7 @@ add(ed|ition)
 |hist(ory)*
 |important
 |note
-|option(al)*
+|option(al(ly)*)*
 |remedy
 |see
 |test(ing)*
@@ -101,6 +101,7 @@ add(ed|ition)
 |todo
 |(un)*known
 |us(ag)*e
+|variant
 |warn(ing)*
 |when
 |where
