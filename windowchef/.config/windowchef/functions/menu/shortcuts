@@ -13,7 +13,7 @@ export COLSEP=⁋  # NOTE: '^' used for kak split regex SEE: menu (picklist)
 shortcuts() {
 echo "
 /    ⁋>/dev/null
-2    ⁋2>/dev/null
+!    ⁋2>/dev/null
 &    ⁋>/dev/null 2>&1
 ^    ⁋[^\\\\n]*
 g    ⁋grep -E
