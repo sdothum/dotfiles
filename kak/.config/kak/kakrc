@@ -93,7 +93,7 @@ add(ed|ition)
 |hist(ory)*
 |important
 |note
-|option(al(ly)*)*
+|option(al|ly)*
 |remedy
 |see
 |test(ing)*
@@ -143,7 +143,7 @@ setm %{ format : section  }
 # info-notifier %{user-modes} %{<space>   edit\n<ret>     buffer\n#         format}
 nop %sh{ notify 10 user-modes "&lt;<b>space</b>&gt;\tedit\n&lt;<b>ret</b>&gt;\tbuffer\n<b>#</b>\tformat" }
 
-# HACK: sync-terminal-bg doesn't take effect on first invocation with socket/window_id options SEE: colorscheme.kak
+# HACK: passive sync-terminal-bg doesn't take effect on window creation with socket/window_id options SEE: colorscheme.kak duochrome.kak
 
 hook global WinCreate ^[^*].* %{  # ignore scratch buffers NOTE: will cause peneira commands to fail
 	nop %sh{
