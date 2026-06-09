@@ -94,10 +94,10 @@ quarters() {
 	for i in $winids ;do
 		waitron window_focus $i
 		case $instance in
-			2 ) window tile 4 4 ;;
-			1 ) window tile 4 2 ;;
-			0 ) window tile 4 3 ;;
 			3 ) window tile 4 1 ; instance=-1 ;;
+			2 ) window tile 4 2 ;;
+			0 ) window tile 4 3 ;;
+			1 ) window tile 4 4 ;;
 		esac
 		instance=$(( instance + 1 ))
 	done
@@ -107,14 +107,14 @@ quarters_matrix() {
 	for i in $winids ;do
 		waitron window_focus $i
 		case $instance in
-			6 ) window $tile 4x2 4 top    ;;
-			7 ) window $tile 4x2 4 bottom ; instance=-1 ;;
-			2 ) window $tile 4x2 4 top    ;;
-			3 ) window $tile 4x2 4 bottom ;;
-			0 ) window $tile 4x2 3 top    ;;
-			1 ) window $tile 4x2 3 bottom ;;
+			6 ) window $tile 4x2 1 top    ;;
+			7 ) window $tile 4x2 1 bottom ; instance=-1 ;;
 			4 ) window $tile 4x2 2 top    ;;
 			5 ) window $tile 4x2 2 bottom ;;
+			0 ) window $tile 4x2 3 top    ;;
+			1 ) window $tile 4x2 3 bottom ;;
+			2 ) window $tile 4x2 4 top    ;;
+			3 ) window $tile 4x2 4 bottom ;;
 		esac
 		instance=$(( instance + 1 ))
 	done
@@ -127,10 +127,10 @@ fifths() {
 		waitron window_focus $i
 		case $instance in
 			4 ) window tile 5 1 ; instance=-1 ;;
-			2 ) window tile 5 2 ;;
+			3 ) window tile 5 2 ;;
 			0 ) window tile 5 3 ;;
 			1 ) window tile 5 4 ;;
-			3 ) window tile 5 5 ;;
+			2 ) window tile 5 5 ;;
 		esac
 		instance=$(( instance + 1 ))
 	done
@@ -142,14 +142,14 @@ fifths_matrix() {
 		case $instance in
 			8 ) window $tile 5x2 1 top    ;;
 			9 ) window $tile 5x2 1 bottom ; instance=-1 ;;
-			4 ) window $tile 5x2 2 top    ;;
-			5 ) window $tile 5x2 2 bottom ;;
+			6 ) window $tile 5x2 2 top    ;;
+			7 ) window $tile 5x2 2 bottom ;;
 			0 ) window $tile 5x2 3 top    ;;
 			1 ) window $tile 5x2 3 bottom ;;
 			2 ) window $tile 5x2 4 top    ;;
 			3 ) window $tile 5x2 4 bottom ;;
-			6 ) window $tile 5x2 5 top    ;;
-			7 ) window $tile 5x2 5 bottom ;;
+			4 ) window $tile 5x2 5 top    ;;
+			5 ) window $tile 5x2 5 bottom ;;
 		esac
 		instance=$(( instance + 1 ))
 	done

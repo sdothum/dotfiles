@@ -23,7 +23,8 @@ desktop $(chef desktop "DESK")
 recipe -a pavucontrol:hide     # hide initial instance of pavucontrol SEE: rulerrc
 recipe -q autostart:oneshot && recipe autostart | while read cmd ;do
 	sleep 0.1
-	eval $cmd &
+	# eval $cmd &
+	eval $cmd
 done
 # recipe -d autostart:oneshot  # SEE: console_login
 recipe -d pavucontrol:hide

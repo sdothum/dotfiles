@@ -33,8 +33,7 @@ class="compose"
 class="kak"
 	window desktop $(chef desktop "CODE")    ;\
 	N=$(chef window count kak)               ;\
-	[ $N -lt 3 ] && exec layout tile 3   kak ;\
-	[ $N -eq 3 ] && exec layout fold 4   kak ;\
+	[ $N -lt 4 ] && exec layout tile 4   kak ;\
 	[ $N -eq 4 ] && exec layout fold 4x2 kak ;\
 	layout tile 4x2 kak
 

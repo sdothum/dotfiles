@@ -11,29 +11,22 @@
 # determine next tile position
 wincount=$(chef window count $2)
 
-column() {
-	tile=$(expr $wincount % $1)
-	[ $tile -eq 0 ] && tile=$1
-	case $1 in
-		2 ) echo 2 1 ;;
-		3 ) echo 2 3 1 ;;
-		4 ) echo 3 2 4 1 ;;
-		5 ) echo 3 2 4 1 5 ;;
-		* ) echo $1 ;;
-	esac | cut -d' ' -f$tile
-}
+# NOTE: arbitrary visual limit of 5 colums on wide screen SEE: layout fold
 
-matrix() {
-	cell=$(expr $(( (wincount - 1) / 2 + 1 )) % $1)
+order() {
+	cell=$2
 	[ $cell -eq 0 ] && cell=$1
 	case $1 in
 		2 ) echo 2 1 ;;
 		3 ) echo 2 3 1 ;;
 		4 ) echo 3 4 2 1 ;;
-		5 ) echo 3 2 4 1 5 ;;
+		5 ) echo 3 4 5 2 1 ;;
 		* ) echo $1 ;;
 	esac | cut -d' ' -f$cell
 }
+
+column() { order $1 $(expr $wincount % $1); }
+matrix() { order $1 $(expr $(( (wincount - 1) / 2 + 1 )) % $1); }
 
 row() {
 	row=$(expr $wincount % 2)
