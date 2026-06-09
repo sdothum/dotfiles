@@ -6,7 +6,7 @@
 
 # ..................................................... Recursive directory diff
 
-usage() { usage: "$(basename $0) [-[1 | p | s | b | x | E | Z | EZ | debug]] [-d <date>] <.[/]|[./]source> [<repo|target>] [<regex>]"; exit 1; }
+usage() { usage: "$(basename $0) [-[- | 1 | p | s | b | w | x | debug]] [-d <date>] <.[/]|[./]source> [<repo|target>] [<regex>]"; exit 1; }
 
 # NOTE: dirdiff quickly highlights project source code changes against a (separate) snapshot directory
 #       ./                    -> do not match source path against target
@@ -33,13 +33,14 @@ delay=0.001  # match message animation interval
 X=true
 while [ "$1" ] ;do
 	case $1 in
-		-1     ) unset IC ICOPT ;;                                        # standard diff (not side-by-side)
-		-p     ) P=true         ;;                                        # pause on match or notfound (to copy file)
-		-s     ) S=true         ;;                                        # splash messages
-		-b     ) B=-b           ;;                                        # ignore whitespace
-		-w     ) B=-w           ;;                                        # ignore ALL whitespace
-		-x     ) unset X        ;;                                        # do not apply .agignore and ignore filters
-		-debug ) debug=true; set -x ;;
+		--     ) unset IC ICOPT         ;; # standard diff (not side-by-side)
+		-1     ) maxdepth='-maxdepth 1' ;;
+		-p     ) P=true                 ;; # pause on match or notfound (to copy file)
+		-s     ) S=true                 ;; # splash messages
+		-b     ) B=-b                   ;; # ignore whitespace
+		-w     ) B=-w                   ;; # ignore ALL whitespace
+		-x     ) unset X                ;; # do not apply .agignore and ignore filters
+		-debug ) debug=true; set -x     ;;
 		-d     ) FILTER=$DIRDIFF:filter; touch -d "$2" $FILTER; shift ;;  # timestamp filter
 		*      ) break ;;
 	esac
@@ -90,9 +91,9 @@ esac
 
 # to handle filenames containing spaces
 if [ $X ] ;then
-	[ $T ] && echo "$source" >$FILES || find -L ./ -type f | exclude | grep -E -v $ignore | grep "$regex" >$FILES
+	[ $T ] && echo "$source" >$FILES || find -L ./ $maxdepth -type f | exclude | grep -E -v $ignore | grep "$regex" >$FILES
 else
-	[ $T ] && echo "$source" >$FILES || find -L ./ -type f | grep "$regex" >$FILES
+	[ $T ] && echo "$source" >$FILES || find -L ./ $maxdepth -type f | grep "$regex" >$FILES
 fi
 [ -s $FILES ] || usage
 src=${source#$HOME/stow/*/}
