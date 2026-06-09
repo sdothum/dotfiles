@@ -13,7 +13,7 @@ URL=$(recipe -/ hangouts/url)
 CSS="-C $(dirname $0)/.hangouts:stylesheet.css"
 
 case $BROWSER in
-	luakit ) luakit "$URL" & ;;
+	luakit ) luakit -Uu "$URL" & ;;  # do not reload previous session
 	surf   ) surf -z1.15 -C $HOME/.config/surf/css/stylesheet.css "$URL" & ;;
 	# *    ) WIDTH=800 DELAY=1.5 qutebrowser "$URL" & ;;
 	*      ) WIDTH=800 qutebrowser "$URL" & ;;
