@@ -6,22 +6,22 @@
 
 # ................................................................ Spread window
 
-# Usage: window spread <columns> <position> [top | bottom], where position is left | right | <column>
-#                                <position> [top | bottom], where columns is calculated to fit by window width
+# Usage: window spread <columns>[x2] <position> [top | bottom], where position is left | right | <column>
+#                                    <position> [top | bottom], where columns is calculated to fit by window width
 # NOTE: window is subsequently positioned vertically, centered (default), top or bottom spread
 
 snapshot_geometry
 set_geometry  # X Y WIDTH HEIGHT
 
-while [ $1 ] ;do
-	case $1 in
-		[0-9]* ) [ $cols ] && Xpos=$1 || cols=$1 ;;
-		left   ) Xpos=$1 ;;
-		right  ) Xpos=$1 ;;
-		center ) Xpos=$1 ;;
-		top    ) Ypos=$1 ;;
-		bottom ) Ypos=$1 ;;
-		*      ) notify critical window/spread "invalid argument $1"; exit 1 ;;
+while [ ${1%x2} ] ;do
+	case ${1%x2} in
+		[0-9]* ) [ $cols ] && Xpos=${1%x2} || cols=${1%x2} ;;
+		left   ) Xpos=${1%x2} ;;
+		right  ) Xpos=${1%x2} ;;
+		center ) Xpos=${1%x2} ;;
+		top    ) Ypos=${1%x2} ;;
+		bottom ) Ypos=${1%x2} ;;
+		*      ) notify critical window/spread "invalid argument ${1%x2}"; exit 1 ;;
 	esac
 	shift
 done
@@ -48,7 +48,7 @@ spread() {
 }
 
 case $Xpos in
-	left   ) spread $cols  1    ;;
+	left   ) spread $cols 1     ;;
 	right  ) spread $cols $cols ;;
 	center ) Xpos=$(( $cols / 2 + $(expr $cols % 2) )); spread $cols $Xpos ;;  # center or center left
 	*      ) spread $cols $Xpos  ;;
@@ -58,7 +58,7 @@ float() {
 	height=$(( (H - gap) / 2 ))
 	offset=$(( (height - HEIGHT) / 2 - border ))  # offset from row edge
 
-	Y=$(( height * $1 + top + gap / 2 + offset ))
+	Y=$(( height * ${1%x2} + top + gap / 2 + offset ))
 	[ $Y -lt $top ] && Y=$top
 	waitron window_move_absolute $X $Y
 }

@@ -6,12 +6,12 @@
 
 # .................................................................. Tile window
 
-# Usage: window tile [<count>] <position>
+# Usage: window tile [<colums>[x2]] <position> [top | bottom], x2 requires top/bottom spec
 
 snapshot_geometry
 set_geometry  # X Y WIDTH HEIGHT
 
-height=$(( H - border * 2 ))  # tiles are full vertical panes
+height=$(( H - border * 2 ))  # tiles are full vertical panes (unless x2)
 
 # .................................................................... Tile left
 
@@ -29,20 +29,28 @@ right() {
 
 # .................................................................. Tile panels
 
-tile() {
-	width=$(( (W - ($1 - 1) * gap - border * $1 * 2) / $1 ))
+# NOTE: "window size monocle" (centered half screen) cannot use window_put_in_grid
 
+column() {
+	# waitron window_put_in_grid $1 1 $(( $2 - 1 )) 0 1 1  # HACK: window_snap middle causes window to revert to original size DEBUG: waitron (wm) window_put_in_grid/window_snap interaction
+	# NOTE: this routine is only a few milliseconds slower than window_put_in_grid :-)
+	width=$(( (W - ($1 - 1) * gap - border * $1 * 2) / $1 ))
 	tile=$(expr $2 % $1)   # tile position left to right
 	[ $tile -eq 0 ] && tile=$1
 	tile=$(( tile - 1 ))  # 0 -> left
-
 	wtp $(( width * tile + margin + border * tile * 2 + tile * gap )) $top $width $height $winid
+}
+
+matrix() {
+	[ $3 = top ] && row=0 || row=1
+	waitron window_put_in_grid $1 2 $(( $2 - 1 )) $row 1 1
 }
 
 case $1 in
 	left  ) left  ;;
 	right ) right ;;
-	*     ) tile $1 ${2:-$1} ;;
+	*x2   ) matrix ${1%x2} ${2:-${1%x2}} $3 ;;
+	*     ) column $1 ${2:-$1} ;;
 esac
 
 waitron window_focus $winid

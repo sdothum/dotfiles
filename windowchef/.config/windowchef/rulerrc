@@ -31,11 +31,12 @@ class="compose"
 # ......................................................................... edit
 
 class="kak"
-	window desktop $(chef desktop "CODE")  ;\
-	N=$(chef window count kak)             ;\
-	[ $N -lt 4 ] && exec layout tile 3 kak ;\
-	[ $N -eq 4 ] && exec layout fold 4 kak ;\
-	[ $N -gt 4 ] && layout tile 4 kak
+	window desktop $(chef desktop "CODE")    ;\
+	N=$(chef window count kak)               ;\
+	[ $N -lt 3 ] && exec layout tile 3   kak ;\
+	[ $N -eq 3 ] && exec layout fold 4   kak ;\
+	[ $N -eq 4 ] && exec layout fold 4x2 kak ;\
+	layout tile 4x2 kak
 
 class="wiki"
 	window desktop $(chef desktop "WIKI") ;\
@@ -71,11 +72,11 @@ class="manpage"
 	layout spread 3 1 manpage
 
 class="term"
-	window desktop $(desktop)                     ;\
-	N=$(chef window count term)                   ;\
-	[ $N -lt 3 ] && exec layout spread 3 term     ;\
-	[ $N -eq 3 ] && exec layout fold pairs 3 term ;\
-	[ $N -gt 3 ] && layout spread pairs 3 term
+	window desktop $(desktop)                    ;\
+	N=$(chef window count term)                  ;\
+	[ $N -lt 3 ] && exec layout spread    3 term ;\
+	[ $N -eq 3 ] && exec layout fold -- 3x2 term ;\
+	layout spread 3x2 term
 
 class="palette"
 	window snap center

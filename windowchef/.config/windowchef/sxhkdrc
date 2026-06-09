@@ -156,8 +156,8 @@ super + shift + {0,1,2,3,4,5}
 	waitron window_focus $W
 
 super + shift + ctrl + 0
-	W=$(pfw)                                                ;\
-	layout fold 0                                           ;\
+	W=$(pfw)      ;\
+	layout fold 0 ;\
 	waitron window_focus $W
 
 # ......................................................................... move

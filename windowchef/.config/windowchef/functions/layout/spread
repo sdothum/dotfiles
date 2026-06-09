@@ -6,7 +6,7 @@
 
 # ............................................................... Spread windows
 
-# Usage: layout spread [pairs] <columns> <name>
+# Usage: layout spread <columns>[x2] <name>
 
 linear() {
 	pos=$(expr $pos % $1)   # position left to right
@@ -27,11 +27,11 @@ matrix() {
 }
 
 case $1 in
-	pair* )
-		pos=$(chef window count $3)
-		window @$(pfw) spread $2 $(matrix $2)
+	*x2 )
+		pos=$(chef window count $2)
+		window @$(pfw) spread $1 $(matrix ${1%x2})
 		;;
-	*     )
+	*   )
 		pos=$(chef window count $2)
 		window @$(pfw) spread $1 $(linear $1)
 		;;

@@ -6,23 +6,43 @@
 
 # ................................................................. Tile windows
 
-# Usage: layout tile <panes> <name>
+# Usage: layout tile <columns>[x2] <name>
 
 # determine next tile position
-tile=$(chef window count $2)
+wincount=$(chef window count $2)
 
-pos() {
-	tile=$(expr $tile % $1)   # tile position left to right
+column() {
+	tile=$(expr $wincount % $1)
 	[ $tile -eq 0 ] && tile=$1
 	case $1 in
 		2 ) echo 2 1 ;;
 		3 ) echo 2 3 1 ;;
-		4 ) echo 2 3 1 4 ;;
+		4 ) echo 3 2 4 1 ;;
 		5 ) echo 3 2 4 1 5 ;;
 		* ) echo $1 ;;
 	esac | cut -d' ' -f$tile
 }
 
-window tile $1 $(pos $1)
+matrix() {
+	cell=$(expr $(( (wincount - 1) / 2 + 1 )) % $1)
+	[ $cell -eq 0 ] && cell=$1
+	case $1 in
+		2 ) echo 2 1 ;;
+		3 ) echo 2 3 1 ;;
+		4 ) echo 3 4 2 1 ;;
+		5 ) echo 3 2 4 1 5 ;;
+		* ) echo $1 ;;
+	esac | cut -d' ' -f$cell
+}
+
+row() {
+	row=$(expr $wincount % 2)
+	[ $row = 1 ] && echo top || echo bottom
+}
+
+case $1 in
+	*x2 ) window tile $1 $(matrix ${1%x2}) $(row ${1%x2}) ;;
+	*   ) window tile $1 $(column $1) ;;
+esac
 
 # kak: filetype=sh
