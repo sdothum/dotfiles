@@ -190,7 +190,7 @@ class="qutebrowser"
 	[ $(desktop) -lt $(chef desktop "CHEF") ] && window desktop $(desktop) || window desktop 1 ;\
 	xdotool search -onlyvisible -class 'qutebrowser' && layout tile 3 qutebrowser
 
-# single purpose hangouts browser (for zoom and custom font control) SEE: hangouts script
+# NOTE: single purpose hangouts browser (for zoom and custom font control) SEE: hangouts script
 
 class="luakit"
 	xdotool search -sync -onlyvisible -name "$(recipe hangouts/name)" set_window -classname 'hangouts' -class 'hangouts' ;\

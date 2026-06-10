@@ -351,10 +351,12 @@ super + ctrl + k
 # ................................................................. audio volume
 
 super + {comma,period}
+	audio_volume mpc      ;\
 	mpc volume {-10, +10} ;\
 	mpc:settings volume
 
 super + ctrl + {comma,period}
+	audio_volume pactl                               ;\
 	pactl set-sink-volume @DEFAULT_SINK@ {-10%,+10%} ;\
 	wp:volume clear
 
