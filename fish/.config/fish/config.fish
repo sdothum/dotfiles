@@ -54,6 +54,7 @@ or set -x TERM xterm-256color
 # ......................................................................... Xorg
 
 set -x QT_QPA_PLATFORMTHEME qt5ct
+set -x TERMBG=263238  # quantum bg hexcolor
 
 # .......................................................................... LAN
 
@@ -79,6 +80,7 @@ set -x XDG_DOWNLOAD_DIR /net/downloads/http
 set -x NNTPSERVER news.sunnyusenet.com
 set -x NO_PROXY '*'                       # required by webkit browsers to access gmail
 set -x WEBKIT_DISABLE_COMPOSITING_MODE  1  # prevent blank web pages with nvidia
+
 # ..................................................................... Defaults
 
 # default editor
