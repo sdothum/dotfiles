@@ -27,7 +27,7 @@ LOG=$DIRDIFF.log
 rm -f $LOG
 
 delay=0.001  # match message animation interval
-trap "alacritty msg config \"colors.primary.background='#${TERMBG:-263238}'\"" EXIT  #restore terminal bg
+# trap "alacritty msg config \"colors.primary.background='#${TERMBG:-263238}'\"" EXIT INT  #restore terminal bg
 
 # Runtime ......................................................................
 
@@ -115,7 +115,9 @@ while read file <&3 ;do
 		[ $title ] || { ditto -t $(basename $0) "$src/$regex    $target" >>$LOG; title=true; }
 		[ -e "${targetfile}" ] || { ditto ERROR notfound "target: ${targetfile}"; ditto ERROR notfound "${targetfile}" >>$LOG; [ $P ] && ifno "fill missing file" || copy ${file} ${targetfile}; break; }
 		kakdiff $B "${file}" "${targetfile}"
-		case $? in
+		retcode=$?
+		alacritty msg config "colors.primary.background='#${TERMBG:-263238}'"  # restore term bg (from kak)
+		case $retcode in
 			0 ) ditto match "${file}"; [ $S ] && sleep $delay; break ;;
 			1 ) break ;;
 			2 ) ;;  # SEE: kakdiff
