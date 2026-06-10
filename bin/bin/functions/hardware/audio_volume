@@ -1,0 +1,27 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Hardware
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................ Audio volume leveling
+
+# Usage: audio_volume mpc | pactl
+
+# level volume to 10% SEE: sxhkdrc
+case $1 in
+	mpc   )
+		level=$(mpc volume | sed -r 's/.* ([0-9]*)%/\1/')
+		[ $(expr $level % 10) -eq 0 ] && return
+		mpc volume ${level%?}0
+		mpc:settings volume
+		;;
+	pactl )
+		level=$(pactl get-sink-volume @DEFAULT_SINK@ | grep 'Volume:' | sed -r 's/.* ([0-9]*)% .*/\1/')
+		[ $(expr $level % 10) -eq 0 ] && return
+		pactl set-sink-volume @DEFAULT_SINK@ ${level%?}0%
+		wp:volume clear
+		;;
+esac
+
+# kak: filetype=sh

@@ -7,7 +7,7 @@
 # ........................................................................ Fetch
 
 FETCH=/usr/bin/neofetch
-BG='263238'  # quantum background hexcolor
+BG="${TERMBG:-263238}"
 exists /usr/bin/alacritty && TERM=alacritty || TERM=urxvt
 # TERM=xterm
 

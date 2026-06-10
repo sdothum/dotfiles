@@ -27,6 +27,7 @@ LOG=$DIRDIFF.log
 rm -f $LOG
 
 delay=0.001  # match message animation interval
+trap "alacritty msg config \"colors.primary.background='#${TERMBG:-263238}'\"" EXIT  #restore terminal bg
 
 # Runtime ......................................................................
 

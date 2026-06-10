@@ -14,7 +14,7 @@ paddingX=0
 paddingY=0
 offsetX=0
 offsetY=0
-background='#263238'
+background="#${TERMBG:-263238}"
 foreground='#eaeaea'
 
 # tweak window margins by fontsize

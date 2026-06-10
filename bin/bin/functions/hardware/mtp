@@ -17,6 +17,8 @@ recover() { sudo umount $MTP; [ -d $MTP ] || ditto mkdir "$(mkdir -v $MTP)"; }
 
 busy() { ditto ERROR mtp "cd ~ before any mtp actions"; exit 1; }
 
+sync
+
 if pwd | grep -q "$MTP" ;then
 	case $1 in
 		mount   ) busy ;;

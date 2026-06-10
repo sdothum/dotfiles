@@ -11,7 +11,7 @@
 export SHELL=/usr/bin/fish
 
 size=$(fontsize)
-background='#263238'
+background="#${TERMBG:-263238}"
 foreground='#eaeaea'
 opacity=0.935
 # proof=tnue  # unset to increase font size for writing focus (versus coding density)
