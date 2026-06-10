@@ -145,13 +145,18 @@ nop %sh{ notify 10 user-modes "&lt;<b>space</b>&gt;\tedit\n&lt;<b>ret</b>&gt;\tb
 
 # HACK: passive sync-terminal-bg doesn't take effect on window creation with socket/window_id options SEE: colorscheme.kak duochrome.kak
 
+declare-option bool refreshed false
+
 hook global WinCreate ^[^*].* %{  # ignore scratch buffers NOTE: will cause peneira commands to fail
-	nop %sh{
-		if [ "$(xdotool getactivewindow getwindowclassname)" != 'aerc' ] && [ -z $DIFF ] ;then  # avoid polluting aerc "To" field
-			xdotool key i Escape
-			# move cursor for HACK: refresh stale cursorline at startup
-			[ "$kak_history_id" -eq 1 ] && xdotool key j || xdotool key g c
-		fi
+	if %{ [ $kak_opt_refreshed = 'false' ] } %{
+		set-option global refreshed true
+		nop %sh{
+			if [ "$(xdotool getactivewindow getwindowclassname)" != 'aerc' ] && [ -z $DIFF ] ;then  # avoid polluting aerc "To" field
+				xdotool key i Escape
+				# move cursor for HACK: refresh stale cursorline at startup
+				[ "$kak_history_id" -eq 1 ] && xdotool key j || xdotool key g c
+			fi
+		}
 	}
 }
 
