@@ -65,12 +65,12 @@ POLLING_PARSING_ERROR_LIMIT=0
 POLLING_SCHEDULER=round_robin
 BATCH_SIZE=10
 CLEANUP_FREQUENCY_HOURS=1
-CLEANUP_ARCHIVE_UNREAD_DAYS=3
-CLEANUP_ARCHIVE_READ_DAYS=3
+CLEANUP_ARCHIVE_UNREAD_DAYS=4
+CLEANUP_ARCHIVE_READ_DAYS=4
 CLEANUP_REMOVE_SESSIONS_DAYS=9999
 " | sudo tee /etc/miniflux.conf
 
-sudo grep -q miniflux.conf /etc/sv/miniflux/run || sudo sed -i '/exec .* miniflux.app/s|$| -c /etc/miniflux.conf|' /etc/sv/miniflux/run  # HACK: see above
+void dinit || sudo grep -q miniflux.conf /etc/sv/miniflux/run || sudo sed -i '/exec .* miniflux.app/s|$| -c /etc/miniflux.conf|' /etc/sv/miniflux/run  # HACK: see above
 
 miniflux.app -c /etc/miniflux.conf -migrate
 miniflux.app -c /etc/miniflux.conf -create-admin
