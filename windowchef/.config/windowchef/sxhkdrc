@@ -333,7 +333,7 @@ super + ctrl + colon
 
 super + j
 	piano stop ;\
-	xdotool search -onlyvisible -classname "music" windowunmap && \{ desktop toggle $(desktop); desktop $(chef desktop "DESK"); \} || \{ music; desktop $(chef desktop "PLAY"); \}
+	xdotool search -onlyvisible -classname music windowunmap || xdotool search -classname music windowmap || music
 
 super + ctrl + j
 	mpc toggle ;\	mpc | grep -q playing && \{ piano stop; mpc:settings volume; mpc:settings; \}
@@ -380,7 +380,7 @@ super + shift + h
 # NOTE: nicotine (direct gui -- not docker browser) leaves dangling child window frames SEE: winids
 
 super + shift + j
-	xdotool search -onlyvisible -name nicotine windowunmap || xdotool search -name nicotine windowmap || \{ nicotine; desktop $(chef desktop "PEER"); \}
+	xdotool search -onlyvisible -name nicotine windowunmap || xdotool search -name nicotine windowmap || nicotine
 
 # ......................................................................... yazi
 
