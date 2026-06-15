@@ -8,7 +8,7 @@
 
 # ...................................................................... kak-lsp
 
-nop bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
+bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 	# diff kak-lsp.toml $HOME/.config/kak/kak-lsp/kak-lsp.toml.unmarksman
 	set-option global lsp_snippet_support false
 	nop evaluate-commands %sh{ kak-lsp -s $kak_session --kakoune }
@@ -28,7 +28,7 @@ nop bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 
 	hook global KakEnd .* lsp-exit
 
-	hook global WinSetOption filetype=(sh|c|cpp|go|javascript|latex|lua|markdown|perl|python|ruby|rust|toml|typescript) %{
+	hook global WinSetOption filetype=(c|cpp|go|javascript|latex|lua|markdown|perl|python|ruby|rust|toml|typescript) %{
 		lsp-enable-window
 		# lsp-inlay-diagnostics-enable global  # too visually noisy (and truncated at window width)
 		lsp-auto-hover-buffer-enable

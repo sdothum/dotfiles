@@ -21,7 +21,7 @@ bundle kak-ansi https://github.com/eraserhd/kak-ansi.git %{
 
 # ................................................................... auto-pairs
 
-bundle auto-pairs https://github.com/alexherbo2/auto-pairs.kak.git %{
+nop bundle auto-pairs https://github.com/alexherbo2/auto-pairs.kak.git %{
 	enable-auto-pairs
 }
 
@@ -217,8 +217,8 @@ bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 
 # .................................................................. Reasymotion
 
-nop bundle reasymotion https://github.com/sdothum/reasymotion.git %{
-	# suppress environment variable error opening new file SEE: sxhkdrc scratchpad 
+bundle reasymotion https://github.com/sdothum/reasymotion.git %{
+	# suppress environment variable error opening new file SEE: sxhkdrc scratchpad
 	evaluate-commands %sh{ rkak_easymotion start 2>/dev/null }
 
 	addm %{ find z3 : map global select j ': reasymotion-on-letter-to-word<ret>'          -docstring '⠀          —— to word,letter'        }
@@ -270,6 +270,14 @@ bundle kak-tree-sitter https://github.com/phaazon/kak-tree-sitter.git %{
 } %{
 	cargo install kak-tree-sitter
 	cargo install ktsctl
+}
+
+# ......................................................................... twos
+
+# NOTE: autopairs alternative
+
+bundle twos https://codeberg.org/straypetal71/twos.kak.git %{
+	twos-register-defaults global
 }
 
 # kak: filetype=kak

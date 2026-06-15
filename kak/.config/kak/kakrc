@@ -151,7 +151,8 @@ hook global WinCreate ^[^*].* %{  # ignore scratch buffers NOTE: will cause pene
 	if %{ [ $kak_opt_refreshed = 'false' ] } %{
 		set-option global refreshed true
 		nop %sh{
-			if [ "$(xdotool getactivewindow getwindowclassname)" != 'aerc' ] && [ -z $DIFF ] ;then  # avoid polluting aerc "To" field
+			# avoid polluting aerc "To" field and bg color sync of kak windows within term and ncurse apps
+			if [ "$(xdotool getactivewindow getwindowclassname)" != 'aerc' ] && [ -z $DIFF ] && [ -z $YAZI ] ;then
 				xdotool key i Escape
 				# move cursor for HACK: refresh stale cursorline at startup
 				[ "$kak_history_id" -eq 1 ] && xdotool key j || xdotool key g c
