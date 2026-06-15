@@ -86,7 +86,11 @@ else
 fi
 
 [ $yazi ] && exec $KAK $files  # NOTE: attached yazi session only issues 1 file (??) spawning via xargs causes desktop windowing issues
-console || [ $console ] && { printf "$files" | sort $reverse | xargs -d'\n' $KAK -e 'db *stdin*'; exit; }  # NOTE: "exec .. | .." (pipe) will not redirect shell, hence, "exit"
+if console || [ $console ] ;then
+	printf "$files" | sort $reverse | xargs -d'\n' $KAK -e 'db *stdin*'
+	alacritty msg config "colors.primary.background='#${TERMBG:-263238}'"  # restore term bg (from kak)
+	exit  # NOTE: "exec .. | .." (pipe) will not redirect shell, hence, "exit"
+fi
 
 title=$(echo "$1" | sed 's|\.\/||g; s| [^ ]*/||; s/ .*/.../g')
 [ $count -gt 1 ] && title="$title($count)"

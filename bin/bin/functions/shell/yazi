@@ -20,18 +20,18 @@ mtp mount && { [ "$1" ] || MTP=$HOME/mtp; }
 # [ "$1" != TMUX ] && trap 'mtp umount' EXIT  # must manually eject if mounted during toggle tmux session, SEE: herbstluftwm appbinds
 udev                                        # reload udev rules
 
-[ $TERMBG ] || { [ -e $SESSION/yazi ] && TERMBG=$(cat $SESSION/yazi); }  # SEE: abbreviations.fish
-case $TERMBG in
+[ $YAZIBG ] || { [ -e $SESSION/yazi ] && YAZIBG=$(cat $SESSION/yazi); }  # SEE: abbreviations.fish
+case $YAZIBG in
 	''     ) cp $THEME:dark  $THEME ;;
 	dark   ) cp $THEME:dark  $THEME ;;
-	light  ) cp $THEME:light $THEME; export TERMBG=PAPER ;;               # SEE: term
+	light  ) cp $THEME:light $THEME; export YAZIBG=PAPER ;;               # SEE: term
 	*      ) cp $THEME:dark  $THEME ;;
 esac
 
 export TMUXCONF=$HOME/.tmux.conf  # SEE: tmux_session
 case $1 in
-	ROOT    ) tmux_session class=yazi 'root' sudo -E $YAZI $TAB             ;;
-	TMUX    ) tmux_session class=yazi 'yazi'         $YAZI $TAB             ;;
+	ROOT    ) tmux_session class=yazi 'root' sudo -E $YAZI $TAB  ;;
+	TMUX    ) tmux_session class=yazi 'yazi'         $YAZI $TAB  ;;
 	XFTP    ) term xftp class=xftp /bin/yazi /net/downloads/http ;;
 	''      ) $termyazi                   $YAZI .                ;;
 	WAIT    ) shift; $termyazi WAIT       $YAZI "${MTP:-$@}"     ;; # don't pass WAIT in command string
