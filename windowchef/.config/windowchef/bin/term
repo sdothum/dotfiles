@@ -70,7 +70,7 @@ while : ;do
 	shift
 done
 
-[ $TERMBG    ] && theme $TERMBG  # see yazi wrapper
+[ $YAZIBG    ] && theme $YAZIBG  # see yazi wrapper
 [ -z "$name" ] && [ "$title" ] && { name="$NAME ${title#$TITLE }"; }
 
 alacritty $theme $font $geometry $title $name $cmd

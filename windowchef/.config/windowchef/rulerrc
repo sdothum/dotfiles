@@ -111,8 +111,7 @@ class="calibre"
 	window desktop $(chef desktop "DESK") ;\
 	window @calibre snap center
 
-class="org.nicotine_plus.Nicotine"
-	[ $(xdotool search -onlyvisible -classname "org.nicotine_plus.Nicotine" | wc -l) -eq 1 ] && xdotool search -sync -onlyvisible -classname "org.nicotine_plus.Nicotine" set_window -classname 'nicotine' -class 'nicotine' ;\
+class="nicotine"
 	window @nicotine size monocle && window desktop $(chef desktop "PEER")
 
 # ......................................................................... draw
