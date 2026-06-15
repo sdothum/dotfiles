@@ -40,6 +40,17 @@
   wifi-firmware
 
 
+# NOTE: dracut replaced with booster for minimal boot images SEE: nvidia for subsequent image rebuild
+
+= initramfs
+= ═════════
+  booster
+! sudo xbps-alternatives -s booster
+! echo "modules: kernel/drivers/video/nvidia.ko,kernel/drivers/video/nvidia-modeset.ko,kernel/drivers/video/nvidia-uvm.ko,kernel/drivers/video/nvidia-drm.ko
+strip: true
+" | sudo tee -a /etc/booster.yaml
+
+
 = nvidia
 = ══════
 # void-repo-multilib-nonfree
@@ -47,7 +58,10 @@
   void-repo-nonfree
 ! sudo xbps-install -Su
   nvidia
-! sudo sed -i \'/GRUB_CMDLINE_LINUX_DEFAULT/s/\"\$/ nomodeset\"/; s/.*GRUB_GFXMODE=.*/GRUB_GFXMODE=3440x1440x32/\' /etc/default/grub
+# ! sudo xbps-reconfigure -f linux$(uname -r | cut -d. -f-2)
+! sudo xbps-reconfigure -f linux
+# NOTE: only display init error messages (0-3)
+! sudo sed -i \'/GRUB_CMDLINE_LINUX_DEFAULT/s/=.*/=\"loglevel=3 nvidia-drm.modeset=1\"/; s/.*GRUB_GFXMODE=.*/GRUB_GFXMODE=3440x1440x32/\' /etc/default/grub
 ! cat /etc/default/grub
 ! ifno "grub ok" && exit 1
 ! sudo update-grub
