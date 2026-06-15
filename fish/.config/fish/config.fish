@@ -54,7 +54,7 @@ or set -x TERM xterm-256color
 # ......................................................................... Xorg
 
 set -x QT_QPA_PLATFORMTHEME qt5ct
-set -x TERMBG=263238  # quantum bg hexcolor
+set -x TERMBG 263238  # quantum bg hexcolor
 
 # .......................................................................... LAN
 
