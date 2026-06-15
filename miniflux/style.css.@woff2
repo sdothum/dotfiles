@@ -1134,10 +1134,6 @@ article .item-meta {
 		opacity: 0.8 !important;
 	}
 
-	article.item.category-item {
-		margin-top: 18px !important;
-	}
-
 	body .item {
 		margin-bottom: 0 !important;
 		margin-top: 10px !important;
@@ -1163,18 +1159,19 @@ article .item-meta {
 	.item-meta .item-meta-icons {
 		float: left;
 		font-size: 1em;
-		margin-top: -5px !important;
 		opacity: 1;
 		padding-left: 21px;
 		transition: none;
+	}
+
+	.item-meta .item-meta-icons * {
+		margin-top: 2.5px !important;
 	}
 
 	.item-meta .item-meta-info {
 		font-size: 1.20em;
 		clear: both;
 		float: right;
-		margin-top: -15px !important;
-		margin-bottom: -6px !important;
 		opacity: .7;
 		transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1),
 			background-color 0.2s cubic-bezier(0.19, 1, 0.22, 1);
@@ -1254,8 +1251,8 @@ article .item-meta {
 		padding-top: 0!important;
 	}
 
-	.feed-item .item-meta-icons * {
-		display: block !importanxt;
+	.feed-item .item-meta-icons {
+		display: block !important;
 		margin-top: 2px !important;
 		padding: 0 !important;
 	}
@@ -1287,6 +1284,10 @@ article .item-meta {
 
 	div.pagination-forward .pagination-last {
 		display: none !important;
+	}
+
+	article.item.category-item .item-meta-info * {
+		margin: -10px 0 5px !important;
 	}
 }
 
