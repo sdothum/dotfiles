@@ -75,7 +75,7 @@ strip_quotes(char *str)
 	if (str[0] != '"' || str[len + 1] != '"')
 		return str;
 
-	char *s = malloc((len + 1) * sizeof(char));
+	char *s = malloc(len + 1);
 	int i;
 
 	for (i = 1; i < strlen(str) - 1; i++) {
@@ -371,7 +371,7 @@ window_type_to_string(xcb_ewmh_get_atoms_reply_t *reply)
 	char *str;
 
 	if (reply != NULL) {
-		str = malloc((WINDOW_TYPE_STRING_LENGTH + 1) * sizeof(char));
+		str = malloc(WINDOW_TYPE_STRING_LENGTH + 1);
 		str[0] = '\0';
 		for (i = 0; i < reply->atoms_len; i++) {
 			xcb_atom_t a = reply->atoms[i];
@@ -394,10 +394,10 @@ window_type_to_string(xcb_ewmh_get_atoms_reply_t *reply)
 
 			if (atom_name != NULL) {
 				if (i == 0)
-					sprintf(str, "%s", atom_name);
+					snprintf(str, WINDOW_TYPE_STRING_LENGTH + 1, "%s", atom_name);
 				else {
 					size_t slen = strlen(str);
-					sprintf(str + slen, ",%s", atom_name);
+					snprintf(str + slen, WINDOW_TYPE_STRING_LENGTH + 1 - slen, ",%s", atom_name);
 				}
 			}
 
@@ -437,9 +437,10 @@ get_string_prop(xcb_window_t win, xcb_atom_t prop, int utf8)
 		DMSG("unable to get window property for 0x%08x\n", win);
 	} else {
 		len = xcb_get_property_value_length(r);
-		p = malloc((len + 1) * sizeof(char));
+		p = malloc(len + 1);
 		value = xcb_get_property_value(r);
-		strncpy(p, value, len);
+		memcpy(p, value, len);
+		p[len] = '\0';
 		p[len] = '\0';
 	}
 	free(r);
@@ -699,8 +700,9 @@ register_events(void)
 void
 set_environ(xcb_window_t win)
 {
-	char *wid = malloc((2 + 8 + 1) * sizeof(char));
-	sprintf(wid, "0x%08x", win);
+	char *wid = malloc(2 + 8 + 1);
+
+	snprintf(wid, 2 + 8 + 1, "0x%08x", win);
 	setenv(ENV_VARIABLE, wid, 1);
 }
 
