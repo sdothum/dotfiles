@@ -1,8 +1,7 @@
 #!/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="menu/econvert $@" . $PARENT
 
-# Windowchef
+# Media
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ...................................................................... E-books
@@ -77,7 +76,8 @@ esac
 [ "$css" ] && CSS="$CSS ${css#*=}"
 [ "$CSS" ] && CSS="--extra-css='$CSS'"
 
-notify low "$title" "Converting to $format..\n--change-justification=${justify:-..inbook justification..}"
+# NOTE: escape $title in case title is numeric
+notify low "\\$title" "Converting to $format..\n\--change-justification=${justify:-..inbook justification..}"
 ditto $format "$file"
 echo "$file" | grep -q '  ' && ditto ERROR econvert 'filename must be single spaced.. check author name'
 

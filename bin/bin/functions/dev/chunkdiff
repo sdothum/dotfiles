@@ -1,0 +1,80 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Dev
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................ Function extract diff
+
+usage() { echo "$(basename $0) [-i] [-t] <source> <target>
+> where, -i -> initialize target chunks
+>        -t -> discard preceeding function type lines" | usage:
+	exit 1
+}
+
+# Verify module functions against the target file sourced from
+# NOTE: it is preferable to define function types on the preceding line
+#       discard the function type line check for dropped "static" type (in module)
+
+# ATTN: at present, only rules for chunking out c lang functions is provided
+#       properly formatted code is assumed so block structures can be extracted for comparison
+
+CHUNK=/tmp/chunkdiff
+rm -f $CHUNK:source*
+
+delay=0.001  # match message animation interval
+
+while [ $1 ] ;do
+	case $1 in
+		-i ) rm -f $CHUNK:target* ;;
+		-t ) notype=true ;;
+		*  ) break ;;
+	esac
+	shift
+done
+
+[ -e "$1" ] || usage
+[ -e "$2" ] || usage
+
+fname() { head -2 $1 | grep '('; }
+
+match() {
+	unset match
+	for j in $CHUNK:target:* ;do
+		diff -bB $1 $j >/dev/null && { match=true; break; }
+	done
+	[ $match ] && { ditto match "$(fname $1)"; return; }
+	ditto ERROR mismatch "$(fname $1)"
+	target=$(grep -l "$(fname $1)" $CHUNK:target:*)  # corresponnding target chunk
+	[ -e "$target" ] && dirdiff -l $1 $target
+}
+
+chunk() {
+	touch $CHUNK:$1
+	count=1
+	while IFS= read -r line <&3 ;do
+		if [ -z "$chunk" ] ;then
+			echo "$line" | grep -q ';'        && continue  # statement
+			echo "$line" | grep -q '^[#|/]'   && continue  # comment
+			echo "$line" | grep -q '^ [*]'    && continue  # comment continuation
+			echo "$line" | grep -q '^[ \t]*$' && continue  # empty line
+			# look for type or function name() {
+			echo "$line" | grep -q '^[ \t_a-zA-Z0-9*]*$'     && { [ $notype ] && continue || chunk=true; }
+			echo "$line" | grep -q '^[ \t_a-zA-Z0-9*(,){]*$' && chunk=true
+			[ -z "$chunk" ] && continue
+		fi
+		echo "$line" >>$CHUNK:$1:$count
+		if echo "$line" | grep -q '^}' ;then
+			[ $1 = 'target' ] && echo -n '.'
+			[ $1 = 'source' ] && match $CHUNK:$1:$count
+			unset chunk
+			count=$(( count + 1 ))
+		fi
+	done 3< $2
+}
+
+[ -e $CHUNK:target ] || { ditto $2 "generating chunks"; chunk target $2; echo; }
+
+chunk source $1
+
+# kak: filetype=sh

@@ -9,11 +9,12 @@
 # Usage: [name=..] qutebrowser-instance <url>  # SEE: kakrc livedown
 #
 # NOTE: --temp-basedir to create separate instance of qutebrowser
+#       --override-restore to start in keyboard input mode (to avoid necessity of entering 'i'nput)
 #       -s tabs.last_close 'close' to close window on livedown-stop
 # SEE: qutebrowser wrapper template
 
 # QUTEBROWSER='/usr/bin/qutebrowser --target private-window --override-restore --temp-basedir --qt-arg name ${name:-livedown}'  # BUG: causes config.py temp dir error on close
-QUTEBROWSER='/usr/bin/qutebrowser --target private-window --override-restore --qt-arg name ${name:-livedown}'
+QUTEBROWSER='/usr/bin/qutebrowser --temp-basedir --target private-window --override-restore --qt-arg name ${name:-livedown}'
 FONT=${FONT:-ottawa}
 
 size="$(fontsize)pt $FONT"
@@ -51,7 +52,7 @@ settings="
 eval $QUTEBROWSER $RUNOPT $settings $startpage 2>/dev/null &
 
 case "${name:-livedown}" in
-	livedown  ) window '@livedown'  URL tile 3 && waitron window_cycle_in_group             ;;  # focus editor
+	livedown  ) window '@livedown'  URL tile 3 && sirocco window_cycle_in_group             ;;  # focus editor
 	sonarr    ) window '@sonarr'    URL size monocle; window desktop $(chef desktop "PEER") ;;
 	nicotine  ) window '@nicotine'  URL size monocle; window desktop $(chef desktop "PEER") ;;
 	thelounge )  # NOTE: docker connection eludes rulerrc timing

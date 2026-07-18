@@ -1,0 +1,15 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Web
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .......................................................... firefox reddit sync
+
+# NOTE: refresh reddit cookie on boot SEE: dinit reddit-miniflux
+[ -e /tmp/$(basename $0):cookie ] && exit
+touch /tmp/$(basename $0):cookie
+
+firefox --class reddit https://reddit.com/ &
+sleep 3
+xdotool search -onlyvisible -sync -class 'reddit' windowclose

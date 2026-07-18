@@ -49,7 +49,7 @@ SDCARD=${SDCARD:-6F7D-F921}              # sdcard ID of SUPERNOTE
 BACKUP=true
 
 mkdir -p /home/SUPERNOTE/SSD             # backup
-trap "sync; cd; underline; eeject" EXIT  # cd out of calibre directory for umount
+trap "/usr/bin/sync; cd; underline; eeject" EXIT  # cd out of calibre directory for umount
 
 # update sdr files to match ever changing default settings :)
 sdr()         { ditto sdr "$1"; SDR="$SDR; $2"; }
@@ -106,7 +106,7 @@ backup()   {
 		adb pull sdcard/koreader/settings.reader.lua $HOME/stow/supernote/koreader/settings.reader.lua
 		adb pull sdcard/koreader/settings/gestures.lua $HOME/stow/supernote/koreader/gestures.lua
 		adb pull sdcard/koreader/settings/profiles.lua $HOME/stow/supernote/koreader/profiles.lua
-		sync && adb disconnect  # to prevent busy mtp device
+		/usr/bin/sync && adb disconnect  # to prevent busy mtp device
 		pkill adb >/dev/null
 	fi
 	unset BACKUP
@@ -193,6 +193,6 @@ if [ -e $KOBO ] ;then
 fi
 
 backup
-sync
+/usr/bin/sync
 
 # kak: filetype=sh

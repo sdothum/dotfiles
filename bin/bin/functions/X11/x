@@ -8,7 +8,7 @@
 
 # ............................................................... Window manager
 
-usage() { usage: "$(basename $0) 'start [@<delay>] | 2bwm | awesome | berry | bspwm | budgie | cinnamon | dwm | gnome | goomwwm | guile | herbstluftwm | i3 | kde | lxde | lxqt | notion | openbox | ratpoison | razor-qt | spectrwm | stumpwm | subtle | shell | windowchef | wmii | wmutils | worm | wtftw | xfce4 | xmonad"; rm -f $BOOTWM; exit 1; }
+usage() { usage: "$(basename $0) 'start [@<delay>] | 2bwm | awesome | berry | bspwm | budgie | cinnamon | dwm | gnome | goomwwm | guile | herbstluftwm | i3 | kde | lxde | lxqt | mate | faouzia | notion | openbox | ratpoison | razor-qt | spectrwm | stumpwm | subtle | shell | windowchef | wmii | wmutils | worm | wtftw | xfce4 | xmonad"; rm -f $BOOTWM; exit 1; }
 
 BOOTWM=$SESSION/boot:wm  # SEE: console_login, user_login
 WM=$HOME/.windowmanager
@@ -47,6 +47,7 @@ case $1 in
 	lxd* ) echo lxde >$WM ;;
 	lxq* ) echo lxqt >$WM ;;
 	ma*  ) echo mate >$WM ;;
+	fa*  ) echo faouzia >$WM ;;
 	no*  ) echo notion >$WM ;;
 	op*  ) echo openbox >$WM ;;
 	rat* ) echo ratpoison >$WM ;;
@@ -138,6 +139,7 @@ if console ;then
 		lxd* ) ;;
 		lxq* ) ;;
 		ma*  ) ;;
+		fa*  ) ;;
 		no*  ) ;;
 		op*  ) ;;
 		rat* ) ;;

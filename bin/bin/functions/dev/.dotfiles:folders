@@ -13,6 +13,7 @@ corne/qmk_firmware/keyboards/crkbd
 dinit
 docker
 dunst
+faouzia
 fish
 fonts/.local/share/fonts/Iosevka*
 georgi/qmk_firmware/keyboards/gboards/georgi
@@ -42,8 +43,10 @@ bin/bin/functions/mail/mailsync
 bin/bin/functions/mail/notmail
 mime
 miniflux
+faouzia
 mpd
 mpv
+nimctlr
 nnn/.config/nnn/plugins/._*
 nnn/.config/nnn/plugins/_*
 picom

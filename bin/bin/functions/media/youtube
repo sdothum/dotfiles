@@ -25,10 +25,11 @@ window hide
 # NOTE: long streams can hang requiring closing mpv manually (??) cause unknown
 # HACK: stream in background and wait on mpv (to close automatically or manually) to cleanup potential dangling yt-dlp
 videomode on
+killall -9 -q mpv
 yt-dlp -o - "$1" | mpv - &
-pidwait -f 'mpv -'
-killall -q -q yt-dlp
+pidwait -f mpv
+killall -9 -q yt-dlp
 videomode off
 
 # restore browser page
-waitron window_focus $WID
+sirocco window_focus $WID

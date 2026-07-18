@@ -17,25 +17,21 @@ DELAY=0.65
 case $1 in
 	''     )
 		mpc pause  # any playlist
-		name=piano ${BROWSER:-qutebrowser} $PIANO
+		${BROWSER:-qutebrowser} $PIANO
+		xdotool search -sync -onlyvisible -name "$NANO" set_window -classname 'piano' -class 'piano'
 
 		sleep $DELAY  # tuned delays required to work around system dependent qutebrowser url loading
-		xdotool search -sync -onlyvisible -name "$NANO" windowfocus
-		window "@$NANO" size 600x300
-		xdotool search -sync -onlyvisible -name "$NANO" windowfocus
-		window "@$NANO" snap top left
+		nimctlr window sync "$NANO" Name . window size 600x200 . window snap top left
 
 		# complete zoom command and execute play button :)
 		sleep $DELAY
-		xdotool search -sync -onlyvisible -name "$NANO" windowfocus
 		xdotool type ':zoom 50'
 		xdotool key Return Tab Return
-		xdotool search -sync -onlyvisible -name "$NANO" set_window -classname 'nano'
 
 		pidwait -f ".*${PIANO}.*"
 		mpc play
 		;;
-	toggle ) xdotool search --onlyvisible --name "$NANO" windowunmap || xdotool search --name "$NANO" windowmap ;;
+	toggle ) invert_map -n "$NANO" ;;
 	stop   ) xdotool search --name "$NANO" windowkill ;;
 	stream ) xdotool search -name "$NANO" getwindowname | sed "s/ | $NANO//" ;;
 esac

@@ -13,7 +13,8 @@ export SHELL=/usr/bin/fish
 size=$(fontsize)
 background="#${TERMBG:-263238}"
 foreground='#eaeaea'
-opacity=0.935
+# opacity=0.935
+opacity=1
 # proof=tnue  # unset to increase font size for writing focus (versus coding density)
 
 if [ "$MONOFONT" ] ;then

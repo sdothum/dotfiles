@@ -1,0 +1,19 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Sysadmin
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................... Format usb
+
+ifno "format /dev/sd${1:-a}" && exit
+
+# unmount udev mounted usb's
+sudo umount /run/media/$USER/* 2>/dev/null || sudo umount -l /dev/sd${1:-a}1 2>/dev/null
+[ $? -eq 0 ] || { ditto ERROR "/dev/${1:-a}" "not unmounted"; exit 1; }
+
+sudo parted /dev/sd${1:-a} mklabel msdos
+sudo parted /dev/sd${1:-a} mkpart primary fat32 1MiB 100%
+sudo mkfs.vfat -F 32 /dev/sd${1:-a}1
+
+# kak: filetype=sh

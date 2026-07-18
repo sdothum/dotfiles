@@ -26,7 +26,7 @@ if [ $USER != root ] ;then
 
 		# turnstiled
 		void 'dinit' && sv -u
-		[ -d $SESSION/windowchef ] && touch $SESSION/windowchef/autostart:oneshot  # SEE: windowchef/autostart
+		[ -d $SESSION/$(cat $HOME/.windowmanager) ] && touch $SESSION/$(cat $HOME/.windowmanager)/autostart:oneshot  # SEE: wm autostart
 
 		# assign deadline scheduler to SSD boot drive
 		if [ $(hostname) = $SERVER ] ;then

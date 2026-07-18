@@ -46,7 +46,7 @@ else
 	fi
 fi
 
-sync
+/usr/bin/sync
 trace --  # elapsed time if monitoring
 
 # kak: filetype=sh

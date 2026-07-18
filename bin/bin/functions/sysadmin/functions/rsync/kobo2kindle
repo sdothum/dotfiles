@@ -25,6 +25,6 @@ ifno "sync Kindle history" || {
 	sed 's|/onboard/|/us/documents/|' .adds/koreader/history.lua >$HISTORY
 }
 ifno "copy gestures" || cp .adds/koreader/settings/gestures.lua $KINDLE/koreader/settings/
-sync
+/usr/bin/sync
 
 # kak: filetype=sh

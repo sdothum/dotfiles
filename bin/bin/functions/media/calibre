@@ -12,6 +12,6 @@ adb devices -l | grep -qE 'Supernote_Nomad' && mtp mount
 
 /usr/bin/calibre 2>/dev/null || flatpak run --user com.calibre_ebook.calibre 2>/dev/null
 
-sync
+/usr/bin/sync
 mtp umount
 window desktop $(chef desktop "DESK")

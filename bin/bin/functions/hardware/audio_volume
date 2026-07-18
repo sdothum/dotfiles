@@ -12,13 +12,13 @@
 case $1 in
 	mpc   )
 		level=$(mpc volume | sed -r 's/.* ([0-9]*)%/\1/')
-		[ $(expr $level % 10) -eq 0 ] && return
+		[ $(expr $level % 5) -eq 0 ] && return
 		mpc volume ${level%?}0
 		mpc:settings volume
 		;;
 	pactl )
 		level=$(pactl get-sink-volume @DEFAULT_SINK@ | grep 'Volume:' | sed -r 's/.* ([0-9]*)% .*/\1/')
-		[ $(expr $level % 10) -eq 0 ] && return
+		[ $(expr $level % 5) -eq 0 ] && return
 		pactl set-sink-volume @DEFAULT_SINK@ ${level%?}0%
 		wp:volume clear
 		;;

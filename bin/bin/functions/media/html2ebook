@@ -22,6 +22,6 @@ ebook-convert $htmlz "$kindle/documents/$2 - $3.$format" \
 	--page-breaks-before '//h:h2'                         \
 	--title "$2"                                          \
 	--authors "$3"
-sync
+/usr/bin/sync
 
 # kak: filetype=sh

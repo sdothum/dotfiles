@@ -6,7 +6,7 @@
 
 # ..................................................... Recursive directory diff
 
-usage() { usage: "$(basename $0) [-[- | 1 | p | s | b | w | x | debug]] [-d <date>] <.[/]|[./]source> [<repo|target>] [<regex>]"; exit 1; }
+usage() { usage: "$(basename $0) [-[- | 1 | l | p | s | b | w | x | debug]] [-d <date>] <.[/]|[./]source> [<repo|target>] [<regex>]"; exit 1; }
 
 # NOTE: dirdiff quickly highlights project source code changes against a (separate) snapshot directory
 #       ./                    -> do not match source path against target
@@ -27,7 +27,6 @@ LOG=$DIRDIFF.log
 rm -f $LOG
 
 delay=0.001  # match message animation interval
-# trap "alacritty msg config \"colors.primary.background='#${TERMBG:-263238}'\"" EXIT INT  #restore terminal bg
 
 # Runtime ......................................................................
 
@@ -36,6 +35,7 @@ while [ "$1" ] ;do
 	case $1 in
 		--     ) unset IC ICOPT         ;; # standard diff (not side-by-side)
 		-1     ) maxdepth='-maxdepth 1' ;;
+		-l     ) nolog=true             ;; # suppress log output
 		-p     ) P=true                 ;; # pause on match or notfound (to copy file)
 		-s     ) S=true                 ;; # splash messages
 		-b     ) B=-b                   ;; # ignore whitespace
@@ -116,7 +116,6 @@ while read file <&3 ;do
 		[ -e "${targetfile}" ] || { ditto ERROR notfound "target: ${targetfile}"; ditto ERROR notfound "${targetfile}" >>$LOG; [ $P ] && ifno "fill missing file" || copy ${file} ${targetfile}; break; }
 		kakdiff $B "${file}" "${targetfile}"
 		retcode=$?
-		alacritty msg config "colors.primary.background='#${TERMBG:-263238}'"  # restore term bg (from kak)
 		case $retcode in
 			0 ) ditto match "${file}"; [ $S ] && sleep $delay; break ;;
 			1 ) break ;;
@@ -125,6 +124,7 @@ while read file <&3 ;do
 	done
 done 3< $FILES
 
-[ -e $LOG ] && cat $LOG | pager
+[ $nolog ]  && exit
+[ -e $LOG ] && cat $LOG | pager 2>/dev/null
 
 # kak: filetype=sh
