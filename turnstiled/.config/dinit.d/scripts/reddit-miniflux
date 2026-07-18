@@ -1,0 +1,62 @@
+#!/usr/bin/env /home/shum/venv-reddit-miniflux/bin/python3
+# sdothum - 2016 (c) wtfpl
+#
+# Installation:
+# python3 -m venv --system-site-packages venv-reddit-miniflux
+# . venv-reddit-miniflux/bin/activate
+# pip install browser-cookie3
+
+import browser_cookie3
+import requests
+
+# 1. From miniflux web interface generate api key NOTE: enter description and save to create
+MINIFLUX_URL = "http://localhost:8080"
+MINIFLUX_API_KEY = "LtiITqnklcyXofxVqKOh-xt1HK2kaQx-dluvSAY4YuY="
+
+print("Reading live cookie data from local Firefox profile...")
+try:
+	# Extract only the cookies matching the reddit domain context
+	cj = browser_cookie3.firefox(domain_name=".reddit.com")
+	
+	# Format the cookie object into a flat, semicolon-delimited cookie string
+	cookie_elements = [f"{c.name}={c.value}" for c in cj]
+	full_cookie_string = "; ".join(cookie_elements)
+
+	if "reddit_session=" not in full_cookie_string:
+		print("Warning: 'reddit_session' not detected in Firefox data. Make sure you are logged into Reddit in Firefox!")
+		exit(1)
+
+	headers = {
+		"X-Auth-Token": MINIFLUX_API_KEY, 
+		"Content-Type": "application/json"
+	}
+
+	# 2. Query Miniflux to gather all current feeds
+	feeds_res = requests.get(f"{MINIFLUX_URL}/v1/feeds", headers=headers)
+	feeds = feeds_res.json()
+	
+	# Filter targets containing 'reddit.com' strings
+	reddit_feeds = [f for f in feeds if "reddit.com" in f.get("feed_url", "")]
+	print(f"Found {len(reddit_feeds)} target Reddit feeds in your Miniflux database.")
+
+	# 3. Stream updates to each individual feed row
+	for feed in reddit_feeds:
+		feed_id = feed["id"]
+		update_payload = {
+			"cookie": full_cookie_string,
+			"disable_http2": True
+		}
+		put_res = requests.put(f"{MINIFLUX_URL}/v1/feeds/{feed_id}", json=update_payload, headers=headers)
+		if put_res.status_code in [201, 204]:
+			print(f" -> Synchronized feed ID {feed_id} ({feed['title']})")
+		else:
+			print(f" -> Failed on feed ID {feed_id}: HTTP {put_res.status_code}")
+
+	print("Success: Miniflux database has been synchronized with Firefox profiles!")
+
+except PermissionError:
+	print("Error: Firefox database is currently locked. Close your Firefox browser and try again.")
+except Exception as e:
+	print(f"Script runtime exception: {e}")
+
+# kak: filetype=python

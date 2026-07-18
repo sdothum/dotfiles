@@ -1,0 +1,5 @@
+type    = process
+command = /home/shum/venv-reddit-miniflux/bin/python3 /home/shum/.config/dinit.d/scripts/reddit-miniflux
+restart = false
+logfile = /home/shum/.local/state/dinit.d/log/reddit-miniflux.log
+
