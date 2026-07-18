@@ -5,8 +5,11 @@
 
 # ....................................................................... syslog
 
+# sudo ln -s /etc/sv/socklog-unix /var/service/
+# sudo ln -s /etc/sv/nanoklogd /var/service/
+sudo usermod -aG socklog $USER
+
 sv enable socklog-unix
 sv enable nanoklogd
-sudo usermod -aG socklog $USER
 
 # vim: set ft=sh: #

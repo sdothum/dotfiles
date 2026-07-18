@@ -20,6 +20,8 @@ m chimera-dinit  # supercedes above runit-dinit
   pam_rundir
 ! sudo sed -i '/pam_elogind/s/^/# /' /etc/pam.d/system-login
 ! sudo sed -i '/pam_elogind/s/^/# /; $asession required pam_rundir.so' /etc/pam.d/turnstiled
+# REMEDY: pam_close_session attempts to access non-installed dinit.d directory
+! sudo mkdir -p /usr/lib/dinit.d/user/boot.d
 
 
 = runit

@@ -21,6 +21,8 @@ cargo install --force --locked taplo-cli --features lsp    # toml
 cargo install --force buffer-language-server
 ditto lsp "gem install.. (be patient)"
 gem install solargraph
+# nimble install nimlangserver
+nimble install nimlsp
 
 # markdown
 # wget -P /tmp https://github.com/artempyanykh/marksman/releases/download/2023-07-25/marksman-linux-x64

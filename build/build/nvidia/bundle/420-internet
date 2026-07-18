@@ -68,4 +68,9 @@ d m sonarr           [server]
   miniflux           [server]
 
 
+= rss-bridge
+= ══════════
+# php-fpm
+# ! sudo sed -i "/^;extension=curl/s/;//; /^;extension=mbstring/s/;//; /^;extension=openssl/s/;//" /etc/php*.*/php.ini
+
 # vim: set ft=conf: #

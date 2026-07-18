@@ -14,6 +14,7 @@ ya pkg add yazi-rs/plugins:smart-filter
 ya pkg add yazi-rs/plugins:smart-paste
 ya pkg add yazi-rs/plugins:toggle-pane
 ya pkg add stelcodes/bunny
+ya pkg add AnirudhG07/rich-preview
 
 ya pkg upgrade
 

@@ -65,6 +65,11 @@
 ! stow lua
 
 
+= nim
+= ═══
+  nim
+
+
 = perl
 = ════
   perl
@@ -129,6 +134,14 @@ g rack-test
 # gdb
   strace
   time
+
+
+= ai
+= ══
+! sudo npm install -g @openai/codex
+! codex --version
+# NOTE: you created a chatgpt account via google
+! go install github.com/aandrew-me/tgpt/v2@latest
 
 
 # vim: set ft=conf: #
