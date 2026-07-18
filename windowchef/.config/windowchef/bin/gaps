@@ -1,4 +1,4 @@
-#!/usr/bin/dash
+#!/usr/bin/bash
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="bin/gaps $@" . $PARENT
 
@@ -9,22 +9,33 @@
 
 # NOTE: panel is lost on exit, cause unknown (windowchefrc?) SEE: abbreviations.fish for usage fix (respawn)
 
+THEMES="ui/themes"
+
 usage() {
+	themes="$(recipe $THEMES | tr '\n' ' ')"
 	echo "$(basename $0) (interative mode.. <Return> to exit)
-> ${GREEN}toggle:${cyan} -'borders
-> ${GREEN}tuples:${cyan} w'idth | internal W'idth <border>
->         f'ocused | u'nfocused | internal F'ocused | internal U'nfocused <color>
->         t'op | b'ottom | l'eft | r'ight | g'rid <gap>
->         h'eight | i'ndent <panel>
->         where, border/gap/height/indent: <pixel>  count
->                color:                    <rrggbb> hex${NOCOLOR}" | usage:
+> ${GREEN}theme: ${cyan} ${brown}a${cyan}pply | ${brown}k${cyan}eep | ${brown}p${cyan}urge <theme>
+> ${GREEN}toggle:${cyan} ${brown}-${cyan}borders
+> ${GREEN}tuples:${cyan} border ${brown}s${cyan}tyle <style> | corners ${brown}%${cyan} <percent>
+>         ${brown}w${cyan}idth | internal ${brown}W${cyan}idth <border>
+>         ${brown}f${cyan}ocused | ${brown}u${cyan}nfocused | internal ${brown}F${cyan}ocused | internal ${brown}U${cyan}nfocused <color>
+>         ${brown}t${cyan}op | ${brown}b${cyan}ottom | ${brown}l${cyan}eft | ${brown}r${cyan}ight | ${brown}g${cyan}rid <gap>
+>         ${brown}h${cyan}eight | ${brown}i${cyan}ndent <panel>
+>         where, border style:             f'rame | l'eft | t'op | r'ight | b'ottom | c'orners [<mask>]
+>                corners mask:             <xxxx> bit 1 (on) 0 (off) topleft .. bottomleft, 0000 == disable
+>                border/gap/height/indent: <pixel>  count
+>                color:                    <rrggbb> hex
+>                themes:                   ${brown}${themes:-${NOCOLOR}(none)}${NOCOLOR}" | usage:
 }
 
 # SEE: windowchefrc
 snapshot() {
 	enable_borders=$(recipe ui/enable_borders)
+	border_style=$(recipe ui/border_style)
 	border_width=$(recipe ui/border_width)
 	internal_border_width=$(recipe ui/internal_border_width)
+	corner_percent=$(recipe ui/corner_percent)
+	corner_mask=$(recipe ui/corner_mask)
 	color_focused=$(recipe ui/color_focused)
 	color_unfocused=$(recipe ui/color_unfocused)
 	internal_color_focused=$(recipe ui/internal_color_focused)
@@ -40,8 +51,11 @@ snapshot() {
 
 recover() {
 	recipe ui/enable_borders $enable_borders
+	recipe ui/border_style $border_style
 	recipe ui/border_width $border_width
 	recipe ui/internal_border_width $internal_border_width
+	recipe ui/corner_percent $corner_percent
+	recipe ui/corner_mask $corner_mask
 	recipe ui/color_focused $color_focused
 	recipe ui/color_unfocused $color_unfocused
 	recipe ui/internal_color_focused $internal_color_focused
@@ -60,8 +74,11 @@ recover() {
 settings() {
 	echo "
 	${ORANGE}-${NOCOLOR}enable borders          "$(recipe ui/enable_borders)"
+	border ${ORANGE}s${NOCOLOR}tyle             "$(decoration $(recipe ui/border_style))"
 	border ${ORANGE}w${NOCOLOR}idth             "$(recipe ui/border_width)"
 	internal border ${ORANGE}W${NOCOLOR}idth    "$(recipe ui/internal_border_width)"
+	corner ${ORANGE}%${NOCOLOR}                 "$(recipe ui/corner_percent)"
+	${ORANGE}c${NOCOLOR}orner mask              "$(map)"
 	color ${ORANGE}f${NOCOLOR}ocused            "$(recipe ui/color_focused)"
 	color ${ORANGE}u${NOCOLOR}nfocused          "$(recipe ui/color_unfocused)"
 	internal color ${ORANGE}F${NOCOLOR}ocused   "$(recipe ui/internal_color_focused)"
@@ -79,7 +96,6 @@ settings() {
 usage
 snapshot
 
-# semi-dynamic rice tweaking
 config() {
 	windowchefrc refresh
 	[ $panel ] && { pkill -f 'draw panel'; restore panel; }
@@ -87,18 +103,74 @@ config() {
 }
 
 color() { pastel format hex $value >/dev/null 2>&1; }
+map()   { printf '%04d\n' $(echo "obase=2; $(recipe ui/corner_mask)" | bc); }
+theme() { [ $value ] || return 1; }
+
+mask()  {
+	[ $(echo "${#1}") -eq 4 ] || return 1
+	m=$((2#$(echo $1 | sed 's/[^0]/1/g')))
+	printf '%d\n' "$m"
+}
+
+style() {
+	case $1 in
+		f ) value=0  ;;
+		l ) value=1  ;;
+		t ) value=2  ;;
+		r ) value=3  ;;
+		b ) value=4  ;;
+		c ) value=5; [ $2 ] && mask=$(mask $2) || return 0 ;;
+		* ) return 1 ;;
+	esac
+}
+
+decoration() {
+	case $1 in
+		0 ) echo frame  ;;
+		1 ) echo left   ;;
+		2 ) echo top    ;;
+		3 ) echo right  ;;
+		4 ) echo bottom ;;
+		5 ) echo "corners $(map)" ;;
+	esac
+}
+
+purge() { recipe -q "$THEMES/$1" && rm -r $WMSESSION/$THEMES/$1; }
+
+apply() {
+	recipe -q "$THEMES/$1" || { usage; return 1; }
+	find $WMSESSION/$THEMES/$1 -maxdepth 1 >/tmp/windowchef:gaps
+	while read theme <&3 ;do
+		[ "${theme##*/}" = "$1" ] && continue
+		recipe -d "ui/${theme##*$1/}"
+		cp -r "$theme" $WMSESSION/ui/
+	done 3< /tmp/windowchef:gaps
+}
+
+keep()  {
+	recipe -d "$THEMES/$1"  # remove any stale settings
+	find $WMSESSION/ui -maxdepth 1 >/tmp/windowchef:gaps
+	recipe -a "$THEMES/$1"
+	while read theme <&3 ;do
+		echo "${theme##*/}" | grep -Eq 'ui|theme' && continue
+		cp -r "$theme" $WMSESSION/$THEMES/$1/
+	done 3< /tmp/windowchef:gaps
+}
 
 while : ;do
 	settings
 	unset panel
 
-	read -p '> ' config
-	[ "$config" ] || break
-	attr=${config%% *}
-	value=${config##* }
+	read -p '> ' attr value option
+	[ "$attr" ] || break
 
 	case $attr in
+		a ) [ "$value" ] || { usage; continue; } ;;
+		k ) [ "$value" ] || { usage; continue; } ;;
+		p ) [ "$value" ] || { usage; continue; } ;;
 		- ) [ $(recipe ui/enable_borders) = 'true' ] && value=false || value=true ;;
+		s ) style $value $option || { usage; continue; } ;;
+		c ) mask=$(mask $value)  || { usage; continue; } ;;
 		f ) color $value || { usage; continue; } ;;
 		u ) color $value || { usage; continue; } ;;
 		F ) color $value || { usage; continue; } ;;
@@ -107,9 +179,15 @@ while : ;do
 	esac
 
 	case $attr in
+		a ) apply $value ;;
+		k ) keep  $value ;;
+		p ) purge $value ;;
 		- ) recipe ui/enable_borders $value ;;
+		s ) recipe ui/border_style $value; [ $mask ] && recipe ui/corner_mask $mask ;;
 		w ) recipe ui/border_width $value ;;
 		W ) recipe ui/internal_border_width $value ;;
+		% ) recipe ui/corner_percent $value ;;
+		c ) recipe ui/corner_mask $mask ;;
 		f ) recipe ui/color_focused $value ;;
 		u ) recipe ui/color_unfocused $value ;;
 		F ) recipe ui/internal_color_focused $value ;;
