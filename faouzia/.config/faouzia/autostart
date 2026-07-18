@@ -1,0 +1,52 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................... Autostart
+
+sudo iwconfig wlp9s0 power off  # disable powersave mode (to prevent sleeping connection)
+restore root
+conky clock auto
+dunst &
+restore unclutter
+displaycal3                     # load color profile
+imwheel -kill                   # set trackball scrollwheel speed
+wp:volume
+
+udev
+void 'runit' && pulse || { sv -u check pipewire || pulse; }
+
+group $(group id "DESK")
+# startup desktop app commands replaced by .session/faouzia/autostart/<command>*
+recipe -q autostart:oneshot && recipe autostart | while read cmd ;do
+	sleep 0.1
+	ditto autostart "$cmd"
+	eval $cmd
+done
+# recipe -d autostart:oneshot  # SEE: console_login
+
+# if not booting with dinit.. (issue running as runit service)
+if void 'runit' ;then
+	!p nzbget && nzbget --daemon
+	!p sonarr && sudo /bin/su - sonarr -c '/usr/lib/sonarr/Sonarr/Sonarr -s localhost:8989 -no-browser -data=/var/lib/sonarr' >/dev/null 2>&1 &
+fi
+
+restore panel  # postponed as long as possible to avoid dirty trace messages
+
+# [ -e /tmp/nicotine-plus ] || { make_install nicotine-plus; touch /tmp/nicotine-plus; }  # for nightly build
+[ -e /tmp/nicotine ] || (sleep 10; sv -u restart nicotine; touch /tmp/nicotine) &  # HACK: to avoid init reconnects to slsknet server (cause unknown)
+exists mpd || exit
+
+sleep 1        # settle pipewire for mpd server connection
+MPDCFG=$XDG_CONFIG_HOME/mpd/mpd.conf
+void 'runit' && dbus-run-session mpd $MPDCFG 2>/dev/null || { sv -u check mpd || dbus-run-session mpd $MPDCFG 2>/dev/null; }
+
+if [ "$(mpc queued)" ] ;then
+	void 'runit' && (sleep 3; for i in play toggle toggle ;do mpc $i >/dev/null ;done; mpc:settings) &  # mpd tickling required to connect to pipewire
+else
+	piano  # nano hi resolution stream
+fi
+
+# kak: filetype=sh

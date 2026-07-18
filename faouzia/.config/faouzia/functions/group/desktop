@@ -1,0 +1,16 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="group/specific $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................. Group as desktop
+
+# Usage: group desktop <group>
+
+[ $(ls -1 $CURRENT) -eq $1 ] || current $1
+
+sirocco group_activate_specific $1
+rm -rf $GROUP:deactivated/$1
+
+# kak: filetype=sh

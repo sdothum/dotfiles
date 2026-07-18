@@ -1,0 +1,32 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="menu/layout $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................... Desktop layout
+
+actions() {
+	echo "
+q ^Quarters
+d ^Quarters edit
+b ^Quarters browser
+h ^Thirds
+k ^Thirds edit
+j ^Thirds browser
+" | picklist
+}
+
+cmd=$(actions | rmenu 'Layout' $cmd -no-custom) || exit
+
+cmd=$(echo "$cmd" | sed "s/.*$SEP //")
+case $cmd in
+	T*browser ) $NIMCTLR layout fold 3 $BROWSER ;;
+	T*edit    ) $NIMCTLR layout fold 3 kak      ;;
+	Thirds    ) $NIMCTLR layout fold 3          ;;
+	Q*browser ) $NIMCTLR layout fold 4 $BROWSER ;;
+	Q*edit    ) $NIMCTLR layout fold 4 kak      ;;
+	Quarters  ) $NIMCTLR layout fold 4          ;;
+esac
+
+# kak: filetype=sh

@@ -1,0 +1,13 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="pfw $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. pfw wrapper
+
+exec sirocco window focused
+
+# kak: filetype=sh
+

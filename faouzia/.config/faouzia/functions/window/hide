@@ -1,0 +1,16 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/hide $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Hide action
+
+rm -rf $HIDDEN/$winid
+mkdir -p $HIDDEN/$winid/"$(group) $winid ^$(wname $winid | sed "s/^'//; s/'$//")"  # SEE: menu unhide
+snapshot_geometry
+sirocco window_hide $winid . window_focus_last
+
+exit  # avoid window (parent) window refocusing
+
+# kak: filetype=sh

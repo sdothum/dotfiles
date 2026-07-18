@@ -1,0 +1,62 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="group $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................. Group operations
+
+# Usage: group <msg> [<name> | <group>] SEE: functions/group
+#              where, 0-9     -> group focus <msg>
+#                     -1/+1   -> group focus <msg> (relative)
+
+# NOTE: sirocco group handling deficiencies (quirks) and extensions are handled here
+# HACK: sirocco group_toggle/_activate does not restore the group window stack order (focused window)
+
+GROUPS="DESK COMM CODE WIKI UTIL PLAY PEER ''"                       # '' end of groups SEE: draw panel and faouziarc
+
+name() { echo "$GROUPS" | cut -d' ' -f${1:-1}; }
+id()   { echo "$GROUPS" | tr ' ' '\n' | grep -n $1 | cut -d: -f1; }  # NOTE: assumes only valid script calls SEE: rulerrc!
+
+CURRENT=$GROUP/current
+LAST=$GROUP/last
+
+current() {
+	[ "$(ls -1 $CURRENT)" = "$(ls -1 $LAST)" ] || { rm -rf $LAST; mv $CURRENT $LAST; }
+	mkdir -p $CURRENT/$1
+	refresh_panel
+	dunstctl close-all
+	notify Group "$1 $(group name $(group current))"
+}
+
+plus() {
+	group=$(( $(ls -1 $CURRENT) + $1 ))
+	tagcount=$(group count)
+	if [ $group -gt $tagcount ] ;then
+		group=1
+	elif [ $group -lt 1 ] ;then
+		group=$tagcount
+	fi
+	echo $group
+}
+
+msg=$1
+case $msg in
+	''      ) ls -1 $CURRENT ;;
+	current ) ls -1 $CURRENT ;;  # nim syntax
+	count   ) echo $(( $(id "''") - 1 )) ;;
+	id      ) id   $2 ;;
+	name    ) name $2 ;;
+	[1-9]   ) group focus $1 ;;          # SEE: query group and rulerrc
+	-* | +* ) group focus $(plus $1) ;;  # -1/+1
+	*       )
+		shift
+		if [ -e $(dirname $0)/functions/group/$msg ] ;then
+			. $(dirname $0)/functions/group/$msg $@
+		else
+			usage $0 $msg
+		fi
+esac
+
+# kak: filetype=sh

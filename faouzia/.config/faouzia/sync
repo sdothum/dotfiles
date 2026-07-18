@@ -1,0 +1,20 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="sync $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .............................................................. Test operations
+
+# Usage: sync <msg> SEE: functions/sync
+
+msg=$1
+[ $msg ] && shift || usage $0
+if [ -e ${0%/sync}/functions/sync/$msg ] ;then
+	. ${0%/sync}/functions/sync/$msg $@
+else
+	usage $0 $msg
+fi
+
+# kak: filetype=sh

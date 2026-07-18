@@ -1,0 +1,16 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="layout/revert $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ Revert layout
+
+for i in $(window ids) ;do
+	$NIMCTLR window revert $i
+done
+
+sirocco window_focus $winid
+notify $WM "layout revert <b>ALL</b>"
+
+# kak: filetype=sh

@@ -1,0 +1,255 @@
+#!/usr/bin/bash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="bin/gaps $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Tweak layout
+
+# Usage: aurora [-verbose]
+
+# NOTE: panel is lost on exit, cause unknown (faouziarc?) SEE: abbreviations.fish for usage fix (respawn)
+
+THEMES="ui/themes"
+verbose=$1
+
+usage() {
+	themes="$(recipe $THEMES | grep -v '^-' | tr '\n' ' ')"
+	echo "$(basename $0) [-verbose] .. <return> to exit
+> ${GREEN}theme: ${cyan} ${brown}a${cyan}pply | ${brown}k${cyan}eep as | ${brown}p${cyan}urge [<theme>]
+> ${GREEN}toggle:${cyan} ${brown}!${cyan} borders
+> ${GREEN}tuples:${cyan} border ${brown}s${cyan}tyle <style> | corners (length) ${brown}%${cyan} <percent>
+>         border ${brown}w${cyan}idth | internal ${brown}W${cyan}idth <pixels>
+>         color ${brown}f${cyan}ocused | ${brown}u${cyan}nfocused | internal ${brown}F${cyan}ocused | internal ${brown}U${cyan}nfocused <aarrggbb>
+>         gap ${brown}t${cyan}op | ${brown}b${cyan}ottom | ${brown}l${cyan}eft | ${brown}r${cyan}ight | ${brown}g${cyan}rid <pixels>
+>         panel ${brown}h${cyan}eight | ${brown}i${cyan}ndent <pixels>
+>         where, border style:             f'rame | l'eft | t'op | r'ight | b'ottom | c'orners [<mask>]
+>                corners mask:             <xxxx> bit 1 (on) 0 (off) topleft .. bottomleft, 0000 == disable
+>                themes:                   ${brown}${themes:-${NOCOLOR}---}${NOCOLOR}" | usage:
+}
+
+# SEE: faouziarc
+snapshot() {
+	enable_borders=$(recipe ui/enable_borders)
+	border_style=$(recipe ui/border_style)
+	border_width=$(recipe ui/border_width)
+	internal_border_width=$(recipe ui/internal_border_width)
+	corner_percent=$(recipe ui/corner_percent)
+	corner_mask=$(recipe ui/corner_mask)
+	color_focused=$(recipe ui/color_focused)
+	color_unfocused=$(recipe ui/color_unfocused)
+	internal_color_focused=$(recipe ui/internal_color_focused)
+	internal_color_unfocused=$(recipe ui/internal_color_unfocused)
+	gap_width_top=$(recipe 'ui/gap_width top')
+	gap_width_bottom=$(recipe 'ui/gap_width bottom')
+	gap_width_left=$(recipe 'ui/gap_width left')
+	gap_width_right=$(recipe 'ui/gap_width right')
+	grid_gap_width=$(recipe ui/grid_gap_width)
+	panel_height=$(recipe panel/height)
+	panel_indent=$(recipe panel/indent)
+}
+
+recover() {
+	recipe ui/enable_borders $enable_borders
+	recipe ui/border_style $border_style
+	recipe ui/border_width $border_width
+	recipe ui/internal_border_width $internal_border_width
+	recipe ui/corner_percent $corner_percent
+	recipe ui/corner_mask $corner_mask
+	recipe ui/color_focused $color_focused
+	recipe ui/color_unfocused $color_unfocused
+	recipe ui/internal_color_focused $internal_color_focused
+	recipe ui/internal_color_unfocused $internal_color_unfocused
+	recipe 'ui/gap_width top' $gap_width_top
+	recipe 'ui/gap_width bottom' $gap_width_bottom
+	recipe 'ui/gap_width left' $gap_width_left
+	recipe 'ui/gap_width right' $gap_width_right
+	recipe ui/grid_gap_width $grid_gap_width
+	recipe panel/height $panel_height
+	recipe panel/indent $panel_indent
+
+	config
+}
+
+settings() {
+	echo "
+	${ORANGE}${NOCOLOR}base theme               "${theme:----}"
+	${ORANGE}!${NOCOLOR} borders                "$(recipe ui/enable_borders)"
+	border ${ORANGE}s${NOCOLOR}tyle             "$(decoration $(recipe ui/border_style))"
+	border ${ORANGE}w${NOCOLOR}idth             "$(recipe ui/border_width)"
+	internal border ${ORANGE}W${NOCOLOR}idth    "$(recipe ui/internal_border_width)"
+	corners ${ORANGE}%${NOCOLOR}                "$(recipe ui/corner_percent)"
+	${ORANGE}c${NOCOLOR}orners mask             "$(map)"
+	color ${ORANGE}f${NOCOLOR}ocused            "$(recipe ui/color_focused)"
+	color ${ORANGE}u${NOCOLOR}nfocused          "$(recipe ui/color_unfocused)"
+	internal color ${ORANGE}F${NOCOLOR}ocused   "$(recipe ui/internal_color_focused)"
+	internal color ${ORANGE}U${NOCOLOR}nfocused "$(recipe ui/internal_color_unfocused)"
+	gap width ${ORANGE}t${NOCOLOR}op            "$(recipe 'ui/gap_width top')"
+	gap width ${ORANGE}b${NOCOLOR}ottom         "$(recipe 'ui/gap_width bottom')"
+	gap width ${ORANGE}l${NOCOLOR}eft           "$(recipe 'ui/gap_width left')"
+	gap width ${ORANGE}r${NOCOLOR}ight          "$(recipe 'ui/gap_width right')"
+	${ORANGE}g${NOCOLOR}rid gap spacing         "$(recipe ui/grid_gap_width)"
+	panel ${ORANGE}h${NOCOLOR}eight             "$(recipe panel/height)"
+	panel ${ORANGE}i${NOCOLOR}ndent             "$(recipe panel/indent)"
+"
+}
+
+usage
+snapshot
+theme="$(recipe $THEMES/---)"  # last saved "base" theme NOTE: may NOT have been kept (updated)
+
+config() {
+	faouziarc refresh
+	[ $panel ] && { pkill -f 'draw panel'; restore panel; }
+	return 0
+}
+
+color() { pastel format hex $value >/dev/null 2>&1; }
+map()   { printf '%04d\n' $(echo "obase=2; $(recipe ui/corner_mask)" | bc); }
+# theme() { [ $value ] || return 1; }
+
+mask()  {
+	[ $(echo "${#1}") -eq 4 ] || return 1
+	m=$((2#$(echo $1 | sed 's/[^0]/1/g')))
+	printf '%d\n' "$m"
+}
+
+style() {
+	case $1 in
+		'' ) [ $theme ] || return 1 ;;
+		f  ) value=0  ;;
+		l  ) value=1  ;;
+		t  ) value=2  ;;
+		r  ) value=3  ;;
+		b  ) value=4  ;;
+		c  ) value=5; [ $2 ] && mask=$(mask $2) || return 0 ;;
+		*  ) return 1 ;;
+	esac
+}
+
+decoration() {
+	case $1 in
+		0 ) echo frame  ;;
+		1 ) echo left   ;;
+		2 ) echo top    ;;
+		3 ) echo right  ;;
+		4 ) echo bottom ;;
+		5 ) echo "corners $(map)" ;;
+	esac
+}
+
+purge() { recipe -q "$THEMES/$1" && rm -r $WMSESSION/$THEMES/$1; }
+
+apply() {
+	theme="${1-:$theme}"
+	recipe -q "$THEMES/$theme"
+	find $WMSESSION/$THEMES/$theme -maxdepth 1 >/tmp/faouzia:gaps 2>/dev/null
+	[ -n "$(cat /tmp/faouzia:gaps)" ] || return 1
+	while read attr <&3 ;do
+		[ "${attr##*/}" = "$theme" ] && continue
+		recipe -d "ui/${attr##*$theme/}"
+		cp -r "$attr" $WMSESSION/ui/
+	done 3< /tmp/faouzia:gaps
+}
+
+keep()  {
+	theme="${1-:$theme}"
+	recipe -d "$THEMES/$theme"
+	find $WMSESSION/ui -maxdepth 1 >/tmp/faouzia:gaps
+	recipe -a "$THEMES/$theme"
+	while read attr <&3 ;do
+		echo "${attr##*/}" | grep -Eq 'ui|theme' && continue
+		cp -r "$attr" $WMSESSION/$THEMES/$theme/
+	done 3< /tmp/faouzia:gaps
+}
+
+while : ;do
+	[ "$msg" ] && { ditto theme "$msg"; unset msg; }
+	settings
+	unset panel
+
+	if [ $verbose ] ;then
+		stty -echo
+		stty cbreak
+		IFS= read -p '> ' -n1 attr
+		stty sane
+		[ "$attr" ] || break
+
+		case $attr in
+			a ) echo -n apply theme ;;
+			k ) echo -n keep as theme ;;
+			p ) echo -n purge theme ;;
+			! ) echo -n toggle borders ;;
+			s ) echo -n border style ;;
+			w ) echo -n border width ;;
+			W ) echo -n internal border width ;;
+			% ) echo -n corners percent ;;
+			c ) echo -n corners mask ;;
+			f ) echo -n focused aarrggbb ;;
+			u ) echo -n unfocused aarrggbb ;;
+			F ) echo -n internal focused aarrggbb ;;
+			U ) echo -n internal unfocused aarrggbb ;;
+			t ) echo -n gap width top ;;
+			b ) echo -n gap width bottom ;;
+			l ) echo -n gap width left ;;
+			r ) echo -n gap width right ;;
+			g ) echo -n grid gap spacing ;;
+			h ) echo -n panel height ;;
+			i ) echo -n panel indent ;;
+			* ) usage; continue ;;
+		esac
+
+		read -p ' ' value option
+	else
+		read -p '> ' attr value option
+		[ "$attr" ] || break
+	fi
+
+	case $attr in
+		a ) [ "$value" ] || [ "$theme" ] || { usage; continue; } ;;
+		k ) [ "$value" ] || [ "$theme" ] || { usage; continue; } ;;
+		p ) [ "$value" ] || [ "$theme" ] || { usage; continue; } ;;
+		! ) [ $(recipe ui/enable_borders) = 'true' ] && value=false || value=true ;;
+		s ) style $value $option || { usage; continue; } ;;
+		c ) mask=$(mask $value)  || { usage; continue; } ;;
+		f ) color $value || { usage; continue; } ;;
+		u ) color $value || { usage; continue; } ;;
+		F ) color $value || { usage; continue; } ;;
+		U ) color $value || { usage; continue; } ;;
+		* ) echo $value | grep -q '[^0-9]' && { usage; continue; } ;;
+	esac
+
+	case $attr in
+		a ) apply ${value:-$theme} || msg="$theme not found" ;;
+		k ) keep  ${value:-$theme} ;;
+		p ) purge ${value:-$theme} ;;
+		! ) recipe ui/enable_borders $value ;;
+		s ) recipe ui/border_style $value; [ $mask ] && recipe ui/corner_mask $mask ;;
+		w ) recipe ui/border_width $value ;;
+		W ) recipe ui/internal_border_width $value ;;
+		% ) recipe ui/corner_percent $value ;;
+		c ) recipe ui/corner_mask $mask ;;
+		f ) recipe ui/color_focused $value ;;
+		u ) recipe ui/color_unfocused $value ;;
+		F ) recipe ui/internal_color_focused $value ;;
+		U ) recipe ui/internal_color_unfocused $value ;;
+		t ) recipe 'ui/gap_width top' $value; recipe 'ui/gap_width bottom' $value ;;  # NOTE: sets balanced margins by default
+		b ) recipe 'ui/gap_width bottom' $value ;;
+		l ) recipe 'ui/gap_width left' $value; recipe 'ui/gap_width right' $value ;;
+		r ) recipe 'ui/gap_width right' $value ;;
+		g ) recipe ui/grid_gap_width $value ;;
+		h ) recipe panel/height $value; panel=true ;;
+		i ) recipe panel/indent $value; panel=true ;;
+		* ) usage; continue ;;
+	esac
+
+	config
+done
+
+ifno 'keep settings' && { recover; exit; }
+ditto $(basename $0) "current settings saved"
+recipe -d "$THEMES/---"
+[ "$theme" ] && recipe -a "$THEMES/---/$theme"
+
+# kak: filetype=sh

@@ -1,0 +1,60 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/extend $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................... Extend window (to screen edge)
+
+# Usage: window extend left | right | near | far | top [left | right] | bottom [left | right]
+
+snapshot_geometry
+set_geometry  # X Y WIDTH HEIGHT
+
+lwidth=$(( X + WIDTH - margin ))
+rwidth=$(( W - X + margin ))
+
+# .......................................................... Extend horizontally
+
+left()  { wtp $margin $Y $lwidth $HEIGHT $winid; }
+right() { wtp $X $Y $rwidth $HEIGHT $winid; }
+near()  { [ $X -le $(opposite_side) ] && left || right; }
+far()   { [ $X -le $(opposite_side) ] && right || left; }
+
+# ................................................................... Extend top
+
+top() {
+	height=$(( Y + HEIGHT - top ))
+	case $1 in
+		left  | Left  ) wtp $margin $top $lwidth $height $winid ;;
+		right | Right ) wtp $X $top $rwidth $height $winid ;;
+		*             ) wtp $X $top $WIDTH $height $winid ;;
+	esac
+}
+
+# ................................................................ Extend bottom
+
+bottom() {
+	# height=$(( H - Y + border ))
+	height=$(( H - Y ))
+
+	case $1 in
+		left  | Left  ) wtp $margin $Y $lwidth $height $winid ;;
+		right | Right ) wtp $X $Y $rwidth $height $winid ;;
+		*             ) wtp $X $Y $WIDTH $height $winid ;;
+	esac
+}
+
+case $1 in
+	''              ) near      ;;  # horizontal axis
+	left   | Left   ) left      ;;
+	right  | Right  ) right     ;;
+	near   | Near   ) near      ;;
+	far    | Far    ) far       ;;
+	top    | Top    ) top    $2 ;;
+	bottom | Bottom ) bottom $2 ;;
+esac
+
+sirocco window_focus $winid
+
+# kak: filetype=sh

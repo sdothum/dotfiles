@@ -1,0 +1,70 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/snap $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Snap windows
+
+# Usage: window snap left | right | near | center [left | right | horizontal | vertical] | top [left | right] | bottom [left | right]
+
+snapshot_geometry  # NOTE: comment out to not overwrite window sizing/tiling geometry
+set_geometry   # X Y WIDTH HEIGHT
+
+move()   {
+	sirocco window_focus $winid . window_move_absolute $1 $2
+}
+
+L=$(( margin ))
+# R=$(( W - WIDTH + margin - border * 2 ))
+# V=$(( (H - HEIGHT) / 2 + top - border ))
+R=$(( W - WIDTH + margin ))
+V=$(( (H - HEIGHT) / 2 + top ))
+G=$(( gap / 2 ))  # respect tiling gap at center :)
+
+left()   { move $L $Y; }
+right()  { move $R $Y; }
+near()   { [ $X -le $(opposite_side) ] && left || right; }
+
+center() {
+	case $1 in
+		# left          ) move $(( W / 2 + margin - WIDTH - border * 2 - G )) $Y ;;
+		left    | Left  ) move $(( W / 2 + margin - WIDTH - G )) $Y ;;
+		right   | Right ) move $(( W / 2 + margin + G )) $Y ;;
+		# hori*         ) move $(( (W - WIDTH) / 2 + margin - border )) $Y ;;
+		hori*   | Hori* ) move $(( (W - WIDTH) / 2 + margin )) $Y ;;
+		vert*   | Vert* ) move $X $V ;;
+		# *             ) move $(( (W - WIDTH) / 2 + margin - border )) $V ;;
+		*               ) move $(( (W - WIDTH) / 2 + margin )) $V ;;
+	esac
+}
+
+top()    {
+	case $1 in
+		left  | Left  ) move $L $top ;;
+		right | Right ) move $R $top ;;
+ 		*             ) move $X $top ;;
+	esac
+}
+
+bottom() {
+	# B=$(( H - HEIGHT + border * 2 ))
+	B=$(( H - HEIGHT ))
+	case $1 in
+		left  | Left  ) move $L $B ;;
+		right | Right ) move $R $B ;;
+		*             ) move $X $B ;;
+	esac
+}
+
+case $1 in
+	''              ) near      ;;  # nearest left/right edge
+	left   | Left   ) left      ;;
+	right  | Right  ) right     ;;
+	near   | Near   ) near      ;;
+	center | Center ) center $2 ;;
+	top    | Top    ) top    $2 ;;
+	bottom | Bottom ) bottom $2 ;;
+esac
+
+# kak: filetype=sh

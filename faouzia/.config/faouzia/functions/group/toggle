@@ -1,0 +1,28 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="group/toggle $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Toggle group
+
+# Usage: group toggle <group>
+
+D=${1:-$(group)}
+[ $(ls -1 $CURRENT) -eq "$D" ] || current "$D"
+
+if [ -e $GROUP:deactivated/$D ] ;then
+	sirocco group_activate $D . window_focus $(ls -1 $GROUP:focus/$D)
+	rm -rf $GROUP:deactivated/$D
+	for i in $(ls -1 $GROUP/$D) ;do [ -e $HIDDEN/$i ] && rmdir $HIDDEN/$i ;done  # NOTE: activating group unhides manually hidden group windows
+	$NIMCTLR group $D
+else
+	winid=$(ls -1 $GROUP/$D | head -1)
+	[ $winid ] || return
+
+	# BUG: sirocco group_toggle/_deactivate does not deactivate whole group unless the top of the window stack has focus
+	sirocco window_focus $winid . group_deactivate $D
+	mkdir -p $GROUP:deactivated/$D
+fi
+
+# kak: filetype=sh

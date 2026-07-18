@@ -1,0 +1,35 @@
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="sync/group $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ WM tree check
+
+# Usage: sync group
+
+
+# sync physical group state tree against wmctrl data
+vacuum() {
+	ids=$(wmctrl -l | awk '{$2=$2+1; print $2"/"$1}')  # in group/id tuple NOTE: group+1 to match nimctlr ranking
+	for i in $(find $GROUP -maxdepth 2 -type d -name '0x*') ;do
+		echo "$ids" | grep -q ${i#*group/} && continue
+		echo "$(timestamp) sync/group -> remove ${i#*group/} (dated)" >>$WMLOG
+		rmdir $i
+	done
+}
+
+winid=$(pfw 2>/dev/null) || return  # trap empty group at startup
+set -- $(find $GROUP -name $winid | cut -d/ -f6)
+[ "$1" ] || exit 0                  # trap unregisterd (yet) window
+
+# is winid found in more than 1 group?
+if [ $2 ] ;then
+	vacuum
+fi
+[ "$1" = "$(ls -1 $GROUP/current)" ] || { $NIMCTLR group add $1 $winid; group $1; }
+
+exit 0  # NOTE: required to suppress nimctlr reporting $? -> 1
+
+# kak: filetype=sh
+

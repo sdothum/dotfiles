@@ -1,0 +1,145 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="window $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................ Window operations
+
+# Usage: window [--] <msg>   SEE: functions/window
+#               @<delay> <msg>
+#               @[<class> | <name>] [URL] <msg>
+#                    where, --  chained window actions require ignoring intermediate window geometry history
+#                           @   wait for delay time or visible window
+#                           URL indicates the spawned window name is a URL (even if <class> is defined)
+#                           SEE: web/qutebrowser-instance, faouzia/rulerrc
+
+[ "$1" = '--' ] && { nested_window_action=true; shift; }  # shell DSL compatibility
+# HACK: nimctlr dispatcher requires "--" as rest (otherwise would be treated as verb)
+[ "$2" = '--' ] && { nested_window_action=true; set -- $1 $3 $4 $5 $6 $7 $8 $9; }  # shell DSL compatibility
+
+geometry()     { xdotool getwindowgeometry -shell ${1:-$winid}; }  # X Y WIDTH HEIGHT (doesn't include borders)
+set_geometry() { eval $(geometry ${1:-$winid}); }
+cat_geometry() { [ -e $WINFO/$winid ] && eval $(ls -1 $WINFO/$winid) || exit 1; }
+rec_geometry() { rm -rf $WINFO/${1:-$winid}; cp -R $WINFO/tmp $WINFO/${1:-$winid}; }
+
+snapshot_geometry() {
+	rm -rf $WINFO/tmp
+	for x in $(geometry ${1:-$winid}) ;do
+		mkdir -p $WINFO/tmp/$x
+	done
+}
+
+save_original_geometry() {
+	[ -e $WINFO/tmp ] || exit
+	[ -e $WINFO/${1:-$winid} ] || { rec_geometry ${1:-$winid}; exit; }
+	for x in $(geometry ${1:-$winid}) ;do
+		[ $(find $WINFO/tmp -name "$x") ] || { rec_geometry ${1:-$winid}; exit; }
+	done
+}
+
+opposite_side()  { echo $(( width + margin * 2 - (X + WIDTH + border * 2) )); }  # for nearest edge SEE: window snap / stretch
+windowfocus_by() { xdotool search -sync -onlyvisible -$1 "$(escape $xname)" windowactivate; }
+windowfocus_id() { xdotool windowmap $1; xdotool windowraise $1; }
+xname_is()       { xdotool getwindow$1 $winid | grep -q "$xname"; }
+
+# ..................................................................... X Y size
+
+# NOTE: sirocco replacement for wtp (wmutils) avoids async display timing issues
+wtp() {
+	# wtp X Y width height winid (as in wmutils)
+	sirocco window_focus $5 . window_move_absolute $1 $2 . window_resize_absolute $3 $4  # chaining requires faouzia repo updates
+}
+
+# draw <winid> <width> <height> [rotate]
+draw() {
+	snapshot_geometry
+	[ $4 ] && { WID=$3; HGT=$2; } || { WID=$2; HGT=$3; }
+	[ $HGT -gt $HEIGHT ] && { swap=$WID; WID=$HGT; HGT=$swap; }
+	wtp $X $Y $WID $HGT $1
+}
+
+# .................................................................... @<map on>
+
+# do we need to wait longer for window creation?
+if [ "$1" ] && [ -z "${1%%@*}" ] ;then
+	winid=$(pfw 2>/dev/null) || return  # trap empty desktop at startup
+	case $1 in
+		@0x*     ) windowfocus_id ${1#@} ;;
+		@[0-9.]* ) sleep ${1#@}          ;;
+
+		*        )
+			xname="${1#@}"
+			if [ $2 = 'URL' ] ;then
+				case $1 in
+					@*\ * ) windowfocus_by name      ;;
+					@*    ) windowfocus_by classname ;;
+				esac
+				shift
+			elif xname_is classname ;then
+				windowfocus_by classname
+			elif xname_is name ;then
+				windowfocus_by name
+			else
+				return 1  # not expected window
+			fi
+			;;
+	esac
+	winid=$(pfw)
+	shift
+fi
+
+# ................................................................ window action
+
+classname() { xdotool getactivewindow getwindowclassname; exit; }
+
+count() {
+	case $1 in
+		'' ) wmctrl -l 2>/dev/null | wc -l ;;
+	#  *  ) wmctrl -l 2>/dev/null | grep -w "$1" | wc -l ;;  # WARNING: can still be fooled by browser url titles
+		*  ) xdotool search -onlyvisible -classname "$1" | wc -l ;;
+	esac
+	exit
+}
+
+winids() { wmctrl -l 2>/dev/null | cut -d' ' -f1 | sort; }  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
+
+ids() {
+	case $1 in
+		'' ) winids ;;
+		*  ) for i in $(winids) ;do [ "$(xdotool getwindowclassname $i)" = $1 ] && echo $i ;done ;;
+	esac
+	exit
+}
+
+case $1 in
+	class* ) classname ;;
+	count  ) count $2  ;;
+	ids    ) ids   $2  ;;
+esac
+
+msg=$1
+[ $msg ] && shift || usage $0
+if [ -e ${0%/window}/functions/window/$msg ] ;then
+	margin=$($NIMCTLR screen margin)
+	panel=$($NIMCTLR screen panel)
+	top=$($NIMCTLR screen top)             # faouziarc panel height is default bottom gap_width
+	gap=$($NIMCTLR screen gap)
+	# border=$($NIMCTLR screen window_border)
+	W=$(( $($NIMCTLR display width) - margin * 2 ))
+	H=$(( $($NIMCTLR display height) - top * 2 ))
+	recipe -q panel/top && top=$panel  # see draw panel
+
+	winid=$(pfw 2>/dev/null) || return  # trap empty desktop at startup
+	# xdotool windowstate -remove fullscreen $winid  # fullscreen negates any attempted window actions
+	. ${0%/window}/functions/window/$msg $@
+else
+	usage $0 $msg
+fi
+
+[ $nested_window_action ] || save_original_geometry  # for 'window revert' geometry history
+
+sirocco window_focus $winid  # regain focus
+
+# kak: filetype=sh

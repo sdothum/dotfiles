@@ -1,0 +1,21 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="group/close $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Group close
+
+# Usage: group close <group>
+
+for i in $(ls -1 $GROUP/$1) ;do
+	sirocco window_focus $i . window_close
+	$NIMCTLR group remove $i           # cleanup
+done
+
+sirocco group_remove_all_windows $1  # redundancy trap for unknown group juggling corner cases
+rm -rf $GROUP/$1/*
+rm -rf $GROUP:focus/$1/*
+rm -rf $GROUP:deactivated/$1
+
+# kak: filetype=sh

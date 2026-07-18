@@ -1,0 +1,27 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/shift $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .............................................................. Shift by window
+
+# Usage: window shift left | right | up | down (of window edge)
+
+set_geometry  # X Y WIDTH HEIGHT
+snapshot_geometry
+
+case $1 in
+	# left  ) sirocco window_move -$(( WIDTH + border * 2 )) 0  ;;
+	# right ) sirocco window_move  $(( WIDTH + border * 2 )) 0  ;;
+	# up    ) sirocco window_move 0 -$(( HEIGHT + border * 2 )) ;;
+	# down  ) sirocco window_move 0  $(( HEIGHT + border * 2 )) ;;
+	left  | Left  ) sirocco window_move -$WIDTH 0  ;;
+	right | Right ) sirocco window_move  $WIDTH 0  ;;
+	up    | Up    ) sirocco window_move 0 -$HEIGHT ;;
+	down  | Down  ) sirocco window_move 0  $HEIGHT ;;
+esac
+
+sirocco window_focus $winid
+
+# kak: filetype=sh

@@ -1,0 +1,116 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/enlarge $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ...................................................... Step up/down paper size
+
+# Usage: window standard [paper | video] + | -
+
+eval $(xdotool getwindowgeometry -shell $winid)
+area=$(( (${HEIGHT#*=} - gap) * (${WIDTH#*=} - gap) ))
+
+# NOTE: tuned for 3440x1440 monitor (minus desktop margins and gaps)
+paper() {
+	if [ ${HEIGHT#*=} -gt ${WIDTH#*=} ] ;then
+		# heighten only
+		if [ "$1" = '+' ] ;then
+			if   [ $area -ge  891662 ] ;then
+				$NIMCTLR window -- size A4
+			elif [ $area -ge  628425 ] ;then
+				$NIMCTLR window -- size B5
+			elif [ $area -ge  443846 ] ;then
+				$NIMCTLR window -- size A5
+			elif [ $area -ge  313880 ] ;then
+				$NIMCTLR window -- size B6
+			elif [ $area -ge  221923 ] ;then
+				$NIMCTLR window -- size A6
+			else
+				$NIMCTLR window -- size B7
+			fi
+		else
+			if   [ $area -le  313880 ] ;then
+				$NIMCTLR window -- size B7
+			elif [ $area -le  443846 ] ;then
+				$NIMCTLR window -- size A6
+			elif [ $area -le  628425 ] ;then
+				$NIMCTLR window -- size B6
+			elif [ $area -le  891662 ] ;then
+				$NIMCTLR window -- size A5
+			elif [ $area -le 1260630 ] ;then
+				$NIMCTLR window -- size B5
+			else
+				$NIMCTLR window -- size A4
+			fi
+		fi
+	else
+		# widen only
+		if [ "$1" = '+' ] ;then
+			if   [ $area -ge 1782201 ] ;then
+				$NIMCTLR window -- size A3 rotate
+			elif [ $area -ge 1260630 ] ;then
+				$NIMCTLR window -- size B4 rotate
+			elif [ $area -ge  891662 ] ;then
+				$NIMCTLR window -- size A4 rotate
+			elif [ $area -ge  628425 ] ;then
+				$NIMCTLR window -- size B5 rotate
+			elif [ $area -ge  443846 ] ;then
+				$NIMCTLR window -- size A5 rotate
+			elif [ $area -ge  313880 ] ;then
+				$NIMCTLR window -- size B6 rotate
+			elif [ $area -ge  221923 ] ;then
+				$NIMCTLR window -- size A6 rotate
+			else
+				$NIMCTLR window -- size B7 rotate
+			fi
+		else
+			if   [ $area -le  313880 ] ;then
+				$NIMCTLR window -- size B7 rotate
+			elif [ $area -le  443846 ] ;then
+				$NIMCTLR window -- size A6 rotate
+			elif [ $area -le  628425 ] ;then
+				$NIMCTLR window -- size B6 rotate
+			elif [ $area -le  891662 ] ;then
+				$NIMCTLR window -- size A5 rotate
+			elif [ $area -le 1260630 ] ;then
+				$NIMCTLR window -- size B5 rotate
+			elif [ $area -le 1782201 ] ;then
+				$NIMCTLR window -- size A4 rotate
+			elif [ $area -le 2521260 ] ;then
+				$NIMCTLR window -- size B4 rotate
+			else
+				$NIMCTLR window -- size A3 rotate
+			fi
+		fi
+	fi
+}
+
+video() {
+	if [ "$1" = '+' ] ;then
+		if   [ $area -ge 921600 ] ;then
+			$NIMCTLR window -- size 1080p
+		elif [ $area -ge 345600 ] ;then
+			$NIMCTLR window -- size 720p
+		else
+			$NIMCTLR window -- size 480p
+		fi
+	else
+		if   [ $area -le 921600 ] ;then
+			$NIMCTLR window -- size 480p
+		elif [ $area -le 2073600 ] ;then
+			$NIMCTLR window -- size 720p
+		else
+			$NIMCTLR window -- size 1080p
+		fi
+	fi
+}
+
+# scale to media type
+case $1 in
+	paper | Paper ) paper $2 ;;
+	video | Video ) video $2 ;;
+	''            ) video $1 ;;
+esac
+
+# kak: filetype=sh

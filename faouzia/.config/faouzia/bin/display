@@ -1,0 +1,36 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="display $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................... Display resolution
+
+# Usage: display [height | width | info | width_test <=|<|=|>|>=]<width>
+
+# replaced by wmutils
+# display() { xrandr | grep -w connected | sed -r 's/.* ([0-9]*x[0-9]*\+[0-9]\+*[0-9]*) .*/\1/' | awk -F'[ +x]' '{ print $1,$2 }'; }
+
+width()  { wattr w $(lsw -r); }  # display | cut -d' ' -f1
+height() { wattr h $(lsw -r); }  # display | cut -d' ' -f2
+
+width_test() {
+	case $1 in
+		ge | Ge ) [ $(width) -ge $2 ] ;;
+		gt | Gt ) [ $(width) -gt $2 ] ;;
+		ne | Ne ) [ $(width) -ne $2 ] ;;
+		eq | Eq ) [ $(width) -eq $2 ] ;;
+		lt | Lt ) [ $(width) -lt $2 ] ;;
+		le | Le ) [ $(width) -le $2 ] ;;
+	esac
+}
+
+case $1 in
+	height | Height ) height ;;
+	width  | Width  ) width  ;;
+	width* | Width* ) width_test $2 $3 ;;
+	*      ) echo "$(width) $(height)" ;;  # typically, set -- $(display) to reference X Y as $1 $2
+esac
+
+# kak: filetype=sh

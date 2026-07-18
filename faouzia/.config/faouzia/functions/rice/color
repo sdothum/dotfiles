@@ -1,0 +1,14 @@
+# sdothum - 2016 (c) wtfpl
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Conky colorN
+
+usage() { usage: "$(basename $0) <color>"; }
+
+COLORS=$PALETTE/.theme
+
+[ $1 ] && grep "^$1.$(recipe theme/contrast)" $COLORS | cut -d= -f2 || usage
+
+# kak: filetype=sh

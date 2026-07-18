@@ -1,0 +1,47 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="menu/shortcuts $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................... Keybourd shortcuts
+
+# NOTE: in lieu of quikeys no longer working with python3
+
+export COLSEP=⁋  # NOTE: '^' used for kak split regex SEE: menu (picklist)
+
+# NOTE: unique glyphs chosen for single keypress trigger (save for /return first item)
+shortcuts() {
+echo "
+/    ⁋ >/dev/null
+!    ⁋ 2>/dev/null
+&    ⁋ >/dev/null 2>&1
+^    ⁋ [^\\\\n]*
+r    ⁋ grep -E
+b    ⁋ [[:alpha:]]
+f    ⁋ [a-z]
+j    ⁋ [A-Z]
+i    ⁋ [[:digit:]]
+.    ⁋ [[:punct:]]
+w    ⁋ [[:alnum:]]
+s    ⁋ ¯\(°_o)/¯
+x    ⁋ (⊙_☉)
+k    ⁋ K1Y 0K4
+" | picklist
+}
+
+string=$(shortcuts | rmenu 'Insert' -no-custom -case-sensitive -auto-select) || exit
+sirocco window_focus ${winid:-$(pfw)}  # refocus active window before menu display SEE: sxhkdrc
+
+[ "${string%%^*}" ] || { xdotool type ' [^\n]*'; exit; }  # HACK: to avoid shell globbing of '*'
+
+case "${string%% *}" in
+	s | x ) xdotool key space; xdotool type $(echo "$string" | sed "s/.*$SEP//")  # non-latin1 characters
+		;;
+	*     )
+		for i in $(echo "$string" | sed "s/.*$SEP //; s/ /⁋/g; s/./& /g") ;do      # NOTE: to avoid xdotool type keystroke delay
+			[ "$i" = '⁋' ] && xdotool key space || xdotool key $(printf "U%x" "'$i")
+		done ;;
+esac
+
+# kak: filetype=sh

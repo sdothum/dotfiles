@@ -1,0 +1,31 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/search $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Focus action
+
+# Usage: window sync <delay> | <winid>
+#                    class   | name [URL]
+
+windowfocus_by() { xdotool search -sync -onlyvisible -$1 "$(escape $xname)" windowactivate; }
+
+# do we need to wait longer for window creation?
+case $1 in
+	0x*     ) windowfocus_id ${1} ;;
+	[0-9.]* ) sleep ${1}          ;;
+
+	*       )
+		xname="${1}"
+		case $2 in
+			url | URL             ) windowfocus_by name ;;
+			classname | Classname ) windowfocus_by classname ;;
+			class | Class         ) windowfocus_by class ;;
+			name | Name           ) windowfocus_by name ;;
+			*                     ) return 1  # not expected window
+		esac
+		;;
+esac
+
+# kak: filetype=sh

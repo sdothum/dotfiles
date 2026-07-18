@@ -1,0 +1,41 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# to enable tracing, export TRACE=/tmp/$WM.log in .xinitrc
+export PARENT=$(which parent)
+[ $TRACE ] && CHILD="ENV $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Usage: . $(which ENV)
+
+export NIMCTLR=nimctlr  # unset to restore shell DSL
+
+# ................................................................... Filesystem
+
+export WM=$(cat $HOME/.windowmanager)
+export WME=/dev/shm/$WM
+export WMLOG=/tmp/$WM.log
+
+[ -d $WME ] && rm -rf $WME
+mkdir $WME
+
+# ............................................................. Faouzia state
+
+export SHELL=/usr/bin/dash
+export XDG_CONFIG_HOME=$HOME/.config
+export SNAPSHOT=$WME/sync:snapshot
+export GROUP=$WME/group
+export HIDDEN=$WME/hidden
+export WINFO=$WME/window
+export WMSESSION=$HOME/.session/$WM
+export FIFO=$WME/fifo
+
+recipe display $DISPLAY
+
+# ............................................................. Root collections
+
+export IMAGES=$HOME/images
+export PALETTE=$IMAGES/colors
+
+# kak: filetype=sh

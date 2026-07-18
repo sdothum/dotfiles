@@ -1,0 +1,41 @@
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="sync/window $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ WM tree check
+
+# Usage: sync window
+
+record() { rm -rf $1/*; for i in $(window ids) ;do mkdir -p $1/$i ;done }
+
+# sync current group against wmctrl data snapshot
+vacuum() {
+	record $SNAPSHOT  # current winids
+	for i in $(ls -1 $GROUP/$($NIMCTLR group current)) ;do
+		[ -e "$SNAPSHOT/$i" ] && continue
+		echo "$(timestamp) sync/window -> remove $i (orphan)" >>$WMLOG
+		$NIMCTLR group remove $i
+		removals=true
+	done
+
+	# HACK: fix rare dangling hidden window pointer (??) creation sequence as yet undetermined
+	for i in $(ls -1 $HIDDEN) ;do
+		[ -e "$SNAPSHOT/$i" ] && continue
+		echo "$(timestamp) sync/window -> remove $i (hidden)" >>$WMLOG
+		rmdir $HIDDEN/$i
+		removals=true
+	done
+}
+
+# new windows opended or closed?
+[ "$(window ids)" = "$(find $SNAPSHOT -maxdepth 1 -mindepth 1 -type d -printf "%f\n" | sort)" ] || vacuum
+
+$NIMCTLR sync group
+[ $removals ] && refresh_panel
+
+exit 0  # NOTE: required to suppress nimctlr reporting $? -> 1
+
+# kak: filetype=sh
+

@@ -1,0 +1,14 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="toggle/contrast $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................................... Root
+
+[ $(recipe theme/contrast) = dark ] && recipe theme/contrast light || recipe theme/contrast dark
+theme $(recipe theme/contrast)
+toggle picom on
+restore panel
+
+# kak: filetype=sh

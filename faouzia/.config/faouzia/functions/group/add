@@ -1,0 +1,22 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="group/add $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................. Group add window
+
+# Usage: group add <group> [<winid>]
+
+if [ $# -le 2 ] ;then
+	W=${2:-$(pfw 2>/dev/null)} || return  # trap empty group at startup
+
+	mkdir -p $GROUP/$1/$W
+	rm -rf $GROUP:focus/$1/*
+	mkdir -p $GROUP:focus/$1/$W
+else
+	echo "$(timestamp) group/add $@ -> too many arguments" >>$WMLOG
+	exit 1
+fi
+
+# kak: filetype=sh

@@ -1,0 +1,34 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="recipe $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................... faouzia persistent states
+
+usage() { echo "$(basename $0) -[a'dd | d'elete | q'uiet (test) | /'utf-8] <path>
+>       -[c'onfig | e'cho | /'utf-8 (escape)] <path> <value>" | usage:
+	exit 1
+}
+
+case "$1" in
+	-h* ) usage ;;
+	-a  ) mkdir -p "$WMSESSION/$2" ;;                         # add to (without clear) branch
+	-c  ) recipe "$2" || { recipe "$2" "$3"; echo "$3"; } ;;  # return value or set (with echo) otherwise
+	-d  ) rm -rf "$WMSESSION/$2" ;;                           # delete branch
+	-e  ) recipe "$2" "$3" && [ "$3" ] && echo "$3" ;;        # set with echo
+	-q  ) recipe "$2" >/dev/null ;;                           # quiet test
+	-/  ) [ "$3" ] && recipe "$2" "$(echo "$3" | utfslash)" || recipe "$2" | utfslash - ;;  # add utf-8 / return ascii slashes
+	*   ) # set or return branch (or error code)
+		branch="$WMSESSION/$1"
+		if [ "$2" ] ;then
+			rm -rf "$branch"/*  # NOTE: most quote $branch for spaces
+			mkdir -p "$branch/$2"
+		else
+			ls -1 "$branch" 2>/dev/null || return 1  # return wm state
+		fi
+		;;
+esac
+
+# kak: filetype=sh
