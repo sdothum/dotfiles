@@ -90,9 +90,10 @@ set_display() { xrandr $OFF --output $1 --primary --mode $2 --rate 60 --dpi 96 -
 
 interface=${interface:-$(interface dp || interface hdmi)}          # DEBUG: env interface=<interface> x
 case $interface in
-# DP*   ) OFF="--output $(interface hdmi) --off" || unset OFF; RGB='--set "Broadcast RGB" "Full"' ;;  # FOR: multiple interfaces to a single monitor
+	# DP* ) OFF="--output $(interface hdmi) --off" || unset OFF; RGB='--set "Broadcast RGB" "Full"' ;;  # FOR: multiple interfaces to a single monitor
 	DP*   ) OFF="--output $(interface hdmi) --off" || unset OFF ;;  # FOR: multiple interfaces to a single monitor
 	HDMI* ) OFF="--output $(interface dp) --off"   || unset OFF ;;
+	*     ) OFF="--output $(interface dp) --off"   || unset OFF ;;
 esac
 ditto interface "$OFF"
 
@@ -104,7 +105,7 @@ case $(hostname) in
 esac
 # pulseeffects --gapplication-service &
 
-gpu nvidia && { nvidia_fan; nvidia-settings -a CurrentMetaMode='DP-0: 3440x1440 { ViewPortIn=3440x1440, ViewPortOut=3440x1440+0+0, HDMIArgbRange=Full}'; }
+# gpu nvidia && { nvidia_fan; nvidia-settings -a CurrentMetaMode='HDMI-0: 3440x1440 { HDMIArgbRange=Full }'; }
 
 # ............................................................... Window manager
 
@@ -115,10 +116,11 @@ xexec() {
 	pkill -f "fifo"
 	pkill -f "pavucontrol"
 	pkill -f "pulseaudio"
+	# ROOT=$WME               # SEE: faouzia ENV NOTE: only /tmp logs are visible to menu log
 	export ROOT=${ROOT:-/tmp}
 	mv -f  $ROOT/$1.log $ROOT/$1.last.log 2>/dev/null
 	rm -f  $ROOT/$1:*
-	rm -rf $ROOT/$1/*  # windowchef tree
+	rm -rf $ROOT/$1/*         # windowchef tree
 	# enable debug trace by referencing log file
 	export TRACE=$ROOT/$1.log
 
@@ -127,10 +129,12 @@ xexec() {
 	# nvidia-settings -a [gpu:0]/OglVideoSync=0
 	# nvidia-settings -a [gpu:0]/ForceCompositionPipeline=0
 	# nvidia-settings -a [gpu:0]/ForceFullCompositionPipeline=0
-	nvidia-settings -a "SyncToVBlank=0" -a "AllowFlipping=0" -a "ConformantTextureClamping=0" -a "GLShowGraphicsVisualIndicator=0"
+	nvidia-settings -a CurrentMetaMode="DP-0: 3440x1440" -a "SyncToVBlank=0" -a "AllowFlipping=0" -a "GLShowGraphicsVisualIndicator=0"
 
 	# exec ck-launch-session dbus-launch --sh-syntax --exit-with-x11 $1 >$ROOT/$1.log 2>&1
-	exec $1 >$ROOT/$1.log 2>&1
+	[ -e /tmp/ruler.log ] && ln -s /tmp/ruler.log $ROOT/$1.log
+	exec $1 >>$ROOT/$1.log 2>&1
+	echo "$1 exited: $?" >>$ROOT/$1.log
 }
 
 setpath() {
@@ -150,14 +154,13 @@ case $wm in
 	setpath $HOME/.config/2bwm cmd
 	. $(which ENV)
 	sxhkd -c $HOME/.config/2bwm/sxhkdrc &
-	ruler -i -c $HOME/.config/2bwm/rulerrc &
+	ruler -i -s /usr/bin/dash -c $HOME/.config/2bwm/rulerrc &
 	$TERM &
 	# autostart the panel in the terminal window (delay for celeron cpu)
 	(sleep 0.15; autostart >/tmp/2bwm.log 2>&1) &
 	xexec 2bwm ;;
 
 aw* ) xexec awesome ;;
-
 be* )
 	setpath $HOME/.config/berry
 	xwallpaper --zoom $HOME/images/default
@@ -179,8 +182,21 @@ bu* )
 	xexec budgie-session ;;
 
 ci* ) xexec gnome-session-cinnamon ;;
-go* ) xexec goomwwm ;;
 dw* ) xexec dwm ;;
+gn* ) xexec gnome-session ;;
+go* ) xexec goomwwm ;;
+
+fa* )
+	setpath $HOME/.config/faouzia
+	. $(which ENV)
+
+	tvover ${interface:-HDMI-0} 3440x14440
+	sxhkd -c $HOME/.config/faouzia/sxhkdrc >/tmp/sxhkd.log &
+	rm -f /tmp/ruler.log
+	touch /tmp/ruler.log
+	ruler -i -s /usr/bin/dash -c $HOME/.config/faouzia/rulerrc 2>>/tmp/ruler.log &
+	# $TERM &  # NOTE: faouzia cannot properly manage windows opened before it!
+	xexec faouzia -c $HOME/.config/faouzia/faouziarc ;;
 
 he* )
 	setpath $HOME/.config/herbstluftwm
@@ -191,7 +207,6 @@ he* )
 	$TERM &
 	xexec herbstluftwm ;;
 
-gn* ) xexec gnome-session ;;
 i3  ) xexec i3 ;;
 kd* ) xexec startkde ;;
 le* ) xexec leftwm ;;
@@ -205,18 +220,18 @@ raz*) xexec razor-session ;;
 sp* ) xexec spectrwm ;;
 st* ) xexec stumpwm ;;
 su* ) xexec subtle ;;
-wmi*) xexec wmii ;;
 
 wi* )
 	setpath $HOME/.config/windowchef
 	. $(which ENV)
 
-tvover ${interface:-HDMI-0} 3440x14440
+	tvover ${interface:-HDMI-0} 3440x14440
 	sxhkd -c $HOME/.config/windowchef/sxhkdrc &
-	ruler -i -c $HOME/.config/windowchef/rulerrc &
-	# $TERM &              # NOTE: windowchef cannot properly manage windows opened before it!
+	ruler -i -s /usr/bin/dash -c $HOME/.config/windowchef/rulerrc &
+	# $TERM &  # NOTE: windowchef cannot properly manage windows opened before it!
 	xexec windowchef -c $HOME/.config/windowchef/windowchefrc ;;
 
+wmi*) xexec wmii ;;
 wm* )
 	setpath $HOME/.config/wmutils
 	xsetroot -solid grey20
