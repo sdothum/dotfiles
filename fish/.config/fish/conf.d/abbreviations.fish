@@ -182,6 +182,7 @@ abbr a1 'a --depth 1'
 abbr a2 'a --depth 2'
 abbr a3 'a --depth 3'
 abbr aa 'clear; a'
+abbr af 'a -F'
 abbr f 'find -iname'
 abbr fi 'find'
 abbr sf 'sudo find -iname'
@@ -198,14 +199,17 @@ abbr w 'which'
 
 # ...................................................................... Desktop
 
+abbr au 'rlwrap -Nn aurora'
+abbr av 'aurora -verbose'
 abbr cl 'clear;  setterm -cursor on'
 abbr cursor 'setterm -cursor on'
-abbr gaps 'rlwrap -Nn gaps; restore panel'  # (??) recover panel lost by gaps
+abbr gaps 'rlwrap -Nn gaps'
 abbr h: 'ls -l /tmp/herbstluftwm:*'
 abbr hc 'herbstclient'
 abbr herbstluftwm ". $HOME/.config/herbstluftwm/config/ENV"
 abbr L 'chefls'
 abbr qkss 'qk stop; qk start'
+abbr xc 'xclip -selection clipboard'
 abbr X x
 
 # ......................................................................... Edit
@@ -282,16 +286,18 @@ abbr zz 'z -'
 
 # ........................................................................... AI
 
-abbr \? 'chatgpt'
-abbr \?\? 'chatgpt -n'  # new conversation
-abbr \@ 'aichat'
-abbr \@s 'aichat -r shell'
-abbr \@c 'aichat -r c'
-abbr \@g 'aichat -r go'
-abbr \@j 'aichat -r julia'
-abbr \@p 'aichat -r python'
-abbr \@r 'aichat -r ruby'
-abbr \@R 'aichat -r rust'
+# abbr \? 'rlwrap chatgpt'
+# abbr \?\? 'rlwrap chatgpt -n'  # new conversation
+abbr \?  'rlwrap tgpt -i'
+abbr \?c 'rlwrap tgpt -ic'       # code
+abbr \@  'rlwrap aichat'
+abbr \@s 'rlwrap aichat -r shell'
+abbr \@c 'rlwrap aichat -r c'
+abbr \@g 'rlwrap aichat -r go'
+abbr \@j 'rlwrap aichat -r julia'
+abbr \@p 'rlwrap aichat -r python'
+abbr \@r 'rlwrap aichat -r ruby'
+abbr \@R 'rlwrap aichat -r rust'
 
 # ................................................................... calc / hex
 

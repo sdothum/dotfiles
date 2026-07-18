@@ -78,7 +78,7 @@ and set -x http_proxy $HTTP_PROXY
 
 set -x XDG_DOWNLOAD_DIR /net/downloads/http
 set -x NNTPSERVER news.sunnyusenet.com
-set -x NO_PROXY '*'                       # required by webkit browsers to access gmail
+set -x NO_PROXY '*'                        # required by webkit browsers to access gmail
 set -x WEBKIT_DISABLE_COMPOSITING_MODE  1  # prevent blank web pages with nvidia
 
 # ..................................................................... Defaults
@@ -113,7 +113,7 @@ set -x PYTHONPATH '/usr/lib/python3.12'
 set -x RI '--format ansi --no-pager'
 
 # for xmonad onhost
-set -x HOST (hostname)
+# set -x HOST (hostname)
 # commom configurations (dotfiles)
 set -x STOW $HOME/stow
 
