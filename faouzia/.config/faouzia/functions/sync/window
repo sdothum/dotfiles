@@ -8,7 +8,7 @@
 
 # Usage: sync window
 
-record() { rm -rf $1/*; for i in $(window ids) ;do mkdir -p $1/$i ;done }
+record() { rm -rf $1/*; for i in $(sirocco window ids 2>>$WMLOG) ;do mkdir -p $1/$i ;done }
 
 # sync current group against wmctrl data snapshot
 vacuum() {
@@ -30,7 +30,7 @@ vacuum() {
 }
 
 # new windows opended or closed?
-[ "$(window ids)" = "$(find $SNAPSHOT -maxdepth 1 -mindepth 1 -type d -printf "%f\n" | sort)" ] || vacuum
+[ "$(sirocco window ids 2>>$WMLOG)" = "$(find $SNAPSHOT -maxdepth 1 -mindepth 1 -type d -printf "%f\n" | sort)" ] || vacuum
 
 $NIMCTLR sync group
 [ $removals ] && refresh_panel
