@@ -271,6 +271,7 @@
 **/vimb/search
 **/vimb/vimb.socket
 !**/.vim/config
+**/.vim/config/timestamp
 **/.vim/job
 **/.vim/.netrwhist
 **/.vim/plugged
