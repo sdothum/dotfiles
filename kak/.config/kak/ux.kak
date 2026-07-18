@@ -11,6 +11,15 @@
 set-option global tabstop 3
 set-option global indentwidth 3
 
+# Configures Nim to strictly use 2 hard spaces and expand the Tab key
+hook global WinSetOption filetype=nim %{
+    set window tabstop 2
+    set window indentwidth 2
+    
+    # This hook instantly converts the tab character into hard spaces
+    hook window InsertChar \t %{ exec -draft -itersel h@ }
+}
+
 addm %{ usermode f : map global select '#' ': enter-user-mode format<ret>' -docstring "format user-mode" }
 map global normal '#' ': enter-user-mode format<ret>'
 
@@ -66,6 +75,8 @@ map global insert <s-tab> '<a-;><a-lt>'  # shift tab deindents
 # ......................................................................... Line
 
 map global insert <a-ret> '<esc><a-o>ji' -docstring 'insert non-comment line below cursor'
+map global insert <a-j> '<esc><a-j>i'    -docstring 'join selected lines'
+map global insert <a-J> '<esc><a-J>i'    -docstring 'join selected lines (and select inserted spaces)'
 map global normal C       '<a-l>di'      -docstring 'replace to end of line'
 map global normal D       '<a-l>d'       -docstring 'delete to end of line'  # BUG: plugin kakboard interferes with yank buffer
 map global normal <a-D>   '<a-l><a-d>'   -docstring 'delete to end of line (not yanking)'

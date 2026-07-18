@@ -145,6 +145,18 @@ bundle hop https://git.sr.ht/~hadronized/hop.kak %{
 	cargo install hop-kak
 }
 
+# ...................................................................... kakpipe
+
+bundle kakpipe https://github.com/eburghar/kakpipe.git %{
+	require-module kakpipe
+
+	# HACK: using alpha subsort to overcome "P,p" sort order (cause unknown)
+	addm %{ test p1 : map global buffer | ': kakpipe '    -docstring "pipe      —— *scratch*,(background)" }
+	addm %{ test p2 : map global buffer & ': kakpipe-bg ' -docstring "pipe      —— *scratch*,(background)" }
+} %{
+	cargo install --path . --root ~/.local
+}
+
 # .............................................................. lua interpreter
 
 bundle luar https://github.com/gustavo-hms/luar.git %{
@@ -200,19 +212,7 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 	addm %{ meta b : map global buffer <ret> ': sync<ret>: buffers<ret>' -docstring 'buffers'      }
 	addm %{ goto c : map global buffer c     ': symbols<ret>'            -docstring 'ctag symbols' }
 	addm %{ goto f : map global buffer f     ': lines<ret>'              -docstring 'fuzzy goto'   }
-	addm %{ file 1 : map global buffer e     ': sync<ret>: files<ret>'   -docstring 'edit file'    }
-}
-
-# ...................................................................... kakpipe
-
-bundle kakpipe https://github.com/eburghar/kakpipe.git %{
-	require-module kakpipe
-
-	# HACK: using alpha subsort to overcome "P,p" sort order (cause unknown)
-	addm %{ test p1 : map global buffer | ': kakpipe '    -docstring "pipe      —— *scratch*,(background)" }
-	addm %{ test p2 : map global buffer & ': kakpipe-bg ' -docstring "pipe      —— *scratch*,(background)" }
-} %{
-	cargo install --path . --root ~/.local
+	addm %{ find 1 : map global buffer e     ': sync<ret>: files<ret>'   -docstring 'edit file'    }
 }
 
 # .................................................................. Reasymotion
@@ -267,9 +267,17 @@ bundle kakoune-sudo-write https://github.com/occivink/kakoune-sudo-write.git %{
 
 bundle kak-tree-sitter https://github.com/phaazon/kak-tree-sitter.git %{
 	nop evaluate-commands %sh{ kak-tree-sitter -d -k --init $kak_session -s }
+
+	# hook global WinSetOption filetype=nim %{
+	# 	# Remove default regex highlighters if needed
+	# 	tree-sitter-enable-window
+	# }
+
 } %{
 	cargo install kak-tree-sitter
 	cargo install ktsctl
+
+	ktsctl sync nim
 }
 
 # ......................................................................... twos

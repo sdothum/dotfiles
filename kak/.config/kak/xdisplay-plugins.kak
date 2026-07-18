@@ -28,7 +28,7 @@ bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 
 	hook global KakEnd .* lsp-exit
 
-	hook global WinSetOption filetype=(c|cpp|go|javascript|latex|lua|markdown|perl|python|ruby|rust|toml|typescript) %{
+	hook global WinSetOption filetype=(c|cpp|go|javascript|latex|lua|markdown|nim|perl|python|ruby|rust|toml|typescript) %{
 		lsp-enable-window
 		# lsp-inlay-diagnostics-enable global  # too visually noisy (and truncated at window width)
 		lsp-auto-hover-buffer-enable
@@ -40,6 +40,11 @@ bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 		map global object k     '<a-semicolon>lsp-object Class Interface Struct<ret>'        -docstring 'LSP class interface or struct'
 		map global object d     '<a-semicolon>lsp-diagnostic-object --include-warnings<ret>' -docstring 'LSP errors and warnings'
 		map global object D     '<a-semicolon>lsp-diagnostic-object<ret>'                    -docstring 'LSP errors'
+	}
+
+	hook global WinSetOption filetype=nim %{
+	    lsp-enable-window
+	    lsp-semantic-tokens-enable-window
 	}
 
 	addm %{ usermode l : map global select L ': enter-user-mode lsp<ret>' -docstring "LSP mode" }

@@ -6,7 +6,7 @@
 # Modal UI
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# ............................................................. Te.kakrm colorscheme
+# ............................................................. Term colorscheme
 
 bundle-theme duochrome https://github.com/sdothum/duochrome.kak.git
 # modal colorscheme switcher
