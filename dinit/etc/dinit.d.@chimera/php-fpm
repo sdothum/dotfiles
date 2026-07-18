@@ -1,0 +1,7 @@
+type            = process
+command         = /usr/bin/php-fpm8.3 --nodaemonize
+smooth-recovery = true
+logfile         = /var/log/dinit.d/php-fpm.log
+depends-on      = network.target
+before          = login.target
+

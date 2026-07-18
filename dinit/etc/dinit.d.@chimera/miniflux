@@ -1,7 +1,7 @@
 type            = process
-# command       = /etc/dinit.d/scripts/miniflux
-command         = /usr/bin/miniflux.app -c /etc/miniflux.conf
-env-file        = /etc/dinit.d/config/miniflux.env
+command         = /etc/dinit.d/scripts/miniflux
+# command       = /usr/bin/miniflux.app -c /etc/miniflux.conf
+# env-file      = /etc/dinit.d/config/miniflux.env
 run-as          = _miniflux
 smooth-recovery = yes
 logfile         = /var/log/dinit.d/miniflux.log

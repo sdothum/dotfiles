@@ -1,0 +1,5 @@
+type       = process
+command    = /usr/bin/socklog unix /dev/log
+restart    = true
+logfile    = /var/log/dinit.d/socklog.log
+depends-on = boot

@@ -1,0 +1,5 @@
+type       = process
+command    = /usr/bin/nanologd
+restart    = true
+depends-on = socklog
+logfile    = /var/log/dinit.d/nanologd.log

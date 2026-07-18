@@ -3,7 +3,9 @@
 
 # export CONTENT_SECURITY_POLICY="default-src 'self'; font-src 'self'; style-src 'self' 'unsafe-inline';"
 # export LISTEN_ADDR=0.0.0.0:8080
+# export RSS_BRIDGE_URL=http://localhost:8080/
 export BASE_URL=http://10.1.0.11
+export USER_AGENT="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 MyMinifluxBot/1.0"
 
 /usr/bin/miniflux.app -c /etc/miniflux.conf
 

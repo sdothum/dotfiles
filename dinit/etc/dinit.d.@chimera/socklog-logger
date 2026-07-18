@@ -1,0 +1,6 @@
+type       = process
+command    = /usr/bin/svlogd -tt /var/log/socklog
+restart    = true
+depends-on = socklog
+logfile    = /var/log/dinit.d/socklog-logger.log
+
