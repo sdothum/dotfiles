@@ -106,6 +106,22 @@ add-highlighter global/ regex \h+$ 0:Trailing
 # Statusline
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+# ................................................................... Word count
+
+declare-option -hidden str word_count ']'
+
+define-command word-count -hidden %{
+    set-option buffer word_count %sh{
+        echo "eval -no-hooks -verbatim write $kak_response_fifo" >$kak_command_fifo
+        printf "%s%s]" ${kak_opt_colsep} $(wc --words <$kak_response_fifo)
+    }
+}
+
+hook global WinSetOption filetype=markdown %{
+    hook buffer InsertIdle .* %{ word-count }
+    hook buffer NormalIdle .* %{ word-count }
+}
+
 # ..................................................................... Kak info
 
 # a minimalist statusline of "mode - column [utf-8] - filename [context]"
@@ -121,7 +137,7 @@ set-option global modelinefmt '
 %sh{ capslock && echo "—CAPS— ${kak_opt_spacer}" }
 {{mode_info}}
 %opt{spacer}
-%val{buf_line_count}%opt{colsep}%val{cursor_char_column}%sh{ [ "$kak_cursor_char_value" -lt 32 ] && [ "$kak_cursor_char_value" -ne 10 ] || [ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value" }
+%val{cursor_line}%opt{colsep}%val{cursor_display_column}%sh{ [ "$kak_cursor_char_value" -lt 32 ] && [ "$kak_cursor_char_value" -ne 10 ] || [ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value" }  [%val{buf_line_count}%opt{word_count}
 %opt{spacer}
 %val{bufname}{{context_info}}
 [%sh{ [ -z "$kak_opt_filetype" ] && echo "--" || echo "$kak_opt_filetype" }]
