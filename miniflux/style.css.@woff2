@@ -1165,7 +1165,7 @@ article .item-meta {
 	}
 
 	.item-meta .item-meta-icons * {
-		margin-top: 2.5px !important;
+		margin-top: 2.75px !important;
 	}
 
 	.item-meta .item-meta-info {
@@ -1286,8 +1286,10 @@ article .item-meta {
 		display: none !important;
 	}
 
-	article.item.category-item .item-meta-info * {
-		margin: -10px 0 5px !important;
+	article.item.category-item .item-meta .item-meta-info * {
+		display: block !important;
+		margin: -2px 0 10px !important;
+		padding: 0 !important;
 	}
 }
 
