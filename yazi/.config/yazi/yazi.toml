@@ -3,7 +3,8 @@
 "$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
 
 [mgr]
-ratio           = [ 3, 10, 7 ]
+# ratio         = [ 3, 4, 9 ]
+ratio           = [ 3, 5, 11 ]
 sort_by         = "alphabetical"
 sort_sensitive  = false
 sort_reverse 	 = false
@@ -193,6 +194,21 @@ previewers = [
 	{ mime = "null/*",                                                                                      run = "null" },
 	# Fallback
 	{ url = "*",                                                                                            run = "file" },
+]
+prepend_previewers = [
+	{ url = "*.csv",    run = "rich-preview"},   # for csv files
+	{ url = "*.md",     run = "rich-preview" },  # for markdown (.md) files
+	{ url = "*.rst",    run = "rich-preview"},   # for restructured text (.rst) files
+	{ url = "*.ipynb",  run = "rich-preview"},   # for jupyter notebooks (.ipynb)
+	{ url = "*.json",   run = "rich-preview"},   # for json (.json) files
+	{ url = "*.c",      run = "rich-preview"},
+	{ url = "*.c++",    run = "rich-preview"},
+	{ url = "*.css",    run = "rich-preview"},
+	{ url = "*.lua",    run = "rich-preview"},
+	{ url = "*.nim",    run = "rich-preview"},
+	{ url = "*.python", run = "rich-preview"},
+	{ url = "*.sh",     run = "rich-preview"},
+	{ url = "*.toml",   run = "rich-preview"},
 ]
 
 [input]

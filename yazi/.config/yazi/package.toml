@@ -33,5 +33,10 @@ use = "yazi-rs/plugins:smart-filter"
 rev = "68f7d48"
 hash = "407d19bc4fb46eff5fa8ff8337644847"
 
+[[plugin.deps]]
+use = "AnirudhG07/rich-preview"
+rev = "7d616ad"
+hash = "d64feec9761392cbc250d199ab4b8a3a"
+
 [flavor]
 deps = []
