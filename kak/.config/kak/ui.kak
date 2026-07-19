@@ -125,7 +125,8 @@ hook global WinSetOption filetype=markdown %{
 # ..................................................................... Kak info
 
 # a minimalist statusline of "mode - column [utf-8] - filename [context]"
-declare-option str spacer '  '
+declare-option str spacer "  "
+# declare-option str spacer " {ModelineSeparator}{StatusLineValue} "
 if-else %{ [ "$kak_opt_ruler" = " " ] } %{
 	declare-option str colsep ":"
 } %{
@@ -134,14 +135,14 @@ if-else %{ [ "$kak_opt_ruler" = " " ] } %{
 
 # display utf-8 value for non-latin characters (except U+000a linefeed) NOTE: continuation lines insert a space into the modeline
 set-option global modelinefmt '
-%sh{ capslock && echo "—CAPS— ${kak_opt_spacer}" }
+{ModelineSeparator}%sh{ capslock && echo "[CAPS] ${kak_opt_spacer}" }{StatusLineValue}
 {{mode_info}}
-%opt{spacer}
-%val{cursor_line}%opt{colsep}%val{cursor_display_column}%sh{ [ "$kak_cursor_char_value" -lt 32 ] && [ "$kak_cursor_char_value" -ne 10 ] || [ "$kak_cursor_char_value" -gt 126 ] && printf " U+%04x" "$kak_cursor_char_value" }  [%val{buf_line_count}%opt{word_count}
-%opt{spacer}
+{ModelineSeparator}%opt{spacer}{StatusLineValue}
+%val{cursor_line}%opt{colsep}%val{cursor_display_column}%sh{ [ "$kak_cursor_char_value" -lt 32 ] && [ "$kak_cursor_char_value" -ne 10 ] || [ "$kak_cursor_char_value" -gt 126 ] && printf "  U+%04x" "$kak_cursor_char_value" }  [%val{buf_line_count}%opt{word_count}
+{ModelineSeparator}%opt{spacer}{StatusLineValue}
 %val{bufname}{{context_info}}
 [%sh{ [ -z "$kak_opt_filetype" ] && echo "--" || echo "$kak_opt_filetype" }]
-%opt{spacer}
+{ModelineSeparator}%opt{spacer}{StatusLineValue}
 %val{session}(%sh{ echo "$kak_client" | sed -r "s/[^0-9]*(.*)/\1/" })
 '
 
