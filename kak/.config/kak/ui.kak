@@ -125,8 +125,8 @@ hook global WinSetOption filetype=markdown %{
 # ..................................................................... Kak info
 
 # a minimalist statusline of "mode - column [utf-8] - filename [context]"
-declare-option str spacer "  "
-declare-option str caps_spacer ''  # SEE: colorscheme.kak capslock-check
+declare-option str spacer      "  "
+declare-option str caps_spacer " "  # SEE: colorscheme.kak capslock-check
 # declare-option str spacer " {ModelineSeparator}{StatusLineValue} "
 if-else %{ [ "$kak_opt_ruler" = " " ] } %{
 	declare-option str colsep ":"
