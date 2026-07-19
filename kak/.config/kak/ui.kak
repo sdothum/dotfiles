@@ -136,7 +136,7 @@ if-else %{ [ "$kak_opt_ruler" = " " ] } %{
 
 # display utf-8 value for non-latin characters (except U+000a linefeed)
 # NOTE: continuation lines insert a space into the modeline
-# NOTE: %val{bufname} displays path/bufname when unfocused secondary client
+# NOTE: %val{bufname} displays path/bufname when unfocused secondary client, hence, ${kak_bufname##*/}
 
 set-option global modelinefmt '
 %sh{ capslock && echo "[CAPS]" }
