@@ -23,6 +23,7 @@ while : ;do
 	stty cbreak
 	IFS= read -rn1 CONTINUE
 	stty sane
+	echo -n $CONTINUE
 	eval $clear
 	case $CONTINUE in
 		''   ) exit 0 ;;

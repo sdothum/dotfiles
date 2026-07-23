@@ -32,6 +32,7 @@ else
 		printf "${TEAL}copy ${RED}[No]${NOCOLOR}/abort / ${ORANGE}L${NOCOLOR}eft->right / ${ORANGE}R${NOCOLOR}ight->left / ${ORANGE}S${NOCOLOR}wap : "
 		# using bash's extended read functionality (over dash) for single character input
 		IFS= read -rn1 CONTINUE
+		echo -n $CONTINUE
 		echo
 		case $CONTINUE in
 			''   ) exit 2 ;;

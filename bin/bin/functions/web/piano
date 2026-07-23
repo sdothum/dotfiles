@@ -31,7 +31,7 @@ case $1 in
 		pidwait -f ".*${PIANO}.*"
 		mpc play
 		;;
-	toggle ) invert_map -n "$NANO" ;;
+	toggle ) nimctlr window toggle --name "$NANO"     ;;
 	stop   ) xdotool search --name "$NANO" windowkill ;;
 	stream ) xdotool search -name "$NANO" getwindowname | sed "s/ | $NANO//" ;;
 esac

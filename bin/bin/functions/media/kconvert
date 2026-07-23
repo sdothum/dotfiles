@@ -9,7 +9,7 @@
 # Usage: [dropcap=<class>] kconvert [<format>|css=<css>]* [<epub|azw3|mobi>]
 
 option=noformat
-set -x
+
 # SEE: econvert
 while : ;do
 	case "$1" in

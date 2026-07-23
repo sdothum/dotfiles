@@ -28,10 +28,17 @@ case $YAZIBG in
 	*      ) cp $THEME:dark  $THEME ;;
 esac
 
+trash() {
+	trash=$(du -h -d0 /net/.Trash-$(id -u)/ | sed 's/\s+/\t/')
+	subvol=$(df -h /net | tail -1 | sed -r 's/.*\s([^ ]*)\s([^ ]*)$/\1\t\2/')
+	sleep 1.15  # NOTE: delay notify to prevent being cleared from yazi rule group notification
+	notify critical 10 Trash "$subvol\n$trash"
+}
+
 export TMUXCONF=$HOME/.tmux.conf  # SEE: tmux_session
 case $1 in
-	ROOT    ) tmux_session class=yazi-root 'yazi-root' sudo -E $YAZI $TAB ;;
-	TMUX    ) tmux_session class=yazi      'yazi'              $YAZI $TAB ;;
+	ROOT    ) tmux_session class=yazi-root 'yazi-root' sudo -E $YAZI $TAB; trash ;;
+	TMUX    ) tmux_session class=yazi      'yazi'              $YAZI $TAB; trash ;;
 	XFTP    ) term xftp class=xftp /bin/yazi /net/downloads/http ;;
 	''      ) $termyazi             $YAZI .            ;;
 	WAIT    ) shift; $termyazi WAIT $YAZI "${MTP:-$@}" ;; # don't pass WAIT in command string

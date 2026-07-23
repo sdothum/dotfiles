@@ -20,6 +20,7 @@ see $DOTFILES" | usage:
 
 # list of folders under stow root
 DOTFILES=$(dirname $0)/.dotfiles:folders
+RSYNC=$(dirname $0)/.dotfiles:rsync
 MESSAGES=/tmp/dotfiles:messages
 UPTODATE="nothing to commit, working tree clean"
 
@@ -38,7 +39,8 @@ find . -name '*.syncthing.hsts.tmp' -exec rm {} \;
 sudo find . -name '.uuid' -exec rm {} \;
 find -regex '.*\/\.[^\]+\.kak\.[^.][^.][^.][^.][^.][^.]' -exec mv -v {} /tmp/ \;
 
-for i in /etc/dinit.d.@* ;do /usr/bin/rsync -avq --delete $i $STOW/dinit/etc/ ;done
+# for i in /etc/dinit.d.@* ;do /usr/bin/rsync -avq --delete $i $STOW/dinit/etc/ ;done
+[ -e $RSYNC ] && . $RSYNC
 
 init() {
 	git init

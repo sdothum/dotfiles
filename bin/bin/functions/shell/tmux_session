@@ -13,13 +13,11 @@ TMUXCONF=${TMUXCONF:-$HOME/.tmux.conf}
 [ "${1#class=}" != "$1" ] && { class=$1; shift; }
 [ $1   ] && { export TMUX=$1; shift; } || export TMUX=tmux
 [ "$1" = aerc ] && export MONOFONT=Iosevka-proof
-# force rox terminal sessions to open in current rox directory
-[ $TMUX = roxterm ] && pkill -f ' -s roxterm'  # <space> -s, as pattern 
 
 if tmux -S /tmp/tmux:$TMUX has-session -t $TMUX ;then
-	term ${TMUX} $class tmux -S /tmp/tmux:$TMUX attach -d -t $TMUX 2>/dev/null
+	term ${TMUX} class=${class:-tmux} tmux -S /tmp/tmux:$TMUX attach -d -t $TMUX 2>/dev/null
 else
-	term ${TMUX} $class "FORTUNE=$TMUX" tmux -f $TMUXCONF -S /tmp/tmux:$TMUX "new-session -n '' -s $TMUX $@"
+	term ${TMUX} class=${class:-tmux} "FORTUNE=$TMUX" tmux -f $TMUXCONF -S /tmp/tmux:$TMUX "new-session -n '' -s $TMUX $@"
 	xsync $TMUX
 	tmux -S /tmp/tmux:$TMUX rename-window "$1*"
 fi

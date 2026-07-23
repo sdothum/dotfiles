@@ -1,0 +1,7 @@
+#!/usr/bin/dash
+
+# dinit on void
+for i in /etc/dinit.d.@* ;do /usr/bin/rsync -avq --delete $i $STOW/dinit/etc/ ;done
+
+# working wm project
+/usr/bin/rsync -avq --delete --exclude='.git' /home/depot/CATLG/x11/faouzia/ $STOW/faouzia/wm/
