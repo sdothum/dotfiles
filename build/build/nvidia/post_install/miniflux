@@ -55,7 +55,7 @@ sleep 5  # wait for database to come back up
 # HACK: user/password changed from postgres/secret (on miniflux documentation)
 echo "
 BASE_URL=http://10.1.0.11
-BATCH_SIZE=1
+BATCH_SIZE=6
 CLEANUP_ARCHIVE_READ_DAYS=4
 CLEANUP_ARCHIVE_UNREAD_DAYS=4
 CLEANUP_FREQUENCY_HOURS=1
