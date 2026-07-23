@@ -4,7 +4,7 @@
 
 [mgr]
 # ratio         = [ 3, 4, 9 ]
-ratio           = [ 3, 5, 11 ]
+ratio           = [ 3, 5, 10 ]
 sort_by         = "alphabetical"
 sort_sensitive  = false
 sort_reverse 	 = false
