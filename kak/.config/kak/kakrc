@@ -150,10 +150,8 @@ declare-option bool refreshed false
 hook global WinCreate ^[^*].* %{  # ignore scratch buffers NOTE: will cause peneira commands to fail
 	if %{ [ $kak_opt_refreshed = 'false' ] } %{
 		set-option global refreshed true
-		nop %sh{
-			# move cursor for HACK: refresh stale cursorline at startup
-			[ "$(xdotool getactivewindow getwindowclassname)" != 'aerc' ] && xdotool key h # avoid polluting aerc "To" field
-		}
+		# move cursor for HACK: refresh stale cursorline at startup BUT: avoid polluting aerc "To" field
+		nop %sh{ [ "$(xdotool getactivewindow getwindowclassname)" != 'aerc' ] && xdotool key h }
 	}
 }
 
