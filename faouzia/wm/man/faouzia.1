@@ -1,0 +1,42 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "FAOUZIA" "1" "June 2026" "Faouzia" "Faouzia Manual"
+.
+.SH "NAME"
+\fBfaouzia\fR \- A stacking window cooker
+.
+.SH "SYNOPSIS"
+\fBfaouzia\fR [\-hv] [\-c \fIconfig_path\fR]
+.
+.SH "DESCRIPTION"
+\fBfaouzia\fR is a stacking window manager that doesn\'t handle keyboard or pointer inputs\. It is controlled and configured by \fBsirocco\fR\.
+.
+.P
+At startup, \fBfaouzia\fR runs a script located at \fB$XDG_CONFIG_HOME/faouzia/faouziarc\fR (\fB$XDG_CONFIG_HOME\fR is usually \fB~/\.config\fR)\. The path of the configuration file can be overridden with the \fB\-c\fR flag\.
+.
+.SH "OPTIONS"
+.
+.TP
+\fB\-h\fR
+Print usage\.
+.
+.TP
+\fB\-v\fR
+Print version information\.
+.
+.TP
+\fB\-c\fR \fIconfig_path\fR
+Load script from \fIconfig_path\fR instead of \fB$XDG_CONFIG_HOME/faouzia/faouziarc\fR\.
+.
+.SH "SEE ALSO"
+sirocco(1), sxhkd(1), xinit(1)
+.
+.SH "REPORTING BUGS"
+\fBfaouzia\fR issue tracker: https://github\.com/tudurom/faouzia/issues
+.
+.SH "AUTHOR"
+Tudor Roman \fB<tudurom at gmail dot com>\fR
+.
+.P
+The default color scheme that comes with \fBfaouzia\fR is 5725 \fIhttps://github\.com/dkeg/crayolo#5725\fR by dkeg\.

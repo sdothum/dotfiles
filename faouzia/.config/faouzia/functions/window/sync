@@ -1,5 +1,5 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="window/search $@" . $PARENT
+[ $TRACE ] && CHILD="window/sync $@" . $PARENT
 
 # Faouzia
 # ══════════════════════════════════════════════════════════════════════════════
@@ -7,25 +7,24 @@
 # ................................................................. Focus action
 
 # Usage: window sync <delay> | <winid>
-#                    class   | name [URL]
+#                    <class> | --name <name | URL>
 
-windowfocus_by() { xdotool search -sync -onlyvisible -$1 "$(escape $xname)" windowactivate; }
+timeout=500  # centiseconds
+
+window_sync() {
+	for i in $(seq 1 $timeout) ;do
+		sirocco window focus $(nimctlr window ids $2 "$(escape $1)") 2>/dev/null && exit 0
+		sleep 0.01
+	done
+	exit 1
+}
 
 # do we need to wait longer for window creation?
 case $1 in
-	0x*     ) windowfocus_id ${1} ;;
-	[0-9.]* ) sleep ${1}          ;;
-
-	*       )
-		xname="${1}"
-		case $2 in
-			url | URL             ) windowfocus_by name ;;
-			classname | Classname ) windowfocus_by classname ;;
-			class | Class         ) windowfocus_by class ;;
-			name | Name           ) windowfocus_by name ;;
-			*                     ) return 1  # not expected window
-		esac
-		;;
+	0x*     ) sirocco window focus $1 ;;
+	[0-9.]* ) sleep ${1} ;;
+	--name  ) window_sync $2 --name ;;
+	*       ) window_sync $1        ;;
 esac
 
 # kak: filetype=sh

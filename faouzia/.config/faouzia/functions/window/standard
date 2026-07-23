@@ -8,7 +8,7 @@
 
 # Usage: window standard [paper | video] + | -
 
-eval $(xdotool getwindowgeometry -shell $winid)
+eval $(sirocco window geometry $winid)
 area=$(( (${HEIGHT#*=} - gap) * (${WIDTH#*=} - gap) ))
 
 # NOTE: tuned for 3440x1440 monitor (minus desktop margins and gaps)

@@ -55,6 +55,6 @@ case $1 in
 	bottom | Bottom ) bottom $2 ;;
 esac
 
-sirocco window_focus $winid
+sirocco window focus $winid
 
 # kak: filetype=sh

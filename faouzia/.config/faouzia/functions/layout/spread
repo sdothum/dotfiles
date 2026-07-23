@@ -1,4 +1,4 @@
-# sdothum - 2016 (c) wtfpl
+ # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="layout/spread $@" . $PARENT
 
 # Faouzia
@@ -28,11 +28,11 @@ matrix() {
 
 case $1 in
 	*x2 )
-		pos=$(window count $2)
+		pos=$(sirocco window count $2)
 		$NIMCTLR window spread $1 $(matrix ${1%x2})
 		;;
 	*   )
-		pos=$(window count $2)
+		pos=$(sirocco window count $2)
 		# window @$(pfw) spread $1 $(column $1)
 		$NIMCTLR window spread $1 $(column $1)
 		;;

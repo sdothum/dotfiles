@@ -9,7 +9,7 @@
 # Usage: layout tile <columns>[x2] <classname>
 
 # determine next tile position
-wincount=$(window count $2)
+wincount=$(sirocco window count $2)
 
 # NOTE: arbitrary visual limit of 5 colums on wide screen SEE: layout fold
 

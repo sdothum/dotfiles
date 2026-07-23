@@ -12,7 +12,7 @@ snapshot_geometry  # NOTE: comment out to not overwrite window sizing/tiling geo
 set_geometry   # X Y WIDTH HEIGHT
 
 move()   {
-	sirocco window_focus $winid . window_move_absolute $1 $2
+	sirocco window focus $winid . window move $1 $2
 }
 
 L=$(( margin ))

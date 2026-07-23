@@ -13,8 +13,9 @@ msg=$1
 [ $msg ] && shift || usage $0
 if [ -e ${0%/toggle}/functions/toggle/$msg ] ;then
 	. ${0%/toggle}/functions/toggle/$msg $@
-elif winid=$(xdotool search -classname "$1" | head -1) ;then
-	xwininfo -id $winid | grep -q "IsViewable" && sirocco window_hide $winid || sirocco window_focus $winid
+elif [ $(nimctlr window count --all "$1") -gt 0 ] ;then
+	winid=$(sirocco window ids "$msg" | head -1)
+	[ -n "$winid" ] && sirocco window hide "$winid" || sirocco window focus $(sirocco window ids --all "$msg" | head -1)
 else
 	$@
 fi

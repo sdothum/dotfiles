@@ -1,21 +1,32 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="invert_map $@" . $PARENT
+[ $TRACE ] && CHILD="window/toggle $@" . $PARENT
 
 # Faouzia
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ..................................................... Toggle window visibility
-
-# Usage: invert_map [-classname | -name] <name>
+set -x
+# Usage: toggle [--name] <name>
 
 case $1 in
-	-n* ) option=name;      name=$2 ;;
-	-c* ) option=name;      name=$2 ;;
-	*   ) option=classname; name=$1 ;;
+	--name ) option=--name; name=$2 ;;
+	*      ) name=$1 ;;
 esac
 
+map() {
+	[ -n "$1" ] && sirocco window hide $1 && exit 0
+	return 1
+}
+
+unmap() {
+	[ -n "$1" ] && sirocco window focus $1 && exit 0
+	return 1
+}
+
 # SEE: sxhkdrc
-xdotool search -onlyvisible -$option "${name:-undefined}" windowunmap || xdotool search -$option "${name:-undefined}" windowmap
+map $(nimctlr window ids $option $name) || unmap $(nimctlr window ids --all $option $name)
+
+exit 1
 
 # kak: filetype=sh

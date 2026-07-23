@@ -8,12 +8,8 @@
 
 # Usage: window revert [winid]
 
-# convert wmutils hex ids to xdotool decimal ids
-# winid=$(printf "%d" ${1:-$winid})
-
 cat_geometry
 draw $winid $WIDTH $HEIGHT
-xdotool windowmove $winid $X $Y
-sirocco window_focus $winid
+sirocco window move $X $Y
 
 # kak: filetype=sh

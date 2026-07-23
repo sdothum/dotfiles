@@ -11,29 +11,29 @@ restore root
 conky clock auto
 dunst &
 restore unclutter
-displaycal3                     # load color profile
-imwheel -kill                   # set trackball scrollwheel speed
+displaycal3    # load color profile
+imwheel -kill  # set trackball scrollwheel speed
 wp:volume
 
 udev
 void 'runit' && pulse || { sv -u check pipewire || pulse; }
+# sleep 0.15   # FOR: xorg settling (hardware dependent) SEE: autostart cmds below
 
+# order commands in ascending order of "rulerrc" complexity SEE: $HOME/.session/faouzia/autostart/[<order>. ]<command>
 group $(group id "DESK")
-# startup desktop app commands replaced by .session/faouzia/autostart/<command>*
 recipe -q autostart:oneshot && recipe autostart | while read cmd ;do
-	sleep 0.1
 	ditto autostart "$cmd"
-	eval $cmd
+	eval ${cmd#*. } &
+	sleep 0.05  # allow window time to draw
 done
 # recipe -d autostart:oneshot  # SEE: console_login
+restore panel  # postponed as long as possible to avoid dirty trace messages
 
 # if not booting with dinit.. (issue running as runit service)
 if void 'runit' ;then
 	!p nzbget && nzbget --daemon
 	!p sonarr && sudo /bin/su - sonarr -c '/usr/lib/sonarr/Sonarr/Sonarr -s localhost:8989 -no-browser -data=/var/lib/sonarr' >/dev/null 2>&1 &
 fi
-
-restore panel  # postponed as long as possible to avoid dirty trace messages
 
 # [ -e /tmp/nicotine-plus ] || { make_install nicotine-plus; touch /tmp/nicotine-plus; }  # for nightly build
 [ -e /tmp/nicotine ] || (sleep 10; sv -u restart nicotine; touch /tmp/nicotine) &  # HACK: to avoid init reconnects to slsknet server (cause unknown)

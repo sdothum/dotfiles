@@ -25,10 +25,10 @@ super + shift + Escape
 # .................................................................... clipboard
 
 # BUG: manual keybinds circumvent (random) X session clipboard loss (cause unknown)
-# HISTORY: cb replaces "xclip {-in, -out} -selection clipboard"
+# HISTORY: cb replaces "xclip {-in,-out} -selection clipboard"
 
 ~ctrl + {c,x}
-	S=$(xsel -p) && [ -n "$S" ] && echo -n "$S" | cb {copy, cut}
+	S=$(xsel -p) && [ -n "$S" ] && echo -n "$S" | cb {copy,cut}
 
 ~ctrl + v
 	cb paste
@@ -49,10 +49,10 @@ super + shift + Escape
 # ........................................................................ menus
 
 super + {F1,F2}
-	souschef {group, window}
+	souschef {group,window}
 
 super + {shift,ctrl} + q
-	{menu halt, sirocco wm_quit 0}
+	{menu halt,sirocco wm quit 0}
 
 super + shift + w
 	menu windowfocus
@@ -68,36 +68,38 @@ super + shift + ctrl + w
 
 # ....................................................................... select
 
+# NOTE: a null selector value must include a " " (space)
+
 super + {_,shift} + Tab
-	sirocco {window_cycle_in_group, window_rev_cycle_in_group}
+	sirocco window cycle --group { ,--reverse}
 
 alt + {_,super} + Tab
-	sirocco {window_cycle, window_rev_cycle}
+	sirocco window cycle { ,--reverse}
 
 super + ctrl + Tab
-	sirocco window_focus_last
+	sirocco window focus --last
 
 alt + {Left,Down,Up,Right}
-	sirocco window_cardinal_focus {west, south, north, east}
+	sirocco window focus --cardinal {west,south,north,east}
 
 # ........................................................................ focus
 
 super + {_,shift} + 0
-	nimctlr window {revert, rotate}
+	nimctlr window {revert,rotate}
 
 super + ctrl + 0
 	nimctlr layout revert
 
 super + {_,shift} + i
 	echo "$(timestamp) sxhkd window hide $(pfw)" >>$WMLOG ;\
-	{nimctlr window hide, menu unhide}                    ;\
+	{nimctlr window hide,menu unhide}                     ;\
 	nimctlr sync group
 
 # NOTE: mouse position determines window focus of stack
 # HACK: center mouse to increase probability of hidden window focus
 
 super + e
-	eval $(xdotool getwindowgeometry -shell $(pfw))              ;\
+	eval $(sirocco window geometry $(pfw))                       ;\
 	xdotool mousemove $(( X + WIDTH / 2 )) $(( Y + HEIGHT / 2 )) ;\
 	sirocco window_stack_toggle
 
@@ -107,13 +109,13 @@ super + shift + e
 super + w
 	echo "$(timestamp) sxhkd window_close $(pfw)" >>$WMLOG ;\
 	nimctlr group remove                                   ;\
-	sirocco window_close . window_focus_last               ;\  # NOTE: some apps take longer to be removed from wm stack
+	sirocco window close . window focus --last             ;\  # NOTE: some apps take longer to be removed from wm stack
 	refresh_panel  # for last visible window removal
 
 # ....................................................................... resize
 
 super + {_,ctrl} + space
-	sirocco {window_ver_maximize, window_hor_maximize}
+	sirocco window maximize --{vertical,horizontal}
 
 super + alt + {space,BackSpace}
 	nimctlr window standard paper {+,-}
@@ -128,16 +130,16 @@ super + alt + Return
 	wgeometry restore $(pfw)
 
 super + ctrl + shift + {Left,Down,Up,Right}
-	sirocco window_resize {-20 0, 0 20, 0 -20, 20 0}
+	sirocco window resize --relative {-20 0,0 20,0 -20,20 0}
 
 super + shift + {Left,Down,Up,Right}
-	sirocco window_resize {-50 0, 0 50, 0 -50, 50 0}
+	sirocco window resize --relative {-50 0,0 50,0 -50,50 0}
 
 super + shift + {t,s}
-	nimctlr window tile {left, right}
+	nimctlr window tile {left,right}
 
 super + {_,shift} + z
-	sirocco {window_monocle, window_maximize}
+	sirocco window {monocle,maximize}
 
 # ......................................................................... tile
 
@@ -145,60 +147,60 @@ super + 2
 	nimctlr window size monocle
 
 super + {5,6,3}
-	nimctlr window tile 3 {1, 2, 3}
+	nimctlr window tile 3 {1,2,3}
 
 super + {4,8,7,9}
-	nimctlr window tile 4 {1, 2, 3, 4}
+	nimctlr window tile 4 {1,2,3,4}
 
 # ....................................................................... layout
 
 super + shift + {0,1,2,3,4,5}
-	W=$(pfw)                                                           ;\
-	nimctlr layout fold {0, 1, 2, 3, 4, 5} $(nimctlr window classname) ;\
-	sirocco window_focus $W
+	W=$(pfw)                                                      ;\
+	nimctlr layout fold {0,1,2,3,4,5} $(nimctlr window classname) ;\
+	sirocco window focus $W
 
 super + shift + ctrl + 0
 	W=$(pfw)              ;\
 	nimctlr layout fold 0 ;\
-	sirocco window_focus $W
+	sirocco window focus $W
 
 # ......................................................................... move
 
 super + ctrl + {Left,Down,Up,Right}
-	sirocco window_move {-20 0, 0 20, 0 -20, 20 0}
+	sirocco window move --relative {-20 0,0 20,0 -20,20 0}
 
 super + {Left,Down,Up,Right}
-	sirocco window_move {-50 0, 0 50, 0 -50, 50 0}
+	sirocco window move --relative {-50 0,0 50,0 -50,50 0}
 
 super + ctrl + {p,l,n,f}
-	nimctlr window shift {left, down, up, right}
+	nimctlr window shift {left,down,up,right}
 
 super + {d,m}
-	nimctlr window snap top {left, right}
+	nimctlr window snap top {left,right}
 
 super + ctrl + e
 	nimctlr layout level
 
 super + {_,ctrl,shift} + g
-	nimctlr window snap center {  ,left, right}
+	nimctlr window snap center { ,left,right}
 
 super + {n,l}
 	nimctlr window snap {top,bottom}
 
 super + {p,f}
-	nimctlr window snap bottom {left, right}
+	nimctlr window snap bottom {left,right}
 
 super + {_,shift} + r
-	nimctlr window snap center {horizontal, vertical}
+	nimctlr window snap center {horizontal,vertical}
 
 super + {t,s}
-	side="{left, right}" ;\
+	side="{left,right}" ;\
 	[ "$(nimctlr window classname)"  = "term" ] && nimctlr window spread $side || nimctlr window snap $side
 
 # ......................................................................... swap
 
 alt + super + {Left,Down,Up,Right}
-	nimctlr window swap {west, south, north, east}
+	nimctlr window swap {west,south,north,east}
 
 # Groups
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -206,37 +208,37 @@ alt + super + {Left,Down,Up,Right}
 # ........................................................................ focus
 
 alt + {0,1,2,3,4,5,6,7,8,9}
-	nimctlr group {last, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+	nimctlr group {last,1,2,3,4,5,6,7,8,9}
 
 alt + super + {0,1,2,3,4,5,6,7,8,9}
-	nimctlr group toggle {$(nimctlr group), 1, 2, 3, 4, 5, 6, 7, 8, 9}
+	nimctlr group toggle {$(nimctlr group),1,2,3,4,5,6,7,8,9}
 
 alt + shift + {0,1,2,3,4,5,6,7,8,9}
-	nimctlr group desktop {$(nimctlr group), 1, 2, 3, 4, 5, 6, 7, 8, 9}
+	nimctlr group desktop {$(nimctlr group),1,2,3,4,5,6,7,8,9}
 
 alt + ctrl + 0
 	nimctlr group restore
 
 super + ctrl + {1,2,3,4,5,6,7,8,9}
-	nimctlr group close {1, 2, 3, 4, 5, 6, 7, 8, 9} ;\
-	sirocco window_focus_last
+	nimctlr group close {1,2,3,4,5,6,7,8,9} ;\
+	sirocco window focus --last
 
 # ....................................................................... window
 
 alt + ctrl + {comma,period}
-	nimctlr window group $(nimctlr group get {-1, +1})
+	nimctlr window group $(nimctlr group get {-1,+1})
 
 alt + ctrl + super + {comma,period}
-	nimctlr window group $(nimctlr group get {-1, +1}) teleport
+	nimctlr window group $(nimctlr group get {-1,+1}) teleport
 
 alt + ctrl + {1,2,3,4,5,6,7,8,9}
-	nimctlr window group {1, 2, 3, 4, 5, 6, 7, 8, 9}
+	nimctlr window group {1,2,3,4,5,6,7,8,9}
 
 alt + ctrl + super + {1,2,3,4,5,6,7,8,9}
-	nimctlr window group {1, 2, 3, 4, 5, 6, 7, 8, 9} teleport
+	nimctlr window group {1,2,3,4,5,6,7,8,9} teleport
 
 super + ctrl + r
-	sirocco group_remove_window
+	sirocco group remove
 
 # UI
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -244,7 +246,7 @@ super + ctrl + r
 # ...................................................................... monitor
 
 super + {F6,F5}
-	brightness {-5, +5}
+	brightness {-5,+5}
 
 # ........................................................................ mouse
 
@@ -257,7 +259,7 @@ super + ctrl + shift + space
 # HACK: bypass QT apps to avoid interference with mouse menus
 
 ~button1
-	sirocco window_focus $(pfw)
+	sirocco window focus $(pfw)
 	# xdotool key Escape
 
 # ..................................................................... keyboard
@@ -271,19 +273,19 @@ super + ctrl + shift + space
 # ........................................................................ group
 
 ctrl + {_,shift} + space
-	dunstctl {close, close-all}
+	dunstctl {close,close-all}
 
 ctrl + BackSpace
 	dunstctl history-pop
 
 super + {_,ctrl} + a
-	conky clock {_, toggle}
+	conky clock {_,toggle}
 
 super + {shift,ctrl} + d
-	toggle {wallpaper, background}
+	toggle {wallpaper,background}
 
 super + {_,ctrl} + v
-	{toggle panel, invert_panel}
+	{toggle panel,invert_panel}
 
 # Applications
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -294,24 +296,27 @@ super + shift + space
 	menu
 
 super + {_,shift,ctrl} + apostrophe
-	winid=$(pfw) menu {shortcuts, wikis, notes}
+	winid=$(pfw) menu {shortcuts,wikis,notes}
 
 super + shift + a
 	menu reminder
 
 super + {_,shift} + o
-	menu {scripts, projects}
+	menu {scripts,projects}
 
 super + shift + {u,v}
-	menu {passwords, media}
+	menu {passwords,media}
 
 super + shift + y
 	menu abook
 
 # ........................................................................ terms
 
+# NOTE: a macro may only define a single matching {selection} list
+
 super + {_,shift} + Return
-	scratchpad {scratchy, itchy}
+	scratchpad={scratchy,itchy} ;\
+	nimctlr window toggle --name $scratchpad || tmux_session $scratchpad
 
 super + ctrl + Return
 	term
@@ -324,21 +329,22 @@ super + shift + colon
 	menu system
 
 super + ctrl + colon
-	xdotool search -name btop windowkill || btop
+	nimctlr window toggle --name btop || term btop BLACKBOARD btop
 
 # ........................................................................ music
 
 # NOTE: switch out to DESK group after hiding app to avoid attaching new windows to app group
 
 super + j
-	piano stop                        ;\
-	invert_map music && exit || music
+	piano stop ;\
+	nimctlr window toggle music && exit || music
 
 super + ctrl + j
-	mpc toggle ;\	mpc | grep -q playing && \{ piano stop; mpc:settings volume; mpc:settings; \}
+	mpc toggle ;\
+	mpc | grep -q playing && \{ piano stop; mpc:settings volume; mpc:settings; \}
 
 super + shift + {comma,period}
-	mpc {prev, next} ;\
+	mpc {prev,next} ;\
 	mpc:settings
 
 super + k
@@ -350,12 +356,12 @@ super + ctrl + k
 # ................................................................. audio volume
 
 super + {comma,period}
-	audio_volume mpc      ;\
-	mpc volume {-5, +5} ;\
+	audio_volume mpc   ;\
+	mpc volume {-5,+5} ;\
 	mpc:settings volume
 
 super + ctrl + {comma,period}
-	audio_volume pactl                               ;\
+	audio_volume pactl                             ;\
 	pactl set-sink-volume @DEFAULT_SINK@ {-5%,+5%} ;\
 	wp:volume clear
 
@@ -365,41 +371,40 @@ super + alt + ctrl + j
 # ......................................................................... http
 
 super + {_,ctrl} + b
-	qutebrowser {_, closeall}
+	qutebrowser {_,closeall}
 
 super + shift + b
 	nimctlr layout fold 3 qutebrowser
 
 super + h
-	invert_map -n "$(recipe hangouts/name)" && exit || hangouts
+	nimctlr window toggle Luakit && exit || hangouts
 
 super + shift + h
-	invert_map halloy || halloy
+	nimctlr window toggle halloy || halloy
 
 # NOTE: nicotine (direct gui -- not docker browser) leaves dangling child nimctlr window frames SEE: winids
 
 super + shift + j
-	invert_map -name nicotine || nicotine
+	nimctlr window toggle --name nicotine || nicotine
 
 # ......................................................................... yazi
 
 super + x
-	invert_map yazi && exit || yazi TMUX
+	nimctlr window toggle yazi && exit || yazi TMUX
 
 super + ctrl + x
 	notify critical 0 yazi '<b>root</b> user' ;\
-	invert_map yazi-root && exit || yazi ROOT
+	nimctlr window toggle yazi-root && exit || yazi ROOT
 
 # ......................................................................... user
 
 super + shift + ctrl + j
-	xdotool search -classname "Asunder" windowkill && rm -f /tmp/rulerrc:asunder || asunder
+	nimctlr window toggle "Asunder" || asunder
 
 super + y
-	invert_map aerc || aerc
+	nimctlr window toggle aerc || aerc
 
 alt + super + ctrl + space
 	kak -PROOF $HOME/diary/$(date '+%Y-%m-%d').mkd
 
 # kak: filetype=sh
-

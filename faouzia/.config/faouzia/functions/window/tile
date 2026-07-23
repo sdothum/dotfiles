@@ -59,6 +59,6 @@ case $1 in
 	*             ) column $1 ${2:-$1} ;;
 esac
 
-sirocco window_focus $winid
+sirocco window focus $winid
 
 # kak: filetype=sh

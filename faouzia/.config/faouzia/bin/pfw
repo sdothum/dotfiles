@@ -7,7 +7,65 @@
 
 # .................................................................. pfw wrapper
 
-exec sirocco window focused
+# exec sirocco window focused
+
+# debug wrapper
+
+PFW=/usr/bin/pfw
+>/tmp/pfw:stderr
+
+count() {
+	n=$(recipe pfw/$1)
+	n=$(( ${n:-0} + 1 ))
+	recipe pfw/$1 $n
+	echo $n
+}
+
+mismatch() {
+	N=$(count mismatch)
+	printf "$(timestamp) ${BROWN}> pfw: PERSISTENT MISMATCH $N${NOCOLOR}\n"
+	pstree -ap $PPID
+	printf '  pfw:      %s\n'     "$old"
+	printf '  sirocco:  %s\n'     "$new"
+	printf '  pfw2:     %s\n'     "$old2"
+	printf '  sirocco2: %s\n'     "$new2"
+	printf '  xdotool:  0x%08x\n' "$(xdotool getactivewindow 2>/dev/null)"
+	printf '  xprop:    0x%08x\n' "$(xprop -root _NET_ACTIVE_WINDOW 2>/dev/null | cut -d' ' -f5)"
+}
+
+race() {
+	N=$(count race)
+	printf "$(timestamp) ${BROWN}> pfw: Focus transition race $N: (recovered) during validation${NOCOLOR}\n"
+}
+
+transient() {
+	N=$(count transient)
+	printf "$(timestamp) ${BROWN}> pfw: Empty IPC transient $N: recovered on resample${NOCOLOR}\n"
+}
+
+old=$($PFW)
+# new=$(sirocco window focused 2>>$WMLOG)
+new=$(sirocco window focused 2>/dev/null)
+
+# log discepancy and retry recovery status
+if [ "$old" != "$new" ]; then
+	{
+		old2=$($PFW)
+		# new2=$(sirocco window focused 2>>$WMLOG)
+		new2=$(sirocco window focused 2>/dev/null)
+		if [ "$old2" != "$new2" ]; then
+			mismatch
+		elif [ -z "$new" ] ;then
+			transient
+		else
+			race
+		fi
+		new=$new2
+		printf '\n'
+	} >>$WMLOG
+fi
+
+printf '%s\n' "$new"
 
 # kak: filetype=sh
 

@@ -31,7 +31,7 @@ k    ⁋ K1Y 0K4
 }
 
 string=$(shortcuts | rmenu 'Insert' -no-custom -case-sensitive -auto-select) || exit
-sirocco window_focus ${winid:-$(pfw)}  # refocus active window before menu display SEE: sxhkdrc
+sirocco window focus ${winid:-$(pfw)}  # refocus active window before menu display SEE: sxhkdrc
 
 [ "${string%%^*}" ] || { xdotool type ' [^\n]*'; exit; }  # HACK: to avoid shell globbing of '*'
 

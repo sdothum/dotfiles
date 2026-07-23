@@ -9,11 +9,11 @@
 # Usage: group close <group>
 
 for i in $(ls -1 $GROUP/$1) ;do
-	sirocco window_focus $i . window_close
-	$NIMCTLR group remove $i           # cleanup
+	sirocco window focus $i . window close
+	$NIMCTLR group remove $i  # cleanup
 done
 
-sirocco group_remove_all_windows $1  # redundancy trap for unknown group juggling corner cases
+sirocco group clear $1       # redundancy trap for unknown group juggling corner cases
 rm -rf $GROUP/$1/*
 rm -rf $GROUP:focus/$1/*
 rm -rf $GROUP:deactivated/$1

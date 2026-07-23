@@ -8,7 +8,7 @@
 
 usage() { usage: "$(basename $0) fold [--] 0 | 1 | 2 | 3 | 4 | 5 [x2] [<classname>]"; exit 1; }
 
-winids=$(window ids ${3:-$2})
+winids=$(sirocco window ids ${3:-$2})
 instance=0  # window placement sequence
 tile=tile
 [ "$1" = '--' ] && { tile=spread; shift; }
@@ -17,14 +17,14 @@ tile=tile
 
 stack() {
 	for i in $winids ;do
-		sirocco window_focus $i
+		sirocco window focus $i
 		$NIMCTLR window size monocle
 	done
 }
 
 stack_matrix() {
 	for i in $winids ;do
-		sirocco window_focus $i
+		sirocco window focus $i
 		case $instance in
 			0 ) $NIMCTLR window $tile 1x2 1 top    ;;
 			1 ) $NIMCTLR window $tile 1x2 1 bottom ; instance=-1  ;;
@@ -37,7 +37,7 @@ stack_matrix() {
 
 halves() {
 	for i in $winids ;do
-		sirocco window_focus $i
+		sirocco window focus $i
 		case $instance in
 			0 ) $NIMCTLR window tile 2 1 ;;
 			1 ) $NIMCTLR window tile 2 2 ; instance=-1 ;;
@@ -48,7 +48,7 @@ halves() {
 
 halves_matrix() {
 	for i in $winids ;do
-		sirocco window_focus $i
+		sirocco window focus $i
 		case $instance in
 			0 ) $NIMCTLR window $tile 2x2 1 top    ;;
 			1 ) $NIMCTLR window $tile 2x2 1 bottom ;;
@@ -63,7 +63,7 @@ halves_matrix() {
 
 thirds() {
 	for i in $winids ;do
-		sirocco window_focus $i
+		sirocco window focus $i
 		case $instance in
 			2 ) $NIMCTLR window tile 3 1 ; instance=-1 ;;
 			0 ) $NIMCTLR window tile 3 2 ;;
@@ -75,7 +75,7 @@ thirds() {
 
 thirds_matrix() {
 	for i in $winids ;do
-		sirocco window_focus $i
+		sirocco window focus $i
 		case $instance in
 			4 ) $NIMCTLR window $tile 3x2 1 top    ;;
 			5 ) $NIMCTLR window $tile 3x2 1 bottom ; instance=-1 ;;
@@ -92,7 +92,7 @@ thirds_matrix() {
 
 quarters() {
 	for i in $winids ;do
-		sirocco window_focus $i
+		sirocco window focus $i
 		case $instance in
 			3 ) $NIMCTLR window tile 4 1 ; instance=-1 ;;
 			2 ) $NIMCTLR window tile 4 2 ;;
@@ -105,7 +105,7 @@ quarters() {
 
 quarters_matrix() {
 	for i in $winids ;do
-		sirocco window_focus $i
+		sirocco window focus $i
 		case $instance in
 			6 ) $NIMCTLR window $tile 4x2 1 top    ;;
 			7 ) $NIMCTLR window $tile 4x2 1 bottom ; instance=-1 ;;
@@ -124,7 +124,7 @@ quarters_matrix() {
 
 fifths() {
 	for i in $winids ;do
-		sirocco window_focus $i
+		sirocco window focus $i
 		case $instance in
 			4 ) $NIMCTLR window tile 5 1 ; instance=-1 ;;
 			3 ) $NIMCTLR window tile 5 2 ;;
@@ -138,7 +138,7 @@ fifths() {
 
 fifths_matrix() {
 	for i in $winids ;do
-		sirocco window_focus $i
+		sirocco window focus $i
 		case $instance in
 			8 ) $NIMCTLR window $tile 5x2 1 top    ;;
 			9 ) $NIMCTLR window $tile 5x2 1 bottom ; instance=-1 ;;
@@ -181,6 +181,6 @@ case "$1" in
 		esac
 esac
 
-sirocco window_focus $winid
+sirocco window focus $winid
 
 # kak: filetype=sh

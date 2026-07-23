@@ -13,6 +13,6 @@
 
 CBONSAI="$HOME/.local/bin/cbonsai -l -t0.125 $repeat"
 
-xdotool search -onlyvisible -classname cbonsai windowclose || term cbonsai BLACKBOARD $CBONSAI
+nimctlr window toggle cbonsai || term cbonsai BLACKBOARD $CBONSAI
 
 # kak: filetype=sh

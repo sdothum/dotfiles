@@ -45,7 +45,7 @@ spread() {
 	X=$(( width * column + margin + column * gap + offset ))
 	[ $X -lt $margin ] && X=$margin
 	notify trace spread "$X $Y $WIDTH $HEIGHT $winid"
-	sirocco window_focus $winid . window_move_absolute $X $Y
+	sirocco window focus $winid . window move $X $Y
 }
 
 case $Xpos in
@@ -62,7 +62,7 @@ float() {
 
 	Y=$(( height * ${1%x2} + top + gap / 2 + offset ))
 	[ $Y -lt $top ] && Y=$top
-	sirocco window_move_absolute $X $Y
+	sirocco window move $X $Y
 }
 
 case $Ypos in
@@ -71,6 +71,6 @@ case $Ypos in
 	*               ) $NIMCTLR window -- snap center vertical ;;
 esac
 
-sirocco window_focus $winid
+sirocco window focus $winid
 
 # kak: filetype=sh

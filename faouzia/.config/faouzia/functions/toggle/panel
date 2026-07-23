@@ -7,12 +7,12 @@
 # ................................................................. Toggle panel
 
 if recipe panel/single ;then
-	xdotool search -onlyvisible -limit 1 -maxdepth 1 -name "lemonbar" windowunmap >/dev/null || xdotool search -limit 1 -maxdepth 1 -name "lemonbar" windowmap >/dev/null
+	nimctlr window toggle --name "lemonbar"
 else
-	xdotool search -onlyvisible -limit 1 -maxdepth 1 -name "lemonbar:desktop" windowunmap >/dev/null || xdotool search -limit 1 -maxdepth 1 -name "lemonbar:desktop" windowmap >/dev/null
-	xdotool search -onlyvisible -limit 1 -maxdepth 1 -name "lemonbar:mpd" windowunmap >/dev/null || xdotool search -limit 1 -maxdepth 1 -name "lemonbar:mpd" windowmap >/dev/null
-	xdotool search -onlyvisible -limit 1 -maxdepth 1 -name "lemonbar:system" windowunmap >/dev/null || xdotool search -limit 1 -maxdepth 1 -name "lemonbar:system" windowmap >/dev/null
-	xdotool search -onlyvisible -limit 1 -maxdepth 1 -name "lemonbar:clock" windowunmap >/dev/null || xdotool search -limit 1 -maxdepth 1 -name "lemonbar:clock" windowmap >/dev/null
+	nimctlr window toggle --name "lemonbar:desktop"
+	nimctlr window toggle --name "lemonbar:mpd"
+	nimctlr window toggle --name "lemonbar:system"
+	nimctlr window toggle --name "lemonbar:clock"
 fi
 
 # kak: filetype=sh

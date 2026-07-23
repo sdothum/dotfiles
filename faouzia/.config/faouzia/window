@@ -19,7 +19,7 @@
 # HACK: nimctlr dispatcher requires "--" as rest (otherwise would be treated as verb)
 [ "$2" = '--' ] && { nested_window_action=true; set -- $1 $3 $4 $5 $6 $7 $8 $9; }  # shell DSL compatibility
 
-geometry()     { xdotool getwindowgeometry -shell ${1:-$winid}; }  # X Y WIDTH HEIGHT (doesn't include borders)
+geometry()     { sirocco window geometry ${1:-$winid}; }  # X Y WIDTH HEIGHT (doesn't include borders)
 set_geometry() { eval $(geometry ${1:-$winid}); }
 cat_geometry() { [ -e $WINFO/$winid ] && eval $(ls -1 $WINFO/$winid) || exit 1; }
 rec_geometry() { rm -rf $WINFO/${1:-$winid}; cp -R $WINFO/tmp $WINFO/${1:-$winid}; }
@@ -39,17 +39,16 @@ save_original_geometry() {
 	done
 }
 
-opposite_side()  { echo $(( width + margin * 2 - (X + WIDTH + border * 2) )); }  # for nearest edge SEE: window snap / stretch
-windowfocus_by() { xdotool search -sync -onlyvisible -$1 "$(escape $xname)" windowactivate; }
-windowfocus_id() { xdotool windowmap $1; xdotool windowraise $1; }
-xname_is()       { xdotool getwindow$1 $winid | grep -q "$xname"; }
+opposite_side() { echo $(( width + margin * 2 - (X + WIDTH + border * 2) )); }  # for nearest edge SEE: window snap / stretch
+window_sync()   { nimctlr window sync $1 "$(escape $xname)"; }
+xname_type()    { nimctlr window ids $1 "$xname" | grep -q "0x"; }
 
 # ..................................................................... X Y size
 
 # NOTE: sirocco replacement for wtp (wmutils) avoids async display timing issues
 wtp() {
 	# wtp X Y width height winid (as in wmutils)
-	sirocco window_focus $5 . window_move_absolute $1 $2 . window_resize_absolute $3 $4  # chaining requires faouzia repo updates
+	sirocco window focus $5 . window move $1 $2 . window resize $3 $4
 }
 
 # draw <winid> <width> <height> [rotate]
@@ -66,21 +65,21 @@ draw() {
 if [ "$1" ] && [ -z "${1%%@*}" ] ;then
 	winid=$(pfw 2>/dev/null) || return  # trap empty desktop at startup
 	case $1 in
-		@0x*     ) windowfocus_id ${1#@} ;;
+		@0x*     ) sirocco window focus ${1#@} ;;
 		@[0-9.]* ) sleep ${1#@}          ;;
 
 		*        )
 			xname="${1#@}"
 			if [ $2 = 'URL' ] ;then
 				case $1 in
-					@*\ * ) windowfocus_by name      ;;
-					@*    ) windowfocus_by classname ;;
+					@*\ * ) window_sync --name ;;
+					@*    ) window_sync      ;;
 				esac
 				shift
-			elif xname_is classname ;then
-				windowfocus_by classname
-			elif xname_is name ;then
-				windowfocus_by name
+			elif xname_type ;then
+				window_sync
+			elif xname_type --name ;then
+				window_sync --name
 			else
 				return 1  # not expected window
 			fi
@@ -92,32 +91,28 @@ fi
 
 # ................................................................ window action
 
-classname() { xdotool getactivewindow getwindowclassname; exit; }
+winids()    { nimctlr window --all ids; }  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
 
 count() {
 	case $1 in
-		'' ) wmctrl -l 2>/dev/null | wc -l ;;
-	#  *  ) wmctrl -l 2>/dev/null | grep -w "$1" | wc -l ;;  # WARNING: can still be fooled by browser url titles
-		*  ) xdotool search -onlyvisible -classname "$1" | wc -l ;;
+		'' ) winids      | wc -l ;;
+		*  ) winids "$1" | wc -l ;;
 	esac
 	exit
 }
 
-# winids() { wmctrl -l 2>/dev/null | cut -d' ' -f1 | sort; }  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
-winids() { sirocco window ids 2>>$WMLOG; }
-
 ids() {
 	case $1 in
-		'' ) winids ;;
-		*  ) for i in $(winids) ;do [ "$(xdotool getwindowclassname $i)" = $1 ] && echo $i ;done ;;
+		'' ) winids      ;;
+		*  ) winids "$1" ;;
 	esac
 	exit
 }
 
 case $1 in
-	class* ) classname ;;
-	count  ) count $2  ;;
-	ids    ) ids   $2  ;;
+	class*   ) sirocco window classname;       exit ;;
+	count    ) shift; sirocco window count $@; exit ;;
+	ids      ) shift; sirocco window ids   $@; exit ;;
 esac
 
 msg=$1
@@ -133,7 +128,6 @@ if [ -e ${0%/window}/functions/window/$msg ] ;then
 	recipe -q panel/top && top=$panel  # see draw panel
 
 	winid=$(pfw 2>/dev/null) || return  # trap empty desktop at startup
-	# xdotool windowstate -remove fullscreen $winid  # fullscreen negates any attempted window actions
 	. ${0%/window}/functions/window/$msg $@
 else
 	usage $0 $msg
@@ -141,6 +135,6 @@ fi
 
 [ $nested_window_action ] || save_original_geometry  # for 'window revert' geometry history
 
-sirocco window_focus $winid  # regain focus
+sirocco window focus $winid  # regain focus
 
 # kak: filetype=sh

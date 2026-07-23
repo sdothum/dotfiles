@@ -1,0 +1,56 @@
+super + {h,j,k,l}
+	sirocco window move --relative {-20 0, 0 20, 0 -20, 20 0}
+
+super + alt + {h,j,k,l}
+	sirocco window resize --relative {-20 0, 0 20, 0 -20, 20 0}
+
+super + shift + {h,j,k,l}
+	sirocco window move --relative {-50 0, 0 50, 0 -50, 50 0}
+
+super + shift + alt + {h,j,k,l}
+	sirocco window resize --relative {-50 0, 0 50, 0 -50, 50 0}
+
+alt + {h,j,k,l}
+	sirocco window_cardinal_focus {left,down,up,right}
+
+super + alt + Escape
+	sirocco wm quit 0
+
+super + f
+	sirocco window_maximize
+
+super + w
+	sirocco window_close
+
+super + b
+	sirocco window_hor_maximize
+
+super + v
+	sirocco window_ver_maximize
+
+super + m
+	sirocco window_monocle
+
+alt + Tab
+	sirocco window_cycle
+
+alt + shift + Tab
+	sirocco window_rev_cycle
+
+alt + ctrl + Tab
+	sirocco window_focus_last
+
+super + {_,shift +}{1-9}
+	sirocco {group_toggle,group_add_window} {1-9}
+
+super + ctrl + r
+	sirocco group_remove_window
+
+super + alt + ctrl + {1-4}
+	sirocco group_remove_all_windows {1-4}
+
+super + Return
+	xterm
+
+super + {Insert,Prior,Delete,Next,End}
+	sirocco window_snap {topleft,topright,bottomleft,bottomright,middle}

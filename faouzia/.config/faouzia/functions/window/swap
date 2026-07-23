@@ -12,7 +12,7 @@
 snapshot_geometry $winid  # X Y WIDTH HEIGHT
 rec_geometry $winid
 
-sirocco window_cardinal_focus $1 2>/dev/null || { notify window "swap $@"; exit 1; }
+sirocco window focus --cardinal $1 2>/dev/null || { notify window "swap $@"; exit 1; }
 wid=$(pfw)
 [ "$wid" = "$winid" ] && exit  # no adjacent window
 

@@ -69,6 +69,9 @@ class="manpage"
 class="term"
 	NIMCTLR_TRACE=1 nimctlr rule term
 
+class="tmux"
+	NIMCTLR_TRACE=1 nimctlr rule tmux
+
 class="palette"
 	NIMCTLR_TRACE=1 nimctlr rule palette
 

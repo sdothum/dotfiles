@@ -43,12 +43,12 @@ TERMSIZE=$WME/term
 
 reterm() {
 	snapshot_geometry
-	eval $(xdotool getwindowgeometry -shell $winid | grep -E 'X|Y')
+	eval $(sirocco window geometry $winid | grep -E 'X|Y')
 	if [ ! -e $TERMSIZE ] ;then
 		term TRANSPARENT class=ephemeral  # as unobtrusive as possible :)
-		xdotool search -onlyvisible -sync -classname 'ephemeral'
-		for i in $(xdotool getwindowgeometry -shell $(pfw)|grep -E 'WIDTH|HEIGHT') ;do mkdir -p $TERMSIZE/$i ;done
-		xdotool search -classname 'ephemeral' windowclose
+		nimctlr window sync 'ephemeral'
+		for i in $(sirocco window geometry $(pfw)|grep -E 'WIDTH|HEIGHT') ;do mkdir -p $TERMSIZE/$i ;done
+		sirocco window close
 	fi
 	eval $(ls -1 $TERMSIZE)
 	wtp $X $Y $WIDTH $HEIGHT $winid

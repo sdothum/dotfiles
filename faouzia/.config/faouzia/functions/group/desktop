@@ -1,5 +1,5 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="group/specific $@" . $PARENT
+[ $TRACE ] && CHILD="group/desktop $@" . $PARENT
 
 # Faouzia
 # ══════════════════════════════════════════════════════════════════════════════
@@ -10,7 +10,7 @@
 
 [ $(ls -1 $CURRENT) -eq $1 ] || current $1
 
-sirocco group_activate_specific $1
+sirocco group focus --exclusive $1
 rm -rf $GROUP:deactivated/$1
 
 # kak: filetype=sh

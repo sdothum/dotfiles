@@ -11,10 +11,10 @@
 D=$(ls -1 $CURRENT)
 
 for i in $(seq 1 $(( $($NIMCTLR group count) - 1 ))) ;do  # except last group
-	sirocco group_activate $i
+	sirocco group focus $i
 done
 
 rm -rf $GROUP:deactivated/*
-sirocco window_focus $(ls -1 $GROUP:focus/$D)
+sirocco window focus $(ls -1 $GROUP:focus/$D)
 
 # kak: filetype=sh

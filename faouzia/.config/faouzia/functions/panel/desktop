@@ -47,7 +47,7 @@ active_window() {
 		fi
 	fi
 	if has_visible $active || has_nilgroup ;then
-		[ "$(xtitle)" = '' ] && { sirocco window_cycle; return; }
+		[ "$(xtitle)" = '' ] && { sirocco window cycle; return; }
 		name=$(xtitle | sed -r "s/^(.)/\u\1/; s/'(.*)'/\1/")  # trap unfocused error messages & discard xtitle quotes
 		[ "$name" ] && name="${SEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}$name%{F-}%{B-}%{F$DEFAULT_FG}"
 		title="${title}${name}"

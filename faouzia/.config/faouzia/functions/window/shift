@@ -12,16 +12,16 @@ set_geometry  # X Y WIDTH HEIGHT
 snapshot_geometry
 
 case $1 in
-	# left  ) sirocco window_move -$(( WIDTH + border * 2 )) 0  ;;
-	# right ) sirocco window_move  $(( WIDTH + border * 2 )) 0  ;;
-	# up    ) sirocco window_move 0 -$(( HEIGHT + border * 2 )) ;;
-	# down  ) sirocco window_move 0  $(( HEIGHT + border * 2 )) ;;
-	left  | Left  ) sirocco window_move -$WIDTH 0  ;;
-	right | Right ) sirocco window_move  $WIDTH 0  ;;
-	up    | Up    ) sirocco window_move 0 -$HEIGHT ;;
-	down  | Down  ) sirocco window_move 0  $HEIGHT ;;
+	# left  ) sirocco window move --relative -$(( WIDTH + border * 2 )) 0  ;;
+	# right ) sirocco window move --relative  $(( WIDTH + border * 2 )) 0  ;;
+	# up    ) sirocco window move --relative 0 -$(( HEIGHT + border * 2 )) ;;
+	# down  ) sirocco window move --relative 0  $(( HEIGHT + border * 2 )) ;;
+	left  | Left  ) sirocco window move --relative -$WIDTH 0  ;;
+	right | Right ) sirocco window move --relative  $WIDTH 0  ;;
+	up    | Up    ) sirocco window move --relative 0 -$HEIGHT ;;
+	down  | Down  ) sirocco window move --relative 0  $HEIGHT ;;
 esac
 
-sirocco window_focus $winid
+sirocco window focus $winid
 
 # kak: filetype=sh

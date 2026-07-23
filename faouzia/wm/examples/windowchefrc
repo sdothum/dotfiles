@@ -1,0 +1,25 @@
+#!/bin/sh
+
+sirocco wm config border_width 5
+sirocco wm config internal_border_width 2
+sirocco wm config color_focused 0x97a293
+sirocco wm config color_unfocused 0x393638
+sirocco wm config internal_color_focused 0x393638
+sirocco wm config internal_color_unfocused 0x97a293
+
+sirocco wm config gap_width all 0
+sirocco wm config grid_gap_width 0
+
+sirocco wm config cursor_position center
+
+sirocco wm config groups_nr 10
+sirocco wm config enable_sloppy_focus true
+sirocco wm config enable_resize_hints false
+sirocco wm config sticky_windows false
+sirocco wm config enable_borders true
+sirocco wm config enable_last_window_focusing true
+sirocco wm config apply_settings true
+sirocco wm config replay_click_on_focus true
+sirocco wm config pointer_actions move resize_side resize_corner
+sirocco wm config pointer_modifier super
+sirocco wm config click_to_focus any

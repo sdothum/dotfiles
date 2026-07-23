@@ -1,0 +1,79 @@
+/* Copyright (c) 2016-2019 Tudor Ioan Roman. All rights reserved. */
+/* Licensed under the ISC License. See the LICENSE file in the project root for full license information. */
+
+#ifndef WM_IPC_H
+#define WM_IPC_H
+
+#include "ipc.h"
+
+#define ATOM_COMMAND "__WM_IPC_COMMAND"
+
+#define IPC_MUL_PLUS 0
+#define IPC_MUL_MINUS 1
+
+enum IPCCommand {
+	IPCGroupActivate,
+	IPCGroupActivateSpecific,
+	IPCGroupAddWindow,
+	IPCGroupDeactivate,
+	IPCGroupRemoveAllWindows,
+	IPCGroupRemoveWindow,
+	IPCGroupToggle,
+	IPCWindowCardinalFocus,
+	IPCWindowClose,
+	IPCWindowCycle,
+	IPCWindowCycleInGroup,
+	IPCWindowFocus,
+	IPCWindowFocusLast,
+	IPCWindowHide,
+	IPCWindowHorMaximize,
+	IPCWindowMaximize,
+	IPCWindowMonocle,
+	IPCWindowMove,
+	IPCWindowMoveAbsolute,
+	IPCWindowMoveInGrid,
+	IPCWindowPutInGrid,
+	IPCWindowResize,
+	IPCWindowResizeAbsolute,
+	IPCWindowResizeInGrid,
+	IPCWindowRevCycle,
+	IPCWindowRevCycleInGroup,
+	IPCWindowSnap,
+	IPCWindowStackToggle,
+	IPCWindowUnmaximize,
+	IPCWindowVerMaximize,
+	IPCWMConfig,
+	IPCWMQuit,
+	NR_IPC_COMMANDS
+};
+
+enum IPCConfig {
+	IPCConfigApplySettings,
+	IPCConfigBorderStyle,
+	IPCConfigBorderWidth,
+	IPCConfigClickToFocus,
+	IPCConfigColorFocused,
+	IPCConfigColorUnfocused,
+	IPCConfigCornerMask,
+	IPCConfigCornerPercent,
+	IPCConfigCursorPosition,
+	IPCConfigEnableBorders,
+	IPCConfigEnableLastWindowFocusing,
+	IPCConfigEnableResizeHints,
+	IPCConfigEnableSloppyFocus,
+	IPCConfigGapWidth,
+	IPCConfigGridGapWidth,
+	IPCConfigGroupsNr,
+	IPCConfigInternalBorderWidth,
+	IPCConfigInternalColorFocused,
+	IPCConfigInternalColorUnfocused,
+	IPCConfigPointerActions,
+	IPCConfigPointerModifier,
+	IPCConfigReplayClickOnFocus,
+	IPCConfigStickyWindows,
+	NR_IPC_CONFIGS
+};
+
+extern void (*ipc_handlers[NR_IPC_COMMANDS])(uint32_t *);
+
+#endif

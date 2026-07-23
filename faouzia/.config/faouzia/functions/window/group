@@ -12,9 +12,9 @@ winid=${winid:-$(pfw)}
 [ -e $GROUP/$1/$winid ] && return
 
 group=$($NIMCTLR group current)
-sirocco group_remove_window
+sirocco group remove
 rm -rf $GROUP/$group/$winid
-sirocco group_add_window $1
+sirocco group add $1
 $NIMCTLR group add $1 $winid
 
 # teleport and refocus to window's previous group
@@ -22,7 +22,7 @@ if [ $2 ] ;then
 	W=$(ls -1 $GROUP/$group | head -1)
 	[ $W ] && {
 		$NIMCTLR group $group
-		sirocco window_focus $W
+		sirocco window focus $W
 		$NIMCTLR group add $group $W
 		exit 0  # skip original window refocus SEE: window wrapper
 	}
