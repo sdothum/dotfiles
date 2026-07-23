@@ -11,10 +11,13 @@ proc classname*(args: seq[string]): string =
   shvArgs("window", "classname", args, 0, 0)
 
 proc count*(args: seq[string]): string =
-  shvArgs("window", "count", args, 1, 1)
+  shvArgs("window", "count", args, 0, 3)
+
+proc geometry*(args: seq[string]): string =
+  shvArgs("window", "geometry", args, 0, 1)
 
 proc ids*(args: seq[string]): string =
-  shvArgs("window", "ids", args, 0, 1)
+  shvArgs("window", "ids", args, 0, 3)
 
 #
 # Actions
@@ -27,7 +30,7 @@ proc group*(args: seq[string]) =
   runvArgs("window", "group", args, 1, 2)
 
 proc hide*(args: seq[string]) =
-  runvArgs("window", "hide", args, 0, 0)
+  runvArgs("window", "hide", args, 0, 1)
 
 proc revert*(args: seq[string]) =
   runvArgs("window", "revert", args, 0, 1)
@@ -59,12 +62,18 @@ proc sync*(args: seq[string]) =
 proc tile*(args: seq[string]) =
   runvArgs("window", "tile", args, 1, 4)
 
+proc toggle*(args: seq[string]) =
+  runvArgs("window", "toggle", args, 1, 2)
+
 #
 # Native Nim convenience overloads
 #
 
 proc classname*(): string =
   classname(@[])
+
+proc count*(): int =
+  parseInt(count(@[]))
 
 proc count*(classname: string): int =
   parseInt(count(@[classname]))
@@ -115,6 +124,8 @@ proc dispatch*(verb: string, rest: seq[string]) =
     echo count(rest)
   of "extend":
     extend(rest)
+  of "geometry":
+    echo geometry(rest)
   of "group":
     group(rest)
   of "hide":
@@ -141,5 +152,7 @@ proc dispatch*(verb: string, rest: seq[string]) =
     sync(rest)
   of "tile":
     tile(rest)
+  of "toggle":
+    toggle(rest)
   else:
     quit("unknown window action: " & verb)

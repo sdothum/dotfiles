@@ -105,6 +105,7 @@ proc usage() =
   echo "  nimctlr window classname"
   echo "  nimctlr window count <args>"
   echo "  nimctlr window extend <args>"
+  echo "  nimctlr window geometry <args>"
   echo "  nimctlr window group <args>"
   echo "  nimctlr window hide"
   echo "  nimctlr window ids [<args>]"
@@ -118,6 +119,7 @@ proc usage() =
   echo "  nimctlr window standard <args>"
   echo "  nimctlr window sync <args>"
   echo "  nimctlr window tile <args>"
+  echo "  nimctlr window toggle <args>"
   quit(1)
 
 #

@@ -6,6 +6,7 @@ const
   ClassManpage* = "manpage"
   ClassQutebrowser* = "qutebrowser"
   ClassTerm* = "term"
+  ClassTmux* = "tmux"
   ClassWiki* = "wiki"
   ClassZathura* = "org.pwmt.zathura"
 

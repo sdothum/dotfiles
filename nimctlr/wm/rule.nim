@@ -33,7 +33,10 @@ proc video1080p(groupname: string = GroupPlay) =
 #
 
 proc btop() =
-  window.size("A5")
+  window.group(GroupUtil)
+  # window.size("A5")
+  window.snap(Center)
+  groups.focus(GroupDesk)
 
 proc kak() =
   window.group(GroupCode)
@@ -70,16 +73,16 @@ proc pavucontrol() =
   window.snap(Center)
   groups.focus(GroupDesk)
 
-proc term() =
-  window.group(groups.nameCurrent())
+proc term(classname: string = ClassTerm) =
+  window.group(GroupCode)
 
-  case window.count(ClassTerm)
+  case window.count(classname)
   of 0..2:
-    layout.spread("3", ClassTerm)
+    layout.spread("3", classname)
   of 3:
-    layout.fold("--", "3x2", ClassTerm)
+    layout.fold("--", "3x2", classname)
   else:
-    layout.spread("3x2", ClassTerm)
+    layout.spread("3x2", classname)
 
 #
 # Dispatch
@@ -115,6 +118,11 @@ proc dispatch*(verb: string, rest: seq[string]) =
   of "zathura":
     tile3Columns(GroupDesk, ClassZathura)
 
+  of "term":
+    term()
+  of "tmux":
+    term(ClassTmux)
+
   of "yazi", "yazi-root":
     sizeA4Centered()
 
@@ -130,7 +138,5 @@ proc dispatch*(verb: string, rest: seq[string]) =
     music()
   of "pavucontrol":
     pavucontrol()
-  of "term":
-    term()
   else:
     quit("unknown rule: " & verb)
