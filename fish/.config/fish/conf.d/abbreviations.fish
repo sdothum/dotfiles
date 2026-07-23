@@ -268,6 +268,7 @@ function fishlog; history $argv | pager ;end
 
 # abbr cd 'z'
 # abbr nd 'ncd'
+abbr btop 'term btop BLACKBOARD btop'
 abbr dash 'rlwrap -Nn dash'
 abbr fd 'flirt:cd'
 abbr fh 'flirt:sh'
