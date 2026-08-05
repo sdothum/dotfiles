@@ -18,6 +18,8 @@ group=$(cat $MAILDIR/.mailsync:group)
 trap "mailsync $group" EXIT
 
 notify aerc "<b>Ctrl-v</b>  vsplit\n<b>q</b>      close"
+export KAKTUI=aerc  # FOR: avoid reseting term window upon exiting compose (tab)
+export BG='f7f3ee:-7,fff5e8:-7,96f8f8:-12,fa8c69'  # match colorscheme to PAPER bg
 offsetY=6 paddingY=6 term email class=aerc WAIT PAPER OPACITY=1 $AERC
 
 # kak: filetype=sh

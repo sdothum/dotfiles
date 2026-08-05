@@ -34,7 +34,7 @@ FONTS=$HOME/.local/share/fonts
 
 usage() {
 	echo "$(basename $0) normal (default) | dyslexic | ebook | expanded | extended | pseudokern  (shapes)
-> utf-8 | english | latin+greek | cyrillic | fluent | ligature <name>  (utf-8)
+> utf-8 | english | latin+greek | ascii | cyrillic | fluent | ligature <name>  (utf-8)
 > heading | kindle | kobo[+] | menu | proof | webfont  (special)
 > monolexic (default) | atkinson | geometric | jost    (typefaces)
 > altmono | elementary | grote | grotesk | nerdfont    (glyph sets)
@@ -72,6 +72,7 @@ usage() {
 > w-asymmetric
 > y-[straight|turn]
 
+> 1-nobase[_]
 > 0-[split|tall|cutout]
 > 1-[[no]base|flat]
 > 4-open[+]
@@ -199,9 +200,11 @@ variant() {
 			0-cutout       ) glyph zero=reverse-slashed-cutout                          ;;
 			0-split        ) glyph zero=reverse-slashed-split                           ;;
 			0-tall         ) glyph zero=tall-reverse-slashed                            ;;
-			1-base         ) glyph one=base                                             ;;
-			1-nobase       ) glyph one=no-base                                          ;;
-			1-flat         ) glyph one=no-base-flat-top-serif                           ;;
+			1-base         ) glyph one=base                                  unset S_1  ;;
+			1-nobase       ) glyph one=no-base;                              unset S_1  ;;
+			1-flat         ) glyph one=no-base-flat-top-serif                unset S_1  ;;
+			1-nobase_      ) glyph one=no-base;                              S_1='1'    ;;
+			1-flat_        ) glyph one=no-base-flat-top-serif                S_1='1'    ;;
 			4-open+        ) glyph four=semi-open-non-crossing-serifless                ;;
 			4-open         ) glyph four=semi-open                                       ;;
 			ampersand      ) glyph ampersand=closed                                     ;;
@@ -322,6 +325,7 @@ english_only() { exclude_chars='ranges = [[384, 401], [403, 505], [512, 535], [5
 latin_greek()  { exclude_chars='ranges = [[384, 401], [403, 505], [512, 535], [540, 566], [568, 585], [588, 709], [712, 712], [714, 727], [734, 768], [770, 805], [807, 820], [822, 879], [1024, 7678], [7936, 8190], [8352, 8363], [8365, 8452], [8454, 8466], [8468, 8469], [8471, 8481], [8483, 8485], [8487, 8493], [8495, 8530], [8533, 8538], [8543, 8705], [8707, 8709], [8711, 8718], [8720, 8720], [8723, 8724], [8726, 8728], [8731, 8733], [8735, 8746], [8748, 8775], [8777, 8799], [8801, 8803], [8806, 9412], [9414, 9673], [9675, 9727], [9984, 11809], [11811, 11812], [11814, 64255], [64259, 130041]]'; }
 cyrillic()     { exclude_chars='ranges = [[384, 401], [403, 505], [512, 535], [540, 566], [568, 585], [588, 709], [712, 712], [714, 727], [734, 768], [770, 805], [807, 820], [822, 879], [3584, 7678], [7936, 8190], [8352, 8363], [8365, 8452], [8454, 8466], [8468, 8469], [8471, 8481], [8483, 8485], [8487, 8493], [8495, 8530], [8533, 8538], [8543, 8705], [8707, 8709], [8711, 8718], [8720, 8720], [8723, 8724], [8726, 8728], [8731, 8733], [8735, 8746], [8748, 8775], [8777, 8799], [8801, 8803], [8806, 9412], [9414, 9673], [9675, 9727], [9984, 11809], [11811, 11812], [11814, 64255], [64259, 130041]]'; }
 fluent() { exclude_chars='ranges = [[3584, 3647], [8592, 9673], [9677, 11360], [12800, 42560], [57344, 64256], [65520, 130041]]'; }
+ascii()  { exclude_chars='ranges = [[128, 8210], [8232, 8591], [8602, 130041]]'; }
 
 family()   { [ $1 ] || return 1; family=$1; }
 space()    { [ $1 = "M" ] && space=$1 || space=$(token decimal $1); }
@@ -354,6 +358,7 @@ cmdopts () {
 			pseudo*        ) export PSEUDO_KERN=true; space 0.915 ;;                                       # SEE: fforge
 
 			# language
+			ascii          ) ascii;        ditto char_set "$1" ;;
 			cyrillic       ) cyrillic;     ditto char_set "$1" ;;
 			english        ) english_only; ditto char_set "$1" ;;
 			fluent         ) fluent;       ditto char_set "$1" ;;
@@ -485,8 +490,8 @@ cmdopts () {
 			0-split        ) variant $1 ;;
 			0-tall         ) variant $1 ;;
 			1-base         ) variant $1 ;;
-			1-nobase       ) variant $1 ;;
-			1-flat         ) variant $1 ;;
+			1-nobase*      ) variant $1 ;;
+			1-flat*        ) variant $1 ;;
 			4-open         ) variant $1 ;;
 			4-open+        ) variant $1 ;;
 			paren-flat     ) variant $1 ;;
@@ -752,7 +757,7 @@ css   = 'normal'  # 'font-stretch' property of webfont CSS.
 # Specify character ranges in the section below to exclude certain characters from the font being
 # built. Remove this section when this feature is not needed.
 
-[buildPlans.$family.excludeChars]
+[buildPlans.$family.subset.exclude]
 $exclude_chars
 
 # End character exclusion
@@ -799,20 +804,20 @@ $ascender
 " >$REPO/private-build-plans.toml
 
 # ensure node.js is uptodate
-npm install  # ignore npm funding and audit messages
+npm install                              # ignore npm funding and audit messages
 # npm update
 
-npm run build -- ttf::$family  # post Verda commits
+npm run build -- ttf::$family            # post Verda commits
 
 if [ -z "$ebook" ] || [ $nerdfont ] ;then
 	ditto mono $mono
-	nerdfont $mono $family                      # insert glyphs
-	# unset serifless                           # monospace charset
+	nerdfont $mono $family                # insert glyphs
+	# unset serifless                     # monospace charset
 fi
 
 mkdir -p $FONTS/$family
 cp -v dist/$family/TTF/* $FONTS/$family  # v30 directory name change
-export ANGLE=-11                               # sight adjusted italics angle
+export ANGLE=-11                         # sight adjusted italics angle
 
 # remove old v27 Iosevka font files
 for i in $FONTS/$family/*ttf ;do
@@ -849,13 +854,13 @@ unset adjust baseline capadjust  # no longer applying for koreader and version 3
 if [ $ebook ] ;then
 	(( $(echo "$space >= 1.0" | bc -l) )) && fforge punctuation ${emdash:-2} ${shape##* } $family 2>/dev/null; unset width
 	if [ $spacing != 'quasi-proportional' ] ;then
-		fforge ligature $width                                          ${shape##* } $family  # ae width character adjustment
-		[ "$s_I$s_i$s_j$s_l" ] && fforge serifless "$s_I$s_i$s_j$s_l"   ${shape##* } $family  # adjust serifless "I i j l" cell width
-		[ "$S_i$S_J$S_j$S_l" ] && fforge serifed "$S_i$S_J$S_j$S_l"     ${shape##* } $family  # adjust serifed "i J j l" cell width
-		[ "$T_l"             ] && fforge l_tailed "$T_l"                ${shape##* } $family  # adjust tailed "l" cell width
-		[ $serifless         ] || [ $serifed ] && fforge quote "‘’‛"    ${shape##* } $family  # adjust quote (left,right,reversed) cell width
-		[ $serifless         ] || [ $serifed ] && fforge serifless  "'" ${shape##* } $family  # adjust single quote cell width
-		[ "$T_a$T_d"         ] && fforge tailed "$T_a$T_d"              ${shape##* } $family  # adjust tailed "a d" cell width
+		[ "$char_set" != 'ascii' ] && fforge ligature $width                ${shape##* } $family  # ae width character adjustment
+		[ "$s_I$s_i$s_j$s_l"     ] && fforge serifless "$s_I$s_i$s_j$s_l"   ${shape##* } $family  # adjust serifless "I i j l" cell width
+		[ "$S_i$S_J$S_j$S_l$S_1" ] && fforge serifed "$S_i$S_J$S_j$S_l$S_1" ${shape##* } $family  # adjust serifed "i J j l" cell width
+		[ "$T_l"                 ] && fforge l_tailed "$T_l"                ${shape##* } $family  # adjust tailed "l" cell width
+		[ $serifless             ] || [ $serifed ] && fforge quote "‘’‛"    ${shape##* } $family  # adjust quote (left,right,reversed) cell width
+		[ $serifless             ] || [ $serifed ] && fforge serifless  "'" ${shape##* } $family  # adjust single quote cell width
+		[ "$T_a$T_d"             ] && fforge tailed "$T_a$T_d"              ${shape##* } $family  # adjust tailed "a d" cell width
 	fi
 	[ $adjust ] && fforge ${regular}weight $adjust $family  # rename weight for e-reader (as regular)
 	[ $space  ] && fforge space $space             $family  # lengthen space character cell width

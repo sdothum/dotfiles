@@ -10,7 +10,7 @@
 
 TMUXCONF=${TMUXCONF:-$HOME/.tmux.conf}
 
-[ "${1#class=}" != "$1" ] && { class=$1; shift; }
+[ "${1#class=}" != "$1" ] && { class=${1#class=}; shift; }
 [ $1   ] && { export TMUX=$1; shift; } || export TMUX=tmux
 [ "$1" = aerc ] && export MONOFONT=Iosevka-proof
 

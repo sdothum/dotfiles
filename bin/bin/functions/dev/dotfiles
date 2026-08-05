@@ -39,6 +39,7 @@ find . -name '*.syncthing.hsts.tmp' -exec rm {} \;
 sudo find . -name '.uuid' -exec rm {} \;
 find -regex '.*\/\.[^\]+\.kak\.[^.][^.][^.][^.][^.][^.]' -exec mv -v {} /tmp/ \;
 
+# update stow from separate project directories
 # for i in /etc/dinit.d.@* ;do /usr/bin/rsync -avq --delete $i $STOW/dinit/etc/ ;done
 [ -e $RSYNC ] && . $RSYNC
 

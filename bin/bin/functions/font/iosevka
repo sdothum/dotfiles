@@ -18,7 +18,7 @@ FONTS=$HOME/.local/share/fonts
 
 usage() {
 	echo "$(basename $0) ebook | kindle | kobo[+] | koreader | supernote | proportional | cities
-> cyrillic | fluent | latin+greek | utf-8
+> ascii | cyrillic | fluent | latin+greek | utf-8
 > classic | coding | quad | mu | serifless | serifed | trio | web
 > altmono | book+regular | expanded | grote | open[+]
 
@@ -39,6 +39,7 @@ usage() {
 > t-[asymmetric[+|-[-]]|cross[+]|descending[+[=]]|flat]
 > y-straight
 
+> 1-nobase[_]
 > 0-[split|tall|cutout]
 > at-tall
 > paren-flat
@@ -116,26 +117,28 @@ cmdopts() {
 			pseudokern     ) pseudokern=$1   ;;
 
 			# language
+			ascii          ) language=$1 ;;
 			cyrillic       ) language=$1 ;;
 			fluent         ) language=$1 ;;
 			latin+greek    ) language=$1 ;;
 			utf*           ) language=$1 ;;
 
 			# typefaces
-			classic        ) classic=true ;;
-			coding         ) coding=true ;;
-			quad           ) quad=true ;;
-			mu             ) mu=true ;;
+			classic        ) classic=true        ;;
+			coding         ) coding=true         ;;
+			quad           ) quad=true           ;;
+			mu             ) mu=true             ;;
 			serifless      ) serifless=serifless ;;
-			serifed        ) serifed=serifed ;;
-			trio           ) trio=true ;;
-			web            ) web=true ;;
+			serifed        ) serifed=serifed     ;;
+			trio           ) trio=true           ;;
+			watchface      ) watchface=true      ;;
+			web            ) web=true            ;;
 
 			# styles
-			altmono        ) altmono=$1 ;;  # alternate "monospace" coding font
-			book+regular   ) adjust=$1 ;;
-			grote          ) grote=$1 ;;
-			open*          ) open=$1 ;;
+			altmono        ) altmono=$1 ;; # alternate "monospace" coding font
+			book+regular   ) adjust=$1  ;;
+			grote          ) grote=$1   ;;
+			open*          ) open=$1    ;;
 
 			# glyphs
 			D-serifless    ) D=$1 ;;
@@ -200,7 +203,7 @@ cmdopts() {
 			0-cutout       ) zero=$1    ;;
 			0-split        ) zero=$1    ;;
 			0-tall         ) zero=$1    ;;
-			1-nobase       ) one=$1     ;;
+			1-nobase*      ) one=$1     ;;
 			4-open+        ) four=$1    ;;
 			at-tall        ) at=$1      ;; # source code variant
 			paren-flat     ) paren=$1   ;; # source code variant
@@ -299,6 +302,11 @@ elif [ "$test" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat l-ascending Q-open 1-nobase f-extended+= a-double_ d-tailed y-turn J-descending utf-8 serifless serifed pseudokern percent/ 0-tall
  	emdash
 	e_ink ottawa     grote I-serifless  t-descending=+  m-straight f-extended+= y-turn
+
+elif [ "$watchface" ] ;then
+	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat l-ascending Q-open f-extended+= a-double_ d-tailed y-turn J-descending utf-8 serifless serifed pseudokern percent/ 0-tall ascii 1-nobase_
+ 	emdash
+	e_ink watchface grote I-serifless  t-descending=+  m-straight f-extended+= y-turn
 
 elif [ "$cities" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat l-ascending Q-open 1-nobase f-extended+= a-double_ d-tailed y-turn J-descending utf-8 serifless serifed pseudokern percent/ 0-tall

@@ -19,6 +19,7 @@ fi
 # stream youtube to mpv (to remove ads)
 # yt-dlp -o - "$1" | mpv --x11-name=youtube -
 WID=$(pfw)
+$NIMCTLR window group $($NIMCTLR group id "DESK")  # recover (potentially shifted) group to prevent restoration on mpv launch
 notify 10 "youtube" "loading..\n$1"
 window hide
 
