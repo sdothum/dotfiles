@@ -104,7 +104,7 @@ addm %{ paste p9 : map global select R '| xsel --output --clipboard<ret>'       
 # ......................................................................... Line
 
 # map global normal G     'ge'     -docstring 'goto buffer end'  # breaks selection motion
-map global normal 0       'gh'     -docstring 'goto line begin'
+# map global normal 0     'gh'     -docstring 'goto line begin'  # breaks <..0..>g
 map global normal ^       'gi'     -docstring 'goto first non-blank character'
 map global normal $       'gl'     -docstring 'goto line end'
 map global normal Y       '<a-l>'  -docstring 'select to end of line'
