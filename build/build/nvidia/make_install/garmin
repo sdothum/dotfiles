@@ -1,0 +1,21 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ....................................................................... Garmin
+
+curl -s https://raw.githubusercontent.com/lindell/connect-iq-sdk-manager-cli/master/install.sh | sh
+
+connect-iq-sdk-manager agreement view    # View and read through the agreement
+connect-iq-sdk-manager agreement accept  # Accept the license agreement
+connect-iq-sdk-manager login
+
+mkdir -p ~/.Garmin/ConnectIQ/Sdks
+connect-iq-sdk-manager sdk list
+connect-iq-sdk-manager sdk set 9.2.0     # NOTE: Download lastest set from list above
+# export PATH=`connect-iq-sdk-manager sdk current-path --bin`:$PATH       # Make the SDK binaries can be callable
+# connect-iq-sdk-manager device download --manifest=your-app/manifest.xml  # Download the devices used in your project
+
+# kak: filetype=sh

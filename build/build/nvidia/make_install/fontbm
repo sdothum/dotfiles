@@ -1,0 +1,17 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ....................................................................... fontbm
+
+cd /home/depot
+exists --repo fontbm && { cd fontbm; git pull; cd ..; } || git clone --depth 1 https://github.com/vladimirgamalyan/fontbm.git
+
+cd fontbm
+cmake .
+make
+sudo cp -v fontbm /usr/local/bin/
+
+# kak: filetype=sh
