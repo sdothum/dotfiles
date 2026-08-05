@@ -4,7 +4,7 @@ Faouzia
 FORK DIFFERENCES
 ----------
 
-32bit #aarrggbb border color transparency (required picom compositor)
+32bit #aarrggbb outer/inner border color transparency (required picom compositor)
 window hiding (vs group hiding)
 window stack toggle (raise)
 sirocco command chaining (dot)
@@ -120,7 +120,7 @@ Features
 	* Focus, move and resize windows with the mouse
 	* Supports window resize hints
 * Respects window resize hints.
-* Simple and stylish solid-color border. Width can be configured
+* Simple and stylish outer/inner-color border. Widths can be configured
 * Gaps around the monitor and around the cells of the virtual grid(s).
 * Configuration script. Faouzia loads a given script at startup that can be
 	used for configuration with sirocco.

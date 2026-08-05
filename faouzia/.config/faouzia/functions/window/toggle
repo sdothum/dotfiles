@@ -6,7 +6,7 @@
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ..................................................... Toggle window visibility
-set -x
+
 # Usage: toggle [--name] <name>
 
 case $1 in
@@ -25,7 +25,7 @@ unmap() {
 }
 
 # SEE: sxhkdrc
-map $(nimctlr window ids $option $name) || unmap $(nimctlr window ids --all $option $name)
+map $(sirocco window ids $option $name) || unmap $(sirocco window ids --all $option $name)
 
 exit 1
 

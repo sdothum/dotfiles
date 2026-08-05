@@ -1,11 +1,11 @@
 #!/bin/sh
 
-sirocco wm config border_width 5
-sirocco wm config internal_border_width 2
-sirocco wm config color_focused 0x97a293
-sirocco wm config color_unfocused 0x393638
-sirocco wm config internal_color_focused 0x393638
-sirocco wm config internal_color_unfocused 0x97a293
+sirocco wm config outer_border_width 5
+sirocco wm config inner_border_width 2
+sirocco wm config outer_color_focused 0x97a293
+sirocco wm config outer_color_unfocused 0x393638
+sirocco wm config inner_color_focused 0x393638
+sirocco wm config inner_color_unfocused 0x97a293
 
 sirocco wm config gap_width all 0
 sirocco wm config grid_gap_width 0

@@ -20,8 +20,8 @@ usage() {
 > ${GREEN}theme: ${cyan} ${brown}a${cyan}pply | ${brown}k${cyan}eep as | ${brown}p${cyan}urge [<theme>]
 > ${GREEN}toggle:${cyan} ${brown}!${cyan} borders
 > ${GREEN}tuples:${cyan} border ${brown}s${cyan}tyle <style> | corners (length) ${brown}%${cyan} <percent>
->         border ${brown}w${cyan}idth | internal ${brown}W${cyan}idth <pixels>
->         color ${brown}f${cyan}ocused | ${brown}u${cyan}nfocused | internal ${brown}F${cyan}ocused | internal ${brown}U${cyan}nfocused <aarrggbb>
+>         outer border ${brown}w${cyan}idth | inner border ${brown}W${cyan}idth <pixels>
+>         outer color ${brown}f${cyan}ocused | ${brown}u${cyan}nfocused | inner color ${brown}F${cyan}ocused | inner color ${brown}U${cyan}nfocused <aarrggbb>
 >         gap ${brown}t${cyan}op | ${brown}b${cyan}ottom | ${brown}l${cyan}eft | ${brown}r${cyan}ight | ${brown}g${cyan}rid <pixels>
 >         panel ${brown}h${cyan}eight | ${brown}i${cyan}ndent <pixels>
 >         where, border style:             f'rame | l'eft | t'op | r'ight | b'ottom | c'orners [<mask>]
@@ -33,14 +33,14 @@ usage() {
 snapshot() {
 	enable_borders=$(recipe ui/enable_borders)
 	border_style=$(recipe ui/border_style)
-	border_width=$(recipe ui/border_width)
-	internal_border_width=$(recipe ui/internal_border_width)
+	outer_border_width=$(recipe ui/outer_border_width)
+	inner_border_width=$(recipe ui/inner_border_width)
 	corner_percent=$(recipe ui/corner_percent)
 	corner_mask=$(recipe ui/corner_mask)
-	color_focused=$(recipe ui/color_focused)
-	color_unfocused=$(recipe ui/color_unfocused)
-	internal_color_focused=$(recipe ui/internal_color_focused)
-	internal_color_unfocused=$(recipe ui/internal_color_unfocused)
+	outer_color_focused=$(recipe ui/outer_color_focused)
+	outer_color_unfocused=$(recipe ui/outer_color_unfocused)
+	inner_color_focused=$(recipe ui/inner_color_focused)
+	inner_color_unfocused=$(recipe ui/inner_color_unfocused)
 	gap_width_top=$(recipe 'ui/gap_width top')
 	gap_width_bottom=$(recipe 'ui/gap_width bottom')
 	gap_width_left=$(recipe 'ui/gap_width left')
@@ -53,14 +53,14 @@ snapshot() {
 recover() {
 	recipe ui/enable_borders $enable_borders
 	recipe ui/border_style $border_style
-	recipe ui/border_width $border_width
-	recipe ui/internal_border_width $internal_border_width
+	recipe ui/outer_border_width $outer_border_width
+	recipe ui/inner_border_width $inner_border_width
 	recipe ui/corner_percent $corner_percent
 	recipe ui/corner_mask $corner_mask
-	recipe ui/color_focused $color_focused
-	recipe ui/color_unfocused $color_unfocused
-	recipe ui/internal_color_focused $internal_color_focused
-	recipe ui/internal_color_unfocused $internal_color_unfocused
+	recipe ui/outer_color_focused $outer_color_focused
+	recipe ui/outer_color_unfocused $outer_color_unfocused
+	recipe ui/inner_color_focused $inner_color_focused
+	recipe ui/inner_color_unfocused $inner_color_unfocused
 	recipe 'ui/gap_width top' $gap_width_top
 	recipe 'ui/gap_width bottom' $gap_width_bottom
 	recipe 'ui/gap_width left' $gap_width_left
@@ -77,14 +77,14 @@ settings() {
 	${ORANGE}${NOCOLOR}base theme               "${theme:----}"
 	${ORANGE}!${NOCOLOR} borders                "$(recipe ui/enable_borders)"
 	border ${ORANGE}s${NOCOLOR}tyle             "$(decoration $(recipe ui/border_style))"
-	border ${ORANGE}w${NOCOLOR}idth             "$(recipe ui/border_width)"
-	internal border ${ORANGE}W${NOCOLOR}idth    "$(recipe ui/internal_border_width)"
+	outer border ${ORANGE}w${NOCOLOR}idth       "$(recipe ui/outer_border_width)"
+	inner border ${ORANGE}W${NOCOLOR}idth       "$(recipe ui/inner_border_width)"
 	corners ${ORANGE}%${NOCOLOR}                "$(recipe ui/corner_percent)"
 	${ORANGE}c${NOCOLOR}orners mask             "$(map)"
-	color ${ORANGE}f${NOCOLOR}ocused            "$(recipe ui/color_focused)"
-	color ${ORANGE}u${NOCOLOR}nfocused          "$(recipe ui/color_unfocused)"
-	internal color ${ORANGE}F${NOCOLOR}ocused   "$(recipe ui/internal_color_focused)"
-	internal color ${ORANGE}U${NOCOLOR}nfocused "$(recipe ui/internal_color_unfocused)"
+	outer color ${ORANGE}f${NOCOLOR}ocused      "$(recipe ui/outer_color_focused)"
+	outer color ${ORANGE}u${NOCOLOR}nfocused    "$(recipe ui/outer_color_unfocused)"
+	inner color ${ORANGE}F${NOCOLOR}ocused      "$(recipe ui/inner_color_focused)"
+	inner color ${ORANGE}U${NOCOLOR}nfocused    "$(recipe ui/inner_color_unfocused)"
 	gap width ${ORANGE}t${NOCOLOR}op            "$(recipe 'ui/gap_width top')"
 	gap width ${ORANGE}b${NOCOLOR}ottom         "$(recipe 'ui/gap_width bottom')"
 	gap width ${ORANGE}l${NOCOLOR}eft           "$(recipe 'ui/gap_width left')"
@@ -182,14 +182,14 @@ while : ;do
 			p ) echo -n purge theme ;;
 			! ) echo -n toggle borders ;;
 			s ) echo -n border style ;;
-			w ) echo -n border width ;;
-			W ) echo -n internal border width ;;
+			w ) echo -n outer border width ;;
+			W ) echo -n inner border width ;;
 			% ) echo -n corners percent ;;
 			c ) echo -n corners mask ;;
 			f ) echo -n focused aarrggbb ;;
 			u ) echo -n unfocused aarrggbb ;;
-			F ) echo -n internal focused aarrggbb ;;
-			U ) echo -n internal unfocused aarrggbb ;;
+			F ) echo -n inner focused aarrggbb ;;
+			U ) echo -n inner unfocused aarrggbb ;;
 			t ) echo -n gap width top ;;
 			b ) echo -n gap width bottom ;;
 			l ) echo -n gap width left ;;
@@ -226,14 +226,14 @@ while : ;do
 		p ) purge ${value:-$theme} ;;
 		! ) recipe ui/enable_borders $value ;;
 		s ) recipe ui/border_style $value; [ $mask ] && recipe ui/corner_mask $mask ;;
-		w ) recipe ui/border_width $value ;;
-		W ) recipe ui/internal_border_width $value ;;
+		w ) recipe ui/outer_border_width $value ;;
+		W ) recipe ui/inner_border_width $value ;;
 		% ) recipe ui/corner_percent $value ;;
 		c ) recipe ui/corner_mask $mask ;;
-		f ) recipe ui/color_focused $value ;;
-		u ) recipe ui/color_unfocused $value ;;
-		F ) recipe ui/internal_color_focused $value ;;
-		U ) recipe ui/internal_color_unfocused $value ;;
+		f ) recipe ui/outer_color_focused $value ;;
+		u ) recipe ui/outer_color_unfocused $value ;;
+		F ) recipe ui/inner_color_focused $value ;;
+		U ) recipe ui/inner_color_unfocused $value ;;
 		t ) recipe 'ui/gap_width top' $value; recipe 'ui/gap_width bottom' $value ;;  # NOTE: sets balanced margins by default
 		b ) recipe 'ui/gap_width bottom' $value ;;
 		l ) recipe 'ui/gap_width left' $value; recipe 'ui/gap_width right' $value ;;

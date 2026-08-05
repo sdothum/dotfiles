@@ -35,7 +35,7 @@ esac
 
 spread() {
 	width=$(( (W - (cols - 1) * gap) / cols ))
-	# offset=$(( (width - WIDTH) / 2 - border ))  # offset from column edge
+	# offset=$(( (width - WIDTH) / 2 - outer_border ))  # offset from column edge
 	offset=$(( (width - WIDTH) / 2 ))  # offset from column edge
 
 	column=$(expr $Xpos % $cols)   # column Xposition left to right
@@ -57,7 +57,7 @@ esac
 
 float() {
 	height=$(( (H - gap) / 2 ))
-	# offset=$(( (height - HEIGHT) / 2 - border ))  # offset from row edge
+	# offset=$(( (height - HEIGHT) / 2 - outer_border ))  # offset from row edge
 	offset=$(( (height - HEIGHT) / 2 ))  # offset from row edge
 
 	Y=$(( height * ${1%x2} + top + gap / 2 + offset ))

@@ -85,10 +85,10 @@ alt + {Left,Down,Up,Right}
 # ........................................................................ focus
 
 super + {_,shift} + 0
-	nimctlr window {revert,rotate}
+	nimctlr window {restore,rotate}
 
 super + ctrl + 0
-	nimctlr layout revert
+	nimctlr layout restore
 
 super + {_,shift} + i
 	echo "$(timestamp) sxhkd window hide $(pfw)" >>$WMLOG ;\

@@ -362,7 +362,7 @@ event_map_request(xcb_generic_event_t *ev)
 
 if (client->frame != XCB_NONE) {
 	xcb_map_window(conn, client->frame);
-	paint_frame(client, conf.focus_color, conf.internal_focus_color);
+	paint_frame(client, conf.outer_focus_color, conf.inner_focus_color);
 }
 	/* window is normal */
 	xcb_change_property(conn, XCB_PROP_MODE_REPLACE, client->window,
@@ -372,7 +372,7 @@ if (client->frame != XCB_NONE) {
 	update_client_list();
 
 	if (!client->maxed)
-		set_borders(client, conf.focus_color, conf.internal_focus_color);
+		set_borders(client, conf.outer_focus_color, conf.inner_focus_color);
 	update_current_desktop(client);
 }
 

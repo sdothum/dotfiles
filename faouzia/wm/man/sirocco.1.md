@@ -219,23 +219,29 @@ Here is a list of exposed properties:
 Configuring is done using the `wm config` command. Possible configuration keys
 are:
 
-* `border_width` <width>:
-	Sets the border width to <width> pixels.
+* `outer_border_width` <width>:
+	Sets the outer border width to <width> pixels.
 
-* `color_focused`, `color_unfocused` <color>:
-	Sets the border color to <color> for the focused and unfocused state respectively.
-	<color> is a hexadecimal value that may or may not start with `0x`
+* `outer_color_focused`, `outer_color_unfocused` <outer_color>:
+	Sets the outer border color to <outer_color> for the focused and unfocused
+	state respectively.
+	<outer_color> is a hexadecimal value that may or may not start with `0x`
 	prefix. Example: `0x1234ef`.
 
-* `internal_border_width` <width>:
+* `inner_border_width` <width>:
 	Make the first <width> pixels from the interior to the exterior of the
-	border of another color, so you get two borders.
-	The width of the external border is `border_width -
-	internal_border_width`.
+	inner border use another color, so you get inner and outer borders.
+	The width of the outer border is `outer_border_width -
+	inner_border_width`.
 
-* `internal_color_focused`, `internal_color_unfocused` <color>:
-	Like `color_focused` and `color_unfocused`, but for the internal
-	border.
+* `inner_color_focused`, `inner_color_unfocused` <inner_color>:
+	Like `outer_color_focused` and `outer_color_unfocused`, but for the inner
+	border. <inner_color> uses the same hexadecimal format as <outer_color>.
+
+The legacy `border_width`, `color_focused`, `color_unfocused`,
+`internal_border_width`, `internal_color_focused`, and
+`internal_color_unfocused` configuration keys remain accepted with the same
+arguments and behavior.
 
 * `gap_width` <POSITION> <width>:
 	Sets the window gap at <POSITION> to <width>. <POSITION> can be equal to

@@ -34,7 +34,7 @@ aspect() {
 
 monocle() {
 	$NIMCTLR window -- tile 2 1
-	sirocco window_snap middle
+	sirocco window_snap center
 }
 
 # .............................................................. To default term

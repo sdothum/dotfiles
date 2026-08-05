@@ -8,17 +8,17 @@
 
 # ...................................................................... Borders
 
-sirocco wm config enable_borders           $(recipe -c ui/enable_borders true)
-sirocco wm config border_width             $(recipe -c ui/border_width 6)
-sirocco wm config internal_border_width    $(recipe -c ui/internal_border_width 4)
-sirocco wm config border_style             $(recipe -c ui/border_style 1)
-sirocco wm config corner_percent           $(recipe -c ui/corner_percent 20)
-sirocco wm config corner_mask              $(recipe -c ui/corner_mask 8)
+sirocco wm config enable_borders        $(recipe -c ui/enable_borders true)
+sirocco wm config outer_border_width    $(recipe -c ui/outer_border_width 6)
+sirocco wm config inner_border_width    $(recipe -c ui/inner_border_width 4)
+sirocco wm config border_style          $(recipe -c ui/border_style 1)
+sirocco wm config corner_percent        $(recipe -c ui/corner_percent 20)
+sirocco wm config corner_mask           $(recipe -c ui/corner_mask 8)
 
-sirocco wm config color_focused            0x$(recipe -c ui/color_focused ffff0000)
-sirocco wm config color_unfocused          0x$(recipe -c ui/color_unfocused 00000000)
-sirocco wm config internal_color_focused   0x$(recipe -c ui/internal_color_focused 00000000)
-sirocco wm config internal_color_unfocused 0x$(recipe -c ui/internal_color_unfocused $(recipe ui/internal_color_focused))
+sirocco wm config outer_color_focused   0x$(recipe -c ui/outer_color_focused ffff0000)
+sirocco wm config outer_color_unfocused 0x$(recipe -c ui/outer_color_unfocused 00000000)
+sirocco wm config inner_color_focused   0x$(recipe -c ui/inner_color_focused 00000000)
+sirocco wm config inner_color_unfocused 0x$(recipe -c ui/inner_color_unfocused $(recipe ui/inner_color_focused))
 
 # ......................................................................... Gaps
 

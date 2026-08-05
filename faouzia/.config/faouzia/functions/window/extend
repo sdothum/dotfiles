@@ -35,7 +35,7 @@ top() {
 # ................................................................ Extend bottom
 
 bottom() {
-	# height=$(( H - Y + border ))
+	# height=$(( H - Y + outer_border ))
 	height=$(( H - Y ))
 
 	case $1 in

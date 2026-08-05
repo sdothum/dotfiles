@@ -61,20 +61,36 @@ false values: \fBfalse\fR | \fBf\fR | \fBno\fR | \fBn\fR | \fB0\fR
 .SH "COMMANDS"
 .
 .TP
+\fBwindow move\fR \fIx\fR \fIy\fR [\fIwinid\fR]
+Move the selected window to the absolute position given by \fIx\fR and \fIy\fR\.
+.
+.TP
+\fBwindow move \-\-relative\fR \fIx\fR \fIy\fR [\fIwinid\fR]
+Move the selected window by the relative pixel values \fIx\fR and \fIy\fR\.
+.
+.TP
+\fBwindow resize\fR \fIwidth\fR \fIheight\fR [\fIwinid\fR]
+Resize the selected window to \fIwidth\fR and \fIheight\fR\.
+.
+.TP
+\fBwindow resize \-\-relative\fR \fIwidth\fR \fIheight\fR [\fIwinid\fR]
+Resize the selected window by the relative pixel values \fIwidth\fR and \fIheight\fR\.
+.
+.TP
 \fBwindow_move\fR \fIx\fR \fIy\fR
-Move the focused window \fIy\fR pixels horizontally and \fIy\fR pixels vertically\.
+Legacy alias that moves the focused window \fIx\fR pixels horizontally and \fIy\fR pixels vertically\.
 .
 .TP
 \fBwindow_move_absolute\fR \fIx\fR \fIy\fR
-Move the focused window to the position given by \fIx\fR and \fIy\fR\.
+Legacy alias that moves the focused window to the position given by \fIx\fR and \fIy\fR\.
 .
 .TP
 \fBwindow_resize\fR \fIx\fR \fIy\fR
-Resize the focused window based on the relative pixel values \fIx\fR and \fIy\fR\.
+Legacy alias that resizes the focused window by \fIx\fR and \fIy\fR\.
 .
 .TP
 \fBwindow_resize_absolute\fR \fIwidth\fR \fIheight\fR
-Resize the focused window up to \fIwidth\fR and \fIheight\fR\.
+Legacy alias that resizes the focused window to \fIwidth\fR and \fIheight\fR\.
 .
 .TP
 \fBwindow_maximize\fR
@@ -187,12 +203,15 @@ Toggle the \fIgroup_nr\fR group\.
 Activate group \fIgroup_nr\fR and deactivate the rest\.
 .
 .TP
-\fBwm_quit\fR \fIexit_status\fR
+\fBwm quit\fR \fIexit_status\fR
 Quit faouzia with exit_status \fIexit_status\fR\.
 .
 .TP
-\fBwm_config\fR \fIkey\fR [\fIvalues\fR\.\.\.]
+\fBwm config\fR \fIkey\fR [\fIvalues\fR\.\.\.]
 See \fICONFIGURING\fR\.
+.
+.P
+The legacy \fBwm_quit\fR and \fBwm_config\fR command names remain accepted with the same arguments and behavior\.
 .
 .SH "QUERYING"
 .
@@ -238,23 +257,26 @@ On the root window\. An integer list of currently active groups\.
 On each managed window\. Contains information about the window\. Notable properties: \fBgroup\fR is \-1 if the window is not in a group\. \fBstate\fR can have one of the following values: \fBnormal\fR, \fBmaxed\fR, \fBvmaxed\fR, \fBhmaxed\fR, \fBmonocled\fR\.
 .
 .SH "CONFIGURING"
-Configuring is done using the \fBwm_config\fR command\. Possible configuration keys are:
+Configuring is done using the \fBwm config\fR command\. Possible configuration keys are:
 .
 .TP
-\fBborder_width\fR \fIwidth\fR
-Sets the border width to \fIwidth\fR pixels\.
+\fBouter_border_width\fR \fIwidth\fR
+Sets the outer border width to \fIwidth\fR pixels\.
 .
 .TP
-\fBcolor_focused\fR, \fBcolor_unfocused\fR \fIcolor\fR
-Sets the border color to \fIcolor\fR for the focused and unfocused state respectively\. \fIcolor\fR is a hexadecimal value that may or may not start with \fB0x\fR prefix\. Example: \fB0x1234ef\fR\.
+\fBouter_color_focused\fR, \fBouter_color_unfocused\fR \fIouter_color\fR
+Sets the outer border color to \fIouter_color\fR for the focused and unfocused state respectively\. \fIouter_color\fR is a hexadecimal value that may or may not start with \fB0x\fR prefix\. Example: \fB0x1234ef\fR\.
 .
 .TP
-\fBinternal_border_width\fR \fIwidth\fR
-Make the first \fIwidth\fR pixels from the interior to the exterior of the border of another color, so you get two borders\. The width of the external border is \fBborder_width \- internal_border_width\fR\.
+\fBinner_border_width\fR \fIwidth\fR
+Make the first \fIwidth\fR pixels from the interior to the exterior of the inner border use another color, so you get inner and outer borders\. The width of the outer border is \fBouter_border_width \- inner_border_width\fR\.
 .
 .TP
-\fBinternal_color_focused\fR, \fBinternal_color_unfocused\fR \fIcolor\fR
-Like \fBcolor_focused\fR and \fBcolor_unfocused\fR, but for the internal border\.
+\fBinner_color_focused\fR, \fBinner_color_unfocused\fR \fIinner_color\fR
+Like \fBouter_color_focused\fR and \fBouter_color_unfocused\fR, but for the inner border\. \fIinner_color\fR uses the same hexadecimal format as \fIouter_color\fR\.
+.
+.P
+The legacy \fBborder_width\fR, \fBcolor_focused\fR, \fBcolor_unfocused\fR, \fBinternal_border_width\fR, \fBinternal_color_focused\fR, and \fBinternal_color_unfocused\fR configuration keys remain accepted with the same arguments and behavior\.
 .
 .TP
 \fBgap_width\fR \fIPOSITION\fR \fIwidth\fR

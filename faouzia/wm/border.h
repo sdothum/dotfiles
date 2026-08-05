@@ -26,11 +26,11 @@ struct client;
 
 bool using_frame_borders(void);
 
-int32_t border_extent(void);
+int32_t outer_border_extent(void);
 
 void create_frame(struct client *);
 void destroy_frame(struct client *);
-void paint_frame(struct client *client, uint32_t color, uint32_t internal_color);
+void paint_frame(struct client *client, uint32_t outer_color, uint32_t inner_color);
 void refresh_borders(void);
 void set_borders(struct client *, uint32_t, uint32_t);
 void update_frame_geometry(struct client *);

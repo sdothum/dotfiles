@@ -14,7 +14,7 @@
 
 ## v0.5.1
 
-* Fixed [#49 Internal border causes black/transparent border on termite](https://github.com/tudurom/faouzia/issues/49).
+* Fixed [#49 Inner border causes black/transparent border on termite](https://github.com/tudurom/faouzia/issues/49).
 * Faouzia will print the cause of error when loading of the config file fails.
 * Last window focusing works correctly
 * Fixed [#62 'sirocco window_rev_cycle' crash report](https://github.com/tudurom/faouzia/issues/62)

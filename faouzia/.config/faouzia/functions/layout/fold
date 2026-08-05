@@ -7,6 +7,7 @@
 # .................................................................. Tile layout
 
 usage() { usage: "$(basename $0) fold [--] 0 | 1 | 2 | 3 | 4 | 5 [x2] [<classname>]"; exit 1; }
+#                         window fold [--] <colums [--rows <n>] [--row <n>] <classname> FOR: nimctlr
 
 winids=$(sirocco window ids ${3:-$2})
 instance=0  # window placement sequence

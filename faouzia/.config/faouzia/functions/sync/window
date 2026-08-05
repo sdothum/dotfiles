@@ -11,31 +11,40 @@
 record() { rm -rf $1/*; for i in $(sirocco window ids 2>>$WMLOG) ;do mkdir -p $1/$i ;done }
 
 # sync current group against wmctrl data snapshot
-vacuum() {
+sync() {
 	record $SNAPSHOT  # current winids
-	for i in $(ls -1 $GROUP/$($NIMCTLR group current)) ;do
+	G=$($NIMCTLR group current)
+	for i in $(ls -1 $GROUP/$G) ;do
 		[ -e "$SNAPSHOT/$i" ] && continue
 		echo "$(timestamp) sync/window -> remove $i (orphan)" >>$WMLOG
 		$NIMCTLR group remove $i
-		removals=true
+		changes=true
 	done
 
-	# HACK: fix rare dangling hidden window pointer (??) creation sequence as yet undetermined
+	for i in $(sirocco window ids) ;do
+		[ "$(find $GROUP -name $i)" = '' ] || continue
+		echo "$(timestamp) sync/window -> add $G/$i" >>$WMLOG
+		mkdir $GROUP/$G/$i
+		changes=true
+	done
+}
+
+# HACK: fix rare dangling hidden window pointer (??) creation sequence as yet undetermined
+dangling() {
 	for i in $(ls -1 $HIDDEN) ;do
-		[ -e "$SNAPSHOT/$i" ] && continue
+		sirocco window ids | grep -vq $1 && continue
 		echo "$(timestamp) sync/window -> remove $i (hidden)" >>$WMLOG
-		rmdir $HIDDEN/$i
-		removals=true
+		rm -r $HIDDEN/$i
+		changes=true
 	done
 }
 
 # new windows opended or closed?
-[ "$(sirocco window ids 2>>$WMLOG)" = "$(find $SNAPSHOT -maxdepth 1 -mindepth 1 -type d -printf "%f\n" | sort)" ] || vacuum
+[ "$(sirocco window ids 2>>$WMLOG)" = "$(find $SNAPSHOT -maxdepth 1 -mindepth 1 -type d -printf "%f\n" | sort)" ] && dangling || sync
 
 $NIMCTLR sync group
-[ $removals ] && refresh_panel
+[ $changes ] && refresh_panel
 
 exit 0  # NOTE: required to suppress nimctlr reporting $? -> 1
 
 # kak: filetype=sh
-

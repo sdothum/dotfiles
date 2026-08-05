@@ -12,10 +12,10 @@ set_geometry  # X Y WIDTH HEIGHT
 snapshot_geometry
 
 case $1 in
-	# left  ) sirocco window move --relative -$(( WIDTH + border * 2 )) 0  ;;
-	# right ) sirocco window move --relative  $(( WIDTH + border * 2 )) 0  ;;
-	# up    ) sirocco window move --relative 0 -$(( HEIGHT + border * 2 )) ;;
-	# down  ) sirocco window move --relative 0  $(( HEIGHT + border * 2 )) ;;
+	# left  ) sirocco window move --relative -$(( WIDTH + outer_border * 2 )) 0  ;;
+	# right ) sirocco window move --relative  $(( WIDTH + outer_border * 2 )) 0  ;;
+	# up    ) sirocco window move --relative 0 -$(( HEIGHT + outer_border * 2 )) ;;
+	# down  ) sirocco window move --relative 0  $(( HEIGHT + outer_border * 2 )) ;;
 	left  | Left  ) sirocco window move --relative -$WIDTH 0  ;;
 	right | Right ) sirocco window move --relative  $WIDTH 0  ;;
 	up    | Up    ) sirocco window move --relative 0 -$HEIGHT ;;

@@ -1,15 +1,16 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="window/revert $@" . $PARENT
+[ $TRACE ] && CHILD="layout/restore $@" . $PARENT
 
 # Faouzia
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ....................................................... Revert window geometry
+# ................................................................ Revert layout
 
-# Usage: window revert [winid]
+for i in $(sirocco window ids --all 2>>$WMLOG) ;do
+	$NIMCTLR window restore $i
+done
 
-cat_geometry
-draw $winid $WIDTH $HEIGHT
-sirocco window move $X $Y
+sirocco window focus $winid
+notify $WM "layout restore <b>ALL</b>"
 
 # kak: filetype=sh

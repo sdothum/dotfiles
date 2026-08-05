@@ -244,8 +244,8 @@ fit_on_screen(struct client *client)
 	} else if (client->geom.width == mon_width && client->geom.height == mon_height) {
 		client->geom.x = mon_x;
 		client->geom.y = mon_y;
-		client->geom.width -= 2 * border_extent();
-		client->geom.height -= 2 * border_extent();
+		client->geom.width -= 2 * outer_border_extent();
+		client->geom.height -= 2 * outer_border_extent();
 		maximize_window(client, mon_x, mon_y, mon_width, mon_height);
 		return;
 	}
@@ -255,11 +255,11 @@ fit_on_screen(struct client *client)
 			|| client->geom.x < mon_x || client->geom.y < mon_y) {
 		will_move = true;
 		if (client->geom.x > mon_x + mon_width)
-			client->geom.x = mon_x + mon_width - client->geom.width - 2 * border_extent();
+			client->geom.x = mon_x + mon_width - client->geom.width - 2 * outer_border_extent();
 		else if (client->geom.x < mon_x)
 			client->geom.x = mon_x;
 		if (client->geom.y > mon_y + mon_height)
-			client->geom.y = mon_y + mon_height - client->geom.height - 2 * border_extent();
+			client->geom.y = mon_y + mon_height - client->geom.height - 2 * outer_border_extent();
 		else if (client->geom.y < mon_y)
 			client->geom.y = mon_y;
 	}
@@ -277,23 +277,23 @@ fit_on_screen(struct client *client)
 
 	// If the window is larger than the screen or is a bit in the outside,
 	// move it to the corner and resize it accordingly.
-	if (client->geom.width + 2 * border_extent() > mon_width) {
+	if (client->geom.width + 2 * outer_border_extent() > mon_width) {
 		client->geom.x = mon_x;
-		client->geom.width = mon_width - 2 * border_extent();
+		client->geom.width = mon_width - 2 * outer_border_extent();
 		will_move = will_resize = true;
-	} else if (client->geom.x + client->geom.width + 2 * border_extent()
+	} else if (client->geom.x + client->geom.width + 2 * outer_border_extent()
 			> mon_x + mon_width) {
-		client->geom.x = mon_x + mon_width - client->geom.width - 2 * border_extent();
+		client->geom.x = mon_x + mon_width - client->geom.width - 2 * outer_border_extent();
 		will_move = true;
 	}
 
-	if (client->geom.height + 2 * border_extent() > mon_height) {
+	if (client->geom.height + 2 * outer_border_extent() > mon_height) {
 		client->geom.y = mon_y;
-		client->geom.height = mon_height - 2 * border_extent();
+		client->geom.height = mon_height - 2 * outer_border_extent();
 		will_move = will_resize = true;
-	} else if (client->geom.y + client->geom.height + 2 * border_extent()
+	} else if (client->geom.y + client->geom.height + 2 * outer_border_extent()
 			> mon_y + mon_height) {
-		client->geom.y = mon_y + mon_height - client->geom.height - 2 * border_extent();
+		client->geom.y = mon_y + mon_height - client->geom.height - 2 * outer_border_extent();
 		will_move = true;
 	}
 
@@ -324,8 +324,8 @@ maximize_window(struct client *client, int16_t mon_x, int16_t mon_y, uint16_t mo
 
 	client->geom.x = mon_x;
 	client->geom.y = mon_y;
-	// client->geom.width = mon_width - 2 * border_extent();
-	// client->geom.height = mon_height - 2 * border_extent();
+	// client->geom.width = mon_width - 2 * outer_border_extent();
+	// client->geom.height = mon_height - 2 * outer_border_extent();
 	client->geom.width = mon_width;
 	client->geom.height = mon_height;
 
@@ -349,7 +349,7 @@ hmaximize_window(struct client *client, int16_t mon_x, uint16_t mon_width)
 	if (client->geom.width != mon_width)
 		client->orig_geom = client->geom;
 	client->geom.x = mon_x + conf.gap_left;
-	client->geom.width = mon_width - conf.gap_left - conf.gap_right - 2 * border_extent();
+	client->geom.width = mon_width - conf.gap_left - conf.gap_right - 2 * outer_border_extent();
 
 	teleport_window(client->window, client->geom.x, client->geom.y);
 	resize_window_absolute(client->window, client->geom.width, client->geom.height);
@@ -372,7 +372,7 @@ vmaximize_window(struct client *client, int16_t mon_y, uint16_t mon_height)
 		client->orig_geom = client->geom;
 
 	client->geom.y = mon_y + conf.gap_up;
-	client->geom.height = mon_height - conf.gap_up - conf.gap_down - 2 * border_extent();
+	client->geom.height = mon_height - conf.gap_up - conf.gap_down - 2 * outer_border_extent();
 
 	teleport_window(client->window, client->geom.x, client->geom.y);
 	resize_window_absolute(client->window, client->geom.width, client->geom.height);
@@ -395,9 +395,9 @@ monocle_window(struct client *client, int16_t mon_x, int16_t mon_y, uint16_t mon
 
 	client->geom.x = mon_x + conf.gap_left;
 	client->geom.y = mon_y + conf.gap_up;
-	client->geom.width = mon_width - 2 * border_extent()
+	client->geom.width = mon_width - 2 * outer_border_extent()
 		- conf.gap_left - conf.gap_right;
-	client->geom.height = mon_height - 2 * border_extent()
+	client->geom.height = mon_height - 2 * outer_border_extent()
 		- conf.gap_up - conf.gap_down;
 	teleport_window(client->window, client->geom.x, client->geom.y);
 	resize_window_absolute(client->window, client->geom.width, client->geom.height);
@@ -510,13 +510,13 @@ grid_window(struct client *client, uint16_t grid_width, uint16_t grid_height, ui
 	get_monitor_size(client, &mon_x, &mon_y, &mon_w, &mon_h);
 
 	base_w = (mon_w - conf.gap_left - conf.gap_right - (grid_width - 1) * conf.grid_gap
-			- grid_width * 2 * border_extent()) / grid_width;
+			- grid_width * 2 * outer_border_extent()) / grid_width;
 	base_h = (mon_h - conf.gap_up - conf.gap_down - (grid_height - 1) * conf.grid_gap
-			- grid_height * 2 * border_extent()) / grid_height;
+			- grid_height * 2 * outer_border_extent()) / grid_height;
 	/* calculate new window size */
-	new_w = base_w * occ_w + (occ_w - 1) * (conf.grid_gap + 2 * border_extent());
+	new_w = base_w * occ_w + (occ_w - 1) * (conf.grid_gap + 2 * outer_border_extent());
 
-	new_h = base_h * occ_h + (occ_h - 1) * (conf.grid_gap + 2 * border_extent());
+	new_h = base_h * occ_h + (occ_h - 1) * (conf.grid_gap + 2 * outer_border_extent());
 
 	client->orig_geom = client->geom;
 
@@ -524,13 +524,13 @@ grid_window(struct client *client, uint16_t grid_width, uint16_t grid_height, ui
 	client->geom.height = new_h;
 
 	// client->geom.x = mon_x + conf.gap_left + grid_x
-	// 	* (conf.border_width + base_w + conf.border_width + conf.grid_gap);
+	// 	* (conf.outer_border_width + base_w + conf.outer_border_width + conf.grid_gap);
 	// client->geom.y = mon_y + conf.gap_up + grid_y
-	// 	* (conf.border_width + base_h + conf.border_width + conf.grid_gap);
+	// 	* (conf.outer_border_width + base_h + conf.outer_border_width + conf.grid_gap);
 	client->geom.x = mon_x + conf.gap_left + grid_x
-			* (2 * border_extent() + base_w + conf.grid_gap);
+			* (2 * outer_border_extent() + base_w + conf.grid_gap);
 	client->geom.y = mon_y + conf.gap_up + grid_y
-			* (2 * border_extent() + base_h + conf.grid_gap);
+			* (2 * outer_border_extent() + base_h + conf.grid_gap);
 
 	client->gridded = true;
 	client->grid.gx = grid_width;
@@ -610,8 +610,8 @@ snap_window(struct client *client, enum position pos)
 
 	win_x = client->geom.x;
 	win_y = client->geom.y;
-	win_w = client->geom.width + 2 * border_extent();
-	win_h = client->geom.height + 2 * border_extent();
+	win_w = client->geom.width + 2 * outer_border_extent();
+	win_h = client->geom.height + 2 * outer_border_extent();
 
 	get_monitor_size(client, &mon_x, &mon_y, &mon_w, &mon_h);
 
@@ -676,4 +676,3 @@ teleport_window(xcb_window_t win, int16_t x, int16_t y)
 
 	xcb_flush(conn);
 }
-

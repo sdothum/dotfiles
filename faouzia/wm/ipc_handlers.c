@@ -1067,18 +1067,18 @@ ipc_wm_config(uint32_t *d)
 			if (conf.apply_settings)
 				refresh_borders();
 			break;
-		case IPCConfigBorderWidth:
-			conf.border_width = d[1];
+		case IPCConfigOuterBorderWidth:
+			conf.outer_border_width = d[1];
 			if (conf.apply_settings)
 				refresh_borders();
 			break;
-		case IPCConfigColorFocused:
-			conf.focus_color = d[1];
+		case IPCConfigOuterColorFocused:
+			conf.outer_focus_color = d[1];
 			if (conf.apply_settings)
 				refresh_borders();
 			break;
-		case IPCConfigColorUnfocused:
-			conf.unfocus_color = d[1];
+		case IPCConfigOuterColorUnfocused:
+			conf.outer_unfocus_color = d[1];
 			if (conf.apply_settings)
 				refresh_borders();
 			break;
@@ -1094,18 +1094,18 @@ ipc_wm_config(uint32_t *d)
 			if (conf.apply_settings)
 				refresh_borders();
 			break;
-		case IPCConfigInternalBorderWidth:
-			conf.internal_border_width = d[1];
+		case IPCConfigInnerBorderWidth:
+			conf.inner_border_width = d[1];
 			if (conf.apply_settings)
 				refresh_borders();
 			break;
-		case IPCConfigInternalColorFocused:
-			conf.internal_focus_color = d[1];
+		case IPCConfigInnerColorFocused:
+			conf.inner_focus_color = d[1];
 			if (conf.apply_settings)
 				refresh_borders();
 			break;
-		case IPCConfigInternalColorUnfocused:
-			conf.internal_unfocus_color = d[1];
+		case IPCConfigInnerColorUnfocused:
+			conf.inner_unfocus_color = d[1];
 			if (conf.apply_settings)
 				refresh_borders();
 			break;

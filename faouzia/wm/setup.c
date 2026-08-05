@@ -186,12 +186,12 @@ load_config(char *config_path)
 void
 load_defaults(void)
 {
-	conf.border_width                   = BORDER_WIDTH;
-	conf.focus_color                    = COLOR_FOCUS;
-	conf.unfocus_color                  = COLOR_UNFOCUS;
-	conf.internal_border_width          = INTERNAL_BORDER_WIDTH;
-	conf.internal_focus_color           = INTERNAL_COLOR_FOCUS;
-	conf.internal_unfocus_color         = INTERNAL_COLOR_UNFOCUS;
+	conf.outer_border_width             = OUTER_BORDER_WIDTH;
+	conf.outer_focus_color              = OUTER_COLOR_FOCUS;
+	conf.outer_unfocus_color            = OUTER_COLOR_UNFOCUS;
+	conf.inner_border_width             = INNER_BORDER_WIDTH;
+	conf.inner_focus_color              = INNER_COLOR_FOCUS;
+	conf.inner_unfocus_color            = INNER_COLOR_UNFOCUS;
 	conf.gap_left                       = conf.gap_down = conf.gap_up = conf.gap_right = GAP;
 	conf.grid_gap                       = GRID_GAP;
 	conf.cursor_position                = CURSOR_POSITION;
@@ -289,4 +289,3 @@ find_argb_visual(void)
 
 	return NULL;
 }
-

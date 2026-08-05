@@ -190,7 +190,7 @@ void
 center_pointer(struct client *client)
 {
 	int16_t cur_x, cur_y;
-	int32_t be = border_extent();
+	int32_t be = outer_border_extent();
 
 	cur_x = cur_y = 0;
 
@@ -268,7 +268,7 @@ set_focused_no_raise(struct client *client)
 	xcb_map_window(conn, client->window);
 
 	if (!client->maxed)
-		set_borders(client, conf.focus_color, conf.internal_focus_color);
+		set_borders(client, conf.outer_focus_color, conf.inner_focus_color);
 
 	/* focus the window */
 	xcb_set_input_focus(conn, XCB_INPUT_FOCUS_POINTER_ROOT,
@@ -286,7 +286,7 @@ set_focused_no_raise(struct client *client)
 	if (client != focused_win) {
 		// if (focused_win != NULL && !focused_win->maxed)
 		if (focused_win != NULL)
-			set_borders(focused_win, conf.unfocus_color, conf.internal_unfocus_color);
+			set_borders(focused_win, conf.outer_unfocus_color, conf.inner_unfocus_color);
 	}
 
 	if (client->focus_item != NULL)
@@ -307,4 +307,3 @@ set_focused(struct client *client)
 	set_focused_no_raise(client);
 	raise_client_with_frame(client);
 }
-

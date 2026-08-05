@@ -115,11 +115,15 @@
 <h2 id="COMMANDS">COMMANDS</h2>
 
 <dl>
-<dt><code>window_move</code> <var>x</var> <var>y</var></dt><dd><p>  Move the focused window <var>y</var> pixels horizontally and <var>y</var> pixels
+<dt><code>window move</code> <var>x</var> <var>y</var> [<var>winid</var>]</dt><dd><p>  Move the selected window to the absolute position given by <var>x</var> and <var>y</var>.</p></dd>
+<dt><code>window move --relative</code> <var>x</var> <var>y</var> [<var>winid</var>]</dt><dd><p>  Move the selected window by the relative pixel values <var>x</var> and <var>y</var>.</p></dd>
+<dt><code>window resize</code> <var>width</var> <var>height</var> [<var>winid</var>]</dt><dd><p>  Resize the selected window to <var>width</var> and <var>height</var>.</p></dd>
+<dt><code>window resize --relative</code> <var>width</var> <var>height</var> [<var>winid</var>]</dt><dd><p>  Resize the selected window by the relative pixel values <var>width</var> and <var>height</var>.</p></dd>
+<dt><code>window_move</code> <var>x</var> <var>y</var></dt><dd><p>  Legacy alias that moves the focused window <var>x</var> pixels horizontally and <var>y</var> pixels
   vertically.</p></dd>
-<dt><code>window_move_absolute</code> <var>x</var> <var>y</var></dt><dd><p>  Move the focused window to the position given by <var>x</var> and <var>y</var>.</p></dd>
-<dt><code>window_resize</code> <var>x</var> <var>y</var></dt><dd><p>  Resize the focused window based on the relative pixel values <var>x</var> and <var>y</var>.</p></dd>
-<dt><code>window_resize_absolute</code> <var>width</var> <var>height</var></dt><dd><p>  Resize the focused window up to <var>width</var> and <var>height</var>.</p></dd>
+<dt><code>window_move_absolute</code> <var>x</var> <var>y</var></dt><dd><p>  Legacy alias that moves the focused window to the position given by <var>x</var> and <var>y</var>.</p></dd>
+<dt><code>window_resize</code> <var>x</var> <var>y</var></dt><dd><p>  Legacy alias that resizes the focused window by <var>x</var> and <var>y</var>.</p></dd>
+<dt><code>window_resize_absolute</code> <var>width</var> <var>height</var></dt><dd><p>  Legacy alias that resizes the focused window to <var>width</var> and <var>height</var>.</p></dd>
 <dt><code>window_maximize</code></dt><dd><p>  Hide the border and maximize the focused window on the current monitor.
   Execute it again after maximizing to revert the state of the window.</p></dd>
 <dt><code>window_unmaximize</code></dt><dd><p>  If the currently focused window is maximized in any way (fully, vertically, horizontally, monocled), return it to normal state.</p></dd>
@@ -168,10 +172,13 @@
 <dt><code>group_deactivate</code> <var>group_nr</var></dt><dd><p>  Unmap all windows that belong to the <var>group_nr</var> group.</p></dd>
 <dt><code>group_toggle</code> <var>group_nr</var></dt><dd><p>  Toggle the <var>group_nr</var> group.</p></dd>
 <dt><code>group_activate_specific</code> <var>group_nr</var></dt><dd><p>  Activate group <var>group_nr</var> and deactivate the rest.</p></dd>
-<dt><code>wm_quit</code> <var>exit_status</var></dt><dd><p>  Quit faouzia with exit_status <var>exit_status</var>.</p></dd>
-<dt><code>wm_config</code> <var>key</var> [<var>values</var>...]</dt><dd><p>  See <a href="#CONFIGURING" title="CONFIGURING" data-bare-link="true">CONFIGURING</a>.</p></dd>
+<dt><code>wm quit</code> <var>exit_status</var></dt><dd><p>  Quit faouzia with exit_status <var>exit_status</var>.</p></dd>
+<dt><code>wm config</code> <var>key</var> [<var>values</var>...]</dt><dd><p>  See <a href="#CONFIGURING" title="CONFIGURING" data-bare-link="true">CONFIGURING</a>.</p></dd>
 </dl>
 
+
+<p>The legacy <code>wm_quit</code> and <code>wm_config</code> command names remain accepted with the
+same arguments and behavior.</p>
 
 <h2 id="QUERYING">QUERYING</h2>
 
@@ -208,20 +215,30 @@ through X properties of the window. Example:</p>
 
 <h2 id="CONFIGURING">CONFIGURING</h2>
 
-<p>Configuring is done using the <code>wm_config</code> command. Possible configuration keys
+<p>Configuring is done using the <code>wm config</code> command. Possible configuration keys
 are:</p>
 
 <dl>
-<dt><code>border_width</code> <var>width</var></dt><dd><p>  Sets the border width to <var>width</var> pixels.</p></dd>
-<dt><code>color_focused</code>, <code>color_unfocused</code> <var>color</var></dt><dd><p>  Sets the border color to <var>color</var> for the focused and unfocused state respectively.
-  <var>color</var> is a hexadecimal value that may or may not start with <code>0x</code>
+<dt><code>outer_border_width</code> <var>width</var></dt><dd><p>  Sets the outer border width to <var>width</var> pixels.</p></dd>
+<dt><code>outer_color_focused</code>, <code>outer_color_unfocused</code> <var>outer_color</var></dt><dd><p>  Sets the outer border color to <var>outer_color</var> for the focused and unfocused
+  state respectively.
+  <var>outer_color</var> is a hexadecimal value that may or may not start with <code>0x</code>
   prefix. Example: <code>0x1234ef</code>.</p></dd>
-<dt><code>internal_border_width</code> <var>width</var></dt><dd><p>  Make the first <var>width</var> pixels from the interior to the exterior of the
-  border of another color, so you get two borders.
-  The width of the external border is <code>border_width -
-  internal_border_width</code>.</p></dd>
-<dt><code>internal_color_focused</code>, <code>internal_color_unfocused</code> <var>color</var></dt><dd><p>  Like <code>color_focused</code> and <code>color_unfocused</code>, but for the internal
-  border.</p></dd>
+<dt><code>inner_border_width</code> <var>width</var></dt><dd><p>  Make the first <var>width</var> pixels from the interior to the exterior of the
+  inner border use another color, so you get inner and outer borders.
+  The width of the outer border is <code>outer_border_width -
+  inner_border_width</code>.</p></dd>
+<dt><code>inner_color_focused</code>, <code>inner_color_unfocused</code> <var>inner_color</var></dt><dd><p>  Like <code>outer_color_focused</code> and <code>outer_color_unfocused</code>, but for the inner
+  border. <var>inner_color</var> uses the same hexadecimal format as <var>outer_color</var>.</p></dd>
+</dl>
+
+
+<p>The legacy <code>border_width</code>, <code>color_focused</code>, <code>color_unfocused</code>,
+<code>internal_border_width</code>, <code>internal_color_focused</code>, and
+<code>internal_color_unfocused</code> configuration keys remain accepted with the same
+arguments and behavior.</p>
+
+<dl>
 <dt><code>gap_width</code> <var>POSITION</var> <var>width</var></dt><dd><p>  Sets the window gap at <var>POSITION</var> to <var>width</var>. <var>POSITION</var> can be equal to
   <code>all</code> to set all gaps to <var>POSITION</var>.</p></dd>
 <dt><code>grid_gap_width</code> <var>width</var></dt><dd><p>  Sets the window gap value used in virtual grids to <var>width</var>.</p></dd>

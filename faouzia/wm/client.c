@@ -124,10 +124,10 @@ static struct Command c[] = {
 static struct ConfigEntry configs[] = {
 	{ "apply_settings"              , IPCConfigApplySettings            ,  1  , fn_bool     } ,
 	{ "border_style"                , IPCConfigBorderStyle              ,  1  , fn_naturals } ,
-	{ "border_width"                , IPCConfigBorderWidth              ,  1  , fn_naturals } ,
+	{ "outer_border_width"          , IPCConfigOuterBorderWidth         ,  1  , fn_naturals } ,
 	{ "click_to_focus"              , IPCConfigClickToFocus             ,  1  , fn_button   } ,
-	{ "color_focused"               , IPCConfigColorFocused             ,  1  , fn_hex      } ,
-	{ "color_unfocused"             , IPCConfigColorUnfocused           ,  1  , fn_hex      } ,
+	{ "outer_color_focused"         , IPCConfigOuterColorFocused        ,  1  , fn_hex      } ,
+	{ "outer_color_unfocused"       , IPCConfigOuterColorUnfocused      ,  1  , fn_hex      } ,
 	{ "corner_mask"                 , IPCConfigCornerMask               ,  1  , fn_naturals } ,
 	{ "corner_percent"              , IPCConfigCornerPercent            ,  1  , fn_naturals } ,
 	{ "cursor_position"             , IPCConfigCursorPosition           ,  1  , fn_position } ,
@@ -138,13 +138,19 @@ static struct ConfigEntry configs[] = {
 	{ "gap_width"                   , IPCConfigGapWidth                 ,  2  , fn_gap      } ,
 	{ "grid_gap_width"              , IPCConfigGridGapWidth             ,  1  , fn_naturals } ,
 	{ "groups_nr"                   , IPCConfigGroupsNr                 ,  1  , fn_naturals } ,
-	{ "internal_border_width"       , IPCConfigInternalBorderWidth      ,  1  , fn_naturals } ,
-	{ "internal_color_focused"      , IPCConfigInternalColorFocused     ,  1  , fn_hex      } ,
-	{ "internal_color_unfocused"    , IPCConfigInternalColorUnfocused   ,  1  , fn_hex      } ,
+	{ "inner_border_width"          , IPCConfigInnerBorderWidth         ,  1  , fn_naturals } ,
+	{ "inner_color_focused"         , IPCConfigInnerColorFocused        ,  1  , fn_hex      } ,
+	{ "inner_color_unfocused"       , IPCConfigInnerColorUnfocused      ,  1  , fn_hex      } ,
 	{ "pointer_actions"             , IPCConfigPointerActions           ,  3  , fn_pac      } ,
 	{ "pointer_modifier"            , IPCConfigPointerModifier          ,  1  , fn_mod      } ,
 	{ "replay_click_on_focus"       , IPCConfigReplayClickOnFocus       ,  1  , fn_bool     } ,
 	{ "sticky_windows"              , IPCConfigStickyWindows            ,  1  , fn_bool     } ,
+	{ "border_width"                , IPCConfigOuterBorderWidth         ,  1  , fn_naturals } ,
+	{ "color_focused"               , IPCConfigOuterColorFocused        ,  1  , fn_hex      } ,
+	{ "color_unfocused"             , IPCConfigOuterColorUnfocused      ,  1  , fn_hex      } ,
+	{ "internal_border_width"       , IPCConfigInnerBorderWidth         ,  1  , fn_naturals } ,
+	{ "internal_color_focused"      , IPCConfigInnerColorFocused        ,  1  , fn_hex      } ,
+	{ "internal_color_unfocused"    , IPCConfigInnerColorUnfocused      ,  1  , fn_hex      } ,
 };
 
 /*
@@ -218,11 +224,13 @@ fn_config(uint32_t *data, int argc, char **argv) {
 
 	key = argv[0];
 
+	const int config_count = sizeof(configs) / sizeof(configs[0]);
+
 	i = 0;
-	while (i < NR_IPC_CONFIGS && strcmp(key, configs[i].key) != 0)
+	while (i < config_count && strcmp(key, configs[i].key) != 0)
 		i++;
 
-	if (i < NR_IPC_CONFIGS) {
+	if (i < config_count) {
 		if (configs[i].argc != argc - 1)
 			errx(EXIT_FAILURE, "too many or not enough arguments. Want: %d", configs[i].argc);
 		data[0] = configs[i].config;
@@ -807,6 +815,12 @@ parse_collection_query(int argc, char **argv, const char **selector,
 		if (strcmp(argv[0], "--all") == 0 && argv[1][0] != '-') {
 			*scope = IPCClientScopeAll;
 			*selector = argv[1];
+			*selector_type = IPCClientSelectorClassname;
+			return true;
+		}
+		if (argv[0][0] != '-' && strcmp(argv[1], "--all") == 0) {
+			*scope = IPCClientScopeAll;
+			*selector = argv[0];
 			*selector_type = IPCClientSelectorClassname;
 			return true;
 		}

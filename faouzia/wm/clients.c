@@ -245,7 +245,7 @@ reset_window(struct client *client)
 
 	teleport_window(client->window, client->geom.x, client->geom.y);
 	resize_window_absolute(client->window, client->geom.width, client->geom.height);
-	set_borders(client, conf.unfocus_color, conf.internal_unfocus_color);
+	set_borders(client, conf.outer_unfocus_color, conf.inner_unfocus_color);
 
 	xcb_change_property(conn, XCB_PROP_MODE_REPLACE, client->window,
 			ewmh->_NET_WM_STATE, ewmh->_NET_WM_STATE, 32, 2, state);
@@ -284,4 +284,3 @@ update_client_list(void)
 
 	free(reply);
 }
-

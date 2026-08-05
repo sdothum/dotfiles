@@ -16,6 +16,7 @@ echo "
 /    ⁋ >/dev/null
 !    ⁋ 2>/dev/null
 &    ⁋ >/dev/null 2>&1
+|    ⁋ | xclip -selection clipboard
 ^    ⁋ [^\\\\n]*
 r    ⁋ grep -E
 b    ⁋ [[:alpha:]]

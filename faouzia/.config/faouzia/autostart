@@ -24,7 +24,7 @@ group $(group id "DESK")
 recipe -q autostart:oneshot && recipe autostart | while read cmd ;do
 	ditto autostart "$cmd"
 	eval ${cmd#*. } &
-	sleep 0.05  # allow window time to draw
+	sleep 0.1  # allow window time to draw
 done
 # recipe -d autostart:oneshot  # SEE: console_login
 restore panel  # postponed as long as possible to avoid dirty trace messages

@@ -22,16 +22,16 @@ using_frame_borders(void)
 }
 
 int32_t
-border_extent(void)
+outer_border_extent(void)
 {
-	return using_frame_borders() ? 0 : conf.border_width;
+	return using_frame_borders() ? 0 : conf.outer_border_width;
 }
 
 static void
 compute_frame_geometry(struct client *client, int32_t *x, int32_t *y, uint32_t *w, uint32_t *h)
 {
-	int32_t bw  = conf.border_width;
-	int32_t gap = conf.internal_border_width;
+	int32_t bw  = conf.outer_border_width;
+	int32_t gap = conf.inner_border_width;
 
 	switch (conf.border_style) {
 		case BORDER_STYLE_SPINE_LEFT:
@@ -130,7 +130,7 @@ destroy_frame(struct client *client)
 }
 
 void
-paint_frame(struct client *client, uint32_t color, uint32_t internal_color)
+paint_frame(struct client *client, uint32_t outer_color, uint32_t inner_color)
 {
 	if (client == NULL ||
 			client->frame == XCB_NONE ||
@@ -140,8 +140,8 @@ paint_frame(struct client *client, uint32_t color, uint32_t internal_color)
 
 	update_frame_geometry(client);
 
-	int32_t bw  = conf.border_width;
-	int32_t gap = conf.internal_border_width;
+	int32_t bw  = conf.outer_border_width;
+	int32_t gap = conf.inner_border_width;
 
 	if (bw < 0 || gap < 0)
 		return;
@@ -175,10 +175,10 @@ paint_frame(struct client *client, uint32_t color, uint32_t internal_color)
 	xcb_render_fill_rectangles(conn, XCB_RENDER_PICT_OP_SRC,
 			picture, transparent, 1, clear);
 
-	uint32_t a = (color >> 24) & 0xff;
-	uint32_t r = (color >> 16) & 0xff;
-	uint32_t g = (color >> 8)  & 0xff;
-	uint32_t b =  color        & 0xff;
+	uint32_t a = (outer_color >> 24) & 0xff;
+	uint32_t r = (outer_color >> 16) & 0xff;
+	uint32_t g = (outer_color >> 8)  & 0xff;
+	uint32_t b =  outer_color        & 0xff;
 
 	xcb_render_color_t c = {
 		.red   = (uint16_t)((r * a * 257u) / 255u),
@@ -187,10 +187,10 @@ paint_frame(struct client *client, uint32_t color, uint32_t internal_color)
 		.alpha = (uint16_t)(a * 257U)
 	};
 
-	uint32_t ia = (internal_color >> 24) & 0xff;
-	uint32_t ir = (internal_color >> 16) & 0xff;
-	uint32_t ig = (internal_color >> 8)  & 0xff;
-	uint32_t ib =  internal_color        & 0xff;
+	uint32_t ia = (inner_color >> 24) & 0xff;
+	uint32_t ir = (inner_color >> 16) & 0xff;
+	uint32_t ig = (inner_color >> 8)  & 0xff;
+	uint32_t ib =  inner_color        & 0xff;
 
 	xcb_render_color_t ic = {
 		.red   = (uint16_t)((ir * ia * 257u) / 255u),
@@ -335,9 +335,9 @@ paint_frame(struct client *client, uint32_t color, uint32_t internal_color)
 // 			continue;
 
 // 		if (client == focused_win)
-// 			set_borders(client, conf.focus_color, conf.internal_focus_color);
+// 			set_borders(client, conf.outer_focus_color, conf.inner_focus_color);
 // 		else
-// 			set_borders(client, conf.unfocus_color, conf.internal_unfocus_color);
+// 			set_borders(client, conf.outer_unfocus_color, conf.inner_unfocus_color);
 // 	}
 // }
 
@@ -361,13 +361,13 @@ refresh_borders(void)
 			continue;
 
 		set_borders(client,
-			client == focused_win ? conf.focus_color : conf.unfocus_color,
-			client == focused_win ? conf.internal_focus_color : conf.internal_unfocus_color);
+			client == focused_win ? conf.outer_focus_color : conf.outer_unfocus_color,
+			client == focused_win ? conf.inner_focus_color : conf.inner_unfocus_color);
 	}
 }
 
 void
-set_borders(struct client *client, uint32_t color, uint32_t internal_color)
+set_borders(struct client *client, uint32_t outer_color, uint32_t inner_color)
 {
 	if (client == NULL || conf.borders == false)
 		return;
@@ -380,7 +380,7 @@ set_borders(struct client *client, uint32_t color, uint32_t internal_color)
 
 	create_frame(client);
 	update_frame_geometry(client);
-	paint_frame(client, color, internal_color);
+	paint_frame(client, outer_color, inner_color);
 }
 
 void
@@ -445,4 +445,3 @@ update_frame_geometry(struct client *client)
 
 	xcb_map_window(conn, client->frame);
 }
-

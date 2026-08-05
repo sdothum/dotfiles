@@ -115,14 +115,15 @@ struct conf {
 	bool sticky_windows;
 	enum pointer_action pointer_actions[3];
 	enum position cursor_position;
-	int32_t border_width, internal_border_width, grid_gap;
+	int32_t outer_border_width, inner_border_width, grid_gap;
 	int32_t gap_left, gap_down, gap_up, gap_right;
 	int8_t click_to_focus;
 	uint16_t pointer_modifier;
 	uint32_t border_style;
 	uint32_t corner_mask;
 	uint32_t corner_percent;
-	uint32_t focus_color, unfocus_color, internal_focus_color, internal_unfocus_color;
+	uint32_t outer_focus_color, outer_unfocus_color;
+	uint32_t inner_focus_color, inner_unfocus_color;
 	uint32_t groups;
 };
 

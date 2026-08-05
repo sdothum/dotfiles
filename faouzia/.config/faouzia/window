@@ -39,7 +39,7 @@ save_original_geometry() {
 	done
 }
 
-opposite_side() { echo $(( width + margin * 2 - (X + WIDTH + border * 2) )); }  # for nearest edge SEE: window snap / stretch
+opposite_side() { echo $(( width + margin * 2 - (X + WIDTH + outer_border * 2) )); }  # for nearest edge SEE: window snap / stretch
 window_sync()   { nimctlr window sync $1 "$(escape $xname)"; }
 xname_type()    { nimctlr window ids $1 "$xname" | grep -q "0x"; }
 
@@ -91,15 +91,7 @@ fi
 
 # ................................................................ window action
 
-winids()    { nimctlr window --all ids; }  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
-
-count() {
-	case $1 in
-		'' ) winids      | wc -l ;;
-		*  ) winids "$1" | wc -l ;;
-	esac
-	exit
-}
+winids()    { sirocco window ids --all $@; }  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
 
 ids() {
 	case $1 in
@@ -110,19 +102,40 @@ ids() {
 }
 
 case $1 in
-	class*   ) sirocco window classname;       exit ;;
-	count    ) shift; sirocco window count $@; exit ;;
-	ids      ) shift; sirocco window ids   $@; exit ;;
+	class*   ) sirocco window classname; exit ;;
+	count    ) shift; ids $@ | wc -l;    exit ;;
+	ids      ) shift; ids $@;            exit ;;
 esac
 
 msg=$1
 [ $msg ] && shift || usage $0
 if [ -e ${0%/window}/functions/window/$msg ] ;then
+
+	# NOTE: nimctlr compatibility conversion ensures parameter correctness
+
+	echo "$@" | grep -q ' --rows*' &&
+	{
+		while [ $1 ] ;do
+			case $1 in
+				--              ) defer=--  ;;
+				left   | Left   ) column=$1 ;;
+				right  | Right  ) column=$1 ;;
+				top    | Top    ) row=$1    ;;
+				bottom | 8ottom ) row=$1    ;;
+				--rows          ) rows=x$2; shift ;;
+				--row           ) [ $2 -eq 1 ] && row=top || row=bottom; shift  ;;
+				*               ) [ $column ] && position=$1 || column=$1 ;;
+			esac
+			shift
+		done
+		set -- $defer $column$rows $position $row
+	}
+
 	margin=$($NIMCTLR screen margin)
 	panel=$($NIMCTLR screen panel)
 	top=$($NIMCTLR screen top)             # faouziarc panel height is default bottom gap_width
 	gap=$($NIMCTLR screen gap)
-	# border=$($NIMCTLR screen window_border)
+	# outer_border=$($NIMCTLR screen window_border_extent)
 	W=$(( $($NIMCTLR display width) - margin * 2 ))
 	H=$(( $($NIMCTLR display height) - top * 2 ))
 	recipe -q panel/top && top=$panel  # see draw panel

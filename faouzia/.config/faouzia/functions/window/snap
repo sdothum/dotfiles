@@ -16,8 +16,8 @@ move()   {
 }
 
 L=$(( margin ))
-# R=$(( W - WIDTH + margin - border * 2 ))
-# V=$(( (H - HEIGHT) / 2 + top - border ))
+# R=$(( W - WIDTH + margin - outer_border * 2 ))
+# V=$(( (H - HEIGHT) / 2 + top - outer_border ))
 R=$(( W - WIDTH + margin ))
 V=$(( (H - HEIGHT) / 2 + top ))
 G=$(( gap / 2 ))  # respect tiling gap at center :)
@@ -28,13 +28,13 @@ near()   { [ $X -le $(opposite_side) ] && left || right; }
 
 center() {
 	case $1 in
-		# left          ) move $(( W / 2 + margin - WIDTH - border * 2 - G )) $Y ;;
+		# left          ) move $(( W / 2 + margin - WIDTH - outer_border * 2 - G )) $Y ;;
 		left    | Left  ) move $(( W / 2 + margin - WIDTH - G )) $Y ;;
 		right   | Right ) move $(( W / 2 + margin + G )) $Y ;;
-		# hori*         ) move $(( (W - WIDTH) / 2 + margin - border )) $Y ;;
+		# hori*         ) move $(( (W - WIDTH) / 2 + margin - outer_border )) $Y ;;
 		hori*   | Hori* ) move $(( (W - WIDTH) / 2 + margin )) $Y ;;
 		vert*   | Vert* ) move $X $V ;;
-		# *             ) move $(( (W - WIDTH) / 2 + margin - border )) $V ;;
+		# *             ) move $(( (W - WIDTH) / 2 + margin - outer_border )) $V ;;
 		*               ) move $(( (W - WIDTH) / 2 + margin )) $V ;;
 	esac
 }
@@ -48,7 +48,7 @@ top()    {
 }
 
 bottom() {
-	# B=$(( H - HEIGHT + border * 2 ))
+	# B=$(( H - HEIGHT + outer_border * 2 ))
 	B=$(( H - HEIGHT ))
 	case $1 in
 		left  | Left  ) move $L $B ;;

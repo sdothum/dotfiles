@@ -8,7 +8,6 @@
 
 # Usage: sync group
 
-
 # sync physical group state tree against wmctrl data
 vacuum() {
 	ids=$(wmctrl -l | awk '{$2=$2+1; print $2"/"$1}')  # in group/id tuple NOTE: group+1 to match nimctlr ranking
