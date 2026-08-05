@@ -1,5 +1,6 @@
 import std/strutils
 
+import cliargs
 import compat
 import group as groups
 
@@ -32,8 +33,8 @@ proc group*(args: seq[string]) =
 proc hide*(args: seq[string]) =
   runvArgs("window", "hide", args, 0, 1)
 
-proc revert*(args: seq[string]) =
-  runvArgs("window", "revert", args, 0, 1)
+proc restore*(args: seq[string]) =
+  runvArgs("window", "restore", args, 0, 1)
 
 proc rotate*(args: seq[string]) =
   runvArgs("window", "rotate", args, 0, 0)
@@ -48,7 +49,7 @@ proc snap*(args: seq[string]) =
   runvArgs("window", "snap", args, 1, 3)
 
 proc spread*(args: seq[string]) =
-  runvArgs("window", "spread", args, 1, 4)
+  runvArgs("window", "spread", args, 1, 6)
 
 proc swap*(args: seq[string]) =
   runvArgs("window", "swap", args, 1, 1)
@@ -60,7 +61,7 @@ proc sync*(args: seq[string]) =
   runvArgs("window", "sync", args, 1, 2)
 
 proc tile*(args: seq[string]) =
-  runvArgs("window", "tile", args, 1, 4)
+  runvArgs("window", "tile", args, 1, 6)
 
 proc toggle*(args: seq[string]) =
   runvArgs("window", "toggle", args, 1, 2)
@@ -132,8 +133,8 @@ proc dispatch*(verb: string, rest: seq[string]) =
     hide(rest)
   of "ids":
     echo ids(rest)
-  of "revert":
-    revert(rest)
+  of "restore":
+    restore(rest)
   of "rotate":
     rotate(rest)
   of "shift":
@@ -142,16 +143,27 @@ proc dispatch*(verb: string, rest: seq[string]) =
     size(rest)
   of "snap":
     snap(rest)
-  of "spread":
-    spread(rest)
+
+  of "spread", "tile":
+    validateOptions(
+      rest,
+      # `window -- <verb> ...` preserves prior window geometry SEE: nimctlr.nim
+      valueOptions = ["--", "--rows", "--row"],
+      allowedOptions = ["--", "--rows", "--row"]
+    )
+
+    case verb
+    of "spread":
+      spread(rest)
+    of "tile":
+      tile(rest)
+
   of "swap":
     swap(rest)
   of "standard":
     standard(rest)
   of "sync":
     sync(rest)
-  of "tile":
-    tile(rest)
   of "toggle":
     toggle(rest)
   else:

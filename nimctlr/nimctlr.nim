@@ -40,17 +40,6 @@ proc dispatchCommand(cmd: seq[string]) =
     else:
       @[]
 
-  # `window -- <verb> ...` preserves prior window geometry.
-  if domain == "window" and verb == "--":
-    if cmd.len < 3:
-      quit("window -- requires a verb")
-
-    verb = cmd[2]
-
-    rest = @["--"]
-    if cmd.len > 3:
-      rest.add(cmd[3 .. ^1])
-
   case domain
   of "display":
     display.dispatch(verb, rest)
@@ -71,6 +60,16 @@ proc dispatchCommand(cmd: seq[string]) =
     sync.dispatch(verb, rest)
 
   of "window":
+    # `window -- <verb> ...` preserves prior window geometry.
+    if verb == "--":
+      if cmd.len < 3:
+        quit("window -- requires a verb")
+
+      verb = cmd[2]
+
+      rest = @["--"]
+      rest.add(cmd[3 .. ^1])
+
     window.dispatch(verb, rest)
 
   else:
@@ -95,7 +94,7 @@ proc usage() =
   echo "  nimctlr group toggle <args>"
   echo "  nimctlr layout fold <args>"
   echo "  nimctlr layout level <args>"
-  echo "  nimctlr layout revert <args>"
+  echo "  nimctlr layout restore <args>"
   echo "  nimctlr layout spread <args>"
   echo "  nimctlr layout tile <args>"
   echo "  nimctlr screen indent"
@@ -109,7 +108,7 @@ proc usage() =
   echo "  nimctlr window group <args>"
   echo "  nimctlr window hide"
   echo "  nimctlr window ids [<args>]"
-  echo "  nimctlr window revert [<args>]"
+  echo "  nimctlr window restore [<args>]"
   echo "  nimctlr window rotate"
   echo "  nimctlr window shift <args>"
   echo "  nimctlr window size <args>"

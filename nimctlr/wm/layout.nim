@@ -1,3 +1,4 @@
+import cliargs
 import compat
 
 #
@@ -5,19 +6,19 @@ import compat
 #
 
 proc fold*(args: seq[string]) =
-  runvArgs("layout", "fold", args, 1, 3)
+  runvArgs("layout", "fold", args, 1, 5)
 
 proc level*(args: seq[string]) =
   runvArgs("layout", "level", args, 0, 0)
 
-proc revert*(args: seq[string]) =
-  runvArgs("layout", "revert", args, 0, 0)
+proc restore*() =
+  runvArgs("layout", "restore", @[], 0, 0)
 
 proc spread*(args: seq[string]) =
-  runvArgs("layout", "spread", args, 1, 3)
+  runvArgs("layout", "spread", args, 1, 4)
 
 proc tile*(args: seq[string]) =
-  runvArgs("layout", "tile", args, 1, 3)
+  runvArgs("layout", "tile", args, 1, 4)
 
 #
 # Native Nim convenience overloads
@@ -32,6 +33,12 @@ proc fold*(columns, classname: string) =
 proc fold*(spread, columns, classname: string) =
   fold(@[spread, columns, classname])
 
+proc fold*(columns, rows, num, classname: string) =
+  fold(@[columns, rows, num, classname])
+
+proc fold*(stateless, columns, rows, num, classname: string) =
+  fold(@[stateless, columns, rows, num, classname])
+
 proc spread*(columns: string) =
   spread(@[columns])
 
@@ -41,11 +48,17 @@ proc spread*(columns, classname: string) =
 proc spread*(columns, position, classname: string) =
   spread(@[columns, position, classname])
 
+proc spread*(columns, rows, num, classname: string) =
+  spread(@[columns, rows, num, classname])
+
 proc tile*(columns: string) =
   tile(@[columns])
 
 proc tile*(columns, classname: string) =
   tile(@[columns, classname])
+
+proc tile*(columns, rows, num, classname: string) =
+  tile(@[columns, rows, num, classname])
 
 #
 # Dispatch
@@ -53,15 +66,25 @@ proc tile*(columns, classname: string) =
 
 proc dispatch*(verb: string, rest: seq[string]) =
   case verb
-  of "fold":
-    fold(rest)
+  of "fold", "spread", "tile":
+    validateOptions(
+      rest,
+      valueOptions = ["--", "--rows"],
+      allowedOptions = ["--", "--rows"]
+    )
+
+    case verb
+    of "fold":
+      fold(rest)
+    of "spread":
+      spread(rest)
+    of "tile":
+      tile(rest)
+
   of "level":
     level(rest)
-  of "revert":
-    revert(rest)
-  of "spread":
-    spread(rest)
-  of "tile":
-    tile(rest)
+  of "restore":
+    requireNoArgs(verb, rest)
+    restore()
   else:
     quit("unknown layout action")

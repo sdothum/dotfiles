@@ -1,3 +1,4 @@
+import compat
 import constants
 import group as groups
 import layout
@@ -49,9 +50,9 @@ proc kak() =
   of 3:
     layout.tile("4", ClassKak)
   of 4:
-    layout.fold("4x2", ClassKak)
+    layout.fold("4", "--rows", "2", ClassKak)
   else:
-    layout.tile("4x2", ClassKak)
+    layout.tile("4", "--rows", "2", ClassKak)
 
 proc luakit() =
   window.group(GroupComm)
@@ -80,17 +81,13 @@ proc term(classname: string = ClassTerm) =
   of 0..2:
     layout.spread("3", classname)
   of 3:
-    layout.fold("--", "3x2", classname)
+    layout.fold("--", "3", "--rows", "2", classname)
   else:
-    layout.spread("3x2", classname)
+    layout.spread("3", "--rows", "2", classname)
 
 #
 # Dispatch
 #
-
-proc requireNoArgs(ruleName: string, args: seq[string]) =
-  if args.len != 0:
-    quit("rule " & ruleName & " expects no args")
 
 proc dispatch*(verb: string, rest: seq[string]) =
   requireNoArgs(verb, rest)

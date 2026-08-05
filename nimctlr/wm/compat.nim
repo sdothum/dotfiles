@@ -36,6 +36,10 @@ proc traceOutput(output: string) =
 # Validation
 #
 
+proc requireNoArgs*(verb: string, args: seq[string]) =
+  if args.len != 0:
+    quit(verb & " expects no args")
+
 proc requireArgCount(
   cmd: string,
   verb: string,
@@ -137,3 +141,18 @@ proc statusvArgs*(
 ): int =
   requireArgCount(cmd, verb, args, minLen, maxLen)
   result = statusv(cmd, commandArgs(verb, args))
+
+#
+# Templates
+#
+
+template defineCommandProc*(
+   name: untyped,
+   namespace: static[string],
+   command: static[string]
+) =
+   proc name*(args: seq[string]): int =
+      runvArgs(namespace, command, args)
+
+   proc name*(args: varargs[string]): int =
+      name(@args)
