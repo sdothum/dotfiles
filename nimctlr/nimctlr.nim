@@ -5,6 +5,7 @@ import wm/group
 import wm/layout
 import wm/rule
 import wm/screen
+import wm/state
 import wm/sync
 import wm/window
 
@@ -56,6 +57,9 @@ proc dispatchCommand(cmd: seq[string]) =
   of "screen":
     screen.dispatch(verb, rest)
 
+  of "state":
+    state.dispatch(verb, rest)
+
   of "sync":
     sync.dispatch(verb, rest)
 
@@ -99,8 +103,11 @@ proc usage() =
   echo "  nimctlr layout tile <args>"
   echo "  nimctlr screen indent"
   echo "  nimctlr screen panel"
+  echo "  nimctlr state snapshot"
+  echo "  nimctlr state restore"
   echo "  nimctlr sync group"
   echo "  nimctlr sync window"
+  echo "  nimctlr window await <args>"
   echo "  nimctlr window classname"
   echo "  nimctlr window count <args>"
   echo "  nimctlr window extend <args>"
@@ -115,8 +122,6 @@ proc usage() =
   echo "  nimctlr window snap <args>"
   echo "  nimctlr window spread <args>"
   echo "  nimctlr window swap <args>"
-  echo "  nimctlr window standard <args>"
-  echo "  nimctlr window sync <args>"
   echo "  nimctlr window tile <args>"
   echo "  nimctlr window toggle <args>"
   quit(1)

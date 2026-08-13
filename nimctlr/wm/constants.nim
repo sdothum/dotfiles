@@ -18,22 +18,31 @@ const
   GroupUtil* = "UTIL"
   GroupWiki* = "WIKI"
 
-  SizeMonocle* = "Monocle"
+  SizeMonocle* = "monocle"
 
-  Top* = "Top"
-  Bottom* = "Bottom"
-  Left* = "Left"
-  Right* = "Right"
+  Top* = "top"
+  Bottom* = "bottom"
+  Left* = "left"
+  Right* = "right"
 
-  Center* = "Center"
-  Horizontal* = "Horizontal"
-  Vertical* = "Vertical"
-  Rotate* = "Rotate"
+  Center* = "center"
+  Horizontal* = "horizontal"
+  Vertical* = "vertical"
+  Rotate* = "--rotate"
 
-  North* = "North"
-  South* = "South"
-  West* = "West"
-  East* = "East"
+  North* = "north"
+  South* = "south"
+  West* = "west"
+  East* = "east"
+
+  A3* = "A3"
+  B4* = "B4"
+  A4* = "A4"
+  B5* = "B5"
+  A5* = "A5"
+  B6* = "B6"
+  A6* = "A6"
+  B7* = "B7"
 
 const GroupNames* = [
   GroupDesk,

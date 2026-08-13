@@ -18,7 +18,7 @@ proc monocle(groupname: string = GroupDesk) =
 
 proc sizeA4Centered(groupname: string = GroupUtil) =
   window.group(groupname)
-  window.size("A4", Rotate)
+  window.size(A4, Rotate)
   window.snap(Center)
 
 proc tile3Columns(groupname, classname: string) =
@@ -35,7 +35,7 @@ proc video1080p(groupname: string = GroupPlay) =
 
 proc btop() =
   window.group(GroupUtil)
-  # window.size("A5")
+  # window.size(A5)
   window.snap(Center)
   groups.focus(GroupDesk)
 
@@ -57,20 +57,16 @@ proc kak() =
 proc luakit() =
   window.group(GroupComm)
   window.size("690x1080")
+  window.snap(Center, Vertical)
   window.spread(Left)
 
 proc manpage() =
-  window.size("A5")
+  window.size(A5)
   layout.spread("3", "1", ClassManpage)
-
-proc music() =
-  window.group(GroupPlay)
-  window.size("1/3")
-  window.snap(Center)
 
 proc pavucontrol() =
   window.group(GroupUtil)
-  window.size("B6", Rotate)
+  window.size(B6, Rotate)
   window.snap(Center)
   groups.focus(GroupDesk)
 
@@ -132,7 +128,7 @@ proc dispatch*(verb: string, rest: seq[string]) =
   of "manpage":
     manpage()
   of "music":
-    music()
+    sizeA4Centered(GroupPlay)
   of "pavucontrol":
     pavucontrol()
   else:

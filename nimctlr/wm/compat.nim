@@ -40,7 +40,7 @@ proc requireNoArgs*(verb: string, args: seq[string]) =
   if args.len != 0:
     quit(verb & " expects no args")
 
-proc requireArgCount(
+proc requireArgCount*(
   cmd: string,
   verb: string,
   args: seq[string],
@@ -57,6 +57,14 @@ proc requireArgCount(
       name & " expects " &
       $minLen & ".." & $maxLen & " arguments"
     )
+
+proc requireArgs*(
+  command: string,
+  args: seq[string],
+  minArgs, maxArgs: int
+) =
+  if args.len < minArgs or args.len > maxArgs:
+    quit(command & " expects " & $minArgs & ".." & $maxArgs & " arguments")
 
 #
 # Process execution
@@ -91,7 +99,7 @@ proc runv(
       code
     )
 
-proc shv(
+proc shv*(
   cmd: string,
   args: openArray[string]
 ): string =
