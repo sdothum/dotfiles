@@ -114,7 +114,7 @@ define-command word-count -hidden %{
     set-option buffer word_count %sh{
         echo "eval -no-hooks -verbatim write $kak_response_fifo" >$kak_command_fifo
         # printf "%s%s]" ${kak_opt_colsep} $(wc --words <$kak_response_fifo)
-        printf "∖%s]" $(wc --words <$kak_response_fifo)
+        printf "] %s" $(wc --words <$kak_response_fifo)
     }
 }
 
