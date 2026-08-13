@@ -1,13 +1,13 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="window/sync $@" . $PARENT
+[ $TRACE ] && CHILD="window/await $@" . $PARENT
 
 # Faouzia
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ................................................................. Focus action
 
-# Usage: window sync <delay> | <winid>
-#                    <class> | --name <name | URL>
+# Usage: window await <delay> | <winid>
+#                     <class> | --name <name | URL>
 
 timeout=500  # centiseconds
 

@@ -26,7 +26,8 @@ set -- $(find $GROUP -name $winid | cut -d/ -f6)
 if [ $2 ] ;then
 	vacuum
 fi
-[ "$1" = "$(ls -1 $GROUP/current)" ] || { $NIMCTLR group add $1 $winid; group $1; }
+# [ "$1" = "$(ls -1 $GROUP/current)" ] || { $NIMCTLR group add $1 $winid; group $1; }
+[ "$1" = "$(ls -1 $GROUP/current)" ] || $NIMCTLR group add $1 $winid . group focus $1
 
 exit 0  # NOTE: required to suppress nimctlr reporting $? -> 1
 

@@ -19,8 +19,15 @@ udev
 void 'runit' && pulse || { sv -u check pipewire || pulse; }
 # sleep 0.15   # FOR: xorg settling (hardware dependent) SEE: autostart cmds below
 
+nimctlr group focus $(nimctlr group id "DESK")
+
+# create first term window to record reterm width/height dimensions
+term TRANSPARENT                                  # as unobtrusive as possible :)
+nimctlr window await 'term' . window snap center  # NOTE: positioning creates revert geometry
+mv -v $WINFO/$(pfw) $WINFO/term                   # SEE: nimctlr window size term
+sirocco window close
+
 # order commands in ascending order of "rulerrc" complexity SEE: $HOME/.session/faouzia/autostart/[<order>. ]<command>
-group $(group id "DESK")
 recipe -q autostart:oneshot && recipe autostart | while read cmd ;do
 	ditto autostart "$cmd"
 	eval ${cmd#*. } &

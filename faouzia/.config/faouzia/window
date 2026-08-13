@@ -1,4 +1,5 @@
 #!/usr/bin/dash
+#p
 # sdothum - 2016 (c) wtfpl
 # [ $TRACE ] && CHILD="window $@" . $PARENT
 
@@ -39,8 +40,8 @@ save_original_geometry() {
 	done
 }
 
-opposite_side() { echo $(( width + margin * 2 - (X + WIDTH + outer_border * 2) )); }  # for nearest edge SEE: window snap / stretch
-window_sync()   { nimctlr window sync $1 "$(escape $xname)"; }
+opposite_side() { echo $(( W + margin * 2 - (X + WIDTH + outer_border * 2) )); }  # for nearest edge SEE: window snap / stretch
+window_sync()   { nimctlr window await $1 "$(escape $xname)"; }
 xname_type()    { nimctlr window ids $1 "$xname" | grep -q "0x"; }
 
 # ..................................................................... X Y size

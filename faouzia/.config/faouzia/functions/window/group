@@ -6,7 +6,7 @@
 
 # .............................................................. Window to group
 
-# Usage: window group <group> [teleport]
+# Usage: window group <group> [--teleport]
 
 winid=${winid:-$(pfw)}
 [ -e $GROUP/$1/$winid ] && return
@@ -21,7 +21,7 @@ $NIMCTLR group add $1 $winid
 if [ $2 ] ;then
 	W=$(ls -1 $GROUP/$group | head -1)
 	[ $W ] && {
-		$NIMCTLR group $group
+		$NIMCTLR group focus $group
 		sirocco window focus $W
 		$NIMCTLR group add $group $W
 		exit 0  # skip original window refocus SEE: window wrapper

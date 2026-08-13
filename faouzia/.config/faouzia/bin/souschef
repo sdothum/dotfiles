@@ -175,7 +175,7 @@ case $menu in
 			form   )
 				size=$(echo "$formats" | pick "size") || exit
 				sirocco window_focus $W
-				window size ${size#* }
+				nimctlr window size ${size#* }
 				# window -- snap center vertical  # preserve size history
 				;;
 			group  )

@@ -159,7 +159,7 @@ name="Mozilla Firefox"
 # qutebrowser crash window
 
 name="Whoops!"
-	nimctlr window sync 'Whoops!' Name . window close
+	nimctlr window await 'Whoops!' Name . window close
 
 # BUG: qutebrowser can fail to render so avoid tiling rule
 
@@ -167,13 +167,13 @@ class="qutebrowser"
 	NIMCTLR_TRACE=1 nimctlr rule qutebrowser
 
 # NOTE: single purpose hangouts browser (for zoom and custom font control) SEE: hangouts script
-# TODO: nimctlr window sync "$(recipe hangouts/name)" Name . window.. requires window.sync timing fix NOTE: rule works (faster) without
+# TODO: nimctlr window await "$(recipe hangouts/name)" Name . window.. requires window.sync timing fix NOTE: rule works (faster) without
 
 class="luakit"
 	NIMCTLR_TRACE=1 nimctlr rule luakit
 
 class="Surf"
-	nimctlr window sync "@cgDIS:T | " URL . nimctlr window tile 4 1 . window group $(nimctlr group id "COMM")
+	nimctlr window await "@cgDIS:T | " URL . nimctlr window tile 4 1 . window group $(nimctlr group id "COMM")
 
 # .......................................................................... irc
 

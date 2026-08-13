@@ -118,16 +118,13 @@ super + {_,ctrl} + space
 	sirocco window maximize --{vertical,horizontal}
 
 super + alt + {space,BackSpace}
-	nimctlr window standard paper {+,-}
+	nimctlr window size paper {--larger,--smaller}
 
 alt + shift + {space,BackSpace}
-	nimctlr window standard video {+,-}
+	nimctlr window size video {--larger,--smaller}
 
 super + alt + Return
-	nimctlr window size term            ;\
-	wgeometry snapshot $(pfw)           ;\
-	nimctlr window snap center vertical ;\
-	wgeometry restore $(pfw)
+	nimctlr state snapshot . window size term . window snap center vertical . state restore
 
 super + ctrl + shift + {Left,Down,Up,Right}
 	sirocco window resize --relative {-20 0,0 20,0 -20,20 0}
@@ -195,7 +192,11 @@ super + {_,shift} + r
 
 super + {t,s}
 	side="{left,right}" ;\
-	[ "$(nimctlr window classname)"  = "term" ] && nimctlr window spread $side || nimctlr window snap $side
+	echo "$(nimctlr window classname)" | grep -q -E "term|tmux" && nimctlr window spread $side || nimctlr window snap $side
+
+super + ctrl + {t,s}
+	side="{left,right}" ;\
+	nimctlr window spread $side
 
 # ......................................................................... swap
 
@@ -229,13 +230,13 @@ alt + ctrl + {comma,period}
 	nimctlr window group $(nimctlr group get {-1,+1})
 
 alt + ctrl + super + {comma,period}
-	nimctlr window group $(nimctlr group get {-1,+1}) teleport
+	nimctlr window group $(nimctlr group get {-1,+1}) --teleport
 
 alt + ctrl + {1,2,3,4,5,6,7,8,9}
 	nimctlr window group {1,2,3,4,5,6,7,8,9}
 
 alt + ctrl + super + {1,2,3,4,5,6,7,8,9}
-	nimctlr window group {1,2,3,4,5,6,7,8,9} teleport
+	nimctlr window group {1,2,3,4,5,6,7,8,9} --teleport
 
 super + ctrl + r
 	sirocco group remove

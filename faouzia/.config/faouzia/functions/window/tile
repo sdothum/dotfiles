@@ -7,7 +7,7 @@
 # .................................................................. Tile window
 
 # Usage: window tile [<colums>[x2]] <position> [top | bottom], x2 requires top/bottom spec
-#        window tile [<colums>]     <position> [--rows <n>] [--row <n>] FOR: nimctlr
+#        window tile <colums>     [<position>] [--rows <n>] [--row <n>] FOR: nimctlr
 
 # NOTE: borders are separate frames now
 

@@ -58,7 +58,6 @@ mkdir -p $GROUP/current/1
 mkdir -p $GROUP/last/-1
 mkdir -p $GROUP:deactivated
 mkdir -p $HIDDEN
-mkdir -p $WINFO:snapshot
 
 # allow pseudo (file) writes to yet as undefined $FIFO/<fifo> buffer during startup SEE: panel
 mkdir -p $FIFO

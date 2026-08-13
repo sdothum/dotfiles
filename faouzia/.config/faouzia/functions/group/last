@@ -8,6 +8,6 @@
 
 # Usage: group last
 
-[ -e $GROUP/last ] && $NIMCTLR group $(ls -1 $GROUP/last)
+[ -e $GROUP/last ] && $NIMCTLR group focus $(ls -1 $GROUP/last)
 
 # kak: filetype=sh
