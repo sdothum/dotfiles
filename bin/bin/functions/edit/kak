@@ -7,7 +7,7 @@
 # ....................................................................... Editor
 
 usage() { echo "[kmd=<command>] $(basename $0) [-l'ist | -k'ill [<id>] | -d'ebug [<debug>] | -v'ersion | -h'elp]
-> [-BENCHMARK | -LEXICON | -PROOF | -TRACE | -UNPLUG | -CONSOLE | RULER=<char>]
+> [-BENCHMARK | -LEXICON | -PROOF | -TRACE | -UNPLUG | -CONSOLE | -TUI | -TRIM | RULER=<char>]
 > [-- | ID=<id>] [WAIT] [<row>x<col>]
 > <file>*
 > where, <debug> is [hooks|shell|profile|keys|commands]" | usage:
@@ -32,23 +32,25 @@ debug() { echo "$1" | grep -qE 'hooks|shell|profile|keys|commands' && debug="-de
 
 while : ;do
 	case $1 in
-		-l            ) $KAK -l; exit ;;
-		-k            ) [ $2 ] && $KAK -p $2 || { for i in $($KAK -l); do ditto kak "$i ${RED}❌"; echo kill | $KAK -p $i ;done; pkill kak-lsp; }; exit ;;
-		-d            ) export TRACE=/tmp/kak:trace; debug $2 && shift ;;  # debug trace
-		-v*           ) $KAK -version; exit ;;
-		-h* | help    ) $KAK -help; usage ;;
-		-B*           ) hyperfine -warmup 10 "$KAK -ui dummy -e quit"; exit ;;
-		-LEXICON      ) DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary; reverse=-r ;;  # push .config dictionary to end of sort list
-		-PROOF        ) export MONOFONT="Iosevka-proof"; export BG="${BG:-ffead0:-7,fff5e8:-7,96f8f8:-12,fa8c69}" ;;
-		-T*           ) export TRACE=/tmp/kak:trace ;;  # trace messages
-		-U*           ) export UNPLUG=true ;;           # kakrc plugins exclusions
-		-C*           ) unset DISPLAY; console=true; export COLORSCHEME=${COLORSCHEME:-default} ;;
-		RULER=*       ) export RULER="${1#*=}" ;;       # default RULER='│'
+		*[0-9]x[0-9]* ) XY=$1   ;;
 		--            ) ID=$(rand)    ;;                # force new instance
+		-BENCH*       ) hyperfine -warmup 10 "$KAK -ui dummy -e quit"; exit ;;
+		-CONSOLE      ) unset DISPLAY; console=true; export COLORSCHEME=${COLORSCHEME:-default} ;;
+		-d            ) export TRACE=/tmp/kak:trace; debug $2 && shift ;;  # debug trace
+		-h* | help    ) $KAK -help; usage ;;
 		id=*          ) ID="${1#*=}"  ;;
 		ID=*          ) ID="${1#*=}"  ;;
+		-k            ) [ $2 ] && $KAK -p $2 || { for i in $($KAK -l); do ditto kak "$i ${RED}❌"; echo kill | $KAK -p $i ;done; pkill kak-lsp; }; exit ;;
+		-l            ) $KAK -l; exit ;;
+		-LEXICON      ) DICTIONARY=$HOME/.config/kak-lsp/kak-lsp:dictionary; reverse=-r ;;  # push .config dictionary to end of sort list
+		-PROOF        ) export MONOFONT="Iosevka-proof"; export BG="${BG:-ffead0:-7,fff5e8:-7,96f8f8:-12,fa8c69}" ;;
+		RULER=*       ) export RULER="${1#*=}" ;;       # default RULER='│'
+		-TRACE        ) export TRACE=/tmp/kak:trace ;;  # trace messages
+		-TRIM         ) export TRIM=BufWritePre ;;      # default NormalIdle blank line trimming
+		-TUI          ) export KAKTUI=true ;;           # avoid resetting term bg on exit (for kak within ncurses panel)
+		-UNPLUG       ) export UNPLUG=true ;;           # kakrc plugins exclusions
+		-v*           ) $KAK -version; exit ;;
 		WAIT          ) WAIT=$1 ;;
-		*[0-9]x[0-9]* ) XY=$1   ;;
 		*             ) break   ;;
 	esac
 	shift
@@ -76,7 +78,7 @@ done
 
 [ $count -gt 1 ] && notify low 'Kakoune' "$count files to edit"
 # snapshot sources (in lieu of persistent undo avalability)
-# console || (printf "$files" | xargs -r -d'\n' hgadd) &
+console || (printf "$files" | xargs -r -d'\n' hgadd) &
 
 # client/server
 if $headless ;then

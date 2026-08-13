@@ -500,6 +500,7 @@ cmdopts () {
 			percent/       ) variant $1 ;;
 			asterisk-high  ) variant $1 ;;
 			at-tall        ) variant $1 ;;
+			ampersand      ) variant $1 ;;
 
 			# geometry
 			ascender=*     ) ascender ${1#*=} || usage ;;                               # affects descender as well
