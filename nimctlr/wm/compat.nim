@@ -66,6 +66,13 @@ proc requireArgs*(
   if args.len < minArgs or args.len > maxArgs:
     quit(command & " expects " & $minArgs & ".." & $maxArgs & " arguments")
 
+proc requireArgs*(
+  command: string,
+  args: seq[string],
+  minArgs: int
+) =
+  requireArgs(command, args, minArgs, minArgs)
+
 #
 # Process execution
 #

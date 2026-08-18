@@ -18,14 +18,18 @@ const
   GroupUtil* = "UTIL"
   GroupWiki* = "WIKI"
 
-  SizeMonocle* = "monocle"
+  Monocle* = "monocle"
+  Terminal* = "terminal"
 
   Top* = "top"
   Bottom* = "bottom"
   Left* = "left"
   Right* = "right"
 
+  Up*     = "up"
   Center* = "center"
+  Down*   = "down"
+
   Horizontal* = "horizontal"
   Vertical* = "vertical"
   Rotate* = "--rotate"

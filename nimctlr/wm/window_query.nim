@@ -52,3 +52,19 @@ proc geometry*(winid: string = ""): Geometry =
 
 proc geometry*(args: seq[string]): string =
   shvArgs("window", "geometry", args, 0, 1)
+
+proc stack*(winid: string = ""): seq[string] =
+  let args =
+    if winid.len == 0:
+      @["stack"]
+    else:
+      @["stack", winid]
+
+  result =
+    shvArgs(
+      "sirocco",
+      "window",
+      args,
+      args.len,
+      args.len
+    ).splitLines()

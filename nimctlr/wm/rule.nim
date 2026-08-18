@@ -14,7 +14,7 @@ proc center(groupname: string = GroupDesk) =
 
 proc monocle(groupname: string = GroupDesk) =
   window.group(groupname)
-  window.size(SizeMonocle)
+  window.size(Monocle)
 
 proc sizeA4Centered(groupname: string = GroupUtil) =
   window.group(groupname)
@@ -23,7 +23,7 @@ proc sizeA4Centered(groupname: string = GroupUtil) =
 
 proc tile3Columns(groupname, classname: string) =
   window.group(groupname)
-  layout.tile("3", classname)
+  layout.fold("3", classname)
 
 proc video1080p(groupname: string = GroupPlay) =
   window.size("1080p")
@@ -45,14 +45,10 @@ proc kak() =
   case window.count(ClassKak)
   of 1:
     window.tile("3", "3")
-  of 2:
+  of 2 .. 3:
     layout.fold("4", ClassKak)
-  of 3:
-    layout.tile("4", ClassKak)
-  of 4:
-    layout.fold("4", "--rows", "2", ClassKak)
   else:
-    layout.tile("4", "--rows", "2", ClassKak)
+    layout.fold("4", "--rows", "2", ClassKak)
 
 proc luakit() =
   window.group(GroupComm)
@@ -75,11 +71,9 @@ proc term(classname: string = ClassTerm) =
 
   case window.count(classname)
   of 0..2:
-    layout.spread("3", classname)
-  of 3:
-    layout.fold("--", "3", "--rows", "2", classname)
+    layout.fold("3", "--spread", classname)
   else:
-    layout.spread("3", "--rows", "2", classname)
+    layout.fold("3", "--rows", "2", "--spread", classname)
 
 #
 # Dispatch

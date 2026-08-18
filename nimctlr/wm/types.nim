@@ -26,3 +26,11 @@ type
     top*: int
     width*: int
     height*: int
+
+type
+  Grid* = object
+    columns*: int
+    column*: int
+    rows*: int
+    row*: int
+

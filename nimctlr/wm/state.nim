@@ -1,5 +1,7 @@
+import std/algorithm
 import std/envvars
 import std/os
+import std/sequtils
 import std/strutils
 
 import types
@@ -41,6 +43,14 @@ proc saveGeometry*(winid: string = "") =
 
   saveGeometry(query.geometry(id), id, false)
 
+proc saveState*(root: string, position: int, winid: string) =
+  let g = query.geometry(winid)
+
+  writeGeometry(
+    g,
+    root / align($position, 3, '0') & "=" & winid
+  )
+
 proc loadGeometry*(winid: string = "", root: string = getEnv("WINFO")): Geometry =
   let id =
     if winid.len == 0:
@@ -81,6 +91,29 @@ proc loadGeometry*(winid: string = "", root: string = getEnv("WINFO")): Geometry
   if not (gotX and gotY and gotWidth and gotHeight):
     quit("incomplete saved geometry for window " & id)
 
+proc loadStateWinids*(root: string): seq[string] =
+  if not dirExists(root):
+    return @[]
+
+  let entries = toSeq(walkDir(root, relative = true))
+    .filterIt(
+      (it.kind == pcDir or it.kind == pcLinkToDir) and
+      it.path.len >= 4 and
+      it.path[0 .. 2].allCharsInSet(Digits) and
+      it.path[3] == '='
+    )
+    .mapIt(it.path)
+    .sorted()
+
+  for entry in entries:
+    result.add(entry.split("=", maxsplit = 1)[1])
+proc loadStateFocus*(root: string): string =
+  for kind, entry in walkDir(root, relative = true):
+    if kind == pcDir or kind == pcLinkToDir:
+      if entry.startsWith("focus="):
+        return entry[6 .. ^1]
+
+  result = ""
 
 proc snapshot*(args: seq[string]) =
   let id =
@@ -105,6 +138,7 @@ proc restore*(args: seq[string]) =
     loadGeometry(id, getEnv("WME") / "snapshot"),
     getEnv("WINFO") / id
     )
+
 
 #
 # Dispatch

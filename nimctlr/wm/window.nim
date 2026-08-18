@@ -1,5 +1,5 @@
+import std/envvars
 import std/strutils
-import std/sequtils
 
 import cliargs
 import compat
@@ -22,8 +22,25 @@ proc classname*(args: seq[string]): string =
 proc count*(args: seq[string]): string =
   shvArgs("window", "count", args, 0, 3)
 
+proc geometry*(args: seq[string]): string =
+  requireArgs("window geometry", args, 0, 1)
+
+  let g =
+    if args.len == 0:
+      query.geometry()
+    else:
+      query.geometry(args[0])
+
+  echo "X=" & $g.x
+  echo "Y=" & $g.y
+  echo "WIDTH=" & $g.width
+  echo "HEIGHT=" & $g.height
+
 proc ids*(args: seq[string]): string =
   shvArgs("window", "ids", args, 0, 3)
+
+proc stack*(args: seq[string]): string =
+  shvArgs("sirocco", "window", @["stack"] & args, 1, 2)
 
 proc screenGeometry(): ScreenGeometry =
   result.gap = parseInt(screen.gap())
@@ -202,6 +219,14 @@ proc extend*(args: seq[string]) =
   saveGeometry(g)
 
 proc group*(args: seq[string]) =
+  requireArgs("window group", args, 0, 1)
+
+  discard parseArguments(
+    "window group",
+    args,
+    [ArgGroup, ArgTeleport]
+  )
+
   runvArgs("window", "group", args, 1, 2)
 
 proc hide*(args: seq[string]) =
@@ -223,9 +248,9 @@ proc shift*(args: seq[string]) =
     width = 0
 
   case args[0]
-  of "up":
+  of Up:
     height = -g.height
-  of "down":
+  of Down:
     height = g.height
   of Left:
     width = -g.width
@@ -318,7 +343,7 @@ proc snap*(args: seq[string]) =
     else:
       snapErr()
 
-  of "center":
+  of Center:
     case position[1]
     of "":
       move((s.width - g.width) div 2 + s.margin, verticalCenter)
@@ -371,17 +396,17 @@ proc snap*(position: string) =
 proc size*(args: seq[string]) =
   requireArgs("window size", args, 1, 3)
 
-  let format = args & @[""]
+  var a = parseArguments(
+    "window size",
+    args,
+    [ArgPreset, ArgZoom, ArgRotate, ArgSize, ArgAspect]
+  )
+
   let g = query.geometry()
   let s = screenGeometry()
 
-  proc sizeErr(detail: string = "") =
-    quit(
-      "invalid window size format: " &
-      format[0] &
-      (if format.len > 1: " " & format[1] else: "") &
-      (if detail.len > 0: " (" & detail & ")" else: "")
-    )
+  proc fail(error: string) =
+    quit("window size: " & error)
 
   proc paperDimensions(name: string): array[2, int] =
     case name
@@ -394,7 +419,7 @@ proc size*(args: seq[string]) =
     of A6: result = [472, 665]
     of B7: result = [397, 559]
     else:
-      sizeErr("unknown paper size " & name)
+      fail("unknown paper size " & name)
 
   proc paperArea(name: string): int =
     let size = paperDimensions(name)
@@ -419,7 +444,7 @@ proc size*(args: seq[string]) =
     of "720p": result = [1280, 720]
     of "480p": result = [720, 480]
     else:
-      sizeErr("unknown video size " & name)
+      fail("unknown video size " & name)
 
   proc videoArea(name: string): int =
     let size = videoDimensions(name)
@@ -435,10 +460,10 @@ proc size*(args: seq[string]) =
       height: video[1]
     ))
 
-  case format[0]
-  of "monocle":
-    if format[1] != "":
-      sizeErr()
+  case args[0]
+  of Monocle:
+    if args.len > 1:
+      fail("monocle has no options")
 
     wtp(Geometry(
       x: s.width div 4 + s.margin,
@@ -447,7 +472,7 @@ proc size*(args: seq[string]) =
       height: s.height
     ))
 
-  of "term":
+  of Terminal:
     let g = query.geometry()
     let t = loadGeometry(ClassTerm)
 
@@ -461,17 +486,17 @@ proc size*(args: seq[string]) =
     saveGeometry(g)
 
   of "paper", "video":
-    if format[1] == "":
-      sizeErr()
+    if a.zoom == "":
+      fail("missing --larger/--smaller zoom")
 
     let area = g.width * g.height
 
-    case format[0]
+    case a.preset
     of "paper":
       var rotate = false
       let size =
         if g.height > g.width:  # portrait
-          if format[1] == "--larger":
+          if a.zoom == "--larger":
             if area >= paperArea(B5): A4
             elif area >= paperArea(A5): B5
             elif area >= paperArea(B6): A5
@@ -487,7 +512,7 @@ proc size*(args: seq[string]) =
             else: A4
         else:                   # landscape
           rotate = true
-          if format[1] == "--larger":
+          if a.zoom == "--larger":
             if area >= paperArea(B4): A3
             elif area >= paperArea(A4): B4
             elif area >= paperArea(B5): A4
@@ -510,7 +535,7 @@ proc size*(args: seq[string]) =
 
     of "video":
       let size =
-        if format[1] == "--larger":
+        if a.zoom == "--larger":
           if area >= videoArea("720p"): "1080p"
           elif area >= videoArea("480p"): "720p"
           else: "480p"
@@ -523,74 +548,52 @@ proc size*(args: seq[string]) =
 
   of A3, B4, A4, B5, A5, B6, A6, B7:
     paperSize(
-      format[0],
-      rotate = format[1] == "--rotate"
+      a.preset,
+      a.rotate
     )
 
   of "1080p", "720p", "480p":
-    if format[1] != "":
-      sizeErr()
+    if args.len > 1:
+      fail("invalid option")
 
-    videoSize(format[0])
+    videoSize(a.preset)
 
     snap(Center)
 
   else:
-    if 'x' in format[0]:
-      proc parseSize(size: string): tuple[width, height: int] =
-        let parts = try: size.split("x", maxsplit = 1).map(parseInt)
-        except ValueError:
-          @[0]
+    if 'x' in args[0]:
+      if a.rotate:
+        swap(a.size.width, a.size.height)
 
-        if parts.len != 2:
-          sizeErr()
-
-        if format[1] == "":
-          result = (parts[0], parts[1])
-        else:
-          result = (parts[1], parts[0])
-
-      var size = parseSize(format[0])
-
-      if size.height > s.height:
-        swap(size.width, size.height)
+      if a.size.height > s.height:
+        swap(a.size.width, a.size.height)
 
       wtp(Geometry(
         x: g.x,
         y: g.y,
-        width: size.width,
-        height: size.height
+        width: a.size.width,
+        height: a.size.height
       ))
 
-    elif ':' in format[0]:
-      proc parseRatio(ratio: string): tuple[width, height: int] =
-        let parts = try: ratio.split(":", maxsplit = 1).map(parseInt)
-        except ValueError:
-          @[0]
+    elif ':' in args[0]:
+      var width, height: int
 
-        if parts.len != 2:
-          sizeErr()
-        if parts[0] == parts[1]:
-          sizeErr()
-
-        if parts[0] > parts[1]:
-          result.width = g.width * parts[0] div parts[1]
-          result.height = result.width * parts[1] div parts[0]
-        else:
-          result.height = g.height * parts[0] div parts[1]
-          result.width = result.height * parts[1] div parts[0]
-
-      let size = parseRatio(format[0])
+      if a.aspect.width > a.aspect.height:
+        width = g.width * a.aspect.width div a.aspect.height
+        height = width * a.aspect.height div a.aspect.width
+      else:
+        height = g.height * a.aspect.width div a.aspect.height
+        width = height * a.aspect.height div a.aspect.width
 
       wtp(Geometry(
         x: g.x,
         y: g.y,
-        width: size.width,
-        height: size.height
+        width: width,
+        height: height
       ))
 
     else:
-      sizeErr()
+      fail("undefined option")
 
   saveGeometry(g)
 
@@ -601,10 +604,159 @@ proc size*(size: string) =
   size(@[size])
 
 proc spread*(args: seq[string]) =
-  runvArgs("window", "spread", args, 1, 6)
+  requireArgs("window spread", args, 1, 6)
+
+  var a = parseArguments(
+    "window spread",
+    args,
+    [
+      ArgColumns,
+      ArgColumn,
+      ArgColumnName,
+      ArgRows,
+      ArgRow,
+      ArgRowName
+    ]
+  )
+
+  if a.rows == -1:
+    a.rows = 1
+
+  let g = query.geometry()
+  let s = screenGeometry()
+
+  proc fail(error: string) =
+    quit("window spread: " & error)
+
+  if a.columns == -1 and a.column == -1 and a.columnName == "":
+    fail("no column position specified")
+
+  proc calculateColumns(): int =
+      (s.width + s.gap) div (g.width + s.gap)
+
+  proc centerColumn(columns: int): int =
+    case getEnv("CENTER_BIAS", "right")
+    of Left:
+      result = (a.columns + 1) div 2
+    of Right:
+      result = (a.columns + 2) div 2
+    else:
+      fail("CENTER_BIAS expects left or right")
+
+  proc setColumn() =
+    case a.columnName:
+    of Left:
+      a.column = 1
+    of Right:
+      a.column = a.columns
+    of Center:
+      a.column = centerColumn(a.columns)
+
+    if a.column < 1 or a.column > a.columns:
+      fail("column out of range")
+
+  proc setRow() =
+    if a.row == -1:
+      case a.rowName:
+      of "", Top:
+        a.row = 1
+      else:  # Bottom
+        a.row = a.rows
+
+    if a.row < 1 or a.row > a.rows:
+      fail("row out of range")
+
+    if s.height < a.rows * g.height + (a.rows - 1) * s.gap:
+      fail("window exceeds row height")
+
+  proc spreadGeometry() =
+    setRow()
+    setColumn()
+
+    let spreadWidth =
+      (s.width - (a.columns - 1) * s.gap) div a.columns
+
+    let spreadHeight =
+      (s.height - (a.rows - 1) * s.gap) div a.rows
+
+    let x =
+      spreadWidth * (a.column - 1) +
+      s.margin +
+      (a.column - 1) * s.gap +
+      (spreadWidth - g.width) div 2
+
+    let y =
+      spreadHeight * (a.row - 1) +
+      s.top +
+      (a.row - 1) * s.gap +
+      (spreadHeight - g.height) div 2
+
+    wtp(Geometry(
+      x: x,
+      y: y,
+      width: g.width,
+      height: g.height
+    ))
+
+  case args[0]
+  # spread left/right/center ...
+  of Left, Right, Center:
+    a.columns = calculateColumns()
+
+    spreadGeometry()
+
+  else:
+    # spread column ... NOTE: one numeric operand means column of auto-sized grid
+    if a.column == -1 and a.columnName == "":
+      a.column = a.columns
+      if a.column < 1:
+        fail("column must be >= 1")
+
+      a.columns = calculateColumns()
+
+      spreadGeometry()
+
+    # spread columns column/left/right/center ...
+    else:
+      if a.columns < 1:
+        fail("columns must be >= 1")
+
+      if a.column > a.columns:
+        fail("column must be <= " & $a.columns)
+
+      if a.columns > calculateColumns():
+        fail("window exceeds column width")
+
+      spreadGeometry()
+
+  saveGeometry(g)
 
 proc swap*(args: seq[string]) =
-  runvArgs("window", "swap", args, 1, 1)
+  requireArgs("window swap", args, 1)
+
+  let source = query.focusedWinid()
+  let sourceGeometry = query.geometry(source)
+
+  runvArgs(
+    "sirocco",
+    "window",
+    @["focus", "--cardinal", args[0]],
+    3,
+    3
+  )
+
+  let target = query.focusedWinid()
+
+  if target == source:
+    quit("no adjacent window")
+
+  let targetGeometry = query.geometry(target)
+
+  wtp(targetGeometry, source)
+  wtp(sourceGeometry, target)
+
+  saveGeometry(sourceGeometry, source)
+  saveGeometry(targetGeometry, target)
 
 proc standard*(args: seq[string]) =
   runvArgs("window", "standard", args, 2, 3)
@@ -615,57 +767,29 @@ proc await*(args: seq[string]) =
 proc tile*(args: seq[string]) =
   requireArgs("window tile", args, 1, 6)
 
+  var a = parseArguments(
+    "window tile",
+    args,
+    [
+      ArgColumns,
+      ArgColumn,
+      ArgColumnName,
+      ArgRows,
+      ArgRow,
+    ]
+  )
+
+  if a.rows == -1:
+    a.rows = 1
+
+  if a.row == -1:
+    a.row = 1
+
   let g = query.geometry()
   let s = screenGeometry()
 
-  proc tileErr(detail: string = "") =
-    quit(
-      "invalid window tile position: " &
-      args[0] &
-      (if args.len > 1: " " & args[1 .. ^1].join(" ") else: "") &
-      (if detail.len > 0: " (" & detail & ")" else: "")
-    )
-
-  var
-    columns = 0
-    column = -1
-    rows = 1
-    row = 1
-    i = 0
-
-  while i < args.len:
-    case args[i]
-    of Left, Right:
-      if args.len > 1:
-        tileErr()
-
-      inc i
-
-    of "--rows":
-      rows = try: parseInt(args[i + 1])
-      except ValueError:
-        0
-      i += 2
-
-    of "--row":
-      row = try: parseInt(args[i + 1])
-      except ValueError:
-        0
-      i += 2
-
-    else:
-      if columns == 0:
-        columns = try: parseInt(args[i])
-        except ValueError:
-          0
-      elif column == 0:
-        column = try: parseInt(args[i])
-        except ValueError:
-          0
-      else:
-        tileErr()
-
-      inc i  # defaults unless overwritten
+  proc fail(error: string) =
+    quit("window tile: " & error)
 
   case args[0]
   of Left:
@@ -685,35 +809,39 @@ proc tile*(args: seq[string]) =
     ))
 
   else:
-    if columns < 1:
-      tileErr("columns must be >= 1")
+    # unused columnName check
+    if a.columnName == Center:
+      fail("invalid column")
 
-    if column == -1:
-      column = columns
-    elif column < 1 or column > columns:
-      tileErr("column out of range")
+    if a.columns < 1:
+      fail("columns must be >= 1")
 
-    if rows < 1:
-      tileErr("rows must be >= 1")
+    if a.column == -1:
+      a.column = a.columns
+    elif a.column < 1 or a.column > a.columns:
+      fail("column out of range")
 
-    if row < 1 or row > rows:
-      tileErr("row out of range")
+    if a.rows < 1:
+      fail("rows must be >= 1")
+
+    if a.row < 1 or a.row > a.rows:
+      fail("row out of range")
 
     let tileWidth =
-      (s.width - (columns - 1) * s.gap) div columns
+      (s.width - (a.columns - 1) * s.gap) div a.columns
 
     let tileHeight =
-      (s.height - (rows - 1) * s.gap) div rows
+      (s.height - (a.rows - 1) * s.gap) div a.rows
 
     let x =
-      tileWidth * (column - 1) +
+      tileWidth * (a.column - 1) +
       s.margin +
-      (column - 1) * s.gap
+      (a.column - 1) * s.gap
 
     let y =
-      tileHeight * (row - 1) +
+      tileHeight * (a.row - 1) +
       s.top +
-      (row - 1) * s.gap
+      (a.row - 1) * s.gap
 
     wtp(Geometry(
       x: x,
@@ -771,35 +899,16 @@ proc dispatch*(verb: string, rest: seq[string]) =
     echo count(rest)
   of "extend":
     extend(rest)
-
   of "geometry":
-    requireArgs("window geometry", rest, 0, 1)
-
-    let g =
-      if rest.len == 0:
-        query.geometry()
-      else:
-        query.geometry(rest[0])
-
-    echo "X=" & $g.x
-    echo "Y=" & $g.y
-    echo "WIDTH=" & $g.width
-    echo "HEIGHT=" & $g.height
-
+    echo geometry(rest)
   of "group":
-    let parsed = parseArgs(rest)
-
-    rejectUnsupported(
-      parsed,
-      allowedFlags = ["--teleport"]
-    )
-
     group(rest)
-
   of "hide":
     hide(rest)
   of "ids":
     echo ids(rest)
+  of "stack":
+    echo stack(rest)
   of "restore":
     restore(rest)
   of "rotate":
@@ -807,41 +916,13 @@ proc dispatch*(verb: string, rest: seq[string]) =
   of "shift":
     shift(rest)
   of "size":
-    let parsed = parseArgs(rest)
-
-    rejectUnsupported(
-      parsed,
-      allowedFlags = ["--", "--larger", "--smaller", "--rotate"]
-    )
-
-    let larger = hasFlag(parsed, "--larger")
-    let smaller = hasFlag(parsed, "--smaller")
-
-    if parsed.positionals.len > 0 and
-       parsed.positionals[0] in ["paper", "video"]:
-      if larger == smaller:
-        quit("window size " & parsed.positionals[0] &
-             " requires exactly one of --larger or --smaller")
-
     size(rest)
-
   of "snap":
     snap(rest)
-
-  of "spread", "tile":
-    validateOptions(
-      rest,
-      # `window -- <verb> ...` preserves prior window geometry SEE: nimctlr.nim
-      valueOptions = ["--", "--rows", "--row"],
-      allowedOptions = ["--", "--rows", "--row"]
-    )
-
-    case verb
-    of "spread":
-      spread(rest)
-    of "tile":
-      tile(rest)
-
+  of "spread":
+    spread(rest)
+  of "tile":
+    tile(rest)
   of "swap":
     swap(rest)
   of "standard":
