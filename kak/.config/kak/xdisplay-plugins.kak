@@ -42,6 +42,15 @@ bundle kakoune-lsp https://github.com/kakoune-lsp/kakoune-lsp.git %{
 		map global object D     '<a-semicolon>lsp-diagnostic-object<ret>'                    -docstring 'LSP errors'
 	}
 
+	nop hook global WinSetOption filetype=(c|cpp|go|lua||nim|perl|python|ruby|rust) %{
+	    hook window -group semantic-tokens BufReload .* lsp-semantic-tokens
+	    hook window -group semantic-tokens NormalIdle .* lsp-semantic-tokens
+	    hook window -group semantic-tokens InsertIdle .* lsp-semantic-tokens
+	    hook window -once -always window WinSetOption filetype=.* %{
+	        remove-hooks window semantic-tokens
+	    }
+	}
+
 	hook global WinSetOption filetype=nim %{
 	    lsp-enable-window
 	    lsp-semantic-tokens-enable-window

@@ -265,7 +265,7 @@ bundle kakoune-sudo-write https://github.com/occivink/kakoune-sudo-write.git %{
 
 # .................................................................. tree-sitter
 
-bundle kak-tree-sitter https://github.com/phaazon/kak-tree-sitter.git %{
+bundle kak-tree-sitter https://git.sr.ht/~hadronized/kak-tree-sitter %{
 	nop evaluate-commands %sh{ kak-tree-sitter -d -k --init $kak_session -s }
 
 	# hook global WinSetOption filetype=nim %{
