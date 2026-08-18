@@ -11,6 +11,7 @@
 #include "input.h"
 #include "ipc_handlers.h"
 #include "focus.h"
+#include "geometry.h"
 #include "groups.h"
 #include "monitor.h"
 #include "stack.h"
@@ -50,6 +51,7 @@ static void ipc_window_resize(uint32_t *);
 static void ipc_window_rev_cycle_in_group(uint32_t *);
 static void ipc_window_rev_cycle(uint32_t *);
 static void ipc_window_snap(uint32_t *);
+static void ipc_window_stack(uint32_t *);
 static void ipc_window_stack_toggle(uint32_t *);
 static void ipc_window_unmaximize(uint32_t *);
 static void ipc_window_ver_maximize(uint32_t *);
@@ -313,6 +315,121 @@ register_ipc_handlers(void)
 	ipc_handlers[IPCActionWindowHide]       = ipc_action_window_hide;
 	ipc_handlers[IPCActionGroupAdd]         = ipc_action_group_add;
 	ipc_handlers[IPCActionGroupRemove]      = ipc_action_group_remove;
+	ipc_handlers[IPCWindowStack]            = ipc_window_stack;
+}
+
+static void
+ipc_window_stack(uint32_t *d)
+{
+	bool changed;
+	bool explicit_window = d[1] != 0;
+	bool *included = NULL;
+	char *response = NULL;
+	char *write_at;
+	const char *error_response = NULL;
+	int flush_result;
+	size_t client_count = 0;
+	size_t i, j;
+	struct client *client;
+	struct client *reference;
+	struct client **clients = NULL;
+	struct list_item *item;
+	xcb_query_tree_reply_t *tree = NULL;
+	xcb_void_cookie_t property_cookie;
+	xcb_window_t *children;
+	xcb_window_t reply_window = d[0];
+	int children_length;
+
+	if (reply_window == XCB_NONE)
+		return;
+
+	reference = explicit_window ? find_client(&d[2]) : focused_win;
+	if (reference == NULL) {
+		error_response = explicit_window ? "ERROR unknown or unmanaged window" :
+				"ERROR no focused managed window";
+		goto respond;
+	}
+	if (!reference->mapped) {
+		error_response = "ERROR reference window is not mapped";
+		goto respond;
+	}
+
+	for (item = win_list; item != NULL; item = item->next)
+		client_count++;
+	clients = calloc(client_count, sizeof(*clients));
+	included = calloc(client_count, sizeof(*included));
+	if (clients == NULL || included == NULL) {
+		error_response = "ERROR unable to allocate response";
+		goto respond;
+	}
+
+	tree = xcb_query_tree_reply(conn, xcb_query_tree(conn, scr->root), NULL);
+	if (tree == NULL) {
+		error_response = "ERROR unable to read stacking order";
+		goto respond;
+	}
+	children = xcb_query_tree_children(tree);
+	children_length = xcb_query_tree_children_length(tree);
+	client_count = 0;
+	for (int child = 0; child < children_length; child++) {
+		client = find_client(&children[child]);
+		if (client == NULL || !client->mapped)
+			continue;
+		for (i = 0; i < client_count && clients[i] != client; i++);
+		if (i == client_count)
+			clients[client_count++] = client;
+	}
+
+	for (i = 0; i < client_count && clients[i] != reference; i++);
+	if (i == client_count) {
+		error_response = "ERROR reference window missing from stacking order";
+		goto respond;
+	}
+	included[i] = true;
+	do {
+		changed = false;
+		for (i = 0; i < client_count; i++) {
+			if (included[i])
+				continue;
+			for (j = 0; j < client_count; j++) {
+				if (included[j] && clients_overlap(clients[i], clients[j])) {
+					included[i] = true;
+					changed = true;
+					break;
+				}
+			}
+		}
+	} while (changed);
+
+	response = malloc(3 + client_count * 11);
+	if (response == NULL) {
+		error_response = "ERROR unable to allocate response";
+		goto respond;
+	}
+	write_at = response;
+	memcpy(write_at, "OK", 2);
+	write_at += 2;
+	for (i = 0; i < client_count; i++)
+		if (included[i])
+			write_at += sprintf(write_at, "\n0x%08x", clients[i]->window);
+
+respond:
+	if (error_response != NULL) {
+		property_cookie = xcb_change_property(conn, XCB_PROP_MODE_REPLACE,
+				reply_window, ATOMS[_IPC_ATOM_RESPONSE], XCB_ATOM_STRING, 8,
+				strlen(error_response), error_response);
+	} else {
+		property_cookie = xcb_change_property(conn, XCB_PROP_MODE_REPLACE,
+				reply_window, ATOMS[_IPC_ATOM_RESPONSE], XCB_ATOM_STRING, 8,
+				write_at - response, response);
+	}
+	flush_result = xcb_flush(conn);
+	(void)(property_cookie);
+	(void)(flush_result);
+	free(tree);
+	free(included);
+	free(clients);
+	free(response);
 }
 
 static void

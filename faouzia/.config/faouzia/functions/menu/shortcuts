@@ -18,11 +18,12 @@ echo "
 &    ⁋ >/dev/null 2>&1
 |    ⁋ | xclip -selection clipboard
 ^    ⁋ [^\\\\n]*
+,    ⁋ & \" \" &
 r    ⁋ grep -E
 b    ⁋ [[:alpha:]]
 f    ⁋ [a-z]
 j    ⁋ [A-Z]
-i    ⁋ [[:digit:]]
+#    ⁋ [[:digit:]]
 .    ⁋ [[:punct:]]
 w    ⁋ [[:alnum:]]
 s    ⁋ ¯\(°_o)/¯

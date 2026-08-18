@@ -124,7 +124,7 @@ alt + shift + {space,BackSpace}
 	nimctlr window size video {--larger,--smaller}
 
 super + alt + Return
-	nimctlr state snapshot . window size term . window snap center vertical . state restore
+	nimctlr state snapshot . window size terminal . window snap center vertical . state restore
 
 super + ctrl + shift + {Left,Down,Up,Right}
 	sirocco window resize --relative {-20 0,0 20,0 -20,20 0}

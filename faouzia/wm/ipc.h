@@ -66,6 +66,7 @@ enum IPCCommand {
 	IPCActionWindowHide,
 	IPCActionGroupAdd,
 	IPCActionGroupRemove,
+	IPCWindowStack,
 	NR_IPC_COMMANDS
 };
 

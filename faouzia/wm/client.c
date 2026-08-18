@@ -567,11 +567,12 @@ query_window(enum IPCCommand query, const char *selector,
 	char *id;
 	char *line_end;
 	char *parse_end;
-	const bool ids_query = query == IPCWindowIds;
+	const bool stack_query = query == IPCWindowStack;
+	const bool ids_query = query == IPCWindowIds || stack_query;
 	const bool count_query = query == IPCWindowCount;
 	const bool classname_query = query == IPCWindowClassname;
 	const bool geometry_query = query == IPCWindowGeometry;
-	const char *query_name = ids_query ? "ids" : count_query ? "count" :
+	const char *query_name = stack_query ? "stack" : ids_query ? "ids" : count_query ? "count" :
 			classname_query ? "classname" : geometry_query ? "geometry" : "focused";
 	long elapsed_ms;
 	size_t id_count;
@@ -605,6 +606,9 @@ query_window(enum IPCCommand query, const char *selector,
 	msg.data.data32[3] = scope;
 	msg.data.data32[4] = selector_type;
 	if (geometry_query) {
+		msg.data.data32[2] = explicit_window;
+		msg.data.data32[3] = window;
+	} else if (stack_query) {
 		msg.data.data32[2] = explicit_window;
 		msg.data.data32[3] = window;
 	}
@@ -705,7 +709,8 @@ query_window(enum IPCCommand query, const char *selector,
 					fprintf(stderr, "sirocco: malformed windowchef response\n");
 					goto done;
 				}
-				qsort(ids, id_count, sizeof(*ids), compare_ids);
+				if (!stack_query)
+					qsort(ids, id_count, sizeof(*ids), compare_ids);
 				DMSG("sirocco ipc window ids: reply=0x%08x seq=%u decoded ID count=%zu\n",
 						reply_window, cookie.sequence, id_count);
 				for (i = 0; i < id_count; i++)
@@ -1248,6 +1253,19 @@ int main(int argc, char **argv) {
 		if (argc == 4 && !fn_hex(&window, 1, argv + 3))
 			errx(EXIT_FAILURE, "malformed input");
 		int status = query_window(IPCWindowGeometry, NULL, IPCClientScopeMapped,
+				IPCClientSelectorNone, argc == 4, window);
+		xcb_disconnect(conn);
+		return status;
+	}
+	if (argc >= 3 && strcmp(argv[1], "window") == 0 &&
+			strcmp(argv[2], "stack") == 0) {
+		uint32_t window = XCB_NONE;
+
+		if (argc > 4)
+			errx(EXIT_FAILURE, "too many arguments");
+		if (argc == 4 && !fn_hex(&window, 1, argv + 3))
+			errx(EXIT_FAILURE, "malformed input");
+		int status = query_window(IPCWindowStack, NULL, IPCClientScopeMapped,
 				IPCClientSelectorNone, argc == 4, window);
 		xcb_disconnect(conn);
 		return status;
