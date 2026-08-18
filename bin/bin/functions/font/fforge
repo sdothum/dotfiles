@@ -34,6 +34,7 @@ $(basename $0) map                                   <family> <glyph> <glyph>, m
 $(basename $0) punctuation                           <emdash>  <shape>
 $(basename $0) Q_[horizontal|custom]                 <shape>
 $(basename $0) q_hook_                               <shape>
+$(basename $0) bar_extended                          <shape>
 $(basename $0) quote                                 <letters> <shape>
 $(basename $0) serifed                               <letters> <shape>
 $(basename $0) serifless                             <letters> <shape>
@@ -448,6 +449,21 @@ Generate(\$1);
 	done
 }
 
+
+bar_extended() {
+	# copy char 0u024a and paste to char 0u0051
+	# confirm 'Q-hook'  # SEE: iosevka
+	echo "
+Open(\$1);
+$(replace $(utf '|') 0u2502)
+Generate(\$1);
+" >${LOG}:bar_extended.script
+
+	for i in *ttf ;do
+		ditto bar_extended $i
+		fontforge -quiet --script ${LOG}:bar_extended.script $i
+	done
+}
 
 Q_hook() {
 	# copy char 0u024a and paste to char 0u0051
@@ -1146,6 +1162,7 @@ case $1 in
 	baseline      ) shape=$2; shift ;;
 	capadjust     ) letters=$2; shift ;;                                         # align "C G O Q S U" to x base
 	copy          ) [ $3 ] && { family=$2; alias=$3; shift 2; copy; exit; }      || usage ;;  # pwd commandline only!
+	bar_extended  ) ;;
 	f_ascending   ) shape=$2; shift ;;
 	f_asymmetric  ) shape=$2; shift ;;
 	f_descending  ) shape=$2; shift ;;

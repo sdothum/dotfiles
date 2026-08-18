@@ -78,6 +78,7 @@ usage() {
 > 4-open[+]
 > asterisk-high
 > at-tall
+> bar-extended
 > paren-flat
 
 > [ascender=[+-]<integer>]
@@ -213,6 +214,7 @@ variant() {
 			at             ) glyph at=threefold                                         ;;
 			at-tall        ) glyph at=threefold-solid-inner-tall                        ;;
 			dollar         ) glyph dollar=open                                          ;;
+			bar-extended   ) glyph '' "BAR=extended";                bar_extended=true  ;;
 			number_sign    ) glyph number_sign=slanted                                  ;;
 			paren-flat     ) glyph paren=flat-arc                                       ;;
 			percent        ) glyph percent=rings-segmented-slash                        ;;
@@ -500,6 +502,7 @@ cmdopts () {
 			percent/       ) variant $1 ;;
 			asterisk-high  ) variant $1 ;;
 			at-tall        ) variant $1 ;;
+			bar-extended   ) variant $1 ;;
 			ampersand      ) variant $1 ;;
 
 			# geometry
@@ -866,6 +869,7 @@ if [ $ebook ] ;then
 	[ $adjust ] && fforge ${regular}weight $adjust $family  # rename weight for e-reader (as regular)
 	[ $space  ] && fforge space $space             $family  # lengthen space character cell width
 fi
+[ $bar_extended  ] && fforge bar_extended                    $family  # extended bar
 
 [ $baseline ] && fforge baseline ${shape##* } $family 2>/dev/null  # force baseline adjustment for descending caps and q-hook
 

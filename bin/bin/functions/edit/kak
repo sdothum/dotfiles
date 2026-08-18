@@ -56,6 +56,9 @@ while : ;do
 	shift
 done
 
+# remove dangling lsp service state
+pgrep kak-lsp >/dev/null || rm -rf /run/user/$(id -u)/kakoune-lsp/${USER}*
+
 # inject spelling dictionary manually into ltex configuration in lieu of unavailable ltex-ls dictionary update
 if [ "$DICTIONARY" ] ;then
 	TOML=$HOME/.config/kak-lsp/kak-lsp.toml  # FOR: kak-lsp v17.2.1
