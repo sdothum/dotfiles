@@ -1,0 +1,25 @@
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ....................................................................... kasane
+
+cd /home/depot
+exists --repo kasane && { cd kasane; git pull; cd ..; } || git clone --depth 1 https://github.com/Yus314/kasane.git
+
+cd kasane
+
+# Default: TUI + WASM plugin support (cursor-line and color-preview bundled)
+cargo install --path kasane
+
+# Include the GPU backend
+# cargo install --path kasane --features gui
+
+# Add tree-sitter syntax highlighting
+# cargo install --path kasane --features syntax
+
+# Combine
+cargo install --path kasane --features "gui syntax"
+
+# kak: filetype=sh

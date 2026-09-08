@@ -8,7 +8,7 @@
 sudo xbps-install -y npm libwebkit2gtk41-devel
 
 cd /home/depot
-if exists --repo RapidRaw ;then
+if exists --repo RapidRAW ;then
 	cd RapidRAW
 	git pull --recurse-submodules
 else
