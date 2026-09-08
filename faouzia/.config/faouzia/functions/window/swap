@@ -1,0 +1,30 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window/swap $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................. Swap window
+
+# Usage: window swap left | right | up | down (of window edge)
+
+# NOTE: preset window history (rec_geometry) for swap reference
+snapshot_geometry $winid  # X Y WIDTH HEIGHT
+rec_geometry $winid
+
+sirocco window_cardinal_focus $1 2>/dev/null || { notify window "swap $@"; exit 1; }
+wid=$(pfw)
+[ "$wid" = "$winid" ] && exit  # no adjacent window
+
+snapshot_geometry $wid  # X Y WIDTH HEIGHT
+rec_geometry $wid
+
+set_geometry $wid
+wtp $X $Y $WIDTH $HEIGHT $winid
+
+cat_geometry $winid
+wtp $X $Y $WIDTH $HEIGHT $wid
+
+exit  # to avoid "window" (parent) history management of window snapshot (history already recorded above)
+
+# kak: filetype=sh

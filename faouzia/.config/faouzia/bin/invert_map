@@ -1,0 +1,21 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="invert_map $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ..................................................... Toggle window visibility
+
+# Usage: invert_map [-classname | -name] <name>
+
+case $1 in
+	-n* ) option=name;      name=$2 ;;
+	-c* ) option=name;      name=$2 ;;
+	*   ) option=classname; name=$1 ;;
+esac
+
+# SEE: sxhkdrc
+xdotool search -onlyvisible -$option "${name:-undefined}" windowunmap || xdotool search -$option "${name:-undefined}" windowmap
+
+# kak: filetype=sh

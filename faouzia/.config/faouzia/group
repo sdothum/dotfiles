@@ -14,7 +14,7 @@
 # NOTE: sirocco group handling deficiencies (quirks) and extensions are handled here
 # HACK: sirocco group_toggle/_activate does not restore the group window stack order (focused window)
 
-GROUPS="DESK COMM CODE WIKI UTIL PLAY PEER ''"                       # '' end of groups SEE: draw panel and faouziarc
+GROUPS="DESK COMM CODE WIKI UTIL PLAY PEER ''"                        # '' end of groups SEE: draw panel and faouziarc
 
 name() { echo "$GROUPS" | cut -d' ' -f${1:-1}; }
 id()   { echo "$GROUPS" | tr ' ' '\n' | grep -n $1 | cut -d: -f1; }  # NOTE: assumes only valid script calls SEE: rulerrc!
@@ -41,6 +41,13 @@ plus() {
 	echo $group
 }
 
+sync() {
+	winid=$(pfw 2>/dev/null) || return  # trap empty group at startup
+	D=$(find $GROUP -name $winid | cut -d/ -f6)
+	[ "$D" ] || return                  # trap unregisterd (yet) window
+	[ "$D" = "$(ls -1 $GROUP/current)" ] || { group add $D $winid; group $D; }
+}
+
 msg=$1
 case $msg in
 	''      ) ls -1 $CURRENT ;;
@@ -48,6 +55,7 @@ case $msg in
 	count   ) echo $(( $(id "''") - 1 )) ;;
 	id      ) id   $2 ;;
 	name    ) name $2 ;;
+	sync    ) sync    ;;
 	[1-9]   ) group focus $1 ;;          # SEE: query group and rulerrc
 	-* | +* ) group focus $(plus $1) ;;  # -1/+1
 	*       )

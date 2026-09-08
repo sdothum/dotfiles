@@ -26,9 +26,9 @@ off() {
 }
 
 case $1 in
-	on  | On  ) on  ;;
-	off | Off ) off ;;
-	*         ) pstat picom && off || on ;;
+	on  ) on  ;;
+	off ) off ;;
+	*   ) pstat picom && off || on ;;
 esac
 
 # kak: filetype=sh

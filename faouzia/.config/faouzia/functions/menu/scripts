@@ -64,8 +64,7 @@ while : ;do
 	if expand $file >/dev/null ;then
 		$EDITOR $(expand $file)
 	else
-		# error=": ${file##*/} ∉ ${file%/*}"
-		error=": ( ${file%/*}/${file##*/} defunct )"
+		error=": ${file##*/} ∉ ${file%/*}"
 		sed -i "\|${file##*/}.$SEP ${file%/*}$|d" $HISTORY/scripts
 		file=${file##*/}
 		continue

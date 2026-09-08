@@ -1,5 +1,5 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="group/last $@" . $PARENT
+# [ $TRACE ] && CHILD="group/last $@" . $PARENT
 
 # Faouzia
 # ══════════════════════════════════════════════════════════════════════════════
@@ -8,6 +8,6 @@
 
 # Usage: group last
 
-[ -e $GROUP/last ] && $NIMCTLR group focus $(ls -1 $GROUP/last)
+[ -e $GROUP/last ] && group $(ls -1 $GROUP/last)
 
 # kak: filetype=sh

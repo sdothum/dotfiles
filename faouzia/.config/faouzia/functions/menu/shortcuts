@@ -16,14 +16,12 @@ echo "
 /    ⁋ >/dev/null
 !    ⁋ 2>/dev/null
 &    ⁋ >/dev/null 2>&1
-|    ⁋ | xclip -selection clipboard
 ^    ⁋ [^\\\\n]*
-,    ⁋ & \" \" &
 r    ⁋ grep -E
 b    ⁋ [[:alpha:]]
 f    ⁋ [a-z]
 j    ⁋ [A-Z]
-#    ⁋ [[:digit:]]
+i    ⁋ [[:digit:]]
 .    ⁋ [[:punct:]]
 w    ⁋ [[:alnum:]]
 s    ⁋ ¯\(°_o)/¯
@@ -33,7 +31,7 @@ k    ⁋ K1Y 0K4
 }
 
 string=$(shortcuts | rmenu 'Insert' -no-custom -case-sensitive -auto-select) || exit
-sirocco window focus ${winid:-$(pfw)}  # refocus active window before menu display SEE: sxhkdrc
+sirocco window_focus ${winid:-$(pfw)}  # refocus active window before menu display SEE: sxhkdrc
 
 [ "${string%%^*}" ] || { xdotool type ' [^\n]*'; exit; }  # HACK: to avoid shell globbing of '*'
 

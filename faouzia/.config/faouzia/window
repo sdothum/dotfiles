@@ -1,5 +1,4 @@
 #!/usr/bin/dash
-#p
 # sdothum - 2016 (c) wtfpl
 # [ $TRACE ] && CHILD="window $@" . $PARENT
 
@@ -16,11 +15,10 @@
 #                           URL indicates the spawned window name is a URL (even if <class> is defined)
 #                           SEE: web/qutebrowser-instance, faouzia/rulerrc
 
-[ "$1" = '--' ] && { nested_window_action=true; shift; }  # shell DSL compatibility
-# HACK: nimctlr dispatcher requires "--" as rest (otherwise would be treated as verb)
-[ "$2" = '--' ] && { nested_window_action=true; set -- $1 $3 $4 $5 $6 $7 $8 $9; }  # shell DSL compatibility
+[ "$1" = '--' ] && { nested_window_action=true; shift; }
 
-geometry()     { sirocco window geometry ${1:-$winid}; }  # X Y WIDTH HEIGHT (doesn't include borders)
+
+geometry()     { xdotool getwindowgeometry -shell ${1:-$winid}; }  # X Y WIDTH HEIGHT (doesn't include borders)
 set_geometry() { eval $(geometry ${1:-$winid}); }
 cat_geometry() { [ -e $WINFO/$winid ] && eval $(ls -1 $WINFO/$winid) || exit 1; }
 rec_geometry() { rm -rf $WINFO/${1:-$winid}; cp -R $WINFO/tmp $WINFO/${1:-$winid}; }
@@ -40,16 +38,17 @@ save_original_geometry() {
 	done
 }
 
-opposite_side() { echo $(( W + margin * 2 - (X + WIDTH + outer_border * 2) )); }  # for nearest edge SEE: window snap / stretch
-window_sync()   { nimctlr window await $1 "$(escape $xname)"; }
-xname_type()    { nimctlr window ids $1 "$xname" | grep -q "0x"; }
+opposite_side()  { echo $(( width + margin * 2 - (X + WIDTH + border * 2) )); }  # for nearest edge SEE: window snap / stretch
+windowfocus_by() { xdotool search -sync -onlyvisible -$1 "$(escape $xname)" windowactivate; }
+windowfocus_id() { xdotool windowmap $1; xdotool windowraise $1; }
+xname_is()       { xdotool getwindow$1 $winid | grep -q "$xname"; }
 
 # ..................................................................... X Y size
 
 # NOTE: sirocco replacement for wtp (wmutils) avoids async display timing issues
 wtp() {
 	# wtp X Y width height winid (as in wmutils)
-	sirocco window focus $5 . window move $1 $2 . window resize $3 $4
+	sirocco window_focus $5 . window_move_absolute $1 $2 . window_resize_absolute $3 $4  # chaining requires faouzia repo updates
 }
 
 # draw <winid> <width> <height> [rotate]
@@ -66,21 +65,21 @@ draw() {
 if [ "$1" ] && [ -z "${1%%@*}" ] ;then
 	winid=$(pfw 2>/dev/null) || return  # trap empty desktop at startup
 	case $1 in
-		@0x*     ) sirocco window focus ${1#@} ;;
+		@0x*     ) windowfocus_id ${1#@} ;;
 		@[0-9.]* ) sleep ${1#@}          ;;
 
 		*        )
 			xname="${1#@}"
 			if [ $2 = 'URL' ] ;then
 				case $1 in
-					@*\ * ) window_sync --name ;;
-					@*    ) window_sync      ;;
+					@*\ * ) windowfocus_by name      ;;
+					@*    ) windowfocus_by classname ;;
 				esac
 				shift
-			elif xname_type ;then
-				window_sync
-			elif xname_type --name ;then
-				window_sync --name
+			elif xname_is classname ;then
+				windowfocus_by classname
+			elif xname_is name ;then
+				windowfocus_by name
 			else
 				return 1  # not expected window
 			fi
@@ -92,56 +91,49 @@ fi
 
 # ................................................................ window action
 
-winids()    { sirocco window ids --all $@; }  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
+classname() { xdotool getactivewindow getwindowclassname; exit; }
+
+count() {
+	case $1 in
+		'' ) wmctrl -l 2>/dev/null | wc -l ;;
+	#  *  ) wmctrl -l 2>/dev/null | grep -w "$1" | wc -l ;;  # WARNING: can still be fooled by browser url titles
+		*  ) xdotool search -onlyvisible -classname "$1" | wc -l ;;
+	esac
+	exit
+}
+
+winids() { wmctrl -l 2>/dev/null | cut -d' ' -f1 | sort; }  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
 
 ids() {
 	case $1 in
-		'' ) winids      ;;
-		*  ) winids "$1" ;;
+		'' ) winids ;;
+		*  ) for i in $(winids) ;do [ "$(xdotool getwindowclassname $i)" = $1 ] && echo $i ;done ;;
 	esac
 	exit
 }
 
 case $1 in
-	class*   ) sirocco window classname; exit ;;
-	count    ) shift; ids $@ | wc -l;    exit ;;
-	ids      ) shift; ids $@;            exit ;;
+	class* ) classname ;;
+	count  ) count $2  ;;
+	ids    ) ids   $2  ;;
 esac
 
 msg=$1
 [ $msg ] && shift || usage $0
 if [ -e ${0%/window}/functions/window/$msg ] ;then
+	if [ $msg != sync ] ;then
+		margin=$(screen margin)
+		panel=$(screen panel)
+		top=$(screen top)             # faouziarc panel height is default bottom gap_width
+		gap=$(screen gap)
+		W=$(( $(display width) - margin * 2 ))
+		H=$(( $(display height) - top * 2 ))
+		recipe -q panel/top && top=$panel  # see draw panel
 
-	# NOTE: nimctlr compatibility conversion ensures parameter correctness
-
-	echo "$@" | grep -q ' --rows*' &&
-	{
-		while [ $1 ] ;do
-			case $1 in
-				--              ) defer=--  ;;
-				left   | Left   ) column=$1 ;;
-				right  | Right  ) column=$1 ;;
-				top    | Top    ) row=$1    ;;
-				bottom | 8ottom ) row=$1    ;;
-				--rows          ) rows=x$2; shift ;;
-				--row           ) [ $2 -eq 1 ] && row=top || row=bottom; shift  ;;
-				*               ) [ $column ] && position=$1 || column=$1 ;;
-			esac
-			shift
-		done
-		set -- $defer $column$rows $position $row
-	}
-
-	margin=$($NIMCTLR screen margin)
-	panel=$($NIMCTLR screen panel)
-	top=$($NIMCTLR screen top)             # faouziarc panel height is default bottom gap_width
-	gap=$($NIMCTLR screen gap)
-	# outer_border=$($NIMCTLR screen window_border_extent)
-	W=$(( $($NIMCTLR display width) - margin * 2 ))
-	H=$(( $($NIMCTLR display height) - top * 2 ))
-	recipe -q panel/top && top=$panel  # see draw panel
-
-	winid=$(pfw 2>/dev/null) || return  # trap empty desktop at startup
+		border=$(screen window_border)
+		winid=$(pfw 2>/dev/null) || return  # trap empty desktop at startup
+		# xdotool windowstate -remove fullscreen $winid  # fullscreen negates any attempted window actions
+	fi
 	. ${0%/window}/functions/window/$msg $@
 else
 	usage $0 $msg
@@ -149,6 +141,6 @@ fi
 
 [ $nested_window_action ] || save_original_geometry  # for 'window revert' geometry history
 
-sirocco window focus $winid  # regain focus
+sirocco window_focus $winid  # regain focus
 
 # kak: filetype=sh

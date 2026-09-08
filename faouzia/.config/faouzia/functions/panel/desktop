@@ -23,11 +23,11 @@ fi
 
 map=$(for i in $(seq 1 $tagcount) ;do echo -n '‧' ;done)
 
-map() { echo "$map" | sed "s/‧/•/$($NIMCTLR group current)"; }
+map() { echo "$map" | sed "s/‧/•/$(group current)"; }
 
 # group details NOTE: faouzia does not track window visibility states
 active_window() {
-	title="$(map)  $($NIMCTLR group name $($NIMCTLR group current))"  # current/last group
+	title="$(map)  $(group name $(group current))"  # current/last group
 	active=$(group)
 	if has_windows $active ;then
 		if deactivated $active ;then
@@ -47,7 +47,7 @@ active_window() {
 		fi
 	fi
 	if has_visible $active || has_nilgroup ;then
-		[ "$(xtitle)" = '' ] && { sirocco window cycle; return; }
+		[ "$(xtitle)" = '' ] && { sirocco window_cycle; return; }
 		name=$(xtitle | sed -r "s/^(.)/\u\1/; s/'(.*)'/\1/")  # trap unfocused error messages & discard xtitle quotes
 		[ "$name" ] && name="${SEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}$name%{F-}%{B-}%{F$DEFAULT_FG}"
 		title="${title}${name}"
@@ -69,8 +69,7 @@ STREAM=$(mkfifo $FIFO/$msg)  # SEE: panel wrapper
 
 # event driven panel update
 xtitle -sf 'X%s\n' >$STREAM 2>/dev/null &
-# state tree check NOTE: also triggers panel/desktop update
-# while : ;do $NIMCTLR sync window; sleep 1 ;done &  # SEE: faouziarc
+while : ;do window sync; sleep 0.5; done &  # trap mouse focus movements
 
 cat $STREAM | panel | handlebar &
 

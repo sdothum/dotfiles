@@ -21,12 +21,12 @@ cmd=$(actions | rmenu 'Layout' $cmd -no-custom) || exit
 
 cmd=$(echo "$cmd" | sed "s/.*$SEP //")
 case $cmd in
-	T*browser ) $NIMCTLR layout fold 3 $BROWSER ;;
-	T*edit    ) $NIMCTLR layout fold 3 kak      ;;
-	Thirds    ) $NIMCTLR layout fold 3          ;;
-	Q*browser ) $NIMCTLR layout fold 4 $BROWSER ;;
-	Q*edit    ) $NIMCTLR layout fold 4 kak      ;;
-	Quarters  ) $NIMCTLR layout fold 4          ;;
+	T*browser ) layout fold 3 $BROWSER ;;
+	T*edit    ) layout fold 3 kak      ;;
+	Thirds    ) layout fold 3          ;;
+	Q*browser ) layout fold 4 $BROWSER ;;
+	Q*edit    ) layout fold 4 kak      ;;
+	Quarters  ) layout fold 4          ;;
 esac
 
 # kak: filetype=sh

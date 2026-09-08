@@ -9,13 +9,10 @@ export PARENT=$(which parent)
 
 # Usage: . $(which ENV)
 
-export NIMCTLR=nimctlr  # unset to restore shell DSL
-
 # ................................................................... Filesystem
 
 export WM=$(cat $HOME/.windowmanager)
 export WME=/dev/shm/$WM
-export WMLOG=/tmp/$WM.log
 
 [ -d $WME ] && rm -rf $WME
 mkdir $WME
@@ -24,7 +21,8 @@ mkdir $WME
 
 export SHELL=/usr/bin/dash
 export XDG_CONFIG_HOME=$HOME/.config
-export SNAPSHOT=$WME/sync:snapshot
+export WORKING=$WME/working
+export SNAPSHOT=$WORKING/snapshot
 export GROUP=$WME/group
 export HIDDEN=$WME/hidden
 export WINFO=$WME/window

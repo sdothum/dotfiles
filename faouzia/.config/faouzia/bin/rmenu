@@ -39,7 +39,7 @@ hbg=$bg
 hfg='#20bbfcFF'
 
 # leader left or right (prompt case Right, RIGHT, right)
-lead=right
+lead=Right
 leader='—————— '
 
 # .......................................................................... GUI
@@ -51,7 +51,7 @@ padsize() {
 	fontsize=$2
 }
 
-width=$($NIMCTLR display width)
+width=$(display width)
 indent='        '
 
 # tune padding to displaywidth / (font * factor) for current monitor resolutions in system

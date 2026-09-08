@@ -1,0 +1,31 @@
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="window/sync $@" . $PARENT
+
+# Faouzia
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ WM tree check
+
+ Usage: window sync
+
+record() { rm -rf $1/*; for i in $(winids) ;do mkdir -p $1/$i ;done }
+
+vacuum() {
+	record $SNAPSHOT  # current winids
+	for i in $(ls -1 $GROUP/$(group)) ;do
+		[ -e "$SNAPSHOT/$i" ] || { group remove $i; removals=true; }
+	done
+
+	# HACK: fix rare dangling hidden window pointer (??) creation sequence as yet undetermined
+	for i in $(ls -1 $HIDDEN) ;do
+		[ -e "$SNAPSHOT/$i" ] || { rm -rf $HIDDEN/$i; removals=true; }
+	done
+}
+
+[ "$(window ids)" = "$(find $SNAPSHOT -maxdepth 1 -mindepth 1 -type d -printf "%f\n" | sort)" ] || vacuum
+
+group sync
+[ $removals ] && refresh_panel
+
+# kak: filetype=sh
+
