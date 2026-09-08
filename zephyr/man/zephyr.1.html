@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='content-type' value='text/html;charset=utf8'>
+  <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
+  <title>zephyr(1) - Nim policy and workflow controller</title>
+  <style type='text/css' media='all'>
+  /* style: man */
+  body#manpage {margin:0}
+  .mp {max-width:100ex;padding:0 9ex 1ex 4ex}
+  .mp p,.mp pre,.mp ul,.mp ol,.mp dl {margin:0 0 20px 0}
+  .mp h2 {margin:10px 0 0 0}
+  .mp > p,.mp > pre,.mp > ul,.mp > ol,.mp > dl {margin-left:8ex}
+  .mp h3 {margin:0 0 0 4ex}
+  .mp dt {margin:0;clear:left}
+  .mp dt.flush {float:left;width:8ex}
+  .mp dd {margin:0 0 0 9ex}
+  .mp h1,.mp h2,.mp h3,.mp h4 {clear:left}
+  .mp pre {margin-bottom:20px}
+  .mp pre+h2,.mp pre+h3 {margin-top:22px}
+  .mp h2+pre,.mp h3+pre {margin-top:5px}
+  .mp img {display:block;margin:auto}
+  .mp h1.man-title {display:none}
+  .mp,.mp code,.mp pre,.mp tt,.mp kbd,.mp samp,.mp h3,.mp h4 {font-family:monospace;font-size:14px;line-height:1.42857142857143}
+  .mp h2 {font-size:16px;line-height:1.25}
+  .mp h1 {font-size:20px;line-height:2}
+  .mp {text-align:justify;background:#fff}
+  .mp,.mp code,.mp pre,.mp pre code,.mp tt,.mp kbd,.mp samp {color:#131211}
+  .mp h1,.mp h2,.mp h3,.mp h4 {color:#030201}
+  .mp u {text-decoration:underline}
+  .mp code,.mp strong,.mp b {font-weight:bold;color:#131211}
+  .mp em,.mp var {font-style:italic;color:#232221;text-decoration:none}
+  .mp a,.mp a:link,.mp a:hover,.mp a code,.mp a pre,.mp a tt,.mp a kbd,.mp a samp {color:#0000ff}
+  .mp b.man-ref {font-weight:normal;color:#434241}
+  .mp pre {padding:0 4ex}
+  .mp pre code {font-weight:normal;color:#434241}
+  .mp h2+pre,h3+pre {padding-left:0}
+  ol.man-decor,ol.man-decor li {margin:3px 0 10px 0;padding:0;float:left;width:33%;list-style-type:none;text-transform:uppercase;color:#999;letter-spacing:1px}
+  ol.man-decor {width:100%}
+  ol.man-decor li.tl {text-align:left}
+  ol.man-decor li.tc {text-align:center;letter-spacing:4px}
+  ol.man-decor li.tr {text-align:right;float:right}
+  </style>
+</head>
+<!--
+  The following styles are deprecated and will be removed at some point:
+  div#man, div#man ol.man, div#man ol.head, div#man ol.man.
+
+  The .man-page, .man-decor, .man-head, .man-foot, .man-title, and
+  .man-navigation should be used instead.
+-->
+<body id='manpage'>
+  <div class='mp' id='man'>
+
+  <div class='man-navigation' style='display:none'>
+    <a href="#NAME">NAME</a>
+    <a href="#SYNOPSIS">SYNOPSIS</a>
+    <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#COMMANDS">COMMANDS</a>
+    <a href="#CHAINING">CHAINING</a>
+    <a href="#SEE-ALSO">SEE ALSO</a>
+  </div>
+
+  <ol class='man-decor man-head man head'>
+    <li class='tl'>zephyr(1)</li>
+    <li class='tc'>zephyr Manual</li>
+    <li class='tr'>zephyr(1)</li>
+  </ol>
+
+  <h2 id="NAME">NAME</h2>
+<p class="man-name">
+  <code>zephyr</code> - <span class="man-whatis">Nim policy and workflow controller</span>
+</p>
+
+<h2 id="SYNOPSIS">SYNOPSIS</h2>
+
+<p><code>zephyr</code> <var>domain</var> <var>action</var> [<var>args</var>...]</p>
+
+<p>Commands may be chained with <code>.</code>.</p>
+
+<h2 id="DESCRIPTION">DESCRIPTION</h2>
+
+<p><code>zephyr</code> is the policy, workflow, geometry, and filesystem helper layer for
+Cirrus. It provides higher-level window, group, layout, rule, and state
+operations while preserving explicit window IDs for action targeting.</p>
+
+<h2 id="COMMANDS">COMMANDS</h2>
+
+<h3 id="DISPLAY">DISPLAY</h3>
+
+<ul>
+<li><code>display height</code>: Print display height.</li>
+<li><code>display width</code>: Print display width.</li>
+<li><code>display width_test</code> <var>args</var>: Test the configured display width.</li>
+</ul>
+
+
+<h3 id="SCREEN">SCREEN</h3>
+
+<ul>
+<li><code>screen gap</code>: Print the configured gap.</li>
+<li><code>screen indent</code>: Print the configured indentation.</li>
+<li><code>screen margin</code>: Print the configured margin.</li>
+<li><code>screen panel</code>: Print panel height/position information.</li>
+<li><code>screen top</code>: Print the configured top offset.</li>
+</ul>
+
+
+<h3 id="GROUP">GROUP</h3>
+
+<ul>
+<li><code>group add</code> <var>group</var> [<var>winid</var>]: Add a window to a public group.</li>
+<li><code>group remove</code> [<var>winid</var>]: Remove a window from its group.</li>
+<li><code>group close</code> [<var>winid</var>]: Close the selected group/window workflow target.</li>
+<li><code>group count</code>: Print the configured group count.</li>
+<li><code>group current</code>: Print the selected filesystem/current group.</li>
+<li><code>group desktop</code> <var>args</var>: Run the desktop compatibility workflow.</li>
+<li><code>group focus</code> <var>args</var>: Navigate to a group.</li>
+<li><code>group id</code> <var>name</var>: Print a group's public numeric ID.</li>
+<li><code>group last</code>: Run the previous-group workflow.</li>
+<li><code>group name</code> [<var>group</var>]: Print a group name.</li>
+<li><code>group reconcile</code> <var>group</var>: Reconcile the filesystem current-group mirror.</li>
+<li><code>group restore</code>: Restore the saved group state.</li>
+<li><code>group toggle</code> <var>args</var>: Toggle group visibility/selection.</li>
+</ul>
+
+
+<p>Public group IDs are one-based. <code>0</code> is not a public group argument.</p>
+
+<h3 id="WINDOW">WINDOW</h3>
+
+<ul>
+<li><code>window await</code> <var>selector</var> [<var>property</var>]: Wait for a matching window/property.</li>
+<li><code>window classname</code>: Print the focused window class.</li>
+<li><code>window count</code> [<var>selector</var>]: Count matching windows.</li>
+<li><code>window extend</code> <var>args</var>: Extend the selected window toward a direction/side.</li>
+<li><code>window geometry</code> [<var>winid</var>]: Print geometry for an explicit or focused window.</li>
+<li><code>window group</code> <var>group</var> [--teleport]: Assign the focused window to a public
+group; <code>--teleport</code> additionally applies the existing teleport workflow.</li>
+<li><code>window hide</code> [<var>winid</var>]: Hide a window.</li>
+<li><code>window ids</code> [<var>args</var>]: Print matching window IDs.</li>
+<li><code>window restore</code> [<var>winid</var>]: Restore saved window geometry.</li>
+<li><code>window rotate</code> [<var>winid</var>]: Swap the selected window's width and height.</li>
+<li><code>window shift</code> <var>args</var>: Shift the selected window.</li>
+<li><code>window size</code> <var>args</var>: Set or adjust the selected window's size.</li>
+<li><code>window snap</code> <var>args</var>: Snap the selected window to a screen position.</li>
+<li><code>window spread</code> <var>args</var>: Spread the selected window across a region.</li>
+<li><code>window stack</code> [<var>winid</var>]: Print the overlap-connected stack for a window.</li>
+<li><code>window swap</code> <var>args</var>: Swap window geometry/state as requested.</li>
+<li><code>window tile</code> <var>args</var>: Tile the selected window.</li>
+<li><code>window toggle</code> <var>args</var>: Toggle matching windows.</li>
+<li><code>window wm-group</code> <var>winid</var>: Print the WM-reported group for an explicit ID.</li>
+<li><code>window wm-groups</code>: Print WM groups for managed windows.</li>
+<li><code>window snapshot</code>: Print the normalized WM snapshot.</li>
+</ul>
+
+
+<p><code>wm-group</code>, <code>wm-groups</code>, and <code>snapshot</code> are read-only observations. The
+<code>window stack-geometries</code> and <code>window apply-geometries</code> commands are Sirocco
+commands; they are not zephyr public actions.</p>
+
+<h3 id="LAYOUT">LAYOUT</h3>
+
+<ul>
+<li><code>layout explode</code>: Capture the current overlap-connected stack, save original
+geometry, and arrange those windows according to the existing layout rule.</li>
+<li><code>layout unexplode</code>: Restore saved geometry for surviving exploded windows.</li>
+<li><code>layout fold</code> <var>args</var>: Fold matching windows into a grid.</li>
+<li><code>layout level</code> <var>args</var>: Level windows vertically.</li>
+<li><code>layout restore</code> [<var>args</var>]: Restore layout state.</li>
+<li><code>layout spread</code> <var>args</var>: Spread windows across a grid.</li>
+<li><code>layout tile</code> <var>args</var>: Tile windows into a grid.</li>
+</ul>
+
+
+<p><code>unexplode</code> ignores disappeared saved XIDs and preserves the current focus.</p>
+
+<h3 id="RULE">RULE</h3>
+
+<ul>
+<li><code>rule</code> <var>name</var>: Apply a configured application rule. Rule names are the
+names implemented by the current rule dispatcher.</li>
+</ul>
+
+
+<h3 id="STATE">STATE</h3>
+
+<ul>
+<li><code>state snapshot</code> [<var>winid</var>]: Save a window geometry snapshot.</li>
+<li><code>state restore</code> [<var>winid</var>]: Restore a saved window geometry snapshot.</li>
+</ul>
+
+
+<h3 id="SYNC">SYNC</h3>
+
+<ul>
+<li><code>sync window</code> [<var>args</var>]: Run the compatibility window synchronization command.</li>
+<li><code>sync group</code> [<var>args</var>]: Run the compatibility group synchronization command.</li>
+</ul>
+
+
+<p>These remain explicit compatibility commands; they are not the passive daemon
+observation publisher.</p>
+
+<h2 id="CHAINING">CHAINING</h2>
+
+<p>Commands can be sequenced with a period:</p>
+
+<pre><code>zephyr window move 10 10 0x01234567 . window size 800x600 0x01234567
+</code></pre>
+
+<h2 id="SEE-ALSO">SEE ALSO</h2>
+
+<p><code>sirocco</code>(1), <code>cirrus</code>(1), <code>ruler</code>(1)</p>
+
+
+  <ol class='man-decor man-foot man foot'>
+    <li class='tl'>zephyr</li>
+    <li class='tc'>September 2026</li>
+    <li class='tr'>zephyr(1)</li>
+  </ol>
+
+  </div>
+</body>
+</html>

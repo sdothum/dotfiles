@@ -1,0 +1,240 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "ZEPHYR" "1" "September 2026" "zephyr" "zephyr Manual"
+.
+.SH "NAME"
+\fBzephyr\fR \- Nim policy and workflow controller
+.
+.SH "SYNOPSIS"
+\fBzephyr\fR \fIdomain\fR \fIaction\fR [\fIargs\fR\.\.\.]
+.
+.P
+Commands may be chained with \fB\.\fR\.
+.
+.SH "DESCRIPTION"
+\fBzephyr\fR is the policy, workflow, geometry, and filesystem helper layer for Cirrus\. It provides higher\-level window, group, layout, rule, and state operations while preserving explicit window IDs for action targeting\.
+.
+.SH "COMMANDS"
+.
+.SS "DISPLAY"
+.
+.IP "\(bu" 4
+\fBdisplay height\fR: Print display height\.
+.
+.IP "\(bu" 4
+\fBdisplay width\fR: Print display width\.
+.
+.IP "\(bu" 4
+\fBdisplay width_test\fR \fIargs\fR: Test the configured display width\.
+.
+.IP "" 0
+.
+.SS "SCREEN"
+.
+.IP "\(bu" 4
+\fBscreen gap\fR: Print the configured gap\.
+.
+.IP "\(bu" 4
+\fBscreen indent\fR: Print the configured indentation\.
+.
+.IP "\(bu" 4
+\fBscreen margin\fR: Print the configured margin\.
+.
+.IP "\(bu" 4
+\fBscreen panel\fR: Print panel height/position information\.
+.
+.IP "\(bu" 4
+\fBscreen top\fR: Print the configured top offset\.
+.
+.IP "" 0
+.
+.SS "GROUP"
+.
+.IP "\(bu" 4
+\fBgroup add\fR \fIgroup\fR [\fIwinid\fR]: Add a window to a public group\.
+.
+.IP "\(bu" 4
+\fBgroup remove\fR [\fIwinid\fR]: Remove a window from its group\.
+.
+.IP "\(bu" 4
+\fBgroup close\fR [\fIwinid\fR]: Close the selected group/window workflow target\.
+.
+.IP "\(bu" 4
+\fBgroup count\fR: Print the configured group count\.
+.
+.IP "\(bu" 4
+\fBgroup current\fR: Print the selected filesystem/current group\.
+.
+.IP "\(bu" 4
+\fBgroup desktop\fR \fIargs\fR: Run the desktop compatibility workflow\.
+.
+.IP "\(bu" 4
+\fBgroup focus\fR \fIargs\fR: Navigate to a group\.
+.
+.IP "\(bu" 4
+\fBgroup id\fR \fIname\fR: Print a group\'s public numeric ID\.
+.
+.IP "\(bu" 4
+\fBgroup last\fR: Run the previous\-group workflow\.
+.
+.IP "\(bu" 4
+\fBgroup name\fR [\fIgroup\fR]: Print a group name\.
+.
+.IP "\(bu" 4
+\fBgroup reconcile\fR \fIgroup\fR: Reconcile the filesystem current\-group mirror\.
+.
+.IP "\(bu" 4
+\fBgroup restore\fR: Restore the saved group state\.
+.
+.IP "\(bu" 4
+\fBgroup toggle\fR \fIargs\fR: Toggle group visibility/selection\.
+.
+.IP "" 0
+.
+.P
+Public group IDs are one\-based\. \fB0\fR is not a public group argument\.
+.
+.SS "WINDOW"
+.
+.IP "\(bu" 4
+\fBwindow await\fR \fIselector\fR [\fIproperty\fR]: Wait for a matching window/property\.
+.
+.IP "\(bu" 4
+\fBwindow classname\fR: Print the focused window class\.
+.
+.IP "\(bu" 4
+\fBwindow count\fR [\fIselector\fR]: Count matching windows\.
+.
+.IP "\(bu" 4
+\fBwindow extend\fR \fIargs\fR: Extend the selected window toward a direction/side\.
+.
+.IP "\(bu" 4
+\fBwindow geometry\fR [\fIwinid\fR]: Print geometry for an explicit or focused window\.
+.
+.IP "\(bu" 4
+\fBwindow group\fR \fIgroup\fR [\-\-teleport]: Assign the focused window to a public group; \fB\-\-teleport\fR additionally applies the existing teleport workflow\.
+.
+.IP "\(bu" 4
+\fBwindow hide\fR [\fIwinid\fR]: Hide a window\.
+.
+.IP "\(bu" 4
+\fBwindow ids\fR [\fIargs\fR]: Print matching window IDs\.
+.
+.IP "\(bu" 4
+\fBwindow restore\fR [\fIwinid\fR]: Restore saved window geometry\.
+.
+.IP "\(bu" 4
+\fBwindow rotate\fR [\fIwinid\fR]: Swap the selected window\'s width and height\.
+.
+.IP "\(bu" 4
+\fBwindow shift\fR \fIargs\fR: Shift the selected window\.
+.
+.IP "\(bu" 4
+\fBwindow size\fR \fIargs\fR: Set or adjust the selected window\'s size\.
+.
+.IP "\(bu" 4
+\fBwindow snap\fR \fIargs\fR: Snap the selected window to a screen position\.
+.
+.IP "\(bu" 4
+\fBwindow spread\fR \fIargs\fR: Spread the selected window across a region\.
+.
+.IP "\(bu" 4
+\fBwindow stack\fR [\fIwinid\fR]: Print the overlap\-connected stack for a window\.
+.
+.IP "\(bu" 4
+\fBwindow swap\fR \fIargs\fR: Swap window geometry/state as requested\.
+.
+.IP "\(bu" 4
+\fBwindow tile\fR \fIargs\fR: Tile the selected window\.
+.
+.IP "\(bu" 4
+\fBwindow toggle\fR \fIargs\fR: Toggle matching windows\.
+.
+.IP "\(bu" 4
+\fBwindow wm\-group\fR \fIwinid\fR: Print the WM\-reported group for an explicit ID\.
+.
+.IP "\(bu" 4
+\fBwindow wm\-groups\fR: Print WM groups for managed windows\.
+.
+.IP "\(bu" 4
+\fBwindow snapshot\fR: Print the normalized WM snapshot\.
+.
+.IP "" 0
+.
+.P
+\fBwm\-group\fR, \fBwm\-groups\fR, and \fBsnapshot\fR are read\-only observations\. The \fBwindow stack\-geometries\fR and \fBwindow apply\-geometries\fR commands are Sirocco commands; they are not zephyr public actions\.
+.
+.SS "LAYOUT"
+.
+.IP "\(bu" 4
+\fBlayout explode\fR: Capture the current overlap\-connected stack, save original geometry, and arrange those windows according to the existing layout rule\.
+.
+.IP "\(bu" 4
+\fBlayout unexplode\fR: Restore saved geometry for surviving exploded windows\.
+.
+.IP "\(bu" 4
+\fBlayout fold\fR \fIargs\fR: Fold matching windows into a grid\.
+.
+.IP "\(bu" 4
+\fBlayout level\fR \fIargs\fR: Level windows vertically\.
+.
+.IP "\(bu" 4
+\fBlayout restore\fR [\fIargs\fR]: Restore layout state\.
+.
+.IP "\(bu" 4
+\fBlayout spread\fR \fIargs\fR: Spread windows across a grid\.
+.
+.IP "\(bu" 4
+\fBlayout tile\fR \fIargs\fR: Tile windows into a grid\.
+.
+.IP "" 0
+.
+.P
+\fBunexplode\fR ignores disappeared saved XIDs and preserves the current focus\.
+.
+.SS "RULE"
+.
+.IP "\(bu" 4
+\fBrule\fR \fIname\fR: Apply a configured application rule\. Rule names are the names implemented by the current rule dispatcher\.
+.
+.IP "" 0
+.
+.SS "STATE"
+.
+.IP "\(bu" 4
+\fBstate snapshot\fR [\fIwinid\fR]: Save a window geometry snapshot\.
+.
+.IP "\(bu" 4
+\fBstate restore\fR [\fIwinid\fR]: Restore a saved window geometry snapshot\.
+.
+.IP "" 0
+.
+.SS "SYNC"
+.
+.IP "\(bu" 4
+\fBsync window\fR [\fIargs\fR]: Run the compatibility window synchronization command\.
+.
+.IP "\(bu" 4
+\fBsync group\fR [\fIargs\fR]: Run the compatibility group synchronization command\.
+.
+.IP "" 0
+.
+.P
+These remain explicit compatibility commands; they are not the passive daemon observation publisher\.
+.
+.SH "CHAINING"
+Commands can be sequenced with a period:
+.
+.IP "" 4
+.
+.nf
+
+zephyr window move 10 10 0x01234567 \. window size 800x600 0x01234567
+.
+.fi
+.
+.IP "" 0
+.
+.SH "SEE ALSO"
+\fBsirocco\fR(1), \fBcirrus\fR(1), \fBruler\fR(1)

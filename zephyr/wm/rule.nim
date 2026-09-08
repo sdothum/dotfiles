@@ -1,0 +1,135 @@
+import compat
+import constants
+import group as groups
+import layout
+import window
+
+#
+# Shared policies
+#
+
+proc center(groupname: string = GroupDesk) =
+  window.group(groupname)
+  window.snap(Center)
+
+proc viewport(groupname: string = GroupDesk) =
+  window.group(groupname)
+  window.size(Viewport)
+
+proc sizeA4Centered(groupname: string = GroupUtil) =
+  window.group(groupname)
+  window.size(A4, Rotate)
+  window.snap(Center)
+
+proc tile3Columns(groupname, classname: string) =
+  window.group(groupname)
+  layout.fold("3", classname)
+
+proc video1080p(groupname: string = GroupPlay) =
+  window.size("1080p")
+  center(groupname)
+
+#
+# Application policies
+#
+
+proc btop() =
+  window.group(GroupUtil)
+  # window.size(A5)
+  window.snap(Center)
+  groups.focus(GroupDesk)
+
+proc kak() =
+  window.group(GroupCode)
+
+  case window.count(ClassKak)
+  of 1:
+    case window.count(ClassQutebrowser)
+    of 0:
+      window.tile("3", "2")
+      # layout.fold("3", ClassKak)
+    else:
+      window.tile("3", "3")
+  of 2 .. 3:
+    layout.fold("4", ClassKak)
+  else:
+    layout.fold("4", "--rows", "2", ClassKak)
+
+proc luakit() =
+  window.group(GroupComm)
+  window.size("690x1080")
+  window.snap(Center, Vertical)
+  window.spread(Left)
+
+proc manpage() =
+  window.group(GroupCode)
+  window.size(A5)
+  layout.spread("3", "1")
+
+proc pavucontrol() =
+  window.group(GroupUtil)
+  window.size(B6, Rotate)
+  window.snap(Center)
+  groups.focus(GroupDesk)
+
+proc term(classname: string = ClassTerm) =
+  window.group(GroupCode)
+
+  case window.count(classname)
+  of 0..2:
+    layout.fold("3", "--spread", classname)
+  else:
+    layout.fold("3", "--rows", "2", "--spread", classname)
+
+#
+# Dispatch
+#
+
+proc dispatch*(verb: string, rest: seq[string]) =
+  requireNoArgs(verb, rest)
+
+  case verb
+  of "calibre", "darktable", "gimp", "krita", "palette", "rawtherapee":
+    center()
+
+  of "chromium", "firefox", "foliate", "oculante", "rapidraw":
+    viewport()
+  of "aerc", "halloy":
+    viewport(GroupComm)
+  of "fontmatrix":
+    viewport(GroupCode)
+  of "nicotine":
+    viewport(GroupPeer)
+
+  of "mpv", "youtube":
+    video1080p()
+
+  of "qutebrowser":
+    tile3Columns(GroupDesk, ClassQutebrowser)
+  of "wiki":
+    tile3Columns(GroupWiki, ClassWiki)
+  of "zathura":
+    tile3Columns(GroupDesk, ClassZathura)
+
+  of "term":
+    term()
+  of "tmux":
+    term(ClassTmux)
+
+  of "yazi", "yazi-root":
+    sizeA4Centered()
+
+  of "btop":
+    btop()
+  of "kak":
+    kak()
+  of "luakit":
+    luakit()
+  of "manpage":
+    manpage()
+  of "music":
+    sizeA4Centered(GroupPlay)
+  of "pavucontrol":
+    pavucontrol()
+  else:
+    quit("unknown rule: " & verb)
