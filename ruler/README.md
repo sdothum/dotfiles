@@ -23,7 +23,7 @@ Example configuration
 ```
 # move all browsers to workspace 2
 role="browser"
-	wtf "$RULER_ID" && waitron group_add_window 2
+	wtf "$RULER_ID" && waitron group add 2
 
 # drop a notification if a window containing that fifth glyph is born
 instance=".*e.*"

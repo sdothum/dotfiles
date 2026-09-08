@@ -115,7 +115,7 @@ combination of
 ```c
 # assign all browsers to group 2
 role="browser"
-	wtf "$RULER_WID" && waitron group_add_window 2
+	wtf "$RULER_WID" && waitron group add 2
 
 # say hello if a window is created, synchronously
 name=".*"
