@@ -455,7 +455,23 @@ bar_extended() {
 	# confirm 'Q-hook'  # SEE: iosevka
 	echo "
 Open(\$1);
+
+Select($(utf '|'))
+barbox = GlyphInfo(\"BBox\")
+barwidth = barbox[2] - barbox[0]
+
 $(replace $(utf '|') 0u2502)
+
+Select($(utf '|'))
+bbox = GlyphInfo(\"BBox\")
+width = bbox[2] - bbox[0]
+xscale = 100.0 * barwidth / width
+height = bbox[3] - bbox[1]
+trim = 48
+yscale = 100 * (height - 2 * trim) / height
+cy = (bbox[1] + bbox[3]) / 2
+Scale(xscale, yscale, 0, cy)
+
 Generate(\$1);
 " >${LOG}:bar_extended.script
 

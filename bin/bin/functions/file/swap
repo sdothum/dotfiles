@@ -10,9 +10,10 @@ usage() { usage: "$(basename $0) <link> | <file> <file>"; exit 1; }
 
 # swap file file
 swap() {
+	[ -e $1 ] && [ -e $2 ] || usage
 	target=${1%/}
 	destination=${2%/}
-	hold=$RANDOM.$target
+	hold=$(mktemp)
 	if ([ -e $target ] && [ -e $destination ]) || ([ -d $target ] && [ -d $destination ]) ;then
 		sudo mv $target $hold
 		sudo mv $destination $target
@@ -23,6 +24,7 @@ swap() {
 
 # swap link (-> source) 
 reverse() {
+	[ -L $1 ] || usage
 	symlink=$(realpath $1)
 	source=$(readlink ${1##*/}) || usage
 	relpath=$(realpath --relative-to=${source%/*} $PWD)

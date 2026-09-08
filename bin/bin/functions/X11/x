@@ -8,7 +8,7 @@
 
 # ............................................................... Window manager
 
-usage() { usage: "$(basename $0) 'start [@<delay>] | 2bwm | awesome | berry | bspwm | budgie | cinnamon | dwm | gnome | goomwwm | guile | herbstluftwm | i3 | kde | lxde | lxqt | mate | faouzia | notion | openbox | ratpoison | razor-qt | spectrwm | stumpwm | subtle | shell | windowchef | wmii | wmutils | worm | wtftw | xfce4 | xmonad"; rm -f $BOOTWM; exit 1; }
+usage() { usage: "$(basename $0) 'start [@<delay>] | 2bwm | awesome | berry | bspwm | budgie | cinnamon | dwm | gnome | goomwwm | guile | herbstluftwm | i3 | kde | lxde | lxqt | mate | cirrus | notion | openbox | ratpoison | razor-qt | spectrwm | stumpwm | subtle | shell | windowchef | wmii | wmutils | worm | wtftw | xfce4 | xmonad"; rm -f $BOOTWM; exit 1; }
 
 BOOTWM=$SESSION/boot:wm  # SEE: console_login, user_login
 WM=$HOME/.windowmanager
@@ -30,39 +30,40 @@ rm -f $WMREBOOT
 case $1 in
 	abort | halt | stop ) [ -e $BOOTWM ] && ditto user_login 'canceling startx'; rm -f $BOOTWM; exit ;;  # boot intercept shortcut
 	''   ) ;;
-	2b*  ) echo 2bwm >$WM ;;
-	be*  ) echo berry >$WM ;;
-	aw*  ) echo awesome >$WM ;;
-	bs*  ) echo bspwm >$WM ;;
-	bu*  ) echo budgie >$WM ;;
-	ci*  ) echo cinnamon >$WM ;;
-	dw*  ) echo dwm >$WM ;;
-	gn*  ) echo gnome >$WM ;;
-	go*  ) echo goomwwm >$WM ;;
-	gu*  ) echo guile >$WM ;;
+	2b*  ) echo 2bwm >$WM         ;;
+	aw*  ) echo awesome >$WM      ;;
+	be*  ) echo berry >$WM        ;;
+	bs*  ) echo bspwm >$WM        ;;
+	bu*  ) echo budgie >$WM       ;;
+	ci*  ) echo cirrus >$WM       ;;
+	c*n  ) echo cinnamon >$WM     ;;
+	dw*  ) echo dwm >$WM          ;;
+	fa*  ) echo faouzia >$WM      ;;
+	gn*  ) echo gnome >$WM        ;;
+	go*  ) echo goomwwm >$WM      ;;
+	gu*  ) echo guile >$WM        ;;
 	he*  ) echo herbstluftwm >$WM ;;
-	i3   ) echo i3 >$WM ;;
-	kde  ) echo kde >$WM ;;
-	le*  ) echo leftwm >$WM ;;
-	lxd* ) echo lxde >$WM ;;
-	lxq* ) echo lxqt >$WM ;;
-	ma*  ) echo mate >$WM ;;
-	fa*  ) echo faouzia >$WM ;;
-	no*  ) echo notion >$WM ;;
-	op*  ) echo openbox >$WM ;;
-	rat* ) echo ratpoison >$WM ;;
-	raz* ) echo razor-qt >$WM ;;
-	sp*  ) echo spectrwm >$WM ;;
-	st*  ) echo stumpwm >$WM ;;
-	su*  ) echo subtle >$WM ;;
-	sh*  ) echo shell >$WM ;;
-	wi*  ) echo windowchef >$WM ;;
-	wmi* ) echo wmii >$WM ;;
-	wmu* ) echo wmutils >$WM ;;
-	wo*  ) echo worm >$WM ;;
-	wt*  ) echo wtftw >$WM ;;
-	xf*  ) echo xfce4 >$WM ;;
-	xm*  ) echo xmonad >$WM ;;
+	i3   ) echo i3 >$WM           ;;
+	kde  ) echo kde >$WM          ;;
+	le*  ) echo leftwm >$WM       ;;
+	lxd* ) echo lxde >$WM         ;;
+	lxq* ) echo lxqt >$WM         ;;
+	ma*  ) echo mate >$WM         ;;
+	no*  ) echo notion >$WM       ;;
+	op*  ) echo openbox >$WM      ;;
+	rat* ) echo ratpoison >$WM    ;;
+	raz* ) echo razor-qt >$WM     ;;
+	sh*  ) echo shell >$WM        ;;
+	sp*  ) echo spectrwm >$WM     ;;
+	st*  ) echo stumpwm >$WM      ;;
+	su*  ) echo subtle >$WM       ;;
+	wi*  ) echo windowchef >$WM   ;;
+	wmi* ) echo wmii >$WM         ;;
+	wmu* ) echo wmutils >$WM      ;;
+	wo*  ) echo worm >$WM         ;;
+	wt*  ) echo wtftw >$WM        ;;
+	xf*  ) echo xfce4 >$WM        ;;
+	xm*  ) echo xmonad >$WM       ;;
 	*    ) usage ;;
 esac
 
@@ -123,12 +124,14 @@ if console ;then
 	pkill -KILL $wm
 	case $wm in
 		2b*  ) ;;
-		be*  ) ;;
 		aw*  ) ;;
+		be*  ) ;;
 		bs*  ) ;;
 		bu*  ) ;;
 		ci*  ) ;;
+		c*n  ) ;;
 		dw*  ) ;;
+		fa*  ) ;;
 		gn*  ) ;;
 		go*  ) ;;
 		gu*  ) ;;
@@ -139,15 +142,14 @@ if console ;then
 		lxd* ) ;;
 		lxq* ) ;;
 		ma*  ) ;;
-		fa*  ) ;;
 		no*  ) ;;
 		op*  ) ;;
 		rat* ) ;;
 		raz* ) ;;
+		sh*  ) ;;
 		sp*  ) ;;
 		st*  ) ;;
 		su*  ) ;;
-		sh*  ) ;;
 		wi*  ) ;;
 		wmi* ) ;;
 		wmu* ) ;;

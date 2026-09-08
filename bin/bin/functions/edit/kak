@@ -7,7 +7,7 @@
 # ....................................................................... Editor
 
 usage() { echo "[kmd=<command>] $(basename $0) [-l'ist | -k'ill [<id>] | -d'ebug [<debug>] | -v'ersion | -h'elp]
-> [-BENCHMARK | -LEXICON | -PROOF | -TRACE | -UNPLUG | -CONSOLE | -TUI | -TRIM | RULER=<char>]
+> [-BENCHMARK | -LEXICON | -PROOF | -TRACE | -UNPLUG | -CONSOLE | -TUI | -TRIM | -CROSSHAIRS | RULER=<char>]
 > [-- | ID=<id>] [WAIT] [<row>x<col>]
 > <file>*
 > where, <debug> is [hooks|shell|profile|keys|commands]" | usage:
@@ -36,6 +36,7 @@ while : ;do
 		--            ) ID=$(rand)    ;;                # force new instance
 		-BENCH*       ) hyperfine -warmup 10 "$KAK -ui dummy -e quit"; exit ;;
 		-CONSOLE      ) unset DISPLAY; console=true; export COLORSCHEME=${COLORSCHEME:-default} ;;
+		-CROSSHAIRS   ) export CROSSHAIRS=true ;;
 		-d            ) export TRACE=/tmp/kak:trace; debug $2 && shift ;;  # debug trace
 		-h* | help    ) $KAK -help; usage ;;
 		id=*          ) ID="${1#*=}"  ;;
@@ -46,7 +47,7 @@ while : ;do
 		-PROOF        ) export MONOFONT="Iosevka-proof"; export BG="${BG:-ffead0:-7,fff5e8:-7,96f8f8:-12,fa8c69}" ;;
 		RULER=*       ) export RULER="${1#*=}" ;;       # default RULER='│'
 		-TRACE        ) export TRACE=/tmp/kak:trace ;;  # trace messages
-		-TRIM         ) export TRIM=BufWritePre ;;      # default NormalIdle blank line trimming
+		-TRIM         ) export TRIM=NormalIdle ;;       # BufWritePre default blank line trimming
 		-TUI          ) export KAKTUI=true ;;           # avoid resetting term bg on exit (for kak within ncurses panel)
 		-UNPLUG       ) export UNPLUG=true ;;           # kakrc plugins exclusions
 		-v*           ) $KAK -version; exit ;;
@@ -55,6 +56,9 @@ while : ;do
 	esac
 	shift
 done
+
+echo $@ | grep -q '\.nim' >/dev/null && export CROSSHAIRS=true  # BECAUSE: nim uses 2 space indentation
+pgrep aurora >/dev/null && export KAKTUI=true                   # FOR: visual gap/margin tweaking
 
 # remove dangling lsp service state
 pgrep kak-lsp >/dev/null || rm -rf /run/user/$(id -u)/kakoune-lsp/${USER}*
@@ -99,6 +103,7 @@ fi
 title=$(echo "$1" | sed 's|\.\/||g; s| [^ ]*/||; s/ .*/.../g')
 [ $count -gt 1 ] && title="$title($count)"
 XARGS=$(mktemp --suffix=@kak)  # (??) mktemp TEMPLATE (eg kak-XXXXXX) is problematic
+files=${files:-$(mktemp --suffix=:kak)}
 
 # NOTE: kak -e 'db *stdin*' to remove *stdin* scratch buffer created by "xargs kak"
 

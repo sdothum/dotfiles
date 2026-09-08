@@ -33,4 +33,4 @@ killall -9 -q yt-dlp
 videomode off
 
 # restore browser page
-sirocco window_focus $WID
+sirocco window focus $WID

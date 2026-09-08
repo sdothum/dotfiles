@@ -1,13 +1,14 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
-# Log
+# Shell
 # ══════════════════════════════════════════════════════════════════════════════
 
-# .................................................................... Highlight
+# ................................................................. tmux session
 
-# mark notation point
-console && drawline '  • ' ${red} || drawline '  ‧‧‧••‧‧‧ ' ${teal}
-attention "$@"
+SCROLLBACK=/tmp/tmux:scrollback-$(rand 4).txt
+
+tmux capture-pane -S - -E - && tmux save-buffer $SCROLLBACK
+kak $SCROLLBACK
 
 # kak: filetype=sh

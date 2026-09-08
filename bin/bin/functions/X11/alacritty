@@ -21,8 +21,8 @@ if [ "$MONOFONT" ] ;then
 	if [ "$MONOFONT" = "Iosevka-proof" ] ;then
 		size=$(fontsize proof)  # SEE: compose, menu wikis/notes
 		offsetY=0               # NOTE: these adjustment values tuned for 4K display size 9
-		paddingY=4
-		paddingX=5
+		paddingY=15             #       tweaked for current window manager margins & gaps
+		paddingX=10
 	else
 		offsetY=1             # for current desktop frame settings (yes, anal i know :)
 	fi
@@ -30,9 +30,9 @@ fi
 
 [ "$SCROLLING" ] || SCROLLING=10000  # set envar to 0 to disable history
 
-if recipe -q term ;then
-	columns=$(recipe term | cut -dx -f1)
-	lines=$(recipe term | cut -dx -f2)
+if recipe -q "term" ;then
+	columns=$(recipe "term" | cut -dx -f1)
+	lines=$(recipe "term" | cut -dx -f2)
 else
 	[ $(chef display height) -ge 1440 ] && { columns=130; lines=28; } || { columns=120; lines=20; }
 fi
@@ -51,10 +51,10 @@ done
 
 # tweak window margins by fontsize
 case $size in
-	8  ) paddingX=${paddingX:-8}; paddingY=${paddingY:-8}; offsetX=0; offsetY=${offsetY:-1}   ;;
-	9  ) paddingX=${paddingX:-9}; paddingY=${paddingY:-9}; offsetX=0; offsetY=${offsetY:-2}   ;;
-	11 ) paddingX=${paddingX:-12}; paddingY=${paddingY:-12}; offsetX=0; offsetY=${offsetY:-3} ;;
-	*  ) paddingX=${paddingX:-12}; paddingY=${paddingY:-12}; offsetX=0; offsetY=${offsetY:-0} ;;
+	8*  ) paddingX=${paddingX:-8}; paddingY=${paddingY:-8}; offsetX=0; offsetY=${offsetY:-1}   ;;
+	9*  ) paddingX=${paddingX:-9}; paddingY=${paddingY:-9}; offsetX=0; offsetY=${offsetY:-2}   ;;
+	11* ) paddingX=${paddingX:-12}; paddingY=${paddingY:-12}; offsetX=0; offsetY=${offsetY:-3} ;;
+	*   ) paddingX=${paddingX:-12}; paddingY=${paddingY:-12}; offsetX=0; offsetY=${offsetY:-0} ;;
 esac
 [ $YAZI ] && offsetY=0  # Y font offset may affect status bar pixel level highlighting (SEE: yazi wrapper)
 

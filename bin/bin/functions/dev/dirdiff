@@ -6,7 +6,7 @@
 
 # ..................................................... Recursive directory diff
 
-usage() { usage: "$(basename $0) [-[- | 1 | l | p | s | b | w | x | debug]] [-d <date>] <.[/]|[./]source> [<repo|target>] [<regex>]"; exit 1; }
+usage() { usage: "$(basename $0) [-[- | 1 | h | l | p | s | b | w | x | debug]] [-d <date>] <.[/]|[./]source> [<repo|target>] [<regex>]"; exit 1; }
 
 # NOTE: dirdiff quickly highlights project source code changes against a (separate) snapshot directory
 #       ./                    -> do not match source path against target
@@ -28,19 +28,20 @@ rm -f $LOG
 
 delay=0.001  # match message animation interval
 
-# Runtime ......................................................................
+# ...................................................................... Runtime
 
 X=true
 while [ "$1" ] ;do
 	case $1 in
-		--     ) unset IC ICOPT         ;; # standard diff (not side-by-side)
+		--     ) unset IC ICOPT         ;;  # standard diff (not side-by-side)
 		-1     ) maxdepth='-maxdepth 1' ;;
-		-l     ) nolog=true             ;; # suppress log output
-		-p     ) P=true                 ;; # pause on match or notfound (to copy file)
-		-s     ) S=true                 ;; # splash messages
-		-b     ) B=-b                   ;; # ignore whitespace
-		-w     ) B=-w                   ;; # ignore ALL whitespace
-		-x     ) unset X                ;; # do not apply .agignore and ignore filters
+		-h     ) H=true; unset S        ;;  # agains latest history file of ${source}..*
+		-l     ) nolog=true             ;;  # suppress log output
+		-p     ) P=true                 ;;  # pause on match or notfound (to copy file)
+		-s     ) S=true                 ;;  # splash messages
+		-b     ) B=-b                   ;;  # ignore whitespace
+		-w     ) B=-w                   ;;  # ignore ALL whitespace
+		-x     ) unset X                ;;  # do not apply .agignore and ignore filters
 		-debug ) debug=true; set -x     ;;
 		-d     ) FILTER=$DIRDIFF:filter; touch -d "$2" $FILTER; shift ;;  # timestamp filter
 		*      ) break ;;
@@ -50,27 +51,35 @@ done
 
 [ $IC ] && unset w  # inapplicable option
 
-# Target directory .............................................................
+# ............................................................. Target directory
 
 while [ "$1" ] ;do
 	[ -e "$1" ] && { [ "$source" ] && target=${1%/} || source=${1%/}; } || regex=$1
 	shift
 done
 source=${source#$HOME/}
-[ "$target" ] && [ "${target%${target#?*}}" != '/' ] && target=${PWD}/$target  # target must be full pathname
-target=${target%/.}
-[ "${source#./}" = "${source}" ] && P=$HOME || { P=${PWD}; P=${P#$HOME/}; }    # ./ ignore source path
-[ -d "$source" ] && { cd "$source" >/dev/null; source=${PWD}; path="$source"; } || { T=f; path="${PWD}/${source#$HOME}"; [ "$P" ] && path="${path#*./}"; unset S; }
+
+if [ $H ] ;then
+	target=$(ls -td ${source}?* | head -n 1)  # checkpoint ${source}?* folder name match
+	[ "$target" ] || exit
+else
+	[ "$target" ] && [ "${target%${target#?*}}" != '/' ] && target=${PWD}/$target  # target must be full pathname
+	target=${target%/.}
+	[ "${source#./}" = "${source}" ] && P=$HOME || { P=${PWD}; P=${P#$HOME/}; }    # ./ ignore source path
+	[ -d "$source" ] && { cd "$source" >/dev/null; source=${PWD}; path="$source"; } || { T=f; path="${PWD}/${source#$HOME}"; [ "$P" ] && path="${path#*./}"; unset S; }
+fi
 
 # find matching source directory in target repo
-TARGET=${target:-$DOTFILES}  # unprovided target defaults to dotfile repo
-[ -L $TARGET ] && L=-L       # WARNING: find will fail on errant recursive links
-target=$(find $L $TARGET -type ${T:-d} -regex ".*${path#*$P}" | head -1)
-[ -${T:-d} "$target" ] || target=$(find $L $TARGET -type ${T:-d} -regex ".*${path#*/stow}" | head -1)
-# for explicit directory references not pertaining to usual project directories
-[ "$target" ] || target=$(find $L $TARGET -type ${T:-d} | head -1)
+if [ ! -d "$target" ] ;then
+	TARGET=${target:-$DOTFILES}  # unprovided target defaults to dotfile repo
+	[ -L $TARGET ] && L=-L       # WARNING: find will fail on errant recursive links
+	target=$(find $L $TARGET -type ${T:-d} -regex ".*${path#*$P}" | head -1)
+	[ -${T:-d} "$target" ] || target=$(find $L $TARGET -type ${T:-d} -regex ".*${path#*/stow}" | head -1)
+	# for explicit directory references not pertaining to usual project directories
+	[ "$target" ] || target=$(find $L $TARGET -type ${T:-d} | head -1)
+fi
 
-# Source bin ...................................................................
+# .................................................................... $HOME/bin
 
 # distinguish $HOME/bin from all other application bin folders
 if [ $T ] ;then
@@ -79,19 +88,23 @@ if [ $T ] ;then
 else
 	path="$source"
 fi
+
 case "${path#$HOME/}" in
 	bin          ) target="$TARGET/bin/bin"; src=/${source##*/} ;;
 	stow/bin     ) target="$TARGET/bin";     src=/${source##*/} ;;
 	stow/bin/bin ) target="$TARGET/bin/bin"; src=/${source##*/} ;;
 esac
+
 [ $T ] && target="$target$src"
 [ -${T:-d} "$target" ] || usage
 [ "$regex"           ] || regex='.*'
 
-# File set .....................................................................
+# ..................................................................... File set
 
 # to handle filenames containing spaces
-if [ $X ] ;then
+if [ $H ] ;then
+	[ $T ] && echo "$source" >$FILES || find -L ./ $maxdepth -type f -regex "./${source}/.*" | exclude | grep -E -v $ignore | grep "$regex" >$FILES
+elif [ $X ] ;then
 	[ $T ] && echo "$source" >$FILES || find -L ./ $maxdepth -type f | exclude | grep -E -v $ignore | grep "$regex" >$FILES
 else
 	[ $T ] && echo "$source" >$FILES || find -L ./ $maxdepth -type f | grep "$regex" >$FILES
@@ -102,12 +115,27 @@ src=\~/${src#$HOME/}
 
 [ $debug ] && { ditto debug "source=$source src=$src T=$T target=$target"; exit; }
 
-# Diff .........................................................................
+# ......................................................................... Diff
+
+[ $H ] && {
+	ditto dirdiff "${source}  //  ${target}"
+	for i in 1 2 3 ;do
+		echo -n "• "
+		sleep 1
+	done
+	echo
+}
+
 
 while read file <&3 ;do
 	[ "${file##*.}" = 'log' ] || [ "${file##*.}" = 'jpg' ] && continue
 	file "$file" | grep -q text || { ditto WARNING skipping "${file#./}"; continue; }
-	[ $T ] && targetfile=$target || targetfile="${target}/${file#./}"
+	if [ $H ] ;then
+		[ $T ] && targetfile=$target || targetfile="${target}/$(echo $file | sed "s/[./]*${source}\///")"
+	else
+		[ $T ] && targetfile=$target || targetfile="${target}/${file#./}"
+	fi
+
 	while : ;do
 		[ $FILTER ] && [ "$file" -ot $FILTER ] && break
 		[ $S ] && clear
@@ -120,8 +148,12 @@ while read file <&3 ;do
 			0 ) ditto match "${file}"; [ $S ] && sleep $delay; break ;;
 			1 ) break ;;
 			2 ) ;;  # SEE: kakdiff
+			3 ) BREAK=true; break ;;
 		esac
 	done
+
+	[ $BREAK ] && break
+
 done 3< $FILES
 
 [ $nolog ]  && exit

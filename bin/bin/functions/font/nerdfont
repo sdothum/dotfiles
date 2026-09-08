@@ -19,7 +19,7 @@ NERD=/home/depot/nerd-fonts
 MAKE_NERD=/tmp/iosevka:nerdfont
 
 [ $1 = '--mono' ] && { mono=$1; shift; }
-FONT=$HOME/.fonts/${1:-iosevka}
+FONT=$HOME/.local/share/fonts/${1:-iosevka}
 family=${FONT##*/}
 
 # install nerd-font patcher
@@ -75,6 +75,7 @@ if [ -e $NERD/font-patcher ] ;then
 	rm -f /tmp/*ttf  # nerd-font creates file by font family name (note case)
 	$NERD/font-patcher --adjust-line-height $mono --powerline -out /tmp $REGULAR
 	mv -v /tmp/*ttf $REGULAR
+	# $NERD/font-patcher $mono $nerdfonts --name nerdfonts -out /tmp $REGULAR
 	$NERD/font-patcher $mono $nerdfonts -out /tmp $REGULAR
 
 	cd /tmp

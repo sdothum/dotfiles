@@ -12,7 +12,8 @@ sig=${sig:--TERM}
 
 if [ "$@" != 'copy'  ] ;then
 	# if no || ..
-	underline ${YELLOW}$@
+	underline "${YELLOW}$@"
+
 	while : ;do
 		printf "${TEAL}continue? ${RED}[No]${NOCOLOR}/yes/abort / ${ORANGE}C${NOCOLOR}opy : "
 		# using bash's extended read functionality (over dash) for single character input
@@ -22,8 +23,8 @@ if [ "$@" != 'copy'  ] ;then
 			''   ) exit 0 ;;
 			[nN] ) exit 0 ;;
 			[yY] ) exit 1 ;;
-			[aA] ) { kill $sig ${TMPPID:-$PPID}; break; } ;;  # SEE: tmout
-			[cC] ) exit 2 ;;                                  # SEE: kakdiff
+			[aA] ) exit 3 ;;  # SEE: tmout
+			[cC] ) exit 2 ;;                                   # SEE: kakdiff
 		esac
 	done
 else
@@ -37,10 +38,10 @@ else
 		case $CONTINUE in
 			''   ) exit 2 ;;
 			[nN] ) exit 2 ;;
-			[aA] ) { kill $sig ${TMPPID:-$PPID}; break; } ;;  # SEE: tmout
-			[lL] ) exit 3 ;;
-			[rR] ) exit 4 ;;
-			[sS] ) exit 5 ;;
+			[aA] ) exit 3 ;;  # SEE: tmout
+			[lL] ) exit 4 ;;
+			[rR] ) exit 5 ;;
+			[sS] ) exit 6 ;;
 		esac
 	done
 fi

@@ -14,7 +14,7 @@ sig=${sig:--TERM}
 [ "$1" = '-c' ] && { clear='printf "\r$(tput el)\n"'; shift; } || clear='echo; echo'
 
 # if no || ..
-underline ${YELLOW}$@
+underline "${YELLOW}$@"
 
 while : ;do
 	printf "${TEAL}continue? ${RED}[No]${NOCOLOR}/yes/abort : "

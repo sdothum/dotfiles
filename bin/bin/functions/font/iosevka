@@ -417,7 +417,7 @@ else                                      # desktop fonts
 	cmdopts t-descending=+ j-serifed 1-nobase at-tall f-extended+= y-turn J-descending a-double_ d-tailed 0-tall m-straight
 	dfont $leading 1-base m-straight l-ascending bar-extended
 	[ $HOME/thedarnedestthing.com/application/public/fonts/ ] && cp -v $FONTS/Iosevka/*ttf $HOME/thedarnedestthing.com/application/public/fonts/
-	# dfont proof    l-ascending I-serifless bar-extended
+	dfont proof    l-ascending m-straight bar-extended
 	# dfont menu     I-serifed l-ascending
 	# dfont dyslexic I-serifed space=2.2 family=qclocktwo l-ascending j-serifless m-straight  # conky qclocktwo font
 	# dfont dyslexic I-serifed quasi-extension space=1.125 family=monograffic serifless serifed l-ascending  # panel/dunst font
