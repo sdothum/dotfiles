@@ -43,7 +43,13 @@ bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
 	addm %{ focus x1 : map global select + ': crosshairs<ret>'   -docstring "visual     —— crosshairs,column,line" }
 	addm %{ focus x2 : map global select ^ ': cursorcolumn<ret>' -docstring "visual     —— crosshairs,column,line" }
 	addm %{ focus x3 : map global select _ ': cursorline<ret>'   -docstring "visual     —— crosshairs,column,line" }
-	cursorline
+
+	# NOTE: hook global WinSetOption .. does not consistently apply crosshairs setting across buffer windows
+	if-else %{ [ $CROSSHAIRS ] } %{
+		crosshairs
+	} %{
+		cursorline
+	}
 }
 
 # ........................................................................ fandt

@@ -11,23 +11,22 @@
 set-option global tabstop 3
 set-option global indentwidth 3
 
-# Configures Nim to strictly use 2 hard spaces and expand the Tab key
 hook global WinSetOption filetype=nim %{
-    set window tabstop 2
-    set window indentwidth 2
-
-    # This hook instantly converts the tab character into hard spaces
-    hook window InsertChar \t %{ exec -draft -itersel h@ }
+	# Configures Nim to strictly use 2 hard spaces and expand the Tab key
+	set window tabstop 2
+	set window indentwidth 2
+	# This hook instantly converts the tab character into hard spaces
+	hook window InsertChar \t %{ exec -draft -itersel h@ }
 }
 
 # Trim blank lines NOTE: NormalIdle CANNOT undo auto-trimmed lines (use BufWritePre instead SEE: kak wrapper)
 if-else %{ [ -z $TRIM ] } %{
-	hook global NormalIdle .* %{
-		try %{ execute-keys -draft '%s^[ \t]+$<ret>c<ret>' }
-	}
-} %{
 	hook global BufWritePre .* %{
 		try %{ execute-keys -draft '%s^[ \t]+$<ret>d' }
+	}
+} %{
+	hook global NormalIdle .* %{
+		try %{ execute-keys -draft '%s^[ \t]+$<ret>c<ret>' }
 	}
 }
 
