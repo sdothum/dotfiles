@@ -9,11 +9,11 @@
 # Usage: desktop close <group>
 
 for i in $(ls -1 $GROUP/$1) ;do
-	waitron window_focus $i . window_close
+	waitron window focus $i . window close
 	desktop remove $i                 # cleanup
 done
 
-waitron group_remove_all_windows $1  # redundancy trap for unknown group juggling corner cases
+waitron group remove --all $1  # redundancy trap for unknown group juggling corner cases
 rm -rf $GROUP/$1/*
 rm -rf $GROUP:focus/$1/*
 rm -rf $GROUP:deactivated/$1

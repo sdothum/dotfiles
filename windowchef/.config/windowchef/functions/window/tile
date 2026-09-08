@@ -53,6 +53,6 @@ case $1 in
 	*     ) column $1 ${2:-$1} ;;
 esac
 
-waitron window_focus $winid
+waitron window focus $winid
 
 # kak: filetype=sh

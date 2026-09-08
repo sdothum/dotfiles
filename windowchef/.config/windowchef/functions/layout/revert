@@ -10,7 +10,7 @@ for i in $(chef window ids) ;do
 	window revert $i
 done
 
-waitron window_focus $winid
+waitron window focus $winid
 notify $WM "layout revert <b>ALL</b>"
 
 # kak: filetype=sh

@@ -10,7 +10,7 @@
 
 [ $(ls -1 $CURRENT) -eq $1 ] || current $1
 
-waitron group_activate_specific $1
+waitron group focus --exclusive $1
 rm -rf $GROUP:deactivated/$1
 
 # kak: filetype=sh

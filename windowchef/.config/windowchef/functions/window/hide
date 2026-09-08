@@ -9,7 +9,7 @@
 rm -rf $HIDDEN/$winid
 mkdir -p $HIDDEN/$winid/"$(desktop) $winid ^$(wname $winid | sed "s/^'//; s/'$//")"  # SEE: menu unhide
 snapshot_geometry
-waitron window_hide $winid . window_focus_last
+waitron window hide $winid . window focus --last
 
 exit  # avoid window (parent) window refocusing
 

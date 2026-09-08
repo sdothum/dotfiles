@@ -11,10 +11,10 @@
 D=$(ls -1 $CURRENT)
 
 for i in $(seq 1 $(( $(chef desktop count) - 1 ))) ;do  # except CHEF group
-	waitron group_activate $i
+	waitron group focus $i
 done
 
 rm -rf $GROUP:deactivated/*
-waitron window_focus $(ls -1 $GROUP:focus/$D)
+waitron window focus $(ls -1 $GROUP:focus/$D)
 
 # kak: filetype=sh

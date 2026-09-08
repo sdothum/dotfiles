@@ -53,6 +53,6 @@ case $1 in
 	bottom ) bottom $2 ;;
 esac
 
-waitron window_focus $winid
+waitron window focus $winid
 
 # kak: filetype=sh

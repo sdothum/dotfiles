@@ -12,7 +12,7 @@ snapshot_geometry  # NOTE: comment out to not overwrite window sizing/tiling geo
 set_geometry   # X Y WIDTH HEIGHT
 
 move()   {
-	waitron window_focus $winid . window_move_absolute $1 $2
+	waitron window focus $winid . window move $1 $2
 }
 
 L=$(( margin ))

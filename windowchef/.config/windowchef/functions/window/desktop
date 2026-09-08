@@ -9,9 +9,9 @@
 # Usage: window desktop <group> [teleport]
 
 desktop=$(desktop)
-waitron group_remove_window
+waitron group remove
 rmdir $GROUP/$desktop/$winid
-waitron group_add_window $1
+waitron group add $1
 mkdir -p $GROUP/$1/$winid
 desktop add $1 $winid
 
@@ -20,7 +20,7 @@ if [ $2 ] ;then
 	W=$(ls -1 $GROUP/$desktop | head -1)
 	[ $W ] && {
 		desktop $desktop
-		waitron window_focus $W
+		waitron window focus $W
 		desktop add $desktop $W
 		exit  # skip original window refocus SEE: window wrapper
 	}

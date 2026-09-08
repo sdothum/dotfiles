@@ -61,7 +61,7 @@ xname_is()       { xdotool getwindow$1 $winid | grep -q "$xname"; }
 # NOTE: waitron replacement for wtp (wmutils) avoids async display timing issues
 wtp() {
 	# wtp X Y width height winid (as in wmutils)
-	waitron window_focus $5 . window_move_absolute $1 $2 . window_resize_absolute $3 $4  # chaining requires windowchef repo updates
+	waitron window focus $5 . window move $1 $2 . window resize $3 $4  # chaining requires windowchef repo updates
 }
 
 # draw <winid> <width> <height> [rotate]
@@ -113,6 +113,6 @@ fi
 
 [ $nested_window_action ] || save_original_geometry  # for 'window revert' geometry history
 
-waitron window_focus $winid  # regain focus
+waitron window focus $winid  # regain focus
 
 # kak: filetype=sh

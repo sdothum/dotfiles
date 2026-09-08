@@ -1,53 +1,53 @@
 super + {h,j,k,l}
-	waitron window_move {-20 0, 0 20, 0 -20, 20 0}
+	waitron window move --relative {-20 0, 0 20, 0 -20, 20 0}
 
 super + alt + {h,j,k,l}
-	waitron window_resize {-20 0, 0 20, 0 -20, 20 0}
+	waitron window resize --relative {-20 0, 0 20, 0 -20, 20 0}
 
 super + shift + {h,j,k,l}
-	waitron window_move {-50 0, 0 50, 0 -50, 50 0}
+	waitron window move --relative {-50 0, 0 50, 0 -50, 50 0}
 
 super + shift + alt + {h,j,k,l}
-	waitron window_resize {-50 0, 0 50, 0 -50, 50 0}
+	waitron window resize --relative {-50 0, 0 50, 0 -50, 50 0}
 
 alt + {h,j,k,l}
-	waitron window_cardinal_focus {left,down,up,right}
+	waitron window focus --cardinal {left,down,up,right}
 
 super + alt + Escape
-	waitron wm_quit 0
+	waitron wm quit 0
 
 super + f
-	waitron window_maximize
+	waitron window maximize
 
 super + w
-	waitron window_close
+	waitron window close
 
 super + b
-	waitron window_hor_maximize
+	waitron window maximize --horizontal
 
 super + v
-	waitron window_ver_maximize
+	waitron window maximize --vertical
 
 super + m
-	waitron window_monocle
+	waitron window monocle
 
 alt + Tab
-	waitron window_cycle
+	waitron window cycle
 
 alt + shift + Tab
-	waitron window_rev_cycle
+	waitron window cycle --reverse
 
 alt + ctrl + Tab
-	waitron window_focus_last
+	waitron window focus --last
 
 super + {_,shift +}{1-9}
-	waitron {group_toggle,group_add_window} {1-9}
+	waitron {group toggle,group add} {1-9}
 
 super + ctrl + r
-	waitron group_remove_window
+	waitron group remove
 
 super + alt + ctrl + {1-4}
-	waitron group_remove_all_windows {1-4}
+	waitron group remove --all {1-4}
 
 super + Return
 	xterm

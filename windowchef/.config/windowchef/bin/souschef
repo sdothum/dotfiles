@@ -126,7 +126,7 @@ case $menu in
 			close  )
 				group=$(echo "$groups" | pick "close") || exit
 				desktop ${group%% *} close
-				waitron window_focus_last
+				waitron window focus --last
 				;;
 			filter )
 				group=$(echo "$groups" | sed '1i-   restore all\n0   current' | pick "by") || exit
@@ -159,13 +159,13 @@ case $menu in
 				;;
 			column )
 				column=$(echo "$columns" | pick "tile : column") || exit
-				waitron window_focus $W
+				waitron window focus $W
 				column=${column%% *}
 				window tile ${column%:*} ${column#*:}
 				;;
 			draw   )
 				extend=$(echo "$directions" | pick "direction") || exit
-				waitron window_focus $W
+				waitron window focus $W
 				extend=${extend#* }
 				case ${extend%% *} in
 					tile ) window ${extend}        ;;
@@ -174,7 +174,7 @@ case $menu in
 				;;
 			form   )
 				size=$(echo "$formats" | pick "size") || exit
-				waitron window_focus $W
+				waitron window focus $W
 				window size ${size#* }
 				# window -- snap center vertical  # preserve size history
 				;;
@@ -184,7 +184,7 @@ case $menu in
 				;;
 			snap   )
 				snap=$(echo "$regions" | pick "to") || exit
-				waitron window_focus $W
+				waitron window focus $W
 				snap=${snap#* }
 				case $snap in
 					left | right ) [ "$(chef window classname)"  = "term" ] && window spread $snap || window snap $snap
@@ -195,7 +195,7 @@ case $menu in
 			tile   )
 				tile=$(echo "$tiles" | pick "by") || exit
 				layout fold ${tile%% *} $(chef window classname)
-				waitron window_focus $W
+				waitron window focus $W
 				;;
 		esac
 		;;

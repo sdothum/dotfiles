@@ -12,12 +12,12 @@ set_geometry  # X Y WIDTH HEIGHT
 snapshot_geometry
 
 case $1 in
-	left  ) waitron window_move -$(( WIDTH + border * 2 )) 0  ;;
-	right ) waitron window_move  $(( WIDTH + border * 2 )) 0  ;;
-	up    ) waitron window_move 0 -$(( HEIGHT + border * 2 )) ;;
-	down  ) waitron window_move 0  $(( HEIGHT + border * 2 )) ;;
+	left  ) waitron window move --relative -$(( WIDTH + border * 2 )) 0  ;;
+	right ) waitron window move --relative  $(( WIDTH + border * 2 )) 0  ;;
+	up    ) waitron window move --relative 0 -$(( HEIGHT + border * 2 )) ;;
+	down  ) waitron window move --relative 0  $(( HEIGHT + border * 2 )) ;;
 esac
 
-waitron window_focus $winid
+waitron window focus $winid
 
 # kak: filetype=sh

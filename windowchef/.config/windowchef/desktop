@@ -12,7 +12,7 @@
 #                       -1/+1 -> desktop focus <msg> (relative)
 
 # NOTE: waitron group handling deficiencies (quirks) and extensions are handled here
-# HACK: waitron group_toggle/_activate does not restore the group window stack order (focused window)
+# HACK: waitron group toggle/_activate does not restore the group window stack order (focused window)
 
 CURRENT=$GROUP/current
 LAST=$GROUP/last

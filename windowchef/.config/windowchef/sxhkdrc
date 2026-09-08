@@ -52,7 +52,7 @@ super + {F1,F2}
 	souschef {group, window}
 
 super + {shift,ctrl} + q
-	{menu halt, waitron wm_quit 0}
+	{menu halt, waitron wm quit 0}
 
 super + shift + w
 	menu windowfocus
@@ -69,16 +69,16 @@ super + shift + ctrl + w
 # ....................................................................... select
 
 super + {_,shift} + Tab
-	waitron {window_cycle_in_group, window_rev_cycle_in_group}
+	waitron {window cycle --group, window cycle --group --reverse}
 
 alt + {_,super} + Tab
-	waitron {window_cycle, window_rev_cycle}
+	waitron {window cycle, window cycle --reverse}
 
 super + ctrl + Tab
-	waitron window_focus_last
+	waitron window focus --last
 
 alt + {Left,Down,Up,Right}
-	waitron window_cardinal_focus {west, south, north, east}
+	waitron window focus --cardinal {west, south, north, east}
 
 # ........................................................................ focus
 
@@ -105,13 +105,13 @@ super + shift + e
 
 super + w
 	desktop remove                           ;\
-	waitron window_close . window_focus_last ;\  # NOTE: some apps take longer to be removed from chef stack
+	waitron window close . window focus --last ;\  # NOTE: some apps take longer to be removed from chef stack
 	refresh_panel                                # for last visible window removal
 
 # ....................................................................... resize
 
 super + {_,ctrl} + space
-	waitron {window_ver_maximize, window_hor_maximize}
+	waitron {window maximize --vertical, window maximize --horizontal}
 
 super + alt + {space,BackSpace}
 	window papersize {+,-}
@@ -126,16 +126,16 @@ super + alt + Return
 	wgeometry restore $(pfw)
 
 super + ctrl + shift + {Left,Down,Up,Right}
-	waitron window_resize {-20 0, 0 20, 0 -20, 20 0}
+	waitron window resize --relative {-20 0, 0 20, 0 -20, 20 0}
 
 super + shift + {Left,Down,Up,Right}
-	waitron window_resize {-50 0, 0 50, 0 -50, 50 0}
+	waitron window resize --relative {-50 0, 0 50, 0 -50, 50 0}
 
 super + shift + {t,s}
 	window tile {left, right}
 
 super + {_,shift} + z
-	waitron {window_monocle, window_maximize}
+	waitron {window monocle, window maximize}
 
 # ......................................................................... tile
 
@@ -153,20 +153,20 @@ super + {4,8,7,9}
 super + shift + {0,1,2,3,4,5}
 	W=$(pfw)                                                ;\
 	layout fold {0, 1, 2, 3, 4, 5} $(chef window classname) ;\
-	waitron window_focus $W
+	waitron window focus $W
 
 super + shift + ctrl + 0
 	W=$(pfw)      ;\
 	layout fold 0 ;\
-	waitron window_focus $W
+	waitron window focus $W
 
 # ......................................................................... move
 
 super + ctrl + {Left,Down,Up,Right}
-	waitron window_move {-20 0, 0 20, 0 -20, 20 0}
+	waitron window move --relative {-20 0, 0 20, 0 -20, 20 0}
 
 super + {Left,Down,Up,Right}
-	waitron window_move {-50 0, 0 50, 0 -50, 50 0}
+	waitron window move --relative {-50 0, 0 50, 0 -50, 50 0}
 
 super + ctrl + {p,l,n,f}
 	window shift {left, down, up, right}
@@ -217,7 +217,7 @@ alt + ctrl + 0
 
 super + ctrl + {1,2,3,4,5,6,7,8,9}
 	desktop close {1, 2, 3, 4, 5, 6, 7, 8, 9} ;\
-	waitron window_focus_last
+	waitron window focus --last
 
 # ....................................................................... window
 
@@ -234,7 +234,7 @@ alt + ctrl + super + {1,2,3,4,5,6,7,8,9}
 	window desktop {1, 2, 3, 4, 5, 6, 7, 8, 9} teleport
 
 super + ctrl + r
-	waitron group_remove_window
+	waitron group remove
 
 # UI
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -251,11 +251,11 @@ super + {F6,F5}
 super + ctrl + shift + space
 	xdotool mousemove $(( $(chef display width) / 2 )) $(( $(chef display height) / 2 ))
 
-# NOTE: restore mouse focus after group_activate (of top of window stack)
+# NOTE: restore mouse focus after group focus (of top of window stack)
 # HACK: bypass QT apps to avoid interference with mouse menus
 
 ~button1
-	waitron window_focus $(pfw)
+	waitron window focus $(pfw)
 	# xdotool key Escape
 
 # ..................................................................... keyboard
