@@ -114,9 +114,10 @@ export XDG_CONFIG_HOME=$HOME/.config
 xexec() {
 	pkill -f "$WM/.*panel.*"  # kill all dangling panel processes
 	pkill -f "fifo"
+	pkill -f "firefox"
 	pkill -f "pavucontrol"
 	pkill -f "pulseaudio"
-	# ROOT=$WME               # SEE: faouzia ENV NOTE: only /tmp logs are visible to menu log
+	# ROOT=$WME               # SEE: cirrus ENV NOTE: only /tmp logs are visible to menu log
 	export ROOT=${ROOT:-/tmp}
 	mv -f  $ROOT/$1.log $ROOT/$1.last.log 2>/dev/null
 	rm -f  $ROOT/$1:*
@@ -133,7 +134,18 @@ xexec() {
 
 	# exec ck-launch-session dbus-launch --sh-syntax --exit-with-x11 $1 >$ROOT/$1.log 2>&1
 	[ -e /tmp/ruler.log ] && ln -s /tmp/ruler.log $ROOT/$1.log
-	exec $1 >>$ROOT/$1.log 2>&1
+
+	while :; do
+		$1 >>$ROOT/$1.log 2>&1
+	   rc=$?
+		ditto restart "$1 pid=$$ exited rc=$rc" >>"$ROOT/$1.log"
+
+	   case $rc in
+	      75) notify critical "$1" "restarted"; continue ;;
+	      *)  break ;;  # terminate X session
+	   esac
+	done
+
 	echo "$1 exited: $?" >>$ROOT/$1.log
 }
 
@@ -181,14 +193,44 @@ bu* )
 	autostart
 	xexec budgie-session ;;
 
-ci* ) xexec gnome-session-cinnamon ;;
+ci* )
+	setpath $HOME/.config/cirrus
+	. $(which ENV)
+	touch $SESSION/cirrus/autostart:oneshot  # SEE: wm autostart
+
+	# export CIRRUS_TRACE_RESTART=1
+	pgrep -x zephyrd >/dev/null || {
+		rm -f /run/user/1000/zephyr/zephyrd.sock
+		# mkdir -p $WME/log
+		# zephyrd >$WME/log/zephyrd.log &
+		zephyrd >>/tmp/cirrus.log &
+	}
+
+	tvover ${interface:-HDMI-0} 3440x14440
+	sxhkd -c $HOME/.config/cirrus/sxhkdrc >/tmp/sxhkd.log &
+	rm -f /tmp/ruler.log
+	touch /tmp/ruler.log
+	ruler -i -s /usr/bin/dash -c $HOME/.config/cirrus/rulerrc 2>>/tmp/ruler.log &
+	# $TERM &  # NOTE: cirrus cannot properly manage windows opened before it!
+	# export CIRRUS_TRACE_STACK=1
+	# export CIRRUS_TRACE_GEOMETRY_ENTER=1
+	xexec cirrus -c $HOME/.config/cirrus/cirrusrc ;;
+
+c*n ) xexec gnome-session-cinnamon ;;
 dw* ) xexec dwm ;;
-gn* ) xexec gnome-session ;;
-go* ) xexec goomwwm ;;
 
 fa* )
 	setpath $HOME/.config/faouzia
 	. $(which ENV)
+	touch $SESSION/faouzia/autostart:oneshot  # SEE: wm autostart
+
+	# export FAOUZIA_TRACE_RESTART=1
+	pgrep -x faouziad >/dev/null || {
+		rm -f /run/user/1000/faouzia/faouziad.sock
+		# mkdir -p $WME/log
+		# faouziad >$WME/log/faouziad.log &
+		faouziad >>/tmp/faouzia.log &
+	}
 
 	tvover ${interface:-HDMI-0} 3440x14440
 	sxhkd -c $HOME/.config/faouzia/sxhkdrc >/tmp/sxhkd.log &
@@ -196,7 +238,12 @@ fa* )
 	touch /tmp/ruler.log
 	ruler -i -s /usr/bin/dash -c $HOME/.config/faouzia/rulerrc 2>>/tmp/ruler.log &
 	# $TERM &  # NOTE: faouzia cannot properly manage windows opened before it!
+	# export FAOUZIA_TRACE_STACK=1
+	# export FAOUZIA_TRACE_GEOMETRY_ENTER=1
 	xexec faouzia -c $HOME/.config/faouzia/faouziarc ;;
+
+gn* ) xexec gnome-session ;;
+go* ) xexec goomwwm ;;
 
 he* )
 	setpath $HOME/.config/herbstluftwm
