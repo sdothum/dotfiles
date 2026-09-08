@@ -1,0 +1,39 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="window $@" . $PARENT
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .............................................................. Desktop layouts
+
+# Usage: layout <msg> SEE: functions/layout
+
+winid=$(pfw)
+
+msg=$1
+[ $msg ] && shift || usage $0
+if [ -e ${0%/layout}/functions/layout/$msg ] ;then
+
+	# NOTE: zephyr compatibility conversion ensures parameter correctness
+
+	echo "$@" | grep -q ' --rows*' &&
+	{
+		while [ $1 ] ;do
+			case $1 in
+				--     ) defer=--  ;;
+				[0-9]  ) column=$1 ;;
+				--rows ) rows=x$2; shift ;;
+				*      ) classname=$1 ;;
+			esac
+			shift
+		done
+		set -- $defer $column$rows $classname
+	}
+
+	. ${0%/layout}/functions/layout/$msg $@
+else
+	usage $0 $msg
+fi
+
+# kak: filetype=sh

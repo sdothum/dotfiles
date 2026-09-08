@@ -1,0 +1,18 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="cbonsai $@" . $PARENT
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................... Ncurses bonsai
+
+# Usage: cbonsai [single]
+
+[ $1 ] || repeat=-iw15
+
+CBONSAI="$HOME/.local/bin/cbonsai -l -t0.125 $repeat"
+
+zephyr window toggle cbonsai || term cbonsai BLACKBOARD $CBONSAI
+
+# kak: filetype=sh

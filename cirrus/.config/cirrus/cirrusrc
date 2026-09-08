@@ -1,0 +1,71 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Usage: cirrusrc [refresh] SEE: aurora
+
+# ...................................................................... Borders
+
+sirocco wm config enable_borders        $(recipe -c ui/enable_borders true)
+sirocco wm config outer_border_width    $(recipe -c ui/outer_border_width 6)
+sirocco wm config inner_border_width    $(recipe -c ui/inner_border_width 4)
+sirocco wm config border_style          $(recipe -c ui/border_style 1)
+sirocco wm config corner_percent        $(recipe -c ui/corner_percent 20)
+sirocco wm config corner_mask           $(recipe -c ui/corner_mask 8)
+
+sirocco wm config outer_color_focused   0x$(recipe -c ui/outer_color_focused ffff0000)
+sirocco wm config outer_color_unfocused 0x$(recipe -c ui/outer_color_unfocused 00000000)
+sirocco wm config inner_color_focused   0x$(recipe -c ui/inner_color_focused 00000000)
+sirocco wm config inner_color_unfocused 0x$(recipe -c ui/inner_color_unfocused $(recipe ui/inner_color_focused))
+
+# ......................................................................... Gaps
+
+sirocco wm config gap_width top    $(recipe -c 'ui/gap_width top' 45)
+sirocco wm config gap_width bottom $(recipe -c 'ui/gap_width bottom' 45)
+sirocco wm config gap_width left   $(recipe -c 'ui/gap_width left' 58)
+sirocco wm config gap_width right  $(recipe -c 'ui/gap_width right' $(recipe 'ui/gap_width left'))
+recipe -c ui/grid_gap_width 33 >/dev/null
+
+[ $1 ] && exit  # SEE: aurora
+
+# ....................................................................... Groups
+
+sirocco wm config groups_nr      10  # SEE: group (action) and rulerrc for group labels
+sirocco wm config sticky_windows false
+
+# .................................................................... Behaviour
+
+sirocco wm config cursor_position             center
+sirocco wm config enable_resize_hints         true
+sirocco wm config enable_sloppy_focus         true
+sirocco wm config enable_last_window_focusing true
+sirocco wm config apply_settings              true
+
+# ........................................................................ Mouse
+
+sirocco wm config replay_click_on_focus true
+sirocco wm config pointer_actions       move resize_side resize_corner
+sirocco wm config pointer_modifier      super
+sirocco wm config click_to_focus        any
+
+# ................................................................... State tree
+
+mkdir -p $GROUP/-1
+mkdir -p $GROUP/last/-1
+mkdir -p $GROUP:deactivated
+mkdir -p $HIDDEN
+
+# allow pseudo (file) writes to yet as undefined $FIFO/<fifo> buffer during startup SEE: panel
+mkdir -p $FIFO
+
+# ...................................................................... Startup
+
+recipe -d pfw  # pfw wrapper winid mismatch stats
+
+autostart
+
+# WM membership and current-group reconciliation is owned by zephyrd.
+
+# kak: filetype=sh

@@ -1,0 +1,27 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................... set default term geometry
+
+[ -e "$WINFO/term" ] && exit
+
+# snapshot "window size terminal" width/height dimensions
+term class=terminal_size TRANSPARENT
+zephyr window await terminal_size . window snap center
+
+winid=$(sirocco window ids --all terminal_size)
+
+[ -n "$winid" ] || exit 1
+[ -e "$WINFO/$winid" ] || exit 1
+
+mv -v "$WINFO/$winid" "$WINFO/term"
+
+notify 5 "terminal:size" \
+   "$(ls -1 "$WINFO/term" | grep WIDTH)\n$(ls -1 "$WINFO/term" | grep HEIGHT)"
+
+sirocco window close "$winid"
+
+# kak: filetype=sh

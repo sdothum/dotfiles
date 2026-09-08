@@ -1,0 +1,18 @@
+// See LICENSE file for copyright and license details.
+
+#ifndef ATOMS_H
+#define ATOMS_H
+
+enum {
+	WM_DELETE_WINDOW,
+	ICCCM_WM_STATE,
+	CIRRUS_ACTIVE_GROUPS,
+	_IPC_ATOM_COMMAND,
+	_IPC_ATOM_RESPONSE,
+	CIRRUS_STATUS,
+	CIRRUS_STATE_INVALIDATE,
+	_IPC_ATOM_REQUEST,
+	NR_ATOMS
+};
+
+#endif

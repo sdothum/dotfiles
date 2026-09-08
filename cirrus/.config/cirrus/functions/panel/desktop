@@ -1,0 +1,209 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="panel/desktop $@" . $PARENT
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................... Draw panel
+
+# Usage: panel desktop [<offset Y>]
+#
+# NOTE: this script is executed via "draw panel" SEE: also restore panel
+
+[ $1 ] && panel_offsetY=$1
+panel_len=${panel_len:-200}          # HACK: arbitrary display length (for wide screen monitor)
+
+if [ "$panel_offsetY" = "0" ] ;then  # (??) use of -eq fails comparison
+	SEP="  %{F$INACTIVE_FG}%{F-}  "  # top bar
+else
+	SEP="  %{F$INACTIVE_FG}%{F-}  "  # bottom bar
+fi
+
+# ............................................................... Current window
+
+tagcount=$($ZEPHYR group tagcount)
+groupcount=$($ZEPHYR group count)
+
+map=$(for i in $(seq 1 "$tagcount") ;do echo -n '‧' ;done)
+
+valid_snapshot_xid() {
+	case "$1" in
+		0x????????)
+			case "${1#0x}" in
+				''|*[!0-9A-Fa-f]*) return 1 ;;
+			esac
+			return 0
+			;;
+	esac
+	return 1
+}
+
+valid_snapshot_group() {
+	case "$1" in
+	''|4294967295|*[!0-9]*) return 1 ;;
+	esac
+	[ "$1" = 0 ] && return 0
+	valid_group=1
+	while [ "$valid_group" -lt "$groupcount" ] ;do
+		[ "$1" = "$valid_group" ] && return 0
+		valid_group=$((valid_group + 1))
+	done
+	return 1
+}
+
+read_wm_snapshot() {
+	wm_snapshot=$(cat "$WME/wm/snapshot" 2>/dev/null) || return 1
+	snapshot_header_count=0
+	snapshot_focused_count=0
+	snapshot_current_count=0
+	snapshot_group=
+	snapshot_nilcount=0
+	snapshot_version=
+	snapshot_valid=true
+	while IFS=' ' read -r snapshot_kind snapshot_field1 snapshot_field2 snapshot_field3 snapshot_extra ;do
+		case "$snapshot_kind" in
+			SNAPSHOT)
+				{ [ "$snapshot_field1" = 1 ] || [ "$snapshot_field1" = 2 ]; } && [ -z "$snapshot_field2" ] &&
+					[ -z "$snapshot_field3" ] && [ -z "$snapshot_extra" ] &&
+					snapshot_header_count=$((snapshot_header_count + 1)) &&
+					snapshot_version=$snapshot_field1 || snapshot_valid=false
+				;;
+			FOCUSED)
+				snapshot_focused_count=$((snapshot_focused_count + 1))
+				[ -n "$snapshot_field1" ] && [ -z "$snapshot_field2" ] &&
+					[ -z "$snapshot_field3" ] && [ -z "$snapshot_extra" ] || snapshot_valid=false
+				if [ "$snapshot_field1" != NONE ] ;then
+					valid_snapshot_xid "$snapshot_field1" || snapshot_valid=false
+				fi
+				;;
+			CURRENT)
+				snapshot_current_count=$((snapshot_current_count + 1))
+				[ -n "$snapshot_field1" ] && [ -z "$snapshot_field2" ] &&
+					[ -z "$snapshot_field3" ] && [ -z "$snapshot_extra" ] || snapshot_valid=false
+				snapshot_group=$snapshot_field1
+				;;
+			CLIENT)
+				if [ -z "$snapshot_field1" ] || [ -z "$snapshot_field2" ] ||
+					{ [ "$snapshot_field3" != 0 ] && [ "$snapshot_field3" != 1 ]; } ||
+					{ [ "$snapshot_version" = 1 ] && [ -n "$snapshot_extra" ]; } ;then
+					snapshot_valid=false
+				fi
+				valid_snapshot_xid "$snapshot_field1" || snapshot_valid=false
+				if [ "$snapshot_field2" = 4294967295 ] ;then
+					:
+				else
+					valid_snapshot_group "$snapshot_field2" || snapshot_valid=false
+				fi
+				[ "$snapshot_field2" = 4294967295 ] &&
+					snapshot_nilcount=$((snapshot_nilcount + 1))
+				;;
+			*)
+				snapshot_valid=false
+				;;
+		esac
+	done <<EOF
+$wm_snapshot
+EOF
+	[ "$snapshot_valid" = true ] || return 1
+	[ "$snapshot_header_count" -eq 1 ] || return 1
+	[ "$snapshot_focused_count" -eq 1 ] || return 1
+	[ "$snapshot_current_count" -eq 1 ] || return 1
+	case "$snapshot_group" in
+		4294967295) ;;
+		*) valid_snapshot_group "$snapshot_group" || return 1 ;;
+	esac
+	return 0
+}
+
+groupno=4294967295
+groupname="----"
+nilgroup_count_cache=
+if read_wm_snapshot ;then
+	nilgroup_count_cache=$snapshot_nilcount
+	if [ "$snapshot_group" = "4294967295" ] ;then
+		groupno=$snapshot_group
+		groupname="----"
+	elif candidate_name=$($ZEPHYR group name "$snapshot_group" 2>/dev/null) &&
+	     [ -n "$candidate_name" ] ;then
+		groupno=$snapshot_group
+		groupname=$candidate_name
+	fi
+fi
+
+map() {
+	if [ "$groupno" = "4294967295" ] ||
+	   [ "$groupno" = "0" ] ||
+	   [ "$groupno" -gt "$tagcount" ] ;then
+		echo "$map"
+	else
+		echo "$map" | sed "s/‧/•/$groupno"
+	fi
+}
+
+name() {
+		name=$(xtitle | sed -r "s/^(.)/\u\1/; s/'(.*)'/\1/")  # trap unfocused error messages & discard xtitle quotes
+		[ "$name" ] && echo "${SEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}$name%{F-}%{B-}%{F$DEFAULT_FG}"
+}
+
+# group details NOTE: cirrus does not track window visibility states
+active_window() {
+	if read_wm_snapshot ;then
+		nilgroup_count_cache=$snapshot_nilcount
+		if [ "$snapshot_group" = "4294967295" ] ;then
+			if [ "$groupno" != "$snapshot_group" ] ;then
+				groupno=$snapshot_group
+				groupname="----"
+				dunstctl close-all
+				notify Group "$groupno $groupname"
+			fi
+		elif [ "$groupno" != "$snapshot_group" ] &&
+				candidate_name=$($ZEPHYR group name "$snapshot_group" 2>/dev/null) && [ -n "$candidate_name" ] ;then
+			groupno=$snapshot_group
+			groupname=$candidate_name
+			dunstctl close-all
+			notify Group "$groupno $groupname"
+		fi
+	fi
+
+	title="$(map)  $groupname"  # current/last group
+	active=$($ZEPHYR group current)
+	if has_windows $active ;then
+		if deactivated $active ;then
+			title="${title}${SEP}%{U$DEFAULT_FG}%{+u}$(windows $active)%{-u}%{U-}"
+		else
+			title="${title}${SEP}$(windows $active)"
+		fi
+	fi
+	if has_hidden ;then
+		title="${title}${SEP}%{U$DEFAULT_FG}%{+u}$(hidden)%{-u}%{U-}"
+	fi
+	if [ -n "$nilgroup_count_cache" ] && [ "$nilgroup_count_cache" -gt 0 ] ;then
+		if has_hidden ;then
+			title="${title}  -$nilgroup_count_cache"      # group -1 windows
+		else
+			title="${title}${SEP}-$nilgroup_count_cache"  # group -1 windows
+		fi
+	fi
+}
+
+# ............................................................... FIFO read loop
+
+panel() {
+	while read -r line ;do
+		active_window
+		printf "%s\n" "$(echo "%{l}${title}$(name)" | cut -c1-$panel_len)"
+	done
+}
+
+# ......................................................................... FIFO
+
+STREAM=$(mkfifo $FIFO/$msg)  # SEE: panel wrapper
+
+# event driven panel update
+xtitle -sf 'X%s\n' >$STREAM 2>/dev/null &
+# state tree check NOTE: also triggers panel/desktop update
+# while : ;do $ZEPHYR sync window; sleep 1 ;done &  # SEE: cirrusrc
+
+cat $STREAM | panel | handlebar &
+
+# kak: filetype=sh

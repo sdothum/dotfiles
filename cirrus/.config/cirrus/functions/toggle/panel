@@ -1,0 +1,18 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="toggle/panel $@" . $PARENT
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Toggle panel
+
+if recipe panel/single ;then
+	zephyr window toggle --name "lemonbar"
+else
+	zephyr window toggle --name "lemonbar:desktop"
+	zephyr window toggle --name "lemonbar:mpd"
+	zephyr window toggle --name "lemonbar:system"
+	zephyr window toggle --name "lemonbar:clock"
+fi
+
+# kak: filetype=sh

@@ -1,0 +1,412 @@
+# sdothum - 2016 (c) wtfpl
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# NOTE: only use groups 1-9 with group 0 reserved for special actions (typically, "last")
+
+# NOTE: block { statements.. } must be escaped \{ statements.. \}
+#       lest block be treated as positional sxhkd parameter list
+
+# Hotkeys
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ........................................................................ sxhkd
+
+super + Escape
+	notify reloading "sxhkd & ruler" ;\
+	pkill -USR1 -x sxhkd             ;\
+	pkill -KILL -x ruler             ;\
+	ruler -i -c $HOME/.config/$WM/rulerrc &
+
+super + shift + Escape
+	kak $(find $HOME/.config/${WM}/ -maxdepth 1 -type f -name '*rc')
+
+# .................................................................... clipboard
+
+# BUG: manual keybinds circumvent (random) X session clipboard loss (cause unknown)
+# HISTORY: cb replaces "xclip {-in,-out} -selection clipboard"
+
+~ctrl + {c,x}
+	S=$(xsel -p) && [ -n "$S" ] && echo -n "$S" | cb {copy,cut}
+
+~ctrl + v
+	cb paste
+
+# ~ctrl + c
+# 	S=$(xsel -p) && [ -n "$S" ] && echo -n "$S" | copyq copy
+
+# ~ctrl + x
+# 	S=$(xsel -p) && [ -n "$S" ] && echo -n "$S" | copyq copy ;\
+# 	xdotool key Del
+
+# ~ctrl + v
+# 	copyq paste
+
+# Window manager
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ........................................................................ menus
+
+super + {F1,F2}
+	souschef {group,window}
+
+super + {shift,ctrl} + q
+	{menu halt,sirocco wm restart}
+
+super + shift + w
+	menu windowfocus
+
+super + {alt,ctrl} + w
+	souschef window {tile,form}
+
+super + shift + ctrl + w
+	menu layout
+
+# Windows
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ....................................................................... select
+
+# NOTE: a null selector value must include a " " (space)
+
+super + {_,shift} + Tab
+	sirocco window cycle --group { ,--reverse}
+
+alt + {_,super} + Tab
+	sirocco window cycle { ,--reverse}
+
+super + ctrl + Tab
+	sirocco window focus --last
+
+alt + {Left,Down,Up,Right}
+	sirocco window focus --cardinal {west,south,north,east}
+
+# ........................................................................ focus
+
+super + {_,shift} + 0
+	zephyr window {restore,rotate}
+
+super + ctrl + 0
+	zephyr layout restore
+
+super + {_,shift} + i
+	echo "$(timestamp) sxhkd window hide $(pfw)" >>$WMLOG ;\
+	{zephyr window hide,menu unhide}                     ;\
+	zephyr sync group
+
+# Rotate the canonical overlap stack by raising its bottommost window.
+
+super + e
+	sirocco window stack cycle
+
+super + w
+	echo "$(timestamp) sxhkd window close $(pfw)" >>$WMLOG ;\
+	zephyr group remove                                   ;\
+	sirocco window close . window focus --last             ;\  # NOTE: some apps take longer to be removed from wm stack
+	refresh_panel  # for last visible window removal
+
+# ....................................................................... resize
+
+super + {_,ctrl} + space
+	sirocco window maximize --{vertical,horizontal}
+
+super + alt + {space,BackSpace}
+	zephyr window size paper {--larger,--smaller}
+
+alt + shift + {space,BackSpace}
+	zephyr window size video {--larger,--smaller}
+
+super + alt + Return
+	term_geometry ;\
+	zephyr state snapshot . window size terminal . window snap center vertical . state restore
+
+super + ctrl + shift + {Left,Down,Up,Right}
+	sirocco window resize --relative {-20 0,0 20,0 -20,20 0}
+
+super + shift + {Left,Down,Up,Right}
+	sirocco window resize --relative {-50 0,0 50,0 -50,50 0}
+
+super + shift + {t,s}
+	zephyr window tile {left,right}
+
+super + {_,shift} + z
+	sirocco window {monocle,maximize}
+
+# ......................................................................... tile
+
+super + 2
+	zephyr window size viewport
+
+super + {5,6,3}
+	zephyr window tile 3 {1,2,3}
+
+super + {4,8,7,9}
+	zephyr window tile 4 {1,2,3,4}
+
+# ....................................................................... layout
+
+super + shift + {0,1,2,3,4,5}
+	W=$(pfw)                                                      ;\
+	zephyr layout fold {0,1,2,3,4,5} $(zephyr window classname) ;\
+	sirocco window focus $W
+
+super + shift + ctrl + 0
+	W=$(pfw)              ;\
+	zephyr layout fold 0 ;\
+	sirocco window focus $W
+
+# alt + ctrl + {space, BackSpace}
+# 	zephyr layout {explode,unexplode}
+
+alt + ctrl + space
+	[ -e $WME/layout/explode ] && zephyr layout unexplode || zephyr layout explode
+
+# ......................................................................... move
+
+super + ctrl + {Left,Down,Up,Right}
+	sirocco window move --relative {-20 0,0 20,0 -20,20 0}
+
+super + {Left,Down,Up,Right}
+	sirocco window move --relative {-50 0,0 50,0 -50,50 0}
+
+super + ctrl + {p,l,n,f}
+	zephyr window shift {left,down,up,right}
+
+super + {d,m}
+	zephyr window snap top {left,right}
+
+super + ctrl + e
+	zephyr layout level
+
+super + {_,ctrl,shift} + g
+	zephyr window snap center { ,left,right}
+
+super + {n,l}
+	zephyr window snap {top,bottom}
+
+super + {p,f}
+	zephyr window snap bottom {left,right}
+
+super + {_,shift} + r
+	zephyr window snap center {horizontal,vertical}
+
+super + {t,s}
+	side="{left,right}" ;\
+	echo "$(zephyr window classname)" | grep -q -E "term|tmux" && zephyr window spread $side || zephyr window snap $side
+
+super + ctrl + {t,s}
+	side="{left,right}" ;\
+	zephyr window spread $side
+
+# ......................................................................... swap
+
+alt + super + {Left,Down,Up,Right}
+	zephyr window swap {west,south,north,east}
+
+# Groups
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ........................................................................ focus
+
+alt + {0,1,2,3,4,5,6,7,8,9}
+	zephyr group {last,1,2,3,4,5,6,7,8,9}
+
+alt + super + {0,1,2,3,4,5,6,7,8,9}
+	zephyr group toggle {$(zephyr group),1,2,3,4,5,6,7,8,9}
+
+alt + shift + {0,1,2,3,4,5,6,7,8,9}
+	zephyr group desktop {$(zephyr group),1,2,3,4,5,6,7,8,9}
+
+alt + ctrl + 0
+	zephyr group restore
+
+super + ctrl + {1,2,3,4,5,6,7,8,9}
+	zephyr group close {1,2,3,4,5,6,7,8,9} ;\
+	sirocco window focus --last
+
+# ....................................................................... window
+
+alt + ctrl + {comma,period}
+	zephyr window group $(zephyr group get {-1,+1})
+
+alt + ctrl + super + {comma,period}
+	zephyr window group $(zephyr group get {-1,+1}) --teleport
+
+alt + ctrl + {1,2,3,4,5,6,7,8,9}
+	zephyr window group {1,2,3,4,5,6,7,8,9}
+
+alt + ctrl + super + {1,2,3,4,5,6,7,8,9}
+	zephyr window group {1,2,3,4,5,6,7,8,9} --teleport
+
+super + ctrl + r
+	sirocco group remove
+
+# UI
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ...................................................................... monitor
+
+super + {F6,F5}
+	brightness {-5,+5}
+
+# ........................................................................ mouse
+
+# center mouse pointer
+
+super + ctrl + shift + space
+	xdotool mousemove $(( $(zephyr display width) / 2 )) $(( $(zephyr display height) / 2 ))
+
+# NOTE: restore mouse focus after group focus (of top of zephyr window stack)
+# HACK: bypass QT apps to avoid interference with mouse menus
+
+~button1
+	sirocco window focus $(pfw)
+	# xdotool key Escape
+
+# ..................................................................... keyboard
+
+# HACK: kak hook *Idle only triggers on keypress SEE: kakrc
+# ATTENTION: use {shift,alt,ctrl,super} + Caps_Lock to bypass keypress trigger event
+
+~Caps_Lock
+	xdotool key Right Left
+
+# ........................................................................ group
+
+ctrl + {_,shift} + space
+	dunstctl {close,close-all}
+
+ctrl + BackSpace
+	dunstctl history-pop
+
+super + {_,ctrl} + a
+	conky clock {_,toggle}
+
+super + {shift,ctrl} + d
+	toggle {wallpaper,background}
+
+super + {_,ctrl} + v
+	{toggle panel,invert_panel}
+
+# Applications
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ........................................................................ menus
+
+super + shift + space
+	menu
+
+super + {_,shift,ctrl} + apostrophe
+	winid=$(pfw) menu {shortcuts,wikis,notes}
+
+super + shift + a
+	menu reminder
+
+super + {_,shift} + o
+	menu {scripts,projects}
+
+super + shift + {u,v}
+	menu {passwords,media}
+
+super + shift + y
+	menu abook
+
+# ........................................................................ terms
+
+# NOTE: a macro may only define a single matching {selection} list
+
+super + {_,shift} + Return
+	scratchpad={scratchy,itchy} ;\
+	zephyr window toggle --name $scratchpad || tmux_session $scratchpad
+
+super + ctrl + Return
+	term
+
+# ....................................................................... system
+
+# NOTE: super + shift + colon == super + colon
+
+super + shift + colon
+	menu system
+
+super + ctrl + colon
+	zephyr window toggle btop || term btop class=btop BLACKBOARD btop
+
+# ........................................................................ music
+
+# NOTE: switch out to DESK group after hiding app to avoid attaching new windows to app group
+
+super + j
+	piano stop ;\
+	zephyr window toggle music && exit || music
+
+super + ctrl + j
+	mpc toggle ;\
+	mpc | grep -q playing && \{ piano stop; mpc:settings volume; mpc:settings; \}
+
+super + shift + {comma,period}
+	mpc {prev,next} ;\
+	mpc:settings
+
+super + k
+	piano toggle || piano
+
+super + ctrl + k
+	piano stop
+
+# ................................................................. audio volume
+
+super + {comma,period}
+	audio_volume mpc   ;\
+	mpc volume {-5,+5} ;\
+	mpc:settings volume
+
+super + ctrl + {comma,period}
+	audio_volume pactl                             ;\
+	pactl set-sink-volume @DEFAULT_SINK@ {-5%,+5%} ;\
+	wp:volume clear
+
+super + alt + ctrl + j
+	pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+# ......................................................................... http
+
+super + {_,ctrl} + b
+	qutebrowser {_,closeall}
+
+super + shift + b
+	zephyr layout fold 3 qutebrowser
+
+super + h
+	zephyr window toggle Luakit && exit || hangouts
+
+super + shift + h
+	zephyr window toggle halloy || halloy
+
+# NOTE: nicotine (direct gui -- not docker browser) leaves dangling child zephyr window frames SEE: winids
+
+super + shift + j
+	zephyr window toggle --name nicotine || nicotine
+
+# ......................................................................... yazi
+
+super + x
+	zephyr window toggle yazi && exit || yazi TMUX
+
+super + ctrl + x
+	notify critical 0 yazi '<b>root</b> user' ;\
+	zephyr window toggle yazi-root && exit || yazi ROOT
+
+# ......................................................................... user
+
+super + shift + ctrl + j
+	zephyr window toggle "Asunder" || asunder
+
+super + y
+	zephyr window toggle aerc || aerc
+
+alt + super + ctrl + space
+	kak -PROOF $HOME/diary/$(date '+%Y-%m-%d').mkd
+
+# kak: filetype=sh

@@ -1,0 +1,104 @@
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="sync/group $@" . $PARENT
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ WM tree check
+
+# Usage: sync group
+
+wm_snapshot=$(cat "$WME/wm/snapshot" 2>/dev/null) || exit 0
+snapshot_header_count=0
+snapshot_focused_count=0
+snapshot_current_count=0
+snapshot_focused=
+snapshot_current=
+snapshot_valid=true
+while IFS=' ' read -r snapshot_kind snapshot_field1 snapshot_field2 snapshot_field3 snapshot_extra ;do
+	case "$snapshot_kind" in
+		SNAPSHOT)
+			{ [ "$snapshot_field1" = 1 ] || [ "$snapshot_field1" = 2 ]; } && [ -z "$snapshot_field2" ] &&
+				[ -z "$snapshot_field3" ] && [ -z "$snapshot_extra" ] &&
+				snapshot_header_count=$((snapshot_header_count + 1)) || snapshot_valid=false
+			;;
+		FOCUSED)
+			snapshot_focused_count=$((snapshot_focused_count + 1))
+			[ -n "$snapshot_field1" ] && [ -z "$snapshot_field2" ] &&
+				[ -z "$snapshot_field3" ] && [ -z "$snapshot_extra" ] || snapshot_valid=false
+			snapshot_focused=$snapshot_field1
+			;;
+		CURRENT)
+			snapshot_current_count=$((snapshot_current_count + 1))
+			[ -n "$snapshot_field1" ] && [ -z "$snapshot_field2" ] &&
+				[ -z "$snapshot_field3" ] && [ -z "$snapshot_extra" ] || snapshot_valid=false
+			snapshot_current=$snapshot_field1
+			;;
+		CLIENT)
+			# CLIENT records are producer-validated and unnecessary here.
+			;;
+		*)
+			snapshot_valid=false
+			;;
+	esac
+done <<EOF
+$wm_snapshot
+EOF
+
+[ "$snapshot_valid" = true ] || exit 0
+[ "$snapshot_header_count" -eq 1 ] || exit 0
+[ "$snapshot_focused_count" -eq 1 ] || exit 0
+[ "$snapshot_current_count" -eq 1 ] || exit 0
+
+case "$snapshot_focused" in
+	NONE)
+		exit 0
+		;;
+	0x????????)
+		case "${snapshot_focused#0x}" in
+			''|*[!0-9A-Fa-f]*) exit 0 ;;
+		esac
+		;;
+	*)
+		exit 0
+		;;
+esac
+
+case "$snapshot_current" in
+	4294967295|''|*[!0-9]*)
+		exit 0
+		;;
+esac
+
+winid=$snapshot_focused
+
+# Find the focused window's unique numeric GROUP membership. Reserved
+# directories such as current and last are deliberately excluded.
+membership_count=0
+membership_group=
+for membership_path in "$GROUP"/*/"$winid" ;do
+	[ -d "$membership_path" ] || continue
+	group=${membership_path%/*}
+	group=${group##*/}
+	case "$group" in
+		''|*[!0-9]*) continue ;;
+	esac
+	membership_count=$((membership_count + 1))
+	membership_group=$group
+done
+
+# Zero or ambiguous membership is not actionable here. zephyrd owns
+# authoritative membership reconciliation.
+[ "$membership_count" -eq 1 ] || exit 0
+
+# Do not reinforce a filesystem membership that disagrees with the same WM
+# observation. zephyrd owns repairing that disagreement.
+[ "$membership_group" = "$snapshot_current" ] || exit 0
+
+current_group=$(group 2>/dev/null) || exit 0
+[ "$membership_group" = "$current_group" ] ||
+	$ZEPHYR group reconcile "$membership_group"
+
+exit 0  # NOTE: required to suppress zephyr reporting $? -> 1
+
+# kak: filetype=sh

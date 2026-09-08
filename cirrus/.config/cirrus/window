@@ -1,0 +1,154 @@
+#!/usr/bin/dash
+#p
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="window $@" . $PARENT
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................ Window operations
+
+# Usage: window [--] <msg>   SEE: functions/window
+#               @<delay> <msg>
+#               @[<class> | <name>] [URL] <msg>
+#                    where, --  chained window actions require ignoring intermediate window geometry history
+#                           @   wait for delay time or visible window
+#                           URL indicates the spawned window name is a URL (even if <class> is defined)
+#                           SEE: web/qutebrowser-instance, cirrus/rulerrc
+
+[ "$1" = '--' ] && { nested_window_action=true; shift; }  # shell DSL compatibility
+# HACK: zephyr dispatcher requires "--" as rest (otherwise would be treated as verb)
+[ "$2" = '--' ] && { nested_window_action=true; set -- $1 $3 $4 $5 $6 $7 $8 $9; }  # shell DSL compatibility
+
+geometry()     { sirocco window geometry ${1:-$winid}; }  # X Y WIDTH HEIGHT (doesn't include borders)
+set_geometry() { eval $(geometry ${1:-$winid}); }
+cat_geometry() { [ -e $WINFO/$winid ] && eval $(ls -1 $WINFO/$winid) || exit 1; }
+rec_geometry() { rm -rf $WINFO/${1:-$winid}; cp -R $WINFO/tmp $WINFO/${1:-$winid}; }
+
+snapshot_geometry() {
+	rm -rf $WINFO/tmp
+	for x in $(geometry ${1:-$winid}) ;do
+		mkdir -p $WINFO/tmp/$x
+	done
+}
+
+save_original_geometry() {
+	[ -e $WINFO/tmp ] || exit
+	[ -e $WINFO/${1:-$winid} ] || { rec_geometry ${1:-$winid}; exit; }
+	for x in $(geometry ${1:-$winid}) ;do
+		[ $(find $WINFO/tmp -name "$x") ] || { rec_geometry ${1:-$winid}; exit; }
+	done
+}
+
+opposite_side() { echo $(( W + margin * 2 - (X + WIDTH + outer_border * 2) )); }  # for nearest edge SEE: window snap / stretch
+window_sync()   { zephyr window await $1 "$(escape $xname)"; }
+xname_type()    { zephyr window ids $1 "$xname" | grep -q "0x"; }
+
+# ..................................................................... X Y size
+
+# NOTE: sirocco replacement for wtp (wmutils) avoids async display timing issues
+wtp() {
+	# wtp X Y width height winid (as in wmutils)
+	sirocco window focus $5 . window move $1 $2 . window resize $3 $4
+}
+
+# draw <winid> <width> <height> [rotate]
+draw() {
+	snapshot_geometry
+	[ $4 ] && { WID=$3; HGT=$2; } || { WID=$2; HGT=$3; }
+	[ $HGT -gt $HEIGHT ] && { swap=$WID; WID=$HGT; HGT=$swap; }
+	wtp $X $Y $WID $HGT $1
+}
+
+# .................................................................... @<map on>
+
+# do we need to wait longer for window creation?
+if [ "$1" ] && [ -z "${1%%@*}" ] ;then
+	winid=$(pfw 2>/dev/null) || return  # trap empty desktop at startup
+	case $1 in
+		@0x*     ) sirocco window focus ${1#@} ;;
+		@[0-9.]* ) sleep ${1#@}          ;;
+
+		*        )
+			xname="${1#@}"
+			if [ $2 = 'URL' ] ;then
+				case $1 in
+					@*\ * ) window_sync --name ;;
+					@*    ) window_sync      ;;
+				esac
+				shift
+			elif xname_type ;then
+				window_sync
+			elif xname_type --name ;then
+				window_sync --name
+			else
+				return 1  # not expected window
+			fi
+			;;
+	esac
+	winid=$(pfw)
+	shift
+fi
+
+# ................................................................ window action
+
+winids()    { sirocco window ids --all $@; }  # includes hidden/deactivated windows NOTE: lsw only lists visible windows
+
+ids() {
+	case $1 in
+		'' ) winids      ;;
+		*  ) winids "$1" ;;
+	esac
+	exit
+}
+
+case $1 in
+	class*   ) sirocco window classname; exit ;;
+	count    ) shift; ids $@ | wc -l;    exit ;;
+	ids      ) shift; ids $@;            exit ;;
+esac
+
+msg=$1
+[ $msg ] && shift || usage $0
+if [ -e ${0%/window}/functions/window/$msg ] ;then
+
+	# NOTE: zephyr compatibility conversion ensures parameter correctness
+
+	echo "$@" | grep -q ' --rows*' &&
+	{
+		while [ $1 ] ;do
+			case $1 in
+				--              ) defer=--  ;;
+				left   | Left   ) column=$1 ;;
+				right  | Right  ) column=$1 ;;
+				top    | Top    ) row=$1    ;;
+				bottom | 8ottom ) row=$1    ;;
+				--rows          ) rows=x$2; shift ;;
+				--row           ) [ $2 -eq 1 ] && row=top || row=bottom; shift  ;;
+				*               ) [ $column ] && position=$1 || column=$1 ;;
+			esac
+			shift
+		done
+		set -- $defer $column$rows $position $row
+	}
+
+	margin=$($ZEPHYR screen margin)
+	panel=$($ZEPHYR screen panel)
+	top=$($ZEPHYR screen top)             # cirrusrc panel height is default bottom gap_width
+	gap=$($ZEPHYR screen gap)
+	# outer_border=$($ZEPHYR screen window_border_extent)
+	W=$(( $($ZEPHYR display width) - margin * 2 ))
+	H=$(( $($ZEPHYR display height) - top * 2 ))
+	recipe -q panel/top && top=$panel  # see draw panel
+
+	winid=$(pfw 2>/dev/null) || return  # trap empty desktop at startup
+	. ${0%/window}/functions/window/$msg $@
+else
+	usage $0 $msg
+fi
+
+[ $nested_window_action ] || save_original_geometry  # for 'window revert' geometry history
+
+sirocco window focus $winid  # regain focus
+
+# kak: filetype=sh

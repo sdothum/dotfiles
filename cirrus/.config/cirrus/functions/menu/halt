@@ -1,0 +1,28 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="menu/halt $@" . $PARENT
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ...................................................................... Session
+
+void 'dinit' && default=cirrus || default=reboot
+
+actions() { echo "cirrus\nx11 kill\nlock\nlogout\nsuspend\nhalt\nreboot\npoweroff\nshutdown\nsoft-reboot"; }
+
+# quit!
+cmd=$(actions | rmenu 'Session' $default -no-custom) || exit
+case $cmd in
+	cirrus      ) sirocco wm quit 0 ;;
+	halt        ) supervisor halt ;;
+	lock        ) lock_screen ;;
+	logout      ) sudo kill -TERM X ;;
+	poweroff    ) supervisor poweroff ;;
+	reboot      ) supervisor reboot ;;
+	shutdown    ) supervisor shutdown ;;
+	soft-reboot ) supervisor soft-reboot ;;
+	suspend     ) [ -e /sbin/systemctl ] && sudo systemctl suspend ;;
+	x11*        ) killall Xorg ;;
+esac
+
+# kak: filetype=sh

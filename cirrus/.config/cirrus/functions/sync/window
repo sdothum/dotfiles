@@ -1,0 +1,13 @@
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="sync/window $@" . $PARENT
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Legacy explicit compatibility command. WM reconciliation is owned by zephyrd;
+# retain the GROUP/current consumer for callers that invoke this command directly.
+$ZEPHYR sync group
+
+exit 0  # NOTE: required to suppress zephyr reporting $? -> 1
+
+# kak: filetype=sh

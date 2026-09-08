@@ -1,0 +1,50 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="menu/unhide $@" . $PARENT
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ........................................................ Unhide hidden windows
+
+windows() {
+	for path in "$HIDDEN"/* ;do
+		[ -d "$path" ] || continue
+
+		winid=${path##*/}
+		marker=$(find "$path" -maxdepth 1 -mindepth 1 -type d -printf '%f\n' -quit)
+		label=
+
+		case $marker in
+			*:*)
+				group=${marker%%:*}
+				classname=${marker#*:}
+
+				case $group in
+					'' | *[!0-9]*) [ "$classname" ] && label=$classname ;;
+					*)
+						label="group $group"
+						[ "$classname" ] && label="$label  $classname"
+						;;
+				esac
+				;;
+		esac
+
+		printf '%s^%s\n' "$winid" "$label"
+	done | sort
+}
+finished() { [ -z "$(windows)" ]; }
+
+finished && exit
+while window=$(windows | sed "s/\^/&$SEP /" | column -s^ -t | rmenu 'raise' -no-custom) || exit ;do
+	[ "$window" ] || exit
+	winid=${window%%[[:space:]]*}
+	echo "$winid" | grep -Eq '^0x[[:xdigit:]]+$' || exit
+	[ -d "$HIDDEN/$winid" ] || exit
+	sirocco window ids --all | grep -qx "$winid" || exit
+	sirocco window focus "$winid" || exit
+	$ZEPHYR window restore  # to last position
+	rm -rf -- "${HIDDEN:?}/$winid"  # see window hide
+	finished && break
+done
+
+# kak: filetype=sh
