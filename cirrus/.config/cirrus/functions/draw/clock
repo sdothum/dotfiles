@@ -1,5 +1,5 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="panel/infobar $@" . $PARENT
+[ $TRACE ] && CHILD="draw/clock $@" . $PARENT
 
 # Cirrus
 # ══════════════════════════════════════════════════════════════════════════════
@@ -8,7 +8,7 @@
 
 # Usage: panel clock [<offset Y>]
 #
-# NOTE: this script is executed via "draw panel" SEE: also restore panel
+# NOTE: this script is executed via "draw panel" SEE: also draw panel
 
 [ $1 ] && panel_offsetY=$1
 

@@ -1,5 +1,5 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="panel/desktop $@" . $PARENT
+[ $TRACE ] && CHILD="draw/desktop $@" . $PARENT
 
 # Cirrus
 # ══════════════════════════════════════════════════════════════════════════════
@@ -8,7 +8,7 @@
 
 # Usage: panel desktop [<offset Y>]
 #
-# NOTE: this script is executed via "draw panel" SEE: also restore panel
+# NOTE: this script is executed via "draw panel" SEE: also draw panel
 
 [ $1 ] && panel_offsetY=$1
 panel_len=${panel_len:-200}          # HACK: arbitrary display length (for wide screen monitor)
@@ -146,6 +146,9 @@ name() {
 }
 
 # group details NOTE: cirrus does not track window visibility states
+hidden()     { find $HIDDEN -maxdepth 1 -mindepth 1 -type d | wc -l; }
+has_hidden() { [ $(hidden) -gt 0 ]; }
+
 active_window() {
 	if read_wm_snapshot ;then
 		nilgroup_count_cache=$snapshot_nilcount
@@ -201,8 +204,6 @@ STREAM=$(mkfifo $FIFO/$msg)  # SEE: panel wrapper
 
 # event driven panel update
 xtitle -sf 'X%s\n' >$STREAM 2>/dev/null &
-# state tree check NOTE: also triggers panel/desktop update
-# while : ;do $ZEPHYR sync window; sleep 1 ;done &  # SEE: cirrusrc
 
 cat $STREAM | panel | handlebar &
 

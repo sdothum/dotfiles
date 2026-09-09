@@ -31,7 +31,7 @@ save() {
 	contrast=$(recipe theme/contrast)  # see draw root color
 	theme $contrast
 	mhistory root "$bg^$SEP $contrast $hue"
-	rice swatch $(recipe theme/random:rgb) $hue
+	swatch $(recipe theme/random:rgb) $hue
 	root
 	recipe -/ theme/wallcolor "$PALETTE/$contrast/$hue/$bg.png"
 	recipe theme/root $(recipe theme/wallcolor)
@@ -62,8 +62,8 @@ while color=$(colors | column -s^ -t | rmenu 'Setroot') || exit ;do
 	case ${color#$(X)} in
 		''         ) break ;;
 		"$PICK"*   ) color=$(grabc 2>/dev/null | cut -d'#' -f2); setroot ;;
-		"$VIEWER"* ) exec draw root restore ;;
-		"$RANDOM"* ) draw root color; KEEP="$(X $SAVE)\n"; sleep $delay ;;
+		"$VIEWER"* ) exec draw root palette ;;
+		"$RANDOM"* ) draw root random; KEEP="$(X $SAVE)\n"; sleep $delay ;;
 		"$COLORS"* ) term "colors" class=palette WAIT trap pastel list ;;
 		"$UPDATE"* ) root ;;
 		"$SAVE"*   ) save; break ;;

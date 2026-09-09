@@ -1,15 +1,15 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="souschef $@" . $PARENT
+[ $TRACE ] && CHILD="derecho $@" . $PARENT
 
 # Cirrus
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ............................................................ sous chef desktop
+# .............................................................. derecho desktop
 
-# Usage: souschef [group | window [<action>]]
+# Usage: derecho [group | window [<action>]]
 
-TREE=$WME/souschef:tree
+TREE=$WME/derecho:tree
 > $TREE
 
 tree() { echo -n "$1 / " | tee -a $TREE >/dev/null; }

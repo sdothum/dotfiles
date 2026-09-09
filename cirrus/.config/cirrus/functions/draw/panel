@@ -6,18 +6,28 @@
 
 # ................................................................... Draw panel
 
-# Usage: draw panel uno | duo | top | asymmetrical SEE: also restore panel
-#                   system | desktop | clock | music [0]
+# Usage: draw panel (restore)
+#                   clock   | desktop | music | system [Yoffset], Yoffset >= 0 ? (top) : (bottom)
+#                   default | bottom  | top   | asymmetric
+
+
+restore() {
+	pkill -KILL -f "$WM/draw --"
+	sleep 0.1
+	theme=$(recipe -e panel/format)
+	exec draw panel ${theme:-default}
+}
 
 case $1 in
-	system ) panel system $2 ;;  # testing
-	desk*  ) panel desktop   $2 ;;
-	clock  ) panel clock  $2 ;;
-	music  ) panel mpd    $2 ;;
-	uno    ) panel system  ; panel clock  ; panel desktop   ;;               # bottom
-	top    ) panel system 0; panel clock 0; panel desktop 0 ;;
-	asym*  ) panel system  ; panel clock  ; panel desktop 0; panel mpd 0 ;;  # asymmetrical
-	*      ) panel system  ; panel clock 0; panel desktop 0 ;;               # duo symmetry
+	clock   ) draw -- clock   $2 ;;
+	desktop ) draw -- desktop $2 ;;
+	music   ) draw -- mpd     $2 ;;
+	system  ) draw -- system  $2 ;;
+	default ) draw -- system  ; draw -- clock 0; draw -- desktop 0 ;;
+	bottom  ) draw -- system  ; draw -- clock  ; draw -- desktop   ;;
+	top     ) draw -- system 0; draw -- clock 0; draw -- desktop 0 ;;
+	asym*   ) draw -- system  ; draw -- clock  ; draw -- desktop 0; draw -- mpd 0 ;;
+	*       ) restore ;;
 esac
 
 # kak: filetype=sh

@@ -8,6 +8,6 @@
 
 menu root
 toggle picom on
-restore panel
+draw panel
 
 # kak: filetype=sh

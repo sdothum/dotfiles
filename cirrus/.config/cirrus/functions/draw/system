@@ -1,5 +1,5 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="panel/system $@" . $PARENT
+[ $TRACE ] && CHILD="draw/system $@" . $PARENT
 
 # Cirrus
 # ══════════════════════════════════════════════════════════════════════════════
@@ -8,7 +8,7 @@
 
 # Usage: panel systembar [<offset Y>]
 #
-# NOTE: this script is executed via "draw panel" SEE: also restore panel
+# NOTE: this script is executed via "draw panel" SEE: also draw panel
 
 recipe -q panel/system || exit
 [ $1 ] && panel_offsetY=$1

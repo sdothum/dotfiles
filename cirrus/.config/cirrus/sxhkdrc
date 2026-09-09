@@ -49,7 +49,7 @@ super + shift + Escape
 # ........................................................................ menus
 
 super + {F1,F2}
-	souschef {group,window}
+	derecho {group,window}
 
 super + {shift,ctrl} + q
 	{menu halt,sirocco wm restart}
@@ -58,7 +58,7 @@ super + shift + w
 	menu windowfocus
 
 super + {alt,ctrl} + w
-	souschef window {tile,form}
+	derecho window {tile,form}
 
 super + shift + ctrl + w
 	menu layout
@@ -92,8 +92,8 @@ super + ctrl + 0
 
 super + {_,shift} + i
 	echo "$(timestamp) sxhkd window hide $(pfw)" >>$WMLOG ;\
-	{zephyr window hide,menu unhide}                     ;\
-	zephyr sync group
+	{zephyr window hide,menu unhide}                      ;\
+	group_sync
 
 # Rotate the canonical overlap stack by raising its bottommost window.
 
@@ -102,7 +102,7 @@ super + e
 
 super + w
 	echo "$(timestamp) sxhkd window close $(pfw)" >>$WMLOG ;\
-	zephyr group remove                                   ;\
+	zephyr group remove                                    ;\
 	sirocco window close . window focus --last             ;\  # NOTE: some apps take longer to be removed from wm stack
 	refresh_panel  # for last visible window removal
 
@@ -147,12 +147,12 @@ super + {4,8,7,9}
 # ....................................................................... layout
 
 super + shift + {0,1,2,3,4,5}
-	W=$(pfw)                                                      ;\
+	W=$(pfw)                                                    ;\
 	zephyr layout fold {0,1,2,3,4,5} $(zephyr window classname) ;\
 	sirocco window focus $W
 
 super + shift + ctrl + 0
-	W=$(pfw)              ;\
+	W=$(pfw)             ;\
 	zephyr layout fold 0 ;\
 	sirocco window focus $W
 

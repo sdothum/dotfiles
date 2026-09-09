@@ -1,12 +1,11 @@
+#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-# [ $TRACE ] && CHILD="sync/group $@" . $PARENT
+# [ $TRACE ] && CHILD="group_sync $@" . $PARENT
 
 # Cirrus
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ................................................................ WM tree check
-
-# Usage: sync group
 
 wm_snapshot=$(cat "$WME/wm/snapshot" 2>/dev/null) || exit 0
 snapshot_header_count=0

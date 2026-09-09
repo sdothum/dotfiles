@@ -1,15 +1,15 @@
+#!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="restore/panel $@" . $PARENT
 
 # Cirrus
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ................................................................ Restore panel
+# ................................................................. Conky colorN
 
-# Usage: restore panel [<panel>]
+usage() { usage: "$(basename $0) <rgb>"; }
 
-pkill -KILL -f "$WM/panel .*"
-sleep 0.1
-draw panel ${1:-$(recipe -e panel/format)}
+COLORS=$PALETTE/.theme
+
+[ $1 ] && grep "^$1.$(recipe theme/contrast)" $COLORS | cut -d= -f2 || usage
 
 # kak: filetype=sh

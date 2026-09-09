@@ -9,19 +9,19 @@
 DELAY=0.10  # window draw time separation
 
 sudo iwconfig wlp9s0 power off  # disable powersave mode (to prevent sleeping connection)
-restore root
+draw root
+recipe -q unclutter && toggle unclutter on
 conky clock auto
 dunst &
-restore unclutter
 displaycal3    # load color profile
 imwheel -kill  # set trackball scrollwheel speed
 wp:volume
-
 udev
 void 'runit' && pulse || { sv -u check pipewire || pulse; }
 
-zephyr group focus $(zephyr group id "DESK")
+sleep 0.25  # let wm settle
 
+zephyr group focus $(zephyr group id "DESK")
 # order commands in ascending order of "rulerrc" complexity SEE: $HOME/.session/cirrus/autostart/[<order>. ]<command>
 recipe -q autostart:oneshot && recipe autostart | while read cmd ;do
 	ditto autostart "$cmd"
@@ -29,7 +29,7 @@ recipe -q autostart:oneshot && recipe autostart | while read cmd ;do
 	sleep $DELAY  # allow window time to draw
 done
 recipe -d autostart:oneshot  # SEE: .xinitrc
-restore panel    # postponed as long as possible to avoid dirty trace messages
+draw panel
 
 # if not booting with dinit.. (issue running as runit service)
 if void 'runit' ;then

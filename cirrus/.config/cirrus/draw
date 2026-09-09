@@ -7,7 +7,102 @@
 
 # .............................................................. Draw operations
 
-# Usage: draw <msg> SEE: functions/draw
+# Usage: draw [--] <msg> SEE: functions/draw
+
+# lemonbar panel
+if [ "$1" = '--' ] ;then
+	shift
+
+	recipe -q panel/format             || exit  # no panel
+	exists lemonbar                    || exit
+	pstat "lemonbar -d -n lemonbar:$1" && exit
+
+	toggle picom on
+
+	# .................................................................. Panel theme
+
+	DEFAULT_BG='#00000000'     # alpha channel for panel transparency with picom
+	DEFAULT_FG="#$(color default)"
+	ACTIVE_FG="#$(color active)"
+	INACTIVE_FG="#$(color inactive)"
+	FREE_FG="#$(color free)"
+	OCCUPIED_FG=$FREE_FG
+	STARTREK=$(recipe panel/startrek) && ICANDY="#$STARTREK" || ICANDY="$DEFAULT_FG"
+
+	# panel font
+	# PANEL_FONT=$(recipe panel/font) || PANEL_FONT=monograffic  # NOTE: this font does not have NerdFont glyphs (not a pure monospaced font)
+	PANEL_FONT=$(recipe panel/font) || PANEL_FONT=Iosevka
+	PANEL_UNDERLINE=2       # thickness
+
+	# panel symbols (tag numbers option dropped to simplify colour assignments)
+	case $($ZEPHYR display width) in
+		3440 ) TAG_PAD='      '; STATPAD='   ' ;;  # tag bar separator (visual spacing)
+		1920 ) TAG_PAD='     ' ; STATPAD='  '  ;;
+		*    ) TAG_PAD='    '  ; STATPAD='  '  ;;
+	esac
+
+	[ $($ZEPHYR display width) -lt 1920 ] && scaledown=true
+	[ $scaledown ] && { LSEP=${LSEP# }; LSEP=${LSEP% }; RSEP=${RSEP# }; RSEP=${RSEP% }; }
+
+	# ..................................................................... Geometry
+
+	# Cirrus panel geometry
+	PANEL_HEIGHT=$($ZEPHYR screen panel)
+	PANEL_INDENT=$($ZEPHYR screen indent)  # assumes equal left/right screen margins
+
+	fontsize=$(fontsize panel)
+	# [ $scaledown ] && fontsize=$(echo "$fontsize - 1.0" | bc )
+	width=$($ZEPHYR display width)
+
+	panel_offsetY=$(( $($ZEPHYR display height) - PANEL_HEIGHT ))  # bottombar (topbar = 0)
+	panel_offsetX=$PANEL_INDENT
+	panel_width=$(( width - PANEL_INDENT * 2 ))
+
+	# .................................................................... Tag state
+
+	# desktops
+	tagcount=$($ZEPHYR group tagcount)
+	DESKTOPS=$(seq 1 $tagcount)
+
+	# desktop (group) windows NOTE: -1 is undefined group
+	for i in -1 $(seq 1 9) ;do mkdir -p $GROUP/$i ;done  # preserve if switching panels within startx session
+
+	membership_count() {
+		path=$GROUP/$1
+		if [ ! -e "$path" ] && [ ! -L "$path" ] ;then
+			printf '0\n'
+			return 0
+		fi
+		[ -d "$path" ] || return 1
+
+		entries=$(find "$path" -mindepth 1 -maxdepth 1 ! -name '.*' -print 2>/dev/null) || return 1
+		count=0
+		if [ -n "$entries" ] ;then
+			while IFS= read -r entry ;do
+				count=$((count + 1))
+			done <<EOF
+$entries
+EOF
+		fi
+		printf '%s\n' "$count"
+	}
+
+	windows()      { membership_count "$1"; }
+	has_windows()  { count=$(windows "$1") 2>/dev/null && [ "$count" -gt 0 ]; }
+	deactivated()  { [ -e $GROUP:deactivated/$1 ]; }
+
+	# ................................................................... Draw panel
+
+	# mkfifo wrapper
+	mkfifo() { [ -e $1 ] && rm -rf $1; mkdir -p ${1%/*}; /bin/mkfifo $1; echo $1; }
+
+	handlebar() {
+		lemonbar -d -n "lemonbar:$msg" -a 0                              \
+			-g ${panel_width}x$PANEL_HEIGHT+$panel_offsetX+$panel_offsetY \
+			-u $PANEL_UNDERLINE                                           \
+			-f "$PANEL_FONT:size=$fontsize" -F "$DEFAULT_FG" -B "$DEFAULT_BG" 2>/dev/null  # (??) invalid color errors.. from transparency?
+	}
+fi
 
 msg=$1
 [ $msg ] && shift || usage $0

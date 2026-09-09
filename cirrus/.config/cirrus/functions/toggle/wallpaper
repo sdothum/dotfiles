@@ -6,8 +6,8 @@
 
 # ......................................................................... Root
 
-draw root select
+draw root gallery
 toggle picom on
-restore panel
+draw panel
 
 # kak: filetype=sh

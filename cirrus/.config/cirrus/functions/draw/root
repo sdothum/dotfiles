@@ -6,14 +6,9 @@
 
 # .............................................................. Draw background
 
-# Usage: draw root [color [<color>] | restore | save]
-#        draw root [select | shuffle | wallpaper]
-#        draw root, refresh background if necessary, shuffling if set
-#        draw root color, draw random background color
-#        draw root restore, restore background color
-#        draw root select, select default background and disable shuffling
-#        draw root shuffle, enable random background shuffling
-#        draw root wallpaper, draw background
+# Usage: draw root (restore)
+#                  color [<rgb> [luminance]] | random  | palette
+#                  wallpaper                 | shuffle | gallery
 
 exists xwallpaper && XSETROOT=xwallpaper || XSETROOT=hsetroot  # alpine wallpaper
 
@@ -76,14 +71,29 @@ shuffle() {
 
 # ...................................................................... Setroot
 
+restore() {
+	background=$(recipe theme/setroot)
+	case $background in
+		color     )
+			contrast=$(recipe -/ theme/wallcolor | cut -d/ -f6)
+			rgb=$(recipe -/ theme/wallcolor | cut -d/ -f8)
+			[ $contrast ] && { [ $contrast = light ] && recipe theme/contrast dark || recipe theme/contrast light; }
+			exec draw root color ${rgb%.png} $(recipe theme/contrast)
+			;;
+		wallpaper ) recipe -q theme/shuffle && exec draw root shuffle || exec draw root wallpaper ;;
+		*         ) exec draw root color ;;  # random
+	esac
+}
+
 # remember current background state for autostart
 case $1 in
+	random    ) color        ;;  # $3, see menu root
 	color     ) color $2 $3  ;;  # $3, see menu root
-	restore   ) select_color ;;
+	palette   ) select_color ;;
 	wallpaper ) wallpaper        ;;
-	select    ) select_wallpaper ;;
+	gallery   ) select_wallpaper ;;
 	shuffle   ) shuffle          ;;
-	*         ) recipe shuffle && one_in $modulo && shuffle ;;  # increase modulo to reduce frequency of shuffle
+	*         ) restore ;;
 esac
 
 # .................................................................. Apply theme

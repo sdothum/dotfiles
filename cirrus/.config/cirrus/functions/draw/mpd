@@ -1,5 +1,5 @@
 # sdothum - 2016 (c) wtfpl
-[ $TRACE ] && CHILD="panel/mpd $@" . $PARENT
+[ $TRACE ] && CHILD="draw/mpd $@" . $PARENT
 
 # Cirrus
 # ══════════════════════════════════════════════════════════════════════════════
@@ -8,7 +8,7 @@
 
 # Usage: panel music [<offset Y>]
 #
-# NOTE: this script is executed via "draw panel" SEE: also restore panel
+# NOTE: this script is executed via "draw panel" SEE: also draw panel
 
 exists mpc || exit
 [ $1 ] && panel_offsetY=$1
@@ -19,6 +19,9 @@ else
 	SEP="  %{F$INACTIVE_FG}%{F-}  "  # bottom bar
 fi
 DLM=$(printf '\t')                   # default cut delimiter
+
+transparency() { echo "#$1${2#\#}"; }  # Usage: transparency <amount> #<rrggbb>
+
 FAINT=$(transparency 80 "$ICANDY")   # dim icon
 FLASH=$(transparency D0 "$ICANDY")   # dim icon
 
