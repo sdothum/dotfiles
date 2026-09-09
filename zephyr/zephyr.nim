@@ -6,7 +6,6 @@ import wm/layout
 import wm/rule
 import wm/screen
 import wm/state
-import wm/sync
 import wm/window
 
 #
@@ -59,9 +58,6 @@ proc dispatchCommand(cmd: seq[string]) =
 
   of "state":
     state.dispatch(verb, rest)
-
-  of "sync":
-    sync.dispatch(verb, rest)
 
   of "window":
     # `window -- <verb> ...` preserves prior window geometry.

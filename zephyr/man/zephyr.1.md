@@ -99,14 +99,6 @@ commands; they are not zephyr public actions.
 * `state snapshot` [<winid>]: Save a window geometry snapshot.
 * `state restore` [<winid>]: Restore a saved window geometry snapshot.
 
-### SYNC
-
-* `sync window` [<args>]: Run the compatibility window synchronization command.
-* `sync group` [<args>]: Run the compatibility group synchronization command.
-
-These remain explicit compatibility commands; they are not the passive daemon
-observation publisher.
-
 ## CHAINING
 
 Commands can be sequenced with a period:
