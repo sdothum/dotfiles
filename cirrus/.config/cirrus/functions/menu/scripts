@@ -9,7 +9,7 @@
 # shell scripts excluding .man (see menu man)
 
 REFRESH='refresh cache'  # catalogue, see ffcache
-EXCLUDE='(AppImage|.service|-module|.mp3|-multilib)$'
+EXCLUDE='(AppImage|\.service|kak/(autoload|bundle)|-module|\.mp3|-multilib)'
 EDITOR=${EDITOR:-kak}
 
 # search these project library folders..
