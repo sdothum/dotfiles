@@ -112,7 +112,7 @@ esac
 export XDG_CONFIG_HOME=$HOME/.config
 
 xexec() {
-	pkill -f "$WM/.*panel.*"  # kill all dangling panel processes
+	pkill -f "$WM/draw --"  # kill all dangling panel processes
 	pkill -f "fifo"
 	pkill -f "firefox"
 	pkill -f "pavucontrol"
