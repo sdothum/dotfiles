@@ -42,7 +42,7 @@ addm %{ block   f2 : map global format F       ': unfold<ret>'                  
 
 # ...................................................................... Comment
 
-addm %{ remark  c1 : map global format <c-c>   ': comment-line<ret>'              -docstring 'comment,block  (kak)'        }
+addm %{ remark  c1 : map global format <c-l>   ': comment-line<ret>'              -docstring 'comment,block  (kak)'        }
 addm %{ remark  c2 : map global format c       ': comment-block<ret>'             -docstring 'comment,block  (kak)'        }
 addm %{ remark  h  : map global format h       'x|comment c<ret>'                 -docstring '/* css */'                   }
 addm %{ remark  m  : map global format '`'     'x|comment \`<ret>'                -docstring 'markdown ``    (code block)' }
