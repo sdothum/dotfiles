@@ -6,15 +6,16 @@
 
 # .................................................................... Autostart
 
-DELAY=0.10  # window draw time separation
+DELAY=0.10                      # window draw time separation
 
 sudo iwconfig wlp9s0 power off  # disable powersave mode (to prevent sleeping connection)
 draw root
 recipe -q unclutter && toggle unclutter on
 conky clock auto
 dunst &
-displaycal3    # load color profile
-imwheel -kill  # set trackball scrollwheel speed
+displaycal3                     # load color profile
+imwheel -kill                   # set trackball scrollwheel speed
+xinput disable 14               # corne keyboard mouse interface
 wp:volume
 udev
 void 'runit' && pulse || { sv -u check pipewire || pulse; }

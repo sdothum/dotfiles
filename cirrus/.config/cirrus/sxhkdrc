@@ -54,14 +54,11 @@ super + {F1,F2}
 super + {shift,ctrl} + q
 	{menu halt,sirocco wm restart}
 
-super + shift + w
-	menu windowfocus
+super + shift + w ; {w,l}
+	menu {windowfocus,layout}
 
-super + {alt,ctrl} + w
+super + shift + w ; {t,f}
 	derecho window {tile,form}
-
-super + shift + ctrl + w
-	menu layout
 
 # Windows
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -111,13 +108,13 @@ super + w
 super + {_,ctrl} + space
 	sirocco window maximize --{vertical,horizontal}
 
-super + alt + {space,BackSpace}
+super + shift + p ; {space,BackSpace}
 	zephyr window size paper {--larger,--smaller}
 
-alt + shift + {space,BackSpace}
+super + shift + v ; {space,BackSpace}
 	zephyr window size video {--larger,--smaller}
 
-super + alt + Return
+alt + super + Return
 	term_geometry ;\
 	zephyr state snapshot . window size terminal . window snap center vertical . state restore
 
@@ -146,18 +143,10 @@ super + {4,8,7,9}
 
 # ....................................................................... layout
 
-super + shift + {0,1,2,3,4,5}
-	W=$(pfw)                                                    ;\
-	zephyr layout fold {0,1,2,3,4,5} $(zephyr window classname) ;\
+super + shift + {1,2,3,4,5}
+	W=$(pfw)                                                  ;\
+	zephyr layout fold {1,2,3,4,5} $(zephyr window classname) ;\
 	sirocco window focus $W
-
-super + shift + ctrl + 0
-	W=$(pfw)             ;\
-	zephyr layout fold 0 ;\
-	sirocco window focus $W
-
-# alt + ctrl + {space, BackSpace}
-# 	zephyr layout {explode,unexplode}
 
 alt + ctrl + space
 	[ -e $WME/layout/explode ] && zephyr layout unexplode || zephyr layout explode
@@ -306,7 +295,7 @@ super + shift + a
 super + {_,shift} + o
 	menu {scripts,projects}
 
-super + shift + {u,v}
+super + shift + {u,m}
 	menu {passwords,media}
 
 super + shift + y
@@ -367,13 +356,16 @@ super + ctrl + {comma,period}
 	pactl set-sink-volume @DEFAULT_SINK@ {-5%,+5%} ;\
 	wp:volume clear
 
-super + alt + ctrl + j
+alt + super + ctrl + j
 	pactl set-sink-mute @DEFAULT_SINK@ toggle
 
 # ......................................................................... http
 
-super + {_,ctrl} + b
-	qutebrowser {_,closeall}
+super + b ; {b,c,f}
+	{qutebrowser,chromium,firefox}
+
+super + ctrl + b
+	qutebrowser closeall
 
 super + shift + b
 	zephyr layout fold 3 qutebrowser
