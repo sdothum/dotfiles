@@ -401,6 +401,7 @@ proc fold*(args: seq[string]) =
 proc explode*(args: seq[string]) =
   requireNoArgs("layout explode", args)
 
+  let winid = query.focusedWinid()
   let stack = query.stackGeometries()
 
   if stack.len == 0:
@@ -464,6 +465,8 @@ proc explode*(args: seq[string]) =
   state.markExplodeGeometryApplied(operation)
   window.raiseMany(stack.mapIt(it.winid))
   state.commitExplodeOperation(operation)
+
+  focus(winid)
 
 proc unexplode*(args: seq[string]) =
   requireNoArgs("layout unexplode", args)
