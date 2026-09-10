@@ -341,6 +341,8 @@ proc fold*(args: seq[string]) =
     ]
   )
 
+  let winid = query.focusedWinid()
+
   if a.rows == -1:
     a.rows = 1
 
@@ -387,11 +389,14 @@ proc fold*(args: seq[string]) =
     applications.add((winid, token, destination))
 
   if history.len == 0:
+    focus(winid)
     return
 
   var transaction = state.beginRestoreHistoryIdentity(history)
   window.applyGeometriesChecked(applications)
   state.commitRestoreHistory(transaction)
+
+  focus(winid)
 
 proc explode*(args: seq[string]) =
   requireNoArgs("layout explode", args)

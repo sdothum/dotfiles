@@ -99,9 +99,6 @@ proc ids*(args: seq[string]): string =
     return cachedFilteredIds(a.all, "", a.name)
   liveIds(args)
 
-proc ids(arg1, arg2: string): string =
-  ids(@[arg1, arg2])
-
 proc ids*(arg: string): string =
   ids(@[arg])
 
