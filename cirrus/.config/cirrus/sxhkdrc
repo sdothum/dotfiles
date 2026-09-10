@@ -295,7 +295,7 @@ super + shift + a
 super + {_,shift} + o
 	menu {scripts,projects}
 
-super + shift + {u,m}
+super + shift + {k,m}
 	menu {passwords,media}
 
 super + shift + y
