@@ -14,4 +14,4 @@ adb devices -l | grep -qE 'Supernote_Nomad' && mtp mount
 
 /usr/bin/sync
 mtp umount
-window desktop $(chef desktop "DESK")
+$ZEPHYR group focus $($ZEPHYR group id "DESK")

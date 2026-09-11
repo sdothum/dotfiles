@@ -6,15 +6,26 @@
 
 # ..................................................................... Keyboard
 
-usage() { usage: "$(basename $0) off | on"; exit 1; }
+usage() { usage: "$(basename $0) georgi | mouse [off | on]"; exit 1; }
 
-# set to Georgi usb
-kbdid () { xinput list | grep 'Georgi' | cut -f2 | cut -d'=' -f2; }
+device() { xinput list | grep "$1" | cut -f2 | cut -d'=' -f2; }
 
 case $1 in
-	off ) for i in $(kbdid) ;do xinput float    $i   ;done ;;
-	on  ) for i in $(kbdid) ;do xinput reattach $i 3 ;done ;;
-	*   ) usage ;;
+	georgi )  # manage Georgi usb interface
+		case $2 in
+			off ) for i in $(device Georgi) ;do xinput float    $i   ;done ;;
+			on  ) for i in $(device Georgi) ;do xinput reattach $i 3 ;done ;;
+			*   ) usage ;;
+		esac
+		;;
+	mouse  )  # manage keyboard mouse interference with wireless mice
+		case $2 in
+			off ) xinput disable $(device "Corne Mouse") && notify keyboard "Mouse off" ;;
+			on  ) xinput enable  $(device "Corne Mouse") && notify keyboard "Mouse on"  ;;
+			*   ) usage ;;
+		esac
+		;;
+	*      ) usage ;;
 esac
 
 # kak: filetype=sh

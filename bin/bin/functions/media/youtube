@@ -19,9 +19,9 @@ fi
 # stream youtube to mpv (to remove ads)
 # yt-dlp -o - "$1" | mpv --x11-name=youtube -
 WID=$(pfw)
-$NIMCTLR window group $($NIMCTLR group id "DESK")  # recover (potentially shifted) group to prevent restoration on mpv launch
+$ZEPHYR window group $($ZEPHYR group id "DESK")  # recover (potentially shifted) group to prevent restoration on mpv launch
 notify 10 "youtube" "loading..\n$1"
-window hide
+sirocco window hide
 
 # NOTE: long streams can hang requiring closing mpv manually (??) cause unknown
 # HACK: stream in background and wait on mpv (to close automatically or manually) to cleanup potential dangling yt-dlp

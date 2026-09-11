@@ -52,14 +52,12 @@ settings="
 eval $QUTEBROWSER $RUNOPT $settings $startpage 2>/dev/null &
 
 case "${name:-livedown}" in
-	livedown  ) window '@livedown'  URL tile 3 && sirocco window cycle --group             ;;  # focus editor
-	sonarr    ) window '@sonarr'    URL size monocle; window desktop $(chef desktop "PEER") ;;
-	nicotine  ) window '@nicotine'  URL size monocle; window desktop $(chef desktop "PEER") ;;
+	livedown  ) $ZEPHYR window await --name 'livedown'  URL tile 3 && sirocco window cycle --group             ;;  # focus editor
+	sonarr    ) $ZEPHYR window await --name 'sonarr'    URL size monocle . window group focus $($ZEPHYR group id "PEER") ;;
+	nicotine  ) $ZEPHYR window await --name 'nicotine'  URL size monocle . window group focus $($ZEPHYR group id "PEER") ;;
 	thelounge )  # NOTE: docker connection eludes rulerrc timing
 		xdotool search -sync -onlyvisible -name "The Lounge - qutebrowser" set_window -classname 'thelounge' -class 'thelounge'
-		window '@thelounge' URL size B5
-		window '@thelounge' desktop $(chef desktop "COMM")
-		window '@thelounge' spread right
+		$ZEPHYR window await --name 'thelounge' . window size B5 . window spread right . window group focus $($ZEPHYR group id "COMM")
 		;;
 esac
 
