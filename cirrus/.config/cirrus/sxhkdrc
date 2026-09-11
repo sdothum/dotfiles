@@ -87,9 +87,13 @@ super + {_,shift} + 0
 super + ctrl + 0
 	zephyr layout restore
 
-super + {_,shift} + i
+super + i
 	echo "$(timestamp) sxhkd window hide $(pfw)" >>$WMLOG ;\
-	{zephyr window hide,menu unhide}                      ;\
+	zephyr window hide                                    ;\
+	group_sync
+
+super + shift + i
+	menu unhide ;\
 	group_sync
 
 # Rotate the canonical overlap stack by raising its bottommost window.
@@ -101,7 +105,7 @@ super + w
 	echo "$(timestamp) sxhkd window close $(pfw)" >>$WMLOG ;\
 	zephyr group remove                                    ;\
 	sirocco window close . window focus --last             ;\  # NOTE: some apps take longer to be removed from wm stack
-	refresh_panel  # for last visible window removal
+	refresh_panel                                              # for last visible window removal
 
 # ....................................................................... resize
 
@@ -114,15 +118,11 @@ super + shift + p ; {space,BackSpace}
 super + shift + v ; {space,BackSpace}
 	zephyr window size video {--larger,--smaller}
 
-alt + super + Return
-	term_geometry ;\
-	zephyr state snapshot . window size terminal . window snap center vertical . state restore
+super + shift + {Left,Down,Up,Right}
+	sirocco window resize --relative {-50 0,0 50,0 -50,50 0}
 
 super + ctrl + shift + {Left,Down,Up,Right}
 	sirocco window resize --relative {-20 0,0 20,0 -20,20 0}
-
-super + shift + {Left,Down,Up,Right}
-	sirocco window resize --relative {-50 0,0 50,0 -50,50 0}
 
 super + shift + {t,s}
 	zephyr window tile {left,right}
@@ -131,11 +131,19 @@ super + {_,shift} + z
 	sirocco window {monocle,maximize}
 
 # ......................................................................... tile
+#
+# NOTE: beaklwi keyboard layout numpad
+#       4 5 9
+#       1 2 3
+#       8 6 7
 
-super + 2
-	zephyr window size viewport
+super + 5
+	zephyr window size viewport  # half screen monocle
 
-super + {5,6,3}
+super + 6
+	zephyr state snapshot . window tile 3 2 . window tile right . window snap center . state restore
+
+super + {1,2,3}
 	zephyr window tile 3 {1,2,3}
 
 super + {4,8,7,9}
@@ -152,12 +160,17 @@ alt + ctrl + space
 	[ -e $WME/layout/explode ] && zephyr layout unexplode || zephyr layout explode
 
 # ......................................................................... move
-
-super + ctrl + {Left,Down,Up,Right}
-	sirocco window move --relative {-20 0,0 20,0 -20,20 0}
+#
+# NOTE: beaklwi keyboard layout numpad alph overlay
+#       d n m
+#       t r s
+#       p l f
 
 super + {Left,Down,Up,Right}
 	sirocco window move --relative {-50 0,0 50,0 -50,50 0}
+
+super + ctrl + {Left,Down,Up,Right}
+	sirocco window move --relative {-20 0,0 20,0 -20,20 0}
 
 super + ctrl + {p,l,n,f}
 	zephyr window shift {left,down,up,right}
@@ -165,17 +178,11 @@ super + ctrl + {p,l,n,f}
 super + {d,m}
 	zephyr window snap top {left,right}
 
-super + ctrl + e
-	zephyr layout level
-
-super + {_,ctrl,shift} + g
-	zephyr window snap center { ,left,right}
+super + {p,f}
+	zephyr window snap bottom {left,right}
 
 super + {n,l}
 	zephyr window snap {top,bottom}
-
-super + {p,f}
-	zephyr window snap bottom {left,right}
 
 super + {_,shift} + r
 	zephyr window snap center {horizontal,vertical}
@@ -187,6 +194,12 @@ super + {t,s}
 super + ctrl + {t,s}
 	side="{left,right}" ;\
 	zephyr window spread $side
+
+super + {_,ctrl,shift} + g
+	zephyr window snap center { ,left,right}
+
+super + ctrl + e
+	zephyr layout level
 
 # ......................................................................... swap
 
@@ -216,17 +229,17 @@ super + ctrl + {1,2,3,4,5,6,7,8,9}
 
 # ....................................................................... window
 
-alt + ctrl + {comma,period}
-	zephyr window group $(zephyr group get {-1,+1})
-
-alt + ctrl + super + {comma,period}
-	zephyr window group $(zephyr group get {-1,+1}) --teleport
-
 alt + ctrl + {1,2,3,4,5,6,7,8,9}
 	zephyr window group {1,2,3,4,5,6,7,8,9}
 
 alt + ctrl + super + {1,2,3,4,5,6,7,8,9}
 	zephyr window group {1,2,3,4,5,6,7,8,9} --teleport
+
+alt + ctrl + {comma,period}
+	zephyr window group $(zephyr group get {-1,+1})
+
+alt + ctrl + super + {comma,period}
+	zephyr window group $(zephyr group get {-1,+1}) --teleport
 
 super + ctrl + r
 	sirocco group remove
@@ -261,7 +274,7 @@ super + ctrl + shift + space
 ~Caps_Lock
 	xdotool key Right Left
 
-# ........................................................................ group
+# ...................................................................... desktop
 
 ctrl + {_,shift} + space
 	dunstctl {close,close-all}
@@ -272,7 +285,7 @@ ctrl + BackSpace
 super + {_,ctrl} + a
 	conky clock {_,toggle}
 
-super + {shift,ctrl} + d
+super + shift + d ; {w,c}
 	toggle {wallpaper,background}
 
 super + {_,ctrl} + v
@@ -312,11 +325,15 @@ super + {_,shift} + Return
 super + ctrl + Return
 	term
 
+alt + super + Return
+	term_geometry ;\
+	zephyr state snapshot . window size terminal . window snap center vertical . state restore
+
 # ....................................................................... system
 
 # NOTE: super + shift + colon == super + colon
 
-super + shift + colon
+super + colon
 	menu system
 
 super + ctrl + colon
@@ -338,11 +355,11 @@ super + shift + {comma,period}
 	mpc {prev,next} ;\
 	mpc:settings
 
-super + k
-	piano toggle || piano
+super + {_,ctrl} + k
+	piano {toggle || piano,stop}
 
-super + ctrl + k
-	piano stop
+# super + ctrl + k
+# 	piano stop
 
 # ................................................................. audio volume
 

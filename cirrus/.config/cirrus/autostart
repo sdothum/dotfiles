@@ -15,7 +15,7 @@ conky clock auto
 dunst &
 displaycal3                     # load color profile
 imwheel -kill                   # set trackball scrollwheel speed
-xinput disable 14               # corne keyboard mouse interface
+keyboard mouse off              # mitigate keyboard mouse interference with wireless mice
 wp:volume
 udev
 void 'runit' && pulse || { sv -u check pipewire || pulse; }
