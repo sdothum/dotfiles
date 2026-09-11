@@ -732,10 +732,13 @@ proc snapshot*(args: seq[string]) =
     else:
       args[0]
 
+  let token = query.clientToken(id)
+
   writeGeometry(
     query.geometry(id),
-    getEnv("WME") / "snapshot" / id
-    )
+    getEnv("WME") / "snapshot" / id,
+    token
+  )
 
 proc restore*(args: seq[string]) =
   let id =
@@ -744,11 +747,24 @@ proc restore*(args: seq[string]) =
     else:
       args[0]
 
-  writeGeometry(
-    loadGeometry(id, getEnv("WME") / "snapshot"),
-    getEnv("WINFO") / id
-    )
+  let root = getEnv("WME") / "snapshot"
+  let token = historyToken(root, id)
 
+  if not token.isPresent:
+    quit("state restore: snapshot has no identity for window " & id)
+
+  var live: query.ClientToken
+  if not query.tryClientToken(id, live):
+    quit("state restore: window no longer exists " & id)
+
+  if live != token:
+    quit("state restore: snapshot identity mismatch for window " & id)
+
+  writeGeometry(
+    loadGeometry(id, root, false),
+    getEnv("WINFO") / id,
+    token
+  )
 
 #
 # Dispatch
