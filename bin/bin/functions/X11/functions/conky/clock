@@ -12,6 +12,8 @@ usage() { usage: "$(basename $0) clock [auto | stop | toggle | on | off]"; exit 
 CONKYRC=$HOME/.conkyrc.qclocktwo
 [ -e $CONKYRC ] || exit
 
+panels="$(pgrep -f lemonbar: -a | cut -d' ' -f5)"
+
 clock() { pstat "conky -c $CONKYRC"; }
 
 case $1 in
@@ -30,14 +32,13 @@ case $1 in
 		;;
 
 	toggle ) pstat xautolock && conky clock stop || conky clock auto ;;
-	
+
 	on     )
 		clock && exit
 		silent=true toggle unclutter on
-		# xdotool search --onlyvisible --limit 1 --maxdepth 1 --name "lemonbar" windowunmap >/dev/null  # disable panel
-		xdotool search --name "lemonbar:chef" windowunmap >/dev/null    # disable panel
-		xdotool search --name "lemonbar:system" windowunmap >/dev/null  # disable panel
-		xdotool search --name "lemonbar:clock" windowunmap >/dev/null   # disable panel
+		for i in $panels; do
+			xdotool search --name "$i" windowunmap >/dev/null  # hide panel
+		done
 		if [ $WM = 2bwm ] ;then
 			# switch desktops with conkyrc window_type "override" to prevent 2bwm race condition
 			sed -i '/own_window_type =/s/panel/override/' $HOME/.conkyrc.qclocktwo
@@ -54,10 +55,9 @@ case $1 in
 	off    )
 		clock || exit
 		restore unclutter
-		# xdotool search --limit 1 --maxdepth 1 --name "lemonbar" windowmap >/dev/null  # restore panel
-		xdotool search --name "lemonbar:chef" windowmap >/dev/null    # disable panel
-		xdotool search --name "lemonbar:system" windowmap >/dev/null  # disable panel
-		xdotool search --name "lemonbar:clock" windowmap >/dev/null   # disable panel
+		for i in $panels; do
+			xdotool search --name "$i" windowmap >/dev/null  # unhide panel
+		done
 		if [ $WM = 2bwm ] ;then
 			[ -e $DESKTOP ] && xdotool set_desktop $(cat $DESKTOP)
 		fi

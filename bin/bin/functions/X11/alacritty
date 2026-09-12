@@ -34,7 +34,7 @@ if recipe -q "term" ;then
 	columns=$(recipe "term" | cut -dx -f1)
 	lines=$(recipe "term" | cut -dx -f2)
 else
-	[ $(chef display height) -ge 1440 ] && { columns=130; lines=28; } || { columns=120; lines=20; }
+	[ $(xdpyinfo | grep dimensions | cut -dx -f2 | cut -d' ' -f1) -ge 1440 ] && { columns=130; lines=28; } || { columns=120; lines=20; }
 fi
 
 while : ;do

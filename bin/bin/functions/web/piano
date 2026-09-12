@@ -18,7 +18,7 @@ case $1 in
 	''     )
 		mpc pause  # any playlist
 		name=piano ${BROWSER:-qutebrowser} $PIANO
-		$ZEPHYR window await --name "$NANO" . window size 500x250 . window snap top left
+		$ZEPHYR window await --name "$NANO" . window size 500x250 . window snap top left . window layer Above
 
 		# complete zoom command and execute play button :)
 		sleep $DELAY
