@@ -56,6 +56,13 @@ Public group IDs are one-based. `0` is not a public group argument.
 * `window geometry` [<winid>]: Print geometry for an explicit or focused window.
 * `window group` <group> [--teleport]: Assign the focused window to a public
   group; `--teleport` additionally applies the existing teleport workflow.
+* `window layer` <normal|above|overlay> [<winid>]: Set a persistent WM stacking
+  layer without changing focus. `overlay` stays above `above`, which stays above
+  `normal`. The target defaults to the focused window; normal restores ordinary
+  stacking. An explicit assignment overrides EWMH defaults until the managed
+  client is destroyed/unmanaged, including across hide/remap. Title-case layer
+  names remain accepted. Docks and EWMH ABOVE windows automatically participate
+  in the WM above tier without zephyr or zephyrd rules.
 * `window hide` [<winid>]: Hide a window.
 * `window ids` [<args>]: Print matching window IDs.
 * `window restore` [<winid>]: Restore saved window geometry.

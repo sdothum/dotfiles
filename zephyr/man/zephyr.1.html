@@ -137,6 +137,13 @@ operations while preserving explicit window IDs for action targeting.</p>
 <li><code>window geometry</code> [<var>winid</var>]: Print geometry for an explicit or focused window.</li>
 <li><code>window group</code> <var>group</var> [--teleport]: Assign the focused window to a public
 group; <code>--teleport</code> additionally applies the existing teleport workflow.</li>
+<li><code>window layer</code> <var>normal|above|overlay</var> [<var>winid</var>]: Set a persistent WM stacking
+layer without changing focus. <code>overlay</code> stays above <code>above</code>, which stays above
+<code>normal</code>. The target defaults to the focused window; normal restores ordinary
+stacking. An explicit assignment overrides EWMH defaults until the managed
+client is destroyed/unmanaged, including across hide/remap. Title-case layer
+names remain accepted. Docks and EWMH ABOVE windows automatically participate
+in the WM above tier without zephyr or zephyrd rules.</li>
 <li><code>window hide</code> [<var>winid</var>]: Hide a window.</li>
 <li><code>window ids</code> [<var>args</var>]: Print matching window IDs.</li>
 <li><code>window restore</code> [<var>winid</var>]: Restore saved window geometry.</li>

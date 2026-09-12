@@ -97,6 +97,7 @@ type
     ArgDirection,
     ArgGroup,
     ArgGroupName,
+    ArgLayer,
     ArgName,
     ArgPosition,
     ArgPreset,
@@ -125,6 +126,7 @@ type
     direction*: string
     group*: int
     groupName*: string
+    layer*: string
     name*: string
     position*: int
     preset*: string
@@ -318,7 +320,12 @@ proc parseArguments*(
     # first option must be a group, columns, direction/cardinal direction, classname (with --all or --name) or size directive {X}x{Y} or {X}:{Y}
     elif i == 0:
 
-      if args[i].match(re(r"^0x........$")):
+      if ArgLayer in allowed:
+        if args[i] notin [Normal, Above, Overlay, "normal", "above", "overlay"]:
+          fail("layer must be normal, above or overlay")
+        result.layer = parseArgument(result.layer, ArgLayer, allowed)
+
+      elif args[i].match(re(r"^0x........$")):
         if result.winid != "" or ArgWinid notin allowed:
           fail("invalid winid")
         if not args[i].match(re(r"^0x[0-9a-fA-F]{8}$")):

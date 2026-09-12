@@ -1,4 +1,8 @@
 const
+  Above* = "Above"
+  Normal* = "Normal"
+  Overlay* = "Overlay"
+
   Classname* = "Classname"
   Name* = "Name"
 

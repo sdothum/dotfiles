@@ -145,6 +145,17 @@ proc focus*(winid: string) =
     2
   )
 
+proc layer*(args: seq[string]) =
+  requireArgs("window layer", args, 1, 2)
+  let a = parseArguments("window layer", args, [ArgLayer, ArgWinid])
+  if a.layer.len == 0:
+    quit("window layer: layer must be normal, above or overlay")
+  let winid = if a.winid.len == 0: query.focusedWinid() else: a.winid
+  runvArgs("sirocco", "window", @["layer", a.layer, winid], 3, 3)
+
+proc layer*(value: string, winid: string = "") =
+  layer(@[value, winid])
+
 proc geometry*(args: seq[string]) =
   requireArgs("window geometry", args, 0, 1)
 
@@ -1372,6 +1383,8 @@ proc dispatch*(verb: string, rest: seq[string]) =
     echo count(rest)
   of "extend":
     extend(rest)
+  of "layer":
+    layer(rest)
   of "geometry":
     geometry(rest)
   of "wm-group":
