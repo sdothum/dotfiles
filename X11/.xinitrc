@@ -13,7 +13,7 @@
 
 BOOTWM=$SESSION/boot:wm  # see console_login, user_login
 WM=$HOME/.windowmanager
-TIMEOUT=2                  # sxhkd -t timeout
+TIMEOUT=2                # sxhkd -t timeout
 
 # rm -f $BOOTWM                                   # cancel autostart of wm if manually started
 [ -e $WM ] || { pkill -KILL startx; exit; }
