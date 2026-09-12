@@ -219,13 +219,24 @@ paint_frame(struct client *client, uint32_t outer_color, uint32_t inner_color)
 			: client->geom.height;
 
 	uint32_t ubw = (uint32_t)bw;
-	uint32_t corner_len = (min_dim * conf.corner_percent) / 100;
+	uint32_t corner_len_x;
+	uint32_t corner_len_y;
 
-	if (corner_len < ubw * 2)
-		corner_len = ubw * 2;
+	if (conf.corner_percent == 0) {
+		corner_len_x = client->geom.width;
+		corner_len_y = client->geom.height;
+	} else {
+		uint32_t corner_len = (min_dim * conf.corner_percent) / 100;
 
-	if (corner_len > min_dim)
-		corner_len = min_dim;
+		if (corner_len < ubw * 2)
+			corner_len = ubw * 2;
+
+		if (corner_len > min_dim)
+			corner_len = min_dim;
+
+		corner_len_x = corner_len;
+		corner_len_y = corner_len;
+	}
 
 	switch (conf.border_style) {
 		case BORDER_STYLE_SPINE_LEFT:
@@ -257,45 +268,98 @@ paint_frame(struct client *client, uint32_t outer_color, uint32_t inner_color)
 			break;
 
 		case BORDER_STYLE_CORNERS:
-
 			if (conf.corner_mask & CORNER_TOP_LEFT) {
 				if (gap > 0) {
-					gaps[ngaps++] = RECT( bw, bw, corner_len, gap );
-					gaps[ngaps++] = RECT( bw, bw + gap, gap, corner_len );
+					gaps[ngaps++] = RECT( bw, bw, corner_len_x, gap );
+					gaps[ngaps++] = RECT( bw, bw + gap, gap, corner_len_y );
 				}
 
-				rects[nrects++] = RECT( 0, 0, corner_len + bw + gap, bw );
-				rects[nrects++] = RECT( 0, 0, bw, corner_len + bw + gap );
+				rects[nrects++] = RECT( 0, 0, corner_len_x + bw + gap, bw );
+				rects[nrects++] = RECT( 0, 0, bw, corner_len_y + bw + gap );
 			}
 
 			if (conf.corner_mask & CORNER_TOP_RIGHT) {
 				if (gap > 0) {
-					gaps[ngaps++] = RECT( w - bw - gap - corner_len, bw, corner_len, gap );
-					gaps[ngaps++] = RECT( w - bw - gap, bw + gap, gap, corner_len );
+					gaps[ngaps++] = RECT(
+							w - bw - gap - corner_len_x,
+							bw,
+							corner_len_x,
+							gap);
+
+					gaps[ngaps++] = RECT(
+							w - bw - gap,
+							bw + gap,
+							gap,
+							corner_len_y);
 				}
 
-				rects[nrects++] = RECT( w - corner_len - bw - gap, 0, corner_len + bw + gap, bw );
-				rects[nrects++] = RECT( w - bw, 0, bw, corner_len + bw + gap );
+				rects[nrects++] = RECT(
+						w - corner_len_x - bw - gap,
+						0,
+						corner_len_x + bw + gap,
+						bw);
+
+				rects[nrects++] = RECT(
+						w - bw,
+						0,
+						bw,
+						corner_len_y + bw + gap);
 			}
 
 			if (conf.corner_mask & CORNER_BOTTOM_RIGHT) {
 				if (gap > 0) {
-					gaps[ngaps++] = RECT( w - bw - gap - corner_len, h - bw - gap, corner_len, gap );
-					gaps[ngaps++] = RECT( w - bw - gap, h - bw - gap - corner_len, gap, corner_len );
+					gaps[ngaps++] = RECT(
+							w - bw - gap - corner_len_x,
+							h - bw - gap,
+							corner_len_x,
+							gap);
+
+					gaps[ngaps++] = RECT(
+							w - bw - gap,
+							h - bw - gap - corner_len_y,
+							gap,
+							corner_len_y);
 				}
 
-				rects[nrects++] = RECT( w - corner_len - bw - gap, h - bw, corner_len + bw + gap, bw );
-				rects[nrects++] = RECT( w - bw, h - corner_len - bw - gap, bw, corner_len + bw + gap );
+				rects[nrects++] = RECT(
+						w - corner_len_x - bw - gap,
+						h - bw,
+						corner_len_x + bw + gap,
+						bw);
+
+				rects[nrects++] = RECT(
+						w - bw,
+						h - corner_len_y - bw - gap,
+						bw,
+						corner_len_y + bw + gap);
 			}
 
 			if (conf.corner_mask & CORNER_BOTTOM_LEFT) {
 				if (gap > 0) {
-					gaps[ngaps++] = RECT( bw, h - bw - gap, corner_len, gap );
-					gaps[ngaps++] = RECT( bw, h - bw - gap - corner_len, gap, corner_len );
+					gaps[ngaps++] = RECT(
+							bw,
+							h - bw - gap,
+							corner_len_x,
+							gap);
+
+					gaps[ngaps++] = RECT(
+							bw,
+							h - bw - gap - corner_len_y,
+							gap,
+							corner_len_y);
 				}
 
-				rects[nrects++] = RECT( 0, h - bw, corner_len + bw + gap, bw );
-				rects[nrects++] = RECT( 0, h - corner_len - bw - gap, bw, corner_len + bw + gap );
+				rects[nrects++] = RECT(
+						0,
+						h - bw,
+						corner_len_x + bw + gap,
+						bw);
+
+				rects[nrects++] = RECT(
+						0,
+						h - corner_len_y - bw - gap,
+						bw,
+						corner_len_y + bw + gap);
 			}
 
 			break;

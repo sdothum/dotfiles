@@ -16,17 +16,9 @@ verbose=$1
 
 usage() {
 	themes="$(recipe $THEMES | grep -v '^-' | tr '\n' ' ')"
-	echo "$(basename $0) [-verbose] .. <return> to exit
-> ${GREEN}theme: ${cyan} ${brown}L${cyan}oad | ${brown}S${cyan}ave as | ${brown}D${cyan}elete [<theme>]
-> ${GREEN}toggle:${cyan} ${brown}!${cyan} borders
-> ${GREEN}tuples:${cyan} border ${brown}s${cyan}tyle <style> | corners (length) ${brown}%${cyan} <percent>
->         outer border ${brown}w${cyan}idth | inner border ${brown}W${cyan}idth <pixels>
->         outer color ${brown}f${cyan}ocused | ${brown}u${cyan}nfocused | inner color ${brown}F${cyan}ocused | inner color ${brown}U${cyan}nfocused <aarrggbb>
->         gap ${brown}t${cyan}op | ${brown}b${cyan}ottom | ${brown}l${cyan}eft | ${brown}r${cyan}ight | ${brown}g${cyan}rid <pixels>
->         panel ${brown}h${cyan}eight | ${brown}i${cyan}ndent <pixels>
->         where, border style:             f'rame | l'eft | t'op | r'ight | b'ottom | c'orners [<mask>]
->                corners mask:             <xxxx> bit 1 (on) 0 (off) topleft .. bottomleft, 0000 == disable
->                themes:                   ${brown}${themes:-${NOCOLOR}---}${NOCOLOR}" | usage:
+	echo "$(basename $0) [-verbose]
+> ${BROWN}Note: ${cyan}corner length 0% == full length of both sides (versus % of short side)
+> <return> to exit" | usage:
 }
 
 # SEE: cirrusrc
@@ -73,25 +65,26 @@ recover() {
 }
 
 settings() {
+	themes="$(recipe $THEMES | grep -v '^-' | tr '\n' ' ')"
 	echo "
-	${ORANGE}T${NOCOLOR}heme                    "${theme:----}"
-	${ORANGE}!${NOCOLOR} borders                "$(recipe ui/enable_borders)"
-	border ${ORANGE}s${NOCOLOR}tyle             "$(decoration $(recipe ui/border_style))"
-	outer border ${ORANGE}w${NOCOLOR}idth       "$(recipe ui/outer_border_width)"
-	inner border ${ORANGE}W${NOCOLOR}idth       "$(recipe ui/inner_border_width)"
-	corners ${ORANGE}%${NOCOLOR}                "$(recipe ui/corner_percent)"
-	${ORANGE}c${NOCOLOR}orners mask             "$(map)"
-	outer color ${ORANGE}f${NOCOLOR}ocused      "$(recipe ui/outer_color_focused)"
-	outer color ${ORANGE}u${NOCOLOR}nfocused    "$(recipe ui/outer_color_unfocused)"
-	inner color ${ORANGE}F${NOCOLOR}ocused      "$(recipe ui/inner_color_focused)"
-	inner color ${ORANGE}U${NOCOLOR}nfocused    "$(recipe ui/inner_color_unfocused)"
-	gap width ${ORANGE}t${NOCOLOR}op            "$(recipe 'ui/gap_width top')"
-	gap width ${ORANGE}b${NOCOLOR}ottom         "$(recipe 'ui/gap_width bottom')"
-	gap width ${ORANGE}l${NOCOLOR}eft           "$(recipe 'ui/gap_width left')"
-	gap width ${ORANGE}r${NOCOLOR}ight          "$(recipe 'ui/gap_width right')"
-	${ORANGE}g${NOCOLOR}rid gap spacing         "$(recipe ui/grid_gap_width)"
-	panel ${ORANGE}h${NOCOLOR}eight             "$(recipe panel/height)"
-	panel ${ORANGE}i${NOCOLOR}ndent             "$(recipe panel/indent)"
+	${ORANGE}T${cyan}heme                    "${NOCOLOR}${theme:----} \ \ ${brown}L${cyan}oad \| ${brown}S${cyan}ave as \| ${brown}D${cyan}elete  ${BROWN}${themes}"
+	${ORANGE}!${cyan} borders                "${NOCOLOR}$(recipe ui/enable_borders)"
+	${cyan}border ${ORANGE}s${cyan}tyle             "${NOCOLOR}$(decoration $(recipe ui/border_style)) \ \ ${brown}f${cyan}rame \| ${brown}l${cyan}eft \| ${brown}t${cyan}op \| ${brown}r${cyan}ight \| ${brown}b${cyan}ottom \| ${brown}c${cyan}orners [\<${BROWN}mask${cyan}\>]"
+	${cyan}outer border ${ORANGE}w${cyan}idth       "${NOCOLOR}$(recipe ui/outer_border_width)"
+	${cyan}inner border ${ORANGE}W${cyan}idth       "${NOCOLOR}$(recipe ui/inner_border_width)"
+	${cyan}corner length ${ORANGE}%${cyan}          "${NOCOLOR}$(recipe ui/corner_percent)"
+	${ORANGE}c${cyan}orners mask             "${NOCOLOR}$(map) \ \ \ \ \ \ ${cyan}\<${BROWN}xxxx${cyan}\> bit 1 \(on\) 0 \(off\) topleft .. bottomleft, 0000 == disable${cyan}"
+	${cyan}outer color ${ORANGE}f${cyan}ocused      "${NOCOLOR}$(recipe ui/outer_color_focused) \ \ \<${BROWN}aarrggbb${cyan}\>"
+	${cyan}outer color ${ORANGE}u${cyan}nfocused    "${NOCOLOR}$(recipe ui/outer_color_unfocused)"
+	${cyan}inner color ${ORANGE}F${cyan}ocused      "${NOCOLOR}$(recipe ui/inner_color_focused)"
+	${cyan}inner color ${ORANGE}U${cyan}nfocused    "${NOCOLOR}$(recipe ui/inner_color_unfocused)"
+	${cyan}gap width ${ORANGE}t${cyan}op            "${NOCOLOR}$(recipe 'ui/gap_width top')"
+	${cyan}gap width ${ORANGE}b${cyan}ottom         "${NOCOLOR}$(recipe 'ui/gap_width bottom')"
+	${cyan}gap width ${ORANGE}l${cyan}eft           "${NOCOLOR}$(recipe 'ui/gap_width left')"
+	${cyan}gap width ${ORANGE}r${cyan}ight          "${NOCOLOR}$(recipe 'ui/gap_width right')"
+	${ORANGE}g${cyan}rid gap spacing         "${NOCOLOR}$(recipe ui/grid_gap_width)"
+	${cyan}panel ${ORANGE}h${cyan}eight             "${NOCOLOR}$(recipe panel/height)"
+	${cyan}panel ${ORANGE}i${cyan}ndent             "${NOCOLOR}$(recipe panel/indent)"
 "
 }
 
@@ -110,8 +103,8 @@ map()   { printf '%04d\n' $(echo "obase=2; $(recipe ui/corner_mask)" | bc); }
 # theme() { [ $value ] || return 1; }
 
 mask()  {
-	[ $(echo "${#1}") -eq 4 ] || return 1
-	m=$((2#$(echo $1 | sed 's/[^0]/1/g')))
+	[ $(echo "${#1}") -gt 4 ] && return 1
+	m=$((2#$(echo ${1}0000 | sed 's/[^0]/1/g' | cut -c1-4)))
 	printf '%d\n' "$m"
 }
 
@@ -130,12 +123,13 @@ style() {
 
 decoration() {
 	case $1 in
-		0 ) echo frame  ;;
-		1 ) echo left   ;;
-		2 ) echo top    ;;
-		3 ) echo right  ;;
-		4 ) echo bottom ;;
-		5 ) echo "corners $(map)" ;;
+		0   ) echo frame  ;;
+		1   ) echo left   ;;
+		2   ) echo top    ;;
+		3   ) echo right  ;;
+		4   ) echo bottom ;;
+		# 5 ) echo "corners $(map)" ;;
+		5   ) echo "corners" ;;
 	esac
 }
 
