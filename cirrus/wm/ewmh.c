@@ -1,6 +1,7 @@
 // See LICENSE file for copyright and license details.
 
 #include "clients.h"
+#include "stack.h"
 #include "atoms.h"
 #include "common.h"
 #include "ewmh.h"
@@ -28,6 +29,28 @@ handle_wm_state(struct client *client, xcb_atom_t state, unsigned int action)
 {
 	int16_t mon_x, mon_y;
 	uint16_t mon_w, mon_h;
+
+	if (state == ewmh->_NET_WM_STATE_ABOVE) {
+		/* An explicit assignment owns the tier until this client is unmanaged. */
+		if (client->layer_explicit)
+			return;
+		switch (action) {
+		case XCB_EWMH_WM_STATE_ADD:
+			set_window_layer(client, LayerAbove, false);
+			break;
+		case XCB_EWMH_WM_STATE_REMOVE:
+			set_window_layer(client, window_has_ewmh_atom(client->window,
+					ewmh->_NET_WM_WINDOW_TYPE, ewmh->_NET_WM_WINDOW_TYPE_DOCK) ?
+					LayerAbove : LayerNormal, false);
+			break;
+		case XCB_EWMH_WM_STATE_TOGGLE:
+			set_window_layer(client, client->layer == LayerAbove &&
+					!window_has_ewmh_atom(client->window, ewmh->_NET_WM_WINDOW_TYPE,
+					ewmh->_NET_WM_WINDOW_TYPE_DOCK) ? LayerNormal : LayerAbove, false);
+			break;
+		}
+		return;
+	}
 
 	get_monitor_size(client, &mon_x, &mon_y, &mon_w, &mon_h);
 
@@ -99,14 +122,14 @@ update_desktop_viewport(void)
 	xcb_ewmh_set_desktop_viewport(ewmh, scrno, 1, &coord);
 }
 
-void
+bool
 update_ewmh_wm_state(struct client *client)
 {
 	int i;
 	uint32_t values[12];
 
 	if (client == NULL)
-		return;
+		return false;
 
 #define HANDLE_WM_STATE(s)              \
 	values[i] = ewmh->_NET_WM_STATE_##s; \
@@ -114,6 +137,9 @@ update_ewmh_wm_state(struct client *client)
 	DMSG("ewmh net_wm_state %s present\n", #s);
 
 	i = 0;
+	if (client->layer == LayerAbove) {
+		HANDLE_WM_STATE(ABOVE);
+	}
 	if (client->maxed) {
 		HANDLE_WM_STATE(FULLSCREEN);
 	}
@@ -124,7 +150,11 @@ update_ewmh_wm_state(struct client *client)
 		HANDLE_WM_STATE(MAXIMIZED_HORZ);
 	}
 
-	xcb_ewmh_set_wm_state(ewmh, client->window, i, values);
+	xcb_generic_error_t *error = xcb_request_check(conn,
+			xcb_ewmh_set_wm_state_checked(ewmh, client->window, i, values));
+	bool ok = error == NULL && !xcb_connection_has_error(conn);
+	free(error);
+	return ok;
 }
 
 void
@@ -186,4 +216,77 @@ update_wm_desktop(struct client *client)
 {
 	if (client != NULL)
 		xcb_ewmh_set_wm_desktop(ewmh, client->window, client->group);
+}
+
+bool
+window_has_ewmh_atom(xcb_window_t window, xcb_atom_t property, xcb_atom_t atom)
+{
+	bool found = false;
+	xcb_get_property_reply_t *reply = xcb_get_property_reply(conn,
+			xcb_get_property(conn, false, window, property, XCB_ATOM_ATOM, 0, UINT32_MAX), NULL);
+	if (reply != NULL && reply->type == XCB_ATOM_ATOM && reply->format == 32) {
+		xcb_atom_t *atoms = xcb_get_property_value(reply);
+		int count = xcb_get_property_value_length(reply) / sizeof(*atoms);
+		for (int i = 0; i < count; i++)
+			if (atoms[i] == atom)
+				found = true;
+	}
+	free(reply);
+	return found;
+}
+
+enum stacking_layer
+default_window_layer(xcb_window_t window)
+{
+	if (window_has_ewmh_atom(window, ewmh->_NET_WM_WINDOW_TYPE, ewmh->_NET_WM_WINDOW_TYPE_DOCK) ||
+			window_has_ewmh_atom(window, ewmh->_NET_WM_STATE, ewmh->_NET_WM_STATE_ABOVE))
+		return LayerAbove;
+	return LayerNormal;
+}
+
+/* Change only ABOVE: unrelated application state belongs to its existing
+ * EWMH handlers, not to the layer request. */
+static bool
+set_ewmh_above(xcb_window_t window, bool above)
+{
+	xcb_ewmh_get_atoms_reply_t reply = {0};
+	bool ok = false;
+	bool got = xcb_ewmh_get_wm_state_reply(ewmh,
+			xcb_ewmh_get_wm_state(ewmh, window), &reply, NULL);
+	uint32_t count = got ? reply.atoms_len : 0;
+	xcb_atom_t *atoms = calloc((size_t)count + 1, sizeof(*atoms));
+	if (atoms != NULL) {
+		uint32_t length = 0;
+		for (uint32_t i = 0; i < count; i++)
+			if (reply.atoms[i] != ewmh->_NET_WM_STATE_ABOVE)
+				atoms[length++] = reply.atoms[i];
+		if (above)
+			atoms[length++] = ewmh->_NET_WM_STATE_ABOVE;
+		xcb_generic_error_t *error = xcb_request_check(conn,
+				xcb_ewmh_set_wm_state_checked(ewmh, window, length, atoms));
+		ok = error == NULL && !xcb_connection_has_error(conn);
+		free(error);
+		free(atoms);
+	}
+	if (got)
+		xcb_ewmh_get_atoms_reply_wipe(&reply);
+	return ok;
+}
+
+bool
+update_ewmh_layer_state(struct client *client)
+{
+	return client != NULL && set_ewmh_above(client->window, client->layer == LayerAbove);
+}
+
+/* Panels are intentionally absent from the ordinary managed/focus lists. */
+void
+handle_unmanaged_wm_state(xcb_window_t window, xcb_atom_t state, unsigned int action)
+{
+	if (state != ewmh->_NET_WM_STATE_ABOVE || action > XCB_EWMH_WM_STATE_TOGGLE)
+		return;
+	bool above = action == XCB_EWMH_WM_STATE_ADD ||
+			(action == XCB_EWMH_WM_STATE_TOGGLE &&
+			 !window_has_ewmh_atom(window, ewmh->_NET_WM_STATE, state));
+	set_ewmh_above(window, above);
 }

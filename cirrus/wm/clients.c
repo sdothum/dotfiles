@@ -11,6 +11,7 @@
 
 #include "border.h"
 #include "clients.h"
+#include "stack.h"
 #include "common.h"
 #include "config.h"
 #include "ewmh.h"
@@ -153,13 +154,14 @@ setup_window(xcb_window_t win)
 		if (i < win_type.atoms_len) {
 			xcb_ewmh_get_atoms_reply_wipe(&win_type);
 			trace_restart("map special xid=0x%08x", win);
-			xcb_map_window(conn, win);
+			map_window_stacking(conn, win);
 			return NULL;
 		}
 	}
 
 	/* subscribe to events */
-	values[0] = XCB_EVENT_MASK_ENTER_WINDOW | XCB_EVENT_MASK_FOCUS_CHANGE;
+	values[0] = XCB_EVENT_MASK_ENTER_WINDOW | XCB_EVENT_MASK_FOCUS_CHANGE |
+			XCB_EVENT_MASK_PROPERTY_CHANGE;
 	xcb_change_window_attributes(conn, win, XCB_CW_EVENT_MASK, values);
 	trace_restart("setup_window xid=0x%08x event_mask=0x%x", win, values[0]);
 
@@ -191,6 +193,8 @@ setup_window(xcb_window_t win)
 	client->item = item;
 	client->window = win;
 	client->frame = XCB_NONE;
+	client->layer_explicit = false;
+	client->layer = default_window_layer(win);
 	client->geom.x = client->geom.y = client->geom.width
 			= client->geom.height
 			= client->min_width = client->min_height = 0;
@@ -348,7 +352,7 @@ adopt_existing_windows(void)
 		if (mapped && client->frame != XCB_NONE) {
 			trace_restart("adopt map frame=0x%08x client=0x%08x", client->frame,
 					client->window);
-			xcb_map_window(conn, client->frame);
+			map_window_stacking(conn, client->frame);
 			paint_frame(client, conf.outer_unfocus_color,
 					conf.inner_unfocus_color);
 			/* The client was already mapped before the new frame existed.
@@ -356,7 +360,7 @@ adopt_existing_windows(void)
 			 * relative to other application windows. */
 			{
 				uint32_t values[2] = { client->frame, XCB_STACK_MODE_ABOVE };
-				xcb_configure_window(conn, client->window,
+				configure_window_stacking(conn, client->window,
 						XCB_CONFIG_WINDOW_SIBLING |
 						XCB_CONFIG_WINDOW_STACK_MODE, values);
 			}

@@ -118,6 +118,24 @@ cirrus(1) as an X client message. Mutation commands don't print anything on
 	Focus the closest window in a direction, relative to the currently
 	focused window. Does nothing if there is no window focused.
 
+* `window layer` <normal|above|overlay> [<winid>]:
+	Set the managed client's persistent stacking tier without focusing it.
+	Overlay stays above Above, and Above stays above Normal, including during
+	focus, raises, configure requests, and group changes. Within each tier,
+	existing relative stacking order is retained where possible. Normal restores
+	ordinary stacking. The target defaults to the focused managed window.
+	Hidden clients retain their tier until destroyed or unmanaged; state is
+	not cached by XID. Above is exposed as `_NET_WM_STATE_ABOVE`; Overlay is an
+	internal tier. Every explicit IPC assignment overrides automatic EWMH
+	defaults for the lifetime of that managed client, including across remap.
+	Without an explicit assignment, either `_NET_WM_STATE_ABOVE` or
+	`_NET_WM_WINDOW_TYPE_DOCK` selects above; neither selects normal. Property
+	changes and EWMH ABOVE requests update automatic tiers. Unmanaged docks
+	and ABOVE windows also participate in stacking while retaining their
+	existing exclusion from ordinary focus/group handling. Title-case names
+	remain accepted. Invalid layers,
+	unknown/unmanaged XIDs, or failure to apply the state return nonzero.
+
 * `window hide` [<winid>]:
 	Hide (unmap) the selected window. The <winid> can be found using pfw(1) or lsw(1) from
 	[wmutils](https://github.com/wmutils/core/).

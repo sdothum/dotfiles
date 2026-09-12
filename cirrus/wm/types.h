@@ -73,7 +73,16 @@ struct window_geom {
 	uint16_t width, height;
 };
 
+/* Wire values for IPCActionWindowLayer. */
+enum stacking_layer {
+	LayerNormal = 0,
+	LayerAbove = 1,
+	LayerOverlay = 2,
+};
+
 struct client {
+	enum stacking_layer layer;
+	bool layer_explicit;
 	uint64_t generation;
 	bool mapped;
 	bool group_map_pending, group_unmap_pending;

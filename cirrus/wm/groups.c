@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #include "clients.h"
+#include "stack.h"
 #include "ewmh.h"
 #include "focus.h"
 #include "groups.h"
@@ -61,10 +62,10 @@ group_activate(uint32_t group) {
 			if (client->frame != XCB_NONE) {
 				trace_restart("map frame via group_activate frame=0x%08x client=0x%08x",
 						client->frame, client->window);
-				xcb_map_window(conn, client->frame);
+				map_window_stacking(conn, client->frame);
 			}
 			trace_restart("map client via group_activate xid=0x%08x", client->window);
-			xcb_map_window(conn, client->window);
+			map_window_stacking(conn, client->window);
 		}
 	}
 	if (!has_members)

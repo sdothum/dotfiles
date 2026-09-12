@@ -98,8 +98,8 @@ super + shift + i
 
 # Rotate the canonical overlap stack by raising its bottommost window.
 
-super + e
-	sirocco window stack cycle
+super + {_,ctrl,shift} + e
+	sirocco window {stack cycle,layer Above,layer Normal}
 
 super + w
 	echo "$(timestamp) sxhkd window close $(pfw)" >>$WMLOG ;\
@@ -115,7 +115,7 @@ super + {_,ctrl} + space
 super + shift + p ; {space,BackSpace}
 	zephyr window size paper {--larger,--smaller}
 
-super + shift + v ; {space,BackSpace}
+super + shift + v ; {space,BackSpace},layer Above,layer Normal},layer Above,layer Normal},layer Above,layer Normal},layer Above,layer Normal},layer Above,layer Normal},layer Above,layer Normal}
 	zephyr window size video {--larger,--smaller}
 
 super + shift + {Left,Down,Up,Right}

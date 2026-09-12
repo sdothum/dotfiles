@@ -15,6 +15,7 @@ void event_focus_out(xcb_generic_event_t *);
 void event_map_notify(xcb_generic_event_t *);
 void event_map_request(xcb_generic_event_t *);
 void event_unmap_notify(xcb_generic_event_t *);
+void event_property_notify(xcb_generic_event_t *);
 void trace_x_event(xcb_generic_event_t *);
 
 #endif

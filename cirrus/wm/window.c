@@ -6,6 +6,7 @@
 
 #include "border.h"
 #include "clients.h"
+#include "stack.h"
 #include "common.h"
 #include "ewmh.h"
 #include "focus.h"
@@ -128,7 +129,7 @@ void
 raise_window(xcb_window_t win)
 {
 	uint32_t values[1] = { XCB_STACK_MODE_ABOVE };
-	xcb_configure_window(conn, win, XCB_CONFIG_WINDOW_STACK_MODE, values);
+	configure_window_stacking(conn, win, XCB_CONFIG_WINDOW_STACK_MODE, values);
 }
 
 void

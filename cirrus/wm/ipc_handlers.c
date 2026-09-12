@@ -55,6 +55,7 @@ static void ipc_action_window_maximize(uint32_t *);
 static void ipc_action_window_monocle(uint32_t *);
 static void ipc_action_window_close(uint32_t *);
 static void ipc_action_window_hide(uint32_t *);
+static void ipc_action_window_layer(uint32_t *);
 static void ipc_action_window_reset(uint32_t *);
 static void ipc_action_window_stack_cycle(uint32_t *);
 static void ipc_action_group_add(uint32_t *);
@@ -341,6 +342,7 @@ register_ipc_handlers(void)
 	ipc_handlers[IPCActionWindowClose]      = ipc_action_window_close;
 	ipc_handlers[IPCActionWindowHide]       = ipc_action_window_hide;
 	ipc_handlers[IPCActionWindowReset]      = ipc_action_window_reset;
+	ipc_handlers[IPCActionWindowLayer]      = ipc_action_window_layer;
 	ipc_handlers[IPCActionWindowStackCycle] = ipc_action_window_stack_cycle;
 	ipc_handlers[IPCActionGroupAdd]         = ipc_action_group_add;
 	ipc_handlers[IPCActionGroupRemove]      = ipc_action_group_remove;
@@ -812,7 +814,7 @@ ipc_action_window_raise_many(uint32_t *d)
 		if (trace_stack_enabled())
 			fprintf(stderr, "RESTACK configure object=0x%08x sibling=0x%08x mode=ABOVE\n",
 				objects[i], sibling);
-		xcb_configure_window(conn, objects[i], mask, values);
+		configure_window_stacking(conn, objects[i], mask, values);
 		sibling = objects[i];
 	}
 	free(objects);
@@ -1877,4 +1879,26 @@ ipc_wm_restart(uint32_t *d)
 	(void)d;
 	halt = true;
 	exit_code = WM_EXIT_RESTART;
+}
+
+/* Reply window, explicit-target flag, XID, layer. */
+static void
+ipc_action_window_layer(uint32_t *d)
+{
+	struct client *client = d[1] ? find_client(&d[2]) : focused_win;
+	const char *response;
+	if (d[0] == XCB_NONE)
+		return;
+	if (d[3] > LayerOverlay)
+		response = "ERROR invalid window layer";
+	else if (client == NULL)
+		response = "ERROR unknown or unmanaged window";
+	else if (!set_window_layer(client, d[3], true))
+		response = "ERROR unable to apply window layer";
+	else
+		response = "OK";
+	xcb_change_property(conn, XCB_PROP_MODE_REPLACE, d[0],
+			ATOMS[_IPC_ATOM_RESPONSE], XCB_ATOM_STRING, 8,
+			strlen(response), response);
+	xcb_flush(conn);
 }

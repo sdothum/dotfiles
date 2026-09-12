@@ -8,6 +8,7 @@
 
 #include "border.h"
 #include "clients.h"
+#include "stack.h"
 #include "config.h"
 #include "randr.h"
 #include "render.h"
@@ -120,7 +121,7 @@ create_frame(struct client *client)
 	if (client->mapped) {
 		trace_restart("map frame via create_frame frame=0x%08x client=0x%08x",
 				client->frame, client->window);
-		xcb_map_window(conn, client->frame);
+		map_window_stacking(conn, client->frame);
 	}
 	xcb_flush(conn);
 }
@@ -451,5 +452,5 @@ update_frame_geometry(struct client *client)
 			XCB_CONFIG_WINDOW_HEIGHT,
 			values);
 
-	xcb_map_window(conn, client->frame);
+	map_window_stacking(conn, client->frame);
 }

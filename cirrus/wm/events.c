@@ -129,7 +129,7 @@ event_circulate_request(xcb_generic_event_t *ev)
 {
 	xcb_circulate_request_event_t *e = (xcb_circulate_request_event_t *)ev;
 
-	xcb_circulate_window(conn, e->window, e->place);
+	circulate_window_stacking(e->window, e->place);
 }
 
 /*
@@ -154,8 +154,14 @@ event_client_message(xcb_generic_event_t *ev)
 		DMSG("IPC Command %u with arguments %u %u %u\n", ipc_command, data[1], data[2], data[3]);
 	} else {
 		client = find_client(&e->window);
-		if (client == NULL)
+		if (client == NULL) {
+			if (e->type == ewmh->_NET_WM_STATE && e->format == 32 && e->window != scr->root) {
+				handle_unmanaged_wm_state(e->window, e->data.data32[1], e->data.data32[0]);
+				handle_unmanaged_wm_state(e->window, e->data.data32[2], e->data.data32[0]);
+				enforce_stacking_layers();
+			}
 			return;
+		}
 		if (e->type == ewmh->_NET_WM_STATE) {
 			DMSG("got _NET_WM_STATE for 0x%08x\n", client->window);
 			handle_wm_state(client, e->data.data32[1], e->data.data32[0]);
@@ -197,6 +203,8 @@ event_configure_notify(xcb_generic_event_t *ev)
 		}
 	} else {
 		client = find_client(&e->window);
+		if (client == NULL && e->override_redirect && find_client_by_frame(e->window) == NULL)
+			enforce_stacking_layers();
 		if (client != NULL) {
 			client->monitor = find_monitor_by_coord(client->geom.x, client->geom.y);
 		}
@@ -236,7 +244,7 @@ event_configure_request(xcb_generic_event_t *ev)
 
 		if (e->value_mask & XCB_CONFIG_WINDOW_STACK_MODE) {
 			values[0] = e->stack_mode;
-			xcb_configure_window(conn, e->window,
+			configure_window_stacking(conn, e->window,
 					XCB_CONFIG_WINDOW_STACK_MODE, values);
 		}
 
@@ -287,7 +295,7 @@ event_configure_request(xcb_generic_event_t *ev)
 
 		if (i == 0)
 			return;
-		xcb_configure_window(conn, e->window, mask, values);
+		configure_window_stacking(conn, e->window, mask, values);
 	}
 }
 
@@ -375,6 +383,8 @@ event_map_notify(xcb_generic_event_t *ev)
 {
 	xcb_map_notify_event_t *e = (xcb_map_notify_event_t *)ev;
 	struct client *client = find_client(&e->window);
+	refresh_window_layer(client);
+	enforce_stacking_layers();
 	trace_restart("MapNotify xid=0x%08x resolved=%d", e->window,
 			client != NULL);
 
@@ -439,11 +449,11 @@ event_map_request(xcb_generic_event_t *ev)
 	if (client != NULL && client->frame != XCB_NONE) {
 		trace_restart("map frame via MapRequest frame=0x%08x client=0x%08x",
 				client->frame, client->window);
-		xcb_map_window(conn, client->frame);
+		map_window_stacking(conn, client->frame);
 	}
 
 	trace_restart("map client via MapRequest xid=0x%08x", e->window);
-	xcb_map_window(conn, e->window);
+	map_window_stacking(conn, e->window);
 
 	/* in case of fire, abort */
 	if (client == NULL)
@@ -463,7 +473,7 @@ event_map_request(xcb_generic_event_t *ev)
 if (client->frame != XCB_NONE) {
 	trace_restart("map frame via MapRequest completion frame=0x%08x client=0x%08x",
 			client->frame, client->window);
-	xcb_map_window(conn, client->frame);
+	map_window_stacking(conn, client->frame);
 	paint_frame(client, conf.outer_focus_color, conf.inner_focus_color);
 }
 	/* window is normal */
@@ -520,4 +530,15 @@ event_unmap_notify(xcb_generic_event_t *ev)
 	update_window_status(client);
 	if (was_mapped)
 		invalidate_snapshot_state();
+}
+
+void
+event_property_notify(xcb_generic_event_t *ev)
+{
+	xcb_property_notify_event_t *e = (xcb_property_notify_event_t *)ev;
+	if (e->window == scr->root || (e->atom != ewmh->_NET_WM_STATE &&
+			e->atom != ewmh->_NET_WM_WINDOW_TYPE))
+		return;
+	refresh_window_layer(find_client(&e->window));
+	enforce_stacking_layers();
 }

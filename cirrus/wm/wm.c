@@ -14,6 +14,7 @@
 #include "clients.h"
 #include "ewmh.h"
 #include "events.h"
+#include "focus.h"
 #include "groups.h"
 #include "ipc_handlers.h"
 #include "randr.h"
@@ -92,6 +93,7 @@ run(void)
 		xcb_flush(conn);
 		ev = xcb_wait_for_event(conn);
 		if (ev) {
+			expire_stacking_guards(ev->full_sequence);
 			trace_x_event(ev);
 			DMSG("X Event %d\n", ev->response_type & ~0x80);
 			if (ev->response_type == randr_base + XCB_RANDR_SCREEN_CHANGE_NOTIFY) {

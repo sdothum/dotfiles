@@ -10,6 +10,7 @@
 #include "wm_state.h"
 
 struct explicit_geometry_guard {
+	bool stacking;
 	bool active;
 	xcb_window_t focused_window;
 	xcb_window_t pointer_child;
@@ -25,6 +26,8 @@ void cardinal_focus(uint32_t);
 void center_pointer(struct client *);
 void clear_focused(void);
 void begin_explicit_geometry_guard(struct client *, struct explicit_geometry_guard *);
+void expire_stacking_guards(uint32_t);
+void begin_stacking_guard(struct explicit_geometry_guard *);
 void finish_explicit_geometry_guard(struct explicit_geometry_guard *);
 void set_focused_last_best(void);
 void set_focused_no_raise(struct client *);

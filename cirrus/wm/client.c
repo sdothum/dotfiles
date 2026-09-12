@@ -36,7 +36,7 @@ static bool fn_button(uint32_t *, int, char **);
 static void usage(char *, int);
 static void version(void);
 static int query_window(enum IPCCommand, const char *, enum IPCClientScope,
-		enum IPCClientSelector, bool, xcb_window_t);
+		uint32_t, bool, xcb_window_t);
 static const char *bulk_geometry_body;
 static const char *raise_many_body;
 
@@ -650,7 +650,7 @@ parse_raise_many_arguments(int argc, char **argv)
 
 static int
 query_window(enum IPCCommand query, const char *selector,
-		enum IPCClientScope scope, enum IPCClientSelector selector_type,
+		enum IPCClientScope scope, uint32_t selector_type,
 		bool explicit_window, xcb_window_t window)
 {
 	const int timeout_ms = 2000;
@@ -686,6 +686,7 @@ query_window(enum IPCCommand query, const char *selector,
 	const bool snapshot_query = query == IPCWindowSnapshot;
 	const bool reset_query = query == IPCActionWindowReset;
 	const bool hide_query = query == IPCActionWindowHide;
+	const bool layer_query = query == IPCActionWindowLayer;
 	const bool group_action = query == IPCActionGroupActivate ||
 			query == IPCActionGroupDeactivate;
 	const char *query_name = stack_cycle ? "stack cycle" : stack_query ? "stack" :
@@ -695,7 +696,7 @@ query_window(enum IPCCommand query, const char *selector,
 			groups_query ? "groups" :
 			snapshot_query ? "snapshot" :
 			raise_many_query ? "raise-many" :
-			reset_query ? "reset" : hide_query ? "hide" :
+			layer_query ? "layer" : reset_query ? "reset" : hide_query ? "hide" :
 			group_action ? "group action" : "focused";
 	long elapsed_ms;
 	size_t id_count;
@@ -727,6 +728,7 @@ query_window(enum IPCCommand query, const char *selector,
 	if (selector != NULL)
 		msg.data.data32[2] = get_atom((char *)selector);
 	msg.data.data32[3] = scope;
+	/* The final payload word carries the layer for IPCActionWindowLayer. */
 	msg.data.data32[4] = selector_type;
 	if (bulk_geometry_query) {
 			xcb_change_property(conn, XCB_PROP_MODE_REPLACE, reply_window,
@@ -738,7 +740,7 @@ query_window(enum IPCCommand query, const char *selector,
 			get_atom(ATOM_REQUEST), XCB_ATOM_STRING, 8,
 			strlen(raise_many_body), raise_many_body);
 	}
-	if (geometry_query || reset_query || hide_query) {
+	if (geometry_query || reset_query || hide_query || layer_query) {
 		msg.data.data32[2] = explicit_window;
 		msg.data.data32[3] = window;
 	} else if (group_query) {
@@ -891,11 +893,11 @@ query_window(enum IPCCommand query, const char *selector,
 					strspn(response + 3, "0123456789") == strlen(response + 3)) {
 				printf("%s\n", response + 3);
 				status = EXIT_SUCCESS;
-			} else if ((reset_query || hide_query || stack_cycle || group_action || bulk_geometry_query || raise_many_query) &&
+			} else if ((layer_query || reset_query || hide_query || stack_cycle || group_action || bulk_geometry_query || raise_many_query) &&
 					strcmp(response, "OK") == 0) {
 				status = EXIT_SUCCESS;
 			} else if (!ids_query && !count_query && !classname_query && !geometry_query &&
-				!reset_query && !hide_query && !group_query && !groups_query && !stack_cycle && !group_action &&
+				!layer_query && !reset_query && !hide_query && !group_query && !groups_query && !stack_cycle && !group_action &&
 				!snapshot_query && !stack_geometries_query && !bulk_geometry_query && !raise_many_query &&
 					strncmp(response, "OK ", 3) == 0 && response[3] != '\0') {
 				DMSG("sirocco ipc window focused: reply=0x%08x seq=%u decoded window=%s\n",
@@ -1141,6 +1143,18 @@ parse_window_action(int argc, char **argv, struct ActionCommand *action)
 			first_argument++;
 		}
 		parse_window_geometry_arguments(argc, argv, first_argument, action);
+	} else if (strcmp(action->verb, "layer") == 0) {
+		if (argc < 2 || argc > 3)
+			errx(EXIT_FAILURE, "window layer expects normal|above|overlay [winid]");
+		if (strcmp(argv[1], "Normal") == 0 || strcmp(argv[1], "normal") == 0)
+			action->numeric[0] = 0;
+		else if (strcmp(argv[1], "Above") == 0 || strcmp(argv[1], "above") == 0)
+			action->numeric[0] = 1;
+		else if (strcmp(argv[1], "Overlay") == 0 || strcmp(argv[1], "overlay") == 0)
+			action->numeric[0] = 2;
+		else
+			errx(EXIT_FAILURE, "invalid window layer");
+		parse_optional_winid(argc - 2, argv + 2, &action->winid);
 	} else if (strcmp(action->verb, "maximize") == 0) {
 		if (first_argument < argc && strcmp(argv[first_argument], "--horizontal") == 0) {
 			action->modifier = ActionModifierHorizontal;
@@ -1274,6 +1288,13 @@ normalized_action(int argc, char **argv)
 		parse_window_action(argc - 1, argv + 1, &action);
 	else
 		parse_group_action(argc - 1, argv + 1, &action);
+	if (action.domain == ActionWindow && strcmp(action.verb, "layer") == 0) {
+		int status = query_window(IPCActionWindowLayer, NULL, IPCClientScopeAll,
+				(uint32_t)action.numeric[0], action.winid != XCB_NONE, action.winid);
+		if (status != EXIT_SUCCESS)
+			exit(status);
+		return;
+	}
 	if (action.domain == ActionWindow && strcmp(action.verb, "reset") == 0) {
 		int status = query_window(IPCActionWindowReset, NULL, IPCClientScopeMapped,
 				IPCClientSelectorNone, action.winid != XCB_NONE, action.winid);

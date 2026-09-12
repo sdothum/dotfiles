@@ -116,6 +116,7 @@ setup(void)
 		ewmh->_NET_SUPPORTED               , ewmh->_NET_WM_DESKTOP              ,
 		ewmh->_NET_NUMBER_OF_DESKTOPS      , ewmh->_NET_CURRENT_DESKTOP         ,
 		ewmh->_NET_ACTIVE_WINDOW           , ewmh->_NET_WM_STATE                ,
+		ewmh->_NET_WM_STATE_ABOVE          ,
 		ewmh->_NET_WM_STATE_FULLSCREEN     , ewmh->_NET_WM_STATE_MAXIMIZED_VERT ,
 		ewmh->_NET_WM_STATE_MAXIMIZED_HORZ , ewmh->_NET_WM_NAME                 ,
 		ewmh->_NET_WM_ICON_NAME            , ewmh->_NET_WM_WINDOW_TYPE          ,
@@ -322,6 +323,7 @@ register_event_handlers(void)
 	events[XCB_DESTROY_NOTIFY]    = event_destroy_notify;
 	events[XCB_ENTER_NOTIFY]      = event_enter_notify;
 	events[XCB_MAP_REQUEST]       = event_map_request;
+	events[XCB_PROPERTY_NOTIFY]   = event_property_notify;
 	events[XCB_MAP_NOTIFY]        = event_map_notify;
 	events[XCB_UNMAP_NOTIFY]      = event_unmap_notify;
 	events[XCB_CLIENT_MESSAGE]    = event_client_message;

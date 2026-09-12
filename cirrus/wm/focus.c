@@ -4,12 +4,14 @@
 #include <stdlib.h>
 
 #include "clients.h"
+#include "stack.h"
 #include "ewmh.h"
 #include "focus.h"
 #include "geometry.h"
 #include "input.h"
 
 struct geometry_enter_suppression {
+	bool stacking;
 	xcb_window_t focused_window;
 	xcb_window_t entered_window;
 	int16_t root_x, root_y;
@@ -35,6 +37,7 @@ begin_explicit_geometry_guard(struct client *client,
 	struct client *pointer_client;
 
 	guard->active = false;
+	guard->stacking = false;
 	if (!conf.sloppy_focus || client == NULL || client != focused_win ||
 			!client->mapped)
 		return;
@@ -48,6 +51,32 @@ begin_explicit_geometry_guard(struct client *client,
 	if (pointer->same_screen && pointer_client == client) {
 		guard->active = true;
 		guard->focused_window = client->window;
+		guard->pointer_child = pointer->child;
+		guard->root_x = pointer->root_x;
+		guard->root_y = pointer->root_y;
+		guard->lower_sequence = cookie.sequence;
+	}
+	free(pointer);
+}
+
+/* Layer changes can expose any client, including intermediate restack
+ * positions. Reuse the sequence/coordinate guard without requiring the
+ * focused client to be under the pointer. Real later pointer motion remains
+ * eligible for sloppy focus. */
+void
+begin_stacking_guard(struct explicit_geometry_guard *guard)
+{
+	xcb_query_pointer_cookie_t cookie;
+	xcb_query_pointer_reply_t *pointer;
+	guard->active = false;
+	guard->stacking = true;
+	if (!conf.sloppy_focus)
+		return;
+	cookie = xcb_query_pointer(conn, scr->root);
+	pointer = xcb_query_pointer_reply(conn, cookie, NULL);
+	if (pointer != NULL && pointer->same_screen) {
+		guard->active = true;
+		guard->focused_window = focused_win ? focused_win->window : XCB_NONE;
 		guard->pointer_child = pointer->child;
 		guard->root_x = pointer->root_x;
 		guard->root_y = pointer->root_y;
@@ -77,9 +106,9 @@ finish_explicit_geometry_guard(struct explicit_geometry_guard *guard)
 	entered = find_client_from_window(pointer->child);
 	if (!pointer->same_screen || pointer->root_x != guard->root_x ||
 			pointer->root_y != guard->root_y ||
-			pointer->child == guard->pointer_child || entered == NULL ||
-			entered->window == guard->focused_window || focused_win == NULL ||
-			focused_win->window != guard->focused_window) {
+			(!guard->stacking && (pointer->child == guard->pointer_child || entered == NULL ||
+			entered->window == guard->focused_window || focused_win == NULL)) ||
+			(focused_win ? focused_win->window : XCB_NONE) != guard->focused_window) {
 		free(pointer);
 		return;
 	}
@@ -89,8 +118,9 @@ finish_explicit_geometry_guard(struct explicit_geometry_guard *guard)
 		free(pointer);
 		return;
 	}
+	pending->stacking = guard->stacking;
 	pending->focused_window = guard->focused_window;
-	pending->entered_window = entered->window;
+	pending->entered_window = entered ? entered->window : XCB_NONE;
 	pending->root_x = guard->root_x;
 	pending->root_y = guard->root_y;
 	pending->lower_sequence = guard->lower_sequence;
@@ -103,6 +133,22 @@ finish_explicit_geometry_guard(struct explicit_geometry_guard *guard)
 	free(pointer);
 }
 
+/* Retire stacking guards even when a restack generated no crossing event. */
+void
+expire_stacking_guards(uint32_t sequence)
+{
+	struct geometry_enter_suppression **link = &geometry_enter_suppressions;
+	while (*link != NULL) {
+		struct geometry_enter_suppression *pending = *link;
+		if (pending->stacking && (int32_t)(sequence - pending->upper_sequence) >= 0) {
+			*link = pending->next;
+			free(pending);
+		} else {
+			link = &pending->next;
+		}
+	}
+}
+
 bool
 suppress_explicit_geometry_enter(xcb_generic_event_t *ev,
 		xcb_enter_notify_event_t *enter)
@@ -112,8 +158,8 @@ suppress_explicit_geometry_enter(xcb_generic_event_t *ev,
 	while (*link != NULL) {
 		struct geometry_enter_suppression *pending = *link;
 		struct client *entered = find_client_from_window(enter->event);
-		bool focus_changed = focused_win == NULL ||
-				focused_win->window != pending->focused_window;
+		bool focus_changed = (focused_win ? focused_win->window : XCB_NONE) !=
+				pending->focused_window;
 		bool sequence_passed =
 				(int32_t)(ev->full_sequence - pending->upper_sequence) >= 0;
 		bool normal_mode = enter->mode == XCB_NOTIFY_MODE_NORMAL;
@@ -124,9 +170,11 @@ suppress_explicit_geometry_enter(xcb_generic_event_t *ev,
 		bool sequence_match = sequence_between(ev->full_sequence,
 				pending->lower_sequence, pending->upper_sequence);
 		bool matches = !focus_changed && normal_mode &&
-				client_match && coordinate_match && sequence_match;
+				(pending->stacking || client_match) && coordinate_match && sequence_match;
 
 
+		if (matches && pending->stacking)
+			return true;
 		if (matches || focus_changed || sequence_passed) {
 			*link = pending->next;
 			free(pending);
@@ -422,10 +470,10 @@ set_focused_no_raise(struct client *client)
 	if (client->frame != XCB_NONE) {
 		trace_restart("map frame via focus frame=0x%08x client=0x%08x",
 				client->frame, client->window);
-		xcb_map_window(conn, client->frame);
+		map_window_stacking(conn, client->frame);
 	}
 	trace_restart("map client via focus xid=0x%08x", client->window);
-	xcb_map_window(conn, client->window);
+	map_window_stacking(conn, client->window);
 
 	if (!client->maxed)
 		set_borders(client, conf.outer_focus_color, conf.inner_focus_color);

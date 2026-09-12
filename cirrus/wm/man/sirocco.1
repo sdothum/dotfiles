@@ -133,6 +133,10 @@ Focus the window that was focused before the currently focused window\.
 Focus the closest window in a direction, relative to the currently focused window\. Does nothing if there is no window focused\.
 .
 .TP
+\fBwindow layer\fR \fInormal|above|overlay\fR [\fIwinid\fR]
+Set the managed client\'s persistent stacking tier without focusing it\. Overlay stays above Above, and Above stays above Normal, including during focus, raises, configure requests, and group changes\. Within each tier, existing relative stacking order is retained where possible\. Normal restores ordinary stacking\. The target defaults to the focused managed window\. Hidden clients retain their tier until destroyed or unmanaged; state is not cached by XID\. Above is exposed as \fB_NET_WM_STATE_ABOVE\fR; Overlay is an internal tier\. Every explicit IPC assignment overrides automatic EWMH defaults for the lifetime of that managed client, including across remap\. Without an explicit assignment, either \fB_NET_WM_STATE_ABOVE\fR or \fB_NET_WM_WINDOW_TYPE_DOCK\fR selects above; neither selects normal\. Property changes and EWMH ABOVE requests update automatic tiers\. Unmanaged docks and ABOVE windows also participate in stacking while retaining their existing exclusion from ordinary focus/group handling\. Title\-case names remain accepted\. Invalid layers, unknown/unmanaged XIDs, or failure to apply the state return nonzero\.
+.
+.TP
 \fBwindow hide\fR [\fIwinid\fR]
 Hide (unmap) the selected window\. The \fIwinid\fR can be found using pfw(1) or lsw(1) from wmutils \fIhttps://github\.com/wmutils/core/\fR\.
 .

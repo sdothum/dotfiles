@@ -59,6 +59,8 @@ enum IPCCommand {
 	IPCActionWindowApplyGeometriesChecked,
 	IPCGroupCount,
 	IPCWMRestart,
+	/* reply window, explicit target, XID, layer (Normal=0, Above=1, Overlay=2) */
+	IPCActionWindowLayer,
 	NR_IPC_COMMANDS
 };
 
