@@ -13,6 +13,7 @@
 
 BOOTWM=$SESSION/boot:wm  # see console_login, user_login
 WM=$HOME/.windowmanager
+TIMEOUT=2                  # sxhkd -t timeout
 
 # rm -f $BOOTWM                                   # cancel autostart of wm if manually started
 [ -e $WM ] || { pkill -KILL startx; exit; }
@@ -165,7 +166,7 @@ case $wm in
 2b* )
 	setpath $HOME/.config/2bwm cmd
 	. $(which ENV)
-	sxhkd -c $HOME/.config/2bwm/sxhkdrc &
+	sxhkd -t $TIMEOUT -c $HOME/.config/2bwm/sxhkdrc &
 	ruler -i -s /usr/bin/dash -c $HOME/.config/2bwm/rulerrc &
 	$TERM &
 	# autostart the panel in the terminal window (delay for celeron cpu)
@@ -176,7 +177,7 @@ aw* ) xexec awesome ;;
 be* )
 	setpath $HOME/.config/berry
 	xwallpaper --zoom $HOME/images/default
-	sxhkd -c $HOME/.config/berry/sxhkdrc &
+	sxhkd -t $TIMEOUT -c $HOME/.config/berry/sxhkdrc &
 	conky clock auto
 	$TERM &
 	xexec berry ;;
@@ -185,7 +186,7 @@ bs* )
 	setpath $HOME/.config/bspwm
 	rm -f /tmp/bspwm-socket 2>/dev/null
 	rm -f /tmp/bspwm.lock
-	sxhkd -c $HOME/.config/bspwm/sxhkdrc &
+	sxhkd -t $TIMEOUT -c $HOME/.config/bspwm/sxhkdrc &
 	xexec bspwm ;;
 
 bu* )
@@ -207,7 +208,7 @@ ci* )
 	}
 
 	tvover ${interface:-HDMI-0} 3440x14440
-	sxhkd -c $HOME/.config/cirrus/sxhkdrc >/tmp/sxhkd.log &
+	sxhkd -t $TIMEOUT -c $HOME/.config/cirrus/sxhkdrc >/tmp/sxhkd.log &
 	rm -f /tmp/ruler.log
 	touch /tmp/ruler.log
 	ruler -i -s /usr/bin/dash -c $HOME/.config/cirrus/rulerrc 2>>/tmp/ruler.log &
@@ -233,7 +234,7 @@ fa* )
 	}
 
 	tvover ${interface:-HDMI-0} 3440x14440
-	sxhkd -c $HOME/.config/faouzia/sxhkdrc >/tmp/sxhkd.log &
+	sxhkd -t $TIMEOUT -c $HOME/.config/faouzia/sxhkdrc >/tmp/sxhkd.log &
 	rm -f /tmp/ruler.log
 	touch /tmp/ruler.log
 	ruler -i -s /usr/bin/dash -c $HOME/.config/faouzia/rulerrc 2>>/tmp/ruler.log &
@@ -273,7 +274,7 @@ wi* )
 	. $(which ENV)
 
 	tvover ${interface:-HDMI-0} 3440x14440
-	sxhkd -c $HOME/.config/windowchef/sxhkdrc &
+	sxhkd -t $TIMEOUT -c $HOME/.config/windowchef/sxhkdrc &
 	ruler -i -s /usr/bin/dash -c $HOME/.config/windowchef/rulerrc &
 	# $TERM &  # NOTE: windowchef cannot properly manage windows opened before it!
 	xexec windowchef -c $HOME/.config/windowchef/windowchefrc ;;
@@ -282,7 +283,7 @@ wmi*) xexec wmii ;;
 wm* )
 	setpath $HOME/.config/wmutils
 	xsetroot -solid grey20
-	sxhkd -c $HOME/.config/wmutils/sxhkdrc &
+	sxhkd -t $TIMEOUT -c $HOME/.config/wmutils/sxhkdrc &
 	wew | yawee &
 	$TERM &
 	pwait wew ;;
@@ -291,7 +292,7 @@ wo* )
 	setpath $HOME/.config/worm
 	export BLACKBOARD=/tmp/worm:blackboard
 	xwallpaper --zoom $HOME/images/default
-	sxhkd -c $HOME/.config/worm/sxhkdrc &
+	sxhkd -t $TIMEOUT -c $HOME/.config/worm/sxhkdrc &
 	conky clock auto
 	$TERM &
 	xexec worm ;;
