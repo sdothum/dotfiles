@@ -708,7 +708,6 @@ ipc_action_window_raise_many(uint32_t *d)
 	xcb_query_tree_reply_t *tree = NULL;
 	xcb_window_t *objects = NULL;
 	size_t object_count = 0;
-	xcb_window_t sibling = XCB_NONE;
 
 	if (reply_window == XCB_NONE)
 		return;
@@ -792,36 +791,16 @@ ipc_action_window_raise_many(uint32_t *d)
 			objects[object_count++] = clients[i]->frame;
 		objects[object_count++] = clients[i]->window;
 	}
-	/* Anchor the first target object above the highest unrelated root child,
-	 * then insert each following object immediately above its predecessor. */
-	{
-		xcb_window_t *children = xcb_query_tree_children(tree);
-		int child_count = xcb_query_tree_children_length(tree);
-		for (i = child_count; i > 0; i--) {
-			bool target = false;
-			for (size_t j = 0; j < object_count; j++)
-				if (children[i - 1] == objects[j])
-					target = true;
-			if (!target) {
-				sibling = children[i - 1];
-				break;
-			}
-		}
-	}
+	struct explicit_geometry_guard guard;
+	begin_stacking_guard(&guard);
+	/* Input is bottom-to-top. Raise each object to the top of its effective
+	 * band through the central policy. Anchoring to a preceding lower-band
+	 * object would leave higher-band targets below unrelated peers. */
 	for (i = 0; i < object_count; i++) {
-		uint16_t mask = XCB_CONFIG_WINDOW_STACK_MODE;
-		uint32_t values[2] = { XCB_STACK_MODE_ABOVE };
-		if (sibling != XCB_NONE) {
-			mask |= XCB_CONFIG_WINDOW_SIBLING;
-			values[0] = sibling;
-			values[1] = XCB_STACK_MODE_ABOVE;
-		}
-		if (trace_stack_enabled())
-			fprintf(stderr, "RESTACK configure object=0x%08x sibling=0x%08x mode=ABOVE\n",
-				objects[i], sibling);
-		configure_window_stacking(conn, objects[i], mask, values);
-		sibling = objects[i];
+		uint32_t mode = XCB_STACK_MODE_ABOVE;
+		configure_window_stacking(conn, objects[i], XCB_CONFIG_WINDOW_STACK_MODE, &mode);
 	}
+	finish_explicit_geometry_guard(&guard);
 	free(objects);
 	free(tree);
 	trace_stack("STACK-3");

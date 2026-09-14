@@ -68,12 +68,12 @@ super + shift + w ; {t,f}
 # NOTE: a null selector value must include a " " (space)
 
 super + {_,shift} + Tab
-	sirocco window cycle --group { ,--reverse}
+	sirocco window cycle --group {_,--reverse}
 
-alt + {_,super} + Tab
-	sirocco window cycle { ,--reverse}
+alt + {_,shift} + Tab
+	sirocco window cycle {_,--reverse}
 
-super + ctrl + Tab
+alt + ctrl + Tab
 	sirocco window focus --last
 
 alt + {Left,Down,Up,Right}
@@ -122,9 +122,6 @@ super + shift + {Left,Down,Up,Right}
 super + ctrl + shift + {Left,Down,Up,Right}
 	sirocco window resize --relative {-20 0,0 20,0 -20,20 0}
 
-super + shift + {t,s}
-	zephyr window tile {left,right}
-
 super + {_,shift} + z
 	sirocco window {monocle,maximize}
 
@@ -139,7 +136,7 @@ super + 5
 	zephyr state snapshot . window tile 3 2 . window tile right . window snap center . state restore
 
 super + 6
-	zephyr window size viewport  # half screen monocle
+	zephyr window size viewport  # half screen mono
 
 super + {1,2,3}
 	zephyr window tile 3 {1,2,3}
@@ -147,12 +144,13 @@ super + {1,2,3}
 super + {4,8,7,9}
 	zephyr window tile 4 {1,2,3,4}
 
-# ....................................................................... layout
+super + shift + {t,s}
+	zephyr window tile {left,right}
+
+# ...................................................................... explode
 
 super + shift + {1,2,3,4,5}
-	W=$(pfw)                                                  ;\
-	zephyr layout fold {1,2,3,4,5} $(zephyr window classname) ;\
-	sirocco window focus $W
+	zephyr layout fold {1,2,3,4,5} $(zephyr window classname)
 
 alt + super + space
 	[ -e $WME/layout/explode ] && zephyr layout unexplode || zephyr layout explode
@@ -160,6 +158,11 @@ alt + super + space
 alt + ctrl + space
 	G=$(sirocco group current) ;\
 	[ -e $WME/layout/explode:group:$G ] && zephyr layout unexplode --group $G || zephyr layout explode --group $G
+
+# .................................................................. level (all)
+
+super + ctrl + e
+	zephyr layout level
 
 # ......................................................................... move
 #
@@ -177,6 +180,13 @@ super + ctrl + {Left,Down,Up,Right}
 super + ctrl + {p,l,n,f}
 	zephyr window shift {left,down,up,right}
 
+# ......................................................................... snap
+#
+# NOTE: beaklwi keyboard layout numpad alph overlay
+#       d n m
+#       t r s
+#       p l f
+
 super + {d,n,m,p,l,f}
 	zephyr window snap {top left,top,top right,bottom left,bottom,bottom right}
 
@@ -192,10 +202,7 @@ super + ctrl + {t,s}
 	zephyr window spread $side
 
 super + {_,ctrl,shift} + g
-	zephyr window snap center { ,left,right}
-
-super + ctrl + e
-	zephyr layout level
+	zephyr window snap center {_,left,right}
 
 # ......................................................................... swap
 
@@ -281,11 +288,8 @@ ctrl + BackSpace
 super + {_,ctrl} + a
 	conky clock {_,toggle}
 
-super + shift + d ; {w,c}
-	toggle {wallpaper,background}
-
-super + {_,ctrl} + v
-	{toggle panel,invert_panel}
+super + shift + d ; {d,D,P,p}
+	{toggle wallpaper,toggle background,toggle panel,invert_panel}
 
 # Applications
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -304,11 +308,8 @@ super + shift + a
 super + {_,shift} + o
 	menu {scripts,projects}
 
-super + shift + {k,m}
+super + shift + {p,m}
 	menu {passwords,media}
-
-super + shift + y
-	menu abook
 
 # ........................................................................ terms
 
@@ -410,6 +411,9 @@ super + shift + ctrl + j
 
 super + y
 	zephyr window toggle aerc || aerc
+
+super + shift + y
+	menu abook
 
 alt + super + ctrl + space
 	kak -PROOF $HOME/diary/$(date '+%Y-%m-%d').mkd

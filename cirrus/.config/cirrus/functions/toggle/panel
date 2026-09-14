@@ -6,13 +6,8 @@
 
 # ................................................................. Toggle panel
 
-if recipe panel/single ;then
-	zephyr window toggle --name "lemonbar"
-else
-	zephyr window toggle --name "lemonbar:desktop"
-	zephyr window toggle --name "lemonbar:mpd"
-	zephyr window toggle --name "lemonbar:system"
-	zephyr window toggle --name "lemonbar:clock"
-fi
+# NOTE: lemonbar instances are not managed by cirrus (no winids), hence, cannot be hidden
+
+pgrep lemonbar >/dev/null && killall lemonbar || draw panel
 
 # kak: filetype=sh
