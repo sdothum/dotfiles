@@ -14,7 +14,7 @@ msg=$1
 if [ -e ${0%/toggle}/functions/toggle/$msg ] ;then
 	. ${0%/toggle}/functions/toggle/$msg $@
 elif winid=$(xdotool search -classname "$1" | head -1) ;then
-	xwininfo -id $winid | grep -q "IsViewable" && sirocco window_hide $winid || sirocco window_focus $winid
+	xwininfo -id $winid | grep -q "IsViewable" && sirocco window hide $winid || sirocco window focus $winid
 else
 	$@
 fi
