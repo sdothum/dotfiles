@@ -120,10 +120,10 @@ src=\~/${src#$HOME/}
 [ $H ] && {
 	ditto dirdiff "${source}  //  ${target}"
 	for i in 1 2 3 ;do
-		echo -n "• "
+		echo -n "${ORANGE}• "
 		sleep 1
 	done
-	echo
+	echo "${NOCOLOR}"
 }
 
 
