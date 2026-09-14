@@ -1,51 +1,51 @@
-import compat
+import std/os
 import std/strutils
+
+import compat
 
 type ScreenMetrics* = object
   gap*: int
   margin*: int
   top*: int
+  bottom*: int
   panel*: int
   indent*: int
 
 proc metrics*(): ScreenMetrics =
-  let raw = shv("screen", @[])
-  var seenGap, seenMargin, seenTop, seenPanel, seenIndent = false
-  for line in raw.splitLines():
-    let fields = line.split('=' , maxsplit = 1)
-    if fields.len != 2:
-      quit("screen metrics: malformed response")
-    let value = try:
-      parseInt(fields[1].strip())
-    except ValueError:
-      quit("screen metrics: malformed value for " & fields[0])
-    case fields[0]
-    of "GAP":
-      if seenGap: quit("screen metrics: duplicate GAP")
-      result.gap = value
-      seenGap = true
-    of "MARGIN":
-      if seenMargin: quit("screen metrics: duplicate MARGIN")
-      result.margin = value
-      seenMargin = true
-    of "TOP":
-      if seenTop: quit("screen metrics: duplicate TOP")
-      result.top = value
-      seenTop = true
-    of "PANEL_HEIGHT":
-      if seenPanel: quit("screen metrics: duplicate PANEL_HEIGHT")
-      result.panel = value
-      seenPanel = true
-    of "PANEL_INDENT":
-      if seenIndent: quit("screen metrics: duplicate PANEL_INDENT")
-      result.indent = value
-      seenIndent = true
-    of "OUTER_BORDER", "INNER_BORDER", "BORDER_EXTENT":
-      discard
+  proc value(path: string): int =
+    for kind, entry in walkDir(path):
+      if kind == pcDir:
+        return parseInt(extractFilename(entry))
+
+    return 0
+
+  for kind, entry in walkDir(getEnv("WMSE") / "ui"):
+    if kind != pcDir:
+      continue
+
+    case extractFilename(entry)
+    of "gap_width bottom":
+      result.bottom = value(entry)
+    of "gap_width top":
+      result.top = value(entry)
+    of "gap_width left":
+      result.margin = value(entry)
+    of "grid_gap_width":
+      result.gap = value(entry)
     else:
-      quit("screen metrics: unknown field " & fields[0])
-  if not (seenGap and seenMargin and seenTop and seenPanel and seenIndent):
-    quit("screen metrics: incomplete response")
+      discard
+
+  for kind, entry in walkDir(getEnv("WMSE") / "panel"):
+    if kind != pcDir:
+      continue
+
+    case extractFilename(entry)
+    of "height":
+      result.panel = value(entry)
+    of "indent":
+      result.indent = value(entry)
+    else:
+      discard
 
 #
 # Queries
@@ -71,6 +71,10 @@ proc top*(args: seq[string]): string =
   requireNoArgs("screen top", args)
   $metrics().top
 
+proc bottom*(args: seq[string]): string =
+  requireNoArgs("screen bottom", args)
+  $metrics().bottom
+
 #
 # Native Nim convenience overloads
 #
@@ -90,6 +94,9 @@ proc panel*(): string =
 proc top*(): string =
   top(@[])
 
+proc bottom*(): string =
+  bottom(@[])
+
 #
 # Dispatch
 #
@@ -106,5 +113,7 @@ proc dispatch*(verb: string, rest: seq[string]) =
     echo panel(rest)
   of "top":
     echo top(rest)
+  of "bottom":
+    echo bottom(rest)
   else:
     quit("unknown screen action")

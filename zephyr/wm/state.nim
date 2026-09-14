@@ -80,14 +80,20 @@ proc restoreTxnMarkerPath(root: string): string =
 proc restoreTxnLockPath(root: string): string =
   splitFile(root).dir / RestoreTxnLockName
 
+proc explodeMetadataPath(root, legacyName: string): string =
+  let name = extractFilename(root)
+  if name.startsWith("explode:group:"):
+    return splitFile(root).dir / ("." & name & legacyName[".explode".len .. ^1])
+  splitFile(root).dir / legacyName
+
 proc explodeTxnMarkerPath(root: string): string =
-  splitFile(root).dir / ExplodeTxnName
+  explodeMetadataPath(root, ExplodeTxnName)
 
 proc explodeTxnLockPath(root: string): string =
-  splitFile(root).dir / ExplodeTxnLockName
+  explodeMetadataPath(root, ExplodeTxnLockName)
 
 proc explodeOperationMarkerPath(root: string): string =
-  splitFile(root).dir / ExplodeOperationName
+  explodeMetadataPath(root, ExplodeOperationName)
 
 proc writeRestoreMarker(path, phase, stage, backup: string, pid: int) =
   let temporary = path & ".tmp"
@@ -95,7 +101,7 @@ proc writeRestoreMarker(path, phase, stage, backup: string, pid: int) =
   moveFile(temporary, path)
 
 proc processAlive(pid: int): bool =
-  pid > 0 and fileExists("/proc/" & $pid)
+  pid > 0 and dirExists("/proc/" & $pid)
 
 proc recoverRestoreHistory*(root: string, fromExplodeOperation = false)
 proc recoverExplodeOperation*(root: string)
@@ -155,6 +161,20 @@ proc recoverRestoreHistory*(root: string, fromExplodeOperation = false) =
     let operationRoot = splitFile(root).dir / "layout" / "explode"
     if fileExists(explodeOperationMarkerPath(operationRoot)):
       recoverExplodeOperation(operationRoot)
+    # Group explode operations share WINFO history, but own separate journals.
+    var layoutRoots = @[splitFile(operationRoot).dir]
+    let wme = getEnv("WME")
+    if wme.len > 0 and wme / "layout" notin layoutRoots:
+      layoutRoots.add(wme / "layout")
+    for layoutRoot in layoutRoots:
+      for kind, path in walkDir(layoutRoot):
+        let name = extractFilename(path)
+        if kind == pcFile and name.startsWith(".explode:group:") and
+            name.endsWith("-operation.txn"):
+          let fields = readFile(path).splitLines()
+          if fields.len >= 4 and fields[2] == root:
+            let groupRoot = layoutRoot / name[1 ..< name.len - "-operation.txn".len]
+            recoverExplodeOperation(groupRoot)
   let marker = restoreTxnMarkerPath(root)
   if not fileExists(marker):
     let lock = restoreTxnLockPath(root)
@@ -780,3 +800,32 @@ proc dispatch*(verb: string, rest: seq[string]) =
 
   else:
     quit("unknown state action: " & verb)
+
+proc windowStateCleanupReady*(): bool =
+  ## Defer daemon cleanup while restore-all may replace the entire WINFO tree.
+  let root = getEnv("WINFO")
+  if root.len == 0:
+    return true
+  try:
+    recoverRestoreHistory(root)
+    return not dirExists(restoreTxnLockPath(root))
+  except CatchableError:
+    return false
+
+proc cleanupWindowState*(winid: string): bool =
+  let root = getEnv("WINFO")
+  if root.len == 0:
+    return true
+  if not winid.match(re(r"^0x[0-9a-fA-F]{8}$")):
+    return false
+  if not windowStateCleanupReady():
+    return false
+  let path = root / winid
+  try:
+    if symlinkExists(path):
+      removeFile(path)
+    elif dirExists(path):
+      removeDir(path)
+    return true
+  except CatchableError:
+    return false

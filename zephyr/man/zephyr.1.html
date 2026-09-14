@@ -103,6 +103,7 @@ operations while preserving explicit window IDs for action targeting.</p>
 <li><code>screen margin</code>: Print the configured margin.</li>
 <li><code>screen panel</code>: Print panel height/position information.</li>
 <li><code>screen top</code>: Print the configured top offset.</li>
+<li><code>screen bottom</code>: Print the configured bottom offset.</li>
 </ul>
 
 
@@ -145,7 +146,11 @@ client is destroyed/unmanaged, including across hide/remap. Title-case layer
 names remain accepted. Docks and EWMH ABOVE windows automatically participate
 in the WM above tier without zephyr or zephyrd rules.</li>
 <li><code>window hide</code> [<var>winid</var>]: Hide a window.</li>
-<li><code>window ids</code> [<var>args</var>]: Print matching window IDs.</li>
+<li><code>window ids</code> [--all] [<var>classname</var>] [--name <var>name</var>] [--group <var>group</var>]:
+Print matching window IDs through the daemon cache. <code>--group</code> narrows the
+existing visibility and class/name filters without implying <code>--all</code>. Group
+IDs match <code>sirocco group add</code> directly; zero is invalid. Membership is refreshed
+by the existing WM snapshot/invalidation path, including after daemon restart.</li>
 <li><code>window restore</code> [<var>winid</var>]: Restore saved window geometry.</li>
 <li><code>window rotate</code> [<var>winid</var>]: Swap the selected window's width and height.</li>
 <li><code>window shift</code> <var>args</var>: Shift the selected window.</li>
@@ -172,6 +177,13 @@ commands; they are not zephyr public actions.</p>
 <li><code>layout explode</code>: Capture the current overlap-connected stack, save original
 geometry, and arrange those windows according to the existing layout rule.</li>
 <li><code>layout unexplode</code>: Restore saved geometry for surviving exploded windows.</li>
+<li><code>layout explode --group</code> <var>group</var>: Place visible group members using the fold
+grid engine and save a dedicated identity-bearing explode operation under
+<code>$WME/layout/explode:group:N</code>. Each group retains independent state.</li>
+<li><code>layout unexplode --group</code> <var>group</var>: Restore that recorded operation, including
+surviving clients that changed groups or became hidden. New members and
+reused XIDs with different identity tokens are not restored. Preserve current
+focus and remove the saved operation after restoration.</li>
 <li><code>layout fold</code> <var>args</var>: Fold matching windows into a grid.</li>
 <li><code>layout level</code> <var>args</var>: Level windows vertically.</li>
 <li><code>layout restore</code> [<var>args</var>]: Restore layout state.</li>
@@ -197,6 +209,23 @@ names implemented by the current rule dispatcher.</li>
 <li><code>state restore</code> [<var>winid</var>]: Restore a saved window geometry snapshot.</li>
 </ul>
 
+
+<p><code>zephyrd</code> removes <code>$WINFO/&lt;winid></code> after receiving an actual X11
+<code>DestroyNotify</code> and confirming that the window no longer exists. Hidden,
+unmapped, and inactive-group windows retain their state. Startup and X11
+reconnection also reconcile stale WINFO directories, including windows that
+died while the daemon was stopped. Uncertain X11 errors preserve state.</p>
+
+<p>The same lifecycle handler reconciles <code>$HIDDEN/&lt;winid></code> on <code>MapNotify</code> and
+<code>DestroyNotify</code>, checking current X visibility before removing an entry.
+Visible or destroyed windows lose hidden metadata; genuinely unmapped windows
+retain it. Startup/reconnection scans both trees, including hidden entries
+without WINFO records. No particular focus or restore command is required.</p>
+
+<p>WINFO cleanup waits for active restore-history transactions and retries deferred
+work; HIDDEN cleanup proceeds independently. Group membership and focus records
+remain owned by WM snapshot reconciliation. Correctness does not require an
+explicit <code>zephyr group close</code> before closing an application.</p>
 
 <h2 id="CHAINING">CHAINING</h2>
 

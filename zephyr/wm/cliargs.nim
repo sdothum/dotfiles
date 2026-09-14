@@ -97,6 +97,7 @@ type
     ArgDirection,
     ArgGroup,
     ArgGroupName,
+    ArgGroupNo,
     ArgLayer,
     ArgName,
     ArgPosition,
@@ -126,6 +127,7 @@ type
     direction*: string
     group*: int
     groupName*: string
+    groupNo*: int
     layer*: string
     name*: string
     position*: int
@@ -160,6 +162,7 @@ proc parseArguments*(
   result.direction = ""
   result.group = -1
   result.groupName = ""
+  result.groupNo = -1
   result.name = ""
   result.position = -1
   result.preset = ""
@@ -285,6 +288,14 @@ proc parseArguments*(
 
     of "--name":
       result.name = parseName(result.name, ArgName, allowed)
+      inc i
+
+    of "--group":
+      result.groupNo = parseValue(result.groupNo, ArgGroupNo, allowed)
+
+      if result.groupNo < 1:
+        fail("group must be > 0")
+
       inc i
 
     of "--rows":

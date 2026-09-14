@@ -1,7 +1,9 @@
 type
   XcbConnection {.importc: "xcb_connection_t", incompleteStruct.} = object
   XcbSetup {.importc: "xcb_setup_t", incompleteStruct.} = object
-  XcbGenericError {.importc: "xcb_generic_error_t", incompleteStruct.} = object
+  XcbGenericError {.importc: "xcb_generic_error_t".} = object
+    responseType {.importc: "response_type".}: uint8
+    errorCode {.importc: "error_code".}: uint8
 
   XcbWindow = uint32
   XcbAtom = uint32
@@ -22,6 +24,21 @@ type
     time {.importc: "time".}: uint32
     state: uint8
     pad: array[3, uint8]
+
+  XcbDestroyNotifyEvent {.importc: "xcb_destroy_notify_event_t".} = object
+    responseType {.importc: "response_type".}: uint8
+    pad0: uint8
+    sequence: uint16
+    event: XcbWindow
+    window: XcbWindow
+
+  XcbMapNotifyEvent {.importc: "xcb_map_notify_event_t".} = object
+    window: XcbWindow
+
+  XcbGetWindowAttributesCookie {.importc: "xcb_get_window_attributes_cookie_t".} = object
+    sequence: cuint
+  XcbGetWindowAttributesReply {.importc: "xcb_get_window_attributes_reply_t".} = object
+    mapState {.importc: "map_state".}: uint8
 
   XcbScreen = object
     root: XcbWindow
@@ -45,6 +62,10 @@ type
     sequence: cuint
 
 const
+  XcbMapNotify = 19'u8
+  XcbDestroyNotify = 17'u8
+  XcbStructureNotifyMask = 1'u32 shl 17
+  XcbSubstructureNotifyMask = 1'u32 shl 19
   XcbPropertyNotify = 28'u8
   XcbPropertyChangeMask = 1'u32 shl 22
   XcbCWEventMask = 1'u32 shl 11
@@ -85,6 +106,11 @@ proc xcb_flush(connection: ptr XcbConnection): cint
 proc xcb_wait_for_event(connection: ptr XcbConnection): ptr XcbGenericEvent
   {.importc, cdecl, header: "xcb/xcb.h".}
 proc xcb_poll_for_event(connection: ptr XcbConnection): ptr XcbGenericEvent
+  {.importc, cdecl, header: "xcb/xcb.h".}
+proc xcb_get_window_attributes(connection: ptr XcbConnection, window: XcbWindow): XcbGetWindowAttributesCookie
+  {.importc, cdecl, header: "xcb/xcb.h".}
+proc xcb_get_window_attributes_reply(connection: ptr XcbConnection,
+  cookie: XcbGetWindowAttributesCookie, error: ptr ptr XcbGenericError): ptr XcbGetWindowAttributesReply
   {.importc, cdecl, header: "xcb/xcb.h".}
 proc c_free(value: pointer) {.importc: "free", cdecl, header: "stdlib.h".}
 
@@ -143,7 +169,7 @@ proc open*(event: var X11Invalidation): bool =
     event.titleAtoms[index] = titleReply.atom
     c_free(titleReply)
 
-  var mask = XcbPropertyChangeMask
+  var mask = XcbPropertyChangeMask or XcbSubstructureNotifyMask
   discard xcb_change_window_attributes(
     connection, event.root, XcbCWEventMask, addr mask
   )
@@ -156,8 +182,10 @@ proc watchClients*(event: var X11Invalidation, clients: seq[uint32]) =
   if event.connection == nil:
     return
   let connection = cast[ptr XcbConnection](event.connection)
-  var mask = XcbPropertyChangeMask
   for client in clients:
+    var mask = XcbPropertyChangeMask or XcbStructureNotifyMask
+    if client == event.root:
+      mask = mask or XcbSubstructureNotifyMask
     discard xcb_change_window_attributes(connection, client, XcbCWEventMask,
       addr mask)
   discard xcb_flush(connection)
@@ -175,22 +203,68 @@ proc isTitleChange(event: X11Invalidation, value: ptr XcbGenericEvent): bool =
   property.window != event.root and
     (property.atom == event.titleAtoms[0] or property.atom == event.titleAtoms[1])
 
-proc drain*(event: X11Invalidation): bool =
+type
+  WindowExistence* = enum
+    WindowExists, WindowMissing, WindowUnknown
+  WindowVisibility* = enum
+    WindowViewable, WindowUnmapped, VisibilityMissing, VisibilityUnknown
+  DestroyHandler* = proc(window: uint32) {.closure.}
+
+proc windowVisibility*(event: X11Invalidation, window: uint32): WindowVisibility =
+  # Only BadWindow proves absence. Connection/protocol errors preserve state.
+  if not event.healthy():
+    return VisibilityUnknown
+  let connection = cast[ptr XcbConnection](event.connection)
+  var error: ptr XcbGenericError
+  let reply = xcb_get_window_attributes_reply(connection,
+    xcb_get_window_attributes(connection, window), addr error)
+  result = VisibilityUnknown
+  if reply != nil:
+    # Unviewable children of unmapped parents are still genuinely hidden.
+    result = if reply.mapState == 2: WindowViewable else: WindowUnmapped
+  elif error != nil and error.errorCode == 3:
+    result = VisibilityMissing
+  if reply != nil: c_free(reply)
+  if error != nil: c_free(error)
+
+proc windowExistence*(event: X11Invalidation, window: uint32): WindowExistence =
+  case event.windowVisibility(window)
+  of WindowViewable, WindowUnmapped: WindowExists
+  of VisibilityMissing: WindowMissing
+  of VisibilityUnknown: WindowUnknown
+
+proc mapped(value: ptr XcbGenericEvent, handler: DestroyHandler) =
+  if handler != nil and value.responseType == XcbMapNotify:
+    handler(cast[ptr XcbMapNotifyEvent](value).window)
+
+proc destroyed(value: ptr XcbGenericEvent, handler: DestroyHandler) =
+  # Ignore SendEvent: an application can synthesize a DestroyNotify for a
+  # still-live window. Real destruction is additionally checked for XID reuse.
+  if handler != nil and value.responseType == XcbDestroyNotify:
+    handler(cast[ptr XcbDestroyNotifyEvent](value).window)
+
+proc drain*(event: X11Invalidation, onDestroyed: DestroyHandler = nil,
+    onMapped: DestroyHandler = nil): bool =
   var found = false
   while true:
     let value = xcb_poll_for_event(cast[ptr XcbConnection](event.connection))
     if value == nil:
       break
+    destroyed(value, onDestroyed)
+    mapped(value, onMapped)
     if event.isInvalidation(value) or event.isTitleChange(value):
       found = true
     c_free(value)
   found
 
-proc wait*(event: X11Invalidation): bool =
+proc wait*(event: X11Invalidation, onDestroyed: DestroyHandler = nil,
+    onMapped: DestroyHandler = nil): bool =
   while true:
     let value = xcb_wait_for_event(cast[ptr XcbConnection](event.connection))
     if value == nil:
       return false
+    destroyed(value, onDestroyed)
+    mapped(value, onMapped)
     let matched = event.isInvalidation(value) or event.isTitleChange(value)
     c_free(value)
     if matched:

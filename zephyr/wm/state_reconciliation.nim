@@ -67,18 +67,6 @@ proc reconcileStaleGroupEntries(
       except CatchableError:
         result = false
 
-proc reconcileHidden(hiddenRoot: string, managed: Table[string, bool]): bool =
-  if not dirExists(hiddenRoot):
-    return true
-  result = true
-  try:
-    for kind, path in walkDir(hiddenRoot):
-      if kind == pcDir or kind == pcFile or kind == pcLinkToFile or kind == pcLinkToDir:
-        if not managed.hasKey(lastPathPart(path)) and not removeEntry(path):
-          result = false
-  except CatchableError:
-    result = false
-
 proc readCurrentGroup(groupRoot: string, groupCount: int, current: var uint32): bool =
   let currentRoot = groupRoot / "current"
   if not dirExists(currentRoot):
@@ -164,8 +152,7 @@ proc reconcileCurrent(
 
 proc reconcileSnapshot*(snapshot: WmSnapshot): bool =
   let groupRoot = getEnv("GROUP")
-  let hiddenRoot = getEnv("HIDDEN")
-  if groupRoot.len == 0 or hiddenRoot.len == 0:
+  if groupRoot.len == 0:
     return false
 
   let focusRoot = groupRoot & ":focus"
@@ -206,8 +193,6 @@ proc reconcileSnapshot*(snapshot: WmSnapshot): bool =
         membershipSuccess = false
 
   var success = membershipSuccess
-  if not reconcileHidden(hiddenRoot, managed):
-    success = false
   if not reconcileCurrent(snapshot, groupRoot, groupCount, membershipSuccess):
     success = false
   success

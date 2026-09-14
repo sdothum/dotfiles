@@ -47,6 +47,9 @@ Commands may be chained with \fB\.\fR\.
 .IP "\(bu" 4
 \fBscreen top\fR: Print the configured top offset\.
 .
+.IP "\(bu" 4
+\fBscreen bottom\fR: Print the configured bottom offset\.
+.
 .IP "" 0
 .
 .SS "GROUP"
@@ -122,7 +125,7 @@ Public group IDs are one\-based\. \fB0\fR is not a public group argument\.
 \fBwindow hide\fR [\fIwinid\fR]: Hide a window\.
 .
 .IP "\(bu" 4
-\fBwindow ids\fR [\fIargs\fR]: Print matching window IDs\.
+\fBwindow ids\fR [\-\-all] [\fIclassname\fR] [\-\-name \fIname\fR] [\-\-group \fIgroup\fR]: Print matching window IDs through the daemon cache\. \fB\-\-group\fR narrows the existing visibility and class/name filters without implying \fB\-\-all\fR\. Group IDs match \fBsirocco group add\fR directly; zero is invalid\. Membership is refreshed by the existing WM snapshot/invalidation path, including after daemon restart\.
 .
 .IP "\(bu" 4
 \fBwindow restore\fR [\fIwinid\fR]: Restore saved window geometry\.
@@ -177,6 +180,12 @@ Public group IDs are one\-based\. \fB0\fR is not a public group argument\.
 \fBlayout unexplode\fR: Restore saved geometry for surviving exploded windows\.
 .
 .IP "\(bu" 4
+\fBlayout explode \-\-group\fR \fIgroup\fR: Place visible group members using the fold grid engine and save a dedicated identity\-bearing explode operation under \fB$WME/layout/explode:group:N\fR\. Each group retains independent state\.
+.
+.IP "\(bu" 4
+\fBlayout unexplode \-\-group\fR \fIgroup\fR: Restore that recorded operation, including surviving clients that changed groups or became hidden\. New members and reused XIDs with different identity tokens are not restored\. Preserve current focus and remove the saved operation after restoration\.
+.
+.IP "\(bu" 4
 \fBlayout fold\fR \fIargs\fR: Fold matching windows into a grid\.
 .
 .IP "\(bu" 4
@@ -212,6 +221,15 @@ Public group IDs are one\-based\. \fB0\fR is not a public group argument\.
 \fBstate restore\fR [\fIwinid\fR]: Restore a saved window geometry snapshot\.
 .
 .IP "" 0
+.
+.P
+\fBzephyrd\fR removes \fB$WINFO/<winid>\fR after receiving an actual X11 \fBDestroyNotify\fR and confirming that the window no longer exists\. Hidden, unmapped, and inactive\-group windows retain their state\. Startup and X11 reconnection also reconcile stale WINFO directories, including windows that died while the daemon was stopped\. Uncertain X11 errors preserve state\.
+.
+.P
+The same lifecycle handler reconciles \fB$HIDDEN/<winid>\fR on \fBMapNotify\fR and \fBDestroyNotify\fR, checking current X visibility before removing an entry\. Visible or destroyed windows lose hidden metadata; genuinely unmapped windows retain it\. Startup/reconnection scans both trees, including hidden entries without WINFO records\. No particular focus or restore command is required\.
+.
+.P
+WINFO cleanup waits for active restore\-history transactions and retries deferred work; HIDDEN cleanup proceeds independently\. Group membership and focus records remain owned by WM snapshot reconciliation\. Correctness does not require an explicit \fBzephyr group close\fR before closing an application\.
 .
 .SH "CHAINING"
 Commands can be sequenced with a period:

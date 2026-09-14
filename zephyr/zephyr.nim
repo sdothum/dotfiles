@@ -106,7 +106,6 @@ proc usage() =
   echo "  zephyr state snapshot"
   echo "  zephyr state restore"
   echo "  zephyr sync group"
-  echo "  zephyr sync window"
   echo "  zephyr window await <args>"
   echo "  zephyr window classname"
   echo "  zephyr window count <args>"

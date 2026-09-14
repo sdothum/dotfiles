@@ -48,6 +48,7 @@ type
     argument*: string
     timeoutMs*: uint32
     includeAll*: bool
+    groupNo*: uint32 # Zero means no group filter in the daemon protocol.
 
   DaemonCachedClient* = object
     winid*: string
@@ -185,17 +186,22 @@ proc decodeRequest(payload: string): tuple[request: DaemonRequest, error: string
       argument: payload[5 ..< timeoutOffset], timeoutMs: timeoutMs)
     return
   if kind == RequestQueryClassList or kind == RequestQueryNameList:
-    if payload.len < 8:
+    if payload.len < 7:
       return (DaemonRequest(version: version), "malformed request payload", ErrorMalformedRequest)
     let argumentLength = (uint16(ord(payload[4])) shl 8) or uint16(ord(payload[5]))
-    if payload.len != 6 + int(argumentLength) or argumentLength == 0:
+    let baseLength = 6 + int(argumentLength)
+    if (payload.len != baseLength and payload.len != baseLength + 4) or argumentLength == 0:
       return (DaemonRequest(version: version), "malformed request payload", ErrorMalformedRequest)
     if payload[3].ord != 0 and payload[3].ord != 1:
       return (DaemonRequest(version: version), "malformed request payload", ErrorMalformedRequest)
     result.request = DaemonRequest(version: version,
       kind: if kind == RequestQueryClassList: drQueryClassList else: drQueryNameList,
       includeAll: payload[3].ord == 1,
-      argument: payload[6 .. ^1])
+      argument: payload[6 ..< baseLength])
+    if payload.len == baseLength + 4:
+      result.request.groupNo = readBe32(payload[baseLength .. ^1])
+      if result.request.groupNo == 0:
+        return (DaemonRequest(version: version), "invalid group number", ErrorMalformedRequest)
     return
   if kind != RequestQueryClientState and kind != RequestQueryClientClass:
     result.request = DaemonRequest(version: version)
@@ -259,19 +265,19 @@ proc matchingNameClients(clients: seq[DaemonCachedClient], pattern: string): seq
       result.add(client.winid)
 
 proc filteredClients(clients: seq[DaemonCachedClient], byName, includeAll: bool,
-    pattern: string): seq[string] =
+    pattern: string, groupNo: uint32): seq[string] =
+  var eligible: seq[DaemonCachedClient] = @[]
+  for client in clients:
+    if (includeAll or client.mapped) and (groupNo == 0 or client.group == groupNo):
+      eligible.add(client)
   if byName:
-    let matches = matchingNameClients(clients, pattern)
-    if includeAll:
-      for client in clients:
-        if client.titleAvailable and client.title.match(re(pattern, {reIgnoreCase})):
-          result.add(client.winid)
-    else:
-      result = matches
+    let expression = re(pattern, {reIgnoreCase})
+    for client in eligible:
+      if client.titleAvailable and client.title.match(expression):
+        result.add(client.winid)
   else:
-    for client in clients:
-      if (includeAll or client.mapped) and client.metadataAvailable and
-          client.className == pattern:
+    for client in eligible:
+      if client.metadataAvailable and client.className == pattern:
         result.add(client.winid)
 
 proc queueWaitResult(client: var IpcClient, clients: seq[DaemonCachedClient]) =
@@ -351,7 +357,7 @@ proc processInput(server: var IpcServer, client: var IpcClient): bool =
       else:
         let values = filteredClients(server.cachedClients,
           decoded.request.kind == drQueryNameList, decoded.request.includeAll,
-          decoded.request.argument)
+          decoded.request.argument, decoded.request.groupNo)
         queueResponse(client, responseData(uint8(ord(decoded.request.kind) + 1),
           values.join("\n")))
     of drWaitClass:
@@ -443,13 +449,17 @@ proc probe(path: string): bool =
   var address = makeUnixAddr(path)
   connect(fd, cast[ptr SockAddr](addr address), sizeof(address).SockLen) == 0
 
+proc socketPathExists(path: string): bool =
+  var info: Stat
+  lstat(path.cstring, info) == 0
+
 proc open*(server: var IpcServer, path = socketPath()): bool =
   if server.initialized:
     server.close()
   if path.len == 0:
     return false
   ensureParent(path)
-  if fileExists(path):
+  if socketPathExists(path):
     if probe(path):
       quit("zephyrd IPC: another daemon is serving " & path)
     removeFile(path)
@@ -480,7 +490,7 @@ proc close*(server: var IpcServer) =
   if server.listener != osInvalidSocket:
     close(server.listener)
     server.listener = osInvalidSocket
-  if server.path.len > 0 and fileExists(server.path):
+  if server.path.len > 0 and socketPathExists(server.path):
     removeFile(server.path)
   server.path = ""
   server.initialized = false

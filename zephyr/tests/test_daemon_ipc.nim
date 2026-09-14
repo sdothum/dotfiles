@@ -162,6 +162,21 @@ suite "zephyrd IPC transport":
     discard server.service(-1) # observe disconnect
     check connectAndService(server, path, pingFrame())[5].ord == 1
 
+  test "stale Unix socket is replaced after daemon death":
+    let root = getTempDir() / ("zephyrd-ipc-dead-" & $getCurrentProcessId())
+    createDir(root)
+    let path = root / "zephyrd.sock"
+    let fd = createNativeSocket(AF_UNIX, SOCK_STREAM, 0)
+    var address = makeUnixAddr(path)
+    check bindAddr(fd, cast[ptr SockAddr](addr address), sizeof(address).SockLen) == 0
+    close(fd)
+    var server: IpcServer
+    check server.open(path)
+    server.close()
+    var info: Stat
+    check lstat(path.cstring, info) != 0
+    removeDir(root)
+
   test "stale regular path is replaced":
     let root = getTempDir() / ("zephyrd-ipc-stale-" & $getCurrentProcessId())
     createDir(root)

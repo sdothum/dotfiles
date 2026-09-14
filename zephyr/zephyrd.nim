@@ -4,6 +4,7 @@ import std/times
 import std/strutils
 
 import wm/snapshot_diff
+import wm/window_lifecycle
 import wm/state_reconciliation
 import wm/window_query
 import wm/x11_invalidation
@@ -114,6 +115,7 @@ stderr.writeLine("IPC_SOCKET_READY " & ipc.path)
 
 var
   event: X11Invalidation
+  lifecycle = WindowLifecycle(reconcile: true)
   query: X11SnapshotQuery
   previous: WmSnapshot
   havePrevious = false
@@ -142,6 +144,14 @@ proc loseObservation(
   previous = WmSnapshot()
   pendingReconcile = none(WmSnapshot)
 
+proc drainLifecycle(event: var X11Invalidation): bool =
+  result = event.drain(
+    onDestroyed = proc(window: uint32) = lifecycle.queueDestroyed(window),
+    onMapped = proc(window: uint32) = lifecycle.queueMapped(window)
+  )
+  if not lifecycle.service(event):
+    stderr.writeLine("WINDOW_STATE_CLEANUP_DEFERRED")
+
 while true:
   if not observationReady:
     if epochTime() < nextReconnect:
@@ -152,7 +162,15 @@ while true:
     # attachment.  This prevents an accepted client from waiting behind XCB
     # reconnect probes while the WM is absent.
     discard ipc.service(-1)
-    if not event.open() or not query.open():
+    if not event.open():
+      nextReconnect = epochTime() + 1.0
+      discard ipc.service(-1)
+      continue
+    # Subscribe before scanning: deaths during reconciliation remain queued.
+    lifecycle.reconcile = true
+    if not lifecycle.service(event):
+      stderr.writeLine("WINDOW_STATE_CLEANUP_DEFERRED")
+    if not query.open():
       nextReconnect = epochTime() + 1.0
       discard ipc.service(-1)
       continue
@@ -160,6 +178,9 @@ while true:
     notifyBootstrap = connectedOnce
     connectedOnce = true
     retry = true
+
+  if not lifecycle.service(event):
+    stderr.writeLine("WINDOW_STATE_CLEANUP_DEFERRED")
 
   if retry:
     let refreshed = refresh(event, query, previous, havePrevious, pendingReconcile, ipc,
@@ -175,7 +196,7 @@ while true:
       # next loop will retry XCB attachment after servicing bounded clients.
       discard ipc.service(-1)
       continue
-    if event.drain():
+    if drainLifecycle(event):
       retry = true
       continue
 
@@ -186,7 +207,7 @@ while true:
         observationReady = false
         snapshotTimeoutMs = 100
         nextReconnect = epochTime() + 1.0
-      elif event.drain():
+      elif drainLifecycle(event):
         retry = true
       continue
     if reconcileSnapshot(pendingReconcile.get()):
@@ -201,7 +222,7 @@ while true:
       observationReady = false
       snapshotTimeoutMs = 100
       nextReconnect = epochTime() + 1.0
-    elif event.drain():
+    elif drainLifecycle(event):
       retry = true
     continue
   if not event.healthy():
@@ -210,7 +231,7 @@ while true:
     snapshotTimeoutMs = 100
     nextReconnect = epochTime() + 1.0
     continue
-  if event.drain():
+  if drainLifecycle(event):
     retry = true
   elif epochTime() - lastProbe >= 1.0:
     # A WM can disappear without changing the XCB connection state.  Periodic

@@ -82,8 +82,8 @@ proc waitFrame(kind: uint8, pattern: string, timeoutMs: uint32): string =
   result[offset + 2] = char((timeoutMs shr 8) and 0xff)
   result[offset + 3] = char(timeoutMs and 0xff)
 
-proc filteredFrame(kind: uint8, includeAll: bool, pattern: string): string =
-  let payloadSize = 3 + 1 + 2 + pattern.len
+proc filteredFrame(kind: uint8, includeAll: bool, pattern: string, groupNo: int): string =
+  let payloadSize = 3 + 1 + 2 + pattern.len + (if groupNo > 0: 4 else: 0)
   result = newString(4 + payloadSize)
   result[0] = char((uint32(payloadSize) shr 24) and 0xff)
   result[1] = char((uint32(payloadSize) shr 16) and 0xff)
@@ -97,6 +97,12 @@ proc filteredFrame(kind: uint8, includeAll: bool, pattern: string): string =
   result[9] = char(uint16(pattern.len) and 0xff)
   for index, value in pattern:
     result[10 + index] = value
+  if groupNo > 0:
+    let offset = 10 + pattern.len
+    let group = uint32(groupNo)
+    for index in 0 .. 3:
+      result[offset + index] = char((group shr (24 - index * 8)) and 0xff)
+
 
 proc queryDaemon*(kind: uint8, argument = ""): DaemonReply =
   let path = socketPath()
@@ -136,7 +142,9 @@ proc queryDaemon*(kind: uint8, argument = ""): DaemonReply =
       result.error = payload[4 .. ^1]
 
 proc queryDaemonFiltered*(kind: uint8, includeAll: bool,
-    pattern: string): DaemonReply =
+    pattern: string, groupNo = -1): DaemonReply =
+  if groupNo != -1 and (groupNo < 1 or groupNo.uint64 > uint32.high.uint64):
+    return DaemonReply(error: "invalid group number")
   let path = socketPath()
   if path.len == 0: return DaemonReply(error: "zephyrd socket path is unavailable")
   let fd = createNativeSocket(AF_UNIX, SOCK_STREAM, 0)
@@ -145,7 +153,7 @@ proc queryDaemonFiltered*(kind: uint8, includeAll: bool,
   var address = makeUnixAddr(path)
   if connect(fd, cast[ptr SockAddr](addr address), sizeof(address).SockLen) != 0:
     return DaemonReply(error: "zephyrd is unavailable")
-  if not writeAll(fd, filteredFrame(kind, includeAll, pattern)):
+  if not writeAll(fd, filteredFrame(kind, includeAll, pattern, groupNo)):
     return DaemonReply(error: "zephyrd request failed")
   var header: string
   if not readAll(fd, header, 4): return DaemonReply(error: "truncated zephyrd response")

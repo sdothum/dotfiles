@@ -327,40 +327,16 @@ proc tile*(args: seq[string]) =
 proc spread*(args: seq[string]) =
   spreadWithScreen(args, ScreenGeometry())
 
-proc fold*(args: seq[string]) =
-  requireArgs("layout fold", args, 1, 6)
+type FoldPlacement = object
+  applications: seq[window.CheckedGeometryApplication]
+  history: seq[state.IdentityHistoryUpdate]
+  records: seq[state.IdentityExplodeStateRecord]
 
-  var a = parseArguments(
-    "layout fold",
-    args,
-    [
-      ArgColumns,
-      ArgRows,
-      ArgClassname,
-      ArgSpread
-    ]
-  )
-
-  let winid = query.focusedWinid()
-
-  if a.rows == -1:
-    a.rows = 1
-
-  let winids =
-    if a.classname.len > 0:
-      window.ids(@[a.classname]).splitLines()
-    else:
-      window.liveIds(@[]).splitLines()
-
-  if winids.len == 0:
-    quit("layout fold: no matching windows")
-
-  let screenGeometry = window.screenGeometry()
+proc prepareFoldPlacement(winids: seq[string], columns, rows: int, spread: bool,
+    screenGeometry: ScreenGeometry, identitySnapshot: query.WmSnapshot,
+    command: string): FoldPlacement =
   var
     initial: seq[Geometry] = @[]
-    applications: seq[window.CheckedGeometryApplication] = @[]
-    history: seq[state.IdentityHistoryUpdate] = @[]
-  let identitySnapshot = query.wmSnapshot()
 
   # Capture every source geometry before any fold mutation occurs.  This
   # preserves spread sizing and the original-history comparison semantics.
@@ -375,60 +351,122 @@ proc fold*(args: seq[string]) =
         token = client.token
         break
     if not token.isPresent:
-      quit("layout fold: missing client identity for " & winid)
+      quit(command & ": missing client identity for " & winid)
     let destination = foldDestination(
-      a.columns,
-      a.rows,
+      columns,
+      rows,
       index + 1,
       screenGeometry,
       source,
-      a.spread
+      spread
     )
+    result.records.add((winid, token, source))
     if source != destination:
-      history.add((winid, token, source))
-    applications.add((winid, token, destination))
+      result.history.add((winid, token, source))
+    result.applications.add((winid, token, destination))
 
-  if history.len == 0:
+
+proc fold*(args: seq[string]) =
+  requireArgs("layout fold", args, 1, 6)
+
+  var a = parseArguments(
+    "layout fold",
+    args,
+    [
+      ArgColumns,
+      ArgRows,
+      ArgClassname,
+      ArgGroupNo,
+      ArgSpread
+    ]
+  )
+
+  let winid = query.focusedWinid()
+
+  if a.rows == -1:
+    a.rows = 1
+
+  let winids =
+    if a.groupNo > 0:
+      window.ids(@["--group", $a.groupNo]).splitLines()
+    elif a.classname.len > 0:
+      window.ids(@[a.classname]).splitLines()
+    else:
+      window.liveIds(@[]).splitLines()
+
+  if winids.len == 0:
+    quit("layout fold: no matching windows")
+
+  let screenGeometry = window.screenGeometry()
+  let placement = prepareFoldPlacement(winids, a.columns, a.rows, a.spread,
+    screenGeometry, query.wmSnapshot(), "layout fold")
+
+  if placement.history.len == 0:
     focus(winid)
     return
 
-  var transaction = state.beginRestoreHistoryIdentity(history)
-  window.applyGeometriesChecked(applications)
+  var transaction = state.beginRestoreHistoryIdentity(placement.history)
+  window.applyGeometriesChecked(placement.applications)
   state.commitRestoreHistory(transaction)
 
   focus(winid)
 
-proc explode*(args: seq[string]) =
-  requireNoArgs("layout explode", args)
+proc spreadGrid(count: int): Spread =
+  result.columns = 1
+  result.rows = 1
 
+  case count
+  of 1:
+    return
+  of 2:
+    result.columns = 3
+  of 3:
+    result.columns = 4
+  of 4:
+    result.columns = 3
+    result.rows = 2
+  of 5 .. 9:
+    result.columns = 4
+    result.rows = 3
+  else:
+    result.columns = 5
+    result.rows = 3
+
+proc explodeGroup*(group: int) =
+  let winid = query.focusedWinid()
+
+  let winids = window.ids(@["--group", $group]).splitLines().filterIt(it.len > 0)
+
+  if winids.len == 0:
+    quit("layout explode --group: no matching windows")
+
+  let spread = spreadGrid(winids.len)
+  let root = getEnv("WME") / "layout" / "explode:group:" & $group
+
+  state.recoverExplodeOperation(root)
+  let identitySnapshot = query.wmSnapshot()
+  let placement = prepareFoldPlacement(winids, spread.columns, spread.rows, false,
+    window.screenGeometry(), identitySnapshot, "layout explode --group")
+  var operation = state.beginExplodeOperationIdentity(root, placement.records,
+    placement.history)
+  window.applyGeometriesChecked(placement.applications)
+  state.markExplodeGeometryApplied(operation)
+  state.commitExplodeOperation(operation)
+
+  if winid.len > 0 and winid in window.liveIds(@["--all"]).splitLines():
+    if query.focusedWinid() != winid:
+      focus(winid)
+
+proc explodeStack*() =
   let winid = query.focusedWinid()
   let stack = query.stackGeometries()
 
   if stack.len == 0:
     quit("layout explode: no matching windows")
 
-  var
-    columns = 1
-    rows = 1
-
-  case stack.len
-  of 1:
-    return
-  of 2:
-    columns = 3
-  of 3:
-    columns = 4
-  of 4:
-    columns = 3
-    rows = 2
-  of 5 .. 9:
-    columns = 4
-    rows = 3
-  else:
-    columns = 5
-    rows = 3
-
+  let spread = spreadGrid(stack.len)
   let root = getEnv("WME") / "layout" / "explode"
+
   state.recoverExplodeOperation(root)
   var position = 1
   let screenGeometry = window.screenGeometry()
@@ -448,8 +486,8 @@ proc explode*(args: seq[string]) =
     records.add((entry.winid, token, entry.geometry))
 
     let destination = explodeDestination(
-      columns,
-      rows,
+      spread.columns,
+      spread.rows,
       position,
       screenGeometry,
     )
@@ -468,11 +506,23 @@ proc explode*(args: seq[string]) =
 
   focus(winid)
 
-proc unexplode*(args: seq[string]) =
-  requireNoArgs("layout unexplode", args)
+proc explode*(args: seq[string]) =
+  requireArgs("layout explode", args, 0, 2)
 
-  let root = getEnv("WME") / "layout" / "explode"
+  let a = parseArguments(
+    "layout explode",
+    args,
+    [
+      ArgGroupNo
+    ]
+  )
 
+  if a.groupNo > 0:
+    explodeGroup(a.groupNo)
+  else:
+    explodeStack()
+
+proc unexplodeRecorded(root, command: string) =
   state.recoverExplodeOperation(root)
   state.recoverExplodeState(root)
   let explodeLock = acquireExplodeLock(root)
@@ -486,7 +536,7 @@ proc unexplode*(args: seq[string]) =
     if dirExists(root):
       removeDir(root)
     releaseExplodeLock(explodeLock)
-    quit("layout unexplode: no matching windows")
+    quit(command & ": no matching windows")
 
   let existing = window.liveIds(@["--all"]).splitLines.toHashSet
   let focusedBefore = query.focusedWinid()
@@ -516,6 +566,30 @@ proc unexplode*(args: seq[string]) =
         query.focusedWinid() != focusedBefore:
       focus(focusedBefore)
   removeDir(root)
+
+proc unexplodeGroup*(group: int) =
+  let root = getEnv("WME") / "layout" / "explode:group:" & $group
+  unexplodeRecorded(root, "layout unexplode --group")
+
+proc unexplodeStack*() =
+  let root = getEnv("WME") / "layout" / "explode"
+  unexplodeRecorded(root, "layout unexplode")
+
+proc unexplode*(args: seq[string]) =
+  requireArgs("layout unexplode", args, 0, 2)
+
+  let a = parseArguments(
+    "layout unexplode",
+    args,
+    [
+      ArgGroupNo
+    ]
+  )
+
+  if a.groupNo > 0:
+    unexplodeGroup(a.groupNo)
+  else:
+    unexplodeStack()
 
 #
 # Native Nim convenience overloads

@@ -59,21 +59,22 @@ proc liveIds*(args: seq[string]): string =
     else:
       shvArgs("sirocco", "window", @["ids", "--name", a.name], 3, 3)
 
-proc cachedFilteredIds(includeAll: bool, classname, name: string): string =
+proc cachedFilteredIds(includeAll: bool, classname, name: string, groupNo = -1): string =
   let kind = if name.len > 0: RequestQueryNameList else: RequestQueryClassList
   let pattern = if name.len > 0: name else: classname
-  let reply = queryDaemonFiltered(kind, includeAll, pattern)
+  let reply = queryDaemonFiltered(kind, includeAll, pattern, groupNo)
   if not reply.ok:
     quit("window ids: " & reply.error)
   reply.body
 
-proc cachedIds(includeAll: bool): string =
+proc cachedIds(includeAll: bool, groupNo = -1): string =
   let reply = queryDaemonClientList()
   if not reply.ok:
     quit("window ids: " & reply.error)
   var values: seq[string] = @[]
   for client in reply.clients:
-    if includeAll or client.mapped:
+    if (includeAll or client.mapped) and
+        (groupNo == -1 or client.group.uint64 == groupNo.uint64):
       values.add(client.winid)
   # Sirocco preserves its historical numeric-XID ordering for ids queries;
   # snapshot client order is WM list order and is not equivalent.
@@ -81,22 +82,23 @@ proc cachedIds(includeAll: bool): string =
   values.join("\n")
 
 proc ids*(args: seq[string]): string =
-  requireArgs("window ids", args, 0, 3)
+  requireArgs("window ids", args, 0, 5)
   let a = parseArguments(
     "window ids",
     args,
     [
       ArgAll,
       ArgClassname,
-      ArgName
+      ArgName,
+      ArgGroupNo
     ]
   )
   if a.classname == "" and a.name == "":
-    return cachedIds(a.all)
+    return cachedIds(a.all, a.groupNo)
   if a.classname != "":
-    return cachedFilteredIds(a.all, a.classname, "")
+    return cachedFilteredIds(a.all, a.classname, "", a.groupNo)
   if a.name != "":
-    return cachedFilteredIds(a.all, "", a.name)
+    return cachedFilteredIds(a.all, "", a.name, a.groupNo)
   liveIds(args)
 
 proc ids*(arg: string): string =
@@ -218,12 +220,13 @@ proc screenGeometry*(): ScreenGeometry =
   result.gap = metrics.gap
   result.margin = metrics.margin
   result.top = metrics.top
+  result.bottom = metrics.bottom
 
   result.width =
     dimensions.width - result.margin * 2
 
   result.height =
-    dimensions.height - result.top * 2
+    dimensions.height - (result.top + result.bottom)
 
 #
 # Helpers

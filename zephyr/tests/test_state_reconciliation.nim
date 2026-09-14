@@ -99,7 +99,7 @@ suite "state reconciliation":
     check dirExists(root / "hidden" / winid)
     cleanRoot(root)
 
-  test "destroyed clients lose membership and hidden metadata":
+  test "absent clients lose membership; lifecycle owns hidden metadata":
     let root = makeRoot("cirrus-destroy")
     let winid = "0x00000004"
     createDir(root / "group" / "2" / winid)
@@ -111,7 +111,7 @@ suite "state reconciliation":
     check reconcileSnapshot(snapshot)
     check not dirExists(root / "group" / "2" / winid)
     check not dirExists(root / "group:focus" / "2" / winid)
-    check not dirExists(root / "hidden" / winid)
+    check dirExists(root / "hidden" / winid)
     cleanRoot(root)
 
   test "destination failure preserves stale membership and can retry":

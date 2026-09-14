@@ -24,6 +24,7 @@ type
     gap*: int
     margin*: int
     top*: int
+    bottom*: int
     width*: int
     height*: int
 
@@ -34,3 +35,7 @@ type
     rows*: int
     row*: int
 
+type
+  Spread* = object
+    columns*: int
+    rows*: int
