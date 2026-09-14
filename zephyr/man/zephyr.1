@@ -186,7 +186,7 @@ Public group IDs are one\-based\. \fB0\fR is not a public group argument\.
 \fBlayout unexplode \-\-group\fR \fIgroup\fR: Restore that recorded operation, including surviving clients that changed groups or became hidden\. New members and reused XIDs with different identity tokens are not restored\. Preserve current focus and remove the saved operation after restoration\.
 .
 .IP "\(bu" 4
-\fBlayout fold\fR \fIargs\fR: Fold matching windows into a grid\.
+\fBlayout fold\fR \fIargs\fR: Fold matching windows into a grid, then raise participants in placement order within their effective stacking bands while preserving focus\. Repeating an unchanged fold still raises the selected set\. Group explode shares this stacking behavior without sharing fold transaction ownership\.
 .
 .IP "\(bu" 4
 \fBlayout level\fR \fIargs\fR: Level windows vertically\.

@@ -366,6 +366,19 @@ proc prepareFoldPlacement(winids: seq[string], columns, rows: int, spread: bool,
     result.applications.add((winid, token, destination))
 
 
+proc raiseFoldPlacement(placement: FoldPlacement) =
+  # raiseMany consumes bottom-to-top order; retain the placement/input order.
+  window.raiseMany(placement.applications.mapIt(it.winid))
+
+proc restoreFoldFocus(winid: string, placement: FoldPlacement) =
+  # Explicit multi-raise preserves focus. Avoid raising an unrelated focused
+  # window back over the placement merely to reaffirm its existing focus.
+  if query.focusedWinid() != winid:
+    focus(winid)
+    # Restoring focus raises its target. Reassert the participant order without
+    # changing focus, including when the original focus is outside the set.
+    raiseFoldPlacement(placement)
+
 proc fold*(args: seq[string]) =
   requireArgs("layout fold", args, 1, 6)
 
@@ -402,14 +415,16 @@ proc fold*(args: seq[string]) =
     screenGeometry, query.wmSnapshot(), "layout fold")
 
   if placement.history.len == 0:
-    focus(winid)
+    raiseFoldPlacement(placement)
+    restoreFoldFocus(winid, placement)
     return
 
   var transaction = state.beginRestoreHistoryIdentity(placement.history)
   window.applyGeometriesChecked(placement.applications)
   state.commitRestoreHistory(transaction)
+  raiseFoldPlacement(placement)
 
-  focus(winid)
+  restoreFoldFocus(winid, placement)
 
 proc spreadGrid(count: int): Spread =
   result.columns = 1
@@ -451,11 +466,11 @@ proc explodeGroup*(group: int) =
     placement.history)
   window.applyGeometriesChecked(placement.applications)
   state.markExplodeGeometryApplied(operation)
+  raiseFoldPlacement(placement)
   state.commitExplodeOperation(operation)
 
   if winid.len > 0 and winid in window.liveIds(@["--all"]).splitLines():
-    if query.focusedWinid() != winid:
-      focus(winid)
+    restoreFoldFocus(winid, placement)
 
 proc explodeStack*() =
   let winid = query.focusedWinid()

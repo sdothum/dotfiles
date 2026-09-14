@@ -100,7 +100,10 @@ commands; they are not zephyr public actions.
   surviving clients that changed groups or became hidden. New members and
   reused XIDs with different identity tokens are not restored. Preserve current
   focus and remove the saved operation after restoration.
-* `layout fold` <args>: Fold matching windows into a grid.
+* `layout fold` <args>: Fold matching windows into a grid, then raise participants
+  in placement order within their effective stacking bands while preserving focus.
+  Repeating an unchanged fold still raises the selected set. Group explode shares
+  this stacking behavior without sharing fold transaction ownership.
 * `layout level` <args>: Level windows vertically.
 * `layout restore` [<args>]: Restore layout state.
 * `layout spread` <args>: Spread windows across a grid.

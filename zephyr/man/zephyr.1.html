@@ -184,7 +184,10 @@ grid engine and save a dedicated identity-bearing explode operation under
 surviving clients that changed groups or became hidden. New members and
 reused XIDs with different identity tokens are not restored. Preserve current
 focus and remove the saved operation after restoration.</li>
-<li><code>layout fold</code> <var>args</var>: Fold matching windows into a grid.</li>
+<li><code>layout fold</code> <var>args</var>: Fold matching windows into a grid, then raise participants
+in placement order within their effective stacking bands while preserving focus.
+Repeating an unchanged fold still raises the selected set. Group explode shares
+this stacking behavior without sharing fold transaction ownership.</li>
 <li><code>layout level</code> <var>args</var>: Level windows vertically.</li>
 <li><code>layout restore</code> [<var>args</var>]: Restore layout state.</li>
 <li><code>layout spread</code> <var>args</var>: Spread windows across a grid.</li>
