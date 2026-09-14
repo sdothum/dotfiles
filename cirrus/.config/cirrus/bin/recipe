@@ -14,15 +14,15 @@ usage() { echo "$(basename $0) -[a'dd | d'elete | p'ath | q'uiet (test) | /'utf-
 
 case "$1" in
 	-h* ) usage ;;
-	-a  ) mkdir -p "$WMSESSION/$2" ;;                         # add to (without clear) branch
+	-a  ) mkdir -p "$WMSE/$2" ;;                              # add to (without clear) branch
 	-c  ) recipe "$2" || { recipe "$2" "$3"; echo "$3"; } ;;  # return value or set (with echo) otherwise
-	-d  ) rm -rf "$WMSESSION/$2" ;;                           # delete branch
+	-d  ) rm -rf "$WMSE/$2" ;;                                # delete branch
 	-e  ) recipe "$2" "$3" && [ "$3" ] && echo "$3" ;;        # set with echo
-	-p  ) echo "$WMSESSION/$2"   ;;
+	-p  ) echo "$WMSE/$2"   ;;
 	-q  ) recipe "$2" >/dev/null ;;                           # quiet test
 	-/  ) [ "$3" ] && recipe "$2" "$(echo "$3" | utfslash)" || recipe "$2" | utfslash - ;;  # add utf-8 / return ascii slashes
 	*   ) # set or return branch (or error code)
-		branch="$WMSESSION/$1"
+		branch="$WMSE/$1"
 		if [ "$2" ] ;then
 			rm -rf "$branch"/*  # NOTE: most quote $branch for spaces
 			mkdir -p "$branch/$2"

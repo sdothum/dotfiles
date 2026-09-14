@@ -177,12 +177,15 @@ struct ipc_client_query {
 	xcb_atom_t wm_class;
 	regex_t title_regex;
 	bool regex_compiled;
+	bool filter_group;
+	uint32_t group;
 };
 
 enum ipc_query_prepare_result {
 	IPCQueryPrepareOK,
 	IPCQueryPrepareError,
-	IPCQueryPrepareInvalidRegex
+	IPCQueryPrepareInvalidRegex,
+	IPCQueryPrepareInvalidGroup
 };
 
 static bool
@@ -228,6 +231,8 @@ ipc_client_query_matches(struct client *client, struct ipc_client_query *query)
 	bool matches;
 
 	if (query->scope != IPCClientScopeAll && !client->mapped)
+		return false;
+	if (query->filter_group && client->group != query->group)
 		return false;
 	switch (query->selector) {
 	case IPCClientSelectorNone:
@@ -1261,6 +1266,31 @@ ipc_window_ids(uint32_t *d)
 	if (prepare_result != IPCQueryPrepareOK)
 		goto query_error;
 
+	/* Optional CARDINAL request payload is the one-based public group ID. */
+	xcb_get_property_reply_t *group_reply = xcb_get_property_reply(conn,
+			xcb_get_property(conn, false, reply_window, ATOMS[_IPC_ATOM_REQUEST],
+				XCB_GET_PROPERTY_TYPE_ANY, 0, 1), NULL);
+	if (group_reply == NULL) {
+		prepare_result = IPCQueryPrepareError;
+		goto query_error;
+	}
+	if (group_reply->type != XCB_ATOM_NONE) {
+		bool valid = group_reply->type == XCB_ATOM_CARDINAL &&
+				group_reply->format == 32 && group_reply->bytes_after == 0 &&
+				xcb_get_property_value_length(group_reply) == sizeof(uint32_t);
+		uint32_t public_group = 0;
+		if (valid)
+			memcpy(&public_group, xcb_get_property_value(group_reply), sizeof(public_group));
+		if (!valid || public_group == 0 || public_group >= conf.groups) {
+			free(group_reply);
+			prepare_result = IPCQueryPrepareInvalidGroup;
+			goto query_error;
+		}
+		query.filter_group = true;
+		query.group = public_group;
+	}
+	free(group_reply);
+
 	for (item = win_list; item != NULL; item = item->next)
 		client_count++;
 
@@ -1316,7 +1346,8 @@ query_error:
 		static const char query_error_response[] = "ERROR unable to prepare selector query";
 		static const char regex_error_response[] = "ERROR invalid title regex";
 		const char *error_response = prepare_result == IPCQueryPrepareInvalidRegex ?
-				regex_error_response : query_error_response;
+				regex_error_response : prepare_result == IPCQueryPrepareInvalidGroup ?
+				"ERROR invalid group" : query_error_response;
 
 		property_cookie = xcb_change_property(conn, XCB_PROP_MODE_REPLACE,
 				reply_window, ATOMS[_IPC_ATOM_RESPONSE], XCB_ATOM_STRING, 8,
@@ -1672,8 +1703,7 @@ ipc_action_window_stack_cycle(uint32_t *d)
 		goto respond;
 	}
 	if (stack.count > 1) {
-		target = stack.reference_index == stack.count - 1 ?
-				stack.clients[0] : reference;
+		target = stack_cycle_target(&stack);
 		set_focused(target);
 	}
 	response = "OK";

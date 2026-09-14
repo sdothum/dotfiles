@@ -150,8 +150,12 @@
 <dt><code>window focus --cardinal</code> <var>DIRECTION</var></dt><dd><p>  Focus the closest window in a direction, relative to the currently
   focused window. Does nothing if there is no window focused.</p></dd>
 <dt><code>window layer</code> <var>normal|above|overlay</var> [<var>winid</var>]</dt><dd><p>  Set the managed client's persistent stacking tier without focusing it.
-  Overlay stays above Above, and Above stays above Normal, including during
-  focus, raises, configure requests, and group changes. Within each tier,
+  Effective stacking order is Overlay, zoomed/fullscreen, Above, Normal,
+  including during focus, raises, configure requests, and group changes.
+  Monocle and full maximize (also EWMH fullscreen) temporarily place a client
+  above Above while preserving its persistent layer. Overlay remains highest
+  even when zoomed. Exiting these modes immediately restores the persistent
+  tier; horizontal/vertical maximization does not gain this priority. Within each tier,
   existing relative stacking order is retained where possible. Normal restores
   ordinary stacking. The target defaults to the focused managed window.
   Hidden clients retain their tier until destroyed or unmanaged; state is
@@ -187,11 +191,16 @@
 <dt><code>window focused</code></dt><dd><p>  Print the currently focused managed window ID in <code>0x%08x</code> format. If no
   managed window is focused, print an error and exit with a nonzero status.
   The query also exits nonzero if cirrus does not respond within two seconds.</p></dd>
-<dt><code>window ids</code> [--all] [<var>classname</var>] [--name <var>name</var>]</dt><dd><p>  Print managed window IDs, one per line. Without <code>--all</code>, only mapped windows
+<dt><code>window ids</code> [--all] [<var>classname</var>] [--name <var>name</var>] [--group <var>group</var>]</dt><dd><p>  Print managed window IDs, one per line. Without <code>--all</code>, only mapped windows
   are included; <code>--all</code> includes all managed windows. An optional classname or
-  name restricts the result.</p></dd>
-<dt><code>window count</code> [--all] [<var>classname</var>] [--name <var>name</var>]</dt><dd><p>  Print the number of windows selected by the same collection options as
-  <code>window ids</code>.</p></dd>
+  name restricts the result. <code>--group</code> independently narrows this set to the
+  specified public group, using the same ID as <code>group add</code> (1 up to, but
+  excluding, <code>group count</code>; group 0 is reserved). It can appear before or
+  after the existing collection options. Zero, out-of-range, nonnumeric,
+  missing, and repeated group arguments fail. Group filtering does not change
+  visibility, classname matching, title regex matching, or output format.</p></dd>
+<dt><code>window count</code> [--all] [<var>classname</var>] [--name <var>name</var>]</dt><dd><p>  Print the number of windows selected by the existing visibility and
+  classname/name options. <code>--group</code> is supported by <code>window ids</code> only.</p></dd>
 <dt><code>window classname</code></dt><dd><p>  Print the focused managed window's class name.</p></dd>
 <dt><code>window stack</code> [<var>winid</var>]</dt><dd><p>  Print the connected transitive overlap cluster containing the selected window,
   one window ID per line in actual X stacking order from bottom to top.</p></dd>
@@ -218,7 +227,12 @@
   <code>4294967295</code> is the null-group sentinel. This is a read-only observation.</p></dd>
 <dt><code>window stack cycle</code> [<var>winid</var>]</dt><dd><p>  Focus and raise the selected window if it is not already the topmost member of
   its canonical stack. If it is topmost, focus and raise the bottommost member.
-  A single-member stack is left unchanged.</p></dd>
+  This physical-order rotation is preserved when all members share one effective
+  stacking band. Across different bands, select the least recently focused
+  overlapping member other than the reference, so repeated cycles visit every
+  member even when it cannot rise above another band. Focus raises the target
+  only within its effective band (including temporary zoom/fullscreen priority);
+  persistent layers are unchanged. A single-member stack is left unchanged.</p></dd>
 </dl>
 
 

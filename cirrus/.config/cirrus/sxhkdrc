@@ -115,7 +115,7 @@ super + {_,ctrl} + space
 super + shift + p ; {space,BackSpace}
 	zephyr window size paper {--larger,--smaller}
 
-super + shift + v ; {space,BackSpace},layer Above,layer Normal},layer Above,layer Normal},layer Above,layer Normal},layer Above,layer Normal},layer Above,layer Normal},layer Above,layer Normal}
+super + shift + v ; {space,BackSpace}
 	zephyr window size video {--larger,--smaller}
 
 super + shift + {Left,Down,Up,Right}
@@ -156,6 +156,10 @@ super + shift + {1,2,3,4,5}
 	zephyr layout fold {1,2,3,4,5} $(zephyr window classname) ;\
 	sirocco window focus $W
 
+alt + super + space
+	G=$(sirocco group current) ;\
+	[ -e $WME/layout/explode:group:$G ] && zephyr layout unexplode --group $G || zephyr layout explode --group $G
+
 alt + ctrl + space
 	[ -e $WME/layout/explode ] && zephyr layout unexplode || zephyr layout explode
 
@@ -189,11 +193,11 @@ super + {_,shift} + r
 
 super + {t,s}
 	side="{left,right}" ;\
-	echo "$(zephyr window classname)" | grep -q -E "term|tmux" && zephyr window spread $side || zephyr window snap $side
+	zephyr window spread $side
 
 super + ctrl + {t,s}
 	side="{left,right}" ;\
-	zephyr window spread $side
+	zephyr window snap $side
 
 super + {_,ctrl,shift} + g
 	zephyr window snap center { ,left,right}

@@ -1,4 +1,4 @@
-"""Build and test stacking layers on a private Xvfb display (requires Xvfb)."""
+"""Build and test group-filtered window IDs on a private Xvfb display (requires Xvfb)."""
 import os
 from pathlib import Path
 import select
@@ -8,11 +8,11 @@ import time
 
 root = Path(__file__).resolve().parents[1]
 subprocess.run(["make", "-B"], cwd=root, check=True)
-with tempfile.TemporaryDirectory(prefix="cirrus-layers-") as directory:
+with tempfile.TemporaryDirectory(prefix="cirrus-ids-group-") as directory:
     temporary = Path(directory)
-    test = temporary / "test_layers"
+    test = temporary / "test_ids_group"
     subprocess.run(["cc", "-std=c99", "-Wall", "-Wextra", "-I", str(root),
-                    str(root / "tests/test_layers.c"), "-o", str(test),
+                    str(root / "tests/test_ids_group.c"), "-o", str(test),
                     "-lxcb", "-lxcb-ewmh"], check=True)
     read_fd, write_fd = os.pipe()
     with (temporary / "server.log").open("w+") as server_log, \
@@ -33,7 +33,7 @@ with tempfile.TemporaryDirectory(prefix="cirrus-layers-") as directory:
             time.sleep(0.5)
             assert wm.poll() is None, "test WM failed to start"
             subprocess.run([str(test), str(root / "sirocco")], env=env,
-                           timeout=120, check=True)
+                           timeout=40, check=True)
         except BaseException:
             for log in (server_log, wm_log):
                 log.flush()

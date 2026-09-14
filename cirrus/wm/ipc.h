@@ -6,6 +6,8 @@
 #define ATOM_COMMAND "__WM_IPC_COMMAND"
 #define ATOM_RESPONSE "__WM_IPC_RESPONSE"
 #define ATOM_REQUEST "__WM_IPC_REQUEST"
+/* IPCWindowIds: optional single CARDINAL on the reply window selects a
+ * one-based public group. Absence preserves the unfiltered query. */
 
 #define WM_EXIT_RESTART 75
 

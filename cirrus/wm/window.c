@@ -248,6 +248,7 @@ fit_on_screen(struct client *client)
 	get_monitor_size(client, &mon_x, &mon_y, &mon_width, &mon_height);
 	if (client->maxed) {
 		client->maxed = false;
+		enforce_stacking_layers();
 	} else if (client->geom.width == mon_width && client->geom.height == mon_height) {
 		struct window_geom normal_geom = client->geom;
 
@@ -341,6 +342,7 @@ maximize_window(struct client *client, int16_t mon_x, int16_t mon_y, uint16_t mo
 	teleport_window(client->window, client->geom.x, client->geom.y);
 	resize_window_absolute(client->window, client->geom.width, client->geom.height);
 	set_focused_no_raise(client);
+	enforce_stacking_layers();
 
 	update_ewmh_wm_state(client);
 	update_window_status(client);
@@ -410,6 +412,7 @@ monocle_window(struct client *client, int16_t mon_x, int16_t mon_y, uint16_t mon
 	resize_window_absolute(client->window, client->geom.width, client->geom.height);
 	client->monocled = true;
 	set_focused_no_raise(client);
+	enforce_stacking_layers();
 
 	update_ewmh_wm_state(client);
 	update_window_status(client);

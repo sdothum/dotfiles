@@ -67,24 +67,24 @@ recover() {
 settings() {
 	themes="$(recipe $THEMES | grep -v '^-' | tr '\n' ' ')"
 	echo "
-	${ORANGE}T${cyan}heme                    "${NOCOLOR}${theme:----} \ \ ${brown}L${cyan}oad \| ${brown}S${cyan}ave as \| ${brown}D${cyan}elete  ${BROWN}${themes}"
-	${ORANGE}!${cyan} borders                "${NOCOLOR}$(recipe ui/enable_borders)"
-	${cyan}border ${ORANGE}s${cyan}tyle             "${NOCOLOR}$(decoration $(recipe ui/border_style)) \ \ ${brown}f${cyan}rame \| ${brown}l${cyan}eft \| ${brown}t${cyan}op \| ${brown}r${cyan}ight \| ${brown}b${cyan}ottom \| ${brown}c${cyan}orners [\<${BROWN}mask${cyan}\>]"
-	${cyan}outer border ${ORANGE}w${cyan}idth       "${NOCOLOR}$(recipe ui/outer_border_width)"
-	${cyan}inner border ${ORANGE}W${cyan}idth       "${NOCOLOR}$(recipe ui/inner_border_width)"
-	${cyan}corner length ${ORANGE}%${cyan}          "${NOCOLOR}$(recipe ui/corner_percent)"
-	${ORANGE}c${cyan}orners mask             "${NOCOLOR}$(map) \ \ \ \ \ \ ${cyan}\<${BROWN}xxxx${cyan}\> bit 1 \(on\) 0 \(off\) topleft .. bottomleft, 0000 == disable${cyan}"
-	${cyan}outer color ${ORANGE}f${cyan}ocused      "${NOCOLOR}$(recipe ui/outer_color_focused) \ \ \<${BROWN}aarrggbb${cyan}\>"
-	${cyan}outer color ${ORANGE}u${cyan}nfocused    "${NOCOLOR}$(recipe ui/outer_color_unfocused)"
-	${cyan}inner color ${ORANGE}F${cyan}ocused      "${NOCOLOR}$(recipe ui/inner_color_focused)"
-	${cyan}inner color ${ORANGE}U${cyan}nfocused    "${NOCOLOR}$(recipe ui/inner_color_unfocused)"
-	${cyan}gap width ${ORANGE}t${cyan}op            "${NOCOLOR}$(recipe 'ui/gap_width top')"
-	${cyan}gap width ${ORANGE}b${cyan}ottom         "${NOCOLOR}$(recipe 'ui/gap_width bottom')"
-	${cyan}gap width ${ORANGE}l${cyan}eft           "${NOCOLOR}$(recipe 'ui/gap_width left')"
-	${cyan}gap width ${ORANGE}r${cyan}ight          "${NOCOLOR}$(recipe 'ui/gap_width right')"
-	${ORANGE}g${cyan}rid gap spacing         "${NOCOLOR}$(recipe ui/grid_gap_width)"
-	${cyan}panel ${ORANGE}h${cyan}eight             "${NOCOLOR}$(recipe panel/height)"
-	${cyan}panel ${ORANGE}i${cyan}ndent             "${NOCOLOR}$(recipe panel/indent)"
+   ${ORANGE}T${cyan}heme                    "${NOCOLOR}${theme:----} \ \ ${brown}L${cyan}oad \| ${brown}S${cyan}ave as \| ${brown}D${cyan}elete  \"${theme:----}\" \| ${BROWN}${themes% *}"
+   ${ORANGE}!${cyan} borders                "${NOCOLOR}$(recipe ui/enable_borders)"
+   ${cyan}border ${ORANGE}s${cyan}tyle             "${NOCOLOR}$(decoration $(recipe ui/border_style)) \ \ ${brown}f${cyan}rame \| ${brown}l${cyan}eft \| ${brown}t${cyan}op \| ${brown}r${cyan}ight \| ${brown}b${cyan}ottom \| ${brown}c${cyan}orners [\<${BROWN}mask${cyan}\>]"
+   ${cyan}outer border ${ORANGE}w${cyan}idth       "${NOCOLOR}$(recipe ui/outer_border_width)"
+   ${cyan}inner border ${ORANGE}W${cyan}idth       "${NOCOLOR}$(recipe ui/inner_border_width)"
+   ${cyan}corner length ${ORANGE}%${cyan}          "${NOCOLOR}$(recipe ui/corner_percent)"
+   ${ORANGE}c${cyan}orners mask             "${NOCOLOR}$(map) \ \ \ \ \ \ ${cyan}\<${BROWN}xxxx${cyan}\> bit 1 \(on\) 0 \(off\) topleft .. bottomleft, 0000 == disable${cyan}"
+   ${cyan}outer color ${ORANGE}f${cyan}ocused      "${NOCOLOR}$(recipe ui/outer_color_focused) \ \ \<${BROWN}aarrggbb${cyan}\>"
+   ${cyan}outer color ${ORANGE}u${cyan}nfocused    "${NOCOLOR}$(recipe ui/outer_color_unfocused)"
+   ${cyan}inner color ${ORANGE}F${cyan}ocused      "${NOCOLOR}$(recipe ui/inner_color_focused)"
+   ${cyan}inner color ${ORANGE}U${cyan}nfocused    "${NOCOLOR}$(recipe ui/inner_color_unfocused)"
+   ${cyan}gap width ${ORANGE}t${cyan}op            "${NOCOLOR}$(recipe 'ui/gap_width top')"
+   ${cyan}gap width ${ORANGE}b${cyan}ottom         "${NOCOLOR}$(recipe 'ui/gap_width bottom')"
+   ${cyan}gap width ${ORANGE}l${cyan}eft           "${NOCOLOR}$(recipe 'ui/gap_width left')"
+   ${cyan}gap width ${ORANGE}r${cyan}ight          "${NOCOLOR}$(recipe 'ui/gap_width right')"
+   ${ORANGE}g${cyan}rid gap spacing         "${NOCOLOR}$(recipe ui/grid_gap_width)"
+   ${cyan}panel ${ORANGE}h${cyan}eight             "${NOCOLOR}$(recipe panel/height)"
+   ${cyan}panel ${ORANGE}i${cyan}ndent             "${NOCOLOR}$(recipe panel/indent)"
 "
 }
 
@@ -133,28 +133,28 @@ decoration() {
 	esac
 }
 
-delete() { recipe -q "$THEMES/$1" && rm -r $WMSESSION/$THEMES/$1; }
+delete() { recipe -q "$THEMES/$1" && rm -r $WMSE/$THEMES/$1; }
 
 load() {
 	theme="${1-:$theme}"
 	recipe -q "$THEMES/$theme"
-	find $WMSESSION/$THEMES/$theme -maxdepth 1 >/tmp/cirrus:aurora 2>/dev/null
+	find $WMSE/$THEMES/$theme -maxdepth 1 >/tmp/cirrus:aurora 2>/dev/null
 	[ -n "$(cat /tmp/cirrus:aurora)" ] || return 1
 	while read attr <&3 ;do
 		[ "${attr##*/}" = "$theme" ] && continue
 		recipe -d "ui/${attr##*$theme/}"
-		cp -r "$attr" $WMSESSION/ui/
+		cp -r "$attr" $WMSE/ui/
 	done 3< /tmp/cirrus:aurora
 }
 
 save()  {
 	theme="${1-:$theme}"
 	recipe -d "$THEMES/$theme"
-	find $WMSESSION/ui -maxdepth 1 >/tmp/cirrus:aurora
+	find $WMSE/ui -maxdepth 1 >/tmp/cirrus:aurora
 	recipe -a "$THEMES/$theme"
 	while read attr <&3 ;do
 		echo "${attr##*/}" | grep -Eq 'ui|theme' && continue
-		cp -r "$attr" $WMSESSION/$THEMES/$theme/
+		cp -r "$attr" $WMSE/$THEMES/$theme/
 	done 3< /tmp/cirrus:aurora
 }
 
@@ -241,7 +241,7 @@ while : ;do
 	config
 done
 
-ifyes 'keep settings' || { recover; exit; }
+ifyes 'use these settings' || { recover; exit; }
 ditto $(basename $0) "current settings saved"
 recipe -d "$THEMES/---"
 [ "$theme" ] && recipe -a "$THEMES/---/$theme"

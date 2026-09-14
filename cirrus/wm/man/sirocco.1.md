@@ -120,8 +120,12 @@ cirrus(1) as an X client message. Mutation commands don't print anything on
 
 * `window layer` <normal|above|overlay> [<winid>]:
 	Set the managed client's persistent stacking tier without focusing it.
-	Overlay stays above Above, and Above stays above Normal, including during
-	focus, raises, configure requests, and group changes. Within each tier,
+	Effective stacking order is Overlay, zoomed/fullscreen, Above, Normal,
+	including during focus, raises, configure requests, and group changes.
+	Monocle and full maximize (also EWMH fullscreen) temporarily place a client
+	above Above while preserving its persistent layer. Overlay remains highest
+	even when zoomed. Exiting these modes immediately restores the persistent
+	tier; horizontal/vertical maximization does not gain this priority. Within each tier,
 	existing relative stacking order is retained where possible. Normal restores
 	ordinary stacking. The target defaults to the focused managed window.
 	Hidden clients retain their tier until destroyed or unmanaged; state is
@@ -172,14 +176,19 @@ cirrus(1) as an X client message. Mutation commands don't print anything on
 	managed window is focused, print an error and exit with a nonzero status.
 	The query also exits nonzero if cirrus does not respond within two seconds.
 
-* `window ids` [--all] [<classname>] [--name <name>]:
+* `window ids` [--all] [<classname>] [--name <name>] [--group <group>]:
 	Print managed window IDs, one per line. Without `--all`, only mapped windows
 	are included; `--all` includes all managed windows. An optional classname or
-	name restricts the result.
+	name restricts the result. `--group` independently narrows this set to the
+	specified public group, using the same ID as `group add` (1 up to, but
+	excluding, `group count`; group 0 is reserved). It can appear before or
+	after the existing collection options. Zero, out-of-range, nonnumeric,
+	missing, and repeated group arguments fail. Group filtering does not change
+	visibility, classname matching, title regex matching, or output format.
 
 * `window count` [--all] [<classname>] [--name <name>]:
-	Print the number of windows selected by the same collection options as
-	`window ids`.
+	Print the number of windows selected by the existing visibility and
+	classname/name options. `--group` is supported by `window ids` only.
 
 * `window classname`:
 	Print the focused managed window's class name.
@@ -223,7 +232,12 @@ cirrus(1) as an X client message. Mutation commands don't print anything on
 * `window stack cycle` [<winid>]:
 	Focus and raise the selected window if it is not already the topmost member of
 	its canonical stack. If it is topmost, focus and raise the bottommost member.
-	A single-member stack is left unchanged.
+	This physical-order rotation is preserved when all members share one effective
+	stacking band. Across different bands, select the least recently focused
+	overlapping member other than the reference, so repeated cycles visit every
+	member even when it cannot rise above another band. Focus raises the target
+	only within its effective band (including temporary zoom/fullscreen priority);
+	persistent layers are unchanged. A single-member stack is left unchanged.
 
 Information about the current state of cirrus is available through
 X properties of the root window. Example:

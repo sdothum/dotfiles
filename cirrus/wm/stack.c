@@ -109,6 +109,59 @@ free_window_stack(struct window_stack *stack)
 	stack->reference_index = 0;
 }
 
+enum stacking_priority {
+	StackNormal,
+	StackAbove,
+	StackZoomed,
+	StackOverlay,
+};
+
+/* Zoom is transient; the persistent layer remains authoritative on exit. */
+static enum stacking_priority
+effective_priority(const struct client *client)
+{
+	if (client->layer == LayerOverlay)
+		return StackOverlay;
+	if (client->maxed || client->monocled)
+		return StackZoomed;
+	if (client->layer == LayerAbove)
+		return StackAbove;
+	return StackNormal;
+}
+
+/* Physical order can rotate a single band, but cannot rotate across bands.
+ * In a mixed stack, use existing focus recency as the traversal order instead.
+ * No client pointers or XIDs are retained beyond this freshly collected stack. */
+struct client *
+stack_cycle_target(const struct window_stack *stack)
+{
+	struct client *reference = stack->clients[stack->reference_index];
+	bool mixed = false;
+	struct client *target = reference;
+	for (size_t i = 0; i < stack->count; i++) {
+		if (effective_priority(stack->clients[i]) != effective_priority(reference)) {
+			mixed = true;
+			break;
+		}
+	}
+	if (!mixed)
+		return stack->reference_index == stack->count - 1 ? stack->clients[0] : reference;
+
+	/* focus_list runs newest to oldest. Choose the least recently focused
+	 * eligible member, excluding the reference even for an explicit XID. */
+	for (struct list_item *item = focus_list; item != NULL; item = item->next) {
+		if (item->data == reference)
+			continue;
+		for (size_t i = 0; i < stack->count; i++) {
+			if (stack->clients[i] == item->data) {
+				target = item->data;
+				break;
+			}
+		}
+	}
+	return target;
+}
+
 /* X remains the source of within-tier order. Include EWMH ABOVE/dock root
  * windows without enrolling panels in focus/group policy. Other unmanaged
  * children retain their slots. Frames share their owner's
@@ -120,7 +173,7 @@ restack_layers(void)
 	xcb_query_tree_reply_t *tree = xcb_query_tree_reply(conn,
 			xcb_query_tree(conn, scr->root), NULL);
 	xcb_window_t *ordered;
-	int *layers;
+	int *priorities;
 	xcb_window_t *children;
 	bool ok = true, changed = false;
 	int count, slot = 0;
@@ -129,21 +182,21 @@ restack_layers(void)
 	count = xcb_query_tree_children_length(tree);
 	children = xcb_query_tree_children(tree);
 	ordered = calloc(count ? count : 1, sizeof(*ordered));
-	layers = calloc(count ? count : 1, sizeof(*layers));
-	if (ordered == NULL || layers == NULL) {
+	priorities = calloc(count ? count : 1, sizeof(*priorities));
+	if (ordered == NULL || priorities == NULL) {
 		free(ordered);
-		free(layers);
+		free(priorities);
 		free(tree);
 		return false;
 	}
 	for (int i = 0; i < count; i++) {
 		struct client *client = find_client_from_window(children[i]);
 		ordered[i] = children[i];
-		layers[i] = client != NULL ? (int)client->layer : -1;
+		priorities[i] = client != NULL ? (int)effective_priority(client) : -1;
 		if (client == NULL) {
 			/* Read properties on the live root child: no XID lifetime cache. */
 			if (default_window_layer(children[i]) == LayerAbove)
-				layers[i] = LayerAbove;
+				priorities[i] = StackAbove;
 			xcb_get_window_attributes_reply_t *attributes = xcb_get_window_attributes_reply(
 					conn, xcb_get_window_attributes(conn, children[i]), NULL);
 			if (attributes != NULL) {
@@ -154,11 +207,11 @@ restack_layers(void)
 			}
 		}
 	}
-	for (int layer = LayerNormal; layer <= LayerOverlay; layer++) {
+	for (int priority = StackNormal; priority <= StackOverlay; priority++) {
 		for (int i = 0; i < count; i++) {
-			if (layers[i] != layer)
+			if (priorities[i] != priority)
 				continue;
-			while (slot < count && layers[slot] < 0)
+			while (slot < count && priorities[slot] < 0)
 				slot++;
 			ordered[slot++] = children[i];
 		}
@@ -182,7 +235,7 @@ restack_layers(void)
 		}
 		finish_explicit_geometry_guard(&guard);
 	}
-	free(layers);
+	free(priorities);
 	free(ordered);
 	free(tree);
 	return ok;

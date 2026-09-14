@@ -15,6 +15,7 @@ static xcb_screen_t *s;
 static xcb_ewmh_connection_t e;
 static xcb_window_t w[4], frames[4];
 static int layers[4];
+static bool zoomed[4];
 static xcb_window_t panels[3];
 static int panel_layers[3] = {1, 1, 1};
 static const char *bin;
@@ -57,7 +58,7 @@ static void invariant(void) {
  for (int i=0; i<xcb_query_tree_children_length(r); i++) {
   int tier = -1;
   for (int j=0; j<4; j++) if (ids[i] == w[j] || ids[i] == frames[j]) {
-   tier=layers[j]; found++;
+   tier=layers[j]==2 ? 3 : zoomed[j] ? 2 : layers[j]; found++;
   }
   for (int j=0; j<3; j++) if (panels[j] && ids[i] == panels[j]) tier=panel_layers[j];
   if (tier >= 0) { assert(tier >= last); last=tier; }
@@ -76,15 +77,96 @@ static void layer(int i, int value) {
  assert(focused()==focus); invariant();
 }
 static bool above(int i) {
- xcb_ewmh_get_atoms_reply_t r; bool found=false;
- assert(xcb_ewmh_get_wm_state_reply(&e,xcb_ewmh_get_wm_state(&e,w[i]),&r,NULL));
- for(unsigned j=0;j<r.atoms_len;j++) if(r.atoms[j]==e._NET_WM_STATE_ABOVE) found=true;
- xcb_ewmh_get_atoms_reply_wipe(&r); return found;
+ bool found=false;
+ xcb_get_property_reply_t *r=xcb_get_property_reply(c,
+  xcb_get_property(c,0,w[i],e._NET_WM_STATE,XCB_ATOM_ATOM,0,1024),NULL);
+ assert(r);
+ xcb_atom_t *atoms=xcb_get_property_value(r);
+ for(int j=0;j<xcb_get_property_value_length(r)/(int)sizeof(*atoms);j++)
+  if(atoms[j]==e._NET_WM_STATE_ABOVE)found=true;
+ free(r);return found;
 }
 static void ewmh(int i, int action) {
  xcb_window_t focus=focused();
  xcb_ewmh_request_change_wm_state(&e,0,w[i],action,e._NET_WM_STATE_ABOVE,XCB_NONE,XCB_EWMH_CLIENT_SOURCE_TYPE_OTHER);
  settle(); assert(focused()==focus);
+}
+static void zoom(int i, const char *verb, bool enabled) {
+ bool persistent_above=above(i);
+ assert(!command(verb,NULL,w[i]));zoomed[i]=enabled;
+ assert(above(i)==persistent_above);invariant();
+}
+static void fullscreen(int i, int action, bool enabled) {
+ bool persistent_above=above(i);
+ xcb_ewmh_request_change_wm_state(&e,0,w[i],action,e._NET_WM_STATE_FULLSCREEN,
+  XCB_NONE,XCB_EWMH_CLIENT_SOURCE_TYPE_OTHER);
+ settle();zoomed[i]=enabled;assert(above(i)==persistent_above);invariant();
+}
+static void zoom_tests(void) {
+ /* Normal/Above return to their persistent bands; Overlay always wins. */
+ const char *verbs[]={"maximize","monocle"};
+ for(int v=0;v<2;v++) {
+  for(int i=0;i<3;i++) {
+   zoom(i,verbs[v],true);
+   zoom(i,verbs[v],false);
+   zoom(i,verbs[v],true);
+   for(int repeat=0;repeat<3;repeat++) for(int j=0;j<4;j++) {
+    assert(!command("focus",NULL,w[j]));invariant();
+    uint32_t mode=XCB_STACK_MODE_ABOVE;
+    xcb_configure_window(c,w[j],XCB_CONFIG_WINDOW_STACK_MODE,&mode);settle();invariant();
+   }
+   raise_many();invariant();
+   /* ConfigureRequest can turn a gapless monocle into full maximize in
+    * existing geometry policy, so exit either zoom mode through reset. */
+   zoom(i,"reset",false);
+   uint32_t size[]={200,200};
+   xcb_configure_window(c,w[i],XCB_CONFIG_WINDOW_WIDTH|XCB_CONFIG_WINDOW_HEIGHT,size);
+   settle();invariant();
+  }
+ }
+ zoom(0,"maximize",true);zoom(1,"monocle",true);
+ assert(!command("focus",NULL,w[0]));invariant();assert(position(w[0])>position(w[1]));
+ assert(!command("focus",NULL,w[1]));invariant();assert(position(w[1])>position(w[0]));
+ zoom(0,"reset",false);zoom(1,"reset",false);
+ fullscreen(0,XCB_EWMH_WM_STATE_ADD,true);
+ fullscreen(0,XCB_EWMH_WM_STATE_REMOVE,false);
+ fullscreen(1,XCB_EWMH_WM_STATE_TOGGLE,true);
+ fullscreen(1,XCB_EWMH_WM_STATE_TOGGLE,false);
+ assert(!command("maximize","--horizontal",w[0]));invariant();
+ assert(!command("reset",NULL,w[0]));invariant();
+ assert(!command("maximize","--vertical",w[0]));invariant();
+ assert(!command("reset",NULL,w[0]));invariant();
+}
+static void cycle_rounds(void) {
+ for(int explicit=0;explicit<2;explicit++) for(int round=0;round<3;round++) {
+  unsigned seen=0;
+  for(int step=0;step<4;step++) {
+   xcb_window_t previous=focused();
+   assert(!command("stack","cycle",explicit?previous:XCB_NONE));
+   xcb_window_t current=focused();assert(current!=previous);
+   int i;for(i=0;i<4;i++)if(w[i]==current)break;
+   assert(i<4);assert(!(seen&(1u<<i)));seen|=1u<<i;
+   xcb_window_t active;
+   assert(xcb_ewmh_get_active_window_reply(&e,xcb_ewmh_get_active_window(&e,0),&active,NULL));
+   assert(active==current);invariant();
+   for(int j=0;j<4;j++)assert(above(j)==(layers[j]==1));
+  }
+  assert(seen==15);
+ }
+}
+static void normal_cycles(void) {
+ /* Preserve the original raise-reference-then-bottommost rotation. */
+ assert(!command("focus",NULL,w[0]));
+ for(int repeat=0;repeat<8;repeat++) {
+  int bottom=0;
+  for(int i=1;i<4;i++)if(position(w[i])<position(w[bottom]))bottom=i;
+  assert(!command("stack","cycle",XCB_NONE));
+  assert(focused()==w[bottom]);invariant();
+ }
+ /* An explicitly selected non-topmost reference is raised itself. */
+ int bottom=0;
+ for(int i=1;i<4;i++)if(position(w[i])<position(w[bottom]))bottom=i;
+ assert(!command("stack","cycle",w[bottom]));assert(focused()==w[bottom]);invariant();
 }
 static void invalid_ipc(void) {
  xcb_intern_atom_reply_t *a=xcb_intern_atom_reply(c,xcb_intern_atom(c,0,strlen(ATOM_COMMAND),ATOM_COMMAND),NULL);
@@ -127,11 +209,17 @@ int main(int argc,char **argv) {
    XCB_WINDOW_CLASS_INPUT_OUTPUT,s->root_visual,XCB_CW_OVERRIDE_REDIRECT,&override);
   xcb_atom_t dock=i==2 ? e._NET_WM_WINDOW_TYPE_TOOLBAR : e._NET_WM_WINDOW_TYPE_DOCK;
   xcb_ewmh_set_wm_window_type(&e,panels[i],1,&dock);
-  if(i!=1) {xcb_atom_t a=e._NET_WM_STATE_ABOVE;xcb_ewmh_set_wm_state(&e,panels[i],1,&a);}
+  if(i!=1) {xcb_atom_t atoms[]={e._NET_WM_STATE_ABOVE,e._NET_WM_STATE_STICKY};xcb_ewmh_set_wm_state(&e,panels[i],2,atoms);}
   xcb_window_t focus=focused();xcb_map_window(c,panels[i]);settle();assert(focused()==focus);
  }
  invariant(); assert(above(3));
+ cycle_rounds();
+ layer(3,0);normal_cycles();layer(3,1);
  layer(1,1);layer(2,2);assert(above(1));assert(!above(2));
+ cycle_rounds();
+ zoom(0,"maximize",true);cycle_rounds();zoom(0,"reset",false);
+ zoom(0,"monocle",true);cycle_rounds();zoom(0,"reset",false);
+ zoom_tests();
  for(int i=0;i<4;i++) {assert(!command("focus",NULL,w[i]));assert(focused()==w[i]);invariant();}
  /* Tab-style cycling and direct unmanaged panel raises obey the same tiers. */
  for(int i=0;i<12;i++) {
@@ -205,6 +293,6 @@ int main(int argc,char **argv) {
  /* The WM creates a fresh frame as well; compare client ordering on reuse. */
  for(int j=0;j<4;j++)if(j!=2)assert(position(old)>position(w[j]));
  for(int j=0;j<2;j++)assert(position(panels[j])>position(old));
- puts("PASS: layer ordering, focus, within-tier raises, configure/circulate, hide/remap, groups, bulk raises, EWMH defaults/overrides, docks/panels, invalid IPC/XIDs, XID reuse");
+ puts("PASS: mixed-band stack traversal and single-band compatibility, transient fullscreen/monocle priority, persistent layer restoration, layer ordering, focus, within-tier raises, configure/circulate, hide/remap, groups, bulk raises, EWMH defaults/overrides, docks/panels, invalid IPC/XIDs, XID reuse");
  xcb_disconnect(c);return 0;
 }

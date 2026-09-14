@@ -434,6 +434,7 @@ reset_window(struct client *client)
 	resize_window_absolute(client->window, client->geom.width, client->geom.height);
 	set_borders(client, conf.outer_unfocus_color, conf.inner_unfocus_color);
 
+	enforce_stacking_layers();
 	update_ewmh_wm_state(client);
 	update_window_status(client);
 }

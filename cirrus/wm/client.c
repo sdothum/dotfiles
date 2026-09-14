@@ -730,6 +730,19 @@ query_window(enum IPCCommand query, const char *selector,
 	msg.data.data32[3] = scope;
 	/* The final payload word carries the layer for IPCActionWindowLayer. */
 	msg.data.data32[4] = selector_type;
+	/* IDs carry an optional public group number on their reply window. */
+	if (query == IPCWindowIds && window != 0) {
+		error = xcb_request_check(conn, xcb_change_property_checked(conn,
+				XCB_PROP_MODE_REPLACE, reply_window, get_atom(ATOM_REQUEST),
+				XCB_ATOM_CARDINAL, 32, 1, &window));
+		if (error != NULL) {
+			fprintf(stderr, "sirocco: unable to write group filter: X error %u\n",
+					error->error_code);
+			free(error);
+			xcb_destroy_window(conn, reply_window);
+			return EXIT_FAILURE;
+		}
+	}
 	if (bulk_geometry_query) {
 			xcb_change_property(conn, XCB_PROP_MODE_REPLACE, reply_window,
 			get_atom(ATOM_REQUEST), XCB_ATOM_STRING, 8,
@@ -1002,6 +1015,34 @@ parse_collection_query(int argc, char **argv, const char **selector,
 	default:
 		return false;
 	}
+}
+
+/* Strip only the independent group filter; retain the collection grammar. */
+static bool
+parse_ids_query(int argc, char **argv, const char **selector,
+		enum IPCClientScope *scope, enum IPCClientSelector *selector_type,
+		uint32_t *group)
+{
+	char *collection_args[3];
+	int count = 0;
+	*group = 0;
+	for (int i = 0; i < argc; i++) {
+		if (strcmp(argv[i], "--group") == 0) {
+			if (*group != 0 || ++i == argc ||
+					!parse_groupid(argv[i], group) || *group == 0)
+				return false;
+		} else {
+			if (count == 3)
+				return false;
+			collection_args[count++] = argv[i];
+			if (strcmp(argv[i], "--name") == 0 && i + 1 < argc) {
+				if (count == 3)
+					return false;
+				collection_args[count++] = argv[++i];
+			}
+		}
+	}
+	return parse_collection_query(count, collection_args, selector, scope, selector_type);
 }
 
 static void
@@ -1345,6 +1386,7 @@ int main(int argc, char **argv) {
 	enum IPCClientScope collection_scope = IPCClientScopeMapped;
 	enum IPCClientSelector collection_selector = IPCClientSelectorNone;
 	bool collection_query;
+	uint32_t collection_group = 0;
 
 	if (argc == 1) {
 		usage(argv[0], EXIT_FAILURE);
@@ -1356,9 +1398,15 @@ int main(int argc, char **argv) {
 	}
 	collection_query = argc >= 3 && strcmp(argv[1], "window") == 0 &&
 			(strcmp(argv[2], "ids") == 0 || strcmp(argv[2], "count") == 0);
-	if (collection_query && !parse_collection_query(argc - 3, argv + 3,
-			&collection_classname, &collection_scope, &collection_selector))
-		errx(EXIT_FAILURE, "invalid window collection query arguments");
+	if (collection_query) {
+		bool valid = strcmp(argv[2], "ids") == 0 ?
+				parse_ids_query(argc - 3, argv + 3, &collection_classname,
+						&collection_scope, &collection_selector, &collection_group) :
+				parse_collection_query(argc - 3, argv + 3, &collection_classname,
+						&collection_scope, &collection_selector);
+		if (!valid)
+			errx(EXIT_FAILURE, "invalid window collection query arguments");
+	}
 
 	init_xcb(&conn);
 	if (argc == 3 && strcmp(argv[1], "window") == 0 &&
@@ -1483,7 +1531,7 @@ int main(int argc, char **argv) {
 		enum IPCCommand query = strcmp(argv[2], "ids") == 0 ?
 				IPCWindowIds : IPCWindowCount;
 		int status = query_window(query, collection_classname, collection_scope,
-				collection_selector, false, XCB_NONE);
+				collection_selector, false, collection_group);
 		xcb_disconnect(conn);
 		return status;
 	}

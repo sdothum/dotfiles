@@ -25,6 +25,7 @@ struct window_stack {
 };
 
 enum window_stack_result get_window_stack(struct client *, struct window_stack *);
+struct client *stack_cycle_target(const struct window_stack *);
 void free_window_stack(struct window_stack *);
 void circulate_window_stacking(xcb_window_t, uint8_t);
 bool set_window_layer(struct client *, enum stacking_layer, bool);

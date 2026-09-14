@@ -134,7 +134,7 @@ Focus the closest window in a direction, relative to the currently focused windo
 .
 .TP
 \fBwindow layer\fR \fInormal|above|overlay\fR [\fIwinid\fR]
-Set the managed client\'s persistent stacking tier without focusing it\. Overlay stays above Above, and Above stays above Normal, including during focus, raises, configure requests, and group changes\. Within each tier, existing relative stacking order is retained where possible\. Normal restores ordinary stacking\. The target defaults to the focused managed window\. Hidden clients retain their tier until destroyed or unmanaged; state is not cached by XID\. Above is exposed as \fB_NET_WM_STATE_ABOVE\fR; Overlay is an internal tier\. Every explicit IPC assignment overrides automatic EWMH defaults for the lifetime of that managed client, including across remap\. Without an explicit assignment, either \fB_NET_WM_STATE_ABOVE\fR or \fB_NET_WM_WINDOW_TYPE_DOCK\fR selects above; neither selects normal\. Property changes and EWMH ABOVE requests update automatic tiers\. Unmanaged docks and ABOVE windows also participate in stacking while retaining their existing exclusion from ordinary focus/group handling\. Title\-case names remain accepted\. Invalid layers, unknown/unmanaged XIDs, or failure to apply the state return nonzero\.
+Set the managed client\'s persistent stacking tier without focusing it\. Effective stacking order is Overlay, zoomed/fullscreen, Above, Normal, including during focus, raises, configure requests, and group changes\. Monocle and full maximize (also EWMH fullscreen) temporarily place a client above Above while preserving its persistent layer\. Overlay remains highest even when zoomed\. Exiting these modes immediately restores the persistent tier; horizontal/vertical maximization does not gain this priority\. Within each tier, existing relative stacking order is retained where possible\. Normal restores ordinary stacking\. The target defaults to the focused managed window\. Hidden clients retain their tier until destroyed or unmanaged; state is not cached by XID\. Above is exposed as \fB_NET_WM_STATE_ABOVE\fR; Overlay is an internal tier\. Every explicit IPC assignment overrides automatic EWMH defaults for the lifetime of that managed client, including across remap\. Without an explicit assignment, either \fB_NET_WM_STATE_ABOVE\fR or \fB_NET_WM_WINDOW_TYPE_DOCK\fR selects above; neither selects normal\. Property changes and EWMH ABOVE requests update automatic tiers\. Unmanaged docks and ABOVE windows also participate in stacking while retaining their existing exclusion from ordinary focus/group handling\. Title\-case names remain accepted\. Invalid layers, unknown/unmanaged XIDs, or failure to apply the state return nonzero\.
 .
 .TP
 \fBwindow hide\fR [\fIwinid\fR]
@@ -178,12 +178,12 @@ See \fICONFIGURING\fR\.
 Print the currently focused managed window ID in \fB0x%08x\fR format\. If no managed window is focused, print an error and exit with a nonzero status\. The query also exits nonzero if cirrus does not respond within two seconds\.
 .
 .TP
-\fBwindow ids\fR [\-\-all] [\fIclassname\fR] [\-\-name \fIname\fR]
-Print managed window IDs, one per line\. Without \fB\-\-all\fR, only mapped windows are included; \fB\-\-all\fR includes all managed windows\. An optional classname or name restricts the result\.
+\fBwindow ids\fR [\-\-all] [\fIclassname\fR] [\-\-name \fIname\fR] [\-\-group \fIgroup\fR]
+Print managed window IDs, one per line\. Without \fB\-\-all\fR, only mapped windows are included; \fB\-\-all\fR includes all managed windows\. An optional classname or name restricts the result\. \fB\-\-group\fR independently narrows this set to the specified public group, using the same ID as \fBgroup add\fR (1 up to, but excluding, \fBgroup count\fR; group 0 is reserved)\. It can appear before or after the existing collection options\. Zero, out\-of\-range, nonnumeric, missing, and repeated group arguments fail\. Group filtering does not change visibility, classname matching, title regex matching, or output format\.
 .
 .TP
 \fBwindow count\fR [\-\-all] [\fIclassname\fR] [\-\-name \fIname\fR]
-Print the number of windows selected by the same collection options as \fBwindow ids\fR\.
+Print the number of windows selected by the existing visibility and classname/name options\. \fB\-\-group\fR is supported by \fBwindow ids\fR only\.
 .
 .TP
 \fBwindow classname\fR
@@ -231,7 +231,7 @@ Groups are public one\-based values\. \fBMAPPED\fR is \fB0\fR or \fB1\fR, and \f
 .
 .TP
 \fBwindow stack cycle\fR [\fIwinid\fR]
-Focus and raise the selected window if it is not already the topmost member of its canonical stack\. If it is topmost, focus and raise the bottommost member\. A single\-member stack is left unchanged\.
+Focus and raise the selected window if it is not already the topmost member of its canonical stack\. If it is topmost, focus and raise the bottommost member\. This physical\-order rotation is preserved when all members share one effective stacking band\. Across different bands, select the least recently focused overlapping member other than the reference, so repeated cycles visit every member even when it cannot rise above another band\. Focus raises the target only within its effective band (including temporary zoom/fullscreen priority); persistent layers are unchanged\. A single\-member stack is left unchanged\.
 .
 .P
 Information about the current state of cirrus is available through X properties of the root window\. Example:
