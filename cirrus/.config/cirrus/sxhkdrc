@@ -103,20 +103,18 @@ super + {_,ctrl,shift} + e
 
 super + w
 	echo "$(timestamp) sxhkd window close $(pfw)" >>$WMLOG ;\
-	zephyr group remove                                    ;\
-	sirocco window close . window focus --last             ;\  # NOTE: some apps take longer to be removed from wm stack
-	refresh_panel                                              # for last visible window removal
+	W=$(pfw)                                               ;\
+	sirocco window cycle --group                           ;\
+	zephyr group remove --close $W                         ;\
+	refresh_panel  # for last visible window removal
 
 # ....................................................................... resize
 
 super + {_,ctrl} + space
 	sirocco window maximize --{vertical,horizontal}
 
-super + shift + p ; {space,BackSpace}
-	zephyr window size paper {--larger,--smaller}
-
-super + shift + v ; {space,BackSpace}
-	zephyr window size video {--larger,--smaller}
+super + shift + p ; {p,f,d,m}
+	zephyr window size {paper --smaller,paper --larger,video --smaller,video --larger}
 
 super + shift + {Left,Down,Up,Right}
 	sirocco window resize --relative {-50 0,0 50,0 -50,50 0}
@@ -138,10 +136,10 @@ super + {_,shift} + z
 #       8 6 7
 
 super + 5
-	zephyr window size viewport  # half screen monocle
+	zephyr state snapshot . window tile 3 2 . window tile right . window snap center . state restore
 
 super + 6
-	zephyr state snapshot . window tile 3 2 . window tile right . window snap center . state restore
+	zephyr window size viewport  # half screen monocle
 
 super + {1,2,3}
 	zephyr window tile 3 {1,2,3}
@@ -157,11 +155,11 @@ super + shift + {1,2,3,4,5}
 	sirocco window focus $W
 
 alt + super + space
-	G=$(sirocco group current) ;\
-	[ -e $WME/layout/explode:group:$G ] && zephyr layout unexplode --group $G || zephyr layout explode --group $G
+	[ -e $WME/layout/explode ] && zephyr layout unexplode || zephyr layout explode
 
 alt + ctrl + space
-	[ -e $WME/layout/explode ] && zephyr layout unexplode || zephyr layout explode
+	G=$(sirocco group current) ;\
+	[ -e $WME/layout/explode:group:$G ] && zephyr layout unexplode --group $G || zephyr layout explode --group $G
 
 # ......................................................................... move
 #
@@ -179,25 +177,19 @@ super + ctrl + {Left,Down,Up,Right}
 super + ctrl + {p,l,n,f}
 	zephyr window shift {left,down,up,right}
 
-super + {d,m}
-	zephyr window snap top {left,right}
-
-super + {p,f}
-	zephyr window snap bottom {left,right}
-
-super + {n,l}
-	zephyr window snap {top,bottom}
+super + {d,n,m,p,l,f}
+	zephyr window snap {top left,top,top right,bottom left,bottom,bottom right}
 
 super + {_,shift} + r
 	zephyr window snap center {horizontal,vertical}
 
 super + {t,s}
 	side="{left,right}" ;\
-	zephyr window spread $side
+	zephyr window snap $side
 
 super + ctrl + {t,s}
 	side="{left,right}" ;\
-	zephyr window snap $side
+	zephyr window spread $side
 
 super + {_,ctrl,shift} + g
 	zephyr window snap center { ,left,right}
