@@ -90,6 +90,7 @@ type
     ArgAxis,
     ArgCardinal,
     ArgClassname,
+    ArgClose,
     ArgColumn,
     ArgColumnName,
     ArgColumns,
@@ -110,7 +111,6 @@ type
     ArgSize,
     ArgSpread,
     ArgTeleport,
-    ArgUndo,
     ArgWinid,
     ArgZoom
 
@@ -120,6 +120,7 @@ type
     axis*: string
     cardinal*: string
     classname*: string
+    close*: bool
     column*: int
     columnName*: string
     columns*: int
@@ -140,7 +141,6 @@ type
     size*: tuple[width, height: int]
     spread*: bool
     teleport*: bool
-    undo*: bool 
     winid*: string
     zoom*: string
 
@@ -155,6 +155,7 @@ proc parseArguments*(
   result.axis = ""
   result.cardinal = ""
   result.classname = ""
+  result.close = false
   result.column = -1
   result.columnName = ""
   result.columns = -1
@@ -174,7 +175,6 @@ proc parseArguments*(
   result.size = (0, 0)
   result.spread = false
   result.teleport = false
-  result.undo = false
   result.winid = ""
   result.zoom = ""
 
@@ -325,8 +325,8 @@ proc parseArguments*(
     of "--teleport":
       result.teleport = parseSwitch(result.teleport, ArgTeleport, allowed)
 
-    of "--undo":
-      result.undo = parseSwitch(result.undo, ArgUndo, allowed)
+    of "--close":
+      result.close = parseSwitch(result.close, ArgClose, allowed)
 
     # first option must be a group, columns, direction/cardinal direction, classname (with --all or --name) or size directive {X}x{Y} or {X}:{Y}
     elif i == 0:

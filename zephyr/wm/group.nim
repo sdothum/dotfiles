@@ -161,12 +161,13 @@ proc add*(args: seq[string]) =
   createDir(root & ":focus" / $a.group / a.winid)
 
 proc remove*(args: seq[string]) =
-  requireArgs("group remove", args, 0, 1)
+  requireArgs("group remove", args, 0, 2)
 
   var a = parseArguments(
     "group remove",
     args,
     [
+      ArgClose,
       ArgWinid
     ]
   )
@@ -174,7 +175,7 @@ proc remove*(args: seq[string]) =
   if a.winid == "":
     a.winid = window.focusedWinid()
 
-  if a.winid  == "":
+  if a.winid == "":
     return
 
   let root = getEnv("GROUP")
@@ -182,6 +183,15 @@ proc remove*(args: seq[string]) =
   for group in 0 ..< count():
     removeDir(root / $group / a.winid)
     removeDir(root & ":focus" / $group / a.winid)
+
+  if a.close:
+    runvArgs(
+      "sirocco",
+      "window",
+      @["close", a.winid],
+      2,
+      2
+    )
 
 proc remove*(winid: string) =
   remove(@[winid])
