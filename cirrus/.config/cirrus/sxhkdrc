@@ -78,9 +78,6 @@ alt + {Left,Down,Up,Right}
 super + {_,shift} + 0
 	zephyr window {restore,rotate}
 
-super + ctrl + 0
-	zephyr layout restore
-
 super + i
 	echo "$(timestamp) sxhkd window hide $(pfw)" >>$WMLOG ;\
 	zephyr window hide                                    ;\
@@ -150,7 +147,12 @@ super + shift + {t,s}
 # ...................................................................... explode
 
 super + shift + {1,2,3,4,5}
-	zephyr layout fold {1,2,3,4,5} $(zephyr window classname)
+	C=$(zephyr window classname)  ;\
+	N=$(sirocco window count $C)  ;\
+	[ $N -le 5 ] && zephyr layout fold {1,2,3,4,5} $C || zephyr layout fold 4 --rows 3 $C
+
+super + ctrl + 0
+	zephyr layout restore
 
 alt + super + space
 	[ -e $WME/layout/explode ] && zephyr layout unexplode || zephyr layout explode
