@@ -36,8 +36,8 @@ wactions="
 beam
 column
 draw
-form
 group
+paper
 snap
 tile
 "
@@ -77,7 +77,6 @@ z   bottom  right
 "
 
 formats="
-x   term
 c   B4  --rotate
 d   A4
 f   A4  --rotate
@@ -106,7 +105,7 @@ u   bottom  left
 v   bottom  right
 "
 
-for i in $(seq 1 9);do groups="${groups}$i   $(query desktop $i | grep -v "''")\n" ;done  # SEE: chef desktop
+for i in $(seq 1 9);do groups="${groups}$i   $(zephyr group name $i | grep -v "''")\n" ;done
 
 while [ $1 ] ;do
 	case $1 in
@@ -117,7 +116,7 @@ while [ $1 ] ;do
 	shift
 done
 
-[ $menu ] || menu=$(echo "$mactions" | pick "sous-chef") || exit
+[ $menu ] || menu=$(echo "$mactions" | pick "derecho") || exit
 case $menu in
 	group  )
 		[ $action ] || action=$(echo "$gactions" | pick "group") || exit
@@ -125,26 +124,26 @@ case $menu in
 		case $action in
 			close  )
 				group=$(echo "$groups" | pick "close") || exit
-				desktop ${group%% *} close
+				zephyr group ${group%% *} close
 				sirocco window focus --last
 				;;
 			filter )
 				group=$(echo "$groups" | sed '1i-   restore all\n0   current' | pick "by") || exit
-				[ ${group%% *} = 0 ] && group=$(desktop)
+				[ ${group%% *} = 0 ] && group=$(sirocco group current)
 				case ${group%% *} in
-					- ) desktop restore               ;;
-					* ) desktop ${group%% *} specific ;;
+					- ) zephyr group restore              ;;
+					* ) zephyr group desktop ${group%% *} ;;
 				esac
 				;;
 			raise  )
 				group=$(echo "$groups" | sed '1i0 last' | pick "raise") || exit
 				[ ${group%% *} = 0 ] && group=last
-				desktop ${group%% *}
+				zephyr group focus ${group%% *}
 				;;
 			toggle )
 				group=$(echo "$groups" | sed '1i0   current' | pick "toggle") || exit
-				[ ${group%% *} = 0 ] && group=$(desktop)
-				desktop ${group%% *} toggle
+				[ ${group%% *} = 0 ] && group=$(sirocco group current)
+				zephyr group toggle ${group%% *}
 				;;
 		esac
 		;;
@@ -155,24 +154,24 @@ case $menu in
 		case $action in
 			beam   )
 				group=$(echo "$groups" | pick "group") || exit
-				window desktop ${group%% *} teleport
+				zephyr window group ${group%% *} --teleport
 				;;
 			column )
 				column=$(echo "$columns" | pick "tile : column") || exit
 				sirocco window focus $W
 				column=${column%% *}
-				window tile ${column%:*} ${column#*:}
+				zephyr window tile ${column%:*} ${column#*:}
 				;;
 			draw   )
 				extend=$(echo "$directions" | pick "direction") || exit
 				sirocco window focus $W
 				extend=${extend#* }
 				case ${extend%% *} in
-					tile ) window ${extend}        ;;
-					*    ) window extend ${extend} ;;
+					tile ) zephyr window tile ${extend} ;;
+					*    ) zephyr window snap ${extend} ;;
 				esac
 				;;
-			form   )
+			paper  )
 				size=$(echo "$formats" | pick "size") || exit
 				sirocco window focus $W
 				zephyr window size ${size#* }
@@ -180,22 +179,20 @@ case $menu in
 				;;
 			group  )
 				group=$(echo "$groups" | pick "group") || exit
-				window desktop ${group%% *}
+				zephyr group ${group%% *}
 				;;
 			snap   )
 				snap=$(echo "$regions" | pick "to") || exit
 				sirocco window focus $W
 				snap=${snap#* }
 				case $snap in
-					left | right ) [ "$(query window classname)"  = "term" ] && window spread $snap || window snap $snap
-					;;
+					left | right ) [ "$(zephyr window classname)"  = "term" ] && window spread $snap || window snap $snap ;;
 					*            ) window snap ${snap} ;;
 				esac
 				;;
 			tile   )
 				tile=$(echo "$tiles" | pick "by") || exit
-				layout fold ${tile%% *} $(query window classname)
-				sirocco window focus $W
+				zephyr layout fold ${tile%% *} $(zephyr window classname)
 				;;
 		esac
 		;;

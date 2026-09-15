@@ -54,12 +54,6 @@ super + {F1,F2}
 super + {shift,ctrl} + q
 	{menu halt,sirocco wm restart}
 
-super + shift + w ; {w,l}
-	menu {windowfocus,layout}
-
-super + shift + w ; {t,f}
-	derecho window {tile,form}
-
 # Windows
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -108,6 +102,9 @@ super + w
 	zephyr group remove --close $W                         ;\
 	refresh_panel  # for last visible window removal
 
+super + shift + w
+	menu windowfocus
+
 # ....................................................................... resize
 
 super + {_,ctrl} + space
@@ -121,6 +118,9 @@ super + shift + {Left,Down,Up,Right}
 
 super + ctrl + shift + {Left,Down,Up,Right}
 	sirocco window resize --relative {-20 0,0 20,0 -20,20 0}
+
+super + ctrl + w
+	derecho window paper
 
 super + {_,shift} + z
 	sirocco window {monocle,maximize}
