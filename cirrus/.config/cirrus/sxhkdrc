@@ -61,22 +61,16 @@ super + {shift,ctrl} + q
 
 # NOTE: a null selector value must include a " " (space)
 
-super + {_,shift} + Tab
-	sirocco window cycle --group {_,--reverse}
+super + {_,shift,ctrl} + Tab
+	sirocco window {cycle,cycle --reverse,focus --last}
 
 alt + {_,shift} + Tab
-	sirocco window cycle {_,--reverse}
-
-alt + ctrl + Tab
-	sirocco window focus --last
+	sirocco window cycle --group {_,--reverse}
 
 alt + {Left,Down,Up,Right}
 	sirocco window focus --cardinal {west,south,north,east}
 
 # ........................................................................ focus
-
-super + {_,shift} + 0
-	zephyr window {restore,rotate}
 
 super + i
 	echo "$(timestamp) sxhkd window hide $(pfw)" >>$WMLOG ;\
@@ -103,6 +97,9 @@ super + shift + w
 	menu windowfocus
 
 # ....................................................................... resize
+
+super + {_,shift} + 0
+	zephyr window {restore,rotate}
 
 super + {_,ctrl} + space
 	sirocco window maximize --{vertical,horizontal}
