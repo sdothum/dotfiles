@@ -119,6 +119,7 @@ proc usage() =
   echo "  zephyr window ids [<args>]"
   echo "  zephyr window restore [<args>]"
   echo "  zephyr window rotate"
+  echo "  zephyr window move <args>"
   echo "  zephyr window shift <args>"
   echo "  zephyr window size <args>"
   echo "  zephyr window snap <args>"

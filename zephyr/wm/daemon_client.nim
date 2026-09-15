@@ -24,7 +24,7 @@ type DaemonClientRecord* = object
 proc socketPath(): string =
   let runtime = getEnv("XDG_RUNTIME_DIR")
   if runtime.len > 0:
-      return runtime / "zephyr" / "zephyrd.sock"
+    return runtime / "zephyr" / "zephyrd.sock"
   let wme = getEnv("WME")
   if wme.len > 0: wme / "zephyrd.sock" else: ""
 
@@ -122,7 +122,7 @@ proc queryDaemon*(kind: uint8, argument = ""): DaemonReply =
   if not readAll(fd, header, 4):
     return DaemonReply(error: "truncated zephyrd response")
   let size = (uint32(ord(header[0])) shl 24) or (uint32(ord(header[1])) shl 16) or
-    (uint32(ord(header[2])) shl 8) or uint32(ord(header[3]))
+      (uint32(ord(header[2])) shl 8) or uint32(ord(header[3]))
   if size == 0 or size > MaxResponseSize:
     return DaemonReply(error: "invalid zephyrd response size")
   var payload: string

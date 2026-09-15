@@ -310,6 +310,32 @@ proc raiseMany*(winids: seq[string]) =
 # Actions
 #
 
+proc move*(args: seq[string]) =
+  requireArgs("window move", args, 2, 2)
+
+  let a = parseArguments(
+    "window move",
+    args,
+    [
+      ArgXY
+    ]
+  )
+
+  let winid = focusedWinid()
+
+  if winid == "":
+    return
+
+  runvArgs(
+    "sirocco",
+    "window",
+    @["move", "--relative", $a.xy.x, $a.xy.y, winid],
+    5,
+    5
+  )
+
+  focus(winid)
+
 proc extend*(args: seq[string]) =
   requireArgs("window extend", args, 1, 3)
 
@@ -637,6 +663,12 @@ proc snap*(args: seq[string], providedScreen = ScreenGeometry()) =
     ]
   )
 
+  let winid =
+    if a.winid == "":
+      query.focusedWinid()
+    else:
+      a.winid
+
   let g = query.geometry(a.winid)
   let s =
     if providedScreen.width == 0:
@@ -746,6 +778,8 @@ proc snap*(args: seq[string], providedScreen = ScreenGeometry()) =
       move(right, bottom)
     else:
       fail()
+
+  focus(winid)
 
 proc snap*(position1, position2, winid: string) =
   snap(@[position1, position2, winid])
@@ -1283,12 +1317,12 @@ proc tile*(
 
   case args[0]
   of Left:
-      applyGeometry(Geometry(
-        x: s.margin,
-        y: s.top,
-        width: g.x + g.width - s.margin,
-        height: s.height
-      ))
+    applyGeometry(Geometry(
+      x: s.margin,
+      y: s.top,
+      width: g.x + g.width - s.margin,
+      height: s.height
+    ))
 
   of Right:
     applyGeometry(Geometry(
@@ -1402,6 +1436,8 @@ proc dispatch*(verb: string, rest: seq[string]) =
     hide(rest)
   of "ids":
     echo ids(rest)
+  of "move":
+    move(rest)
   of "stack":
     echo stack(rest)
   of "restore":

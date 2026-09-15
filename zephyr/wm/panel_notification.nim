@@ -13,7 +13,7 @@ proc panelRefreshTargets*(changes: openArray[SnapshotChange]): PanelRefreshTarge
   for change in changes:
     case change.kind
     of FocusChanged, CurrentChanged, ClientRemoved, ClientAdded,
-       GroupChanged, MappedChanged, NullGroupChanged:
+        GroupChanged, MappedChanged, NullGroupChanged:
       result.desktop = true
     case change.kind
     of CurrentChanged, ClientRemoved, ClientAdded, GroupChanged, MappedChanged:

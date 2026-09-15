@@ -74,6 +74,7 @@ Public group IDs are one-based. `0` is not a public group argument.
 * `window rotate` [<winid>]: Swap the selected window's width and height.
 * `window shift` <args>: Shift the selected window.
 * `window size` <args>: Set or adjust the selected window's size.
+* `window move <args>: Move the selected window by X Y pixels.
 * `window snap` <args>: Snap the selected window to a screen position.
 * `window spread` <args>: Spread the selected window across a region.
 * `window stack` [<winid>]: Print the overlap-connected stack for a window.

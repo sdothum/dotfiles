@@ -112,6 +112,7 @@ type
     ArgSpread,
     ArgTeleport,
     ArgWinid,
+    ArgXY,
     ArgZoom
 
   Arguments* = object
@@ -142,6 +143,7 @@ type
     spread*: bool
     teleport*: bool
     winid*: string
+    xy*: tuple[x, y: int]
     zoom*: string
 
 proc parseArguments*(
@@ -176,6 +178,7 @@ proc parseArguments*(
   result.spread = false
   result.teleport = false
   result.winid = ""
+  result.xy = (0, 0)
   result.zoom = ""
 
   proc fail(error: string) =
@@ -335,6 +338,18 @@ proc parseArguments*(
         if args[i] notin [Normal, Above, Overlay, "normal", "above", "overlay"]:
           fail("layer must be normal, above or overlay")
         result.layer = parseArgument(result.layer, ArgLayer, allowed)
+
+      elif ArgXY in allowed:
+        if args.len != 2:
+          fail("coordinates require 2 values")
+
+        try: result.xy.x = parseInt(args[i])
+        except: fail("invalid x coordinate")
+
+        try: result.xy.y = parseInt(args[i + 1])
+        except: fail("invalid y coordinate")
+
+        inc i
 
       elif args[i].match(re(r"^0x........$")):
         if result.winid != "" or ArgWinid notin allowed:

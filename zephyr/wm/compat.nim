@@ -180,12 +180,12 @@ proc statusvArgs*(
 #
 
 template defineCommandProc*(
-   name: untyped,
-   namespace: static[string],
-   command: static[string]
+  name: untyped,
+  namespace: static[string],
+  command: static[string]
 ) =
-   proc name*(args: seq[string]): int =
-      runvArgs(namespace, command, args)
+  proc name*(args: seq[string]): int =
+    runvArgs(namespace, command, args)
 
-   proc name*(args: varargs[string]): int =
-      name(@args)
+  proc name*(args: varargs[string]): int =
+    name(@args)
