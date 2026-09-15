@@ -172,10 +172,12 @@ super + ctrl + e
 #       p l f
 
 super + {Left,Down,Up,Right}
-	sirocco window move --relative {-50 0,0 50,0 -50,50 0}
+	zephyr window move {-50 0,0 50,0 -50,50 0}
+	# sirocco window move --relative {-50 0,0 50,0 -50,50 0}
 
 super + ctrl + {Left,Down,Up,Right}
-	sirocco window move --relative {-20 0,0 20,0 -20,20 0}
+	zephyr window move {-20 0,0 20,0 -20,20 0}
+	# sirocco window move --relative {-20 0,0 20,0 -20,20 0}
 
 super + ctrl + {p,l,n,f}
 	zephyr window shift {left,down,up,right}
