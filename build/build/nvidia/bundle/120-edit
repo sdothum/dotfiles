@@ -17,6 +17,12 @@
 # m kakoune  # v2024 required for lsp annotations
 ! stow kak
 m kak-bundle
+  kak-lsp
+! mkdir -p $HOME/.config/kak/autoload/kak-lsp
+! cp -v /usr/share/examples/kak-lsp/lsp.kak $HOME/.config/kak/autoload/kak-lsp/
+! cp -v /usr/share/examples/kak-lsp/servers.kak $HOME/.config/kak/autoload/kak-lsp/
+
+! nimble install -g nimlangserver
 ! stow notes
 
 
