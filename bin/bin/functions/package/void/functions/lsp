@@ -1,0 +1,9 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# SEE: xb, .xb_actions
+
+mkdir -p $HOME/.config/kak/autoload/kak-lsp
+cp -v /usr/share/examples/kak-lsp/lsp.kak $HOME/.config/kak/autoload/kak-lsp/
+cp -v /usr/share/examples/kak-lsp/servers.kak $HOME/.config/kak/autoload/kak-lsp/
+
+# kak: filetype=sh

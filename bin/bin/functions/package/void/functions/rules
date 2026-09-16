@@ -1,11 +1,12 @@
 # sdothum - 2016 (c) wtfpl
-# tuple: <object> <package> -> file: functions/<action>, SEE: xb
+# tuple: <action> <package> -> file: functions/<action>, SEE: xb
 
 hints     chromium
 imap      dovecot
 comment   kak
 gpg       pinentry-gtk
 database  postgresql
+lsp       kak-lsp
 runit     dinit
 runit     runit-void
 turnstile turnstile
