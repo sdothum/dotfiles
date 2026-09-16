@@ -455,7 +455,7 @@ hook -group lsp-filetype-mojo global BufSetOption filetype=mojo %{
 
 hook -group lsp-filetype-nim global BufSetOption filetype=nim %{
     set-option buffer lsp_servers %{
-        [nimlangserver]
+        [nimlsp]
         root_globs = ["*.nimble", ".git", ".hg"]
     }
 }
