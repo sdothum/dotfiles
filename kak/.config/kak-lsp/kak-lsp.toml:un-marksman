@@ -255,10 +255,10 @@ roots = [".zk"]
 command = "zk"
 args = ["lsp"]
 
-[language_server.nimlsp]
+[language_server.nimlangserver]
 filetypes = ["nim"]
 roots = ["*.nimble", ".git", ".hg"]
-command = "nimlsp"
+command = "nimlangserver"
 
 [language_server.ocamllsp]
 filetypes = ["ocaml"]

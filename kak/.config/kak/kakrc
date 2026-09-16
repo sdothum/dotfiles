@@ -62,6 +62,7 @@ if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] } %{
 
 # terminal $DISPLAY plugins
 if %{ [ -z "$UNPLUG" ] && [ -z "$TEST" ] && [ -n "$DISPLAY" ] } %{
+	source "%val{config}/dictionary.kak"
 	source "%val{config}/xdisplay-plugins.kak"
 }
 

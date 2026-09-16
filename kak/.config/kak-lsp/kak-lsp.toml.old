@@ -255,11 +255,6 @@ roots = [".zk"]
 command = "zk"
 args = ["lsp"]
 
-[language_server.nimlsp]
-filetypes = ["nim"]
-roots = ["*.nimble", ".git", ".hg"]
-command = "nimlsp"
-
 [language_server.ocamllsp]
 filetypes = ["ocaml"]
 # Often useful to simply do a `touch dune-workspace` in your project root folder if you have problems with root detection

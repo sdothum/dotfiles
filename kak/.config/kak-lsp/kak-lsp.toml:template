@@ -1,5 +1,5 @@
 snippet_support = true
-verbosity = 2
+verbosity = 3
 
 [server]
 # exit session if no requests were received during given period in seconds
@@ -255,10 +255,10 @@ roots = [".zk"]
 command = "zk"
 args = ["lsp"]
 
-[language_server.nimlsp]
+[language_server.nimlangserver]
 filetypes = ["nim"]
 roots = ["*.nimble", ".git", ".hg"]
-command = "nimlsp"
+command = "nimlangserver"
 
 [language_server.ocamllsp]
 filetypes = ["ocaml"]

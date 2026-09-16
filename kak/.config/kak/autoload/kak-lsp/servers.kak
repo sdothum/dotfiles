@@ -33,7 +33,7 @@ hook -group lsp-filetype-clojure global BufSetOption filetype=clojure %{
     }
 }
 
-hook -group lsp-filetype-cmake global BufSetOption filetype=make %{
+hook -group lsp-filetype-cmake global BufSetOption filetype=cmake %{
     set-option buffer lsp_servers %{
         [cmake-language-server]
         root_globs = ["CMakeLists.txt", ".git", ".hg"]
@@ -83,9 +83,8 @@ hook -group lsp-filetype-dart global BufSetOption filetype=dart %{
     set-option buffer lsp_servers %{
         [dart-lsp]
         root_globs = ["pubspec.yaml", ".git", ".hg"]
-        # start shell to find path to dart analysis server source
-        command = "sh"
-        args = ["-c", "dart \"$(dirname \"$(command -v dart)\")\"/snapshots/analysis_server.dart.snapshot --lsp"]
+        command = "dart"
+        args = ["language-server"]
     }
 }
 
@@ -125,11 +124,20 @@ hook -group lsp-filetype-elvish global BufSetOption filetype=elvish %{
 
 hook -group lsp-filetype-erlang global BufSetOption filetype=erlang %{
     set-option buffer lsp_servers %{
-        [erlang_ls]
+        [elp]
         root_globs = ["rebar.config", "erlang.mk", ".git", ".hg"]
-        # See https://github.com/erlang-ls/erlang_ls.git for more information and
-        # how to configure. This default config should work in most cases though.
+        args = [ "server" ]
     }
+}
+
+hook -group lsp-filetype-fsharp global BufSetOption filetype=fsharp %{
+	set-option buffer lsp_servers %{
+		[fsautocomplete]
+		root_globs = [".git", ".hg", ".sln", ".fsproj"]
+		settings_section = "_"
+		[fsautocomplete.settings._]
+		AutomaticWorkspaceInit = true
+	}
 }
 
 hook -group lsp-filetype-go global BufSetOption filetype=go %{
@@ -153,6 +161,14 @@ hook -group lsp-filetype-go global BufSetOption filetype=go %{
 hook -group lsp-filetype-graphql global BufSetOption filetype=graphql %{
     set-option buffer lsp_servers %opt{lsp_server_biome}
 
+}
+
+hook -group lsp-filetype-hare global BufSetOption filetype=hare %{
+    set-option buffer lsp_servers %{
+        [hare-lsp]
+        root_globs = [".git", ".hg"]
+        args = ["-S"]
+    }
 }
 
 hook -group lsp-filetype-haskell global BufSetOption filetype=haskell %{
@@ -209,6 +225,42 @@ hook -group lsp-filetype-html global BufSetOption filetype=html %{
     }
 }
 
+hook -group lsp-filetype-lean global BufSetOption filetype=lean %{
+    # The lean lsp server ignores the rootUri set in the LSP initialization
+    # options. Instead, we must ensure that the cwd is in the workspace root.
+    set-option buffer lsp_servers "
+        [lake]
+        root_globs = ['lakefile.lean', 'lakefile.toml', '.git', '.hg']
+        command = 'sh'
+        args = [
+            '-c',
+            '''
+              kak_buffile=%val{buffile}
+              %opt{lsp_find_root} lakefile.lean lakefile.toml .git .hg >/dev/null
+              exec lake serve
+            '''
+        ]
+    "
+}
+
+hook -group lsp-filetype-vue global BufSetOption filetype=(?:vue) %{
+    set-option buffer lsp_servers %{
+        [typescript-language-server]
+        root_globs = ["package.json", "tsconfig.json", "jsconfig.json", ".git", ".hg"]
+        args = ["--stdio"]
+        settings_section = "_"
+        [typescript-language-server.settings._]
+        plugins = [{ name = "@vue/typescript-plugin", location = "vue-language-server", languages = ["vue"] }]
+    }
+    # set-option buffer lsp_servers %{
+    #     [tailwindcss-language-server]
+    #     root_globs = ["tailwind.*"]
+    #     args = ["--stdio"]
+    #     [tailwindcss-language-server.settings.tailwindCSS]
+    #     editor = {}
+    # }
+}
+
 hook -group lsp-filetype-javascript global BufSetOption filetype=(?:javascript|typescript) %{
     set-option buffer lsp_servers %{
         [typescript-language-server]
@@ -259,9 +311,11 @@ hook -group lsp-filetype-java global BufSetOption filetype=java %{
     set-option buffer lsp_servers %{
         [jdtls]
         root_globs = ["mvnw", "gradlew", ".git", ".hg"]
-        [jdtls.settings]
-        # See https://github.dev/eclipse/eclipse.jdt.ls
-        # "java.format.insertSpaces" = true
+        settings_section = "_"
+        workspace_did_change_configuration_subsection = "settings"
+        [jdtls.settings._.settings]
+        # See https://github.com/eclipse-jdtls/eclipse.jdt.ls/blob/main/org.eclipse.jdt.ls.core/src/org/eclipse/jdt/ls/core/internal/preferences/Preferences.java
+        # "java.format.enabled" = true
     }
 }
 
@@ -358,6 +412,8 @@ hook -group lsp-filetype-latex global BufSetOption filetype=latex %{
                 '
             """,
         ]
+        # [ltex-ls]
+        # root_globs = [".git", ".hg"]
     }
 }
 
@@ -365,6 +421,7 @@ hook -group lsp-filetype-lua global BufSetOption filetype=lua %{
     set-option buffer lsp_servers %{
         [lua-language-server]
         root_globs = [".git", ".hg"]
+        single_instance = false
         settings_section = "Lua"
         [lua-language-server.settings.Lua]
         # See https://github.com/sumneko/vscode-lua/blob/master/setting/schema.json
@@ -385,7 +442,7 @@ hook -group lsp-filetype-markdown global BufSetOption filetype=markdown %{
     # }
     # set-option buffer lsp_servers %{
     #     [markdown-oxide]
-    #     root_globs = ["logseq"]
+    #     root_globs = [".moxide.toml", ".obsidian", "logseq"]
     # }
 }
 
@@ -405,7 +462,7 @@ hook -group lsp-filetype-nim global BufSetOption filetype=nim %{
 
 hook -group lsp-filetype-nix global BufSetOption filetype=nix %{
     set-option buffer lsp_servers %{
-        [nil]
+        [nixd]
         root_globs = ["flake.nix", "shell.nix", ".git", ".hg"]
     }
 }
@@ -418,6 +475,13 @@ hook -group lsp-filetype-ocaml global BufSetOption filetype=ocaml %{
         settings_section = "_"
         [ocamllsp.settings._]
         # codelens.enable = false
+    }
+}
+
+hook -group lsp-filetype-odin global BufSetOption filetype=odin %{
+    set-option buffer lsp_servers %{
+        [ols]
+        root_globs = ["ols.json", ".git"]
     }
 }
 
@@ -453,7 +517,7 @@ hook -group lsp-filetype-purescript global BufSetOption filetype=purescript %{
 hook -group lsp-filetype-python global BufSetOption filetype=python %{
     set-option buffer lsp_servers %{
         [pylsp]
-        root_globs = ["requirements.txt", "setup.py", "pyproject.toml", ".git", ".hg"]
+        root_globs = ["pyproject.toml", "setup.py", "poetry.lock", ".git", ".hg"]
         settings_section = "_"
         [pylsp.settings._]
         # See https://github.com/python-lsp/python-lsp-server#configuration
@@ -462,13 +526,13 @@ hook -group lsp-filetype-python global BufSetOption filetype=python %{
     }
     # set-option buffer lsp_servers %{
     #     [pyright-langserver]
-    #     root_globs = ["requirements.txt", "setup.py", "pyproject.toml", "pyrightconfig.json", ".git", ".hg"]
+    #     root_globs = ["pyproject.toml", "setup.py", "poetry.lock", "pyrightconfig.json", ".git", ".hg"]
     #     args = ["--stdio"]
     # }
     # set-option -add buffer lsp_servers %{
     #     [ruff]
     #     args = ["server", "--quiet"]
-    #     root_globs = ["requirements.txt", "setup.py", "pyproject.toml", ".git", ".hg"]
+    #     root_globs = ["pyproject.toml", "setup.py", "poetry.lock", ".git", ".hg"]
     #     settings_section = "_"
     #     [ruff.settings._.globalSettings]
     #     organizeImports = true
@@ -505,17 +569,7 @@ hook -group lsp-filetype-rust global BufSetOption filetype=rust %{
     set-option buffer lsp_servers %{
         [rust-analyzer]
         root_globs = ["Cargo.toml"]
-        command = "sh"
-        args = [
-            "-c",
-            """
-                if path=$(rustup which rust-analyzer 2>/dev/null); then
-                    exec "$path"
-                else
-                    exec rust-analyzer
-                fi
-            """,
-        ]
+        single_instance = true
         [rust-analyzer.experimental]
         commands.commands = ["rust-analyzer.runSingle"]
         hoverActions = true
@@ -523,6 +577,19 @@ hook -group lsp-filetype-rust global BufSetOption filetype=rust %{
         # See https://rust-analyzer.github.io/manual.html#configuration
         # cargo.features = []
         check.command = "clippy"
+        [rust-analyzer.symbol_kinds]
+        Constant = "const"
+        Enum = "enum"
+        EnumMember = ""
+        Field = ""
+        Function = "fn"
+        Interface = "trait"
+        Method = "fn"
+        Module = "mod"
+        Object = ""
+        Struct = "struct"
+        TypeParameter = "type"
+        Variable = "let"
     }
 }
 
@@ -577,6 +644,13 @@ hook -group lsp-filetype-svelte global BufSetOption filetype=svelte %{
     }
 }
 
+hook -group lsp-filetype-swift global BufSetOption filetype=swift %{
+    set-option buffer lsp_servers %{
+        [sourcekit-lsp]
+        root_globs = ["Package.swift", ".xcodeproj", ".git", ".hg"]
+    }
+}
+
 hook -group lsp-filetype-terraform global BufSetOption filetype=terraform %{
     set-option buffer lsp_servers %{
         [terraform-ls]
@@ -603,10 +677,10 @@ hook -group lsp-filetype-typst global BufSetOption filetype=typst %{
         args = ["lsp"]
         settings_section = "_"
         [tinymist.settings._]
-        # See https://myriad-dreamin.github.io/tinymist/configurations.html
+        # See https://myriad-dreamin.github.io/tinymist/config/neovim.html
         exportPdf = "onDocumentHasTitle"
         formatterMode = "typstyle"
-        previewFeature = "disable"
+        preview.background.enabled = false
     }
     set-option -add buffer lsp_servers "formatterPrintWidth = %opt{autowrap_column}"
 }
@@ -642,7 +716,7 @@ declare-option -hidden str lsp_server_biome %{
 
 ### Language ID ###
 
-hook -group lsp-language-id global BufSetOption filetype=(.*) %{
+hook -group lsp-language-id global BufSetOption filetype=((?!javascript)(?!typescript).*) %{
     set-option buffer lsp_language_id %val{hook_param_capture_1}
 }
 
@@ -650,12 +724,13 @@ hook -group lsp-language-id global BufSetOption filetype=(?:c|cpp) %{
     set-option buffer lsp_language_id c_cpp
 }
 hook -group lsp-language-id global BufSetOption filetype=javascript %{
-    set-option buffer lsp_language_id javascript
+    try %{
+        "lsp-nop-with-0%opt{lsp_language_id}"
+        set-option buffer lsp_language_id javascript
+    }
 }
 hook -group lsp-language-id global BufCreate .*[.]jsx %{
-    hook -group lsp-language-id buffer BufSetOption filetype=javascript %{
-        set-option buffer lsp_language_id javascriptreact
-    }
+    set-option buffer lsp_language_id javascriptreact
 }
 hook -group lsp-language-id global BufSetOption filetype=protobuf %{
     set-option buffer lsp_language_id proto
@@ -664,10 +739,11 @@ hook -group lsp-language-id global BufSetOption filetype=sh %{
     set-option buffer lsp_language_id shellscript
 }
 hook -group lsp-language-id global BufSetOption filetype=typescript %{
-    set-option buffer lsp_language_id typescript
+    try %{
+        "lsp-nop-with-0%opt{lsp_language_id}"
+        set-option buffer lsp_language_id typescript
+    }
 }
 hook -group lsp-language-id global BufCreate .*[.]tsx %{
-    hook -group lsp-language-id buffer BufSetOption filetype=typescript %{
-        set-option buffer lsp_language_id typescriptreact
-    }
+    set-option buffer lsp_language_id typescriptreact
 }
