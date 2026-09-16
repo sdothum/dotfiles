@@ -186,6 +186,10 @@ proc parseArguments*(
 
   var i = 0
 
+  proc parseCoordinate(): int =
+    try: result = parseInt(args[i])
+    except: fail("invalid coordinate value " & args[i])
+
   proc parseValue(
     value: int,
     kind: ArgumentKind,
@@ -331,7 +335,7 @@ proc parseArguments*(
     of "--close":
       result.close = parseSwitch(result.close, ArgClose, allowed)
 
-    # first option must be a group, columns, direction/cardinal direction, classname (with --all or --name) or size directive {X}x{Y} or {X}:{Y}
+    # first option must be a group, columns, direction/cardinal direction, classname (with --all or --name) or size directive {X}x{Y} or {X}:{Y} or x y coordinate
     elif i == 0:
 
       if ArgLayer in allowed:
@@ -343,13 +347,9 @@ proc parseArguments*(
         if args.len != 2:
           fail("coordinates require 2 values")
 
-        try: result.xy.x = parseInt(args[i])
-        except: fail("invalid x coordinate")
-
-        try: result.xy.y = parseInt(args[i + 1])
-        except: fail("invalid y coordinate")
-
+        result.xy.x = parseCoordinate()
         inc i
+        result.xy.y = parseCoordinate()
 
       elif args[i].match(re(r"^0x........$")):
         if result.winid != "" or ArgWinid notin allowed:
