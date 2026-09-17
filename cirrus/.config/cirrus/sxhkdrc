@@ -192,7 +192,7 @@ super + {d,n,m,p,l,f}
 	zephyr window snap {top left,top,top right,bottom left,bottom,bottom right}
 
 super + {_,shift} + r
-	zephyr window snap center {horizontal,vertical}
+	zephyr window snap center {vertical,horizontal}
 
 super + {t,s}
 	side="{left,right}" ;\
@@ -376,8 +376,10 @@ alt + super + ctrl + j
 
 # ......................................................................... http
 
-super + b ; {b,c,f}
-	{qutebrowser,chromium,firefox}
+# NOTE: {super + b} for sloppy trigger :-)
+
+super + b ; {super + b,b,c,f}
+	{qutebrowser,qutebrowser,chromium,firefox}
 
 super + ctrl + b
 	qutebrowser closeall

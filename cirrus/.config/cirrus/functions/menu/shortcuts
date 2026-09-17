@@ -13,10 +13,10 @@ export COLSEP=⁋  # NOTE: '^' used for kak split regex SEE: menu (picklist)
 # NOTE: unique glyphs chosen for single keypress trigger (save for /return first item)
 shortcuts() {
 echo "
+|    ⁋ | xclip -selection clipboard
 /    ⁋ >/dev/null
 !    ⁋ 2>/dev/null
 &    ⁋ >/dev/null 2>&1
-|    ⁋ | xclip -selection clipboard
 ^    ⁋ [^\\\\n]*
 ,    ⁋ & \" \" &
 r    ⁋ grep -E
@@ -43,7 +43,9 @@ case "${string%% *}" in
 	*     )
 		for i in $(echo "$string" | sed "s/.*$SEP //; s/ /⁋/g; s/./& /g") ;do      # NOTE: to avoid xdotool type keystroke delay
 			[ "$i" = '⁋' ] && xdotool key space || xdotool key $(printf "U%x" "'$i")
-		done ;;
+		done
+		[ "${string%% *}" = '|' ] && xdotool key return
+		;;
 esac
 
 # kak: filetype=sh
