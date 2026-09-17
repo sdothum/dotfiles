@@ -28,7 +28,14 @@ export TABSTOP=3      # default for (pipe), SEE: align
 [ -e /usr/local/bin/kak ] && KAK=/usr/local/bin/kak || KAK=/usr/bin/kak
 $KAK -l | grep -q dead | $KAK -clear  # dead sessions
 
-debug() { echo "$1" | grep -qE 'hooks|shell|profile|keys|commands' && debug="-debug $1" || debug="-debug commands"; }
+debug() {
+	if echo "$1" | grep -qE 'hooks|shell|profile|keys|commands' ;then
+		debug="-debug $1"
+	else
+		debug="-debug commands"
+		false
+	fi
+	}
 
 while : ;do
 	case $1 in
