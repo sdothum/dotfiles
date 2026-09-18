@@ -189,6 +189,14 @@ focus and remove the saved operation after restoration.</li>
 in placement order within their effective stacking bands while preserving focus.
 Repeating an unchanged fold still raises the selected set. Group explode shares
 this stacking behavior without sharing fold transaction ownership.</li>
+<li><code>layout unfold</code> <var>class</var>: Restore the identities and geometries saved by the first
+class-targeted fold under <code>$WME/layout/fold:class:&lt;class></code>, then consume that
+state. Re-folds preserve the first saved population and original geometries.
+New clients, destroyed clients, and reused XIDs with different tokens are not
+restored. Current focus is preserved. Restoration changes geometry, not saved
+stacking order or persistent layers. Class names with path separators are
+percent-encoded in the state directory name. Group/default folds do not create
+class-fold state. Ordinary fold history remains independently available.</li>
 <li><code>layout level</code> <var>args</var>: Level windows vertically.</li>
 <li><code>layout restore</code> [<var>args</var>]: Restore layout state.</li>
 <li><code>layout spread</code> <var>args</var>: Spread windows across a grid.</li>

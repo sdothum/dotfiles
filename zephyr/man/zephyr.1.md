@@ -105,6 +105,14 @@ commands; they are not zephyr public actions.
   in placement order within their effective stacking bands while preserving focus.
   Repeating an unchanged fold still raises the selected set. Group explode shares
   this stacking behavior without sharing fold transaction ownership.
+* `layout unfold` <class>: Restore the identities and geometries saved by the first
+  class-targeted fold under `$WME/layout/fold:class:<class>`, then consume that
+  state. Re-folds preserve the first saved population and original geometries.
+  New clients, destroyed clients, and reused XIDs with different tokens are not
+  restored. Current focus is preserved. Restoration changes geometry, not saved
+  stacking order or persistent layers. Class names with path separators are
+  percent-encoded in the state directory name. Group/default folds do not create
+  class-fold state. Ordinary fold history remains independently available.
 * `layout level` <args>: Level windows vertically.
 * `layout restore` [<args>]: Restore layout state.
 * `layout spread` <args>: Spread windows across a grid.

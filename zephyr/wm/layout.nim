@@ -2,6 +2,7 @@ import std/os
 import std/strutils
 import std/sequtils
 import std/sets
+import std/uri
 
 import cliargs
 # import constants
@@ -379,6 +380,10 @@ proc restoreFoldFocus(winid: string, placement: FoldPlacement) =
     # changing focus, including when the original focus is outside the set.
     raiseFoldPlacement(placement)
 
+proc classFoldRoot(classname: string): string =
+  # Keep ordinary class names readable while preventing path/marker separators.
+  getEnv("WME") / "layout" / ("fold:class:" & encodeUrl(classname, usePlus = false))
+
 proc fold*(args: seq[string]) =
   requireArgs("layout fold", args, 1, 6)
 
@@ -410,9 +415,26 @@ proc fold*(args: seq[string]) =
   if winids.len == 0:
     quit("layout fold: no matching windows")
 
+  let classRoot =
+    if a.groupNo <= 0 and a.classname.len > 0: classFoldRoot(a.classname)
+    else: ""
+  if classRoot.len > 0:
+    state.recoverExplodeOperation(classRoot)
+
   let screenGeometry = window.screenGeometry()
   let placement = prepareFoldPlacement(winids, a.columns, a.rows, a.spread,
     screenGeometry, query.wmSnapshot(), "layout fold")
+
+  if classRoot.len > 0:
+    var operation = state.beginExplodeOperationIdentity(classRoot,
+      placement.records, placement.history, preserveOriginal = true)
+    if placement.history.len > 0:
+      window.applyGeometriesChecked(placement.applications)
+    state.markExplodeGeometryApplied(operation)
+    raiseFoldPlacement(placement)
+    state.commitExplodeOperation(operation)
+    restoreFoldFocus(winid, placement)
+    return
 
   if placement.history.len == 0:
     raiseFoldPlacement(placement)
@@ -537,7 +559,7 @@ proc explode*(args: seq[string]) =
   else:
     explodeStack()
 
-proc unexplodeRecorded(root, command: string) =
+proc restoreRecordedLayout(root, command: string, missingState = "") =
   state.recoverExplodeOperation(root)
   state.recoverExplodeState(root)
   let explodeLock = acquireExplodeLock(root)
@@ -551,7 +573,7 @@ proc unexplodeRecorded(root, command: string) =
     if dirExists(root):
       removeDir(root)
     releaseExplodeLock(explodeLock)
-    quit(command & ": no matching windows")
+    quit(if missingState.len > 0: missingState else: command & ": no matching windows")
 
   let existing = window.liveIds(@["--all"]).splitLines.toHashSet
   let focusedBefore = query.focusedWinid()
@@ -582,13 +604,21 @@ proc unexplodeRecorded(root, command: string) =
       focus(focusedBefore)
   removeDir(root)
 
+proc unfold*(args: seq[string]) =
+  requireArgs("layout unfold", args, 1, 1)
+  let a = parseArguments("layout unfold", args, [ArgClassname])
+  if a.classname.len == 0:
+    quit("layout unfold: classname required")
+  restoreRecordedLayout(classFoldRoot(a.classname), "layout unfold",
+    "layout unfold: no fold state for " & a.classname)
+
 proc unexplodeGroup*(group: int) =
   let root = getEnv("WME") / "layout" / "explode:group:" & $group
-  unexplodeRecorded(root, "layout unexplode --group")
+  restoreRecordedLayout(root, "layout unexplode --group")
 
 proc unexplodeStack*() =
   let root = getEnv("WME") / "layout" / "explode"
-  unexplodeRecorded(root, "layout unexplode")
+  restoreRecordedLayout(root, "layout unexplode")
 
 proc unexplode*(args: seq[string]) =
   requireArgs("layout unexplode", args, 0, 2)
@@ -666,5 +696,7 @@ proc dispatch*(verb: string, rest: seq[string]) =
     tile(rest)
   of "unexplode":
     unexplode(rest)
+  of "unfold":
+    unfold(rest)
   else:
     quit("unknown layout action")

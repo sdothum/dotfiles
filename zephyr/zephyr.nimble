@@ -95,6 +95,7 @@ proc usage() =
   echo "  zephyr group toggle <args>"
   echo "  zephyr layout explode"
   echo "  zephyr layout fold <args>"
+  echo "  zephyr layout unfold <class>"
   echo "  zephyr layout level <args>"
   echo "  zephyr layout restore <args>"
   echo "  zephyr layout spread <args>"

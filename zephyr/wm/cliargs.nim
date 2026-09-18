@@ -343,6 +343,9 @@ proc parseArguments*(
           fail("layer must be normal, above or overlay")
         result.layer = parseArgument(result.layer, ArgLayer, allowed)
 
+      elif allowed.len == 1 and ArgClassname in allowed:
+        result.classname = parseArgument(result.classname, ArgClassname, allowed)
+
       elif ArgXY in allowed:
         if args.len != 2:
           fail("coordinates require 2 values")

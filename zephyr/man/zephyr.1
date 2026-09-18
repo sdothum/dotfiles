@@ -192,6 +192,9 @@ Public group IDs are one\-based\. \fB0\fR is not a public group argument\.
 \fBlayout fold\fR \fIargs\fR: Fold matching windows into a grid, then raise participants in placement order within their effective stacking bands while preserving focus\. Repeating an unchanged fold still raises the selected set\. Group explode shares this stacking behavior without sharing fold transaction ownership\.
 .
 .IP "\(bu" 4
+\fBlayout unfold\fR \fIclass\fR: Restore the identities and geometries saved by the first class\-targeted fold under \fB$WME/layout/fold:class:<class>\fR, then consume that state\. Re\-folds preserve the first saved population and original geometries\. New clients, destroyed clients, and reused XIDs with different tokens are not restored\. Current focus is preserved\. Restoration changes geometry, not saved stacking order or persistent layers\. Class names with path separators are percent\-encoded in the state directory name\. Group/default folds do not create class\-fold state\. Ordinary fold history remains independently available\.
+.
+.IP "\(bu" 4
 \fBlayout level\fR \fIargs\fR: Level windows vertically\.
 .
 .IP "\(bu" 4

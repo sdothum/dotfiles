@@ -82,7 +82,7 @@ proc restoreTxnLockPath(root: string): string =
 
 proc explodeMetadataPath(root, legacyName: string): string =
   let name = extractFilename(root)
-  if name.startsWith("explode:group:"):
+  if name.startsWith("explode:group:") or name.startsWith("fold:class:"):
     return splitFile(root).dir / ("." & name & legacyName[".explode".len .. ^1])
   splitFile(root).dir / legacyName
 
@@ -161,7 +161,7 @@ proc recoverRestoreHistory*(root: string, fromExplodeOperation = false) =
     let operationRoot = splitFile(root).dir / "layout" / "explode"
     if fileExists(explodeOperationMarkerPath(operationRoot)):
       recoverExplodeOperation(operationRoot)
-    # Group explode operations share WINFO history, but own separate journals.
+    # Named layout operations share WINFO history, but own separate journals.
     var layoutRoots = @[splitFile(operationRoot).dir]
     let wme = getEnv("WME")
     if wme.len > 0 and wme / "layout" notin layoutRoots:
@@ -169,7 +169,8 @@ proc recoverRestoreHistory*(root: string, fromExplodeOperation = false) =
     for layoutRoot in layoutRoots:
       for kind, path in walkDir(layoutRoot):
         let name = extractFilename(path)
-        if kind == pcFile and name.startsWith(".explode:group:") and
+        if kind == pcFile and (name.startsWith(".explode:group:") or
+            name.startsWith(".fold:class:")) and
             name.endsWith("-operation.txn"):
           let fields = readFile(path).splitLines()
           if fields.len >= 4 and fields[2] == root:
@@ -316,13 +317,22 @@ proc beginExplodeState*(root: string, records: seq[ExplodeStateRecord]): Explode
   writeRestoreMarker(result.marker, "PREPARED", result.stage, result.backup, getCurrentProcessId())
   result.active = true
 
+proc loadStateEntries*(root: string): seq[IdentityExplodeStateRecord]
+
 proc beginExplodeStateIdentity*(root: string,
-    records: seq[IdentityExplodeStateRecord]): ExplodeTransaction =
+    records: seq[IdentityExplodeStateRecord], preserveOriginal = false): ExplodeTransaction =
   var plain: seq[ExplodeStateRecord] = @[]
   for record in records:
     plain.add((record.winid, record.geometry))
   result = beginExplodeState(root, plain)
-  for position, record in records:
+  var saved = records
+  if preserveOriginal:
+    let existing = loadStateEntries(root) # Read while holding the operation lock.
+    if existing.len > 0:
+      saved = existing
+      removeDir(result.stage)
+      createDir(result.stage)
+  for position, record in saved:
     writeGeometry(record.geometry,
       result.stage / align($(position + 1), 3, '0') & "=" & record.winid,
       record.token)
@@ -360,10 +370,10 @@ proc beginExplodeOperation*(root: string, records: seq[ExplodeStateRecord],
 
 proc beginExplodeOperationIdentity*(root: string,
     records: seq[IdentityExplodeStateRecord],
-    history: seq[IdentityHistoryUpdate]): ExplodeOperation =
+    history: seq[IdentityHistoryUpdate], preserveOriginal = false): ExplodeOperation =
   result.root = root
   result.marker = explodeOperationMarkerPath(root)
-  result.explode = beginExplodeStateIdentity(root, records)
+  result.explode = beginExplodeStateIdentity(root, records, preserveOriginal)
   result.hasHistory = history.len > 0
   if result.hasHistory:
     result.history = beginRestoreHistoryIdentity(history)
