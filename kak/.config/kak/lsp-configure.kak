@@ -10,7 +10,7 @@
 
 # NOTE: bundle replaced by void xbps package and setup in autoload
 # nop evaluate-commands %sh{ kak-lsp -s $kak_session --kakoune }  # NOTE: autoload overrides this statement
-set-option global lsp_cmd /opt/kak-lsp/bin/kak-lsp
+set-option global lsp_cmd /opt/kak-lsp/bin/kak-lsp  # patched to suppress extension/statusUpdate messages
 set-option global lsp_snippet_support false
 set global lsp_debug false
 
@@ -25,9 +25,7 @@ hook global KakEnd .* lsp-exit
 
 hook global WinSetOption filetype=(c|cpp|go|javascript|latex|lua|markdown|nim|perl|python|ruby|rust|toml|typescript) %{
 	lsp-enable-window
-	# lsp-inlay-diagnostics-enable global  # too visually noisy (and truncated at window width)
 	lsp-auto-hover-buffer-enable
-	colorscheme %opt{theme}  # WHY: restore Diagnostic faces (overwritten by kak-lsp injection above)
 
 	map global object a     '<a-semicolon>lsp-object<ret>'                               -docstring 'LSP any symbol'
 	map global object <a-a> '<a-semicolon>lsp-object<ret>'                               -docstring 'LSP any symbol'
@@ -35,6 +33,11 @@ hook global WinSetOption filetype=(c|cpp|go|javascript|latex|lua|markdown|nim|pe
 	map global object k     '<a-semicolon>lsp-object Class Interface Struct<ret>'        -docstring 'LSP class interface or struct'
 	map global object d     '<a-semicolon>lsp-diagnostic-object --include-warnings<ret>' -docstring 'LSP errors and warnings'
 	map global object D     '<a-semicolon>lsp-diagnostic-object<ret>'                    -docstring 'LSP errors'
+}
+
+hook global WinSetOption filetype=markdown %{
+	lsp-inlay-diagnostics-enable global  # messages truncated at window width
+	colorscheme %opt{theme}  # FOR: restore Diagnostic faces (overwritten by lsp injection)
 }
 
 hook global WinSetOption filetype=(c|cpp|go|lua|nim|perl|python|ruby|rust) %{
@@ -57,7 +60,7 @@ hook -group user-lsp-nim global BufSetOption filetype=nim %{
 	set-option buffer lsp_servers %{
 		[nimlangserver]
 		root_globs = ["*.nimble", ".git", ".hg"]
-		command = "/opt/nimlangserver/bin/nimlangserver"
+		command = "/opt/nimlangserver/bin/nimlangserver"  # patched to fix ProgressToken error (and resultant messages)
 
 		[nimlangserver.settings.nim]
 		notificationVerbosity = "none"
