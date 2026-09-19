@@ -2,6 +2,7 @@ import compat
 import constants
 import group as groups
 import layout
+import state
 import window
 
 #
@@ -24,6 +25,8 @@ proc sizeA4Centered(groupname: string = GroupUtil) =
 proc tile3Columns(groupname, classname: string) =
   window.group(groupname)
   layout.fold("3", classname)
+  state.snapshot()
+  state.restore()
 
 proc video1080p(groupname: string = GroupPlay) =
   window.size("1080p")
@@ -52,8 +55,12 @@ proc kak() =
       window.tile("3", "3")
   of 2 .. 3:
     layout.fold("4", ClassKak)
+    state.snapshot()
+    state.restore()
   else:
     layout.fold("4", "--rows", "2", ClassKak)
+    state.snapshot()
+    state.restore()
 
 proc luakit() =
   window.group(GroupComm)
@@ -78,8 +85,12 @@ proc term(classname: string = ClassTerm) =
   case window.count(classname)
   of 0..2:
     layout.fold("3", "--spread", classname)
+    state.snapshot()
+    state.restore()
   else:
     layout.fold("3", "--rows", "2", "--spread", classname)
+    state.snapshot()
+    state.restore()
 
 #
 # Dispatch

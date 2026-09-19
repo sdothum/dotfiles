@@ -770,6 +770,9 @@ proc snapshot*(args: seq[string]) =
     token
   )
 
+proc snapshot*() =
+  snapshot(@[])
+
 proc restore*(args: seq[string]) =
   let id =
     if args.len == 0:
@@ -795,6 +798,9 @@ proc restore*(args: seq[string]) =
     getEnv("WINFO") / id,
     token
   )
+
+proc restore*() =
+  restore(@[])
 
 #
 # Dispatch
