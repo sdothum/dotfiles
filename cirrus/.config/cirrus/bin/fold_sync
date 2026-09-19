@@ -1,0 +1,20 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="fold_sync $@" . $PARENT
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .......................................................... Dangling fold check
+
+# Usage: fold_sync <class>
+
+# remove dangling fold/unfold state tree
+if [ -d $WME/layout/fold:class:$1 ] ;then
+	for W in $(zephyr window ids --all $1) ;do
+		[ -e $WME/layout/fold:class:$1/*$W ] && exit
+	done
+	rm -rf $WME/layout/fold:class:$1
+fi
+
+# kak: filetype=sh
