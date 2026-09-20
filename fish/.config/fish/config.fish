@@ -27,8 +27,8 @@ set -x KEYTIMEOUT 1
 # paths
 set -x CACHEDIR $HOME/.cache
 set -x CDPATH . .. ../.. ~ ~/.config ~/build ~/stow /usr / >/dev/null
-echo $PATH | grep -q "$HOME/.gem/ruby/(rubyver)/bin"
-or set -x PATH $PATH ~/.gem/ruby/(rubyver)/bin ~/.cabal/bin /bin /sbin /usr/sbin /usr/bin/core_perl /usr/local/games >/dev/null
+# echo $PATH | grep -q "$HOME/.gem/ruby/(rubyver)/bin"
+# or set -x PATH $PATH ~/.gem/ruby/(rubyver)/bin >/dev/null
 
 # cli filemanager
 set -x FILEMANAGER yazi
