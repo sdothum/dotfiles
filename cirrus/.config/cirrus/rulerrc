@@ -126,7 +126,7 @@ class="feh"
 	sleep 0.25                         ;\
 	xdotool key space                  ;\
 	sleep 0.1 && xdotool key BackSpace ;\
-	zephyr window snap center
+	zephyr window size 1080x1690 . window snap center
 
 class="foliate"
 	ZEPHYR_TRACE=1 zephyr rule foliate
