@@ -215,6 +215,7 @@ ci* )
 	# $TERM &  # NOTE: cirrus cannot properly manage windows opened before it!
 	# export CIRRUS_TRACE_STACK=1
 	# export CIRRUS_TRACE_GEOMETRY_ENTER=1
+	# export CIRRUS_TRACE_RESTART=1
 	xexec cirrus -c $HOME/.config/cirrus/cirrusrc ;;
 
 c*n ) xexec gnome-session-cinnamon ;;
