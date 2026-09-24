@@ -104,14 +104,17 @@ super + {_,ctrl} + 0
 super + {_,ctrl} + space
 	sirocco window maximize --{vertical,horizontal}
 
-super + shift + p ; {super + shift + p,p,f,d,m}
-	zephyr window size {paper --smaller,paper --smaller,paper --larger,video --smaller,video --larger}
+super + shift + m ; {super + shift + m,p,f,d,m}
+	zephyr window size {video --larger,paper --smaller,paper --larger,video --smaller,video --larger}
 
 super + shift + {Left,Down,Up,Right}
 	sirocco window resize --relative {-50 0,0 50,0 -50,50 0}
 
 super + ctrl + shift + {Left,Down,Up,Right}
 	sirocco window resize --relative {-20 0,0 20,0 -20,20 0}
+
+super + ctrl + v
+	derecho window video
 
 super + ctrl + w
 	derecho window paper
@@ -324,7 +327,7 @@ super + shift + a
 super + {_,shift} + o
 	menu {scripts,projects}
 
-super + shift + {u,m}
+super + shift + {p,v}
 	menu {passwords,media}
 
 # ........................................................................ terms

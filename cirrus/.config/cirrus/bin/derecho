@@ -92,6 +92,12 @@ q   B7
 s   B7  --rotate
 "
 
+screens="
+1   1080p
+7   720p
+4   480p
+"
+
 directions="
 a   tile    left
 c   tile    right
@@ -176,6 +182,11 @@ case $menu in
 				sirocco window focus $W
 				zephyr window size ${size#* }
 				# window -- snap center vertical  # preserve size history
+				;;
+			video  )
+				size=$(echo "$screens" | pick "size") || exit
+				sirocco window focus $W
+				zephyr window size ${size#* }
 				;;
 			group  )
 				group=$(echo "$groups" | pick "group") || exit
