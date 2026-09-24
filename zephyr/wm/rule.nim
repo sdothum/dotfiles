@@ -9,6 +9,12 @@ import window
 # Shared policies
 #
 
+# FOR: revert geometry of newly launched fold windows
+
+proc setGeometry() =
+  state.snapshot()
+  state.restore()
+
 proc center(groupname: string = GroupDesk) =
   window.group(groupname)
   window.snap(Center)
@@ -25,8 +31,7 @@ proc sizeA4Centered(groupname: string = GroupUtil) =
 proc tile3Columns(groupname, classname: string) =
   window.group(groupname)
   layout.fold("3", classname)
-  state.snapshot()
-  state.restore()
+  setGeometry()
 
 proc video1080p(groupname: string = GroupPlay) =
   window.size("1080p")
@@ -42,6 +47,8 @@ proc btop() =
   window.snap(Center)
   groups.focus(GroupDesk)
 
+# NOTE: save newly opened window geometry AFTER its intended sizing
+
 proc kak() =
   window.group(GroupCode)
 
@@ -55,12 +62,10 @@ proc kak() =
       window.tile("3", "3")
   of 2 .. 3:
     layout.fold("4", ClassKak)
-    state.snapshot()
-    state.restore()
+    setGeometry()
   else:
     layout.fold("4", "--rows", "2", ClassKak)
-    state.snapshot()
-    state.restore()
+    setGeometry()
 
 proc luakit() =
   window.group(GroupComm)
@@ -85,12 +90,10 @@ proc term(classname: string = ClassTerm) =
   case window.count(classname)
   of 0..2:
     layout.fold("3", "--spread", classname)
-    state.snapshot()
-    state.restore()
+    setGeometry()
   else:
     layout.fold("3", "--rows", "2", "--spread", classname)
-    state.snapshot()
-    state.restore()
+    setGeometry()
 
 #
 # Dispatch

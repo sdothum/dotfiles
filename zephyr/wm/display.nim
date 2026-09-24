@@ -25,6 +25,10 @@ proc width*(args: seq[string]): string =
   requireNoArgs("display width", args)
   $dimensions().width
 
+proc dimensions(args: seq[string]): string =
+  requireNoArgs("display dimensions", args)
+  $dimensions().width & " " & $dimensions().height
+
 #
 # Predicates
 #
@@ -63,6 +67,8 @@ proc width*(): string =
 
 proc dispatch*(verb: string, rest: seq[string]) =
   case verb
+  of "dimensions":
+    echo dimensions(rest)
   of "height":
     echo height(rest)
   of "width":
