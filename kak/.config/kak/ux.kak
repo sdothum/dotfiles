@@ -37,8 +37,8 @@ map global normal '#' ': enter-user-mode format<ret>'
 
 addm %{ block   e1 : map global format <tab>   '|unexpand --first-only -t<space>' -docstring 'leading tabs,n spaces' }
 addm %{ block   e2 : map global format <s-tab> '|expand --init -t<space>'         -docstring 'leading tabs,n spaces' }
-addm %{ block   f1 : map global format f       ': refold<ret>'                    -docstring 'fold,unfold'           }
-addm %{ block   f2 : map global format F       ': unfold<ret>'                    -docstring 'fold,unfold'           }
+addm %{ block   f1 : map global format f       ": hardwrap<ret>: refold<ret>"     -docstring 'fold,unfold'           }
+addm %{ block   f2 : map global format F       ': unfold<ret>: softwrap<ret>'     -docstring 'fold,unfold'           }
 
 # ...................................................................... Comment
 

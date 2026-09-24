@@ -104,6 +104,7 @@ define-command -hidden ltex-dictionary-add %{
 	ltex-configure
 }
 
-map global normal @ ': ltex-dictionary-add<ret>' -docstring 'add word to dictionary'
+map global normal @     ': ltex-dictionary-add<ret>'       -docstring 'add word to dictionary'
+map global insert <c-@> '<esc>: ltex-dictionary-add<ret>i' -docstring 'add word to dictionary'
 
 # kak: filetype=kak

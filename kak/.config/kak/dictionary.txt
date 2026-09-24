@@ -44,3 +44,7 @@
 "windowchef",
 "autorepeat",
 "aluminium",
+"Metacam",
+"Librela",
+"favours",
+"i",

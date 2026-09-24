@@ -82,11 +82,23 @@ hook global WinCreate .* %{
 
 declare-option bool hardwrap false  # SEE: refold
 
-define-command hardwrap -params 1 %{ autowrap-enable; set-option window hardwrap true; set-option window autowrap_column %arg{1} }
+define-command hardwrap -params ..1 %{
+	autowrap-enable
+	set-option window hardwrap true
+	set-option window autowrap_column %sh{
+		if [ "$1" ]; then
+			echo $1
+		else
+			[ $kak_window_width -gt 132 ] && echo 132 || echo $(( kak_window_width - 12 ))
+		fi
+	}
+}
+
 define-command softwrap -params ..1 %{ autowrap-disable; evaluate-commands add-highlighter -override window/wrap wrap -word -indent -marker "'  ↪ '" %arg{@} }  # escape 'quotes' for eval
+
 define-command nowrap %{ remove-highlighter window/wrap }
 
-hook global WinSetOption filetype=markdown %{ hardwrap '80' }
+hook global WinSetOption filetype=markdown %{ hardwrap }
 hook global WinSetOption filetype=json     %{ softwrap '-width 275' }
 hook global WinSetOption filetype=(sh|c|cpp|fish|go|javascript|kak|latex|lua|nim|perl|python|ruby|rust|toml|typescript) softwrap
 hook global WinSetOption .*(conf|config|log|rc|text|txt) softwrap
