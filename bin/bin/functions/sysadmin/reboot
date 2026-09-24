@@ -13,11 +13,6 @@ REBOPT="$SESSION/$(cat $HOME/.windowmanager)/reboot"
 DELAY="$REBOPT/delay"
 PREHALT="$REBOPT/pre-halt"
 
-# FOR: trap any recent updates to user session paths
-if ! cmp $HOME/bin/userpaths.sh /etc/profile.d/userpaths.sh >/dev/null ;then
-	ifno "update /etc/profile.d/userpaths.sh" || sudo cp -v $HOME/bin/userpaths.sh /etc/profile.d/
-fi
-
 [ -d $DELAY ] && delay=$(ls -1 $DELAY) || delay=5  # reboot delay window
 
 if [ -z $1 ] ;then

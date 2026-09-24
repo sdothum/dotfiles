@@ -1,0 +1,66 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Font
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .............................................................. Watchface fonts
+
+usage() { echo "$(basename $0) n'umerals | d'ate <fontsize}" | usage:
+	exit 1
+}
+
+WATCHFACE=$HOME/.local/share/fonts/watchface
+PROJECT=$STOW/garmin/numerals/resources/fonts
+
+[ $2 ] || usage
+fontsize=$2
+cd $WATCHFACE
+
+# utf decimal "0u9999"
+utf() { printf "$1" | iconv -t UTF16LE | od -t x2 -An -v | sed 's/ /\u/g; s/^/0u/'; }
+
+rotate() {
+	echo "
+Open(\"watchface-normalbookupright.ttf\");
+Select($(utf $1));
+Rotate($2);
+Generate(\"$3\");
+" >/tmp/garminfont.script
+
+fontforge -quiet --script /tmp/garminfont.script
+}
+
+case $1 in
+	n* )
+		rotate '4' +60 four.ttf
+		fontbm \
+			--font-file four.ttf                        \
+			--font-size ${fontsize}                     \
+			--chars '52'                                \
+			--output four_${fontsize}
+
+		rotate '8' -60 eight.ttf
+		fontbm                                         \
+			--font-file eight.ttf                       \
+			--font-size ${fontsize}                     \
+			--chars '56'                                \
+			--output eight_${fontsize}
+
+		fontbm                                         \
+			--font-file watchface-normalbookupright.ttf \
+			--font-size ${fontsize}                     \
+			--chars '49,50'                             \
+			--output twelve_${fontsize}
+		;;
+	d* )
+		fontbm                                         \
+			--font-file watchface-normalbookupright.ttf \
+			--font-size ${fontsize}                     \
+			--chars '32,48-57,65-90,97-122'             \
+			--output date_${fontsize}
+		;;
+	*  ) usage
+esac
+
+cp -v *_${fontsize}.fnt *_${fontsize}_0.png $PROJECT

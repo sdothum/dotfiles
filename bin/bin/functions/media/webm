@@ -21,7 +21,7 @@ if server ;then
 		*       ) usage ;;
 	esac
 else
-	set -- $(query display)
+	set -- $(zephyr display dimensions)
 	opts="-s $1x$2 -i :0.0"
 fi
 

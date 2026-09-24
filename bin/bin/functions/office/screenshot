@@ -20,7 +20,7 @@ if server ;then
 		l* | *0 ) opts='--geometry=3440x1440+0+0' ;;
 		r* | *1 ) opts='--geometry=1680x1050+3440+0' ;;
 		a*      ) opts='--geometry=5120x1440+0+0' ;;
-		d*      ) sleep $refresh; set -- $(query display); opts="--geometry=$1x$2+0+0" ;;
+		d*      ) sleep $refresh; set -- $(zephyr display dimensions); opts="--geometry=$1x$2+0+0" ;;
 		s*      ) opts=-s ;;
 		*       ) usage ;;
 	esac
@@ -28,7 +28,7 @@ else
 	case $1 in
 		A*      ) ;;
 		[0-9]*  ) opts="--geometry=$@" ;;
-		d*      ) sleep $refresh; set -- $(query display); opts="--geometry=$1x$2+0+0" ;;
+		d*      ) sleep $refresh; set -- $(zephyr display dimensions); opts="--geometry=$1x$2+0+0" ;;
 		s*      ) opts=-s ;;
 		*       ) usage ;;
 	esac
