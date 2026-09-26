@@ -45,7 +45,7 @@ add() {
 	mhistory wiki$1 "$title^$SEP $wiki"
 	file="$WIKIS/$wiki/$title.wiki"
 	# prepend h1 title
-	echo "# $title\n\n[ kak: filetype=markdown ]: #" >"$file"
+	echo "# $title\n\n" >"$file"
 	# HACK: link gets written over as regular file so loop back to menu to edit as old
 }
 
