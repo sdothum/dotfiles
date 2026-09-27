@@ -169,7 +169,7 @@ _home_shum_stow_garmin_orbital_source_DateRenderer_mc_30_3_32_14_end:
         symbol [ geometry %tmp.63 38 3 11 ];
         symbol [ centerY %tmp.64 38 12 19 ];
         %tmp.64 = getv %tmp.63 :centerY;
-        %tmp.65 = 3;
+        %tmp.65 = 2;
         %tmp.66 = sub %tmp.64 %tmp.65;
         symbol [ _font %tmp.68 39 3 8 ];
         %tmp.68 = getv ? :_font;

@@ -35,7 +35,7 @@ class DateRenderer {
 
 		dc.drawText(
 			geometry.centerX,
-			geometry.centerY - 3,
+			geometry.centerY - 2,
 			_font,
 			label,
 			Graphics.TEXT_JUSTIFY_CENTER |
