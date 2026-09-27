@@ -3,10 +3,12 @@
 # Kakoune
 # ══════════════════════════════════════════════════════════════════════════════
 
+echo -debug "... loading snippets.kak"
+
 # Snippets
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# ....................................................................... plugin
+# ...................................................................."... plugin
 
 bundle kakoune-snippets https://github.com/occivink/kakoune-snippets.git %{
 	set-option global snippets_auto_expand true
@@ -27,7 +29,7 @@ bundle kakoune-snippets https://github.com/occivink/kakoune-snippets.git %{
 	map global insert <s-tab> '<esc>z)Z,c' -docstring 'select next snippet tab'
 }
 
-# ........................................................................ shell
+# ....................................................................."... shell
 
 hook global BufSetOption filetype=sh %{
 	set-option -add buffer snippets 'usage:'     '%us' %{ snippets-insert %{usage() { usage: "$(basename $0) ${options}"; exit 1; } }}
@@ -39,7 +41,7 @@ hook global BufSetOption filetype=sh %{
 } }}
 }
 
-# ..................................................................... markdown
+# .................................................................."... markdown
 
 hook global BufSetOption filetype=markdown %{
 	set-option -add buffer snippets 'date'   '%da' %{ snippets-insert %sh{ date '+## %A, %d %B %Y' | tr '[:upper:]' '[:lower:]' }}
@@ -47,7 +49,7 @@ hook global BufSetOption filetype=markdown %{
 	set-option -add buffer snippets 'search' '%se' %{ snippets-insert %{[${text}](http://thedarnedestthing.com/search?query=${query}) }}
 }
 
-# ......................................................................... mail
+# ......................................................................"... mail
 
 hook global BufSetOption filetype=mail %{
 	set-option -add buffer snippets 'dad'     '%da' %{ snippets-insert %{:D(A):D }}

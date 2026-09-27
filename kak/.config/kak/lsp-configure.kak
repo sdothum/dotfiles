@@ -3,10 +3,12 @@
 # Kakoune
 # ══════════════════════════════════════════════════════════════════════════════
 
+echo -debug "... loading lsp-configure.kak"
+
 # LSP server
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# ...................................................................... kak-lsp
+# ..................................................................."... kak-lsp
 
 # NOTE: bundle replaced by void xbps package and setup in autoload
 # nop evaluate-commands %sh{ kak-lsp -s $kak_session --kakoune }  # NOTE: autoload overrides this statement
@@ -51,7 +53,7 @@ hook global WinSetOption filetype=(c|cpp|go|lua|nim|perl|python|ruby|rust) %{
 
 addm %{ usermode l : map global select L ': enter-user-mode lsp<ret>' -docstring "LSP mode" }
 
-# ................................................................ nimlangserver
+# ............................................................."... nimlangserver
 
 # override servers.kak nimlsp reference
 remove-hooks global lsp-filetype-nim
@@ -66,7 +68,7 @@ hook -group user-lsp-nim global BufSetOption filetype=nim %{
 		notificationVerbosity = "none"
 	}
 }
-# ...................................................................... ltex-ls
+# ..................................................................."... ltex-ls
 
 # markdown dictionary
 define-command -hidden ltex-configure %{
@@ -90,7 +92,7 @@ define-command -hidden ltex-configure %{
 	}
 }
 
-# .......................................................... Markdown dictionary
+# ......................................................."... Markdown dictionary
 
 hook -group user-lsp-markdown global BufSetOption filetype=markdown %{
 	ltex-configure

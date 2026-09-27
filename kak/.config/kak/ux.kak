@@ -3,10 +3,12 @@
 # Kakoune
 # ══════════════════════════════════════════════════════════════════════════════
 
+echo -debug "... loading ux.kak"
+
 # Formatting
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# ..................................................................... Defaults
+# .................................................................."... Defaults
 
 set-option global tabstop 3
 set-option global indentwidth 3
@@ -33,23 +35,23 @@ if-else %{ [ -z $TRIM ] } %{
 addm %{ usermode f : map global select '#' ': enter-user-mode format<ret>' -docstring "format user-mode" }
 map global normal '#' ': enter-user-mode format<ret>'
 
-# ............................................................. Block conversion
+# .........................................................."... Block conversion
 
 addm %{ block   e1 : map global format <tab>   '|unexpand --first-only -t<space>' -docstring 'leading tabs,n spaces' }
 addm %{ block   e2 : map global format <s-tab> '|expand --init -t<space>'         -docstring 'leading tabs,n spaces' }
 addm %{ block   f1 : map global format f       ": hardwrap<ret>: refold<ret>"     -docstring 'fold,unfold'           }
 addm %{ block   f2 : map global format F       ': unfold<ret>: softwrap<ret>'     -docstring 'fold,unfold'           }
 
-# ...................................................................... Comment
+# ..................................................................."... Comment
 
 addm %{ remark  c1 : map global format <c-l>   ': comment-line<ret>'              -docstring 'comment,block  (kak)'        }
 addm %{ remark  c2 : map global format c       ': comment-block<ret>'             -docstring 'comment,block  (kak)'        }
 addm %{ remark  h  : map global format h       'x|comment c<ret>'                 -docstring '/* css */'                   }
 addm %{ remark  m  : map global format '`'     'x|comment \`<ret>'                -docstring 'markdown ``    (code block)' }
 
-# ......................................................................... Line
+# ......................................................................"... Line
 
-addm %{ section l1 : map global format l       'x|comment l .<ret>'               -docstring 'leader      ... xxx' }
+addm %{ section l1 : map global format l       'x|comment l .<ret>'               -docstring 'leader      "... xxx' }
 addm %{ section l2 : map global format t       'x|comment t .<ret>'               -docstring 'trailer     xxx ...' }
 addm %{ section r1 : map global format R       'x|comment r =<ret>'               -docstring 'ruler       ═══'     }
 addm %{ section r2 : map global format r       'x|comment r --<ret>'              -docstring 'ruler       ━━━'     }
@@ -62,7 +64,7 @@ define-command -hidden unfold %{ if %{ [ "$kak_opt_hardwrap" = true ] } %{ execu
 
 map global normal <c-l> ': comment-line<ret>' -docstring 'comment'  # beakl key position for "#" NOTE: <c-c> unmappable
 
-# ........................................................................ Align
+# ....................................................................."... Align
 
 addm %{ align 1  : map global format <space> 'x|align '          -docstring 'align  space   nth+1 word'         }
 addm %{ align c1 : map global format '#'     'x|align \#<ret>'   -docstring 'align      #   comment'            }
@@ -82,7 +84,7 @@ map global insert <s-tab> '<a-;><a-lt>'  # shift tab deindents
 # Editing
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# ......................................................................... Line
+# ......................................................................"... Line
 
 map global insert <a-ret> '<esc><a-o>ji' -docstring 'insert non-comment line below cursor'
 map global insert <a-j> '<esc><a-j>i'    -docstring 'join selected lines'
@@ -91,7 +93,7 @@ map global normal C       '<a-l>di'      -docstring 'replace to end of line'
 map global normal D       '<a-l>d'       -docstring 'delete to end of line'  # BUG: plugin kakboard interferes with yank buffer
 map global normal <a-D>   '<a-l><a-d>'   -docstring 'delete to end of line (not yanking)'
 
-# ........................................................................ Paste
+# ....................................................................."... Paste
 
 map global normal |       'x|rlwrap '    -docstring "pipe (select) replace"
 map global normal <c-p>   ':<space>yank-ring-previous<ret>'
@@ -99,7 +101,7 @@ map global normal <c-n>   ':<space>yank-ring-next<ret>'
 
 addm %{ paste p0 : map global select | 'i <esc>h|rlwrap ' -docstring "pipe insert" }
 
-# .................................................................... Clipboard
+# ................................................................."... Clipboard
 
 # auto update clipoard with yank, change and delete actions
 hook global RegisterModified '"' %{ nop %sh{ printf %s "$kak_main_reg_dquote" | xsel --input --clipboard }}
@@ -111,7 +113,7 @@ addm %{ paste p9 : map global select R '| xsel --output --clipboard<ret>'       
 # Selection
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# ......................................................................... Line
+# ......................................................................"... Line
 
 # map global normal G     'ge'     -docstring 'goto buffer end'  # breaks selection motion
 # map global normal 0     'gh'     -docstring 'goto line begin'  # breaks <..0..>g
@@ -120,13 +122,13 @@ map global normal $       'gl'     -docstring 'goto line end'
 map global normal Y       '<a-l>'  -docstring 'select to end of line'
 map global normal <c-s-y> '<a-l>y' -docstring 'yank to end of line'
 
-# ........................................................................ Block
+# ....................................................................."... Block
 
 map global normal <minus> '[p'     -docstring 'select to start of paragraph'
 map global normal =       '<a-a>p' -docstring 'select surrounding paragraph'
 map global normal <plus>  '}p'     -docstring 'extend to next paragraph'
 
-# .................................................................... Searching
+# ................................................................."... Searching
 
 declare-option bool null false
 addm %{ focus 1   : map global select c   ': set-register / %opt{null}<ret>' -docstring 'clear search register'   }
@@ -135,7 +137,7 @@ addm %{ refine /2 : map global select )   '/(?i)'                            -do
 addm %[ refine /3 : map global select '{' '<a-?>(?i)'                        -docstring 'iextend    —— prev,next' ]
 addm %[ refine /4 : map global select '}' '?(?i)'                            -docstring 'iextend    —— prev,next' ]
 
-# .............................................................. Split selection
+# ..........................................................."... Split selection
 
 define-command -hidden mkd-para  %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[^|`]<ret>x' }}
 define-command -hidden mkd-table %{ if %{ [ "$kak_opt_filetype" = markdown ] } %{ execute-keys '%<a-s>s^[|]<ret>x'   }}
@@ -152,7 +154,7 @@ map global normal S 's(?i)' -docstring 'split: iselect:'
 # Printing
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# .............................................................. Print selection
+# ..........................................................."... Print selection
 
 define-command -hidden print %{
 	if %{ [ "${kak_selection_desc%%.*}" = "$(echo ${kak_selection_desc#*,} | cut -d. -f1)" ] } %{ execute-keys '\%' }
@@ -171,19 +173,17 @@ map global normal <c-ret> ': enter-user-mode buffer<ret>'  # for find *scratch* 
 
 addm %{ usermode b : map global select <ret> ': enter-user-mode buffer<ret>' -docstring 'buffer user-mode' }
 
-# ..................................................................... Filetype
+# .................................................................."... Filetype
 
 # modeline inline context: "# kak: filetype=.." (comment delimiter by filetype)
-# NOTE: markdown statement '#[ kak: ... ]: #' issues *debug* "Unsupported kakoune variable:" message for trailing ']'
+# NOTE: markdown statement '#[ kak: "... ]: #' issues *debug* "Unsupported kakoune variable:" message for trailing ']'
 set-option global modelines 2  # BUG: avoid "otherwords:" error (not kak: or vim:) within modeline scan range (default 5)
-# hook global BufOpenFile .* %{ modeline-parse }
 hook global BufCreate .* %{ modeline-parse }
 
-# hook global BufOpenFile .*[.](eml|note) %{ set-option buffer filetype markdown }
-hook global BufCreate .*[.](eml|note) %{ set-option buffer filetype markdown }
+hook global BufCreate .*[.](eml|note|wiki) %{ set-option buffer filetype markdown }
 hook global FocusOut .* sync   # over "write" for system files
 
-# ............................................................ Buffer management
+# ........................................................."... Buffer management
 
 try %{ console-plugins } catch %{ define-command sudo-write  %{ nop }}  # SEE: console-plugins.kak
 try %{ console-plugins } catch %{ define-command search-view %{ nop }}  # SEE: console-plugins.kak, search.kak

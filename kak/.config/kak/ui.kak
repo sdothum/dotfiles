@@ -3,6 +3,8 @@
 # Kakoune
 # ══════════════════════════════════════════════════════════════════════════════
 
+echo -debug "... loading ui.kak"
+
 # Modal UI
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -30,13 +32,13 @@ declare-option int typewriter 1  # set to 0 to disable startup default
 
 define-command -hidden typewriter-on %{
 	if %{ [ "$kak_opt_typewriter" -gt 0 ] } %{
-		set-option window scrolloff %sh{ printf '%s,30' $(( $kak_window_height / 2 )) }  # centered cursor row for typing with visual context
+		set-option window scrolloff %sh{ printf '%s,0' $(( $kak_window_height / 2 )) }  # centered cursor row for typing with visual context
 	}
 }
 
 define-command -hidden typewriter-off %{
 	if %{ [ "$kak_opt_typewriter" -gt 0 ] } %{
-		set-option window scrolloff 0,10  # set to 0 row offset to prevent top/bottom mouse selection jitter
+		set-option window scrolloff 0,0  # set to 0 row offset to prevent top/bottom mouse selection jitter
 	}
 }
 
@@ -85,12 +87,13 @@ declare-option bool hardwrap false  # SEE: refold
 define-command hardwrap -params ..1 %{
 	autowrap-enable
 	set-option window hardwrap true
-	set-option window autowrap_column %sh{
-		if [ "$1" ]; then
-			echo $1
-		else
-			[ $kak_window_width -gt 132 ] && echo 132 || echo $(( kak_window_width - 12 ))
-		fi
+
+	hook window WinResize .* %{
+		evaluate-commands %sh{
+			cols=$(( ${kak_hook_param#*.} - 36 ))
+			[ $cols -gt 132 ] && cols=132
+			echo "set-option window autowrap_column $cols"
+		}
 	}
 }
 
