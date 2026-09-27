@@ -1,0 +1,1471 @@
+[ @file = "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc"; @line = 2; @symbol_usingdef<0> = [Toybox,2,6,12]; @symbol_usingdef<1> = [Graphics,2,13,21]; ]
+using Toybox.Graphics;
+[ @file = "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc"; @line = 3; @symbol_usingdef<0> = [Toybox,3,6,12]; @symbol_usingdef<1> = [Math,3,13,17]; ]
+using Toybox.Math;
+[ @file = "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc"; @line = 4; @symbol_usingdef<0> = [Toybox,4,6,12]; @symbol_usingdef<1> = [Lang,4,13,17]; ]
+using Toybox.Lang;
+[ @file = "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc"; @line = 6; @symbol_classdef = [CircleRenderer,6,6,20]; ]
+class CircleRenderer {
+    [ @file = "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc"; @line = 6; ]
+    <init> {
+    }
+    [ @file = "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc"; @line = 6; ]
+    static
+    <init> {
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 10 12 ]
+        %tmp.1 = newa 0;
+        putv self :_cache %tmp.1;
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 129 12 ]
+        %tmp.2 = newa 0;
+        putv self :_ringCache %tmp.2;
+    }
+    [ @file = "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc"; @line = 10; @position = 12; @symbol_vardef = [_cache,10,12,18]; @symbol_type<0> = [Lang,10,22,26]; @symbol_type<1> = [Array,10,27,32]; @symbol_type<2> = [Lang,10,33,37]; @symbol_type<3> = [Dictionary,10,38,48]; ]
+    static
+    var _cache as Lang.Array<Lang.Dictionary>;
+    [ @file = "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc"; @line = 12; @symbol_functiondef = [drawSmoothCircle,12,17,33]; @symbol_param<0> = [dc,12,34,36]; @symbol_param<1> = [cx,12,38,40]; @symbol_param<2> = [cy,12,42,44]; @symbol_param<3> = [radius,12,46,52]; @symbol_param<4> = [color,12,54,59]; ]
+    static
+    function drawSmoothCircle(dc, cx, cy, radius, color) {
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_12_61_49_1_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 13 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_12_61_49_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_12_61_49_1_stop" ]
+        %pattern.1 = local;
+        symbol [ pattern %pattern.1 13 6 13 ];
+        %tmp.1 = self;
+        symbol [ getPattern %tmp.2 13 16 26 ];
+        %tmp.2 = getv function %tmp.1 :getPattern;
+        %tmp.3 = lgetv %radius;
+        symbol [ radius %tmp.3 13 27 33 ];
+        %tmp.4 = lgetv %color;
+        symbol [ color %tmp.4 13 35 40 ];
+        %tmp.5 = invoke %tmp.1 %tmp.2(%tmp.3, %tmp.4);
+        lputv %pattern.1 %tmp.5;
+        symbol [ pattern %pattern.1 13 6 13 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 15 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_12_61_49_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_12_61_49_1_stop" ]
+        %spans.2 = local;
+        symbol [ spans %spans.2 15 6 11 ];
+        %tmp.6 = lgetv %pattern.1;
+        symbol [ pattern %tmp.6 15 14 21 ];
+        %tmp.8 = const :spans;
+        symbol [ spans %tmp.8 15 23 28 const ];
+        %tmp.9 = agetv %tmp.6 %tmp.8;
+        %tmp.10 = as %tmp.9 Lang.Array<Lang.Array<Lang.Number>>;
+        symbol [ Lang %tmp.10 16 6 10 ];
+        symbol [ Array %tmp.10 16 11 16 ];
+        symbol [ Lang %tmp.10 16 17 21 ];
+        symbol [ Array %tmp.10 16 22 27 ];
+        symbol [ Lang %tmp.10 16 28 32 ];
+        symbol [ Number %tmp.10 16 33 39 ];
+        lputv %spans.2 %tmp.10;
+        symbol [ spans %spans.2 15 6 11 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 18 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_12_61_49_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_12_61_49_1_stop" ]
+        %edges.3 = local;
+        symbol [ edges %edges.3 18 6 11 ];
+        %tmp.11 = lgetv %pattern.1;
+        symbol [ pattern %tmp.11 18 14 21 ];
+        %tmp.13 = const :edges;
+        symbol [ edges %tmp.13 18 23 28 const ];
+        %tmp.14 = agetv %tmp.11 %tmp.13;
+        %tmp.15 = as %tmp.14 Lang.Array<Lang.Array<Lang.Number>>;
+        symbol [ Lang %tmp.15 19 6 10 ];
+        symbol [ Array %tmp.15 19 11 16 ];
+        symbol [ Lang %tmp.15 19 17 21 ];
+        symbol [ Array %tmp.15 19 22 27 ];
+        symbol [ Lang %tmp.15 19 28 32 ];
+        symbol [ Number %tmp.15 19 33 39 ];
+        lputv %edges.3 %tmp.15;
+        symbol [ edges %edges.3 18 6 11 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 21 2 ]
+        %tmp.16 = lgetv %dc;
+        symbol [ dc %tmp.16 21 2 4 ];
+        symbol [ setPenWidth %tmp.17 21 5 16 ];
+        %tmp.17 = getv function %tmp.16 :setPenWidth;
+        %tmp.18 = 1;
+        invoke %tmp.16 %tmp.17(%tmp.18);
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 22 2 ]
+        %tmp.19 = lgetv %dc;
+        symbol [ dc %tmp.19 22 2 4 ];
+        symbol [ setColor %tmp.20 22 5 13 ];
+        %tmp.20 = getv function %tmp.19 :setColor;
+        %tmp.21 = lgetv %color;
+        symbol [ color %tmp.21 22 14 19 ];
+        %tmp.22 = 0xFFFFFF;
+        invoke %tmp.19 %tmp.20(%tmp.21, %tmp.22);
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 25 2 ]
+        for @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_25_2_34_2_for_test @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_25_2_34_2_for_incr @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_25_2_34_2_for_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_25_2_34_2_for_init:
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_25_2_34_2_for_begin" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_25_2_34_2_for_end" ]
+        %i.4 = local;
+        symbol [ i %i.4 25 11 12 ];
+        %tmp.23 = 0;
+        lputv %i.4 %tmp.23;
+        symbol [ i %i.4 25 11 12 ];
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_25_2_34_2_for_test:
+        %tmp.24 = lgetv %i.4;
+        symbol [ i %tmp.24 25 18 19 ];
+        %tmp.25 = lgetv %spans.2;
+        symbol [ spans %tmp.25 25 22 27 ];
+        symbol [ size %tmp.26 25 28 32 ];
+        %tmp.26 = getv function %tmp.25 :size;
+        %tmp.27 = invoke %tmp.25 %tmp.26();
+        %tmp.28 = lt %tmp.24 %tmp.27;
+        bf %tmp.28 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_25_2_34_2_for_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_25_2_34_2_for_begin:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_25_44_34_2_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 26 5 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_25_44_34_2_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_25_44_34_2_stop" ]
+        %span.5 = local;
+        symbol [ span %span.5 26 9 13 ];
+        %tmp.29 = lgetv %spans.2;
+        symbol [ spans %tmp.29 26 16 21 ];
+        %tmp.30 = lgetv %i.4;
+        symbol [ i %tmp.30 26 22 23 ];
+        %tmp.31 = agetv %tmp.29 %tmp.30;
+        lputv %span.5 %tmp.31;
+        symbol [ span %span.5 26 9 13 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 28 5 ]
+        %tmp.32 = lgetv %dc;
+        symbol [ dc %tmp.32 28 5 7 ];
+        symbol [ drawLine %tmp.33 28 8 16 ];
+        %tmp.33 = getv function %tmp.32 :drawLine;
+        %tmp.34 = lgetv %cx;
+        symbol [ cx %tmp.34 29 8 10 ];
+        %tmp.35 = lgetv %span.5;
+        symbol [ span %tmp.35 29 13 17 ];
+        %tmp.36 = 0;
+        %tmp.37 = agetv %tmp.35 %tmp.36;
+        %tmp.38 = add %tmp.34 %tmp.37;
+        %tmp.39 = lgetv %cy;
+        symbol [ cy %tmp.39 30 8 10 ];
+        %tmp.40 = lgetv %span.5;
+        symbol [ span %tmp.40 30 13 17 ];
+        %tmp.41 = 1;
+        %tmp.42 = agetv %tmp.40 %tmp.41;
+        %tmp.43 = add %tmp.39 %tmp.42;
+        %tmp.44 = lgetv %cx;
+        symbol [ cx %tmp.44 31 8 10 ];
+        %tmp.45 = lgetv %span.5;
+        symbol [ span %tmp.45 31 13 17 ];
+        %tmp.46 = 2;
+        %tmp.47 = agetv %tmp.45 %tmp.46;
+        %tmp.48 = add %tmp.44 %tmp.47;
+        %tmp.49 = lgetv %cy;
+        symbol [ cy %tmp.49 32 8 10 ];
+        %tmp.50 = lgetv %span.5;
+        symbol [ span %tmp.50 32 13 17 ];
+        %tmp.51 = 1;
+        %tmp.52 = agetv %tmp.50 %tmp.51;
+        %tmp.53 = add %tmp.49 %tmp.52;
+        invoke %tmp.32 %tmp.33(%tmp.38, %tmp.43, %tmp.48, %tmp.53);
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_25_44_34_2_stop:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_25_2_34_2_for_incr:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 25 ]
+        %tmp.54 = lgetv %i.4;
+        symbol [ i %tmp.54 25 36 37 ];
+        %tmp.55 = 1;
+        %tmp.56 = add %tmp.54 %tmp.55;
+        lputv %i.4 %tmp.56;
+        symbol [ i %i.4 25 36 37 ];
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_25_2_34_2_for_test;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_25_2_34_2_for_end:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 37 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_12_61_49_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_12_61_49_1_stop" ]
+        %previousColor.6 = local;
+        symbol [ previousColor %previousColor.6 37 6 19 ];
+        %tmp.57 = -1;
+        lputv %previousColor.6 %tmp.57;
+        symbol [ previousColor %previousColor.6 37 6 19 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 39 2 ]
+        for @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_39_2_48_2_for_test @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_39_2_48_2_for_incr @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_39_2_48_2_for_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_39_2_48_2_for_init:
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_39_2_48_2_for_begin" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_39_2_48_2_for_end" ]
+        %i.7 = local;
+        symbol [ i %i.7 39 11 12 ];
+        %tmp.58 = 0;
+        lputv %i.7 %tmp.58;
+        symbol [ i %i.7 39 11 12 ];
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_39_2_48_2_for_test:
+        %tmp.59 = lgetv %i.7;
+        symbol [ i %tmp.59 39 18 19 ];
+        %tmp.60 = lgetv %edges.3;
+        symbol [ edges %tmp.60 39 22 27 ];
+        symbol [ size %tmp.61 39 28 32 ];
+        %tmp.61 = getv function %tmp.60 :size;
+        %tmp.62 = invoke %tmp.60 %tmp.61();
+        %tmp.63 = lt %tmp.59 %tmp.62;
+        bf %tmp.63 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_39_2_48_2_for_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_39_2_48_2_for_begin:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_39_44_48_2_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 40 3 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_39_44_48_2_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_39_44_48_2_stop" ]
+        %pixel.8 = local;
+        symbol [ pixel %pixel.8 40 7 12 ];
+        %tmp.64 = lgetv %edges.3;
+        symbol [ edges %tmp.64 40 15 20 ];
+        %tmp.65 = lgetv %i.7;
+        symbol [ i %tmp.65 40 21 22 ];
+        %tmp.66 = agetv %tmp.64 %tmp.65;
+        lputv %pixel.8 %tmp.66;
+        symbol [ pixel %pixel.8 40 7 12 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 42 3 ]
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_42_3_45_3_if_stmt:
+        %tmp.67 = lgetv %pixel.8;
+        symbol [ pixel %tmp.67 42 7 12 ];
+        %tmp.68 = 2;
+        %tmp.69 = agetv %tmp.67 %tmp.68;
+        %tmp.70 = lgetv %previousColor.6;
+        symbol [ previousColor %tmp.70 42 19 32 ];
+        %tmp.71 = ne %tmp.69 %tmp.70;
+        bf %tmp.71 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_42_3_45_3_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_42_3_45_3_if_true:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_42_34_45_3_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 43 4 ]
+        %tmp.72 = lgetv %dc;
+        symbol [ dc %tmp.72 43 4 6 ];
+        symbol [ setColor %tmp.73 43 7 15 ];
+        %tmp.73 = getv function %tmp.72 :setColor;
+        %tmp.74 = lgetv %pixel.8;
+        symbol [ pixel %tmp.74 43 16 21 ];
+        %tmp.75 = 2;
+        %tmp.76 = agetv %tmp.74 %tmp.75;
+        %tmp.77 = 0xFFFFFF;
+        invoke %tmp.72 %tmp.73(%tmp.76, %tmp.77);
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 44 4 ]
+        %tmp.78 = lgetv %pixel.8;
+        symbol [ pixel %tmp.78 44 20 25 ];
+        %tmp.79 = 2;
+        %tmp.80 = agetv %tmp.78 %tmp.79;
+        lputv %previousColor.6 %tmp.80;
+        symbol [ previousColor %previousColor.6 44 4 17 ];
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_42_34_45_3_stop:
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_42_3_45_3_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_42_3_45_3_if_end:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 47 3 ]
+        %tmp.81 = lgetv %dc;
+        symbol [ dc %tmp.81 47 3 5 ];
+        symbol [ drawPoint %tmp.82 47 6 15 ];
+        %tmp.82 = getv function %tmp.81 :drawPoint;
+        %tmp.83 = lgetv %cx;
+        symbol [ cx %tmp.83 47 16 18 ];
+        %tmp.84 = lgetv %pixel.8;
+        symbol [ pixel %tmp.84 47 21 26 ];
+        %tmp.85 = 0;
+        %tmp.86 = agetv %tmp.84 %tmp.85;
+        %tmp.87 = add %tmp.83 %tmp.86;
+        %tmp.88 = lgetv %cy;
+        symbol [ cy %tmp.88 47 31 33 ];
+        %tmp.89 = lgetv %pixel.8;
+        symbol [ pixel %tmp.89 47 36 41 ];
+        %tmp.90 = 1;
+        %tmp.91 = agetv %tmp.89 %tmp.90;
+        %tmp.92 = add %tmp.88 %tmp.91;
+        invoke %tmp.81 %tmp.82(%tmp.87, %tmp.92);
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_39_44_48_2_stop:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_39_2_48_2_for_incr:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 39 ]
+        %tmp.93 = lgetv %i.7;
+        symbol [ i %tmp.93 39 36 37 ];
+        %tmp.94 = 1;
+        %tmp.95 = add %tmp.93 %tmp.94;
+        lputv %i.7 %tmp.95;
+        symbol [ i %i.7 39 36 37 ];
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_39_2_48_2_for_test;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_39_2_48_2_for_end:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_12_61_49_1_stop:
+    }
+    [ @file = "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc"; @line = 51; @symbol_functiondef = [getPattern,51,16,26]; @symbol_param<0> = [radius,51,27,33]; @symbol_param<1> = [color,51,35,40]; @symbol_return<0> = [Lang,51,45,49]; @symbol_return<1> = [Dictionary,51,50,60]; ]
+    static
+    function getPattern(radius, color) as Lang.Dictionary {
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_51_61_126_1_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 52 1 ]
+        for @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_52_1_59_2_for_test @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_52_1_59_2_for_incr @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_52_1_59_2_for_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_52_1_59_2_for_init:
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_52_1_59_2_for_begin" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_52_1_59_2_for_end" ]
+        %i.1 = local;
+        symbol [ i %i.1 52 10 11 ];
+        %tmp.1 = 0;
+        lputv %i.1 %tmp.1;
+        symbol [ i %i.1 52 10 11 ];
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_52_1_59_2_for_test:
+        %tmp.2 = lgetv %i.1;
+        symbol [ i %tmp.2 52 17 18 ];
+        symbol [ _cache %tmp.4 52 21 27 ];
+        %tmp.4 = getv ? :_cache;
+        symbol [ size %tmp.5 52 28 32 ];
+        %tmp.5 = getv function %tmp.4 :size;
+        %tmp.6 = invoke %tmp.4 %tmp.5();
+        %tmp.7 = lt %tmp.2 %tmp.6;
+        bf %tmp.7 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_52_1_59_2_for_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_52_1_59_2_for_begin:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_52_44_59_2_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 53 3 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_52_44_59_2_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_52_44_59_2_stop" ]
+        %entry.2 = local;
+        symbol [ entry %entry.2 53 7 12 ];
+        symbol [ _cache %tmp.9 53 15 21 ];
+        %tmp.9 = getv ? :_cache;
+        %tmp.10 = lgetv %i.1;
+        symbol [ i %tmp.10 53 22 23 ];
+        %tmp.11 = agetv %tmp.9 %tmp.10;
+        lputv %entry.2 %tmp.11;
+        symbol [ entry %entry.2 53 7 12 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 55 3 ]
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_55_3_58_3_if_stmt:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_55_7_56_22_begin:
+        %tmp.12 = lgetv %entry.2;
+        symbol [ entry %tmp.12 55 7 12 ];
+        %tmp.14 = const :radius;
+        symbol [ radius %tmp.14 55 14 20 const ];
+        %tmp.15 = agetv %tmp.12 %tmp.14;
+        %tmp.16 = lgetv %radius;
+        symbol [ radius %tmp.16 55 25 31 ];
+        %tmp.17 = eq %tmp.15 %tmp.16;
+        bf %tmp.17 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_55_3_58_3_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_56_5_56_22_true:
+        %tmp.18 = lgetv %entry.2;
+        symbol [ entry %tmp.18 56 5 10 ];
+        %tmp.20 = const :color;
+        symbol [ color %tmp.20 56 12 17 const ];
+        %tmp.21 = agetv %tmp.18 %tmp.20;
+        %tmp.22 = lgetv %color;
+        symbol [ color %tmp.22 56 22 27 ];
+        %tmp.23 = eq %tmp.21 %tmp.22;
+        push %tmp.23;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_56_5_56_22_end:
+        %tmp.24 = phi [%tmp.17 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_55_7_56_22_begin] [%tmp.23 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_56_5_56_22_true] [%tmp.24 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_56_5_56_22_end];
+        bf %tmp.24 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_55_3_58_3_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_55_3_58_3_if_true:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_56_29_58_3_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 57 4 ]
+        %tmp.25 = lgetv %entry.2;
+        symbol [ entry %tmp.25 57 11 16 ];
+        ret %tmp.25;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_56_29_58_3_stop:
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_55_3_58_3_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_55_3_58_3_if_end:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_52_44_59_2_stop:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_52_1_59_2_for_incr:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 52 ]
+        %tmp.26 = lgetv %i.1;
+        symbol [ i %tmp.26 52 36 37 ];
+        %tmp.27 = 1;
+        %tmp.28 = add %tmp.26 %tmp.27;
+        lputv %i.1 %tmp.28;
+        symbol [ i %i.1 52 36 37 ];
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_52_1_59_2_for_test;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_52_1_59_2_for_end:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 61 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_51_61_126_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_51_61_126_1_stop" ]
+        %spans.3 = local;
+        symbol [ spans %spans.3 61 6 11 ];
+        %tmp.29 = newa 0 Lang.Array<Lang.Array<Lang.Number>>;
+        symbol [ Lang %tmp.29 61 20 24 ];
+        symbol [ Array %tmp.29 61 25 30 ];
+        symbol [ Lang %tmp.29 61 31 35 ];
+        symbol [ Array %tmp.29 61 36 41 ];
+        symbol [ Lang %tmp.29 61 42 46 ];
+        symbol [ Number %tmp.29 61 47 53 ];
+        lputv %spans.3 %tmp.29;
+        symbol [ spans %spans.3 61 6 11 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 62 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_51_61_126_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_51_61_126_1_stop" ]
+        %edges.4 = local;
+        symbol [ edges %edges.4 62 6 11 ];
+        %tmp.30 = newa 0 Lang.Array<Lang.Array<Lang.Number>>;
+        symbol [ Lang %tmp.30 62 20 24 ];
+        symbol [ Array %tmp.30 62 25 30 ];
+        symbol [ Lang %tmp.30 62 31 35 ];
+        symbol [ Array %tmp.30 62 36 41 ];
+        symbol [ Lang %tmp.30 62 42 46 ];
+        symbol [ Number %tmp.30 62 47 53 ];
+        lputv %edges.4 %tmp.30;
+        symbol [ edges %edges.4 62 6 11 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 64 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_51_61_126_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_51_61_126_1_stop" ]
+        %red.5 = local;
+        symbol [ red %red.5 64 6 9 ];
+        %tmp.31 = lgetv %color;
+        symbol [ color %tmp.31 64 13 18 ];
+        %tmp.32 = 16;
+        %tmp.33 = shr %tmp.31 %tmp.32;
+        %tmp.34 = 0xFF;
+        %tmp.35 = bitand %tmp.33 %tmp.34;
+        lputv %red.5 %tmp.35;
+        symbol [ red %red.5 64 6 9 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 65 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_51_61_126_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_51_61_126_1_stop" ]
+        %green.6 = local;
+        symbol [ green %green.6 65 6 11 ];
+        %tmp.36 = lgetv %color;
+        symbol [ color %tmp.36 65 15 20 ];
+        %tmp.37 = 8;
+        %tmp.38 = shr %tmp.36 %tmp.37;
+        %tmp.39 = 0xFF;
+        %tmp.40 = bitand %tmp.38 %tmp.39;
+        lputv %green.6 %tmp.40;
+        symbol [ green %green.6 65 6 11 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 66 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_51_61_126_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_51_61_126_1_stop" ]
+        %blue.7 = local;
+        symbol [ blue %blue.7 66 6 10 ];
+        %tmp.41 = lgetv %color;
+        symbol [ color %tmp.41 66 13 18 ];
+        %tmp.42 = 0xFF;
+        %tmp.43 = bitand %tmp.41 %tmp.42;
+        lputv %blue.7 %tmp.43;
+        symbol [ blue %blue.7 66 6 10 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 68 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_51_61_126_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_51_61_126_1_stop" ]
+        %extent.8 = local;
+        symbol [ extent %extent.8 68 6 12 ];
+        %tmp.44 = lgetv %radius;
+        symbol [ radius %tmp.44 68 15 21 ];
+        %tmp.45 = 1;
+        %tmp.46 = add %tmp.44 %tmp.45;
+        lputv %extent.8 %tmp.46;
+        symbol [ extent %extent.8 68 6 12 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 70 2 ]
+        for @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_70_2_114_2_for_test @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_70_2_114_2_for_incr @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_70_2_114_2_for_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_70_2_114_2_for_init:
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_70_2_114_2_for_begin" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_70_2_114_2_for_end" ]
+        %y.9 = local;
+        symbol [ y %y.9 70 11 12 ];
+        %tmp.47 = lgetv %extent.8;
+        symbol [ extent %tmp.47 70 16 22 ];
+        %tmp.48 = sub 0 %tmp.47;
+        lputv %y.9 %tmp.48;
+        symbol [ y %y.9 70 11 12 ];
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_70_2_114_2_for_test:
+        %tmp.49 = lgetv %y.9;
+        symbol [ y %tmp.49 70 24 25 ];
+        %tmp.50 = lgetv %extent.8;
+        symbol [ extent %tmp.50 70 29 35 ];
+        %tmp.51 = lte %tmp.49 %tmp.50;
+        bf %tmp.51 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_70_2_114_2_for_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_70_2_114_2_for_begin:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_70_45_114_2_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 71 3 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_70_45_114_2_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_70_45_114_2_stop" ]
+        %spanStart.10 = local;
+        symbol [ spanStart %spanStart.10 71 7 16 ];
+        %tmp.52 = null;
+        lputv %spanStart.10 %tmp.52;
+        symbol [ spanStart %spanStart.10 71 7 16 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 72 3 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_70_45_114_2_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_70_45_114_2_stop" ]
+        %spanEnd.11 = local;
+        symbol [ spanEnd %spanEnd.11 72 7 14 ];
+        %tmp.53 = null;
+        lputv %spanEnd.11 %tmp.53;
+        symbol [ spanEnd %spanEnd.11 72 7 14 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 74 3 ]
+        for @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_3_109_3_for_test @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_3_109_3_for_incr @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_3_109_3_for_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_3_109_3_for_init:
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_3_109_3_for_begin" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_3_109_3_for_end" ]
+        %x.12 = local;
+        symbol [ x %x.12 74 12 13 ];
+        %tmp.54 = lgetv %extent.8;
+        symbol [ extent %tmp.54 74 17 23 ];
+        %tmp.55 = sub 0 %tmp.54;
+        lputv %x.12 %tmp.55;
+        symbol [ x %x.12 74 12 13 ];
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_3_109_3_for_test:
+        %tmp.56 = lgetv %x.12;
+        symbol [ x %tmp.56 74 25 26 ];
+        %tmp.57 = lgetv %extent.8;
+        symbol [ extent %tmp.57 74 30 36 ];
+        %tmp.58 = lte %tmp.56 %tmp.57;
+        bf %tmp.58 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_3_109_3_for_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_3_109_3_for_begin:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_46_109_3_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 75 4 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_46_109_3_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_46_109_3_stop" ]
+        %distance.13 = local;
+        symbol [ distance %distance.13 75 8 16 ];
+        symbol [ Math %tmp.59 75 19 23 ];
+        %tmp.59 = getm $.Toybox.Math;
+        symbol [ sqrt %tmp.60 75 24 28 ];
+        %tmp.60 = getv function %tmp.59 :sqrt;
+        %tmp.61 = lgetv %x.12;
+        symbol [ x %tmp.61 75 29 30 ];
+        %tmp.62 = lgetv %x.12;
+        symbol [ x %tmp.62 75 33 34 ];
+        %tmp.63 = mul %tmp.61 %tmp.62;
+        %tmp.64 = lgetv %y.9;
+        symbol [ y %tmp.64 75 37 38 ];
+        %tmp.65 = lgetv %y.9;
+        symbol [ y %tmp.65 75 41 42 ];
+        %tmp.66 = mul %tmp.64 %tmp.65;
+        %tmp.67 = add %tmp.63 %tmp.66;
+        %tmp.68 = invoke %tmp.59 %tmp.60(%tmp.67);
+        lputv %distance.13 %tmp.68;
+        symbol [ distance %distance.13 75 8 16 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 76 4 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_46_109_3_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_46_109_3_stop" ]
+        %coverage.14 = local;
+        symbol [ coverage %coverage.14 76 8 16 ];
+        %tmp.69 = lgetv %radius;
+        symbol [ radius %tmp.69 76 19 25 ];
+        %tmp.70 = 0.5;
+        %tmp.71 = add %tmp.69 %tmp.70;
+        %tmp.72 = lgetv %distance.13;
+        symbol [ distance %tmp.72 76 34 42 ];
+        %tmp.73 = sub %tmp.71 %tmp.72;
+        lputv %coverage.14 %tmp.73;
+        symbol [ coverage %coverage.14 76 8 16 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 78 4 ]
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_78_4_80_4_if_stmt:
+        %tmp.74 = lgetv %coverage.14;
+        symbol [ coverage %tmp.74 78 8 16 ];
+        %tmp.75 = 0;
+        %tmp.76 = lte %tmp.74 %tmp.75;
+        bf %tmp.76 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_78_4_80_4_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_78_4_80_4_if_true:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_78_23_80_4_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 79 5 ]
+        goto break @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_3_109_3_for_incr;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_78_23_80_4_stop:
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_78_4_80_4_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_78_4_80_4_if_end:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 82 4 ]
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_82_4_90_4_if_stmt:
+        %tmp.77 = lgetv %coverage.14;
+        symbol [ coverage %tmp.77 82 8 16 ];
+        %tmp.78 = 1;
+        %tmp.79 = gte %tmp.77 %tmp.78;
+        bf %tmp.79 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_82_4_90_4_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_82_4_90_4_if_true:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_82_23_90_4_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 84 5 ]
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_84_5_86_5_if_stmt:
+        %tmp.80 = lgetv %spanStart.10;
+        symbol [ spanStart %tmp.80 84 9 18 ];
+        %tmp.81 = null;
+        %tmp.82 = eq %tmp.80 %tmp.81;
+        bf %tmp.82 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_84_5_86_5_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_84_5_86_5_if_true:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_84_28_86_5_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 85 6 ]
+        %tmp.83 = lgetv %x.12;
+        symbol [ x %tmp.83 85 18 19 ];
+        lputv %spanStart.10 %tmp.83;
+        symbol [ spanStart %spanStart.10 85 6 15 ];
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_84_28_86_5_stop:
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_84_5_86_5_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_84_5_86_5_if_end:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 88 5 ]
+        %tmp.84 = lgetv %x.12;
+        symbol [ x %tmp.84 88 15 16 ];
+        lputv %spanEnd.11 %tmp.84;
+        symbol [ spanEnd %spanEnd.11 88 5 12 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 89 5 ]
+        goto break @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_3_109_3_for_incr;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_82_23_90_4_stop:
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_82_4_90_4_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_82_4_90_4_if_end:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 93 4 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_46_109_3_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_46_109_3_stop" ]
+        %r.15 = local;
+        symbol [ r %r.15 93 8 9 ];
+        symbol [ Math %tmp.85 93 12 16 ];
+        %tmp.85 = getm $.Toybox.Math;
+        symbol [ round %tmp.86 93 17 22 ];
+        %tmp.86 = getv function %tmp.85 :round;
+        %tmp.87 = 255;
+        %tmp.88 = 255;
+        %tmp.89 = lgetv %red.5;
+        symbol [ red %tmp.89 94 18 21 ];
+        %tmp.90 = sub %tmp.88 %tmp.89;
+        %tmp.91 = lgetv %coverage.14;
+        symbol [ coverage %tmp.91 94 25 33 ];
+        %tmp.92 = mul %tmp.90 %tmp.91;
+        %tmp.93 = sub %tmp.87 %tmp.92;
+        %tmp.94 = invoke %tmp.85 %tmp.86(%tmp.93);
+        symbol [ toNumber %tmp.95 95 6 14 ];
+        %tmp.95 = getv function %tmp.94 :toNumber;
+        %tmp.96 = invoke %tmp.94 %tmp.95();
+        lputv %r.15 %tmp.96;
+        symbol [ r %r.15 93 8 9 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 97 4 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_46_109_3_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_46_109_3_stop" ]
+        %g.16 = local;
+        symbol [ g %g.16 97 8 9 ];
+        symbol [ Math %tmp.97 97 12 16 ];
+        %tmp.97 = getm $.Toybox.Math;
+        symbol [ round %tmp.98 97 17 22 ];
+        %tmp.98 = getv function %tmp.97 :round;
+        %tmp.99 = 255;
+        %tmp.100 = 255;
+        %tmp.101 = lgetv %green.6;
+        symbol [ green %tmp.101 98 18 23 ];
+        %tmp.102 = sub %tmp.100 %tmp.101;
+        %tmp.103 = lgetv %coverage.14;
+        symbol [ coverage %tmp.103 98 27 35 ];
+        %tmp.104 = mul %tmp.102 %tmp.103;
+        %tmp.105 = sub %tmp.99 %tmp.104;
+        %tmp.106 = invoke %tmp.97 %tmp.98(%tmp.105);
+        symbol [ toNumber %tmp.107 99 6 14 ];
+        %tmp.107 = getv function %tmp.106 :toNumber;
+        %tmp.108 = invoke %tmp.106 %tmp.107();
+        lputv %g.16 %tmp.108;
+        symbol [ g %g.16 97 8 9 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 101 4 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_46_109_3_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_46_109_3_stop" ]
+        %b.17 = local;
+        symbol [ b %b.17 101 8 9 ];
+        symbol [ Math %tmp.109 101 12 16 ];
+        %tmp.109 = getm $.Toybox.Math;
+        symbol [ round %tmp.110 101 17 22 ];
+        %tmp.110 = getv function %tmp.109 :round;
+        %tmp.111 = 255;
+        %tmp.112 = 255;
+        %tmp.113 = lgetv %blue.7;
+        symbol [ blue %tmp.113 102 18 22 ];
+        %tmp.114 = sub %tmp.112 %tmp.113;
+        %tmp.115 = lgetv %coverage.14;
+        symbol [ coverage %tmp.115 102 26 34 ];
+        %tmp.116 = mul %tmp.114 %tmp.115;
+        %tmp.117 = sub %tmp.111 %tmp.116;
+        %tmp.118 = invoke %tmp.109 %tmp.110(%tmp.117);
+        symbol [ toNumber %tmp.119 103 6 14 ];
+        %tmp.119 = getv function %tmp.118 :toNumber;
+        %tmp.120 = invoke %tmp.118 %tmp.119();
+        lputv %b.17 %tmp.120;
+        symbol [ b %b.17 101 8 9 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 105 4 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_46_109_3_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_46_109_3_stop" ]
+        %pixelColor.18 = local;
+        symbol [ pixelColor %pixelColor.18 105 8 18 ];
+        %tmp.121 = lgetv %r.15;
+        symbol [ r %tmp.121 106 6 7 ];
+        %tmp.122 = 16;
+        %tmp.123 = shl %tmp.121 %tmp.122;
+        %tmp.124 = lgetv %g.16;
+        symbol [ g %tmp.124 106 18 19 ];
+        %tmp.125 = 8;
+        %tmp.126 = shl %tmp.124 %tmp.125;
+        %tmp.127 = bitor %tmp.123 %tmp.126;
+        %tmp.128 = lgetv %b.17;
+        symbol [ b %tmp.128 106 28 29 ];
+        %tmp.129 = bitor %tmp.127 %tmp.128;
+        lputv %pixelColor.18 %tmp.129;
+        symbol [ pixelColor %pixelColor.18 105 8 18 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 108 4 ]
+        %tmp.130 = lgetv %edges.4;
+        symbol [ edges %tmp.130 108 4 9 ];
+        symbol [ add %tmp.131 108 10 13 ];
+        %tmp.131 = getv function %tmp.130 :add;
+        %tmp.132 = newa 3;
+        %tmp.133 = lgetv %x.12;
+        symbol [ x %tmp.133 108 15 16 ];
+        %tmp.134 = dup %tmp.132;
+        %tmp.135 = aputv %tmp.134 0 %tmp.133;
+        %tmp.136 = lgetv %y.9;
+        symbol [ y %tmp.136 108 18 19 ];
+        %tmp.137 = dup %tmp.135;
+        %tmp.138 = aputv %tmp.137 1 %tmp.136;
+        %tmp.139 = lgetv %pixelColor.18;
+        symbol [ pixelColor %tmp.139 108 21 31 ];
+        %tmp.140 = dup %tmp.138;
+        %tmp.141 = aputv %tmp.140 2 %tmp.139;
+        invoke %tmp.130 %tmp.131(%tmp.141);
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_46_109_3_stop:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_3_109_3_for_incr:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 74 ]
+        %tmp.142 = lgetv %x.12;
+        symbol [ x %tmp.142 74 38 39 ];
+        %tmp.143 = 1;
+        %tmp.144 = add %tmp.142 %tmp.143;
+        lputv %x.12 %tmp.144;
+        symbol [ x %x.12 74 38 39 ];
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_3_109_3_for_test;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_74_3_109_3_for_end:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 111 3 ]
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_111_3_113_3_if_stmt:
+        %tmp.145 = lgetv %spanStart.10;
+        symbol [ spanStart %tmp.145 111 7 16 ];
+        %tmp.146 = null;
+        %tmp.147 = ne %tmp.145 %tmp.146;
+        bf %tmp.147 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_111_3_113_3_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_111_3_113_3_if_true:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_111_26_113_3_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 112 4 ]
+        %tmp.148 = lgetv %spans.3;
+        symbol [ spans %tmp.148 112 4 9 ];
+        symbol [ add %tmp.149 112 10 13 ];
+        %tmp.149 = getv function %tmp.148 :add;
+        %tmp.150 = newa 3;
+        %tmp.151 = lgetv %spanStart.10;
+        symbol [ spanStart %tmp.151 112 15 24 ];
+        %tmp.152 = as %tmp.151 { (!Null) };
+        %tmp.153 = dup %tmp.150;
+        %tmp.154 = aputv %tmp.153 0 %tmp.152;
+        %tmp.155 = lgetv %y.9;
+        symbol [ y %tmp.155 112 26 27 ];
+        %tmp.156 = dup %tmp.154;
+        %tmp.157 = aputv %tmp.156 1 %tmp.155;
+        %tmp.158 = lgetv %spanEnd.11;
+        symbol [ spanEnd %tmp.158 112 29 36 ];
+        %tmp.159 = dup %tmp.157;
+        %tmp.160 = aputv %tmp.159 2 %tmp.158;
+        invoke %tmp.148 %tmp.149(%tmp.160);
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_111_26_113_3_stop:
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_111_3_113_3_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_111_3_113_3_if_end:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_70_45_114_2_stop:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_70_2_114_2_for_incr:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 70 ]
+        %tmp.161 = lgetv %y.9;
+        symbol [ y %tmp.161 70 37 38 ];
+        %tmp.162 = 1;
+        %tmp.163 = add %tmp.161 %tmp.162;
+        lputv %y.9 %tmp.163;
+        symbol [ y %y.9 70 37 38 ];
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_70_2_114_2_for_test;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_70_2_114_2_for_end:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 116 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_51_61_126_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_51_61_126_1_stop" ]
+        %pattern.19 = local;
+        symbol [ pattern %pattern.19 116 6 13 ];
+        %tmp.164 = newd 4;
+        %tmp.166 = const :radius;
+        symbol [ radius %tmp.166 117 4 10 const ];
+        %tmp.167 = lgetv %radius;
+        symbol [ radius %tmp.167 117 14 20 ];
+        %tmp.168 = dup %tmp.164;
+        %tmp.169 = aputv %tmp.168 %tmp.166 %tmp.167;
+        %tmp.171 = const :color;
+        symbol [ color %tmp.171 118 4 9 const ];
+        %tmp.172 = lgetv %color;
+        symbol [ color %tmp.172 118 13 18 ];
+        %tmp.173 = dup %tmp.169;
+        %tmp.174 = aputv %tmp.173 %tmp.171 %tmp.172;
+        %tmp.176 = const :spans;
+        symbol [ spans %tmp.176 119 4 9 const ];
+        %tmp.177 = lgetv %spans.3;
+        symbol [ spans %tmp.177 119 13 18 ];
+        %tmp.178 = dup %tmp.174;
+        %tmp.179 = aputv %tmp.178 %tmp.176 %tmp.177;
+        %tmp.181 = const :edges;
+        symbol [ edges %tmp.181 120 4 9 const ];
+        %tmp.182 = lgetv %edges.4;
+        symbol [ edges %tmp.182 120 13 18 ];
+        %tmp.183 = dup %tmp.179;
+        %tmp.184 = aputv %tmp.183 %tmp.181 %tmp.182;
+        lputv %pattern.19 %tmp.184;
+        symbol [ pattern %pattern.19 116 6 13 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 123 2 ]
+        symbol [ _cache %tmp.186 123 2 8 ];
+        %tmp.186 = getv ? :_cache;
+        symbol [ add %tmp.187 123 9 12 ];
+        %tmp.187 = getv function %tmp.186 :add;
+        %tmp.188 = lgetv %pattern.19;
+        symbol [ pattern %tmp.188 123 13 20 ];
+        invoke %tmp.186 %tmp.187(%tmp.188);
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 125 2 ]
+        %tmp.189 = lgetv %pattern.19;
+        symbol [ pattern %tmp.189 125 9 16 ];
+        ret %tmp.189;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_51_61_126_1_stop:
+    }
+    [ @file = "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc"; @line = 129; @position = 12; @symbol_vardef = [_ringCache,129,12,22]; @symbol_type<0> = [Lang,129,26,30]; @symbol_type<1> = [Array,129,31,36]; @symbol_type<2> = [Lang,129,37,41]; @symbol_type<3> = [Dictionary,129,42,52]; ]
+    static
+    var _ringCache as Lang.Array<Lang.Dictionary>;
+    [ @file = "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc"; @line = 131; @symbol_functiondef = [drawSmoothAnnulus,131,17,34]; @symbol_param<0> = [dc,132,2,4]; @symbol_param<1> = [cx,132,6,8]; @symbol_param<2> = [cy,132,10,12]; @symbol_param<3> = [radius,132,14,20]; @symbol_param<4> = [gap,132,22,25]; @symbol_param<5> = [width,132,27,32]; @symbol_param<6> = [color,132,34,39]; ]
+    static
+    function drawSmoothAnnulus(dc, cx, cy, radius, gap, width, color) {
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_133_3_153_1_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 134 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_133_3_153_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_133_3_153_1_stop" ]
+        %pattern.1 = local;
+        symbol [ pattern %pattern.1 134 6 13 ];
+        %tmp.1 = self;
+        symbol [ getRingPattern %tmp.2 134 16 30 ];
+        %tmp.2 = getv function %tmp.1 :getRingPattern;
+        %tmp.3 = lgetv %radius;
+        symbol [ radius %tmp.3 134 31 37 ];
+        %tmp.4 = lgetv %gap;
+        symbol [ gap %tmp.4 134 39 42 ];
+        %tmp.5 = lgetv %width;
+        symbol [ width %tmp.5 134 44 49 ];
+        %tmp.6 = lgetv %color;
+        symbol [ color %tmp.6 134 51 56 ];
+        %tmp.7 = invoke %tmp.1 %tmp.2(%tmp.3, %tmp.4, %tmp.5, %tmp.6);
+        lputv %pattern.1 %tmp.7;
+        symbol [ pattern %pattern.1 134 6 13 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 135 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_133_3_153_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_133_3_153_1_stop" ]
+        %pixels.2 = local;
+        symbol [ pixels %pixels.2 135 6 12 ];
+        %tmp.8 = lgetv %pattern.1;
+        symbol [ pattern %tmp.8 135 15 22 ];
+        %tmp.10 = const :pixels;
+        symbol [ pixels %tmp.10 135 24 30 const ];
+        %tmp.11 = agetv %tmp.8 %tmp.10;
+        %tmp.12 = as %tmp.11 Lang.Array<Lang.Array<Lang.Number>>;
+        symbol [ Lang %tmp.12 136 6 10 ];
+        symbol [ Array %tmp.12 136 11 16 ];
+        symbol [ Lang %tmp.12 136 17 21 ];
+        symbol [ Array %tmp.12 136 22 27 ];
+        symbol [ Lang %tmp.12 136 28 32 ];
+        symbol [ Number %tmp.12 136 33 39 ];
+        lputv %pixels.2 %tmp.12;
+        symbol [ pixels %pixels.2 135 6 12 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 138 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_133_3_153_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_133_3_153_1_stop" ]
+        %previousColor.3 = local;
+        symbol [ previousColor %previousColor.3 138 6 19 ];
+        %tmp.13 = -1;
+        lputv %previousColor.3 %tmp.13;
+        symbol [ previousColor %previousColor.3 138 6 19 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 140 2 ]
+        for @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_140_2_152_2_for_test @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_140_2_152_2_for_incr @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_140_2_152_2_for_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_140_2_152_2_for_init:
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_140_2_152_2_for_begin" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_140_2_152_2_for_end" ]
+        %i.4 = local;
+        symbol [ i %i.4 140 11 12 ];
+        %tmp.14 = 0;
+        lputv %i.4 %tmp.14;
+        symbol [ i %i.4 140 11 12 ];
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_140_2_152_2_for_test:
+        %tmp.15 = lgetv %i.4;
+        symbol [ i %tmp.15 140 18 19 ];
+        %tmp.16 = lgetv %pixels.2;
+        symbol [ pixels %tmp.16 140 22 28 ];
+        symbol [ size %tmp.17 140 29 33 ];
+        %tmp.17 = getv function %tmp.16 :size;
+        %tmp.18 = invoke %tmp.16 %tmp.17();
+        %tmp.19 = lt %tmp.15 %tmp.18;
+        bf %tmp.19 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_140_2_152_2_for_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_140_2_152_2_for_begin:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_140_45_152_2_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 141 3 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_140_45_152_2_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_140_45_152_2_stop" ]
+        %pixel.5 = local;
+        symbol [ pixel %pixel.5 141 7 12 ];
+        %tmp.20 = lgetv %pixels.2;
+        symbol [ pixels %tmp.20 141 15 21 ];
+        %tmp.21 = lgetv %i.4;
+        symbol [ i %tmp.21 141 22 23 ];
+        %tmp.22 = agetv %tmp.20 %tmp.21;
+        lputv %pixel.5 %tmp.22;
+        symbol [ pixel %pixel.5 141 7 12 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 143 3 ]
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_143_3_146_3_if_stmt:
+        %tmp.23 = lgetv %pixel.5;
+        symbol [ pixel %tmp.23 143 7 12 ];
+        %tmp.24 = 2;
+        %tmp.25 = agetv %tmp.23 %tmp.24;
+        %tmp.26 = lgetv %previousColor.3;
+        symbol [ previousColor %tmp.26 143 19 32 ];
+        %tmp.27 = ne %tmp.25 %tmp.26;
+        bf %tmp.27 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_143_3_146_3_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_143_3_146_3_if_true:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_143_34_146_3_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 144 4 ]
+        %tmp.28 = lgetv %dc;
+        symbol [ dc %tmp.28 144 4 6 ];
+        symbol [ setColor %tmp.29 144 7 15 ];
+        %tmp.29 = getv function %tmp.28 :setColor;
+        %tmp.30 = lgetv %pixel.5;
+        symbol [ pixel %tmp.30 144 16 21 ];
+        %tmp.31 = 2;
+        %tmp.32 = agetv %tmp.30 %tmp.31;
+        %tmp.33 = 0xFFFFFF;
+        invoke %tmp.28 %tmp.29(%tmp.32, %tmp.33);
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 145 4 ]
+        %tmp.34 = lgetv %pixel.5;
+        symbol [ pixel %tmp.34 145 20 25 ];
+        %tmp.35 = 2;
+        %tmp.36 = agetv %tmp.34 %tmp.35;
+        lputv %previousColor.3 %tmp.36;
+        symbol [ previousColor %previousColor.3 145 4 17 ];
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_143_34_146_3_stop:
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_143_3_146_3_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_143_3_146_3_if_end:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 148 3 ]
+        %tmp.37 = lgetv %dc;
+        symbol [ dc %tmp.37 148 3 5 ];
+        symbol [ drawPoint %tmp.38 148 6 15 ];
+        %tmp.38 = getv function %tmp.37 :drawPoint;
+        %tmp.39 = lgetv %cx;
+        symbol [ cx %tmp.39 149 5 7 ];
+        %tmp.40 = lgetv %pixel.5;
+        symbol [ pixel %tmp.40 149 10 15 ];
+        %tmp.41 = 0;
+        %tmp.42 = agetv %tmp.40 %tmp.41;
+        %tmp.43 = add %tmp.39 %tmp.42;
+        symbol [ toNumber %tmp.44 149 20 28 ];
+        %tmp.44 = getv function %tmp.43 :toNumber;
+        %tmp.45 = invoke %tmp.43 %tmp.44();
+        %tmp.46 = lgetv %cy;
+        symbol [ cy %tmp.46 150 5 7 ];
+        %tmp.47 = lgetv %pixel.5;
+        symbol [ pixel %tmp.47 150 10 15 ];
+        %tmp.48 = 1;
+        %tmp.49 = agetv %tmp.47 %tmp.48;
+        %tmp.50 = add %tmp.46 %tmp.49;
+        symbol [ toNumber %tmp.51 150 20 28 ];
+        %tmp.51 = getv function %tmp.50 :toNumber;
+        %tmp.52 = invoke %tmp.50 %tmp.51();
+        invoke %tmp.37 %tmp.38(%tmp.45, %tmp.52);
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_140_45_152_2_stop:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_140_2_152_2_for_incr:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 140 ]
+        %tmp.53 = lgetv %i.4;
+        symbol [ i %tmp.53 140 37 38 ];
+        %tmp.54 = 1;
+        %tmp.55 = add %tmp.53 %tmp.54;
+        lputv %i.4 %tmp.55;
+        symbol [ i %i.4 140 37 38 ];
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_140_2_152_2_for_test;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_140_2_152_2_for_end:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_133_3_153_1_stop:
+    }
+    [ @file = "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc"; @line = 155; @symbol_functiondef = [getRingPattern,155,17,31]; @symbol_param<0> = [radius,156,2,8]; @symbol_param<1> = [gap,156,10,13]; @symbol_param<2> = [width,156,15,20]; @symbol_param<3> = [color,156,22,27]; @symbol_return<0> = [Lang,157,6,10]; @symbol_return<1> = [Dictionary,157,11,21]; ]
+    static
+    function getRingPattern(radius, gap, width, color) as Lang.Dictionary {
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_157_22_246_1_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 159 2 ]
+        for @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_159_2_168_2_for_test @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_159_2_168_2_for_incr @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_159_2_168_2_for_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_159_2_168_2_for_init:
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_159_2_168_2_for_begin" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_159_2_168_2_for_end" ]
+        %i.1 = local;
+        symbol [ i %i.1 159 11 12 ];
+        %tmp.1 = 0;
+        lputv %i.1 %tmp.1;
+        symbol [ i %i.1 159 11 12 ];
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_159_2_168_2_for_test:
+        %tmp.2 = lgetv %i.1;
+        symbol [ i %tmp.2 159 18 19 ];
+        symbol [ _ringCache %tmp.4 159 22 32 ];
+        %tmp.4 = getv ? :_ringCache;
+        symbol [ size %tmp.5 159 33 37 ];
+        %tmp.5 = getv function %tmp.4 :size;
+        %tmp.6 = invoke %tmp.4 %tmp.5();
+        %tmp.7 = lt %tmp.2 %tmp.6;
+        bf %tmp.7 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_159_2_168_2_for_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_159_2_168_2_for_begin:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_159_49_168_2_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 160 3 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_159_49_168_2_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_159_49_168_2_stop" ]
+        %entry.2 = local;
+        symbol [ entry %entry.2 160 7 12 ];
+        symbol [ _ringCache %tmp.9 160 15 25 ];
+        %tmp.9 = getv ? :_ringCache;
+        %tmp.10 = lgetv %i.1;
+        symbol [ i %tmp.10 160 26 27 ];
+        %tmp.11 = agetv %tmp.9 %tmp.10;
+        lputv %entry.2 %tmp.11;
+        symbol [ entry %entry.2 160 7 12 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 162 3 ]
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_162_3_167_3_if_stmt:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_162_7_165_22_begin:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_162_7_164_22_begin:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_162_7_163_20_begin:
+        %tmp.12 = lgetv %entry.2;
+        symbol [ entry %tmp.12 162 7 12 ];
+        %tmp.14 = const :radius;
+        symbol [ radius %tmp.14 162 14 20 const ];
+        %tmp.15 = agetv %tmp.12 %tmp.14;
+        %tmp.16 = lgetv %radius;
+        symbol [ radius %tmp.16 162 25 31 ];
+        %tmp.17 = eq %tmp.15 %tmp.16;
+        bf %tmp.17 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_162_3_167_3_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_163_5_163_20_true:
+        %tmp.18 = lgetv %entry.2;
+        symbol [ entry %tmp.18 163 5 10 ];
+        %tmp.20 = const :gap;
+        symbol [ gap %tmp.20 163 12 15 const ];
+        %tmp.21 = agetv %tmp.18 %tmp.20;
+        %tmp.22 = lgetv %gap;
+        symbol [ gap %tmp.22 163 20 23 ];
+        %tmp.23 = eq %tmp.21 %tmp.22;
+        push %tmp.23;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_163_5_163_20_end:
+        %tmp.24 = phi [%tmp.17 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_162_7_163_20_begin] [%tmp.23 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_163_5_163_20_true] [%tmp.24 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_163_5_163_20_end];
+        bf %tmp.24 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_162_3_167_3_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_164_5_164_22_true:
+        %tmp.25 = lgetv %entry.2;
+        symbol [ entry %tmp.25 164 5 10 ];
+        %tmp.27 = const :width;
+        symbol [ width %tmp.27 164 12 17 const ];
+        %tmp.28 = agetv %tmp.25 %tmp.27;
+        %tmp.29 = lgetv %width;
+        symbol [ width %tmp.29 164 22 27 ];
+        %tmp.30 = eq %tmp.28 %tmp.29;
+        push %tmp.30;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_164_5_164_22_end:
+        %tmp.31 = phi [%tmp.24 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_162_7_164_22_begin] [%tmp.30 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_164_5_164_22_true] [%tmp.31 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_164_5_164_22_end];
+        bf %tmp.31 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_162_3_167_3_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_165_5_165_22_true:
+        %tmp.32 = lgetv %entry.2;
+        symbol [ entry %tmp.32 165 5 10 ];
+        %tmp.34 = const :color;
+        symbol [ color %tmp.34 165 12 17 const ];
+        %tmp.35 = agetv %tmp.32 %tmp.34;
+        %tmp.36 = lgetv %color;
+        symbol [ color %tmp.36 165 22 27 ];
+        %tmp.37 = eq %tmp.35 %tmp.36;
+        push %tmp.37;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_165_5_165_22_end:
+        %tmp.38 = phi [%tmp.31 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_162_7_165_22_begin] [%tmp.37 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_165_5_165_22_true] [%tmp.38 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_165_5_165_22_end];
+        bf %tmp.38 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_162_3_167_3_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_162_3_167_3_if_true:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_165_29_167_3_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 166 4 ]
+        %tmp.39 = lgetv %entry.2;
+        symbol [ entry %tmp.39 166 11 16 ];
+        ret %tmp.39;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_165_29_167_3_stop:
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_162_3_167_3_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_162_3_167_3_if_end:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_159_49_168_2_stop:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_159_2_168_2_for_incr:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 159 ]
+        %tmp.40 = lgetv %i.1;
+        symbol [ i %tmp.40 159 41 42 ];
+        %tmp.41 = 1;
+        %tmp.42 = add %tmp.40 %tmp.41;
+        lputv %i.1 %tmp.42;
+        symbol [ i %i.1 159 41 42 ];
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_159_2_168_2_for_test;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_159_2_168_2_for_end:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 170 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_157_22_246_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_157_22_246_1_stop" ]
+        %pixels.3 = local;
+        symbol [ pixels %pixels.3 170 6 12 ];
+        %tmp.43 = newa 0 Lang.Array<Lang.Array<Lang.Number>>;
+        symbol [ Lang %tmp.43 170 21 25 ];
+        symbol [ Array %tmp.43 170 26 31 ];
+        symbol [ Lang %tmp.43 170 32 36 ];
+        symbol [ Array %tmp.43 170 37 42 ];
+        symbol [ Lang %tmp.43 170 43 47 ];
+        symbol [ Number %tmp.43 170 48 54 ];
+        lputv %pixels.3 %tmp.43;
+        symbol [ pixels %pixels.3 170 6 12 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 172 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_157_22_246_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_157_22_246_1_stop" ]
+        %red.4 = local;
+        symbol [ red %red.4 172 6 9 ];
+        %tmp.44 = lgetv %color;
+        symbol [ color %tmp.44 172 13 18 ];
+        %tmp.45 = 16;
+        %tmp.46 = shr %tmp.44 %tmp.45;
+        %tmp.47 = 0xFF;
+        %tmp.48 = bitand %tmp.46 %tmp.47;
+        lputv %red.4 %tmp.48;
+        symbol [ red %red.4 172 6 9 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 173 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_157_22_246_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_157_22_246_1_stop" ]
+        %green.5 = local;
+        symbol [ green %green.5 173 6 11 ];
+        %tmp.49 = lgetv %color;
+        symbol [ color %tmp.49 173 15 20 ];
+        %tmp.50 = 8;
+        %tmp.51 = shr %tmp.49 %tmp.50;
+        %tmp.52 = 0xFF;
+        %tmp.53 = bitand %tmp.51 %tmp.52;
+        lputv %green.5 %tmp.53;
+        symbol [ green %green.5 173 6 11 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 174 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_157_22_246_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_157_22_246_1_stop" ]
+        %blue.6 = local;
+        symbol [ blue %blue.6 174 6 10 ];
+        %tmp.54 = lgetv %color;
+        symbol [ color %tmp.54 174 13 18 ];
+        %tmp.55 = 0xFF;
+        %tmp.56 = bitand %tmp.54 %tmp.55;
+        lputv %blue.6 %tmp.56;
+        symbol [ blue %blue.6 174 6 10 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 177 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_157_22_246_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_157_22_246_1_stop" ]
+        %innerRadius.7 = local;
+        symbol [ innerRadius %innerRadius.7 177 6 17 ];
+        %tmp.57 = lgetv %radius;
+        symbol [ radius %tmp.57 177 20 26 ];
+        %tmp.58 = lgetv %gap;
+        symbol [ gap %tmp.58 177 29 32 ];
+        %tmp.59 = add %tmp.57 %tmp.58;
+        lputv %innerRadius.7 %tmp.59;
+        symbol [ innerRadius %innerRadius.7 177 6 17 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 178 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_157_22_246_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_157_22_246_1_stop" ]
+        %outerRadius.8 = local;
+        symbol [ outerRadius %outerRadius.8 178 6 17 ];
+        %tmp.60 = lgetv %innerRadius.7;
+        symbol [ innerRadius %tmp.60 178 20 31 ];
+        %tmp.61 = lgetv %width;
+        symbol [ width %tmp.61 178 34 39 ];
+        %tmp.62 = add %tmp.60 %tmp.61;
+        lputv %outerRadius.8 %tmp.62;
+        symbol [ outerRadius %outerRadius.8 178 6 17 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 179 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_157_22_246_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_157_22_246_1_stop" ]
+        %extent.9 = local;
+        symbol [ extent %extent.9 179 6 12 ];
+        %tmp.63 = lgetv %outerRadius.8;
+        symbol [ outerRadius %tmp.63 179 15 26 ];
+        %tmp.64 = 1;
+        %tmp.65 = add %tmp.63 %tmp.64;
+        lputv %extent.9 %tmp.65;
+        symbol [ extent %extent.9 179 6 12 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 181 2 ]
+        for @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_181_2_233_2_for_test @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_181_2_233_2_for_incr @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_181_2_233_2_for_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_181_2_233_2_for_init:
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_181_2_233_2_for_begin" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_181_2_233_2_for_end" ]
+        %y.10 = local;
+        symbol [ y %y.10 181 11 12 ];
+        %tmp.66 = lgetv %extent.9;
+        symbol [ extent %tmp.66 181 16 22 ];
+        %tmp.67 = sub 0 %tmp.66;
+        lputv %y.10 %tmp.67;
+        symbol [ y %y.10 181 11 12 ];
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_181_2_233_2_for_test:
+        %tmp.68 = lgetv %y.10;
+        symbol [ y %tmp.68 181 24 25 ];
+        %tmp.69 = lgetv %extent.9;
+        symbol [ extent %tmp.69 181 29 35 ];
+        %tmp.70 = lte %tmp.68 %tmp.69;
+        bf %tmp.70 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_181_2_233_2_for_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_181_2_233_2_for_begin:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_181_45_233_2_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 182 3 ]
+        for @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_3_232_3_for_test @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_3_232_3_for_incr @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_3_232_3_for_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_3_232_3_for_init:
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_3_232_3_for_begin" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_3_232_3_for_end" ]
+        %x.11 = local;
+        symbol [ x %x.11 182 12 13 ];
+        %tmp.71 = lgetv %extent.9;
+        symbol [ extent %tmp.71 182 17 23 ];
+        %tmp.72 = sub 0 %tmp.71;
+        lputv %x.11 %tmp.72;
+        symbol [ x %x.11 182 12 13 ];
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_3_232_3_for_test:
+        %tmp.73 = lgetv %x.11;
+        symbol [ x %tmp.73 182 25 26 ];
+        %tmp.74 = lgetv %extent.9;
+        symbol [ extent %tmp.74 182 30 36 ];
+        %tmp.75 = lte %tmp.73 %tmp.74;
+        bf %tmp.75 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_3_232_3_for_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_3_232_3_for_begin:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_46_232_3_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 184 4 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_46_232_3_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_46_232_3_stop" ]
+        %distance.12 = local;
+        symbol [ distance %distance.12 184 8 16 ];
+        symbol [ Math %tmp.76 184 19 23 ];
+        %tmp.76 = getm $.Toybox.Math;
+        symbol [ sqrt %tmp.77 184 24 28 ];
+        %tmp.77 = getv function %tmp.76 :sqrt;
+        %tmp.78 = lgetv %x.11;
+        symbol [ x %tmp.78 184 29 30 ];
+        %tmp.79 = lgetv %x.11;
+        symbol [ x %tmp.79 184 33 34 ];
+        %tmp.80 = mul %tmp.78 %tmp.79;
+        %tmp.81 = lgetv %y.10;
+        symbol [ y %tmp.81 184 37 38 ];
+        %tmp.82 = lgetv %y.10;
+        symbol [ y %tmp.82 184 41 42 ];
+        %tmp.83 = mul %tmp.81 %tmp.82;
+        %tmp.84 = add %tmp.80 %tmp.83;
+        %tmp.85 = invoke %tmp.76 %tmp.77(%tmp.84);
+        lputv %distance.12 %tmp.85;
+        symbol [ distance %distance.12 184 8 16 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 187 4 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_46_232_3_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_46_232_3_stop" ]
+        %outerCoverage.13 = local;
+        symbol [ outerCoverage %outerCoverage.13 187 8 21 ];
+        %tmp.86 = lgetv %outerRadius.8;
+        symbol [ outerRadius %tmp.86 188 5 16 ];
+        %tmp.87 = 0.5;
+        %tmp.88 = add %tmp.86 %tmp.87;
+        %tmp.89 = lgetv %distance.12;
+        symbol [ distance %tmp.89 188 25 33 ];
+        %tmp.90 = sub %tmp.88 %tmp.89;
+        lputv %outerCoverage.13 %tmp.90;
+        symbol [ outerCoverage %outerCoverage.13 187 8 21 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 190 4 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_46_232_3_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_46_232_3_stop" ]
+        %innerCoverage.14 = local;
+        symbol [ innerCoverage %innerCoverage.14 190 8 21 ];
+        %tmp.91 = lgetv %innerRadius.7;
+        symbol [ innerRadius %tmp.91 191 5 16 ];
+        %tmp.92 = 0.5;
+        %tmp.93 = add %tmp.91 %tmp.92;
+        %tmp.94 = lgetv %distance.12;
+        symbol [ distance %tmp.94 191 25 33 ];
+        %tmp.95 = sub %tmp.93 %tmp.94;
+        lputv %innerCoverage.14 %tmp.95;
+        symbol [ innerCoverage %innerCoverage.14 190 8 21 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 193 4 ]
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_193_4_195_4_if_stmt:
+        %tmp.96 = lgetv %outerCoverage.13;
+        symbol [ outerCoverage %tmp.96 193 8 21 ];
+        %tmp.97 = 0;
+        %tmp.98 = lte %tmp.96 %tmp.97;
+        bf %tmp.98 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_193_4_195_4_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_193_4_195_4_if_true:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_193_28_195_4_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 194 5 ]
+        goto break @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_3_232_3_for_incr;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_193_28_195_4_stop:
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_193_4_195_4_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_193_4_195_4_if_end:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 197 4 ]
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_197_4_199_4_if_stmt:
+        %tmp.99 = lgetv %outerCoverage.13;
+        symbol [ outerCoverage %tmp.99 197 8 21 ];
+        %tmp.100 = 1;
+        %tmp.101 = gt %tmp.99 %tmp.100;
+        bf %tmp.101 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_197_4_199_4_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_197_4_199_4_if_true:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_197_27_199_4_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 198 5 ]
+        %tmp.102 = 1;
+        lputv %outerCoverage.13 %tmp.102;
+        symbol [ outerCoverage %outerCoverage.13 198 5 18 ];
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_197_27_199_4_stop:
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_197_4_199_4_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_197_4_199_4_if_end:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 201 4 ]
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_201_4_203_4_if_stmt:
+        %tmp.103 = lgetv %innerCoverage.14;
+        symbol [ innerCoverage %tmp.103 201 8 21 ];
+        %tmp.104 = 0;
+        %tmp.105 = lt %tmp.103 %tmp.104;
+        bf %tmp.105 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_201_4_203_4_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_201_4_203_4_if_true:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_201_27_203_4_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 202 5 ]
+        %tmp.106 = 0;
+        lputv %innerCoverage.14 %tmp.106;
+        symbol [ innerCoverage %innerCoverage.14 202 5 18 ];
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_201_27_203_4_stop:
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_201_4_203_4_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_201_4_203_4_if_end:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 205 4 ]
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_205_4_207_4_if_stmt:
+        %tmp.107 = lgetv %innerCoverage.14;
+        symbol [ innerCoverage %tmp.107 205 8 21 ];
+        %tmp.108 = 1;
+        %tmp.109 = gt %tmp.107 %tmp.108;
+        bf %tmp.109 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_205_4_207_4_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_205_4_207_4_if_true:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_205_27_207_4_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 206 5 ]
+        %tmp.110 = 1;
+        lputv %innerCoverage.14 %tmp.110;
+        symbol [ innerCoverage %innerCoverage.14 206 5 18 ];
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_205_27_207_4_stop:
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_205_4_207_4_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_205_4_207_4_if_end:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 209 4 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_46_232_3_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_46_232_3_stop" ]
+        %coverage.15 = local;
+        symbol [ coverage %coverage.15 209 8 16 ];
+        %tmp.111 = lgetv %outerCoverage.13;
+        symbol [ outerCoverage %tmp.111 210 5 18 ];
+        %tmp.112 = lgetv %innerCoverage.14;
+        symbol [ innerCoverage %tmp.112 210 21 34 ];
+        %tmp.113 = sub %tmp.111 %tmp.112;
+        lputv %coverage.15 %tmp.113;
+        symbol [ coverage %coverage.15 209 8 16 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 212 4 ]
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_212_4_214_4_if_stmt:
+        %tmp.114 = lgetv %coverage.15;
+        symbol [ coverage %tmp.114 212 8 16 ];
+        %tmp.115 = 0;
+        %tmp.116 = lte %tmp.114 %tmp.115;
+        bf %tmp.116 @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_212_4_214_4_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_212_4_214_4_if_true:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_212_23_214_4_start:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 213 5 ]
+        goto break @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_3_232_3_for_incr;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_212_23_214_4_stop:
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_212_4_214_4_if_end;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_212_4_214_4_if_end:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 216 4 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_46_232_3_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_46_232_3_stop" ]
+        %r.16 = local;
+        symbol [ r %r.16 216 8 9 ];
+        symbol [ Math %tmp.117 216 12 16 ];
+        %tmp.117 = getm $.Toybox.Math;
+        symbol [ round %tmp.118 216 17 22 ];
+        %tmp.118 = getv function %tmp.117 :round;
+        %tmp.119 = 255;
+        %tmp.120 = 255;
+        %tmp.121 = lgetv %red.4;
+        symbol [ red %tmp.121 217 18 21 ];
+        %tmp.122 = sub %tmp.120 %tmp.121;
+        %tmp.123 = lgetv %coverage.15;
+        symbol [ coverage %tmp.123 217 25 33 ];
+        %tmp.124 = mul %tmp.122 %tmp.123;
+        %tmp.125 = sub %tmp.119 %tmp.124;
+        %tmp.126 = invoke %tmp.117 %tmp.118(%tmp.125);
+        symbol [ toNumber %tmp.127 218 6 14 ];
+        %tmp.127 = getv function %tmp.126 :toNumber;
+        %tmp.128 = invoke %tmp.126 %tmp.127();
+        lputv %r.16 %tmp.128;
+        symbol [ r %r.16 216 8 9 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 220 4 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_46_232_3_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_46_232_3_stop" ]
+        %g.17 = local;
+        symbol [ g %g.17 220 8 9 ];
+        symbol [ Math %tmp.129 220 12 16 ];
+        %tmp.129 = getm $.Toybox.Math;
+        symbol [ round %tmp.130 220 17 22 ];
+        %tmp.130 = getv function %tmp.129 :round;
+        %tmp.131 = 255;
+        %tmp.132 = 255;
+        %tmp.133 = lgetv %green.5;
+        symbol [ green %tmp.133 221 18 23 ];
+        %tmp.134 = sub %tmp.132 %tmp.133;
+        %tmp.135 = lgetv %coverage.15;
+        symbol [ coverage %tmp.135 221 27 35 ];
+        %tmp.136 = mul %tmp.134 %tmp.135;
+        %tmp.137 = sub %tmp.131 %tmp.136;
+        %tmp.138 = invoke %tmp.129 %tmp.130(%tmp.137);
+        symbol [ toNumber %tmp.139 222 6 14 ];
+        %tmp.139 = getv function %tmp.138 :toNumber;
+        %tmp.140 = invoke %tmp.138 %tmp.139();
+        lputv %g.17 %tmp.140;
+        symbol [ g %g.17 220 8 9 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 224 4 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_46_232_3_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_46_232_3_stop" ]
+        %b.18 = local;
+        symbol [ b %b.18 224 8 9 ];
+        symbol [ Math %tmp.141 224 12 16 ];
+        %tmp.141 = getm $.Toybox.Math;
+        symbol [ round %tmp.142 224 17 22 ];
+        %tmp.142 = getv function %tmp.141 :round;
+        %tmp.143 = 255;
+        %tmp.144 = 255;
+        %tmp.145 = lgetv %blue.6;
+        symbol [ blue %tmp.145 225 18 22 ];
+        %tmp.146 = sub %tmp.144 %tmp.145;
+        %tmp.147 = lgetv %coverage.15;
+        symbol [ coverage %tmp.147 225 26 34 ];
+        %tmp.148 = mul %tmp.146 %tmp.147;
+        %tmp.149 = sub %tmp.143 %tmp.148;
+        %tmp.150 = invoke %tmp.141 %tmp.142(%tmp.149);
+        symbol [ toNumber %tmp.151 226 6 14 ];
+        %tmp.151 = getv function %tmp.150 :toNumber;
+        %tmp.152 = invoke %tmp.150 %tmp.151();
+        lputv %b.18 %tmp.152;
+        symbol [ b %b.18 224 8 9 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 228 4 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_46_232_3_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_46_232_3_stop" ]
+        %pixelColor.19 = local;
+        symbol [ pixelColor %pixelColor.19 228 8 18 ];
+        %tmp.153 = lgetv %r.16;
+        symbol [ r %tmp.153 229 6 7 ];
+        %tmp.154 = 16;
+        %tmp.155 = shl %tmp.153 %tmp.154;
+        %tmp.156 = lgetv %g.17;
+        symbol [ g %tmp.156 229 18 19 ];
+        %tmp.157 = 8;
+        %tmp.158 = shl %tmp.156 %tmp.157;
+        %tmp.159 = bitor %tmp.155 %tmp.158;
+        %tmp.160 = lgetv %b.18;
+        symbol [ b %tmp.160 229 28 29 ];
+        %tmp.161 = bitor %tmp.159 %tmp.160;
+        lputv %pixelColor.19 %tmp.161;
+        symbol [ pixelColor %pixelColor.19 228 8 18 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 231 4 ]
+        %tmp.162 = lgetv %pixels.3;
+        symbol [ pixels %tmp.162 231 4 10 ];
+        symbol [ add %tmp.163 231 11 14 ];
+        %tmp.163 = getv function %tmp.162 :add;
+        %tmp.164 = newa 3;
+        %tmp.165 = lgetv %x.11;
+        symbol [ x %tmp.165 231 16 17 ];
+        %tmp.166 = dup %tmp.164;
+        %tmp.167 = aputv %tmp.166 0 %tmp.165;
+        %tmp.168 = lgetv %y.10;
+        symbol [ y %tmp.168 231 19 20 ];
+        %tmp.169 = dup %tmp.167;
+        %tmp.170 = aputv %tmp.169 1 %tmp.168;
+        %tmp.171 = lgetv %pixelColor.19;
+        symbol [ pixelColor %tmp.171 231 22 32 ];
+        %tmp.172 = dup %tmp.170;
+        %tmp.173 = aputv %tmp.172 2 %tmp.171;
+        invoke %tmp.162 %tmp.163(%tmp.173);
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_46_232_3_stop:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_3_232_3_for_incr:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 182 ]
+        %tmp.174 = lgetv %x.11;
+        symbol [ x %tmp.174 182 38 39 ];
+        %tmp.175 = 1;
+        %tmp.176 = add %tmp.174 %tmp.175;
+        lputv %x.11 %tmp.176;
+        symbol [ x %x.11 182 38 39 ];
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_3_232_3_for_test;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_182_3_232_3_for_end:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_181_45_233_2_stop:
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_181_2_233_2_for_incr:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 181 ]
+        %tmp.177 = lgetv %y.10;
+        symbol [ y %tmp.177 181 37 38 ];
+        %tmp.178 = 1;
+        %tmp.179 = add %tmp.177 %tmp.178;
+        lputv %y.10 %tmp.179;
+        symbol [ y %y.10 181 37 38 ];
+        goto @_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_181_2_233_2_for_test;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_181_2_233_2_for_end:
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 235 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_157_22_246_1_start" "_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_157_22_246_1_stop" ]
+        %pattern.20 = local;
+        symbol [ pattern %pattern.20 235 6 13 ];
+        %tmp.180 = newd 5;
+        %tmp.182 = const :radius;
+        symbol [ radius %tmp.182 236 4 10 const ];
+        %tmp.183 = lgetv %radius;
+        symbol [ radius %tmp.183 236 14 20 ];
+        %tmp.184 = dup %tmp.180;
+        %tmp.185 = aputv %tmp.184 %tmp.182 %tmp.183;
+        %tmp.187 = const :gap;
+        symbol [ gap %tmp.187 237 4 7 const ];
+        %tmp.188 = lgetv %gap;
+        symbol [ gap %tmp.188 237 11 14 ];
+        %tmp.189 = dup %tmp.185;
+        %tmp.190 = aputv %tmp.189 %tmp.187 %tmp.188;
+        %tmp.192 = const :width;
+        symbol [ width %tmp.192 238 4 9 const ];
+        %tmp.193 = lgetv %width;
+        symbol [ width %tmp.193 238 13 18 ];
+        %tmp.194 = dup %tmp.190;
+        %tmp.195 = aputv %tmp.194 %tmp.192 %tmp.193;
+        %tmp.197 = const :color;
+        symbol [ color %tmp.197 239 4 9 const ];
+        %tmp.198 = lgetv %color;
+        symbol [ color %tmp.198 239 13 18 ];
+        %tmp.199 = dup %tmp.195;
+        %tmp.200 = aputv %tmp.199 %tmp.197 %tmp.198;
+        %tmp.202 = const :pixels;
+        symbol [ pixels %tmp.202 240 4 10 const ];
+        %tmp.203 = lgetv %pixels.3;
+        symbol [ pixels %tmp.203 240 14 20 ];
+        %tmp.204 = dup %tmp.200;
+        %tmp.205 = aputv %tmp.204 %tmp.202 %tmp.203;
+        lputv %pattern.20 %tmp.205;
+        symbol [ pattern %pattern.20 235 6 13 ];
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 243 2 ]
+        symbol [ _ringCache %tmp.207 243 2 12 ];
+        %tmp.207 = getv ? :_ringCache;
+        symbol [ add %tmp.208 243 13 16 ];
+        %tmp.208 = getv function %tmp.207 :add;
+        %tmp.209 = lgetv %pattern.20;
+        symbol [ pattern %tmp.209 243 17 24 ];
+        invoke %tmp.207 %tmp.208(%tmp.209);
+[ "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" 245 2 ]
+        %tmp.210 = lgetv %pattern.20;
+        symbol [ pattern %tmp.210 245 9 16 ];
+        ret %tmp.210;
+_home_shum_stow_garmin_orbital_source_CircleRenderer_mc_157_22_246_1_stop:
+    }
+}
+[ @file = "/home/shum/stow/garmin/orbital/source/CircleRenderer.mc"; @line = 2; ]
+<init> {
+}

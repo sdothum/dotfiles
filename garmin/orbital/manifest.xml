@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<iq:manifest version="3"
+    xmlns:iq="http://www.garmin.com/xml/connectiq">
+
+    <iq:application
+        id="16e97eb91f3443968019f20b9f3f6002"
+        type="watchface"
+        name="@Strings.AppName"
+        entry="OrbitalApp"
+        launcherIcon="@Drawables.LauncherIcon"
+        minApiLevel="3.2.0">
+
+        <iq:products>
+            <iq:product id="fr955"/>
+        </iq:products>
+
+        <iq:permissions>
+            <iq:uses-permission id="SensorHistory"/>
+        </iq:permissions>
+
+        <iq:languages>
+            <iq:language>eng</iq:language>
+        </iq:languages>
+
+        <iq:barrels/>
+    </iq:application>
+</iq:manifest>

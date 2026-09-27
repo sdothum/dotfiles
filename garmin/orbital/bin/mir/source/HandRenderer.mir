@@ -1,0 +1,399 @@
+[ @file = "/home/shum/stow/garmin/orbital/source/HandRenderer.mc"; @line = 1; @symbol_usingdef<0> = [Toybox,1,6,12]; @symbol_usingdef<1> = [Graphics,1,13,21]; ]
+using Toybox.Graphics;
+[ @file = "/home/shum/stow/garmin/orbital/source/HandRenderer.mc"; @line = 2; @symbol_usingdef<0> = [Toybox,2,6,12]; @symbol_usingdef<1> = [Math,2,13,17]; ]
+using Toybox.Math;
+[ @file = "/home/shum/stow/garmin/orbital/source/HandRenderer.mc"; @line = 4; @symbol_classdef = [HandRenderer,4,6,18]; ]
+class HandRenderer {
+    [ @file = "/home/shum/stow/garmin/orbital/source/HandRenderer.mc"; @line = 4; ]
+    <init> {
+    }
+    [ @file = "/home/shum/stow/garmin/orbital/source/HandRenderer.mc"; @line = 4; ]
+    static
+    <init> {
+    }
+    [ @file = "/home/shum/stow/garmin/orbital/source/HandRenderer.mc"; @line = 6; @position = 13; @symbol_vardef = [_hourRadius,6,13,24]; ]
+    private
+    var _hourRadius = 11;
+    [ @file = "/home/shum/stow/garmin/orbital/source/HandRenderer.mc"; @line = 7; @position = 13; @symbol_vardef = [_minuteRadius,7,13,26]; ]
+    private
+    var _minuteRadius = 6;
+    [ @file = "/home/shum/stow/garmin/orbital/source/HandRenderer.mc"; @line = 10; @position = 13; @symbol_vardef = [_tickClearance,10,13,27]; ]
+    private
+    var _tickClearance = 10;
+    [ @file = "/home/shum/stow/garmin/orbital/source/HandRenderer.mc"; @line = 13; @symbol_functiondef = [draw,13,10,14]; @symbol_param<0> = [dc,13,15,17]; @symbol_param<1> = [geometry,13,19,27]; @symbol_param<2> = [hours,13,29,34]; @symbol_param<3> = [minutes,13,36,43]; ]
+    function draw(dc, geometry, hours, minutes) {
+_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_start:
+[ "/home/shum/stow/garmin/orbital/source/HandRenderer.mc" 14 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_start" "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_stop" ]
+        %minuteAngle.1 = local;
+        symbol [ minuteAngle %minuteAngle.1 14 6 17 ];
+        %tmp.1 = lgetv %minutes;
+        symbol [ minutes %tmp.1 15 4 11 ];
+        symbol [ Math %tmp.2 15 14 18 ];
+        %tmp.2 = getm $.Toybox.Math;
+        symbol [ PI %tmp.3 15 19 21 ];
+        %tmp.3 = getv %tmp.2 :PI;
+        %tmp.4 = mul %tmp.1 %tmp.3;
+        %tmp.5 = 2.0;
+        %tmp.6 = mul %tmp.4 %tmp.5;
+        %tmp.7 = 60.0;
+        %tmp.8 = div %tmp.6 %tmp.7;
+        symbol [ Math %tmp.9 16 5 9 ];
+        %tmp.9 = getm $.Toybox.Math;
+        symbol [ PI %tmp.10 16 10 12 ];
+        %tmp.10 = getv %tmp.9 :PI;
+        %tmp.11 = 2.0;
+        %tmp.12 = div %tmp.10 %tmp.11;
+        %tmp.13 = sub %tmp.8 %tmp.12;
+        lputv %minuteAngle.1 %tmp.13;
+        symbol [ minuteAngle %minuteAngle.1 14 6 17 ];
+[ "/home/shum/stow/garmin/orbital/source/HandRenderer.mc" 18 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_start" "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_stop" ]
+        %hourAngle.2 = local;
+        symbol [ hourAngle %hourAngle.2 18 6 15 ];
+        %tmp.14 = lgetv %hours;
+        symbol [ hours %tmp.14 19 6 11 ];
+        %tmp.15 = 12;
+        %tmp.16 = mod %tmp.14 %tmp.15;
+        %tmp.17 = lgetv %minutes;
+        symbol [ minutes %tmp.17 19 20 27 ];
+        %tmp.18 = 60.0;
+        %tmp.19 = div %tmp.17 %tmp.18;
+        %tmp.20 = add %tmp.16 %tmp.19;
+        symbol [ Math %tmp.21 20 5 9 ];
+        %tmp.21 = getm $.Toybox.Math;
+        symbol [ PI %tmp.22 20 10 12 ];
+        %tmp.22 = getv %tmp.21 :PI;
+        %tmp.23 = mul %tmp.20 %tmp.22;
+        %tmp.24 = 2.0;
+        %tmp.25 = mul %tmp.23 %tmp.24;
+        %tmp.26 = 12.0;
+        %tmp.27 = div %tmp.25 %tmp.26;
+        symbol [ Math %tmp.28 21 5 9 ];
+        %tmp.28 = getm $.Toybox.Math;
+        symbol [ PI %tmp.29 21 10 12 ];
+        %tmp.29 = getv %tmp.28 :PI;
+        %tmp.30 = 2.0;
+        %tmp.31 = div %tmp.29 %tmp.30;
+        %tmp.32 = sub %tmp.27 %tmp.31;
+        lputv %hourAngle.2 %tmp.32;
+        symbol [ hourAngle %hourAngle.2 18 6 15 ];
+[ "/home/shum/stow/garmin/orbital/source/HandRenderer.mc" 23 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_start" "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_stop" ]
+        %tickRadius.3 = local;
+        symbol [ tickRadius %tickRadius.3 23 6 16 ];
+        %tmp.33 = lgetv %geometry;
+        symbol [ geometry %tmp.33 23 19 27 ];
+        symbol [ tickCenterRadius %tmp.34 23 28 44 ];
+        %tmp.34 = getv %tmp.33 :tickCenterRadius;
+        %tmp.35 = 2;
+        %tmp.36 = sub %tmp.34 %tmp.35;
+        lputv %tickRadius.3 %tmp.36;
+        symbol [ tickRadius %tickRadius.3 23 6 16 ];
+[ "/home/shum/stow/garmin/orbital/source/HandRenderer.mc" 31 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_start" "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_stop" ]
+        %hourOrbital.4 = local;
+        symbol [ hourOrbital %hourOrbital.4 31 6 17 ];
+        %tmp.37 = lgetv %tickRadius.3;
+        symbol [ tickRadius %tmp.37 32 5 15 ];
+        symbol [ _hourRadius %tmp.39 32 18 29 ];
+        %tmp.39 = getv ? :_hourRadius;
+        %tmp.40 = sub %tmp.37 %tmp.39;
+        symbol [ _tickClearance %tmp.42 32 32 46 ];
+        %tmp.42 = getv ? :_tickClearance;
+        %tmp.43 = 5;
+        %tmp.44 = mul %tmp.42 %tmp.43;
+        %tmp.45 = 2;
+        %tmp.46 = div %tmp.44 %tmp.45;
+        %tmp.47 = sub %tmp.40 %tmp.46;
+        symbol [ _minuteRadius %tmp.49 32 57 70 ];
+        %tmp.49 = getv ? :_minuteRadius;
+        %tmp.50 = sub %tmp.47 %tmp.49;
+        lputv %hourOrbital.4 %tmp.50;
+        symbol [ hourOrbital %hourOrbital.4 31 6 17 ];
+[ "/home/shum/stow/garmin/orbital/source/HandRenderer.mc" 34 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_start" "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_stop" ]
+        %hourX.5 = local;
+        symbol [ hourX %hourX.5 34 6 11 ];
+        %tmp.51 = lgetv %geometry;
+        symbol [ geometry %tmp.51 34 14 22 ];
+        symbol [ centerX %tmp.52 34 23 30 ];
+        %tmp.52 = getv %tmp.51 :centerX;
+        symbol [ Math %tmp.53 35 5 9 ];
+        %tmp.53 = getm $.Toybox.Math;
+        symbol [ round %tmp.54 35 10 15 ];
+        %tmp.54 = getv function %tmp.53 :round;
+        symbol [ Math %tmp.55 35 16 20 ];
+        %tmp.55 = getm $.Toybox.Math;
+        symbol [ cos %tmp.56 35 21 24 ];
+        %tmp.56 = getv function %tmp.55 :cos;
+        %tmp.57 = lgetv %hourAngle.2;
+        symbol [ hourAngle %tmp.57 35 25 34 ];
+        %tmp.58 = invoke %tmp.55 %tmp.56(%tmp.57);
+        %tmp.59 = lgetv %hourOrbital.4;
+        symbol [ hourOrbital %tmp.59 35 38 49 ];
+        %tmp.60 = mul %tmp.58 %tmp.59;
+        %tmp.61 = invoke %tmp.53 %tmp.54(%tmp.60);
+        %tmp.62 = add %tmp.52 %tmp.61;
+        lputv %hourX.5 %tmp.62;
+        symbol [ hourX %hourX.5 34 6 11 ];
+[ "/home/shum/stow/garmin/orbital/source/HandRenderer.mc" 37 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_start" "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_stop" ]
+        %hourY.6 = local;
+        symbol [ hourY %hourY.6 37 6 11 ];
+        %tmp.63 = lgetv %geometry;
+        symbol [ geometry %tmp.63 37 14 22 ];
+        symbol [ centerY %tmp.64 37 23 30 ];
+        %tmp.64 = getv %tmp.63 :centerY;
+        symbol [ Math %tmp.65 38 5 9 ];
+        %tmp.65 = getm $.Toybox.Math;
+        symbol [ round %tmp.66 38 10 15 ];
+        %tmp.66 = getv function %tmp.65 :round;
+        symbol [ Math %tmp.67 38 16 20 ];
+        %tmp.67 = getm $.Toybox.Math;
+        symbol [ sin %tmp.68 38 21 24 ];
+        %tmp.68 = getv function %tmp.67 :sin;
+        %tmp.69 = lgetv %hourAngle.2;
+        symbol [ hourAngle %tmp.69 38 25 34 ];
+        %tmp.70 = invoke %tmp.67 %tmp.68(%tmp.69);
+        %tmp.71 = lgetv %hourOrbital.4;
+        symbol [ hourOrbital %tmp.71 38 38 49 ];
+        %tmp.72 = mul %tmp.70 %tmp.71;
+        %tmp.73 = invoke %tmp.65 %tmp.66(%tmp.72);
+        %tmp.74 = add %tmp.64 %tmp.73;
+        lputv %hourY.6 %tmp.74;
+        symbol [ hourY %hourY.6 37 6 11 ];
+[ "/home/shum/stow/garmin/orbital/source/HandRenderer.mc" 43 2 ]
+        symbol [ CircleRenderer %tmp.76 43 2 16 ];
+        %tmp.76 = getv ? :CircleRenderer;
+        symbol [ drawSmoothCircle %tmp.77 43 17 33 ];
+        %tmp.77 = getv function %tmp.76 :drawSmoothCircle;
+        %tmp.78 = lgetv %dc;
+        symbol [ dc %tmp.78 44 3 5 ];
+        %tmp.79 = lgetv %hourX.5;
+        symbol [ hourX %tmp.79 44 7 12 ];
+        %tmp.80 = lgetv %hourY.6;
+        symbol [ hourY %tmp.80 44 14 19 ];
+        symbol [ _hourRadius %tmp.82 44 21 32 ];
+        %tmp.82 = getv ? :_hourRadius;
+        %tmp.83 = 0x000000;
+        invoke %tmp.76 %tmp.77(%tmp.78, %tmp.79, %tmp.80, %tmp.82, %tmp.83);
+[ "/home/shum/stow/garmin/orbital/source/HandRenderer.mc" 53 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_start" "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_stop" ]
+        %minuteOrbital.7 = local;
+        symbol [ minuteOrbital %minuteOrbital.7 53 6 19 ];
+        %tmp.84 = lgetv %tickRadius.3;
+        symbol [ tickRadius %tmp.84 54 3 13 ];
+        symbol [ _minuteRadius %tmp.86 54 16 29 ];
+        %tmp.86 = getv ? :_minuteRadius;
+        %tmp.87 = sub %tmp.84 %tmp.86;
+        symbol [ _tickClearance %tmp.89 54 32 46 ];
+        %tmp.89 = getv ? :_tickClearance;
+        %tmp.90 = sub %tmp.87 %tmp.89;
+        lputv %minuteOrbital.7 %tmp.90;
+        symbol [ minuteOrbital %minuteOrbital.7 53 6 19 ];
+[ "/home/shum/stow/garmin/orbital/source/HandRenderer.mc" 56 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_start" "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_stop" ]
+        %minuteX.8 = local;
+        symbol [ minuteX %minuteX.8 56 6 13 ];
+        %tmp.91 = lgetv %geometry;
+        symbol [ geometry %tmp.91 56 16 24 ];
+        symbol [ centerX %tmp.92 56 25 32 ];
+        %tmp.92 = getv %tmp.91 :centerX;
+        symbol [ Math %tmp.93 57 3 7 ];
+        %tmp.93 = getm $.Toybox.Math;
+        symbol [ round %tmp.94 57 8 13 ];
+        %tmp.94 = getv function %tmp.93 :round;
+        symbol [ Math %tmp.95 57 14 18 ];
+        %tmp.95 = getm $.Toybox.Math;
+        symbol [ cos %tmp.96 57 19 22 ];
+        %tmp.96 = getv function %tmp.95 :cos;
+        %tmp.97 = lgetv %minuteAngle.1;
+        symbol [ minuteAngle %tmp.97 57 23 34 ];
+        %tmp.98 = invoke %tmp.95 %tmp.96(%tmp.97);
+        %tmp.99 = lgetv %minuteOrbital.7;
+        symbol [ minuteOrbital %tmp.99 57 38 51 ];
+        %tmp.100 = mul %tmp.98 %tmp.99;
+        %tmp.101 = invoke %tmp.93 %tmp.94(%tmp.100);
+        %tmp.102 = add %tmp.92 %tmp.101;
+        lputv %minuteX.8 %tmp.102;
+        symbol [ minuteX %minuteX.8 56 6 13 ];
+[ "/home/shum/stow/garmin/orbital/source/HandRenderer.mc" 59 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_start" "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_stop" ]
+        %minuteY.9 = local;
+        symbol [ minuteY %minuteY.9 59 6 13 ];
+        %tmp.103 = lgetv %geometry;
+        symbol [ geometry %tmp.103 59 16 24 ];
+        symbol [ centerY %tmp.104 59 25 32 ];
+        %tmp.104 = getv %tmp.103 :centerY;
+        symbol [ Math %tmp.105 60 3 7 ];
+        %tmp.105 = getm $.Toybox.Math;
+        symbol [ round %tmp.106 60 8 13 ];
+        %tmp.106 = getv function %tmp.105 :round;
+        symbol [ Math %tmp.107 60 14 18 ];
+        %tmp.107 = getm $.Toybox.Math;
+        symbol [ sin %tmp.108 60 19 22 ];
+        %tmp.108 = getv function %tmp.107 :sin;
+        %tmp.109 = lgetv %minuteAngle.1;
+        symbol [ minuteAngle %tmp.109 60 23 34 ];
+        %tmp.110 = invoke %tmp.107 %tmp.108(%tmp.109);
+        %tmp.111 = lgetv %minuteOrbital.7;
+        symbol [ minuteOrbital %tmp.111 60 38 51 ];
+        %tmp.112 = mul %tmp.110 %tmp.111;
+        %tmp.113 = invoke %tmp.105 %tmp.106(%tmp.112);
+        %tmp.114 = add %tmp.104 %tmp.113;
+        lputv %minuteY.9 %tmp.114;
+        symbol [ minuteY %minuteY.9 59 6 13 ];
+[ "/home/shum/stow/garmin/orbital/source/HandRenderer.mc" 65 2 ]
+        symbol [ CircleRenderer %tmp.116 65 2 16 ];
+        %tmp.116 = getv ? :CircleRenderer;
+        symbol [ drawSmoothCircle %tmp.117 65 17 33 ];
+        %tmp.117 = getv function %tmp.116 :drawSmoothCircle;
+        %tmp.118 = lgetv %dc;
+        symbol [ dc %tmp.118 66 3 5 ];
+        %tmp.119 = lgetv %minuteX.8;
+        symbol [ minuteX %tmp.119 66 7 14 ];
+        %tmp.120 = lgetv %minuteY.9;
+        symbol [ minuteY %tmp.120 66 16 23 ];
+        symbol [ _minuteRadius %tmp.122 66 25 38 ];
+        %tmp.122 = getv ? :_minuteRadius;
+        %tmp.123 = 0xFF0000;
+        invoke %tmp.116 %tmp.117(%tmp.118, %tmp.119, %tmp.120, %tmp.122, %tmp.123);
+[ "/home/shum/stow/garmin/orbital/source/HandRenderer.mc" 69 2 ]
+        symbol [ CircleRenderer %tmp.125 69 2 16 ];
+        %tmp.125 = getv ? :CircleRenderer;
+        symbol [ drawSmoothAnnulus %tmp.126 69 17 34 ];
+        %tmp.126 = getv function %tmp.125 :drawSmoothAnnulus;
+        %tmp.127 = lgetv %dc;
+        symbol [ dc %tmp.127 70 3 5 ];
+        %tmp.128 = lgetv %minuteX.8;
+        symbol [ minuteX %tmp.128 70 7 14 ];
+        %tmp.129 = lgetv %minuteY.9;
+        symbol [ minuteY %tmp.129 70 16 23 ];
+        symbol [ _minuteRadius %tmp.131 71 3 16 ];
+        %tmp.131 = getv ? :_minuteRadius;
+        %tmp.132 = 2;
+        %tmp.133 = 1;
+        %tmp.134 = 0xFF0000;
+        invoke %tmp.125 %tmp.126(%tmp.127, %tmp.128, %tmp.129, %tmp.131, %tmp.132, %tmp.133, %tmp.134);
+_home_shum_stow_garmin_orbital_source_HandRenderer_mc_13_45_77_1_stop:
+    }
+    [ @file = "/home/shum/stow/garmin/orbital/source/HandRenderer.mc"; @line = 79; @symbol_functiondef = [drawRing,79,10,18]; @symbol_param<0> = [dc,79,19,21]; @symbol_param<1> = [geometry,79,23,31]; @symbol_param<2> = [angle,79,33,38]; @symbol_param<3> = [orbitalRadius,80,7,20]; @symbol_param<4> = [ringRadius,80,22,32]; @symbol_param<5> = [width,80,34,39]; ]
+    function drawRing(dc, geometry, angle, orbitalRadius, ringRadius, width) {
+_home_shum_stow_garmin_orbital_source_HandRenderer_mc_80_41_96_1_start:
+[ "/home/shum/stow/garmin/orbital/source/HandRenderer.mc" 81 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_80_41_96_1_start" "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_80_41_96_1_stop" ]
+        %x.1 = local;
+        symbol [ x %x.1 81 6 7 ];
+        %tmp.1 = lgetv %geometry;
+        symbol [ geometry %tmp.1 81 10 18 ];
+        symbol [ centerX %tmp.2 81 19 26 ];
+        %tmp.2 = getv %tmp.1 :centerX;
+        symbol [ Math %tmp.3 82 3 7 ];
+        %tmp.3 = getm $.Toybox.Math;
+        symbol [ round %tmp.4 82 8 13 ];
+        %tmp.4 = getv function %tmp.3 :round;
+        symbol [ Math %tmp.5 82 14 18 ];
+        %tmp.5 = getm $.Toybox.Math;
+        symbol [ cos %tmp.6 82 19 22 ];
+        %tmp.6 = getv function %tmp.5 :cos;
+        %tmp.7 = lgetv %angle;
+        symbol [ angle %tmp.7 82 23 28 ];
+        %tmp.8 = invoke %tmp.5 %tmp.6(%tmp.7);
+        %tmp.9 = lgetv %orbitalRadius;
+        symbol [ orbitalRadius %tmp.9 82 32 45 ];
+        %tmp.10 = mul %tmp.8 %tmp.9;
+        %tmp.11 = invoke %tmp.3 %tmp.4(%tmp.10);
+        %tmp.12 = add %tmp.2 %tmp.11;
+        lputv %x.1 %tmp.12;
+        symbol [ x %x.1 81 6 7 ];
+[ "/home/shum/stow/garmin/orbital/source/HandRenderer.mc" 84 2 ]
+        [ "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_80_41_96_1_start" "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_80_41_96_1_stop" ]
+        %y.2 = local;
+        symbol [ y %y.2 84 6 7 ];
+        %tmp.13 = lgetv %geometry;
+        symbol [ geometry %tmp.13 84 10 18 ];
+        symbol [ centerY %tmp.14 84 19 26 ];
+        %tmp.14 = getv %tmp.13 :centerY;
+        symbol [ Math %tmp.15 85 3 7 ];
+        %tmp.15 = getm $.Toybox.Math;
+        symbol [ round %tmp.16 85 8 13 ];
+        %tmp.16 = getv function %tmp.15 :round;
+        symbol [ Math %tmp.17 85 14 18 ];
+        %tmp.17 = getm $.Toybox.Math;
+        symbol [ sin %tmp.18 85 19 22 ];
+        %tmp.18 = getv function %tmp.17 :sin;
+        %tmp.19 = lgetv %angle;
+        symbol [ angle %tmp.19 85 23 28 ];
+        %tmp.20 = invoke %tmp.17 %tmp.18(%tmp.19);
+        %tmp.21 = lgetv %orbitalRadius;
+        symbol [ orbitalRadius %tmp.21 85 32 45 ];
+        %tmp.22 = mul %tmp.20 %tmp.21;
+        %tmp.23 = invoke %tmp.15 %tmp.16(%tmp.22);
+        %tmp.24 = add %tmp.14 %tmp.23;
+        lputv %y.2 %tmp.24;
+        symbol [ y %y.2 84 6 7 ];
+[ "/home/shum/stow/garmin/orbital/source/HandRenderer.mc" 87 2 ]
+        %tmp.25 = lgetv %dc;
+        symbol [ dc %tmp.25 87 2 4 ];
+        symbol [ setColor %tmp.26 87 5 13 ];
+        %tmp.26 = getv function %tmp.25 :setColor;
+        symbol [ Graphics %tmp.27 88 3 11 ];
+        %tmp.27 = getm $.Toybox.Graphics;
+        symbol [ COLOR_BLACK %tmp.28 88 12 23 ];
+        %tmp.28 = getv %tmp.27 :COLOR_BLACK;
+        symbol [ Theme %tmp.30 89 3 8 ];
+        %tmp.30 = getv ? :Theme;
+        symbol [ BACKGROUND_COLOR %tmp.31 89 9 25 ];
+        %tmp.31 = getv %tmp.30 :BACKGROUND_COLOR;
+        invoke %tmp.25 %tmp.26(%tmp.28, %tmp.31);
+[ "/home/shum/stow/garmin/orbital/source/HandRenderer.mc" 93 2 ]
+        for @_home_shum_stow_garmin_orbital_source_HandRenderer_mc_93_2_95_2_for_test @_home_shum_stow_garmin_orbital_source_HandRenderer_mc_93_2_95_2_for_incr @_home_shum_stow_garmin_orbital_source_HandRenderer_mc_93_2_95_2_for_end;
+_home_shum_stow_garmin_orbital_source_HandRenderer_mc_93_2_95_2_for_init:
+        [ "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_93_2_95_2_for_begin" "_home_shum_stow_garmin_orbital_source_HandRenderer_mc_93_2_95_2_for_end" ]
+        %i.3 = local;
+        symbol [ i %i.3 93 11 12 ];
+        %tmp.32 = 0;
+        lputv %i.3 %tmp.32;
+        symbol [ i %i.3 93 11 12 ];
+_home_shum_stow_garmin_orbital_source_HandRenderer_mc_93_2_95_2_for_test:
+        %tmp.33 = lgetv %i.3;
+        symbol [ i %tmp.33 93 18 19 ];
+        %tmp.34 = lgetv %width;
+        symbol [ width %tmp.34 93 22 27 ];
+        %tmp.35 = lt %tmp.33 %tmp.34;
+        bf %tmp.35 @_home_shum_stow_garmin_orbital_source_HandRenderer_mc_93_2_95_2_for_end;
+_home_shum_stow_garmin_orbital_source_HandRenderer_mc_93_2_95_2_for_begin:
+_home_shum_stow_garmin_orbital_source_HandRenderer_mc_93_37_95_2_start:
+[ "/home/shum/stow/garmin/orbital/source/HandRenderer.mc" 94 3 ]
+        %tmp.36 = lgetv %dc;
+        symbol [ dc %tmp.36 94 3 5 ];
+        symbol [ drawCircle %tmp.37 94 6 16 ];
+        %tmp.37 = getv function %tmp.36 :drawCircle;
+        %tmp.38 = lgetv %x.1;
+        symbol [ x %tmp.38 94 17 18 ];
+        %tmp.39 = lgetv %y.2;
+        symbol [ y %tmp.39 94 20 21 ];
+        %tmp.40 = lgetv %ringRadius;
+        symbol [ ringRadius %tmp.40 94 23 33 ];
+        %tmp.41 = lgetv %i.3;
+        symbol [ i %tmp.41 94 36 37 ];
+        %tmp.42 = sub %tmp.40 %tmp.41;
+        invoke %tmp.36 %tmp.37(%tmp.38, %tmp.39, %tmp.42);
+_home_shum_stow_garmin_orbital_source_HandRenderer_mc_93_37_95_2_stop:
+_home_shum_stow_garmin_orbital_source_HandRenderer_mc_93_2_95_2_for_incr:
+[ "/home/shum/stow/garmin/orbital/source/HandRenderer.mc" 93 ]
+        %tmp.43 = lgetv %i.3;
+        symbol [ i %tmp.43 93 29 30 ];
+        %tmp.44 = 1;
+        %tmp.45 = add %tmp.43 %tmp.44;
+        lputv %i.3 %tmp.45;
+        symbol [ i %i.3 93 29 30 ];
+        goto @_home_shum_stow_garmin_orbital_source_HandRenderer_mc_93_2_95_2_for_test;
+_home_shum_stow_garmin_orbital_source_HandRenderer_mc_93_2_95_2_for_end:
+_home_shum_stow_garmin_orbital_source_HandRenderer_mc_80_41_96_1_stop:
+    }
+}
+[ @file = "/home/shum/stow/garmin/orbital/source/HandRenderer.mc"; @line = 1; ]
+<init> {
+}

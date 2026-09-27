@@ -1,0 +1,84 @@
+
+using Toybox.Graphics;
+using Toybox.Math;
+
+class HandRenderer {
+
+	// Initial proportions, in pixels.
+	private var _railWidth = 2;
+	private var _gapWidth = 2;
+
+	private var _hourLength = 70;
+	private var _minuteInset = 4;
+
+	function draw(dc, geometry, hours, minutes) {
+
+		var minuteAngle =
+			(minutes * Math.PI * 2.0 / 60.0)
+			- Math.PI / 2.0;
+
+		var hourAngle =
+			(((hours % 12) + minutes / 60.0)
+			* Math.PI * 2.0 / 12.0)
+			- Math.PI / 2.0;
+
+		// Draw hour hand first, minute hand above it.
+		drawHand(
+			dc,
+			geometry,
+			hourAngle,
+			12,
+			_hourLength
+		);
+
+		// drawHand(
+		// 	dc,
+		// 	geometry,
+		// 	minuteAngle,
+		// 	0,
+		// 	geometry.tickCenterRadius - 2 - _minuteInset
+		// );
+
+		drawHand(
+		   dc,
+		   geometry,
+		   minuteAngle,
+		   _hourLength,
+		   geometry.tickCenterRadius - 2 - _minuteInset
+		);
+
+	}
+
+	function drawHand(dc, geometry, angle, startRadius, endRadius) {
+		var dx = Math.cos(angle);
+		var dy = Math.sin(angle);
+		var px = -dy;
+		var py = dx;
+
+		var outer = (_gapWidth + 2.0 * _railWidth) / 2.0;
+		var inner = _gapWidth / 2.0;
+
+		dc.setColor(Graphics.COLOR_BLACK, Theme.BACKGROUND_COLOR);
+
+		for (var side = -1; side <= 1; side += 2) {
+			var outerOffset = side * outer;
+			var innerOffset = side * inner;
+
+			var points = [
+				[geometry.centerX + Math.round(dx * startRadius + px * outerOffset),
+				 geometry.centerY + Math.round(dy * startRadius + py * outerOffset)],
+
+				[geometry.centerX + Math.round(dx * endRadius + px * outerOffset),
+				 geometry.centerY + Math.round(dy * endRadius + py * outerOffset)],
+
+				[geometry.centerX + Math.round(dx * endRadius + px * innerOffset),
+				 geometry.centerY + Math.round(dy * endRadius + py * innerOffset)],
+
+				[geometry.centerX + Math.round(dx * startRadius + px * innerOffset),
+				 geometry.centerY + Math.round(dy * startRadius + py * innerOffset)]
+			];
+
+			dc.fillPolygon(points);
+		}
+	}
+}
