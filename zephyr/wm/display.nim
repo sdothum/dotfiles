@@ -1,14 +1,9 @@
 import compat
 import std/strutils
-import x11_ipc
+import native_ipc as ipc
 
 proc rootDimensions(): tuple[width, height: int] =
-  var ipc: X11Ipc
-  if not ipc.open():
-    quit("display: unable to connect to X")
-  defer: ipc.close()
-  if not ipc.rootGeometry(result.width, result.height):
-    quit("display: unable to query root geometry")
+  ipc.rootDimensions()
 
 proc dimensions*(): tuple[width, height: int] =
   rootDimensions()

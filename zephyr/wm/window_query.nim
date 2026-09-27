@@ -6,7 +6,7 @@ import std/strutils
 import cliargs
 import compat
 import types
-import x11_ipc
+import native_ipc as ipc
 import daemon_client
 
 #
@@ -14,7 +14,7 @@ import daemon_client
 #
 
 proc focusedWinid*(): string =
-  shvArgs("sirocco", "window", @["focused"], 1, 1).strip()
+  ipc.focused()
 
 proc tryWmGroup*(winid: string, group: var uint32): bool =
   let reply = queryDaemon(RequestQueryClientState, winid)
@@ -177,9 +177,9 @@ proc wmGroups*(): seq[WmGroupEntry] =
     result.add((client.winid, client.group))
 
 proc wmSnapshot*(): WmSnapshot =
-  let reply = shvStatus("sirocco", ["window", "snapshot"])
+  let reply = ipc.snapshot()
   if reply.status != 0:
-    quit("window_query wm snapshot failed: " & $reply.status)
+    quit("window_query wm snapshot failed: " & reply.error)
   result = parseWmSnapshot(reply.output)
 
 proc cachedWmSnapshot*(): WmSnapshot =
@@ -204,7 +204,7 @@ proc tryClientToken*(winid: string, token: var ClientToken): bool =
 
 proc tryWmSnapshot*(snapshot: var WmSnapshot): bool =
   try:
-    let reply = shvStatus("sirocco", ["window", "snapshot"])
+    let reply = ipc.snapshot()
     if reply.status != 0:
       return false
     snapshot = parseWmSnapshotChecked(reply.output)
@@ -233,20 +233,6 @@ proc classname*(winid: string): string =
   if reply.body.len == 0:
     quit("window_query classname: empty WM_CLASS")
   reply.body
-
-var directIpc: X11Ipc
-
-proc directConnection(): bool =
-  if directIpc.isOpen:
-    return true
-  directIpc.open()
-
-proc directFailure(operation: string) =
-  let reason =
-    if directIpc.lastFailure.len > 0: " " & directIpc.lastFailure
-    else: ""
-  directIpc.close()
-  quit("window_query " & operation & " failed:" & reason)
 
 proc parseGeometryBody*(output: string): Geometry =
   proc fail(error: string) =
@@ -286,40 +272,16 @@ proc parseGeometryBody*(output: string): Geometry =
     fail("incomplete window geometry")
 
 proc geometry*(winid: string = ""): Geometry =
-  var id = 0'u32
-  let explicit = winid != ""
-  if explicit:
-    let parsed = parseArguments("window geometry", @[winid], [ArgWinid]).winid
-    try:
-      id = parseHexInt(parsed).uint32
-    except ValueError:
-      quit("window_query geometry: malformed winid " & winid)
-
-  if not directConnection():
-    directFailure("geometry")
-  var body: string
-  if not directIpc.geometry(id, explicit, body):
-    directFailure("geometry")
-  parseGeometryBody(body)
+  let a = parseArguments("window geometry", (if winid.len == 0: @[] else: @[winid]), [ArgWinid])
+  parseGeometryBody(ipc.geometry(ipc.windowId(a.winid)))
 
 proc geometry*(args: seq[string]): string =
-  shvArgs("sirocco", "window", @["geometry"] & args, 1, 2)
+  requireArgs("window geometry", args, 0, 1)
+  let a = parseArguments("window geometry", args, [ArgWinid])
+  ipc.geometry(ipc.windowId(a.winid))
 
 proc stack*(winid: string = ""): seq[string] =
-  let args =
-    if winid.len == 0:
-      @["stack"]
-    else:
-      @["stack", winid]
-
-  result =
-    shvArgs(
-      "sirocco",
-      "window",
-      args,
-      args.len,
-      args.len
-  ).splitLines()
+  ipc.stack(ipc.windowId(winid)).splitLines()
 
 proc parseStackGeometries*(output: string): seq[StackGeometryEntry] =
   if output.len == 0:
@@ -350,35 +312,11 @@ proc parseStackGeometries*(output: string): seq[StackGeometryEntry] =
     ))
 
 proc stackGeometries*(winid: string = ""): seq[StackGeometryEntry] =
-  if not directConnection():
-    directFailure("stack geometries")
-
-  var id = 0'u32
-  var explicit = winid.len > 0
-  if explicit:
-    let parsed = parseArguments(
-      "window stack-geometries",
-      @[winid],
-      [ArgWinid]
-    ).winid
-    try:
-      id = parseHexInt(parsed).uint32
-    except ValueError:
-      quit("window_query stack geometries: malformed winid " & winid)
-
-  var body: string
-  if not directIpc.stackGeometries(id, explicit, body):
-    directFailure("stack geometries")
-  parseStackGeometries(body.strip())
+  let a = parseArguments("window stack-geometries", (if winid.len == 0: @[] else: @[winid]), [ArgWinid])
+  parseStackGeometries(ipc.stackGeometries(ipc.windowId(a.winid)))
 
 proc applyGeometriesBody*(body: string) =
-  if not directConnection():
-    directFailure("apply geometries")
-  if not directIpc.applyGeometries(body):
-    directFailure("apply geometries")
+  ipc.applyGeometries(body)
 
 proc applyGeometriesCheckedBody*(body: string) =
-  if not directConnection():
-    directFailure("apply geometries checked")
-  if not directIpc.applyGeometriesChecked(body):
-    directFailure("apply geometries checked")
+  ipc.applyGeometriesChecked(body)

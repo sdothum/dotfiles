@@ -1,5 +1,7 @@
 import std/posix
 import std/strutils
+import std/monotimes
+import std/times
 
 {.emit: "#include <xcb/xcb.h>".}
 
@@ -119,9 +121,6 @@ proc xcb_create_window_checked(connection: ptr XcbConnection,
   width, height, borderWidth: uint16, class, visual: uint32,
   valueMask: uint32, values: ptr uint32): XcbVoidCookie
   {.importc, cdecl, header: "xcb/xcb.h".}
-proc xcb_destroy_window_checked(connection: ptr XcbConnection,
-  window: XcbWindow): XcbVoidCookie
-  {.importc, cdecl, header: "xcb/xcb.h".}
 proc xcb_send_event_checked(connection: ptr XcbConnection, propagate: uint8,
   destination: XcbWindow, eventMask: uint32, event: cstring): XcbVoidCookie
   {.importc, cdecl, header: "xcb/xcb.h".}
@@ -156,6 +155,13 @@ proc xcb_change_property(connection: ptr XcbConnection, mode: uint8,
   window, property, typ: XcbAtom, format: uint8, dataLength: uint32,
   data: pointer): XcbVoidCookie
   {.importc, cdecl, header: "xcb/xcb.h".}
+proc xcb_delete_property(connection: ptr XcbConnection, window: XcbWindow,
+    property: XcbAtom): XcbVoidCookie {.importc, cdecl, header: "xcb/xcb.h".}
+proc xcb_screen_next(screen: ptr XcbScreenIterator) {.importc, cdecl, header: "xcb/xcb.h".}
+proc xcb_change_property_checked(connection: ptr XcbConnection, mode: uint8,
+    window: XcbWindow, property, kind: XcbAtom, format: uint8,
+    length: uint32, data: pointer): XcbVoidCookie {.importc, cdecl, header: "xcb/xcb.h".}
+
 proc c_free(value: pointer) {.importc: "free", cdecl, header: "stdlib.h".}
 
 type X11SnapshotQuery* = object
@@ -164,6 +170,7 @@ type X11SnapshotQuery* = object
   commandAtom: XcbAtom
   responseAtom: XcbAtom
   requestAtom: XcbAtom
+  replyWindow: XcbWindow
   lastFailure*: string
   lastResponse*: string
 
@@ -288,12 +295,18 @@ proc failed(query: var X11SnapshotQuery, stage: string): bool =
 
 proc close*(query: var X11SnapshotQuery) =
   if query.connection != nil:
+    # Disconnect destroys the reply window and frees XCB's pending event/reply queues.
     xcb_disconnect(cast[ptr XcbConnection](query.connection))
-    query.connection = nil
-    query.root = 0
-    query.commandAtom = 0
-    query.responseAtom = 0
-    query.requestAtom = 0
+  # Also reset partially initialized sessions, which may not own a connection.
+  query.connection = nil
+  query.replyWindow = 0
+  query.root = 0
+  query.commandAtom = 0
+  query.responseAtom = 0
+  query.requestAtom = 0
+  query.lastResponse = ""
+  # lastFailure is diagnostic only; failed() sets it after cleanup.
+
 
 proc intern(connection: ptr XcbConnection, name: string, atom: var XcbAtom): bool =
   let cookie = xcb_intern_atom(connection, 0, name.len.uint16, name.cstring)
@@ -309,28 +322,21 @@ proc open*(query: var X11SnapshotQuery): bool =
   query.lastFailure = ""
   var screenNumber: cint
   let connection = xcb_connect(nil, addr screenNumber)
+  query.connection = cast[pointer](connection)
   if connection == nil or xcb_connection_has_error(connection) != 0:
-    if connection != nil:
-      xcb_disconnect(connection)
+    query.close()
     return query.failed("CONNECT")
-  let screen = xcb_setup_roots_iterator(xcb_get_setup(connection))
+  var screen = xcb_setup_roots_iterator(xcb_get_setup(connection))
+  for unused in 0 ..< int(screenNumber):
+    xcb_screen_next(addr screen)
   if screen.data == nil or
       not intern(connection, "__WM_IPC_COMMAND", query.commandAtom) or
       not intern(connection, "__WM_IPC_RESPONSE", query.responseAtom) or
       not intern(connection, "__WM_IPC_REQUEST", query.requestAtom):
-    xcb_disconnect(connection)
+    query.close()
     return query.failed("INTERN_ATOMS")
-  query.connection = cast[pointer](connection)
   query.root = screen.data.root
   true
-
-proc destroyReplyWindow(query: X11SnapshotQuery, window: XcbWindow) =
-  if query.connection != nil:
-    let connection = cast[ptr XcbConnection](query.connection)
-    let error = xcb_request_check(connection,
-      xcb_destroy_window_checked(connection, window))
-    if error != nil:
-      c_free(error)
 
 proc snapshotBody*(response: string, body: var string): bool =
   if not (response.startsWith("OK\nSNAPSHOT 1\n") or
@@ -349,94 +355,112 @@ proc okBody*(response: string, body: var string): bool =
     return true
   false
 
+# A disconnected client's XID range can immediately be reused by XCB. Keep
+# ambiguous reply XIDs retired for this process, even across connections: a
+# stopped WM may still hold a request addressed to one of them. This is local
+# allocation bookkeeping, not a wire-level request identifier.
+var retiredReplyWindows: seq[XcbWindow]
+
+proc requestFailed(query: var X11SnapshotQuery, reason: string): bool =
+  # Never reuse a reply window after an ambiguous failure: a late reply has
+  # no request ID and could otherwise satisfy the next operation.
+  if query.replyWindow != 0 and query.replyWindow notin retiredReplyWindows:
+    retiredReplyWindows.add(query.replyWindow)
+  query.close()
+  query.failed(reason)
+
+proc atom*(query: var X11SnapshotQuery, name: string, value: var uint32): bool =
+  query.isOpen() and intern(cast[ptr XcbConnection](query.connection), name, value)
+
+proc trySend*(query: var X11SnapshotQuery, command: uint32,
+    arguments: array[4, uint32]): bool =
+  if not query.isOpen(): return query.requestFailed("CONNECT")
+  let connection = cast[ptr XcbConnection](query.connection)
+  var message = XcbClientMessageEvent(responseType: 33, format: 32,
+    kind: query.commandAtom)
+  message.data[0] = command
+  for i in 0 .. 3: message.data[i + 1] = arguments[i]
+  let error = xcb_request_check(connection, xcb_send_event_checked(connection,
+    0, query.root, XcbEventMaskSubstructureRedirect, cast[cstring](addr message)))
+  if error != nil:
+    c_free(error)
+    return query.requestFailed("SEND_REQUEST")
+  if xcb_flush(connection) <= 0: return query.requestFailed("FLUSH")
+  true
+
 proc tryRequest*(query: var X11SnapshotQuery, command, data2, data3, data4: uint32,
-    requestBody: string, output: var string): bool =
+    requestBody: string, output: var string, timeoutMs = QueryTimeoutMs,
+    groupNo = 0'u32): bool =
   output = ""
   query.lastResponse = ""
-  if query.connection == nil or
-      xcb_connection_has_error(cast[ptr XcbConnection](query.connection)) != 0:
-    return query.failed("CONNECT")
-
+  query.lastFailure = ""
+  if not query.isOpen(): return query.requestFailed("CONNECT")
   let connection = cast[ptr XcbConnection](query.connection)
-  let replyWindow = cast[XcbWindow](xcb_generate_id(connection))
-  var eventMask = XcbPropertyChangeMask
-  let createError = xcb_request_check(connection,
-    xcb_create_window_checked(connection, XcbCopyFromParent, replyWindow,
-      query.root, 0, 0, 1, 1, 0, XcbInputOnly, XcbCopyFromParent,
-      XcbCwEventMask, addr eventMask))
-  if createError != nil:
-    c_free(createError)
-    return query.failed("CREATE_REPLY_WINDOW")
-
-  var message = XcbClientMessageEvent()
-  message.responseType = 33'u8
-  message.format = 32'u8
-  message.window = query.root
-  message.kind = query.commandAtom
-  message.data[0] = command
-  message.data[1] = replyWindow
-  message.data[2] = data2
-  message.data[3] = data3
-  message.data[4] = data4
-
+  if query.replyWindow == 0:
+    while true:
+      query.replyWindow = xcb_generate_id(connection)
+      if query.replyWindow == high(uint32):
+        query.replyWindow = 0
+        return query.requestFailed("ALLOCATE_REPLY_WINDOW")
+      if query.replyWindow notin retiredReplyWindows:
+        break
+    var eventMask = XcbPropertyChangeMask
+    let error = xcb_request_check(connection, xcb_create_window_checked(connection,
+      XcbCopyFromParent, query.replyWindow, query.root, 0, 0, 1, 1, 0,
+      XcbInputOnly, XcbCopyFromParent, XcbCwEventMask, addr eventMask))
+    if error != nil:
+      c_free(error)
+      return query.requestFailed("CREATE_REPLY_WINDOW")
+  let replyWindow = query.replyWindow
+  # Reuse one reply window. Clear request payloads so filters cannot leak.
+  discard xcb_delete_property(connection, replyWindow, query.requestAtom)
   if requestBody.len > 0:
     discard xcb_change_property(connection, 0, replyWindow, query.requestAtom,
       XcbAtomString, 8, requestBody.len.uint32, cast[pointer](requestBody.cstring))
-
-  let sendError = xcb_request_check(connection,
-    xcb_send_event_checked(connection, 0, query.root,
-      XcbEventMaskSubstructureRedirect, cast[cstring](addr message)))
-  if sendError != nil:
-    c_free(sendError)
-    query.destroyReplyWindow(replyWindow)
-    return query.failed("SEND_REQUEST")
-  if xcb_flush(connection) < 0:
-    query.destroyReplyWindow(replyWindow)
-    return query.failed("FLUSH")
-
-  var descriptor = TPollfd(fd: xcb_get_file_descriptor(connection),
-    events: POLLIN, revents: 0)
-  if posix.poll(addr descriptor, Tnfds(1), QueryTimeoutMs.cint) <= 0:
-    query.destroyReplyWindow(replyWindow)
-    return query.failed("WAIT_RESPONSE_EVENT")
-
-  var matched = false
+  elif groupNo > 0:
+    var group = groupNo
+    let error = xcb_request_check(connection, xcb_change_property_checked(connection,
+      0, replyWindow, query.requestAtom, 6, 32, 1, addr group))
+    if error != nil:
+      c_free(error)
+      return query.requestFailed("WRITE_GROUP")
+  if not query.trySend(command, [replyWindow, data2, data3, data4]): return false
+  let deadline = getMonoTime() + initDuration(milliseconds = timeoutMs)
   while true:
-    let event = xcb_poll_for_event(connection)
-    if event == nil:
-      break
-    if (event.responseType and 0x7f'u8) == XcbPropertyNotify:
-      let property = cast[ptr XcbPropertyNotifyEvent](event)
-      if property.window == replyWindow and property.atom == query.responseAtom:
-        matched = true
-    c_free(event)
-    if matched:
-      break
-  if not matched:
-    query.destroyReplyWindow(replyWindow)
-    return query.failed("WAIT_RESPONSE_EVENT")
+    while true:
+      let event = xcb_poll_for_event(connection)
+      if event == nil: break
+      var matched = false
+      if (event.responseType and 0x7f'u8) == XcbPropertyNotify:
+        let property = cast[ptr XcbPropertyNotifyEvent](event)
+        matched = property.window == replyWindow and property.atom == query.responseAtom and property.state == 0
+      c_free(event)
+      if not matched: continue
+      var error: ptr XcbGenericError
+      let reply = xcb_get_property_reply(connection,
+        xcb_get_property(connection, 1, replyWindow, query.responseAtom,
+          XcbAtomString, 0, high(uint32)), addr error)
+      if error != nil: c_free(error)
+      if reply == nil: return query.requestFailed("READ_PROPERTY")
+      let length = xcb_get_property_value_length(reply)
+      if reply.format != 8 or reply.propertyType != XcbAtomString or length <= 0:
+        c_free(reply)
+        return query.requestFailed("INVALID_RESPONSE")
+      output = newString(length)
+      copyMem(addr output[0], xcb_get_property_value(reply), length)
+      c_free(reply)
+      query.lastResponse = output
+      return true
+    if xcb_connection_has_error(connection) != 0:
+      return query.requestFailed("CONNECTION_LOST")
+    let remaining = (deadline - getMonoTime()).inMilliseconds
+    if remaining <= 0: return query.requestFailed("TIMEOUT (completion unknown)")
+    var descriptor = TPollfd(fd: xcb_get_file_descriptor(connection), events: POLLIN)
+    let ready = posix.poll(addr descriptor, Tnfds(1), remaining.cint)
+    if ready < 0 and errno == EINTR: continue
+    if ready < 0 or (descriptor.revents and (POLLERR or POLLHUP or POLLNVAL)) != 0:
+      return query.requestFailed("CONNECTION_LOST")
 
-  var propertyError: ptr XcbGenericError
-  let reply = xcb_get_property_reply(connection,
-    xcb_get_property(connection, 0, replyWindow, query.responseAtom,
-      XcbAtomString, 0, high(uint32)), addr propertyError)
-  if propertyError != nil:
-    c_free(propertyError)
-  if reply == nil:
-    query.destroyReplyWindow(replyWindow)
-    return query.failed("READ_PROPERTY")
-  let length = xcb_get_property_value_length(reply)
-  if length <= 0:
-    c_free(reply)
-    query.destroyReplyWindow(replyWindow)
-    return query.failed("READ_PROPERTY")
-  let bytes = cast[ptr UncheckedArray[char]](xcb_get_property_value(reply))
-  output = newString(length)
-  copyMem(addr output[0], bytes, length)
-  c_free(reply)
-  query.destroyReplyWindow(replyWindow)
-  query.lastResponse = output
-  true
 
 const
   IpcWindowGeometry = 16'u32
@@ -487,92 +511,11 @@ proc tryApplyGeometriesChecked*(query: var X11SnapshotQuery, body: string): bool
 
 proc trySnapshotWithTimeout*(query: var X11SnapshotQuery, output: var string,
     timeoutMs = QueryTimeoutMs): bool =
-  output = ""
-  if query.connection == nil or
-      xcb_connection_has_error(cast[ptr XcbConnection](query.connection)) != 0:
-    return query.failed("CONNECT")
-
-  let connection = cast[ptr XcbConnection](query.connection)
-
-  let replyWindow = cast[XcbWindow](xcb_generate_id(connection))
-  var eventMask = XcbPropertyChangeMask
-  let createError = xcb_request_check(connection,
-    xcb_create_window_checked(connection, XcbCopyFromParent, replyWindow,
-      query.root, 0, 0, 1, 1, 0, XcbInputOnly, XcbCopyFromParent,
-      XcbCwEventMask, addr eventMask))
-  if createError != nil:
-    c_free(createError)
-    return query.failed("CREATE_REPLY_WINDOW")
-
-  var message = XcbClientMessageEvent()
-  message.responseType = 33'u8
-  message.format = 32'u8
-  message.window = query.root
-  message.kind = query.commandAtom
-  message.data[0] = IpcWindowSnapshot
-  message.data[1] = replyWindow
-  message.data[2] = 0
-  message.data[3] = IpcScopeAll
-  message.data[4] = IpcSelectorNone
-
-  let sendError = xcb_request_check(connection,
-    xcb_send_event_checked(connection, 0, query.root,
-      XcbEventMaskSubstructureRedirect, cast[cstring](addr message)))
-  if sendError != nil:
-    c_free(sendError)
-    query.destroyReplyWindow(replyWindow)
-    return query.failed("SEND_REQUEST")
-  if xcb_flush(connection) < 0:
-    query.destroyReplyWindow(replyWindow)
-    return query.failed("FLUSH")
-
-  var descriptor = TPollfd(fd: xcb_get_file_descriptor(connection),
-    events: POLLIN, revents: 0)
-  if posix.poll(addr descriptor, Tnfds(1), timeoutMs.cint) <= 0:
-    query.destroyReplyWindow(replyWindow)
-    return query.failed("WAIT_RESPONSE_EVENT")
-
-  var matched = false
-  while true:
-    let event = xcb_poll_for_event(connection)
-    if event == nil:
-      break
-    if (event.responseType and 0x7f'u8) == XcbPropertyNotify:
-      let property = cast[ptr XcbPropertyNotifyEvent](event)
-      if property.window == replyWindow and property.atom == query.responseAtom:
-        matched = true
-    c_free(event)
-    if matched:
-      break
-  if not matched:
-    query.destroyReplyWindow(replyWindow)
-    return query.failed("WAIT_RESPONSE_EVENT")
-
-  var propertyError: ptr XcbGenericError
-  let reply = xcb_get_property_reply(connection,
-    xcb_get_property(connection, 0, replyWindow, query.responseAtom,
-      XcbAtomString, 0, high(uint32)), addr propertyError)
-  if propertyError != nil:
-    c_free(propertyError)
-  if reply == nil:
-    query.destroyReplyWindow(replyWindow)
-    return query.failed("READ_PROPERTY")
-  let length = xcb_get_property_value_length(reply)
-  if length <= 0:
-    c_free(reply)
-    query.destroyReplyWindow(replyWindow)
-    return query.failed("READ_PROPERTY")
-  let bytes = cast[ptr UncheckedArray[char]](xcb_get_property_value(reply))
-  output = newString(length)
-  copyMem(addr output[0], bytes, length)
-  c_free(reply)
-  query.destroyReplyWindow(replyWindow)
-
-  var body: string
-  if not snapshotBody(output, body):
-    output = ""
-    return query.failed("RESPONSE_ENVELOPE")
-  output = body
+  var response: string
+  if not query.tryRequest(IpcWindowSnapshot, 0, IpcScopeAll, IpcSelectorNone,
+      "", response, timeoutMs): return false
+  if not snapshotBody(response, output):
+    return query.failed("RESPONSE_ENVELOPE " & response)
   true
 
 proc trySnapshot*(query: var X11SnapshotQuery, output: var string,

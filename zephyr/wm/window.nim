@@ -1,3 +1,4 @@
+import native_ipc as ipc
 import std/envvars
 import std/os
 import std/strutils
@@ -45,19 +46,19 @@ proc liveIds*(args: seq[string]): string =
 
   if a.classname == "" and a.name == "":
     if a.all:
-      shvArgs("sirocco", "window", @["ids", "--all"], 2, 2)
+      ipc.ids(all = true)
     else:
-      shvArgs("sirocco", "window", @["ids"], 1, 1)
+      ipc.ids(all = false)
   elif a.classname != "":
     if a.all:
-      shvArgs("sirocco", "window", @["ids", "--all", a.classname], 3, 3)
+      ipc.ids(all = true, selector = ipc.ClassSelector, pattern = a.classname)
     else:
-      shvArgs("sirocco", "window", @["ids", a.classname], 2, 2)
+      ipc.ids(all = false, selector = ipc.ClassSelector, pattern = a.classname)
   else:
     if a.all:
-      shvArgs("sirocco", "window", @["ids", "--all", "--name", a.name], 4, 4)
+      ipc.ids(all = true, selector = ipc.NameSelector, pattern = a.name)
     else:
-      shvArgs("sirocco", "window", @["ids", "--name", a.name], 3, 3)
+      ipc.ids(all = false, selector = ipc.NameSelector, pattern = a.name)
 
 proc cachedFilteredIds(includeAll: bool, classname, name: string, groupNo = -1): string =
   let kind = if name.len > 0: RequestQueryNameList else: RequestQueryClassList
@@ -139,13 +140,8 @@ proc count*(): int =
   parseInt(count(@[]))
 
 proc focus*(winid: string) =
-  runvArgs(
-    "sirocco",
-    "window",
-    @["focus", winid],
-    2,
-    2
-  )
+  if winid == "--last": ipc.focusLast()
+  else: ipc.focus(ipc.windowId(winid)).require()
 
 proc layer*(args: seq[string]) =
   requireArgs("window layer", args, 1, 2)
@@ -153,7 +149,12 @@ proc layer*(args: seq[string]) =
   if a.layer.len == 0:
     quit("window layer: layer must be normal, above or overlay")
   let winid = if a.winid.len == 0: query.focusedWinid() else: a.winid
-  runvArgs("sirocco", "window", @["layer", a.layer, winid], 3, 3)
+  let layer = case a.layer.toLowerAscii()
+    of "normal": ipc.Normal
+    of "above": ipc.Above
+    of "overlay": ipc.Overlay
+    else: quit("window layer: invalid layer")
+  ipc.layer(ipc.windowId(winid), layer)
 
 proc layer*(value: string, winid: string = "") =
   layer(@[value, winid])
@@ -210,9 +211,9 @@ proc stack*(args: seq[string]): string =
   )
 
   if args.len == 0:
-    shvArgs("sirocco", "window", @["stack"], 1, 1)
+    ipc.stack()
   else:
-    shvArgs("sirocco", "window", @["stack", a.winid], 2, 2)
+    ipc.stack(ipc.windowId(a.winid))
 
 proc screenGeometry*(): ScreenGeometry =
   let metrics = screen.metrics()
@@ -239,17 +240,8 @@ proc wtp*(rect: Geometry, winid: string = "") =
     else:
       winid
 
-  runvArgs(
-    "sirocco",
-    "window",
-    @[
-      "move", $rect.x, $rect.y, $wid,
-      ".",
-      "window", "resize", $rect.width, $rect.height, $wid
-    ],
-    10,
-    10
-  )
+  ipc.move(rect.x, rect.y, ipc.windowId(wid))
+  ipc.resize(rect.width, rect.height, ipc.windowId(wid))
 
 type GeometryApplication* = tuple[
   winid: string,
@@ -294,17 +286,7 @@ proc serializeCheckedGeometries*(entries: seq[CheckedGeometryApplication]): stri
 proc raiseMany*(winids: seq[string]) =
   if winids.len == 0:
     return
-  var args = @[
-    "raise-many"
-  ]
-  args.add(winids)
-  runvArgs(
-    "sirocco",
-    "window",
-    args,
-    1,
-    high(int)
-  )
+  ipc.raiseMany(winids.mapIt(ipc.windowId(it)))
 
 #
 # Actions
@@ -326,13 +308,7 @@ proc move*(args: seq[string]) =
   if winid == "":
     return
 
-  runvArgs(
-    "sirocco",
-    "window",
-    @["move", "--relative", $a.xy.x, $a.xy.y, winid],
-    5,
-    5
-  )
+  ipc.move(a.xy.x, a.xy.y, ipc.windowId(winid), relative = true)
 
   focus(winid)
 
@@ -482,9 +458,9 @@ proc group*(args: seq[string]) =
     return
 
   let group = groups.currentLive()
-  runvArgs("sirocco", "group", @["remove", winid], 2, 2)
+  ipc.removeFromGroup(ipc.windowId(winid))
   removeDir(root / group / winid)
-  runvArgs("sirocco", "group", @["add", $a.group, winid], 3, 3)
+  ipc.addToGroup(a.group, ipc.windowId(winid))
   createDir(root / $a.group / winid)
 
   let sourceFocus = (root & ":focus") / group / winid
@@ -535,13 +511,7 @@ proc hide*(args: seq[string]) =
 
   let targetClassname = query.classname(a.winid)
 
-  runvArgs(
-    "sirocco",
-    "window",
-    @["hide", a.winid],
-    2,
-    2
-  )
+  ipc.hide(ipc.windowId(a.winid)).require()
 
   let hiddenPath = getEnv("HIDDEN") / a.winid
   removeDir(hiddenPath)
@@ -615,13 +585,7 @@ proc shift*(args: seq[string]) =
   of Right:
     width = g.width
 
-  runvArgs(
-    "sirocco",
-    "window",
-    @["move", "--relative", $width, $height, a.winid],
-    5,
-    5
-  )
+  ipc.move(width, height, ipc.windowId(a.winid), relative = true)
 
   # Relative movement can first reset WM-owned special state, so its final
   # rectangle is not always derivable from the source rectangle alone.
@@ -692,21 +656,9 @@ proc snap*(args: seq[string], providedScreen = ScreenGeometry()) =
     )
 
     if a.winid != "":
-      runvArgs(
-        "sirocco",
-        "window",
-        @["move", $x, $y, a.winid],
-        4,
-        4
-      )
+      ipc.move(x, y, ipc.windowId(a.winid))
     else:
-      runvArgs(
-        "sirocco",
-        "window",
-        @["move", $x, $y],
-        3,
-        3
-      )
+      ipc.move(x, y)
 
     if destination == g:
       # A move can reset WM-owned special state even at unchanged coordinates.
@@ -1188,13 +1140,13 @@ proc swap*(args: seq[string]) =
   let source = query.focusedWinid()
   let sourceGeometry = query.geometry(source)
 
-  runvArgs(
-    "sirocco",
-    "window",
-    @["focus", "--cardinal", a.cardinal],
-    3,
-    3
-  )
+  let direction = case a.cardinal.toLowerAscii()
+    of "up", "north": ipc.North
+    of "right", "east": ipc.East
+    of "down", "south": ipc.South
+    of "left", "west": ipc.West
+    else: quit("window swap: invalid direction")
+  ipc.focusCardinal(direction)
 
   let target = query.focusedWinid()
 
@@ -1243,13 +1195,7 @@ proc await*(args: seq[string]) =
       fail("could not sync " & a.classname)
     if winids.len > 1:
       fail("indeterminate window")
-    if statusvArgs(
-        "sirocco",
-        "window",
-        @["focus", winids[0]],
-        2,
-        2
-    ) != 0:
+    if ipc.focus(ipc.windowId(winids[0])).status != 0:
       fail("could not focus " & winids[0])
 
   elif a.name != "":
@@ -1263,7 +1209,7 @@ proc await*(args: seq[string]) =
       quit("could not sync --name " & a.name)
     if winids.len > 1:
       quit("indeterminate window")
-    discard statusvArgs("sirocco", "window", @["focus", winids[0]], 2, 2)
+    discard ipc.focus(ipc.windowId(winids[0])).status
 
 proc await*(selector, property: string) =
   await(@[selector, property])
@@ -1394,19 +1340,19 @@ proc toggle*(args: seq[string]) =
 
   let winids =
     if a.classname != "":
-      shvArgs("sirocco", "window", @["ids", "--all", a.classname], 3, 3)
+      ipc.ids(all = true, selector = ipc.ClassSelector, pattern = a.classname)
     else:
-      shvArgs("sirocco", "window", @["ids", "--all", "--name", a.name], 4, 4)
+      ipc.ids(all = true, selector = ipc.NameSelector, pattern = a.name)
 
   if winids == "":
     quit(1)
 
   for winid in winids.splitLines():
     let retcode =
-      statusvArgs("sirocco", "window", @["hide", winid], 2, 2)
+      ipc.hide(ipc.windowId(winid)).status
 
     if retcode != 0:
-      runvArgs("sirocco", "window", @["focus", winid], 2, 2)
+      ipc.focus(ipc.windowId(winid)).require()
 
 #
 # Dispatch

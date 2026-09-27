@@ -5,6 +5,12 @@ import std/unittest
 import ../wm/state_reconciliation
 import ../wm/window_query
 
+# Every case calls reconcileSnapshot(), which queries cirrus' group count.
+# Run via run_native_regressions.py; never inherit a desktop DISPLAY by accident.
+if getEnv("ZEPHYR_PRIVATE_TEST_DISPLAY").len == 0 or
+    getEnv("DISPLAY") != getEnv("ZEPHYR_PRIVATE_TEST_DISPLAY"):
+  quit("state reconciliation requires the private WM fixture: tests/run_native_regressions.py")
+
 proc makeRoot(name: string): string =
   result = getTempDir() / (name & "-" & $getCurrentProcessId())
   if dirExists(result):
@@ -15,11 +21,7 @@ proc makeRoot(name: string): string =
   createDir(result / "group")
   createDir(result / "group:focus")
   createDir(result / "hidden")
-  let bin = result / "bin"
-  createDir(bin)
-  writeFile(bin / "sirocco", "#!/bin/sh\n[ \"$1 $2\" = \"group count\" ] && echo '10' || exit 1\n")
-  setFilePermissions(bin / "sirocco", {fpUserExec, fpUserRead, fpUserWrite})
-  putEnv("PATH", bin & ":" & getEnv("PATH"))
+  # Requires cirrus on DISPLAY; group count now uses the native transport.
 
 proc cleanRoot(root: string) =
   delEnv("GROUP")

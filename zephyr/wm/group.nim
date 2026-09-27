@@ -1,3 +1,4 @@
+import native_ipc as ipc
 import std/os
 import std/strutils
 import std/tables
@@ -27,7 +28,7 @@ const GroupNames* = [
 proc count*(args: seq[string]): int =
   requireNoArgs("group count", args)
   try:
-    result = parseInt(shvArgs("sirocco", "group", @["count"], 1, 1).strip())
+    result = parseInt(ipc.groupCount().strip())
   except ValueError:
     quit("group count: invalid WM group count")
 
@@ -47,10 +48,10 @@ proc current*(args: seq[string]): string =
   reply.body
 
 proc current*(): string =
-  shvArgs("sirocco", "group", @["current"], 1, 1)
+  ipc.groupCurrent()
 
 proc currentLive*(): string =
-  shvArgs("sirocco", "group", @["current"], 1, 1)
+  ipc.groupCurrent()
 
 proc id*(args: seq[string]): int =
   requireArgs("group id", args, 1)
@@ -185,13 +186,7 @@ proc remove*(args: seq[string]) =
     removeDir(root & ":focus" / $group / a.winid)
 
   if a.close:
-    runvArgs(
-      "sirocco",
-      "window",
-      @["close", a.winid],
-      2,
-      2
-    )
+    ipc.closeWindow(ipc.windowId(a.winid))
 
 proc remove*(winid: string) =
   remove(@[winid])
@@ -241,23 +236,11 @@ proc close*(args: seq[string]) =
       removeDir(path)
 
   for winid in members:
-    runvArgs(
-      "sirocco",
-      "window",
-      @["close", winid],
-      2,
-      2
-    )
+    ipc.closeWindow(ipc.windowId(winid))
 
     removeKnownGroupState(winid)
 
-  runvArgs(
-    "sirocco",
-    "group",
-    @["clear", $a.group],
-    2,
-    2
-  )
+  ipc.clearGroup(a.group)
 
   removeDir(root / $a.group)
   removeDir(root & ":focus" / $a.group)
@@ -280,34 +263,16 @@ proc desktop*(args: seq[string]) =
   let root = getEnv("GROUP")
   for g in 1 ..< count():
     if g != a.group:
-      runvArgs(
-        "sirocco",
-        "group",
-        @["deactivate", $g],
-        2,
-        2
-      )
+      ipc.deactivateGroup(g)
 
   removeDir(root & ":deactivated")
 
-  runvArgs(
-    "sirocco",
-    "group",
-    @["activate", $a.group],
-    2,
-    2
-  )
+  ipc.activateGroup(a.group)
 
   let winid = singleChildName(root & ":focus" / $a.group)
 
   if winid != "":
-    runvArgs(
-      "sirocco",
-      "window",
-      @["focus", winid],
-      2,
-      2
-    )
+    ipc.focus(ipc.windowId(winid)).require()
 
 proc focus*(args: seq[string]) =
   requireArgs("group focus", args, 1)
@@ -335,13 +300,7 @@ proc focus*(args: seq[string]) =
 
   setCurrentGroup($a.group, currentGroup)
 
-  runvArgs(
-    "sirocco",
-    "group",
-    @["activate", $a.group],
-    2,
-    2
-  )
+  ipc.activateGroup(a.group)
 
   removeDir(
     (root & ":deactivated") / $a.group
@@ -349,13 +308,7 @@ proc focus*(args: seq[string]) =
 
   let winid = validRememberedWinid(a.group)
   if winid != "":
-    runvArgs(
-      "sirocco",
-      "window",
-      @["focus", winid],
-      2,
-      2
-    )
+    ipc.focus(ipc.windowId(winid)).require()
 
 proc focus*(groupname: string) =
   let group = id(@[groupname])
@@ -399,24 +352,12 @@ proc restore*(args: seq[string]) =
   let root = getEnv("GROUP")
 
   for g in 1 ..< count():
-    runvArgs(
-      "sirocco",
-      "group",
-      @["activate", $g],
-      2,
-      2
-    )
+    ipc.activateGroup(g)
 
   removeDir(root & ":deactivated")
 
   if winid != "":
-    runvArgs(
-      "sirocco",
-      "window",
-      @["focus", winid],
-      2,
-      2
-    )
+    ipc.focus(ipc.windowId(winid)).require()
 
 proc toggle*(args: seq[string]) =
   requireArgs("group toggle", args, 1)
@@ -450,13 +391,7 @@ proc toggle*(args: seq[string]) =
   if winid == "":
     return
 
-  runvArgs(
-    "sirocco",
-    "group",
-    @["deactivate", $a.group],
-    2,
-    2
-  )
+  ipc.deactivateGroup(a.group)
 
   createDir(root & ":deactivated" / $a.group)
 
