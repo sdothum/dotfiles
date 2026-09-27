@@ -119,7 +119,7 @@ proc dispatch*(verb: string, rest: seq[string]) =
     video1080p()
 
   of "qutebrowser":
-    tile3Columns(GroupDesk, ClassQutebrowser)
+    tile3Columns(groups.current(), ClassQutebrowser)
   of "wiki":
     tile3Columns(GroupWiki, ClassWiki)
   of "zathura":
