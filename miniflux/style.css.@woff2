@@ -169,6 +169,10 @@
 	}
 }
 
+.alert.alert-error {
+	background-color: var(--input-background);
+}
+
 .logo {
 	color: var(--color-default);
 	font-family: "ottawa", sans-serif !important;
