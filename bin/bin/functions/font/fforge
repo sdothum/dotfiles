@@ -29,7 +29,9 @@ $(basename $0) i_flipped                             <shape>, experimental
 $(basename $0) l_[ascending|ascendmax]               <shape>
 $(basename $0) l_tailed                              <letters> <shape>
 $(basename $0) ligature                              <width>   <shape>
+$(basename $0) smallcap                              <lowercase> <U+glyph> <shape>
 $(basename $0) m_straight                            <shape>
+$(basename $0) n_straight                            <shape>
 $(basename $0) map                                   <family> <glyph> <glyph>, map U+<glyph> via commandline only
 $(basename $0) punctuation                           <emdash>  <shape>
 $(basename $0) Q_[horizontal|custom]                 <shape>
@@ -313,22 +315,16 @@ Generate(\$1);
 	done
 }
 
-# substitute m straight vertical sides
-m_straight() {
-	# copy char 0u1d0d and paste to char 0u006d
+smallcap() {
 	echo "
 Open(\$1);
-$(replace $(utf 'm') 0u1d0d)
-# Select($(utf 'm'));
-# Transform(135,00,00,100,00,00);
-# SetWidth($(echo "$shape * 1.5" | bc | cut -d. -f1));
-# ChangeWeight(-100);
+$(replace $(utf $lowercase) $smallcap)
 Generate(\$1);
-" >${LOG}:m_straight.script
+" >${LOG}:smallcap_$lowercase.script
 
 	for i in *ttf ;do
-		ditto m_straight $i
-		fontforge -quiet --script ${LOG}:m_straight.script $i
+		ditto smallcap_$lowercase $i
+		fontforge -quiet --script ${LOG}:smallcap_$lowercase.script $i
 	done
 }
 
@@ -1189,7 +1185,8 @@ case $1 in
 	l_ascending   ) shape=$2; shift ;;
 	l_ascendmax   ) shape=$2; shift ;;
 	l_tailed      ) letters=$2; width=$(( $3 * 925 / 1000 )); shift 2 ;;         # percent of "l" (tailed)
-	m_straight    ) shape=$2; shift ;;
+	smallcap      ) lowercase=$2; smallcap=$3; shape=$4; shift 3 ;;
+	n_straight    ) lowercase=$1; smallcap=$2; shape=$2; shift 3 ;;
 	ligature      ) [ $4 ] && { width=$2; shift 2; } || { shape=$2; shift; } ;;  # SEE: iosevka for tricky bits
 	map           ) [ $4 ] && { family=$2; from=$3; to=$4; shift 3; map; exit; } || usage ;;  # pwd commandline only!
 	punctuation   ) emdash=$2; shape=$3; shift 2 ;;

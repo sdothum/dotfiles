@@ -20,6 +20,7 @@ group=$(cat $MAILDIR/.mailsync:group)
 
 # push out any flag and trash changes when finished
 trap "mailsync $group" EXIT
+(sleep 1 && $AERC :vsplit) &  # HACK: allow folder sync to complete before vsplit
 
 notify aerc "<b>Ctrl-v</b>  vsplit\n<b>q</b>      close"
 # export KAKTUI=aerc  # FOR: avoid reseting term window upon exiting compose (tab) SEE: aerc.conf

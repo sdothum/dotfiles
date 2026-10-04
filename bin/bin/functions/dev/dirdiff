@@ -18,7 +18,7 @@ usage() { usage: "$(basename $0) [-[- | 1 | h | l | p | s | b | w | x | debug]] 
 # SEE: ${T} clauses for explicit source file type handling gymnastics
 
 # ignore='backups|debian|\.history|makepkg|nixos|plugged-custom|qmk_firmware|root|snippets|undo|vps'
-ignore='backups|debian|\.history|makepkg|nixos|plugged-custom|snippets|undo|vps'
+ignore='backups|debian|\.history|makepkg|\.mir|nixos|plugged-custom|snippets|undo|vps'
 
 DOTFILES=${DOTFILES:-/home/depot/dotfiles}  # default project snapshot
 DIRDIFF=/tmp/dirdiff

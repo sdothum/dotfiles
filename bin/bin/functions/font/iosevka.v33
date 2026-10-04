@@ -38,7 +38,7 @@ usage() {
 > heading | kindle | kobo[+] | menu | proof | webfont  (special)
 > monolexic (default) | atkinson | geometric | jost    (typefaces)
 > altmono | elementary | grote | grotesk | nerdfont    (glyph sets)
-> capadjust (C G O Q S U)
+> smallcaps | capadjust (C G O Q S U)
 
 > book+regular | descenders | double | open[+]
 > emdash=<decimal>
@@ -68,7 +68,7 @@ usage() {
 > p-[eared|serifed]
 > q-[hook[_]|tailed]
 > t-[asymmetric[+|-[-]]|cross[+]|descending[=+]|flat]
-> u-toothed
+> u-[tailed|toothed]
 > w-asymmetric
 > y-[straight|turn]
 
@@ -297,6 +297,7 @@ variant() {
 			t-cross        ) glyph t=hookless-short-neck2                               ;;
 			t-cross+       ) glyph t=hookless-short-neck                                ;;
 			t-flat         ) glyph t=flat-hook-short-neck2                              ;;
+			u-tailed       ) glyph u=tailed-serifless                                   ;;
 			u-toothed      ) glyph u=toothed                                            ;;
 			w-asymmetric   ) glyph w=straight-asymmetric-serifless                      ;;
 			y-straight     ) glyph y=straight-serifless                                 ;;
@@ -326,9 +327,9 @@ weight() {
 english_only() { exclude_chars='ranges = [[384, 401], [403, 505], [512, 535], [540, 566], [568, 585], [588, 709], [712, 712], [714, 727], [734, 768], [770, 805], [807, 820], [822, 915], [917, 936], [938, 955], [957, 959], [961, 7807], [7814, 7921], [7924, 8190], [8352, 8363], [8365, 8452], [8454, 8466], [8468, 8469], [8471, 8481], [8483, 8485], [8487, 8493], [8495, 8530], [8533, 8538], [8543, 8705], [8707, 8709], [8711, 8718], [8720, 8720], [8723, 8724], [8726, 8728], [8731, 8733], [8735, 8746], [8748, 8775], [8777, 8799], [8801, 8803], [8806, 9412], [9414, 9673], [9675, 9727], [9984, 11809], [11811, 11812], [11814, 64255], [64259, 130041]]'; }  # (??) [8826, 8827, 8880, 8881] not excluded
 latin_greek()  { exclude_chars='ranges = [[384, 401], [403, 505], [512, 535], [540, 566], [568, 585], [588, 709], [712, 712], [714, 727], [734, 768], [770, 805], [807, 820], [822, 879], [1024, 7678], [7936, 8190], [8352, 8363], [8365, 8452], [8454, 8466], [8468, 8469], [8471, 8481], [8483, 8485], [8487, 8493], [8495, 8530], [8533, 8538], [8543, 8705], [8707, 8709], [8711, 8718], [8720, 8720], [8723, 8724], [8726, 8728], [8731, 8733], [8735, 8746], [8748, 8775], [8777, 8799], [8801, 8803], [8806, 9412], [9414, 9673], [9675, 9727], [9984, 11809], [11811, 11812], [11814, 64255], [64259, 130041]]'; }
 cyrillic()     { exclude_chars='ranges = [[384, 401], [403, 505], [512, 535], [540, 566], [568, 585], [588, 709], [712, 712], [714, 727], [734, 768], [770, 805], [807, 820], [822, 879], [3584, 7678], [7936, 8190], [8352, 8363], [8365, 8452], [8454, 8466], [8468, 8469], [8471, 8481], [8483, 8485], [8487, 8493], [8495, 8530], [8533, 8538], [8543, 8705], [8707, 8709], [8711, 8718], [8720, 8720], [8723, 8724], [8726, 8728], [8731, 8733], [8735, 8746], [8748, 8775], [8777, 8799], [8801, 8803], [8806, 9412], [9414, 9673], [9675, 9727], [9984, 11809], [11811, 11812], [11814, 64255], [64259, 130041]]'; }
-fluent() { exclude_chars='ranges = [[3584, 3647], [8592, 9673], [9677, 11360], [12800, 42560], [57344, 64256], [65520, 130041]]'; }
-ascii()  { exclude_chars='ranges = [[128, 8210], [8232, 8591], [8602, 130041]]'; }
-digits() { exclude_chars='ranges = [[0, 47], [58, 130041]]'; }
+fluent()       { exclude_chars='ranges = [[3584, 3647], [8592, 9673], [9677, 11360], [12800, 42560], [57344, 64256], [65520, 130041]]'; }
+ascii()        { exclude_chars='ranges = [[42928, 130041]]'; }  # include smallcaps
+digits()       { exclude_chars='ranges = [[0, 47], [58, 130041]]'; }
 
 family()   { [ $1 ] || return 1; family=$1; }
 space()    { [ $1 = "M" ] && space=$1 || space=$(token decimal $1); }
@@ -359,6 +360,7 @@ cmdopts () {
 			# webfont      ) weight 500 medium; initial w; regular=medium ;;                               # heavier font for web usage
 			webfont        ) leading 1; initial w ;;
 			pseudo*        ) export PSEUDO_KERN=true; space 0.915 ;;                                       # SEE: fforge
+			smallcaps      ) variant 'SMALLCAPS'; smallcaps=true  ;;
 
 			# language
 			ascii          ) ascii;        ditto char_set "$1"; zero=unslashed              ;;
@@ -469,6 +471,7 @@ cmdopts () {
 			m-rounded-     ) variant $1 ;;
 			m-serifless    ) variant $1 ;;
 			m-straight     ) variant 'm=STRAIGHT'; m_straight=true ;;
+			n-straight     ) variant 'n=STRAIGHT'; n_straight=true ;;
 			p-eared        ) variant $1 ;;
 			p-serifed      ) variant $1 sb 0.7650 ;;         # add air for serif corner
 			q-hook         ) variant 'q=HOOK-TAILED';  q_hook=true; unset q_hook_; baseline=true ;;
@@ -485,6 +488,7 @@ cmdopts () {
 			t-descending   ) variant t-cross  'DESCENDING'; t_descending=true;  baseline=true ;;
 			t-descending+  ) variant t-cross  'DESCENDING'; t_descending_=true; baseline=true ;;
 			t-flat         ) variant $1 ;;
+			u-tailed       ) variant $1 ;;
 			u-toothed      ) variant $1 ;;
 			w-asymmetric   ) variant $1 W-asymmetric ;;
 			y-straight     ) variant $1 ;;
@@ -681,6 +685,10 @@ enables  = []  # Optional; enable specific ligation groups, overrides inherited 
 # End ligation section
 ###################################################################################################
 
+# # Explicitly ensure OpenType small caps tags are retained in the compiled font metadata
+# [buildPlans.$family.features]
+# smcp = true
+# c2sc = true
 
 ###################################################################################################
 # Override default building weights
@@ -848,7 +856,8 @@ unset adjust baseline capadjust  # no longer applying for koreader and version 3
 [ $i_flipped     ] && fforge i_flipped          ${shape##* } $family  # font mod for flipped serifed i
 [ $l_ascending   ] && fforge l_ascending        ${shape##* } $family  # font mod for ascending serifless l (extended f height)
 [ $l_ascendmax   ] && fforge l_ascendmax        ${shape##* } $family  # font mod for ascending serifless l (max height)
-[ $m_straight    ] && fforge m_straight         ${shape##* } $family  # straight vertical (angular vs rounded)
+[ $m_straight    ] && fforge smallcap m 0u1d0d  ${shape##* } $family  # straight vertical (angular vs rounded)
+[ $n_straight    ] && fforge smallcap n 0u0274  ${shape##* } $family  # straight vertical (angular vs rounded)
 [ $T_descending  ] && fforge T_descending       ${shape##* } $family  # font mod for descending capital T
 [ $t_descending  ] && fforge t_descending   $(( ${shape##* } + ${proportional:-0} )) $family  # font mod for descending t
 [ $t_descending_ ] && fforge t_descending_  $(( ${shape##* } + ${proportional:-0} )) $family  # font mod for descending t
@@ -856,6 +865,37 @@ unset adjust baseline capadjust  # no longer applying for koreader and version 3
 [ $Y_descending  ] && fforge Y_descending       ${shape##* } $family  # font mod for descending capital Y
 [ $FP_descending ] && fforge FP_descending      ${shape##* } $family  # decending caps (experimental)
 [ $capadjust     ] && fforge capadjust          "CGOQSU"     $family  # shift up bottom of glyphs to x base
+
+# no remapping necessary for c o s u v w x z
+# NOTE: untested for all exclude ranges (may need subequent adjustments)
+[ $smallcaps ] && {
+	fforge smallcap a 0u1d00  ${shape##* } $family
+	fforge smallcap b 0u0299  ${shape##* } $family
+	# c
+	fforge smallcap d 0u1d05  ${shape##* } $family
+	fforge smallcap e 0u1d07  ${shape##* } $family
+	fforge smallcap f 0ua730  ${shape##* } $family
+	fforge smallcap g 0u0262  ${shape##* } $family
+	fforge smallcap h 0u029c  ${shape##* } $family
+	fforge smallcap i 0u026a  ${shape##* } $family
+	fforge smallcap j 0u1d0a  ${shape##* } $family
+	fforge smallcap k 0u1d0b  ${shape##* } $family
+	fforge smallcap l 0u029f  ${shape##* } $family
+	fforge smallcap m 0u043c  ${shape##* } $family
+	fforge smallcap n 0u0274  ${shape##* } $family
+	# o
+	fforge smallcap p 0u1d18  ${shape##* } $family
+	fforge smallcap q 0ua7af  ${shape##* } $family
+	fforge smallcap r 0u0280  ${shape##* } $family
+	# s
+	fforge smallcap t 0u1d1b  ${shape##* } $family
+	# u
+	# v
+	# w
+	# x
+	fforge smallcap y 0u028f  ${shape##* } $family
+	# z
+}
 
 if [ $ebook ] ;then
 	(( $(echo "$space >= 1.0" | bc -l) )) && fforge punctuation ${emdash:-2} ${shape##* } $family 2>/dev/null; unset width

@@ -308,10 +308,9 @@ elif [ "$test" ] ;then
 	e_ink ottawa     grote I-serifless  t-descending=+  m-straight f-extended+= y-turn
 
 elif [ "$watchface" ] ;then
-	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat l-ascending Q-open f-extended+= a-double_ d-tailed y-turn J-descending utf-8 serifless serifed pseudokern percent/ 0-tall ascii 1-nobase_
+	cmdopts quasi-ext Q-straight open+ j-flat l-ascending Q-open f-extended+= a-double_ d-tailed y-turn J-serifless utf-8 serifless serifed pseudokern percent/ 0-tall ascii 1-nobase_
 	emdash
-	e_ink watchface grote I-serifless  t-descending=+  m-straight f-extended+= y-turn ascii
-
+	e_ink watchface grote I-serifless t-descending=+ f-extended+= y-turn ascii smallcaps space=0.75  # space must follow pseudokern
 elif [ "$hyperlegible" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat l-ascending Q-open 1-nobase f-extended+= a-double_ d-tailed y-turn utf-8 serifless serifed pseudokern percent/ 0-tall
  	emdash
@@ -418,15 +417,15 @@ else                                      # desktop fonts
 	dfont $leading 1-base m-straight l-ascending bar-extended
 	[ $HOME/thedarnedestthing.com/application/public/fonts/ ] && cp -v $FONTS/Iosevka/*ttf $HOME/thedarnedestthing.com/application/public/fonts/
 	dfont proof    l-ascending m-straight bar-extended
-	# dfont menu     I-serifed l-ascending
-	# dfont dyslexic I-serifed space=2.2 family=qclocktwo l-ascending j-serifless m-straight  # conky qclocktwo font
-	# dfont dyslexic I-serifed quasi-extension space=1.125 family=monograffic serifless serifed l-ascending  # panel/dunst font
+	dfont menu     I-serifed l-ascending
+	dfont dyslexic I-serifed space=2.2 family=qclocktwo l-ascending j-serifless m-straight  # conky qclocktwo font
+	dfont dyslexic I-serifed quasi-extension space=1.125 family=monograffic serifless serifed l-ascending  # panel/dunst font
 
-	# cmdopts quasi-ext open+ serifless serifed
-	# cmdopts t-descending=+ j-serifed 1-nobase at-tall l-ascending f-extended+= y-turn J-descending a-double_ d-tailed
-	# emdash
-	# e_ink charcoal grote I-serifless l-ascending Q-open 1-nobase a-double_ d-tailed p-eared m-straight y-turn J-descending t-descending=+ pseudokern
-	# [ -d /var/www/localhost/fonts ] && sudo cp -v $FONTS/charcoal/*ttf /var/www/localhost/fonts/
+	cmdopts quasi-ext open+ serifless serifed
+	cmdopts t-descending=+ j-serifed 1-nobase at-tall l-ascending f-extended+= y-turn J-descending a-double_ d-tailed
+	emdash
+	e_ink charcoal grote I-serifless l-ascending Q-open 1-nobase a-double_ d-tailed p-eared m-straight y-turn J-descending t-descending=+ pseudokern
+	[ -d /var/www/localhost/fonts ] && sudo cp -v $FONTS/charcoal/*ttf /var/www/localhost/fonts/
 fi
 
 # kak: filetype=sh

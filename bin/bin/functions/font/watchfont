@@ -6,12 +6,19 @@
 
 # .............................................................. Watchface fonts
 
-usage() { echo "$(basename $0) n'umerals | d'ate <fontsize}" | usage:
+usage() { echo "$(basename $0) [-b] n'umerals | d'ate <fontsize}" | usage:
 	exit 1
 }
 
+# Garmin watchface project fonts
+# NOTE: rotated numerals 4 & 8 require *.fnt adjustment of xoffset/xadvance etc. depending on fontsize
+
 WATCHFACE=$HOME/.local/share/fonts/watchface
-PROJECT=$STOW/garmin/current/resources/fonts
+GARMIN=$STOW/garmin
+FONTS=resources/fonts
+WEIGHT=book  # dial numerals
+
+[ "$1" = -b ] && { WEIGHT=bold; shift; }
 
 [ $2 ] || usage
 fontsize=$2
@@ -22,7 +29,7 @@ utf() { printf "$1" | iconv -t UTF16LE | od -t x2 -An -v | sed 's/ /\u/g; s/^/0u
 
 rotate() {
 	echo "
-Open(\"watchface-normalbookupright.ttf\");
+Open(\"watchface-normal${WEIGHT}upright.ttf\");
 Select($(utf $1));
 Rotate($2);
 Generate(\"$3\");
@@ -48,7 +55,7 @@ case $1 in
 			--output eight_${fontsize}
 
 		fontbm                                         \
-			--font-file watchface-normalbookupright.ttf \
+			--font-file watchface-normal${WEIGHT}upright.ttf \
 			--font-size ${fontsize}                     \
 			--chars '49,50'                             \
 			--output twelve_${fontsize}
@@ -57,10 +64,19 @@ case $1 in
 		fontbm                                         \
 			--font-file watchface-normalbookupright.ttf \
 			--font-size ${fontsize}                     \
-			--chars '32,48-57,65-90,97-122'             \
+			--chars '32,48-57,70,77,83,84,87,97,100,101,104,105,110,111,114,116,117' \
 			--output date_${fontsize}
 		;;
 	*  ) usage
 esac
 
-cp -v *_${fontsize}.fnt *_${fontsize}_0.png $PROJECT
+for i in $GARMIN/* ;do
+	for f in *_${fontsize}.fnt *_${fontsize}_0.png ;do
+		[ -e "$f" ] && mv -v ${i}/$FONTS/$f ${i}/$FONTS/$f.bak
+		cp -v $f ${i}/$FONTS/$f
+	done
+	case $1 in
+		n* ) for n in four eight twelve ;do sed -i "/${n}/s/_[0-9]*/_${fontsize}/" ${i}/$FONTS/fonts.xml ;done ;;
+		d* ) sed -i "/date/s/_[0-9]*/_${fontsize}/" ${i}/$FONTS/fonts.xml ;;
+	esac
+done
