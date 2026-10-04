@@ -111,6 +111,11 @@ esac
 # ............................................................... Window manager
 
 export XDG_CONFIG_HOME=$HOME/.config
+export ROOT=${ROOT:-/tmp}
+mv -f  $ROOT/$wm.log $ROOT/$wm.last.log 2>/dev/null
+rm -f  $ROOT/$wm:*
+rm -rf $ROOT/$wm/*         # windowchef tree
+ditto -t $wm "starting.." >$ROOT/$wm.log
 
 xexec() {
 	pkill -f "$WM/draw --"  # kill all dangling panel processes
@@ -119,10 +124,6 @@ xexec() {
 	pkill -f "pavucontrol"
 	pkill -f "pulseaudio"
 	# ROOT=$WME               # SEE: cirrus ENV NOTE: only /tmp logs are visible to menu log
-	export ROOT=${ROOT:-/tmp}
-	mv -f  $ROOT/$1.log $ROOT/$1.last.log 2>/dev/null
-	rm -f  $ROOT/$1:*
-	rm -rf $ROOT/$1/*         # windowchef tree
 	# enable debug trace by referencing log file
 	export TRACE=$ROOT/$1.log
 
@@ -137,7 +138,7 @@ xexec() {
 	[ -e /tmp/ruler.log ] && ln -s /tmp/ruler.log $ROOT/$1.log
 
 	while :; do
-		$1 >>$ROOT/$1.log 2>&1
+		$@ >>$ROOT/$1.log 2>&1
 	   rc=$?
 		ditto restart "$1 pid=$$ exited rc=$rc" >>"$ROOT/$1.log"
 
@@ -211,7 +212,7 @@ ci* )
 	sxhkd -t $TIMEOUT -c $HOME/.config/cirrus/sxhkdrc >/tmp/sxhkd.log &
 	rm -f /tmp/ruler.log
 	touch /tmp/ruler.log
-	ruler -i -s /usr/bin/dash -c $HOME/.config/cirrus/rulerrc 2>>/tmp/ruler.log &
+	# ruler -i -s /usr/bin/dash -c $HOME/.config/cirrus/rulerrc 2>>/tmp/ruler.log &
 	# $TERM &  # NOTE: cirrus cannot properly manage windows opened before it!
 	# export CIRRUS_TRACE_STACK=1
 	# export CIRRUS_TRACE_GEOMETRY_ENTER=1
