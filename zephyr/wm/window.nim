@@ -1,9 +1,11 @@
 import native_ipc as ipc
 import std/envvars
+import std/options
 import std/os
 import std/strutils
 import std/algorithm
 import std/sequtils
+import ../zephyr_errors
 
 import cliargs
 import compat
@@ -16,6 +18,67 @@ import types
 
 import window_query as query
 import daemon_client
+import group_id
+import layer_types
+
+export layer_types
+
+type
+  WindowChain* = object
+    id: string
+    token: query.ClientToken
+
+proc capturedWinid*(chain: WindowChain): string = chain.id
+
+proc checkedChainTarget(chain: WindowChain) =
+  var snapshot: query.WmSnapshot
+  if not query.tryWmSnapshot(snapshot):
+    raiseZephyrError("window chain: unable to validate captured window " & chain.id)
+  for client in snapshot.clients:
+    if client.winid == chain.id:
+      if client.token.isSome and client.token.get == chain.token:
+        return
+      raiseZephyrError("window chain: captured window identity changed for " & chain.id)
+  raiseZephyrError("window chain: captured window no longer exists: " & chain.id)
+
+proc restoreChainFocus(chain: WindowChain, focusedBefore: string) =
+  if focusedBefore.len == 0 or query.focusedWinid() == focusedBefore:
+    return
+  chain.checkedChainTarget()
+  # Restore only the focus that was authoritative before this operation. This
+  # undoes EnterNotify/sloppy-focus side effects from geometry changes without
+  # focusing the chain target or following focus between separate operations.
+  ipc.focus(ipc.windowId(focusedBefore)).require()
+
+proc chainForSnapshot(id: string, snapshot: query.WmSnapshot): WindowChain =
+  for client in snapshot.clients:
+    if client.winid == id:
+      if client.token.isNone:
+        raiseZephyrError("window target: client identity unavailable for " & id)
+      return WindowChain(id: id, token: client.token.get)
+  raiseZephyrError("window target: no managed window " & id)
+
+proc target*(winid: string): WindowChain =
+  let parsed = parseArguments("window target", @[winid], [ArgWinid]).winid
+  if parsed.len == 0:
+    raiseZephyrError("window target: expected an explicit winid")
+  let id = parsed.toLowerAscii()
+  chainForSnapshot(id, query.wmSnapshot())
+
+proc target*(): WindowChain =
+  let snapshot = query.wmSnapshot()
+  if snapshot.focused.isNone:
+    raiseZephyrError("window target: no focused window")
+  chainForSnapshot(snapshot.focused.get(), snapshot)
+
+proc validateChainArgumentTarget(parsedWinid, targetOverride,
+    action: string): string =
+  if targetOverride.len > 0 and parsedWinid.len > 0 and
+      parsedWinid.toLowerAscii() != targetOverride.toLowerAscii():
+    raiseZephyrError("window chain: operation cannot replace its captured target")
+  if targetOverride.len > 0: targetOverride
+  elif parsedWinid.len > 0: parsedWinid
+  else: query.focusedWinid()
 
 #
 # Queries
@@ -42,7 +105,7 @@ proc liveIds*(args: seq[string]): string =
   )
 
   if a.classname != "" and a.name != "":
-    quit("window ids: only one of " & a.classname & " or --name " & a.name & " is allowed")
+    raiseZephyrError("window ids: only one of " & a.classname & " or --name " & a.name & " is allowed")
 
   if a.classname == "" and a.name == "":
     if a.all:
@@ -60,22 +123,23 @@ proc liveIds*(args: seq[string]): string =
     else:
       ipc.ids(all = false, selector = ipc.NameSelector, pattern = a.name)
 
-proc cachedFilteredIds(includeAll: bool, classname, name: string, groupNo = -1): string =
+proc cachedFilteredIds(includeAll: bool, classname, name: string,
+    groupNo = none(PublicGroupId)): string =
   let kind = if name.len > 0: RequestQueryNameList else: RequestQueryClassList
   let pattern = if name.len > 0: name else: classname
   let reply = queryDaemonFiltered(kind, includeAll, pattern, groupNo)
   if not reply.ok:
-    quit("window ids: " & reply.error)
+    raiseZephyrError("window ids: " & reply.error)
   reply.body
 
-proc cachedIds(includeAll: bool, groupNo = -1): string =
+proc cachedIds(includeAll: bool, groupNo = none(PublicGroupId)): string =
   let reply = queryDaemonClientList()
   if not reply.ok:
-    quit("window ids: " & reply.error)
+    raiseZephyrError("window ids: " & reply.error)
   var values: seq[string] = @[]
   for client in reply.clients:
     if (includeAll or client.mapped) and
-        (groupNo == -1 or client.group.uint64 == groupNo.uint64):
+        (groupNo.isNone or client.group == groupNo.get.intValue.uint32):
       values.add(client.winid)
   # Sirocco preserves its historical numeric-XID ordering for ids queries;
   # snapshot client order is WM list order and is not equivalent.
@@ -92,7 +156,7 @@ proc ids*(args: seq[string]): string =
       ArgClassname,
       ArgName,
       ArgGroupNo
-    ]
+    ], groups.count
   )
   if a.classname == "" and a.name == "":
     return cachedIds(a.all, a.groupNo)
@@ -124,7 +188,7 @@ proc count*(args: seq[string]): string =
   if a.classname == "" and a.name == "":
     let reply = queryDaemonClientList()
     if not reply.ok:
-      quit("window count: " & reply.error)
+      raiseZephyrError("window count: " & reply.error)
     var total = 0
     for client in reply.clients:
       if a.all or client.mapped:
@@ -139,22 +203,51 @@ proc count*(classname: string): int =
 proc count*(): int =
   parseInt(count(@[]))
 
-proc focus*(winid: string) =
+proc focusTarget(winid: string, token = none(query.ClientToken)) =
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
   if winid == "--last": ipc.focusLast()
   else: ipc.focus(ipc.windowId(winid)).require()
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
+
+proc focus*(winid: string) =
+  focusTarget(winid)
+
+proc focus*(chain: WindowChain): WindowChain =
+  focusTarget(chain.id, some(chain.token))
+  chain
+
+proc stackCycle*(chain: WindowChain): WindowChain =
+  chain.checkedChainTarget()
+  ipc.stackCycle(ipc.windowId(chain.id))
+  chain.checkedChainTarget()
+  chain
+
+proc close*(chain: WindowChain): WindowChain =
+  chain.checkedChainTarget()
+  ipc.closeWindow(ipc.windowId(chain.id))
+  chain
+
+proc layerTarget(winid: string, layer: Layer,
+    token = none(query.ClientToken)) =
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
+  ipc.layer(ipc.windowId(winid), layer)
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
 
 proc layer*(args: seq[string]) =
   requireArgs("window layer", args, 1, 2)
   let a = parseArguments("window layer", args, [ArgLayer, ArgWinid])
-  if a.layer.len == 0:
-    quit("window layer: layer must be normal, above or overlay")
-  let winid = if a.winid.len == 0: query.focusedWinid() else: a.winid
-  let layer = case a.layer.toLowerAscii()
-    of "normal": ipc.Normal
-    of "above": ipc.Above
-    of "overlay": ipc.Overlay
-    else: quit("window layer: invalid layer")
-  ipc.layer(ipc.windowId(winid), layer)
+  if a.winid.len == 0:
+    ipc.layer(a.layer)
+  else:
+    layerTarget(a.winid, a.layer)
+
+proc layer*(chain: WindowChain, layer: Layer): WindowChain =
+  layerTarget(chain.id, layer, some(chain.token))
+  chain
 
 proc layer*(value: string, winid: string = "") =
   layer(@[value, winid])
@@ -162,7 +255,7 @@ proc layer*(value: string, winid: string = "") =
 proc geometry*(args: seq[string]) =
   requireArgs("window geometry", args, 0, 1)
 
-  var a = parseArguments(
+  let a = parseArguments(
     "window geometry",
     args,
     [
@@ -233,6 +326,9 @@ proc screenGeometry*(): ScreenGeometry =
 # Helpers
 #
 
+proc wtpTarget(rect: Geometry, winid: string,
+    token: Option[query.ClientToken] = none(query.ClientToken))
+
 proc wtp*(rect: Geometry, winid: string = "") =
   let wid =
     if winid.len == 0:
@@ -240,8 +336,34 @@ proc wtp*(rect: Geometry, winid: string = "") =
     else:
       winid
 
-  ipc.move(rect.x, rect.y, ipc.windowId(wid))
-  ipc.resize(rect.width, rect.height, ipc.windowId(wid))
+  wtpTarget(rect, wid)
+
+proc wtpTarget(rect: Geometry, winid: string,
+    token: Option[query.ClientToken]) =
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
+  ipc.move(rect.x, rect.y, ipc.windowId(winid))
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
+  ipc.resize(rect.width, rect.height, ipc.windowId(winid))
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
+
+proc saveOriginalForTarget(source, destination: Geometry, winid: string,
+    token: query.ClientToken) =
+  if source == destination:
+    return
+  if destination.x == source.x and destination.y == source.y and
+      destination.width <= source.width and destination.height <= source.height and
+      query.geometry(winid) == source:
+    return
+  saveGeometryWithToken(source, winid, token)
+
+proc saveGeometryForTarget(geometry: Geometry, winid: string,
+    token: query.ClientToken, precheck = true) =
+  if precheck and query.geometry(winid) == geometry:
+    return
+  saveGeometryWithToken(geometry, winid, token)
 
 type GeometryApplication* = tuple[
   winid: string,
@@ -258,7 +380,7 @@ proc serializeCheckedGeometries*(entries: seq[CheckedGeometryApplication]): stri
 
 proc applyGeometries*(entries: seq[GeometryApplication]) =
   if entries.len == 0:
-    quit("window apply-geometries: no geometry records")
+    raiseZephyrError("window apply-geometries: no geometry records")
 
   var body = newStringOfCap(entries.len * 64)
   for entry in entries:
@@ -270,7 +392,7 @@ proc applyGeometries*(entries: seq[GeometryApplication]) =
 
 proc applyGeometriesChecked*(entries: seq[CheckedGeometryApplication]) =
   if entries.len == 0:
-    quit("window apply-geometries-checked: no geometry records")
+    raiseZephyrError("window apply-geometries-checked: no geometry records")
   query.applyGeometriesCheckedBody(serializeCheckedGeometries(entries))
 
 proc serializeCheckedGeometries*(entries: seq[CheckedGeometryApplication]): string =
@@ -278,6 +400,7 @@ proc serializeCheckedGeometries*(entries: seq[CheckedGeometryApplication]): stri
     return ""
   var body = newStringOfCap(entries.len * 120)
   for entry in entries:
+    query.validateClientToken(entry.token)
     body.add(entry.winid & " " & $entry.token & " " & $entry.geometry.x & " " &
       $entry.geometry.y & " " & $entry.geometry.width & " " &
       $entry.geometry.height & "\n")
@@ -292,25 +415,36 @@ proc raiseMany*(winids: seq[string]) =
 # Actions
 #
 
+proc moveTarget(dx, dy: int, winid: string,
+    token = none(query.ClientToken),
+    restoreFocus = false) =
+  let focusedBefore = if token.isSome: query.focusedWinid() else: ""
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
+  ipc.move(dx, dy, ipc.windowId(winid), relative = true)
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
+  if restoreFocus:
+    focusTarget(winid, token)
+  elif token.isSome:
+    WindowChain(id: winid, token: token.get).restoreChainFocus(focusedBefore)
+
 proc move*(args: seq[string]) =
   requireArgs("window move", args, 2, 2)
-
-  let a = parseArguments(
-    "window move",
-    args,
-    [
-      ArgXY
-    ]
-  )
-
+  let a = parseArguments("window move", args, [ArgXY])
   let winid = focusedWinid()
-
-  if winid == "":
+  if winid.len == 0:
     return
+  moveTarget(a.xy.x, a.xy.y, winid, restoreFocus = true)
 
-  ipc.move(a.xy.x, a.xy.y, ipc.windowId(winid), relative = true)
+proc move*(chain: WindowChain, dx, dy: int): WindowChain =
+  moveTarget(dx, dy, chain.id, some(chain.token))
+  chain
 
-  focus(winid)
+proc move*(chain: WindowChain, args: seq[string]): WindowChain =
+  requireArgs("window move", args, 2, 2)
+  let a = parseArguments("window move", args, [ArgXY])
+  chain.move(a.xy.x, a.xy.y)
 
 proc extend*(args: seq[string]) =
   requireArgs("window extend", args, 1, 3)
@@ -367,7 +501,7 @@ proc extend*(args: seq[string]) =
       extendLeft()
 
   if a.direction in [Left, Right, Near, Far] and a.side != "" or a.direction == Center:
-    quit("window extend: invalid direction " & a.direction & " " & a.side)
+    raiseZephyrError("window extend: invalid direction " & a.direction & " " & a.side)
 
   case a.direction
   of Left:
@@ -434,52 +568,98 @@ proc extend*(args: seq[string]) =
         height: verticalHeight
       ))
 
-proc group*(args: seq[string]) =
-  requireArgs("window group", args, 1, 2)
+proc groupTarget(group: PublicGroupId, winid: string, sourceGroup: int,
+    token = none(query.ClientToken), teleport = false) =
+  let groupNo = group.intValue
 
-  let a = parseArguments(
-    "window group",
-    args,
-    [
-      ArgGroup,
-      ArgTeleport
-    ]
-  )
-
-  if a.group == 0:
-    quit("window group: group 0 is reserved VOID")
-  if a.group >= groups.count():
-    quit("window group: invalid group id " & $a.group)
+  var source = sourceGroup
+  if token.isSome:
+    var snapshot: query.WmSnapshot
+    if not query.tryWmSnapshot(snapshot):
+      raiseZephyrError("window chain: unable to validate captured window " & winid)
+    var found = false
+    for client in snapshot.clients:
+      if client.winid == winid:
+        if client.token.isNone or client.token.get != token.get:
+          raiseZephyrError("window chain: captured window identity changed for " & winid)
+        found = true
+        if source < 0:
+          source = client.group.int
+        break
+    if not found:
+      raiseZephyrError("window chain: captured window no longer exists: " & winid)
 
   let root = getEnv("GROUP")
-  var winid = query.focusedWinid()
-
-  if dirExists(root / $a.group / winid):
+  if dirExists(root / $groupNo / winid):
     return
 
-  let group = groups.currentLive()
+  if source < 0:
+    source = groups.currentLiveId()
   ipc.removeFromGroup(ipc.windowId(winid))
-  removeDir(root / group / winid)
-  ipc.addToGroup(a.group, ipc.windowId(winid))
-  createDir(root / $a.group / winid)
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
+  removeDir(root / $source / winid)
+  ipc.addToGroup(groupNo, ipc.windowId(winid))
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
+  createDir(root / $groupNo / winid)
 
-  let sourceFocus = (root & ":focus") / group / winid
+  let sourceFocus = (root & ":focus") / $source / winid
   if dirExists(sourceFocus):
     removeDir(sourceFocus)
 
-  if not a.teleport:
+  if not teleport:
     return
 
-  winid = groups.singleChildName(root / group)
+  let nextWinid = groups.singleChildName(root / $source)
 
-  if winid != "":
-    focus(winid)
+  if nextWinid.isSome:
+    var snapshot: query.WmSnapshot
+    if query.tryWmSnapshot(snapshot):
+      for client in snapshot.clients:
+        if client.winid == nextWinid.get and client.group == uint32(source):
+          focusTarget(client.winid, client.token)
+          groups.add(source, client.winid)
+          break
 
-    groups.add(@[group, winid])
+proc group*(args: seq[string]) =
+  requireArgs("window group", args, 1, 2)
+
+  let a = parseArguments("window group", args, [ArgGroup, ArgTeleport])
+  let winid = query.focusedWinid()
+  let groupNo = a.group.get
+  if groupNo == 0:
+    raiseZephyrError("window group: group 0 is reserved VOID")
+  groupTarget(publicGroupId(groupNo, groups.count(), "window group"),
+    winid, groups.currentLiveId(), teleport = a.teleport)
+
+proc group*(groupNo: int) =
+  if groupNo == 0:
+    raiseZephyrError("window group: group 0 is reserved VOID")
+  groupTarget(publicGroupId(groupNo, groups.count(), "window group"),
+    query.focusedWinid(), groups.currentLiveId())
+
+proc group*(group: PublicGroupId) =
+  groupTarget(group, query.focusedWinid(), groups.currentLiveId())
 
 proc group*(groupname: string) =
-  let group = groups.id(groupname)
-  group(@[$group])
+  group(groups.publicId(groupname, "window group"))
+
+proc group*(chain: WindowChain, groupname: string): WindowChain =
+  groupTarget(groups.publicId(groupname, "window group"),
+    chain.id, -1, some(chain.token))
+  chain
+
+proc group*(chain: WindowChain, groupNo: int): WindowChain =
+  if groupNo == 0:
+    raiseZephyrError("window group: group 0 is reserved VOID")
+  groupTarget(publicGroupId(groupNo, groups.count(), "window group"),
+    chain.id, -1, some(chain.token))
+  chain
+
+proc group*(chain: WindowChain, group: PublicGroupId): WindowChain =
+  groupTarget(group, chain.id, -1, some(chain.token))
+  chain
 
 proc hide*(args: seq[string]) =
   requireArgs("window hide", args, 0, 1)
@@ -498,16 +678,16 @@ proc hide*(args: seq[string]) =
   if a.winid == "":
     return
 
-  var group = ""
+  var group = -1
   let groupRoot = getEnv("GROUP")
 
   for g in 1 ..< groups.count():
     if dirExists(groupRoot / $g / a.winid):
-      group = $g
+      group = g
       break
 
-  if group == "":
-    group = groups.currentLive()
+  if group < 0:
+    group = groups.currentLiveId()
 
   let targetClassname = query.classname(a.winid)
 
@@ -515,7 +695,7 @@ proc hide*(args: seq[string]) =
 
   let hiddenPath = getEnv("HIDDEN") / a.winid
   removeDir(hiddenPath)
-  createDir(hiddenPath / group & ":" & targetClassname)
+  createDir(hiddenPath / $group & ":" & targetClassname)
 
   focus("--last")
 
@@ -537,45 +717,30 @@ proc restore*(args: seq[string]) =
   if a.winid == "":
     return
 
-  var token: query.ClientToken
-  if not query.tryClientToken(a.winid, token):
+  let token = query.tryClientToken(a.winid)
+  if token.isNone:
     return
-  if not hasGeometryForToken(a.winid, token):
+  if not hasGeometryForToken(a.winid, token.get):
     return
 
-  let g = loadGeometryForToken(a.winid, token)
+  let g = loadGeometryForToken(a.winid, token.get)
   let source = query.geometry(a.winid)
-  applyGeometriesChecked(@[(a.winid, token, g)])
-  saveGeometryWithToken(source, a.winid, token)
+  applyGeometriesChecked(@[(a.winid, token.get, g)])
+  saveGeometryWithToken(source, a.winid, token.get)
 
 proc restore*(winid: string) =
   restore(@[winid])
 
-proc shift*(args: seq[string]) =
-  requireArgs("window shift", args, 1, 2)
-
-  var a = parseArguments(
-    "window shift",
-    args,
-    [
-      ArgCardinal,
-      ArgWinid
-    ]
-  )
-
-  # Resolve the implicit target once and carry it through the mutation.  The
-  # geometry query already addresses this focused client; forwarding an empty
-  # XID would make the WM treat the subsequent move as implicit and bypass
-  # explicit-geometry crossing suppression.
-  if a.winid == "":
-    a.winid = query.focusedWinid()
-
-  let g = query.geometry(a.winid)
+proc shiftTarget(cardinal, winid: string, token = none(query.ClientToken)) =
+  let focusedBefore = if token.isSome: query.focusedWinid() else: ""
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
+  let g = query.geometry(winid)
   var
     height = 0
     width = 0
 
-  case a.cardinal
+  case cardinal
   of Up:
     height = -g.height
   of Down:
@@ -585,11 +750,30 @@ proc shift*(args: seq[string]) =
   of Right:
     width = g.width
 
-  ipc.move(width, height, ipc.windowId(a.winid), relative = true)
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
+  ipc.move(width, height, ipc.windowId(winid), relative = true)
 
   # Relative movement can first reset WM-owned special state, so its final
   # rectangle is not always derivable from the source rectangle alone.
-  saveGeometry(g, a.winid)
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
+    saveGeometryForTarget(g, winid, token.get)
+    WindowChain(id: winid, token: token.get).restoreChainFocus(focusedBefore)
+  else:
+    saveGeometry(g, winid)
+
+proc shift*(args: seq[string]) =
+  requireArgs("window shift", args, 1, 2)
+  var a = parseArguments("window shift", args, [ArgCardinal, ArgWinid])
+  if a.winid == "":
+    a.winid = query.focusedWinid()
+  shiftTarget(a.cardinal, a.winid)
+
+proc shift*(chain: WindowChain, cardinal: string): WindowChain =
+  let a = parseArguments("window shift", @[cardinal], [ArgCardinal])
+  shiftTarget(a.cardinal, chain.id, some(chain.token))
+  chain
 
 proc rotate*(args: seq[string]) =
   requireArgs("window rotate", args, 0, 1)
@@ -614,7 +798,8 @@ proc rotate*(args: seq[string]) =
   wtp(destination, a.winid)
   saveOriginalIfChanged(g, destination, a.winid)
 
-proc snap*(args: seq[string], providedScreen = ScreenGeometry()) =
+proc snapTarget(args: seq[string], providedScreen: ScreenGeometry,
+    targetOverride = "", token = none(query.ClientToken), restoreFocus = true) =
   requireArgs("window snap", args, 1, 3)
 
   let a = parseArguments(
@@ -627,13 +812,18 @@ proc snap*(args: seq[string], providedScreen = ScreenGeometry()) =
     ]
   )
 
-  let winid =
-    if a.winid == "":
-      query.focusedWinid()
-    else:
-      a.winid
+  if targetOverride.len > 0 and a.winid.len > 0 and
+      a.winid.toLowerAscii() != targetOverride.toLowerAscii():
+    raiseZephyrError("window chain: operation cannot replace its captured target")
 
-  let g = query.geometry(a.winid)
+  let winid = if targetOverride.len > 0: targetOverride
+    elif a.winid.len > 0: a.winid
+    else: query.focusedWinid()
+
+  let focusedBefore = if token.isSome: query.focusedWinid() else: ""
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
+  let g = query.geometry(winid)
   let s =
     if providedScreen.width == 0:
       screenGeometry()
@@ -655,16 +845,23 @@ proc snap*(args: seq[string], providedScreen = ScreenGeometry()) =
       height: g.height
     )
 
-    if a.winid != "":
-      ipc.move(x, y, ipc.windowId(a.winid))
-    else:
-      ipc.move(x, y)
+    if token.isSome:
+      WindowChain(id: winid, token: token.get).checkedChainTarget()
+    ipc.move(x, y, ipc.windowId(winid))
+    if token.isSome:
+      WindowChain(id: winid, token: token.get).checkedChainTarget()
 
     if destination == g:
       # A move can reset WM-owned special state even at unchanged coordinates.
-      saveGeometry(g, a.winid)
+      if token.isSome:
+        saveGeometryForTarget(g, winid, token.get)
+      else:
+        saveGeometry(g, winid)
     else:
-      saveOriginalIfChanged(g, destination, a.winid)
+      if token.isSome:
+        saveOriginalForTarget(g, destination, winid, token.get)
+      else:
+        saveOriginalIfChanged(g, destination, winid)
 
   proc moveLeft() =
     move(s.margin, g.y)
@@ -679,7 +876,7 @@ proc snap*(args: seq[string], providedScreen = ScreenGeometry()) =
       moveRight()
 
   proc fail() =
-    quit("window snap: invalid position: " & a.direction & " " & a.axis)
+    raiseZephyrError("window snap: invalid position: " & a.direction & " " & a.axis)
 
   if a.direction in [Left, Right, Near] and a.axis != "":
     fail()
@@ -731,7 +928,19 @@ proc snap*(args: seq[string], providedScreen = ScreenGeometry()) =
     else:
       fail()
 
-  focus(winid)
+  if restoreFocus:
+    focusTarget(winid, token)
+  elif token.isSome:
+    WindowChain(id: winid, token: token.get).restoreChainFocus(focusedBefore)
+
+proc snap*(args: seq[string], providedScreen = ScreenGeometry()) =
+  snapTarget(args, providedScreen)
+
+proc snap*(chain: WindowChain, args: varargs[string]): WindowChain =
+  let normalized = args.mapIt(it.toLowerAscii())
+  snapTarget(normalized, ScreenGeometry(), chain.id, some(chain.token),
+    restoreFocus = false)
+  chain
 
 proc snap*(position1, position2, winid: string) =
   snap(@[position1, position2, winid])
@@ -742,7 +951,8 @@ proc snap*(position, argument: string) =
 proc snap*(position: string) =
   snap(@[position])
 
-proc size*(args: seq[string]) =
+proc sizeTarget(args: seq[string], targetOverride = "",
+    token = none(query.ClientToken)) =
   requireArgs("window size", args, 1, 4)
 
   var a = parseArguments(
@@ -758,18 +968,29 @@ proc size*(args: seq[string]) =
     ]
   )
 
-  if a.winid == "":
-    a.winid = query.focusedWinid()
+  if targetOverride.len > 0 and a.winid.len > 0 and
+      a.winid.toLowerAscii() != targetOverride.toLowerAscii():
+    raiseZephyrError("window chain: operation cannot replace its captured target")
 
-  let g = query.geometry(a.winid)
+  let winid = if targetOverride.len > 0: targetOverride
+    elif a.winid.len > 0: a.winid
+    else: query.focusedWinid()
+
+  let focusedBefore = if token.isSome: query.focusedWinid() else: ""
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
+  let g = query.geometry(winid)
   let s = screenGeometry()
 
-  proc fail(error: string) =
-    quit("window size: " & error)
+  # proc fail(error: string) =
+  #   raiseZephyrError("window size: " & error)
 
   proc applyGeometry(destination: Geometry) =
-    wtp(destination, a.winid)
-    saveOriginalIfChanged(g, destination, a.winid)
+    wtpTarget(destination, winid, token)
+    if token.isSome:
+      saveOriginalForTarget(g, destination, winid, token.get)
+    else:
+      saveOriginalIfChanged(g, destination, winid)
 
   proc paperDimensions(name: string): array[2, int] =
     case name
@@ -782,7 +1003,7 @@ proc size*(args: seq[string]) =
     of A6: result = [472, 665]
     of B7: result = [397, 559]
     else:
-      fail("unknown paper size " & name)
+      raiseZephyrError("unknown paper size " & name)
 
   proc paperArea(name: string): int =
     let size = paperDimensions(name)
@@ -807,7 +1028,7 @@ proc size*(args: seq[string]) =
     of "720p": result = [1280, 720]
     of "480p": result = [720, 480]
     else:
-      fail("unknown video size " & name)
+      raiseZephyrError("unknown video size " & name)
 
   proc videoArea(name: string): int =
     let size = videoDimensions(name)
@@ -836,7 +1057,7 @@ proc size*(args: seq[string]) =
   case args[0]
   of Viewport:
     if a.rotate or a.zoom != "":
-      fail("viewport has no options")
+      raiseZephyrError("viewport has no options")
 
     applyGeometry(Geometry(
       x: s.width div 4 + s.margin,
@@ -847,22 +1068,28 @@ proc size*(args: seq[string]) =
 
   # NOTE: Terminal is a special case requiring saving the revert geometry immediately
   of Terminal:
-    saveGeometry(g, a.winid, false)
+    if token.isSome:
+      saveGeometryForTarget(g, winid, token.get, precheck = false)
+    else:
+      saveGeometry(g, winid, false)
 
     let t = loadGeometry(ClassTerm)
 
-    wtp(Geometry(
+    wtpTarget(Geometry(
       x: g.x,
       y: g.y,
       width: t.width,
       height: t.height
-    ), a.winid)
+    ), winid, token)
 
-    quit(0)
+    if token.isNone:
+      quit(0)
+    WindowChain(id: winid, token: token.get).restoreChainFocus(focusedBefore)
+    return
 
   of "paper", "video":
     if a.zoom == "":
-      fail("missing --larger/--smaller zoom")
+      raiseZephyrError("missing --larger/--smaller zoom")
 
     let area = g.width * g.height
 
@@ -929,7 +1156,7 @@ proc size*(args: seq[string]) =
 
   of "1080p", "720p", "480p":
     if a.rotate or a.zoom != "":
-      fail("invalid option")
+      raiseZephyrError("invalid option")
 
     videoSize(a.preset, centerHorizontal = true, centerVertical = true)
 
@@ -966,8 +1193,17 @@ proc size*(args: seq[string]) =
       ))
 
     else:
-      fail("undefined option")
+      raiseZephyrError("undefined option")
 
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).restoreChainFocus(focusedBefore)
+
+proc size*(args: seq[string]) =
+  sizeTarget(args)
+
+proc size*(chain: WindowChain, args: varargs[string]): WindowChain =
+  sizeTarget(@args, chain.id, some(chain.token))
+  chain
 
 proc size*(size, orientation: string) =
   size(@[size, orientation])
@@ -975,14 +1211,34 @@ proc size*(size, orientation: string) =
 proc size*(size: string) =
   size(@[size])
 
-proc spread*(
-  args: seq[string],
-  providedScreen = ScreenGeometry(),
-  providedGeometry = Geometry()
-) =
+proc applySpreadGridGeometry(columns, column, rows, row: int,
+    g: Geometry, s: ScreenGeometry, winid: string,
+    token: Option[query.ClientToken]) =
+  let spreadWidth =
+    (s.width - (columns - 1) * s.gap) div columns
+  let spreadHeight =
+    (s.height - (rows - 1) * s.gap) div rows
+  let destination = Geometry(
+    x: spreadWidth * (column - 1) + s.margin +
+      (column - 1) * s.gap + (spreadWidth - g.width) div 2,
+    y: spreadHeight * (row - 1) + s.top +
+      (row - 1) * s.gap + (spreadHeight - g.height) div 2,
+    width: g.width,
+    height: g.height
+  )
+  wtpTarget(destination, winid, token)
+  if token.isSome:
+    saveOriginalForTarget(g, destination, winid, token.get)
+  else:
+    saveOriginalIfChanged(g, destination, winid)
+
+proc spreadTarget(args: seq[string],
+    providedScreen = ScreenGeometry(),
+    providedGeometry = Geometry(), targetOverride = "",
+    token = none(query.ClientToken)) =
   requireArgs("window spread", args, 1, 7)
 
-  var a = parseArguments(
+  let a = parseArguments(
     "window spread",
     args,
     [
@@ -996,12 +1252,17 @@ proc spread*(
     ]
   )
 
-  if a.rows == -1:
-    a.rows = 1
+  let winid = validateChainArgumentTarget(a.winid, targetOverride,
+    "window spread")
+  let focusedBefore = if token.isSome: query.focusedWinid() else: ""
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
+
+  let rows = a.rows.get(1)
 
   let g =
     if providedGeometry.width == 0:
-      query.geometry(a.winid)
+      query.geometry(winid)
     else:
       providedGeometry
   let s =
@@ -1010,11 +1271,11 @@ proc spread*(
     else:
       providedScreen
 
-  proc fail(error: string) =
-    quit("window spread: " & error)
+  # proc fail(error: string) =
+  #   raiseZephyrError("window spread: " & error)
 
-  if a.columns == -1 and a.column == -1 and a.columnName == "":
-    fail("no column position specified")
+  if a.columns.isNone and a.column.isNone and a.columnName == "":
+    raiseZephyrError("no column position specified")
 
   proc calculateColumns(): int =
       (s.width + s.gap) div (g.width + s.gap)
@@ -1026,105 +1287,139 @@ proc spread*(
     of Right:
       result = (columns + 2) div 2
     else:
-      fail("CENTER_BIAS expects left or right")
+      raiseZephyrError("CENTER_BIAS expects left or right")
 
-  proc setColumn() =
+  proc resolveColumn(columns: int): int =
+    if a.column.isSome:
+      result = a.column.get
+      if result > columns:
+        raiseZephyrError("column must be <= " & $columns)
+      return
+
     case a.columnName:
     of Left:
-      a.column = 1
+      result = 1
     of Right:
-      a.column = a.columns
+      result = columns
     of Center:
-      a.column = centerColumn(a.columns)
+      result = centerColumn(columns)
+    else:
+      raiseZephyrError("column out of range")
 
-    if a.column < 1 or a.column > a.columns:
-      fail("column out of range")
+    if result < 1 or result > columns:
+      raiseZephyrError("column out of range")
 
-  proc setRow() =
-    if a.row == -1:
+  proc resolveRow(): int =
+    if a.row.isSome:
+      result = a.row.get
+    else:
       case a.rowName:
       of "", Top:
-        a.row = 1
+        result = 1
       else:  # Bottom
-        a.row = a.rows
+        result = rows
 
-    if a.row < 1 or a.row > a.rows:
-      fail("row out of range")
+    if result < 1 or result > rows:
+      raiseZephyrError("row out of range")
 
-    if s.height < a.rows * g.height + (a.rows - 1) * s.gap:
-      fail("window exceeds row height")
+    if s.height < rows * g.height + (rows - 1) * s.gap:
+      raiseZephyrError("window exceeds row height")
 
-  proc spreadGeometry() =
-    setRow()
-    setColumn()
-
-    let spreadWidth =
-      (s.width - (a.columns - 1) * s.gap) div a.columns
-
-    let spreadHeight =
-      (s.height - (a.rows - 1) * s.gap) div a.rows
-
-    let x =
-      spreadWidth * (a.column - 1) +
-      s.margin +
-      (a.column - 1) * s.gap +
-      (spreadWidth - g.width) div 2
-
-    let y =
-      spreadHeight * (a.row - 1) +
-      s.top +
-      (a.row - 1) * s.gap +
-      (spreadHeight - g.height) div 2
-
-    let destination = Geometry(
-      x: x,
-      y: y,
-      width: g.width,
-      height: g.height
-    )
-
-    wtp(destination, a.winid)
-    saveOriginalIfChanged(g, destination, a.winid)
+  proc spreadGeometry(columns, column, row: int) =
+    applySpreadGridGeometry(columns, column, rows, row, g, s, winid, token)
 
   case args[0]
   # spread left/right/center ...
   of Left, Right, Center:
-    a.columns = calculateColumns()
-
-    spreadGeometry()
+    let columns = calculateColumns()
+    let row = resolveRow()
+    let column = resolveColumn(columns)
+    spreadGeometry(columns, column, row)
 
   else:
     # spread column ... NOTE: one numeric operand means column of auto-sized grid
-    if a.column == -1 and a.columnName == "":
-      a.column = a.columns
-      if a.column < 1:
-        fail("column must be >= 1")
+    if a.column.isNone and a.columnName == "":
+      let column = a.columns.get
+      if column < 1:
+        raiseZephyrError("column must be >= 1")
 
-      a.columns = calculateColumns()
-
-      spreadGeometry()
+      let columns = calculateColumns()
+      let row = resolveRow()
+      spreadGeometry(columns, column, row)
 
     # spread columns column/left/right/center ...
     else:
-      if a.columns < 1:
-        fail("columns must be >= 1")
+      if a.columns.isNone:
+        raiseZephyrError("columns must be >= 1")
+      let columns = a.columns.get
 
-      if a.column > a.columns:
-        fail("column must be <= " & $a.columns)
+      if a.column.isSome and a.column.get > columns:
+        raiseZephyrError("column must be <= " & $columns)
 
-      if a.columns > calculateColumns():
-        fail("window exceeds column width")
+      if columns > calculateColumns():
+        raiseZephyrError("window exceeds column width")
 
-      spreadGeometry()
+      let row = resolveRow()
+      let column = resolveColumn(columns)
+      spreadGeometry(columns, column, row)
+
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).restoreChainFocus(focusedBefore)
+
+proc spread*(
+  args: seq[string],
+  providedScreen = ScreenGeometry(),
+  providedGeometry = Geometry()
+) =
+  spreadTarget(args, providedScreen, providedGeometry)
 
 proc spread*(selector: string) =
   spread(@[selector])
 
+proc spread*(chain: WindowChain, args: varargs[string]): WindowChain =
+  spreadTarget(@args, ScreenGeometry(), Geometry(), chain.id, some(chain.token))
+  chain
+
+proc spreadGridTarget(columns, column, rows, row: int, targetOverride: string,
+    providedScreen: ScreenGeometry, providedGeometry: Geometry,
+    token = none(query.ClientToken)) =
+  let winid = validateChainArgumentTarget("", targetOverride, "window spread")
+  let focusedBefore = if token.isSome: query.focusedWinid() else: ""
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
+  let g =
+    if providedGeometry.width == 0: query.geometry(winid)
+    else: providedGeometry
+  let s =
+    if providedScreen.width == 0: screenGeometry()
+    else: providedScreen
+  let availableColumns = (s.width + s.gap) div (g.width + s.gap)
+  if columns < 1:
+    raiseZephyrError("window spread: columns must be >= 1")
+  if column < 1 or column > columns:
+    raiseZephyrError("window spread: column out of range")
+  if columns > availableColumns:
+    raiseZephyrError("window spread: window exceeds column width")
+  if rows < 1:
+    raiseZephyrError("window spread: rows must be >= 1")
+  if row < 1 or row > rows:
+    raiseZephyrError("window spread: row out of range")
+  if s.height < rows * g.height + (rows - 1) * s.gap:
+    raiseZephyrError("window spread: window exceeds row height")
+  applySpreadGridGeometry(columns, column, rows, row, g, s, winid, token)
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).restoreChainFocus(focusedBefore)
+
+proc spreadGrid*(columns, column, rows, row: int, winid = "",
+    providedScreen = ScreenGeometry(), providedGeometry = Geometry()) =
+  spreadGridTarget(columns, column, rows, row, winid,
+    providedScreen, providedGeometry)
+
 proc swap*(args: seq[string]) =
   requireArgs("window swap", args, 1)
 
-  proc fail(error: string) =
-    quit("window swap: " & error)
+  # proc fail(error: string) =
+  #   raiseZephyrError("window swap: " & error)
 
   let a = parseArguments(
     "window swap",
@@ -1135,7 +1430,7 @@ proc swap*(args: seq[string]) =
   )
 
   if a.cardinal == "":
-    fail("missing cardinal direction")
+    raiseZephyrError("missing cardinal direction")
 
   let source = query.focusedWinid()
   let sourceGeometry = query.geometry(source)
@@ -1145,13 +1440,13 @@ proc swap*(args: seq[string]) =
     of "right", "east": ipc.East
     of "down", "south": ipc.South
     of "left", "west": ipc.West
-    else: quit("window swap: invalid direction")
+    else: raiseZephyrError("window swap: invalid direction")
   ipc.focusCardinal(direction)
 
   let target = query.focusedWinid()
 
   if target == source:
-    fail("no adjacent window")
+    raiseZephyrError("no adjacent window")
 
   let targetGeometry = query.geometry(target)
 
@@ -1165,7 +1460,7 @@ proc await*(args: seq[string]) =
   requireArgs("window await", args, 1, 2)
 
   proc fail(error: string) =
-    quit("window await: " & error)
+    raiseZephyrError("window await: " & error)
 
   let a = parseArguments(
     "window await",
@@ -1181,7 +1476,7 @@ proc await*(args: seq[string]) =
   # selector; do not treat it as the legacy two-parameter form.
   if args.len == 2 and a.name == "":
     if a.delay != -1.0 or a.classname != "":
-      fail("multiple parameters not allowed")
+      raiseZephyrError("multiple parameters not allowed")
 
   elif a.delay > 0.0:
     sleep((a.delay * 1000).int)
@@ -1192,23 +1487,23 @@ proc await*(args: seq[string]) =
       fail(reply.error)
     let winids = reply.body.splitLines().filterIt(it.len > 0)
     if winids.len == 0:
-      fail("could not sync " & a.classname)
+      raiseZephyrError("could not sync " & a.classname)
     if winids.len > 1:
-      fail("indeterminate window")
+      raiseZephyrError("indeterminate window")
     if ipc.focus(ipc.windowId(winids[0])).status != 0:
-      fail("could not focus " & winids[0])
+      raiseZephyrError("could not focus " & winids[0])
 
   elif a.name != "":
     let reply = waitForName(a.name)
     if not reply.ok:
       if reply.code == ErrorTimeout:
-        quit("could not sync --name " & a.name)
-      quit("window await: " & reply.error)
+        raiseZephyrError("could not sync --name " & a.name)
+      raiseZephyrError("window await: " & reply.error)
     let winids = reply.body.splitLines().filterIt(it.len > 0)
     if winids.len == 0:
-      quit("could not sync --name " & a.name)
+      raiseZephyrError("could not sync --name " & a.name)
     if winids.len > 1:
-      quit("indeterminate window")
+      raiseZephyrError("indeterminate window")
     discard ipc.focus(ipc.windowId(winids[0])).status
 
 proc await*(selector, property: string) =
@@ -1217,14 +1512,17 @@ proc await*(selector, property: string) =
 proc await*(selector: string) =
   await(@[selector])
 
-proc tile*(
-  args: seq[string],
-  providedScreen = ScreenGeometry(),
-  providedGeometry = Geometry()
-) =
+proc applyTileGridGeometry(columns, rows, column, row: int,
+    g: Geometry, s: ScreenGeometry, winid: string,
+    token: Option[query.ClientToken])
+
+proc tileTarget(args: seq[string],
+    providedScreen = ScreenGeometry(),
+    providedGeometry = Geometry(), targetOverride = "",
+    token = none(query.ClientToken)) =
   requireArgs("window tile", args, 1, 7)
 
-  var a = parseArguments(
+  let a = parseArguments(
     "window tile",
     args,
     [
@@ -1237,15 +1535,18 @@ proc tile*(
     ]
   )
 
-  if a.rows == -1:
-    a.rows = 1
+  let winid = validateChainArgumentTarget(a.winid, targetOverride,
+    "window tile")
+  let focusedBefore = if token.isSome: query.focusedWinid() else: ""
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
 
-  if a.row == -1:
-    a.row = 1
+  let rows = a.rows.get(1)
+  let row = a.row.get(1)
 
   let g =
     if providedGeometry.width == 0:
-      query.geometry(a.winid)
+      query.geometry(winid)
     else:
       providedGeometry
   let s =
@@ -1254,12 +1555,15 @@ proc tile*(
     else:
       providedScreen
 
-  proc fail(error: string) =
-    quit("window tile: " & error)
+  # proc fail(error: string) =
+  #   raiseZephyrError("window tile: " & error)
 
   proc applyGeometry(destination: Geometry) =
-    wtp(destination, a.winid)
-    saveOriginalIfChanged(g, destination, a.winid)
+    wtpTarget(destination, winid, token)
+    if token.isSome:
+      saveOriginalForTarget(g, destination, winid, token.get)
+    else:
+      saveOriginalIfChanged(g, destination, winid)
 
   case args[0]
   of Left:
@@ -1281,44 +1585,74 @@ proc tile*(
   else:
     # unused columnName check
     if a.columnName == Center:
-      fail("invalid column")
+      raiseZephyrError("invalid column")
 
-    if a.columns < 1:
-      fail("columns must be >= 1")
+    if a.columns.isNone:
+      raiseZephyrError("columns must be >= 1")
+    let columns = a.columns.get
+    let column = a.column.get(columns)
+    applyTileGridGeometry(columns, rows, column, row, g, s, winid, token)
 
-    if a.column == -1:
-      a.column = a.columns
-    elif a.column < 1 or a.column > a.columns:
-      fail("column out of range")
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).restoreChainFocus(focusedBefore)
 
-    if a.rows < 1:
-      fail("rows must be >= 1")
+proc tile*(
+  args: seq[string],
+  providedScreen = ScreenGeometry(),
+  providedGeometry = Geometry()
+) =
+  tileTarget(args, providedScreen, providedGeometry)
 
-    if a.row < 1 or a.row > a.rows:
-      fail("row out of range")
+proc tile*(chain: WindowChain, args: varargs[string]): WindowChain =
+  tileTarget(@args, ScreenGeometry(), Geometry(), chain.id, some(chain.token))
+  chain
 
-    let tileWidth =
-      (s.width - (a.columns - 1) * s.gap) div a.columns
+proc applyTileGridGeometry(columns, rows, column, row: int,
+    g: Geometry, s: ScreenGeometry, winid: string,
+    token: Option[query.ClientToken]) =
+  if columns < 1:
+    raiseZephyrError("window tile: columns must be >= 1")
+  if column < 1 or column > columns:
+    raiseZephyrError("window tile: column out of range")
+  if rows < 1:
+    raiseZephyrError("window tile: rows must be >= 1")
+  if row < 1 or row > rows:
+    raiseZephyrError("window tile: row out of range")
+  let tileWidth = (s.width - (columns - 1) * s.gap) div columns
+  let tileHeight = (s.height - (rows - 1) * s.gap) div rows
+  let destination = Geometry(
+    x: tileWidth * (column - 1) + s.margin + (column - 1) * s.gap,
+    y: tileHeight * (row - 1) + s.top + (row - 1) * s.gap,
+    width: tileWidth,
+    height: tileHeight
+  )
+  wtpTarget(destination, winid, token)
+  if token.isSome:
+    saveOriginalForTarget(g, destination, winid, token.get)
+  else:
+    saveOriginalIfChanged(g, destination, winid)
 
-    let tileHeight =
-      (s.height - (a.rows - 1) * s.gap) div a.rows
+proc tileGridTarget(columns, rows, column, row: int, targetOverride: string,
+    providedScreen: ScreenGeometry, providedGeometry: Geometry,
+    token = none(query.ClientToken)) =
+  let winid = validateChainArgumentTarget("", targetOverride, "window tile")
+  let focusedBefore = if token.isSome: query.focusedWinid() else: ""
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).checkedChainTarget()
+  let g =
+    if providedGeometry.width == 0: query.geometry(winid)
+    else: providedGeometry
+  let s =
+    if providedScreen.width == 0: screenGeometry()
+    else: providedScreen
+  applyTileGridGeometry(columns, rows, column, row, g, s, winid, token)
+  if token.isSome:
+    WindowChain(id: winid, token: token.get).restoreChainFocus(focusedBefore)
 
-    let x =
-      tileWidth * (a.column - 1) +
-      s.margin +
-      (a.column - 1) * s.gap
-
-    let y =
-      tileHeight * (a.row - 1) +
-      s.top +
-      (a.row - 1) * s.gap
-
-    applyGeometry(Geometry(
-      x: x,
-      y: y,
-      width: tileWidth,
-      height: tileHeight
-    ))
+proc tileGrid*(columns, rows, column, row: int, winid = "",
+    providedScreen = ScreenGeometry(), providedGeometry = Geometry()) =
+  tileGridTarget(columns, rows, column, row, winid,
+    providedScreen, providedGeometry)
 
 proc tile*(columns, position: string) =
   tile(@[columns, position])
@@ -1407,4 +1741,4 @@ proc dispatch*(verb: string, rest: seq[string]) =
   of "toggle":
     toggle(rest)
   else:
-    quit("unknown window action: " & verb)
+    raiseZephyrError("unknown window action: " & verb)

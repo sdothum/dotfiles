@@ -2,6 +2,7 @@ import std/options
 import std/re
 import std/sequtils
 import std/strutils
+import ../zephyr_errors
 
 import cliargs
 import compat
@@ -35,7 +36,7 @@ proc tryWmGroup*(winid: string, group: var uint32): bool =
 
 proc wmGroup*(winid: string): uint32 =
   if not tryWmGroup(winid, result):
-    quit("window_query wm group: invalid or unavailable group for " & winid)
+    raiseZephyrError("window_query wm group: invalid or unavailable group for " & winid)
 
 type WmGroupEntry* = tuple[
   winid: string,
@@ -43,11 +44,17 @@ type WmGroupEntry* = tuple[
 ]
 
 type ClientToken* = object
-  value*: string
+  value: string
 
-proc isPresent*(token: ClientToken): bool = token.value.len > 0
+proc tokenValue(token: ClientToken): string =
+  if token.value.len == 0:
+    raise newException(ValueError, "empty client token")
+  token.value
 
-proc `$`*(token: ClientToken): string = token.value
+proc validateClientToken*(token: ClientToken) =
+  discard token.tokenValue
+
+proc `$`*(token: ClientToken): string = token.tokenValue
 
 proc parseClientToken*(value: string): ClientToken =
   if value.len != 49 or value[32] != ':' or
@@ -61,7 +68,7 @@ type WmClientState* = object
   winid*: string
   group*: uint32
   mapped*: bool
-  token*: ClientToken
+  token*: Option[ClientToken]
 
 type WmSnapshot* = object
   focused*: Option[string]
@@ -137,7 +144,7 @@ proc parseWmSnapshotChecked*(output: string): WmSnapshot =
         winid: winid,
         group: group,
         mapped: fields[3] == "1",
-        token: if version2: parseClientToken(fields[4]) else: ClientToken()
+        token: if version2: some(parseClientToken(fields[4])) else: none(ClientToken)
       ))
     else:
       raise newException(ValueError, "unknown record " & fields[0])
@@ -166,12 +173,12 @@ proc parseWmSnapshot*(output: string): WmSnapshot =
   try:
     result = parseWmSnapshotChecked(output)
   except ValueError as error:
-    quit("window snapshot: " & error.msg)
+    raiseZephyrError("window snapshot: " & error.msg)
 
 proc wmGroups*(): seq[WmGroupEntry] =
   let reply = queryDaemon(RequestQuerySnapshot)
   if not reply.ok:
-    quit("window_query wm groups: " & reply.error)
+    raiseZephyrError("window_query wm groups: " & reply.error)
   let snapshot = parseWmSnapshot(reply.body)
   for client in snapshot.clients:
     result.add((client.winid, client.group))
@@ -179,28 +186,27 @@ proc wmGroups*(): seq[WmGroupEntry] =
 proc wmSnapshot*(): WmSnapshot =
   let reply = ipc.snapshot()
   if reply.status != 0:
-    quit("window_query wm snapshot failed: " & reply.error)
+    raiseZephyrError("window_query wm snapshot failed: " & reply.error)
   result = parseWmSnapshot(reply.output)
 
 proc cachedWmSnapshot*(): WmSnapshot =
   let reply = queryDaemon(RequestQuerySnapshot)
   if not reply.ok:
-    quit("window_query wm snapshot failed: " & reply.error)
+    raiseZephyrError("window_query wm snapshot failed: " & reply.error)
   result = parseWmSnapshot(reply.body)
 
-proc clientToken*(winid: string): ClientToken =
+proc clientToken*(winid: string): Option[ClientToken] =
   let snapshot = wmSnapshot()
   for client in snapshot.clients:
     if client.winid == winid:
       return client.token
-  quit("window_query client token: unknown window " & winid)
+  raiseZephyrError("window_query client token: unknown window " & winid)
 
-proc tryClientToken*(winid: string, token: var ClientToken): bool =
-  try:
-    token = clientToken(winid)
-    result = token.isPresent
-  except CatchableError:
-    result = false
+proc requireClientToken*(winid: string): ClientToken =
+  let token = clientToken(winid)
+  if token.isNone:
+    raiseZephyrError("window_query client token: identity unavailable for " & winid)
+  token.get
 
 proc tryWmSnapshot*(snapshot: var WmSnapshot): bool =
   try:
@@ -212,31 +218,39 @@ proc tryWmSnapshot*(snapshot: var WmSnapshot): bool =
   except CatchableError:
     result = false
 
+proc tryClientToken*(winid: string): Option[ClientToken] =
+  var snapshot: WmSnapshot
+  if not tryWmSnapshot(snapshot):
+    return none(ClientToken)
+  for client in snapshot.clients:
+    if client.winid == winid:
+      return client.token
+
 proc serializeWmSnapshot*(snapshot: WmSnapshot): string =
   let focused =
     if snapshot.focused.isSome: snapshot.focused.get()
     else: "NONE"
-  let version2 = snapshot.clients.anyIt(it.token.value.len > 0)
-  if version2 and snapshot.clients.anyIt(it.token.value.len == 0):
+  let version2 = snapshot.clients.anyIt(it.token.isSome)
+  if version2 and snapshot.clients.anyIt(it.token.isNone):
     raise newException(ValueError, "mixed token-bearing and tokenless snapshot")
   result = (if version2: "SNAPSHOT 2\n" else: "SNAPSHOT 1\n") & "FOCUSED " & focused & "\nCURRENT " &
     $snapshot.currentGroup & "\n"
   for client in snapshot.clients:
     result.add("CLIENT " & client.winid & " " & $client.group & " " &
       (if client.mapped: "1" else: "0") &
-      (if version2: " " & $client.token else: "") & "\n")
+      (if version2: " " & $client.token.get else: "") & "\n")
 
 proc classname*(winid: string): string =
   let reply = queryDaemonClientClass(winid)
   if not reply.ok:
-    quit("window_query classname: " & reply.error)
+    raiseZephyrError("window_query classname: " & reply.error)
   if reply.body.len == 0:
-    quit("window_query classname: empty WM_CLASS")
+    raiseZephyrError("window_query classname: empty WM_CLASS")
   reply.body
 
 proc parseGeometryBody*(output: string): Geometry =
-  proc fail(error: string) =
-    quit("window_query geometry: " & error)
+  # proc fail(error: string) =
+  #   raiseZephyrError("window_query geometry: " & error)
 
   var
     gotX = false
@@ -248,7 +262,7 @@ proc parseGeometryBody*(output: string): Geometry =
     let parts = line.split('=', maxsplit = 1)
 
     if parts.len != 2:
-      fail("invalid window geometry " & line)
+      raiseZephyrError("invalid window geometry " & line)
 
     let value = parseInt(parts[1])
 
@@ -266,22 +280,26 @@ proc parseGeometryBody*(output: string): Geometry =
       result.height = value
       gotHeight = true
     else:
-      fail("unknown window geometry field " & parts[0])
+      raiseZephyrError("unknown window geometry field " & parts[0])
 
   if not (gotX and gotY and gotWidth and gotHeight):
-    fail("incomplete window geometry")
+    raiseZephyrError("incomplete window geometry")
 
 proc geometry*(winid: string = ""): Geometry =
   let a = parseArguments("window geometry", (if winid.len == 0: @[] else: @[winid]), [ArgWinid])
-  parseGeometryBody(ipc.geometry(ipc.windowId(a.winid)))
+  let body = if a.winid.len == 0: ipc.geometry()
+    else: ipc.geometry(ipc.windowId(a.winid))
+  parseGeometryBody(body)
 
 proc geometry*(args: seq[string]): string =
   requireArgs("window geometry", args, 0, 1)
   let a = parseArguments("window geometry", args, [ArgWinid])
-  ipc.geometry(ipc.windowId(a.winid))
+  if a.winid.len == 0: ipc.geometry()
+  else: ipc.geometry(ipc.windowId(a.winid))
 
 proc stack*(winid: string = ""): seq[string] =
-  ipc.stack(ipc.windowId(winid)).splitLines()
+  if winid.len == 0: ipc.stack().splitLines()
+  else: ipc.stack(ipc.windowId(winid)).splitLines()
 
 proc parseStackGeometries*(output: string): seq[StackGeometryEntry] =
   if output.len == 0:
@@ -289,7 +307,7 @@ proc parseStackGeometries*(output: string): seq[StackGeometryEntry] =
   for line in output.splitLines():
     let fields = line.splitWhitespace()
     if fields.len != 5:
-      quit("window_query stack geometries: malformed record " & line)
+      raiseZephyrError("window_query stack geometries: malformed record " & line)
     let id = parseArguments("window stack-geometries", @[fields[0]], [ArgWinid]).winid
     var x, y, width, height: int
     try:
@@ -298,14 +316,14 @@ proc parseStackGeometries*(output: string): seq[StackGeometryEntry] =
       width = parseInt(fields[3])
       height = parseInt(fields[4])
     except ValueError:
-      quit("window_query stack geometries: malformed geometry " & line)
+      raiseZephyrError("window_query stack geometries: malformed geometry " & line)
     if x < low(int16) or x > high(int16) or y < low(int16) or y > high(int16) or
         width < 0 or width > int(high(uint16)) or
         height < 0 or height > int(high(uint16)):
-      quit("window_query stack geometries: invalid geometry " & line)
+      raiseZephyrError("window_query stack geometries: invalid geometry " & line)
     for entry in result:
       if entry.winid == id:
-        quit("window_query stack geometries: duplicate winid " & id)
+        raiseZephyrError("window_query stack geometries: duplicate winid " & id)
     result.add(StackGeometryEntry(
       winid: id,
       geometry: Geometry(x: x, y: y, width: width, height: height)
@@ -313,7 +331,9 @@ proc parseStackGeometries*(output: string): seq[StackGeometryEntry] =
 
 proc stackGeometries*(winid: string = ""): seq[StackGeometryEntry] =
   let a = parseArguments("window stack-geometries", (if winid.len == 0: @[] else: @[winid]), [ArgWinid])
-  parseStackGeometries(ipc.stackGeometries(ipc.windowId(a.winid)))
+  let body = if a.winid.len == 0: ipc.stackGeometries()
+    else: ipc.stackGeometries(ipc.windowId(a.winid))
+  parseStackGeometries(body)
 
 proc applyGeometriesBody*(body: string) =
   ipc.applyGeometries(body)

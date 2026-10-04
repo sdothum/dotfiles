@@ -42,7 +42,8 @@ def run():
     shutil.copytree(source / "tests", cirrus / "tests")
     command("build-cirrus", ["make", "-C", cirrus, "-j4"])
     binaries = {}
-    sources = [repo / "zephyr.nimble", repo / "zephyrd.nim", repo / "tests/native_ipc_probe.nim"]
+    sources = [repo / "zephyr.nimble", repo / "zephyrd.nim", repo / "tests/native_ipc_probe.nim",
+               repo / "tests/window_chain_probe.nim", repo / "tests/action_error_probe.nim"]
     sources += sorted((repo / "tests").glob("test_*.nim"))
     for path in sources:
         binary = build / path.stem
@@ -58,11 +59,20 @@ def run():
     with private_wm(cirrus, build / "reconciliation", env) as private_env:
         command("test_state_reconciliation", [binaries["test_state_reconciliation"]], env=private_env)
     for name in ("test_native_ipc", "test_ids_group", "test_window_lifecycle", "test_fold_stacking",
-                 "test_group_explode", "test_class_fold"):
+                 "test_group_explode", "test_class_fold", "test_rule_detection"):
         args = [sys.executable, repo / "tests" / (name + ".py"), cirrus,
                 binaries["zephyr"], binaries["zephyrd"]]
         if name == "test_native_ipc": args.append(binaries["native_ipc_probe"])
         command(name, args)
+    command("test_daemon_readiness", [sys.executable,
+        repo / "tests" / "test_daemon_readiness.py", cirrus,
+        binaries["zephyr"], binaries["zephyrd"]])
+    command("test_window_chain", [sys.executable, repo / "tests/test_window_chain.py", cirrus,
+                                  binaries["zephyr"], binaries["window_chain_probe"],
+                                  binaries["zephyrd"]])
+    command("test_action_error", [sys.executable, repo / "tests/test_action_error.py", cirrus,
+                                  binaries["zephyr"], binaries["action_error_probe"],
+                                  binaries["zephyrd"]])
     for name in ("run_layers", "run_ids_group"):
         command("cirrus-" + name, [sys.executable, cirrus / "tests" / (name + ".py")])
     print("PASS: complete native IPC and existing regression suites", flush=True)

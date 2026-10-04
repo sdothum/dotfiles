@@ -12,13 +12,23 @@ import tempfile
 import time
 
 
-def client():
+def client(classname="LifecycleTest"):
     x = C.CDLL("libX11.so.6")
     class ClassHint(C.Structure):
         _fields_ = [("res_name", C.c_char_p), ("res_class", C.c_char_p)]
 
+    class SizeHints(C.Structure):
+        _fields_ = [("flags", C.c_long)] + [
+            (name, C.c_int) for name in (
+                "x", "y", "width", "height", "min_width", "min_height",
+                "max_width", "max_height", "width_inc", "height_inc",
+                "min_aspect_x", "min_aspect_y", "max_aspect_x", "max_aspect_y",
+                "base_width", "base_height", "win_gravity")
+        ]
+
     signatures = {
         "XSetClassHint": (C.c_int, [C.c_void_p, C.c_ulong, C.POINTER(ClassHint)]),
+        "XSetWMNormalHints": (C.c_int, [C.c_void_p, C.c_ulong, C.POINTER(SizeHints)]),
         "XOpenDisplay": (C.c_void_p, [C.c_char_p]),
         "XDefaultRootWindow": (C.c_ulong, [C.c_void_p]),
         "XCreateSimpleWindow": (C.c_ulong, [C.c_void_p, C.c_ulong, C.c_int, C.c_int,
@@ -26,7 +36,11 @@ def client():
         "XMapWindow": (C.c_int, [C.c_void_p, C.c_ulong]),
         "XUnmapWindow": (C.c_int, [C.c_void_p, C.c_ulong]),
         "XDestroyWindow": (C.c_int, [C.c_void_p, C.c_ulong]),
+        "XResizeWindow": (C.c_int, [C.c_void_p, C.c_ulong, C.c_uint, C.c_uint]),
+        "XStoreName": (C.c_int, [C.c_void_p, C.c_ulong, C.c_char_p]),
         "XSync": (C.c_int, [C.c_void_p, C.c_int]),
+        "XGrabServer": (None, [C.c_void_p]),
+        "XUngrabServer": (None, [C.c_void_p]),
         "XCloseDisplay": (C.c_int, [C.c_void_p]),
     }
     for name, (result, args) in signatures.items():
@@ -34,16 +48,37 @@ def client():
         function.restype, function.argtypes = result, args
     display = x.XOpenDisplay(None)
     assert display
+    # Publish WM_CLASS before other X clients can observe the new window.
+    # This makes metadata-at-ClientAdded tests deterministic.
+    x.XGrabServer(display)
     window = x.XCreateSimpleWindow(display, x.XDefaultRootWindow(display),
                                    20, 20, 160, 100, 0, 0, 0)
-    hint = ClassHint(b"lifecycle-test", b"LifecycleTest")
+    hint = ClassHint(classname.lower().encode(), classname.encode())
     x.XSetClassHint(display, window, C.byref(hint))
+    # Cirrus reads WM_NORMAL_HINTS while managing the client. Publish a valid
+    # empty hint record so this fixture does not leave the WM's size-hint
+    # fields dependent on whatever happened to be in its stack memory.
+    size_hints = SizeHints()
+    x.XSetWMNormalHints(display, window, C.byref(size_hints))
+    x.XSync(display, 0)
+    x.XUngrabServer(display)
     x.XSync(display, 0)
     print(f"0x{window:08x}", flush=True)
     for line in sys.stdin:
         action = line.strip()
         if action == "quit":
             break
+        if action.startswith("resize "):
+            _, width, height = action.split()
+            x.XResizeWindow(display, window, int(width), int(height))
+            x.XSync(display, 0)
+            print("OK", flush=True)
+            continue
+        if action.startswith("title "):
+            x.XStoreName(display, window, action[6:].encode())
+            x.XSync(display, 0)
+            print("OK", flush=True)
+            continue
         function = {"map": x.XMapWindow, "unmap": x.XUnmapWindow,
                     "destroy": x.XDestroyWindow}[action]
         function(display, window)
@@ -231,5 +266,7 @@ def run():
 if __name__ == "__main__":
     if sys.argv[1:] == ["--client"]:
         client()
+    elif len(sys.argv) == 3 and sys.argv[1] == "--client":
+        client(sys.argv[2])
     else:
         run()

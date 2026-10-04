@@ -2,8 +2,11 @@ import std/os
 import std/nativesockets
 import std/posix
 import std/strutils
+import std/options
 
 import daemon_ipc
+import group_id
+import ../zephyr_errors
 
 export daemon_ipc
 
@@ -12,6 +15,7 @@ const MaxResponseSize = MaxFrameSize
 type DaemonReply* = object
   ok*: bool
   code*: uint8
+  responseKind*: uint8
   body*: string
   error*: string
 
@@ -82,8 +86,9 @@ proc waitFrame(kind: uint8, pattern: string, timeoutMs: uint32): string =
   result[offset + 2] = char((timeoutMs shr 8) and 0xff)
   result[offset + 3] = char(timeoutMs and 0xff)
 
-proc filteredFrame(kind: uint8, includeAll: bool, pattern: string, groupNo: int): string =
-  let payloadSize = 3 + 1 + 2 + pattern.len + (if groupNo > 0: 4 else: 0)
+proc filteredFrame(kind: uint8, includeAll: bool, pattern: string,
+    group: Option[PublicGroupId]): string =
+  let payloadSize = 3 + 1 + 2 + pattern.len + (if group.isSome: 4 else: 0)
   result = newString(4 + payloadSize)
   result[0] = char((uint32(payloadSize) shr 24) and 0xff)
   result[1] = char((uint32(payloadSize) shr 16) and 0xff)
@@ -97,9 +102,9 @@ proc filteredFrame(kind: uint8, includeAll: bool, pattern: string, groupNo: int)
   result[9] = char(uint16(pattern.len) and 0xff)
   for index, value in pattern:
     result[10 + index] = value
-  if groupNo > 0:
+  if group.isSome:
     let offset = 10 + pattern.len
-    let group = uint32(groupNo)
+    let group = uint32(group.get.intValue)
     for index in 0 .. 3:
       result[offset + index] = char((group shr (24 - index * 8)) and 0xff)
 
@@ -132,6 +137,7 @@ proc queryDaemon*(kind: uint8, argument = ""): DaemonReply =
   if responseVersion != ProtocolVersion:
     return DaemonReply(error: "unsupported zephyrd response version")
   let status = uint8(ord(payload[2]))
+  result.responseKind = uint8(ord(payload[3]))
   if status == 0:
     result.ok = true
     if payload.len > 4:
@@ -141,10 +147,22 @@ proc queryDaemon*(kind: uint8, argument = ""): DaemonReply =
     if payload.len > 4:
       result.error = payload[4 .. ^1]
 
+proc awaitReady*() =
+  ## Retry only this startup synchronization command while the daemon socket
+  ## is not yet accepting connections. Other daemon commands remain fail-fast.
+  while true:
+    let reply = queryDaemon(RequestAwaitReady)
+    if reply.ok:
+      if reply.responseKind != ResponseDaemonReady:
+        raiseZephyrError("zephyr daemon await: unexpected readiness response")
+      return
+    if reply.error == "zephyrd is unavailable":
+      sleep(100)
+      continue
+    raiseZephyrError("zephyr daemon await: " & reply.error)
+
 proc queryDaemonFiltered*(kind: uint8, includeAll: bool,
-    pattern: string, groupNo = -1): DaemonReply =
-  if groupNo != -1 and (groupNo < 1 or groupNo.uint64 > uint32.high.uint64):
-    return DaemonReply(error: "invalid group number")
+    pattern: string, group = none(PublicGroupId)): DaemonReply =
   let path = socketPath()
   if path.len == 0: return DaemonReply(error: "zephyrd socket path is unavailable")
   let fd = createNativeSocket(AF_UNIX, SOCK_STREAM, 0)
@@ -153,7 +171,7 @@ proc queryDaemonFiltered*(kind: uint8, includeAll: bool,
   var address = makeUnixAddr(path)
   if connect(fd, cast[ptr SockAddr](addr address), sizeof(address).SockLen) != 0:
     return DaemonReply(error: "zephyrd is unavailable")
-  if not writeAll(fd, filteredFrame(kind, includeAll, pattern, groupNo)):
+  if not writeAll(fd, filteredFrame(kind, includeAll, pattern, group)):
     return DaemonReply(error: "zephyrd request failed")
   var header: string
   if not readAll(fd, header, 4): return DaemonReply(error: "truncated zephyrd response")

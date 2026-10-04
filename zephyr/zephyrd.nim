@@ -2,8 +2,10 @@ import std/os
 import std/options
 import std/times
 import std/strutils
+import zephyr_errors
 
 import wm/snapshot_diff
+import wm/title_diff
 import wm/window_lifecycle
 import wm/state_reconciliation
 import wm/window_query
@@ -13,6 +15,8 @@ import wm/panel_notification
 import wm/daemon_snapshot
 import wm/x11_snapshot
 import wm/daemon_ipc
+import policy/rules
+import policy/types as policyTypes
 
 proc baseline(snapshot: WmSnapshot): string =
   let focused =
@@ -31,6 +35,7 @@ proc refresh(
   event: var X11Invalidation,
   query: var X11SnapshotQuery,
   previous: var WmSnapshot,
+  previousMetadata: var seq[DaemonCachedClient],
   havePrevious: var bool,
   pendingReconcile: var Option[WmSnapshot],
   ipc: var IpcServer,
@@ -46,6 +51,7 @@ proc refresh(
   if current.focused.isSome:
     focused = current.focused.get()
   var cachedClients: seq[DaemonCachedClient] = @[]
+  var watched: seq[uint32] = @[]
   for client in current.clients:
     var instanceName = ""
     var className = ""
@@ -53,14 +59,19 @@ proc refresh(
       instanceName, className)
     var title = ""
     var titleAvailable = false
-    try:
-      if client.winid.len > 2 and client.winid[0 .. 1] == "0x":
-        let xid = parseHexInt(client.winid[2 .. ^1]).uint32
-        if not metadataAvailable:
-          metadataAvailable = query.tryWmClass(xid, instanceName, className)
-        titleAvailable = query.tryWmTitle(xid, title)
-    except ValueError:
-      discard
+    var xid: uint32
+    var xidValid = false
+    if client.winid.len > 2 and client.winid[0 .. 1] == "0x":
+      try:
+        xid = parseHexInt(client.winid[2 .. ^1]).uint32
+        xidValid = true
+        watched.add(xid)
+      except ValueError:
+        discard
+    if xidValid:
+      if not metadataAvailable:
+        metadataAvailable = query.tryWmClass(xid, instanceName, className)
+      titleAvailable = query.tryWmTitle(xid, title)
     cachedClients.add(DaemonCachedClient(
       winid: client.winid,
       group: client.group,
@@ -74,13 +85,6 @@ proc refresh(
     ))
   ipc.cacheSnapshot(serializeWmSnapshot(current), focused,
     current.currentGroup, cachedClients)
-  var watched: seq[uint32] = @[]
-  for client in current.clients:
-    try:
-      if client.winid.len > 2 and client.winid[0 .. 1] == "0x":
-        watched.add(parseHexInt(client.winid[2 .. ^1]).uint32)
-    except ValueError:
-      discard
   event.watchClients(watched)
   if not publishWmSnapshot(current):
     stderr.writeLine("SNAPSHOT_PUBLISH_FAILED")
@@ -103,8 +107,64 @@ proc refresh(
     let changes = diffSnapshots(previous, current)
     for change in changes:
       echo change.report()
+      if change.kind == ClientAdded:
+        for client in cachedClients:
+          if client.winid != change.winid:
+            continue
+          if client.metadataAvailable or client.titleAvailable:
+            let rule = rules.matchCreated(policyTypes.RuleClient(
+              winid: client.winid,
+              instanceName: client.instanceName,
+              className: client.className,
+              title: client.title
+            ))
+            if rule.isSome:
+              let verb = rule.get
+              echo "RULE_MATCH " & client.winid & " " & verb
+              stdout.flushFile()
+              try:
+                rules.applyRule(verb, client.winid)
+                echo "RULE_APPLIED " & client.winid & " " & verb
+                stdout.flushFile()
+              except ZephyrError as error:
+                stderr.writeLine("RULE_FAILED " & client.winid & " " & verb & " " & error.msg)
+                stderr.flushFile()
+          break
+    var oldTitles: seq[ObservedTitle] = @[]
+    var newTitles: seq[ObservedTitle] = @[]
+    for client in previousMetadata:
+      oldTitles.add(ObservedTitle(winid: client.winid, token: client.token,
+        title: client.title, available: client.titleAvailable))
+    for client in cachedClients:
+      newTitles.add(ObservedTitle(winid: client.winid, token: client.token,
+        title: client.title, available: client.titleAvailable))
+    for transition in diffTitleChanges(oldTitles, newTitles):
+      for client in cachedClients:
+        if client.winid != transition.winid or client.token != transition.token:
+          continue
+        let matched = rules.matchTitleChanged(policyTypes.RuleClient(
+          winid: client.winid,
+          instanceName: client.instanceName,
+          className: client.className,
+          title: transition.newTitle
+        ), transition.oldTitle)
+        if matched.isSome:
+          let verb = matched.get
+          echo "RULE_EVENT " & client.winid & " title"
+          echo "RULE_MATCH " & client.winid & " " & verb & " title"
+          stdout.flushFile()
+          try:
+            rules.applyRule(verb, client.winid)
+            echo "RULE_APPLIED " & client.winid & " " & verb & " title"
+            stdout.flushFile()
+          except ZephyrError as error:
+            stderr.writeLine("RULE_FAILED " & client.winid & " " & verb &
+              " title " & error.msg)
+            stderr.flushFile()
+        break
     discard notifyPanels(changes)
   previous = current
+  previousMetadata = cachedClients
   true
 
 var ipc: IpcServer
@@ -118,6 +178,7 @@ var
   lifecycle = WindowLifecycle(reconcile: true)
   query: X11SnapshotQuery
   previous: WmSnapshot
+  previousMetadata: seq[DaemonCachedClient]
   havePrevious = false
   pendingReconcile: Option[WmSnapshot]
   observationReady = false
@@ -142,6 +203,7 @@ proc loseObservation(
   discard clearWmSnapshot()
   havePrevious = false
   previous = WmSnapshot()
+  previousMetadata.setLen(0)
   pendingReconcile = none(WmSnapshot)
 
 proc drainLifecycle(event: var X11Invalidation): bool =
@@ -183,7 +245,7 @@ while true:
     stderr.writeLine("WINDOW_STATE_CLEANUP_DEFERRED")
 
   if retry:
-    let refreshed = refresh(event, query, previous, havePrevious, pendingReconcile, ipc,
+    let refreshed = refresh(event, query, previous, previousMetadata, havePrevious, pendingReconcile, ipc,
       notifyBootstrap, snapshotTimeoutMs)
     notifyBootstrap = false
     lastProbe = epochTime()
@@ -196,6 +258,10 @@ while true:
       # next loop will retry XCB attachment after servicing bounded clients.
       discard ipc.service(-1)
       continue
+    # refresh() has now installed `previous` and completed either baseline
+    # establishment or the normal diff path.  From here, later clients are
+    # eligible for post-baseline ClientAdded processing.
+    ipc.markReady()
     if drainLifecycle(event):
       retry = true
       continue

@@ -1,4 +1,5 @@
 import std/[os, osproc, streams, strutils]
+import ../zephyr_errors
 
 #
 # Configuration
@@ -47,9 +48,9 @@ proc requireArgCount*(
     let name = cmd & " " & verb
 
     if minLen == maxLen:
-      quit(name & " expects " & $minLen & " argument(s)")
+      raiseZephyrError(name & " expects " & $minLen & " argument(s)")
 
-    quit(
+    raiseZephyrError(
       name & " expects " &
       $minLen & ".." & $maxLen & " arguments"
     )
@@ -60,7 +61,7 @@ proc requireArgs*(
   minArgs, maxArgs: int
 ) =
   if args.len < minArgs or args.len > maxArgs:
-    quit(command & " expects " & $minArgs & ".." & $maxArgs & " arguments")
+    raiseZephyrError(command & " expects " & $minArgs & ".." & $maxArgs & " arguments")
 
 proc requireArgs*(
   command: string,
@@ -68,7 +69,7 @@ proc requireArgs*(
   minArgs: int
 ) =
   if args.len != minArgs:
-    quit(command & " expects " & $minArgs & " args")
+    raiseZephyrError(command & " expects " & $minArgs & " args")
 
 proc requireNoArgs*(command: string, args: seq[string]) =
   requireArgs(command, args, 0)

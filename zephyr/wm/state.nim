@@ -5,16 +5,20 @@ import std/sequtils
 import std/re
 import std/sets
 import std/strutils
+import std/options
+import ../zephyr_errors
 
 import types
 import window_query as query
 
-proc writeGeometry(g: Geometry, root: string, token: query.ClientToken = query.ClientToken()) =
+proc writeGeometry(g: Geometry, root: string,
+    token = none(query.ClientToken)) =
+  let identity = if token.isSome: $token.get else: ""
   removeDir(root)
   createDir(root)
 
-  if token.isPresent:
-    createDir(root / ("ID=" & $token))
+  if token.isSome:
+    createDir(root / ("ID=" & identity))
 
   createDir(root / ("X=" & $g.x))
   createDir(root / ("Y=" & $g.y))
@@ -140,7 +144,7 @@ proc prepareWinfoAccess(root: string, write: bool) =
     return
 
   if write:
-    quit("state WINFO: restore-all transaction is active")
+    raiseZephyrError("state WINFO: restore-all transaction is active")
 
   # Readers wait for the short publication/cleanup window rather than
   # interpreting a temporarily absent WINFO root as missing history.
@@ -150,7 +154,7 @@ proc prepareWinfoAccess(root: string, write: bool) =
     recoverRestoreHistory(root)
     inc attempts
   if dirExists(lock):
-    quit("state WINFO: restore-all transaction did not complete")
+    raiseZephyrError("state WINFO: restore-all transaction did not complete")
 
 proc recoverRestoreHistory*(root: string, fromExplodeOperation = false) =
   ## Complete or discard an interrupted restore-all publication.  A live
@@ -294,7 +298,7 @@ proc acquireExplodeLock*(root: string): string =
   if dirExists(result):
     let owner = lockOwner(result)
     if processAlive(owner):
-      quit("layout explode: transaction is already active")
+      raiseZephyrError("layout explode: transaction is already active")
     removeDir(result)
   createDir(splitFile(root).dir)
   createDir(result)
@@ -303,7 +307,7 @@ proc acquireExplodeLock*(root: string): string =
 proc releaseExplodeLock*(lock: string) =
   if dirExists(lock): removeDir(lock)
 
-proc beginExplodeState*(root: string, records: seq[ExplodeStateRecord]): ExplodeTransaction =
+proc beginExplodeStateStaging(root: string): ExplodeTransaction =
   result.root = root
   result.stage = root & ".stage"
   result.backup = root & ".backup"
@@ -312,6 +316,9 @@ proc beginExplodeState*(root: string, records: seq[ExplodeStateRecord]): Explode
   if dirExists(result.stage): removeDir(result.stage)
   if dirExists(result.backup): removeDir(result.backup)
   createDir(result.stage)
+
+proc beginExplodeState*(root: string, records: seq[ExplodeStateRecord]): ExplodeTransaction =
+  result = beginExplodeStateStaging(root)
   for position, record in records:
     writeGeometry(record.geometry, result.stage / align($(position + 1), 3, '0') & "=" & record.winid)
   writeRestoreMarker(result.marker, "PREPARED", result.stage, result.backup, getCurrentProcessId())
@@ -321,23 +328,21 @@ proc loadStateEntries*(root: string): seq[IdentityExplodeStateRecord]
 
 proc beginExplodeStateIdentity*(root: string,
     records: seq[IdentityExplodeStateRecord], preserveOriginal = false): ExplodeTransaction =
-  var plain: seq[ExplodeStateRecord] = @[]
   for record in records:
-    plain.add((record.winid, record.geometry))
-  result = beginExplodeState(root, plain)
+    query.validateClientToken(record.token)
+  result = beginExplodeStateStaging(root)
   var saved = records
   if preserveOriginal:
     let existing = loadStateEntries(root) # Read while holding the operation lock.
     if existing.len > 0:
       saved = existing
-      removeDir(result.stage)
-      createDir(result.stage)
   for position, record in saved:
     writeGeometry(record.geometry,
       result.stage / align($(position + 1), 3, '0') & "=" & record.winid,
-      record.token)
+      some(record.token))
   writeRestoreMarker(result.marker, "PREPARED", result.stage, result.backup,
     getCurrentProcessId())
+  result.active = true
 
 proc abortExplodeState*(transaction: var ExplodeTransaction) =
   if not transaction.active: return
@@ -400,10 +405,10 @@ proc markExplodeGeometryApplied*(operation: var ExplodeOperation) =
   writeRestoreMarker(operation.marker, "GEOMETRY_APPLIED", operation.root,
     getEnv("WINFO"), getCurrentProcessId())
 
-proc beginRestoreHistory*(updates: seq[RestoreHistoryUpdate]): RestoreHistoryTransaction =
+proc beginRestoreHistoryStaging(): RestoreHistoryTransaction =
   let root = getEnv("WINFO")
   if root.len == 0:
-    quit("state restore-all: WINFO is not configured")
+    raiseZephyrError("state restore-all: WINFO is not configured")
   result.root = root
   result.marker = restoreTxnMarkerPath(root)
   result.lock = restoreTxnLockPath(root)
@@ -421,7 +426,7 @@ proc beginRestoreHistory*(updates: seq[RestoreHistoryUpdate]): RestoreHistoryTra
       except ValueError:
         owner = 0
     if processAlive(owner):
-      quit("state restore-all: history transaction is already active")
+      raiseZephyrError("state restore-all: history transaction is already active")
     removeDir(result.lock)
   createDir(result.lock)
   writeFile(result.lock / "pid", $getCurrentProcessId())
@@ -434,28 +439,31 @@ proc beginRestoreHistory*(updates: seq[RestoreHistoryUpdate]): RestoreHistoryTra
     removeDir(result.backup)
   copyDir(root, result.stage)
 
+proc markRestoreHistoryPrepared(transaction: var RestoreHistoryTransaction) =
+  writeRestoreMarker(
+    transaction.marker,
+    "PREPARED",
+    transaction.stage,
+    transaction.backup,
+    getCurrentProcessId()
+  )
+  transaction.active = true
+
+proc beginRestoreHistory*(updates: seq[RestoreHistoryUpdate]): RestoreHistoryTransaction =
+  result = beginRestoreHistoryStaging()
+
   for update in updates:
     writeGeometry(update.geometry, result.stage / update.winid)
 
-  writeRestoreMarker(
-    result.marker,
-    "PREPARED",
-    result.stage,
-    result.backup,
-    getCurrentProcessId()
-  )
-  result.active = true
+  markRestoreHistoryPrepared(result)
 
 proc beginRestoreHistoryIdentity*(updates: seq[IdentityHistoryUpdate]): RestoreHistoryTransaction =
-  var plain: seq[RestoreHistoryUpdate] = @[]
   for update in updates:
-    plain.add((update.winid, update.geometry))
-  result = beginRestoreHistory(plain)
+    query.validateClientToken(update.token)
+  result = beginRestoreHistoryStaging()
   for update in updates:
-    writeGeometry(update.geometry, result.stage / update.winid, update.token)
-  # Rewrite the marker after token-bearing records are complete.
-  writeRestoreMarker(result.marker, "PREPARED", result.stage, result.backup,
-    getCurrentProcessId())
+    writeGeometry(update.geometry, result.stage / update.winid, some(update.token))
+  markRestoreHistoryPrepared(result)
 
 proc abortRestoreHistory*(transaction: var RestoreHistoryTransaction) =
   if not transaction.active:
@@ -511,7 +519,7 @@ proc saveGeometry*(g: Geometry, winid: string = "", precheck = true) =
       winid
   let token =
     if id.match(re(r"^0x[0-9a-fA-F]{8}$")): query.clientToken(id)
-    else: query.ClientToken()
+    else: none(query.ClientToken)
 
   # avoid losing revert history to repeated window action
   if precheck:
@@ -527,8 +535,9 @@ proc saveGeometry*(g: Geometry, winid: string = "", precheck = true) =
 
 proc saveGeometryWithToken*(g: Geometry, winid: string,
     token: query.ClientToken) =
+  query.validateClientToken(token)
   prepareWinfoAccess(getEnv("WINFO"), true)
-  writeGeometry(g, getEnv("WINFO") / winid, token)
+  writeGeometry(g, getEnv("WINFO") / winid, some(token))
 
 proc saveOriginalIfChanged*(
   source: Geometry,
@@ -554,7 +563,7 @@ proc saveOriginalIfChanged*(
       winid
   let token =
     if id.match(re(r"^0x[0-9a-fA-F]{8}$")): query.clientToken(id)
-    else: query.ClientToken()
+    else: none(query.ClientToken)
 
   writeGeometry(
     source,
@@ -580,14 +589,15 @@ proc saveState*(root: string, position: int, winid: string, g: Geometry) =
 
 proc saveStateIdentity*(root: string, position: int, winid: string,
     token: query.ClientToken, g: Geometry) =
-  writeGeometry(g, root / align($position, 3, '0') & "=" & winid, token)
+  query.validateClientToken(token)
+  writeGeometry(g, root / align($position, 3, '0') & "=" & winid, some(token))
 
 proc saveState*(root: string, position: int, winid: string) =
   saveState(root, position, winid, query.geometry(winid))
 
 proc hasGeometryForToken*(winid: string, token: query.ClientToken,
     root: string = getEnv("WINFO")): bool
-proc historyToken(root, id: string): query.ClientToken
+proc historyToken(root, id: string): Option[query.ClientToken]
 
 proc hasGeometry*(winid: string = "", root: string = getEnv("WINFO")): bool =
   if root == getEnv("WINFO"):
@@ -601,26 +611,26 @@ proc hasGeometry*(winid: string = "", root: string = getEnv("WINFO")): bool =
   if not dirExists(root / id):
     return false
   if root == getEnv("WINFO") and id.match(re(r"^0x[0-9a-fA-F]{8}$")):
-    var token: query.ClientToken
-    if not query.tryClientToken(id, token):
+    let token = query.tryClientToken(id)
+    if token.isNone:
       return false
-    return hasGeometryForToken(id, token, root)
+    return hasGeometryForToken(id, token.get, root)
   result = true
 
-proc historyToken(root, id: string): query.ClientToken =
+proc historyToken(root, id: string): Option[query.ClientToken] =
   let path = root / id
   var found = ""
   for kind, entry in walkDir(path):
     if kind == pcDir and extractFilename(entry).startsWith("ID="):
       if found.len > 0:
-        quit("state history: duplicate identity for " & id)
+        raiseZephyrError("state history: duplicate identity for " & id)
       found = extractFilename(entry)[3 .. ^1]
   if found.len == 0:
-    return query.ClientToken()
+    return none(query.ClientToken)
   try:
-    result = query.parseClientToken(found)
+    result = some(query.parseClientToken(found))
   except ValueError:
-    quit("state history: malformed identity for " & id)
+    raiseZephyrError("state history: malformed identity for " & id)
 
 proc hasGeometryForToken*(winid: string, token: query.ClientToken,
     root: string = getEnv("WINFO")): bool =
@@ -630,7 +640,7 @@ proc hasGeometryForToken*(winid: string, token: query.ClientToken,
   if not dirExists(path):
     return false
   let stored = historyToken(root, winid)
-  if not stored.isPresent or stored != token:
+  if stored.isNone or stored.get != token:
     return false
   result = true
 
@@ -644,21 +654,21 @@ proc loadGeometry*(winid: string = "", root: string = getEnv("WINFO"),
     else:
       winid
 
-  proc fail(error: string) =
-    quit("state loadGeometry: " & error)
+  # proc fail(error: string) =
+  #   raiseZephyrError("state loadGeometry: " & error)
 
   let path = root / id
 
   if not dirExists(path):
-    fail("no saved geometry for window " & id)
+    raiseZephyrError("no saved geometry for window " & id)
 
   if validateIdentity and root == getEnv("WINFO") and id.match(re(r"^0x[0-9a-fA-F]{8}$")):
-    var live: query.ClientToken
-    if not query.tryClientToken(id, live):
-      fail("no saved geometry for window " & id)
+    let live = query.tryClientToken(id)
+    if live.isNone:
+      raiseZephyrError("no saved geometry for window " & id)
     let stored = historyToken(root, id)
-    if not stored.isPresent or stored != live:
-      fail("no saved geometry for window " & id)
+    if stored.isNone or stored.get != live.get:
+      raiseZephyrError("no saved geometry for window " & id)
 
   var
     gotX = false
@@ -686,7 +696,7 @@ proc loadGeometry*(winid: string = "", root: string = getEnv("WINFO"),
       gotHeight = true
 
   if not (gotX and gotY and gotWidth and gotHeight):
-    fail("incomplete saved geometry for window " & id)
+    raiseZephyrError("incomplete saved geometry for window " & id)
 
 proc loadGeometryForToken*(winid: string, token: query.ClientToken,
     root: string = getEnv("WINFO")): Geometry =
@@ -694,10 +704,10 @@ proc loadGeometryForToken*(winid: string, token: query.ClientToken,
     prepareWinfoAccess(root, false)
   let path = root / winid
   if not dirExists(path):
-    quit("state loadGeometry: no saved geometry for window " & winid)
+    raiseZephyrError("state loadGeometry: no saved geometry for window " & winid)
   let stored = historyToken(root, winid)
-  if not stored.isPresent or stored != token:
-    quit("state loadGeometry: history identity mismatch for window " & winid)
+  if stored.isNone or stored.get != token:
+    raiseZephyrError("state loadGeometry: history identity mismatch for window " & winid)
   result = loadGeometry(winid, root, false)
 
 proc loadStateWinids*(root: string): seq[string] =
@@ -711,13 +721,13 @@ proc loadStateWinids*(root: string): seq[string] =
   for index, item in entries:
     if item.kind != pcDir or item.path.len != 14 or item.path[3] != '=' or
         not item.path[0 .. 2].allCharsInSet(Digits):
-      quit("state explode: malformed record " & item.path)
+      raiseZephyrError("state explode: malformed record " & item.path)
     let expected = align($(index + 1), 3, '0')
     if item.path[0 .. 2] != expected:
-      quit("state explode: non-contiguous ordinal " & item.path)
+      raiseZephyrError("state explode: non-contiguous ordinal " & item.path)
     let winid = item.path[4 .. ^1]
     if not winid.match(re(r"^0x[0-9a-fA-F]{8}$")) or winid in seen:
-      quit("state explode: invalid or duplicate XID " & winid)
+      raiseZephyrError("state explode: invalid or duplicate XID " & winid)
     seen.incl(winid)
     # Validate the complete record before any caller can submit it to WM.
     discard loadGeometry(item.path, root)
@@ -734,17 +744,17 @@ proc loadStateEntries*(root: string): seq[IdentityExplodeStateRecord] =
   for item in entries:
     if item.kind != pcDir or item.path.len != 14 or item.path[3] != '=' or
         not item.path[0 .. 2].allCharsInSet(Digits):
-      quit("state explode: malformed record " & item.path)
+      raiseZephyrError("state explode: malformed record " & item.path)
     let ordinal = align($expected, 3, '0')
     if item.path[0 .. 2] != ordinal:
-      quit("state explode: non-contiguous ordinal " & item.path)
+      raiseZephyrError("state explode: non-contiguous ordinal " & item.path)
     let winid = item.path[4 .. ^1]
     if not winid.match(re(r"^0x[0-9a-fA-F]{8}$")):
-      quit("state explode: invalid XID " & winid)
+      raiseZephyrError("state explode: invalid XID " & winid)
     let recordName = item.path
     let token = historyToken(root, recordName)
-    if token.isPresent:
-      result.add((winid, token, loadGeometry(recordName, root)))
+    if token.isSome:
+      result.add((winid, token.get, loadGeometry(recordName, root)))
     inc expected
 
 # proc loadStateFocus*(root: string): string =
@@ -783,20 +793,20 @@ proc restore*(args: seq[string]) =
   let root = getEnv("WME") / "snapshot"
   let token = historyToken(root, id)
 
-  if not token.isPresent:
-    quit("state restore: snapshot has no identity for window " & id)
+  if token.isNone:
+    raiseZephyrError("state restore: snapshot has no identity for window " & id)
 
-  var live: query.ClientToken
-  if not query.tryClientToken(id, live):
-    quit("state restore: window no longer exists " & id)
+  let live = query.tryClientToken(id)
+  if live.isNone:
+    raiseZephyrError("state restore: window no longer exists " & id)
 
-  if live != token:
-    quit("state restore: snapshot identity mismatch for window " & id)
+  if live.get != token.get:
+    raiseZephyrError("state restore: snapshot identity mismatch for window " & id)
 
   writeGeometry(
     loadGeometry(id, root, false),
     getEnv("WINFO") / id,
-    token
+    some(token.get)
   )
 
 proc restore*() =
@@ -815,7 +825,7 @@ proc dispatch*(verb: string, rest: seq[string]) =
     restore(rest)
 
   else:
-    quit("unknown state action: " & verb)
+    raiseZephyrError("unknown state action: " & verb)
 
 proc windowStateCleanupReady*(): bool =
   ## Defer daemon cleanup while restore-all may replace the entire WINFO tree.

@@ -1,8 +1,12 @@
 import std/os
+import std/algorithm
 import std/strutils
 import std/sequtils
 import std/sets
+import std/tables
 import std/uri
+import std/options
+import ../zephyr_errors
 
 import cliargs
 # import constants
@@ -11,6 +15,8 @@ import state
 import types
 import window
 import window_query as query
+import group as groups
+import group_id
 
 #
 # Helpers
@@ -18,10 +24,28 @@ import window_query as query
 
 type
   GridAction = proc(
-    args: seq[string],
+    columns, rows, column, row: int,
+    winid: string,
     screenGeometry: ScreenGeometry,
     sourceGeometry: Geometry
   )
+
+proc snapshotWinids(snapshot: query.WmSnapshot, mappedOnly: bool,
+    groupNo = none(PublicGroupId)): seq[string] =
+  for client in snapshot.clients:
+    if (not mappedOnly or client.mapped) and
+        (groupNo.isNone or client.group == groupNo.get.intValue.uint32):
+      result.add(client.winid)
+  result.sort()
+
+proc snapshotTokens(snapshot: query.WmSnapshot): Table[string, Option[query.ClientToken]] =
+  result = initTable[string, Option[query.ClientToken]](snapshot.clients.len)
+  for client in snapshot.clients:
+    result[client.winid] = client.token
+
+proc snapshotFocusedWinid(snapshot: query.WmSnapshot): string =
+  if snapshot.focused.isSome:
+    result = snapshot.focused.get()
 
 proc grid(
   command: string,
@@ -32,7 +56,7 @@ proc grid(
 ) =
   requireArgs(command, args, 1, 6)
 
-  var a = parseArguments(
+  let a = parseArguments(
     command,
     args,
     [
@@ -45,10 +69,11 @@ proc grid(
     ]
   )
 
-  if a.rows == -1:
-    a.rows = 1
-  if a.position == -1:
-    a.position = 1
+  if a.columns.isNone:
+    raiseZephyrError(command & ": columns must be > 0")
+  let columns = a.columns.get
+  let rows = a.rows.get(1)
+  let position = a.position.get(1)
 
   let screenGeometry =
     if providedScreen.width == 0:
@@ -56,57 +81,47 @@ proc grid(
     else:
       providedScreen
 
-  proc column(): int =
-    if a.column > 0:
-      return a.column
-    let columnOrder =
-      case a.columns
-      of 1: @[1]
-      of 2: @[2, 1]
-      of 3: @[2, 3, 1]
-      of 4: @[3, 4, 2, 1]
-      of 5: @[3, 4, 5, 2, 1]
-      else: toSeq(1 .. a.columns)
-    if a.rows == 1:
-      result = columnOrder[(a.position - 1) mod a.columns]
+  let column =
+    if a.column.isSome:
+      a.column.get
     else:
-      result = columnOrder[((a.position - 1) div a.rows) mod a.columns]
-
-  proc row(): int =
-    (a.position - 1) mod a.rows + 1
-
-  if a.rows == 1:
-    action(@[
-      $a.columns,
-      $column(),
-      a.winid],
-      screenGeometry,
-      sourceGeometry
-    )
-  else:
-    action(@[
-      $a.columns,
-      $column(),
-      "--rows", $a.rows,
-      "--row", $row(),
-      a.winid],
-      screenGeometry,
-      sourceGeometry
-    )
+      let columnOrder =
+        case columns
+        of 1: @[1]
+        of 2: @[2, 1]
+        of 3: @[2, 3, 1]
+        of 4: @[3, 4, 2, 1]
+        of 5: @[3, 4, 5, 2, 1]
+        else: toSeq(1 .. columns)
+      if rows == 1:
+        columnOrder[(position - 1) mod columns]
+      else:
+        columnOrder[((position - 1) div rows) mod columns]
+  let row = (position - 1) mod rows + 1
+  action(columns, rows, column, row, a.winid,
+    screenGeometry, sourceGeometry)
 
 proc tileWithScreen(
   args: seq[string],
   screenGeometry: ScreenGeometry,
   sourceGeometry = Geometry()
 ) =
-  grid("tile", args, window.tile, screenGeometry, sourceGeometry)
+  grid("tile", args,
+    proc(columns, rows, column, row: int, winid: string,
+        s: ScreenGeometry, g: Geometry) =
+      window.tileGrid(columns, rows, column, row, winid, s, g),
+    screenGeometry, sourceGeometry)
 
 proc spreadWithScreen(
   args: seq[string],
   screenGeometry: ScreenGeometry,
   sourceGeometry = Geometry()
 ) =
-  grid("spread", args, window.spread, screenGeometry, sourceGeometry)
+  grid("spread", args,
+    proc(columns, rows, column, row: int, winid: string,
+        s: ScreenGeometry, g: Geometry) =
+      window.spreadGrid(columns, column, rows, row, winid, s, g),
+    screenGeometry, sourceGeometry)
 
 proc explodeDestination(
   columns, rows, position: int,
@@ -160,7 +175,7 @@ proc foldDestination(
 
   if spread:
     if screen.height < rows * source.height + (rows - 1) * screen.gap:
-      quit("layout fold: window exceeds row height")
+      raiseZephyrError("layout fold: window exceeds row height")
     return Geometry(
       x: tileWidth * (column - 1) + screen.margin +
         (column - 1) * screen.gap + (tileWidth - source.width) div 2,
@@ -184,16 +199,17 @@ proc foldDestination(
 proc level*(args: seq[string]) =
   requireNoArgs("layout level", args)
 
-  let winids = window.liveIds(@[])
+  let identitySnapshot = query.wmSnapshot()
+  let winids = snapshotWinids(identitySnapshot, mappedOnly = true)
 
-  if winids == "":
+  if winids.len == 0:
     return
 
   let screenGeometry = window.screenGeometry()
-  let identitySnapshot = query.wmSnapshot()
+  let tokens = snapshotTokens(identitySnapshot)
   var applications: seq[window.CheckedGeometryApplication] = @[]
 
-  for wid in winids.splitLines():
+  for wid in winids:
     let source = query.geometry(wid)
     let destination = Geometry(
       x: source.x,
@@ -201,18 +217,14 @@ proc level*(args: seq[string]) =
       width: source.width,
       height: source.height
     )
-    var token = query.ClientToken()
-    for client in identitySnapshot.clients:
-      if client.winid == wid:
-        token = client.token
-        break
-    if not token.isPresent:
-      quit("layout level: missing client identity for " & wid)
+    let token = tokens.getOrDefault(wid)
+    if token.isNone:
+      raiseZephyrError("layout level: missing client identity for " & wid)
     if destination == source:
       state.saveGeometry(source, wid)
     else:
       state.saveOriginalIfChanged(source, destination, wid)
-    applications.add((wid, token, destination))
+    applications.add((wid, token.get, destination))
 
   if applications.len > 0:
     window.applyGeometriesChecked(applications)
@@ -237,31 +249,28 @@ proc restore*(args: seq[string]) =
     ]
 
     state.recoverRestoreHistory(getEnv("WINFO"))
-    let winids = window.liveIds(@["--all"])
-    if winids == "":
+    let identitySnapshot = query.wmSnapshot()
+    let winids = snapshotWinids(identitySnapshot, mappedOnly = false)
+    if winids.len == 0:
       return
 
     var plan: seq[RestorePlan] = @[]
-    let identitySnapshot = query.wmSnapshot()
+    let tokens = snapshotTokens(identitySnapshot)
 
     # Read every destination and live source before submitting any geometry.
     # This preserves the restore toggle state while giving bulk application a
     # complete, pre-mutation plan.
-    for winid in winids.splitLines():
-      var token = query.ClientToken()
-      for client in identitySnapshot.clients:
-        if client.winid == winid:
-          token = client.token
-          break
-      if not token.isPresent or not hasGeometryForToken(winid, token):
+    for winid in winids:
+      let token = tokens.getOrDefault(winid)
+      if token.isNone or not hasGeometryForToken(winid, token.get):
         continue
-      plan.add((winid, token, loadGeometryForToken(winid, token), query.geometry(winid)))
+      plan.add((winid, token.get, loadGeometryForToken(winid, token.get), query.geometry(winid)))
 
     if plan.len == 0:
       return
 
-    # A target may disappear after the initial ids query.  Filter against one
-    # all-managed observation, retaining the original restore order.
+    # A target may disappear after planning. Filter against a later all-managed
+    # observation, retaining the snapshot's original restore order.
     let existing = window.liveIds(@["--all"]).splitLines.toHashSet
     var
       applications: seq[window.CheckedGeometryApplication] = @[]
@@ -290,37 +299,34 @@ proc restore*(args: seq[string]) =
     state.commitRestoreHistory(transaction)
     return
 
-  let winid = query.focusedWinid()
-  let winids = window.liveIds(@[])
+  let identitySnapshot = query.wmSnapshot()
+  let winid = snapshotFocusedWinid(identitySnapshot)
+  let winids = snapshotWinids(identitySnapshot, mappedOnly = true)
 
-  if winids == "":
+  if winids.len == 0:
     return
 
   var
     applications: seq[window.CheckedGeometryApplication] = @[]
     historyUpdates: seq[state.IdentityHistoryUpdate] = @[]
 
-  let identitySnapshot = query.wmSnapshot()
-  for wid in winids.splitLines():
-    var token = query.ClientToken()
-    for client in identitySnapshot.clients:
-      if client.winid == wid:
-        token = client.token
-        break
-    if not token.isPresent or not state.hasGeometryForToken(wid, token):
+  let tokens = snapshotTokens(identitySnapshot)
+  for wid in winids:
+    let token = tokens.getOrDefault(wid)
+    if token.isNone or not state.hasGeometryForToken(wid, token.get):
       continue
 
-    let saved = state.loadGeometryForToken(wid, token)
+    let saved = state.loadGeometryForToken(wid, token.get)
     let current = query.geometry(wid)
-    applications.add((wid, token, saved))
-    historyUpdates.add((wid, token, current))
+    applications.add((wid, token.get, saved))
+    historyUpdates.add((wid, token.get, current))
 
   if applications.len > 0:
     var transaction = state.beginRestoreHistoryIdentity(historyUpdates)
     window.applyGeometriesChecked(applications)
     state.commitRestoreHistory(transaction)
 
-  focus(winid)
+  window.focus(winid)
 
 proc tile*(args: seq[string]) =
   tileWithScreen(args, ScreenGeometry())
@@ -338,6 +344,7 @@ proc prepareFoldPlacement(winids: seq[string], columns, rows: int, spread: bool,
     command: string): FoldPlacement =
   var
     initial: seq[Geometry] = @[]
+    tokens = snapshotTokens(identitySnapshot)
 
   # Capture every source geometry before any fold mutation occurs.  This
   # preserves spread sizing and the original-history comparison semantics.
@@ -346,13 +353,9 @@ proc prepareFoldPlacement(winids: seq[string], columns, rows: int, spread: bool,
 
   for index, winid in winids:
     let source = initial[index]
-    var token = query.ClientToken()
-    for client in identitySnapshot.clients:
-      if client.winid == winid:
-        token = client.token
-        break
-    if not token.isPresent:
-      quit(command & ": missing client identity for " & winid)
+    let token = tokens.getOrDefault(winid)
+    if token.isNone:
+      raiseZephyrError(command & ": missing client identity for " & winid)
     let destination = foldDestination(
       columns,
       rows,
@@ -361,10 +364,10 @@ proc prepareFoldPlacement(winids: seq[string], columns, rows: int, spread: bool,
       source,
       spread
     )
-    result.records.add((winid, token, source))
+    result.records.add((winid, token.get, source))
     if source != destination:
-      result.history.add((winid, token, source))
-    result.applications.add((winid, token, destination))
+      result.history.add((winid, token.get, source))
+    result.applications.add((winid, token.get, destination))
 
 
 proc raiseFoldPlacement(placement: FoldPlacement) =
@@ -375,7 +378,7 @@ proc restoreFoldFocus(winid: string, placement: FoldPlacement) =
   # Explicit multi-raise preserves focus. Avoid raising an unrelated focused
   # window back over the placement merely to reaffirm its existing focus.
   if query.focusedWinid() != winid:
-    focus(winid)
+    window.focus(winid)
     # Restoring focus raises its target. Reassert the participant order without
     # changing focus, including when the original focus is outside the set.
     raiseFoldPlacement(placement)
@@ -387,7 +390,7 @@ proc classFoldRoot(classname: string): string =
 proc fold*(args: seq[string]) =
   requireArgs("layout fold", args, 1, 6)
 
-  var a = parseArguments(
+  let a = parseArguments(
     "layout fold",
     args,
     [
@@ -396,34 +399,38 @@ proc fold*(args: seq[string]) =
       ArgClassname,
       ArgGroupNo,
       ArgSpread
-    ]
+    ], groups.count
   )
 
-  let winid = query.focusedWinid()
+  let identitySnapshot = query.wmSnapshot()
+  let winid = snapshotFocusedWinid(identitySnapshot)
 
-  if a.rows == -1:
-    a.rows = 1
+  let columns = a.columns.get
+  let rows = a.rows.get(1)
 
   let winids =
-    if a.groupNo > 0:
-      window.ids(@["--group", $a.groupNo]).splitLines()
+    if a.groupNo.isSome:
+      snapshotWinids(identitySnapshot, mappedOnly = true, groupNo = a.groupNo)
     elif a.classname.len > 0:
-      window.ids(@[a.classname]).splitLines()
+      # Use the direct WM query here. Layout policies can run in zephyrd,
+      # where querying the daemon's own IPC server would deadlock its event
+      # loop while the action is in progress.
+      window.liveIds(@[a.classname]).splitLines()
     else:
-      window.liveIds(@[]).splitLines()
+      snapshotWinids(identitySnapshot, mappedOnly = true)
 
   if winids.len == 0:
-    quit("layout fold: no matching windows")
+    raiseZephyrError("layout fold: no matching windows")
 
   let classRoot =
-    if a.groupNo <= 0 and a.classname.len > 0: classFoldRoot(a.classname)
+    if a.groupNo.isNone and a.classname.len > 0: classFoldRoot(a.classname)
     else: ""
   if classRoot.len > 0:
     state.recoverExplodeOperation(classRoot)
 
   let screenGeometry = window.screenGeometry()
-  let placement = prepareFoldPlacement(winids, a.columns, a.rows, a.spread,
-    screenGeometry, query.wmSnapshot(), "layout fold")
+  let placement = prepareFoldPlacement(winids, columns, rows, a.spread,
+    screenGeometry, identitySnapshot, "layout fold")
 
   if classRoot.len > 0:
     var operation = state.beginExplodeOperationIdentity(classRoot,
@@ -469,19 +476,19 @@ proc spreadGrid(count: int): Spread =
     result.columns = 5
     result.rows = 3
 
-proc explodeGroup*(group: int) =
-  let winid = query.focusedWinid()
-
-  let winids = window.ids(@["--group", $group]).splitLines().filterIt(it.len > 0)
+proc explodeGroup*(group: PublicGroupId) =
+  let identitySnapshot = query.wmSnapshot()
+  let winid = snapshotFocusedWinid(identitySnapshot)
+  let winids = snapshotWinids(identitySnapshot, mappedOnly = true,
+    groupNo = some(group))
 
   if winids.len == 0:
-    quit("layout explode --group: no matching windows")
+    raiseZephyrError("layout explode --group: no matching windows")
 
   let spread = spreadGrid(winids.len)
-  let root = getEnv("WME") / "layout" / "explode:group:" & $group
+  let root = getEnv("WME") / "layout" / "explode:group:" & $group.intValue
 
   state.recoverExplodeOperation(root)
-  let identitySnapshot = query.wmSnapshot()
   let placement = prepareFoldPlacement(winids, spread.columns, spread.rows, false,
     window.screenGeometry(), identitySnapshot, "layout explode --group")
   var operation = state.beginExplodeOperationIdentity(root, placement.records,
@@ -499,7 +506,7 @@ proc explodeStack*() =
   let stack = query.stackGeometries()
 
   if stack.len == 0:
-    quit("layout explode: no matching windows")
+    raiseZephyrError("layout explode: no matching windows")
 
   let spread = spreadGrid(stack.len)
   let root = getEnv("WME") / "layout" / "explode"
@@ -508,19 +515,16 @@ proc explodeStack*() =
   var position = 1
   let screenGeometry = window.screenGeometry()
   let identitySnapshot = query.wmSnapshot()
+  let tokens = snapshotTokens(identitySnapshot)
   var records: seq[state.IdentityExplodeStateRecord] = @[]
   var history: seq[state.IdentityHistoryUpdate] = @[]
   var applications: seq[window.GeometryApplication] = @[]
 
   for entry in stack:
-    var token = query.ClientToken()
-    for client in identitySnapshot.clients:
-      if client.winid == entry.winid:
-        token = client.token
-        break
-    if not token.isPresent:
-      quit("layout explode: missing client identity for " & entry.winid)
-    records.add((entry.winid, token, entry.geometry))
+    let token = tokens.getOrDefault(entry.winid)
+    if token.isNone:
+      raiseZephyrError("layout explode: missing client identity for " & entry.winid)
+    records.add((entry.winid, token.get, entry.geometry))
 
     let destination = explodeDestination(
       spread.columns,
@@ -529,7 +533,7 @@ proc explodeStack*() =
       screenGeometry,
     )
     if entry.geometry != destination:
-      history.add((entry.winid, token, entry.geometry))
+      history.add((entry.winid, token.get, entry.geometry))
     applications.add((entry.winid, destination))
 
     inc position
@@ -541,7 +545,7 @@ proc explodeStack*() =
   window.raiseMany(stack.mapIt(it.winid))
   state.commitExplodeOperation(operation)
 
-  focus(winid)
+  window.focus(winid)
 
 proc explode*(args: seq[string]) =
   requireArgs("layout explode", args, 0, 2)
@@ -551,11 +555,11 @@ proc explode*(args: seq[string]) =
     args,
     [
       ArgGroupNo
-    ]
+    ], groups.count
   )
 
-  if a.groupNo > 0:
-    explodeGroup(a.groupNo)
+  if a.groupNo.isSome:
+    explodeGroup(a.groupNo.get)
   else:
     explodeStack()
 
@@ -573,20 +577,21 @@ proc restoreRecordedLayout(root, command: string, missingState = "") =
     if dirExists(root):
       removeDir(root)
     releaseExplodeLock(explodeLock)
-    quit(if missingState.len > 0: missingState else: command & ": no matching windows")
+    raiseZephyrError(if missingState.len > 0: missingState else: command & ": no matching windows")
 
-  let existing = window.liveIds(@["--all"]).splitLines.toHashSet
-  let focusedBefore = query.focusedWinid()
+  let liveSnapshot = query.wmSnapshot()
+  var existing = initHashSet[string]()
+  for client in liveSnapshot.clients:
+    existing.incl(client.winid)
+  let focusedBefore = snapshotFocusedWinid(liveSnapshot)
+  let tokens = snapshotTokens(liveSnapshot)
   var
     applications: seq[window.CheckedGeometryApplication] = @[]
 
-  let liveSnapshot = query.wmSnapshot()
   for entry in recorded:
-    if entry.winid in existing:
-      for client in liveSnapshot.clients:
-        if client.winid == entry.winid and client.token == entry.token:
-          applications.add((entry.winid, entry.token, entry.geometry))
-          break
+    let token = tokens.getOrDefault(entry.winid)
+    if entry.winid in existing and token.isSome and token.get == entry.token:
+      applications.add((entry.winid, entry.token, entry.geometry))
 
   # let focused = loadStateFocus(root)
 
@@ -601,19 +606,19 @@ proc restoreRecordedLayout(root, command: string, missingState = "") =
     # start of unexplode, never the pre-explode focus.
     if focusedBefore.len > 0 and focusedBefore in existing and
         query.focusedWinid() != focusedBefore:
-      focus(focusedBefore)
+      window.focus(focusedBefore)
   removeDir(root)
 
 proc unfold*(args: seq[string]) =
   requireArgs("layout unfold", args, 1, 1)
   let a = parseArguments("layout unfold", args, [ArgClassname])
   if a.classname.len == 0:
-    quit("layout unfold: classname required")
+    raiseZephyrError("layout unfold: classname required")
   restoreRecordedLayout(classFoldRoot(a.classname), "layout unfold",
     "layout unfold: no fold state for " & a.classname)
 
-proc unexplodeGroup*(group: int) =
-  let root = getEnv("WME") / "layout" / "explode:group:" & $group
+proc unexplodeGroup*(group: PublicGroupId) =
+  let root = getEnv("WME") / "layout" / "explode:group:" & $group.intValue
   restoreRecordedLayout(root, "layout unexplode --group")
 
 proc unexplodeStack*() =
@@ -628,11 +633,11 @@ proc unexplode*(args: seq[string]) =
     args,
     [
       ArgGroupNo
-    ]
+    ], groups.count
   )
 
-  if a.groupNo > 0:
-    unexplodeGroup(a.groupNo)
+  if a.groupNo.isSome:
+    unexplodeGroup(a.groupNo.get)
   else:
     unexplodeStack()
 
@@ -699,4 +704,4 @@ proc dispatch*(verb: string, rest: seq[string]) =
   of "unfold":
     unfold(rest)
   else:
-    quit("unknown layout action")
+    raiseZephyrError("unknown layout action")

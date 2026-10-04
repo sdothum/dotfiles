@@ -1,6 +1,7 @@
 # Test driver keeps the production session alive across stdin requests.
 import std/[os, strutils]
 import ../wm/native_ipc as ipc
+import ../wm/layer_types
 for line in stdin.lines:
   let args = line.splitWhitespace()
   if args.len == 0: continue
@@ -13,7 +14,11 @@ for line in stdin.lines:
   of "move":
     ipc.move(parseInt(args[1]), parseInt(args[2]), ipc.windowId(args[3]))
     echo "OK"
+  of "move-focused":
+    ipc.move(parseInt(args[1]), parseInt(args[2]), relative = true)
+    echo "OK"
   of "geometry": echo ipc.geometry(ipc.windowId(args[1])).replace("\n", "|")
+  of "geometry-focused": echo ipc.geometry().replace("\n", "|")
   of "resize":
     ipc.resize(parseInt(args[1]), parseInt(args[2]), ipc.windowId(args[3]))
     echo "OK"
@@ -21,6 +26,9 @@ for line in stdin.lines:
     ipc.move(parseInt(args[1]), parseInt(args[2]), ipc.windowId(args[3]), relative = true)
     echo "OK"
   of "focus": echo ipc.focus(ipc.windowId(args[1])).status
+  of "layer-focused":
+    ipc.layer(Above)
+    echo "OK"
   of "last":
     ipc.focusLast()
     echo "OK"
@@ -71,5 +79,9 @@ for line in stdin.lines:
   of "close":
     ipc.closeWindow(ipc.windowId(args[1]))
     echo "OK"
+  of "zero-geometry":
+    echo ipc.geometry(ipc.WindowId(0))
+  of "parse-empty-id":
+    discard ipc.windowId("")
   else: quit("unknown probe action")
   stdout.flushFile()

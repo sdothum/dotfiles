@@ -86,6 +86,41 @@ suite "zephyrd IPC transport":
     check response[6].ord == 0
     check response[7].ord == 1
 
+  test "readiness request stays pending until baseline is installed":
+    let root = getTempDir() / ("zephyrd-ipc-ready-" & $getCurrentProcessId())
+    createDir(root)
+    let path = root / "zephyrd.sock"
+    var server: IpcServer
+    check server.open(path)
+    defer:
+      server.close()
+      if dirExists(root): removeDir(root)
+
+    let fd = createNativeSocket(AF_UNIX, SOCK_STREAM, 0)
+    defer: close(fd)
+    setBlocking(fd, false)
+    var address = makeUnixAddr(path)
+    check connect(fd, cast[ptr SockAddr](addr address), sizeof(address).SockLen) == 0
+    let request = queryFrame(RequestAwaitReady)
+    check posix.write(cint(fd), unsafeAddr request[0], request.len) == request.len
+    discard server.service(-1) # accept the early client
+    discard server.service(-1) # keep its readiness request pending
+    check readResponse(fd).len == 0
+
+    server.markReady()
+    discard server.service(-1) # publish READY to the pending client
+    let ready = readResponse(fd)
+    check ready.len == 8
+    check ready[6].ord == 0
+    check ready[7].ord == int(ResponseDaemonReady)
+
+    # Readiness is monotonic even if observation/cache state later changes.
+    server.invalidateCache()
+    let afterReady = connectAndService(server, path, queryFrame(RequestAwaitReady))
+    check afterReady.len == 8
+    check afterReady[6].ord == 0
+    check afterReady[7].ord == int(ResponseDaemonReady)
+
   test "unsupported version is an error and server remains usable":
     let root = getTempDir() / ("zephyrd-ipc-version-" & $getCurrentProcessId())
     createDir(root)
@@ -252,6 +287,74 @@ suite "zephyrd IPC transport":
     check immediate[7].ord == 9
     check immediate[8 .. ^1] == "0x00000001"
 
+  test "invalid name waiter pattern fails immediately and leaves server usable":
+    let root = getTempDir() / ("zephyrd-ipc-bad-name-" & $getCurrentProcessId())
+    createDir(root)
+    let path = root / "zephyrd.sock"
+    var server: IpcServer
+    check server.open(path)
+    defer:
+      server.close()
+      if dirExists(root): removeDir(root)
+    let invalid = connectAndService(server, path,
+      waitFrame(RequestWaitName, "["))
+    check invalid[6].ord == 1
+    check invalid[7].ord == 3
+    check invalid[8 .. ^1] == "invalid wait pattern"
+    check connectAndService(server, path, pingFrame())[7].ord == 1
+
+  test "pending name waiter reuses its expression across cache refreshes":
+    let root = getTempDir() / ("zephyrd-ipc-name-refresh-" & $getCurrentProcessId())
+    createDir(root)
+    let path = root / "zephyrd.sock"
+    var server: IpcServer
+    check server.open(path)
+    defer:
+      server.close()
+      if dirExists(root): removeDir(root)
+    server.cacheSnapshot("SNAPSHOT 2\n", "", 1,
+      @[
+        DaemonCachedClient(winid: "0x00000001", group: 1, mapped: true,
+          token: "one", title: "still waiting", titleAvailable: true),
+        DaemonCachedClient(winid: "0x00000004", group: 1, mapped: true,
+          token: "removed", title: "unrelated", titleAvailable: true)
+      ])
+
+    let fd = createNativeSocket(AF_UNIX, SOCK_STREAM, 0)
+    defer: close(fd)
+    setBlocking(fd, false)
+    var address = makeUnixAddr(path)
+    check connect(fd, cast[ptr SockAddr](addr address), sizeof(address).SockLen) == 0
+    let request = waitFrame(RequestWaitName, "^wanted")
+    check posix.write(cint(fd), unsafeAddr request[0], request.len) == request.len
+    discard server.service(-1) # accept
+    discard server.service(-1) # register waiter with its compiled expression
+    check readResponse(fd).len == 0
+
+    for _ in 0 .. 2:
+      server.cacheSnapshot("SNAPSHOT 2\n", "", 1,
+        @[DaemonCachedClient(winid: "0x00000001", group: 1, mapped: true,
+          token: "one", title: "still waiting", titleAvailable: true)])
+      discard server.service(-1)
+      check readResponse(fd).len == 0
+
+    # The existing client's title changes, another matching client appears,
+    # and the removed client must not be returned from an earlier snapshot.
+    server.cacheSnapshot("SNAPSHOT 2\n", "", 1,
+      @[
+        DaemonCachedClient(winid: "0x00000001", group: 1, mapped: true,
+          token: "one", title: "Wanted first", titleAvailable: true),
+        DaemonCachedClient(winid: "0x00000002", group: 1, mapped: true,
+          token: "two", title: "wanted second", titleAvailable: true),
+        DaemonCachedClient(winid: "0x00000003", group: 1, mapped: false,
+          token: "hidden", title: "Wanted hidden", titleAvailable: true)
+      ])
+    discard server.service(-1) # send waiter completion
+    let matched = readResponse(fd)
+    check matched[6].ord == 0
+    check matched[7].ord == 9
+    check matched[8 .. ^1] == "0x00000001\n0x00000002"
+
   test "name waiter keeps zero-match requests pending then times out":
     let root = "/tmp/zephyrd-ipc-name-timeout-" & $getCurrentProcessId()
     createDir(root)
@@ -295,3 +398,190 @@ suite "zephyrd IPC transport":
     discard server.service(-1)
     let zeroResponse = readResponse(zeroFd)
     check zeroResponse[7].ord == int(ErrorTimeout)
+
+  test "class waiter matches immediately and after a client appears":
+    let root = getTempDir() / ("zephyrd-ipc-class-" & $getCurrentProcessId())
+    createDir(root)
+    let path = root / "zephyrd.sock"
+    var server: IpcServer
+    check server.open(path)
+    defer:
+      server.close()
+      if dirExists(root): removeDir(root)
+
+    server.cacheSnapshot("SNAPSHOT 2\n", "", 1,
+      @[DaemonCachedClient(winid: "0x00000001", group: 1, mapped: true,
+        className: "Terminal", metadataAvailable: true)])
+    let immediate = connectAndService(server, path,
+      waitFrame(RequestWaitClass, "Terminal"))
+    check immediate[6].ord == 0
+    check immediate[7].ord == 8
+    check immediate[8 .. ^1] == "0x00000001"
+
+    server.cacheSnapshot("SNAPSHOT 2\n", "", 1,
+      @[DaemonCachedClient(winid: "0x00000002", group: 1, mapped: true,
+        className: "Other", metadataAvailable: true)])
+    let fd = createNativeSocket(AF_UNIX, SOCK_STREAM, 0)
+    defer: close(fd)
+    setBlocking(fd, false)
+    var address = makeUnixAddr(path)
+    check connect(fd, cast[ptr SockAddr](addr address), sizeof(address).SockLen) == 0
+    let request = waitFrame(RequestWaitClass, "Terminal")
+    check posix.write(cint(fd), unsafeAddr request[0], request.len) == request.len
+    discard server.service(-1) # accept
+    discard server.service(-1) # register the literal class waiter
+    check readResponse(fd).len == 0
+
+    # An unrelated client can disappear while the class waiter remains pending.
+    server.cacheSnapshot("SNAPSHOT 2\n", "", 1, @[])
+    discard server.service(-1)
+    check readResponse(fd).len == 0
+    server.cacheSnapshot("SNAPSHOT 2\n", "", 1,
+      @[
+        DaemonCachedClient(winid: "0x00000003", group: 1, mapped: true,
+          className: "Terminal", metadataAvailable: true),
+        DaemonCachedClient(winid: "0x00000004", group: 1, mapped: false,
+          className: "Terminal", metadataAvailable: true)
+      ])
+    discard server.service(-1)
+    let delayed = readResponse(fd)
+    check delayed[6].ord == 0
+    check delayed[7].ord == 8
+    check delayed[8 .. ^1] == "0x00000003"
+
+  test "class waiter rejects malformed regex syntax during decode":
+    let root = getTempDir() / ("zephyrd-ipc-bad-class-" & $getCurrentProcessId())
+    createDir(root)
+    let path = root / "zephyrd.sock"
+    var server: IpcServer
+    check server.open(path)
+    defer:
+      server.close()
+      if dirExists(root): removeDir(root)
+    server.cacheSnapshot("SNAPSHOT 2\n", "", 1, @[])
+    let invalid = connectAndService(server, path,
+      waitFrame(RequestWaitClass, "["))
+    check invalid[6].ord == 1
+    check invalid[7].ord == 3
+    check invalid[8 .. ^1] == "invalid wait pattern"
+
+  test "class waiter timeout takes precedence over a cache match":
+    let root = getTempDir() / ("zephyrd-ipc-class-timeout-" & $getCurrentProcessId())
+    createDir(root)
+    let path = root / "zephyrd.sock"
+    var server: IpcServer
+    check server.open(path)
+    defer:
+      server.close()
+      if dirExists(root): removeDir(root)
+    server.cacheSnapshot("SNAPSHOT 2\n", "", 1, @[])
+    let fd = createNativeSocket(AF_UNIX, SOCK_STREAM, 0)
+    defer: close(fd)
+    var address = makeUnixAddr(path)
+    check connect(fd, cast[ptr SockAddr](addr address), sizeof(address).SockLen) == 0
+    let request = waitFrame(RequestWaitClass, "Terminal", 1)
+    check posix.write(cint(fd), unsafeAddr request[0], request.len) == request.len
+    discard server.service(-1)
+    discard server.service(-1)
+    sleep(10)
+    # cacheSnapshot services waiters synchronously; expiration is checked
+    # before the newly matching snapshot is considered.
+    server.cacheSnapshot("SNAPSHOT 2\n", "", 1,
+      @[DaemonCachedClient(winid: "0x00000005", group: 1, mapped: true,
+        className: "Terminal", metadataAvailable: true)])
+    discard server.service(-1)
+    let response = readResponse(fd)
+    check response[6].ord == 1
+    check response[7].ord == int(ErrorTimeout)
+
+  test "cache invalidation clears pending waiter with NOT_READY":
+    let root = getTempDir() / ("zephyrd-ipc-waiter-invalidated-" & $getCurrentProcessId())
+    createDir(root)
+    let path = root / "zephyrd.sock"
+    var server: IpcServer
+    check server.open(path)
+    defer:
+      server.close()
+      if dirExists(root): removeDir(root)
+    server.cacheSnapshot("SNAPSHOT 2\n", "", 1,
+      @[DaemonCachedClient(winid: "0x00000001", group: 1, mapped: true,
+        className: "Other", metadataAvailable: true)])
+    let fd = createNativeSocket(AF_UNIX, SOCK_STREAM, 0)
+    defer: close(fd)
+    setBlocking(fd, false)
+    var address = makeUnixAddr(path)
+    check connect(fd, cast[ptr SockAddr](addr address), sizeof(address).SockLen) == 0
+    let request = waitFrame(RequestWaitClass, "Terminal")
+    check posix.write(cint(fd), unsafeAddr request[0], request.len) == request.len
+    discard server.service(-1)
+    discard server.service(-1)
+    check readResponse(fd).len == 0
+    server.invalidateCache()
+    discard server.service(-1)
+    let response = readResponse(fd)
+    check response[6].ord == 1
+    check response[7].ord == int(ErrorNotReady)
+    # Even a later matching snapshot cannot complete the invalidated waiter.
+    server.cacheSnapshot("SNAPSHOT 2\n", "", 1,
+      @[DaemonCachedClient(winid: "0x00000006", group: 1, mapped: true,
+        className: "Terminal", metadataAvailable: true)])
+    discard server.service(-1)
+    check readResponse(fd).len == 0
+
+  test "same-connection second request preserves existing replacement behavior":
+    let root = getTempDir() / ("zephyrd-ipc-second-request-" & $getCurrentProcessId())
+    createDir(root)
+    let path = root / "zephyrd.sock"
+    var server: IpcServer
+    check server.open(path)
+    defer:
+      server.close()
+      if dirExists(root): removeDir(root)
+    server.cacheSnapshot("SNAPSHOT 2\n", "", 1, @[])
+
+    let fd = createNativeSocket(AF_UNIX, SOCK_STREAM, 0)
+    defer: close(fd)
+    setBlocking(fd, false)
+    var address = makeUnixAddr(path)
+    check connect(fd, cast[ptr SockAddr](addr address), sizeof(address).SockLen) == 0
+    let firstWait = waitFrame(RequestWaitClass, "First")
+    check posix.write(cint(fd), unsafeAddr firstWait[0], firstWait.len) == firstWait.len
+    discard server.service(-1) # accept
+    discard server.service(-1) # register first wait
+    check readResponse(fd).len == 0
+    let secondWaitRequest = waitFrame(RequestWaitName, "^Second$")
+    check posix.write(cint(fd), unsafeAddr secondWaitRequest[0], secondWaitRequest.len) == secondWaitRequest.len
+    discard server.service(-1) # the second wait replaces the first
+    check readResponse(fd).len == 0
+    server.cacheSnapshot("SNAPSHOT 2\n", "", 1,
+      @[DaemonCachedClient(winid: "0x00000007", group: 1, mapped: true,
+        className: "First", metadataAvailable: true)])
+    discard server.service(-1)
+    check readResponse(fd).len == 0
+    server.cacheSnapshot("SNAPSHOT 2\n", "", 1,
+      @[DaemonCachedClient(winid: "0x00000008", group: 1, mapped: true,
+        title: "Second", titleAvailable: true)])
+    discard server.service(-1)
+    let secondWait = readResponse(fd)
+    check secondWait[7].ord == 9
+    check secondWait[8 .. ^1] == "0x00000008"
+
+    # An ordinary request on a connection with a pending wait replaces the
+    # wait response and closes the connection with the ordinary response.
+    let queryFd = createNativeSocket(AF_UNIX, SOCK_STREAM, 0)
+    defer: close(queryFd)
+    setBlocking(queryFd, false)
+    var queryAddress = makeUnixAddr(path)
+    check connect(queryFd, cast[ptr SockAddr](addr queryAddress), sizeof(queryAddress).SockLen) == 0
+    let pendingWait = waitFrame(RequestWaitClass, "Never")
+    check posix.write(cint(queryFd), unsafeAddr pendingWait[0], pendingWait.len) == pendingWait.len
+    discard server.service(-1)
+    discard server.service(-1)
+    let ordinaryQuery = queryFrame(RequestQueryCurrentGroup)
+    check posix.write(cint(queryFd), unsafeAddr ordinaryQuery[0], ordinaryQuery.len) == ordinaryQuery.len
+    discard server.service(-1)
+    discard server.service(-1)
+    let ordinary = readResponse(queryFd)
+    check ordinary[6].ord == 0
+    check ordinary[7].ord == int(RequestQueryCurrentGroup)
+    check ordinary[8 .. ^1] == "1"

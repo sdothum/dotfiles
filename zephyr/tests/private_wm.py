@@ -8,7 +8,7 @@ from test_window_lifecycle import wait_for
 
 
 @contextmanager
-def private_wm(cirrus, root, base_env=None):
+def private_wm(cirrus, root, base_env=None, screen="1024x768x24"):
     root = Path(root)
     root.mkdir(parents=True, exist_ok=True)
     env = dict(base_env or os.environ)
@@ -21,7 +21,7 @@ def private_wm(cirrus, root, base_env=None):
     server = wm = None
     with (root / "private-wm.log").open("w+") as log:
         try:
-            server = sp.Popen(["Xvfb", "-displayfd", str(wr), "-screen", "0", "1024x768x24",
+            server = sp.Popen(["Xvfb", "-displayfd", str(wr), "-screen", "0", screen,
                                "-nolisten", "tcp"], pass_fds=(wr,), stdout=log, stderr=log, env=env)
             os.close(wr); wr = None
             assert select.select([rd], [], [], 10)[0], "Xvfb startup timed out"

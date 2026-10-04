@@ -1,13 +1,16 @@
 import native_ipc as ipc
 import std/os
+import std/options
 import std/strutils
 import std/tables
+import ../zephyr_errors
 
 import cliargs
 import compat
 import constants
 import window_query as window
 import daemon_client
+import group_id
 
 # Group IDs are raw WM IDs.  Slot 0 is reserved VOID; names are presentation.
 const GroupNames* = [
@@ -30,7 +33,7 @@ proc count*(args: seq[string]): int =
   try:
     result = parseInt(ipc.groupCount().strip())
   except ValueError:
-    quit("group count: invalid WM group count")
+    raiseZephyrError("group count: invalid WM group count")
 
 proc count*(): int =
   count(@[])
@@ -44,7 +47,7 @@ proc current*(args: seq[string]): string =
   requireNoArgs("group current", args)
   let reply = queryDaemon(RequestQueryCurrentGroup)
   if not reply.ok:
-    quit("group current: " & reply.error)
+    raiseZephyrError("group current: " & reply.error)
   reply.body
 
 proc current*(): string =
@@ -53,11 +56,24 @@ proc current*(): string =
 proc currentLive*(): string =
   ipc.groupCurrent()
 
+proc currentLiveId*(): int =
+  try:
+    parseInt(currentLive())
+  except ValueError:
+    raiseZephyrError("group current: invalid WM group id")
+
+proc id*(groupname: string): int =
+  if groupname.len == 0:
+    raiseZephyrError("group id: missing group name")
+
+  for i, name in GroupNames:
+    if name == groupname:
+      return i
+
+  raiseZephyrError("group id: unknown group " & groupname)
+
 proc id*(args: seq[string]): int =
   requireArgs("group id", args, 1)
-
-  proc fail(error: string) =
-    quit("group id: " & error)
 
   let a = parseArguments(
     "group id",
@@ -67,20 +83,27 @@ proc id*(args: seq[string]): int =
     ]
   )
 
-  if a.groupName.len == 0:
-    fail("missing group name")
+  id(a.groupName)
 
-  for i, name in GroupNames:
-    if name == a.groupName:
-      return i
+proc publicId*(groupname: string, context = "group"): PublicGroupId =
+  let value = id(groupname)
+  if value == 0:
+    raiseZephyrError(context & ": group 0 is reserved VOID")
+  publicGroupId(value, count(), context)
 
-  fail("unknown group " & a.groupName)
+proc name*(group: int): string =
+  if group < 0 or group >= count():
+    raiseZephyrError("group name: invalid group id " & $group)
+  if group < GroupNames.len:
+    GroupNames[group]
+  else:
+    "GROUP " & $group
 
 proc name*(args: seq[string]): string =
   requireArgs("group name", args, 0, 1)
 
   if args.len == 0:
-    return name(@[currentLive()])
+    return name(currentLiveId())
 
   let a = parseArguments(
     "group name",
@@ -90,49 +113,119 @@ proc name*(args: seq[string]): string =
     ]
   )
 
-  if a.group < 0 or a.group >= count():
-    quit("group name: invalid group id " & $a.group)
-  if a.group < GroupNames.len:
-    GroupNames[a.group]
-  else:
-    "GROUP " & $a.group
+  name(a.group.get)
+
+proc name*(): string =
+  name(@[])
 
 #
 # Helpers
 #
 
-proc singleChildName*(path: string): string =
+proc singleChildName*(path: string): Option[string] =
   for kind, child in walkDir(path):
     if kind == pcDir:
-      return lastPathPart(child)
+      let name = lastPathPart(child)
+      if name.len > 0:
+        return some(name)
+      return none(string)
+  none(string)
 
 proc groupPath*(group: string, groupSuffix: string = ""): string =
-  singleChildName((getEnv("GROUP") & groupSuffix) / group)
+  singleChildName((getEnv("GROUP") & groupSuffix) / group).get("")
 
-proc setCurrentGroup(group: string, currentGroup: string) =
+proc validWinid(value: string): bool =
+  if value.len != 10 or value[0 .. 1] != "0x":
+    return false
+  for index in 2 .. 9:
+    if value[index] notin {'0'..'9', 'a'..'f', 'A'..'F'}:
+      return false
+  true
+
+proc rememberedToken(entry: string): tuple[
+    valid: bool,
+    token: Option[window.ClientToken]
+  ] =
+  result.valid = true
+  result.token = none(window.ClientToken)
+  var foundIdentity = false
+  try:
+    for kind, path in walkDir(entry):
+      let name = lastPathPart(path)
+      if not name.startsWith("ID"):
+        continue
+      if foundIdentity or kind != pcDir or not name.startsWith("ID=") or
+          name.len <= 3:
+        return (false, none(window.ClientToken))
+      try:
+        result.token = some(window.parseClientToken(name[3 .. ^1]))
+      except ValueError:
+        return (false, none(window.ClientToken))
+      foundIdentity = true
+  except CatchableError:
+    return (false, none(window.ClientToken))
+
+proc rememberClient(group: PublicGroupId, client: window.WmClientState) =
+  let groupRoot = (getEnv("GROUP") & ":focus") / $group.intValue
+  removeDir(groupRoot)
+  let entry = groupRoot / client.winid
+  createDir(entry)
+  if client.token.isSome:
+    createDir(entry / ("ID=" & $client.token.get))
+
+proc setCurrentGroup(group, currentGroup: int) =
   discard group
   discard currentGroup
 
-proc reconcileCurrentGroup(group: string, currentGroup: string) =
+proc reconcileCurrentGroup(group, currentGroup: int) =
   if currentGroup == group:
     return
 
   discard group
 
-proc validRememberedWinid(group: int): string =
-  let remembered = singleChildName((getEnv("GROUP") & ":focus") / $group)
-  if remembered == "":
-    return
+proc validRememberedWinid(group: PublicGroupId): Option[string] =
+  let groupRoot = (getEnv("GROUP") & ":focus") / $group.intValue
+  let remembered = singleChildName(groupRoot)
+  if remembered.isNone:
+    return none(string)
 
-  var wmGroup: uint32
-  if not window.tryWmGroup(remembered, wmGroup):
-    return
-  if wmGroup == uint32(group):
-    result = remembered
+  let winid = remembered.get
+  if not validWinid(winid):
+    return none(string)
+
+  let saved = rememberedToken(groupRoot / winid)
+  if not saved.valid:
+    removeDir(groupRoot)
+    return none(string)
+
+  var snapshot: window.WmSnapshot
+  if not window.tryWmSnapshot(snapshot):
+    return none(string)
+  for client in snapshot.clients:
+    if client.winid != winid or client.group != uint32(group.intValue):
+      continue
+    if saved.token.isSome:
+      if client.token.isSome and client.token.get == saved.token.get:
+        return some(winid)
+      removeDir(groupRoot)
+      return none(string)
+
+    # Legacy XID-only entries remain usable. Upgrade them when the live
+    # snapshot provides an identity, without making lookup depend on the write.
+    if client.token.isSome:
+      try:
+        createDir(groupRoot / winid / ("ID=" & $client.token.get))
+      except CatchableError:
+        discard
+    return some(winid)
+  none(string)
 
 #
 # Actions
 #
+
+proc add*(group: PublicGroupId, winid = "")
+proc focus*(group: PublicGroupId)
 
 proc add*(args: seq[string]) =
   requireArgs("group add", args, 1, 2)
@@ -146,20 +239,34 @@ proc add*(args: seq[string]) =
     ]
   )
 
-  if a.group == 0 or a.group >= count():
-    quit("group add: invalid group id " & $a.group)
+  let group = a.group.get
+  if group <= 0 or group >= count():
+    raiseZephyrError("group add: invalid group id " & $group)
+  add(publicGroupId(group, count(), "group add"), a.winid)
 
-  if a.winid == "":
-    a.winid = window.focusedWinid()
-
-  if a.winid == "":
-    return
-
+proc add*(group: PublicGroupId, winid: string) =
+  var snapshot: window.WmSnapshot
+  let haveSnapshot = window.tryWmSnapshot(snapshot)
+  var target = winid
+  if target == "":
+    if not haveSnapshot or snapshot.focused.isNone:
+      return
+    target = snapshot.focused.get
   let root = getEnv("GROUP")
 
-  createDir(root / $a.group / a.winid)
-  removeDir(root & ":focus" / $a.group)
-  createDir(root & ":focus" / $a.group / a.winid)
+  createDir(root / $group.intValue / target)
+  let focusRoot = (root & ":focus") / $group.intValue
+  if haveSnapshot:
+    for client in snapshot.clients:
+      if client.winid == target.toLowerAscii():
+        rememberClient(group, client)
+        return
+  removeDir(focusRoot)
+
+proc add*(group: int, winid = "") =
+  if group <= 0 or group >= count():
+    raiseZephyrError("group add: invalid group id " & $group)
+  add(publicGroupId(group, count(), "group add"), winid)
 
 proc remove*(args: seq[string]) =
   requireArgs("group remove", args, 0, 2)
@@ -202,15 +309,18 @@ proc close*(args: seq[string]) =
     ]
   )
 
-  if a.group == 0 or a.group >= count():
-    quit("group close: invalid group id " & $a.group)
+  let parsedGroup = a.group.get
+  if parsedGroup <= 0 or parsedGroup >= count():
+    raiseZephyrError("group close: invalid group id " & $parsedGroup)
+  let group = publicGroupId(parsedGroup, count(), "group close")
+  let groupNo = group.intValue
 
   let root = getEnv("GROUP")
   var
     members: seq[string]
     cleanupPaths = initTable[string, seq[string]]()
 
-  for kind, path in walkDir(root / $a.group):
+  for kind, path in walkDir(root / $groupNo):
     if kind == pcDir:
       let winid = lastPathPart(path)
 
@@ -218,7 +328,7 @@ proc close*(args: seq[string]) =
       cleanupPaths[winid] = @[path]
 
   for group in 0 ..< count():
-    if group != a.group:
+    if group != groupNo:
       for kind, path in walkDir(root / $group):
         if kind == pcDir:
           let winid = lastPathPart(path)
@@ -240,11 +350,11 @@ proc close*(args: seq[string]) =
 
     removeKnownGroupState(winid)
 
-  ipc.clearGroup(a.group)
+  ipc.clearGroup(groupNo)
 
-  removeDir(root / $a.group)
-  removeDir(root & ":focus" / $a.group)
-  removeDir(root & ":deactivated" / $a.group)
+  removeDir(root / $groupNo)
+  removeDir(root & ":focus" / $groupNo)
+  removeDir(root & ":deactivated" / $groupNo)
 
 proc desktop*(args: seq[string]) =
   requireArgs("group desktop", args, 1)
@@ -257,22 +367,25 @@ proc desktop*(args: seq[string]) =
     ]
   )
 
-  if a.group == 0 or a.group >= count():
-    quit("group desktop: invalid group id " & $a.group)
+  let parsedGroup = a.group.get
+  if parsedGroup <= 0 or parsedGroup >= count():
+    raiseZephyrError("group desktop: invalid group id " & $parsedGroup)
+  let group = publicGroupId(parsedGroup, count(), "group desktop")
+  let groupNo = group.intValue
 
   let root = getEnv("GROUP")
   for g in 1 ..< count():
-    if g != a.group:
+    if g != groupNo:
       ipc.deactivateGroup(g)
 
   removeDir(root & ":deactivated")
 
-  ipc.activateGroup(a.group)
+  ipc.activateGroup(groupNo)
 
-  let winid = singleChildName(root & ":focus" / $a.group)
+  let winid = validRememberedWinid(group)
 
-  if winid != "":
-    ipc.focus(ipc.windowId(winid)).require()
+  if winid.isSome:
+    ipc.focus(ipc.windowId(winid.get)).require()
 
 proc focus*(args: seq[string]) =
   requireArgs("group focus", args, 1)
@@ -285,37 +398,41 @@ proc focus*(args: seq[string]) =
     ]
   )
 
-  if a.group == 0:
-    quit("group focus: group 0 is reserved VOID")
-  if a.group >= count():
-    quit("group focus: invalid group id " & $a.group)
+  let groupNo = a.group.get
+  if groupNo == 0:
+    raiseZephyrError("group focus: group 0 is reserved VOID")
+  focus(publicGroupId(groupNo, count(), "group focus"))
 
-  let currentGroup = currentLive()
+proc focus*(group: PublicGroupId) =
+  let groupNo = group.intValue
 
-  if currentGroup == $a.group:
-    add(args)
+  let currentGroup = currentLiveId()
+
+  if currentGroup == groupNo:
+    add(group)
     return
 
   let root = getEnv("GROUP")
 
-  setCurrentGroup($a.group, currentGroup)
+  setCurrentGroup(groupNo, currentGroup)
 
-  ipc.activateGroup(a.group)
+  ipc.activateGroup(groupNo)
 
   removeDir(
-    (root & ":deactivated") / $a.group
+    (root & ":deactivated") / $groupNo
   )
 
-  let winid = validRememberedWinid(a.group)
-  if winid != "":
-    ipc.focus(ipc.windowId(winid)).require()
-
-proc focus*(groupname: string) =
-  let group = id(@[groupname])
-  focus(@[$group])
+  let winid = validRememberedWinid(group)
+  if winid.isSome:
+    ipc.focus(ipc.windowId(winid.get)).require()
 
 proc focus*(group: int) =
-  focus(@[$group])
+  if group == 0:
+    raiseZephyrError("group focus: group 0 is reserved VOID")
+  focus(publicGroupId(group, count(), "group focus"))
+
+proc focus*(groupname: string) =
+  focus(publicId(groupname, "group focus"))
 
 proc reconcile*(args: seq[string]) =
   requireArgs("group reconcile", args, 1)
@@ -328,22 +445,27 @@ proc reconcile*(args: seq[string]) =
     ]
   )
 
-  if a.group == 0 or a.group >= count():
-    quit("group reconcile: invalid group id " & $a.group)
+  let groupNo = a.group.get
+  if groupNo == 0 or groupNo >= count():
+    raiseZephyrError("group reconcile: invalid group id " & $groupNo)
+  let group = publicGroupId(groupNo, count(), "group reconcile")
 
-  let currentGroup = currentLive()
-  if currentGroup == $a.group:
+  let currentGroup = currentLiveId()
+  if currentGroup == group.intValue:
     return
 
-  reconcileCurrentGroup($a.group, currentGroup)
+  reconcileCurrentGroup(group.intValue, currentGroup)
 
 proc last*(args: seq[string]) =
   requireNoArgs("group last", args)
 
   let group = singleChildName(getEnv("GROUP") / "last")
 
-  if group != "":
-    focus(@[group])
+  if group.isSome:
+    try:
+      focus(publicGroupId(parseInt(group.get), count(), "group last"))
+    except ValueError:
+      raiseZephyrError("group last: invalid saved group id " & group.get)
 
 proc restore*(args: seq[string]) =
   requireNoArgs("group restore", args)
@@ -370,37 +492,37 @@ proc toggle*(args: seq[string]) =
     ]
   )
 
-  if a.group == 0 or a.group >= count():
-    quit("group toggle: invalid group id " & $a.group)
+  let parsedGroup = a.group.get
+  if parsedGroup <= 0 or parsedGroup >= count():
+    raiseZephyrError("group toggle: invalid group id " & $parsedGroup)
+  let group = publicGroupId(parsedGroup, count(), "group toggle")
+  let groupNo = group.intValue
 
   let root = getEnv("GROUP")
 
   for kind, path in walkDir(root & ":deactivated"):
     if kind == pcDir:
-      if $a.group == lastPathPart(path):
+      if $groupNo == lastPathPart(path):
 
-        for kind, path in walkDir(root / $a.group):
+        for kind, path in walkDir(root / $groupNo):
           if kind == pcDir:
             removeDir(getEnv("HIDDEN") / lastPathPart(path))
 
-        focus(a.group)
+        focus(group)
         return
 
-  let winid = singleChildName(root / $a.group)
+  let winid = singleChildName(root / $groupNo)
 
-  if winid == "":
+  if winid.isNone:
     return
 
-  ipc.deactivateGroup(a.group)
+  ipc.deactivateGroup(groupNo)
 
-  createDir(root & ":deactivated" / $a.group)
+  createDir(root & ":deactivated" / $groupNo)
 
 #
 # Native Nim convenience overloads
 #
-
-proc id*(groupname: string): string =
-  $id(@[groupname])
 
 proc last*() =
   last(@[])
@@ -440,4 +562,4 @@ proc dispatch*(verb: string, rest: seq[string]) =
   of "toggle":
     toggle(rest)
   else:
-    quit("unknown group action")
+    raiseZephyrError("unknown group action")

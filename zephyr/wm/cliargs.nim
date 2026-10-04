@@ -1,8 +1,12 @@
 import std/re
 import std/sequtils
 import std/strutils
+import std/options
+import ../zephyr_errors
 
 import constants
+import group_id
+import layer_types
 
 type
   OptionValue* = tuple
@@ -25,7 +29,7 @@ proc parseArgs*(
 
     if arg in valueOptions:
       if i + 1 >= args.len:
-        quit(arg & " requires a value")
+        raiseZephyrError(arg & " requires a value")
 
       result.options.add((
         name: arg,
@@ -63,11 +67,11 @@ proc rejectUnsupported*(
 ) =
   for flag in args.flags:
     if flag notin allowedFlags:
-      quit("unsupported option: " & flag)
+      raiseZephyrError("unsupported option: " & flag)
 
   for option in args.options:
     if option.name notin allowedOptions:
-      quit("unsupported option: " & option.name)
+      raiseZephyrError("unsupported option: " & option.name)
 
 proc validateOptions*(
   rest: seq[string],
@@ -122,22 +126,22 @@ type
     cardinal*: string
     classname*: string
     close*: bool
-    column*: int
+    column*: Option[int]
     columnName*: string
-    columns*: int
+    columns*: Option[int]
     delay*: float
     direction*: string
-    group*: int
+    group*: Option[int]
     groupName*: string
-    groupNo*: int
-    layer*: string
+    groupNo*: Option[PublicGroupId]
+    layer*: Layer
     name*: string
-    position*: int
+    position*: Option[int]
     preset*: string
     rotate*: bool
-    row*: int
+    row*: Option[int]
     rowName*: string
-    rows*: int
+    rows*: Option[int]
     side*: string
     size*: tuple[width, height: int]
     spread*: bool
@@ -149,7 +153,8 @@ type
 proc parseArguments*(
   command: string,
   args: seq[string],
-  allowed: openArray[ArgumentKind]
+  allowed: openArray[ArgumentKind],
+  groupCount: proc(): int {.closure.} = nil
 ): Arguments =
 
   result.all = false
@@ -158,21 +163,22 @@ proc parseArguments*(
   result.cardinal = ""
   result.classname = ""
   result.close = false
-  result.column = -1
+  result.column = none(int)
   result.columnName = ""
-  result.columns = -1
+  result.columns = none(int)
   result.delay = -1.0
   result.direction = ""
-  result.group = -1
+  result.group = none(int)
   result.groupName = ""
-  result.groupNo = -1
+  result.groupNo = none(PublicGroupId)
+  result.layer = Layer.Normal
   result.name = ""
-  result.position = -1
+  result.position = none(int)
   result.preset = ""
   result.rotate = false
-  result.row = -1
+  result.row = none(int)
   result.rowName = ""
-  result.rows = -1
+  result.rows = none(int)
   result.side = ""
   result.size = (0, 0)
   result.spread = false
@@ -182,7 +188,7 @@ proc parseArguments*(
   result.zoom = ""
 
   proc fail(error: string) =
-    quit(command & ": " & error)
+    raiseZephyrError(command & ": " & error)
 
   var i = 0
 
@@ -190,26 +196,53 @@ proc parseArguments*(
     try: result = parseInt(args[i])
     except: fail("invalid coordinate value " & args[i])
 
-  proc parseValue(
-    value: int,
+  proc parsePublicGroupOption(
+    value: Option[PublicGroupId],
     kind: ArgumentKind,
     allowed: openArray[ArgumentKind]
-  ): int =
+  ): PublicGroupId =
     if kind notin allowed:
       fail(args[i] & " not allowed")
 
-    if value != -1:
+    if value.isSome:
       fail(args[i] & " already specified")
 
     if i + 1 >= args.len:
       fail(args[i] & " requires a value")
 
-    result =
-      try: parseInt(args[i + 1])
-      except ValueError: 0
+    var parsed: int
+    try: parsed = parseInt(args[i + 1])
+    except ValueError: parsed = 0
 
-    if result < 1:
+    if parsed < 1:
+      fail("group must be > 0")
+    if groupCount.isNil:
+      fail("internal error: group count required for --group")
+    publicGroupId(parsed, groupCount(), command)
+
+  proc parsePositiveOption(
+    value: Option[int],
+    kind: ArgumentKind,
+    allowed: openArray[ArgumentKind]
+  ): Option[int] =
+    if kind notin allowed:
+      fail(args[i] & " not allowed")
+
+    if value.isSome:
+      fail(args[i] & " already specified")
+
+    if i + 1 >= args.len:
+      fail(args[i] & " requires a value")
+
+    var parsed: int
+    try:
+      parsed = parseInt(args[i + 1])
+    except ValueError:
+      parsed = 0
+
+    if parsed < 1:
       fail(args[i] & " must be > 0")
+    some(parsed)
 
   proc parseSwitch(
     value: bool,
@@ -298,26 +331,24 @@ proc parseArguments*(
       inc i
 
     of "--group":
-      result.groupNo = parseValue(result.groupNo, ArgGroupNo, allowed)
-
-      if result.groupNo < 1:
-        fail("group must be > 0")
+      result.groupNo = some(
+        parsePublicGroupOption(result.groupNo, ArgGroupNo, allowed))
 
       inc i
 
     of "--rows":
-      result.rows = parseValue(result.rows, ArgRows, allowed)
+      result.rows = parsePositiveOption(result.rows, ArgRows, allowed)
       inc i
 
     of "--row":
-      result.row = parseValue(result.row, ArgRow, allowed)
+      result.row = parsePositiveOption(result.row, ArgRow, allowed)
       inc i
 
     of "paper", "video", A3, B4, A4, B5, A5, B6, A6, B7, "480p", "720p", "1080p", Viewport, Terminal:
       result.preset = parseArgument(result.preset, ArgPreset, allowed)
 
     of "--position":
-      result.position = parseValue(result.position, ArgPosition, allowed)
+      result.position = parsePositiveOption(result.position, ArgPosition, allowed)
       inc i
 
     of "--rotate":
@@ -339,9 +370,11 @@ proc parseArguments*(
     elif i == 0:
 
       if ArgLayer in allowed:
-        if args[i] notin [Normal, Above, Overlay, "normal", "above", "overlay"]:
-          fail("layer must be normal, above or overlay")
-        result.layer = parseArgument(result.layer, ArgLayer, allowed)
+        case args[i]
+        of constants.Normal, "normal": result.layer = Layer.Normal
+        of constants.Above, "above": result.layer = Layer.Above
+        of constants.Overlay, "overlay": result.layer = Layer.Overlay
+        else: fail("layer must be normal, above or overlay")
 
       elif allowed.len == 1 and ArgClassname in allowed:
         result.classname = parseArgument(result.classname, ArgClassname, allowed)
@@ -390,14 +423,16 @@ proc parseArguments*(
               if value < 0:
                 fail("group must be >= 0")
 
-              result.group = value
+              if result.group.isSome:
+                fail("group already specified")
+              result.group = some(value)
 
             # columns
             else:
               if value < 1:
                 fail("columns must be > 0")
 
-              result.columns = value
+              result.columns = some(value)
 
           # group name, columns, cardinal directive or classname (with --all or --name)
           except ValueError:
@@ -449,17 +484,19 @@ proc parseArguments*(
       result.winid = args[i]
 
     elif ArgColumn in allowed and
-        result.column == -1:
+        result.column.isNone:
 
       if i != 1:
         fail("column must be second option")
 
-      result.column =
-        try: parseInt(args[i])
-        except ValueError: 0
+      var value: int
+      try: value = parseInt(args[i])
+      except ValueError: value = 0
 
-      if result.column < 1:
+      if value < 1:
         fail("column must be > 0")
+
+      result.column = some(value)
 
     elif ArgRowName in allowed and
         result.rowName == "":

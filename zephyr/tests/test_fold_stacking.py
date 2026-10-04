@@ -125,6 +125,15 @@ def run():
                 folded = {w: geometry(w) for w in windows[:2]}
                 assert any(folded[w] != original[w] for w in windows[:2])
                 assert focused() == focus_before
+                command("window", "hide", windows[1])
+                wait_for(lambda: windows[1] not in ids(), "hidden fold client remained mapped")
+                layout("restore", "--all")
+                assert {w: geometry(w) for w in windows[:2]} == {
+                    w: original[w] for w in windows[:2]
+                }
+                assert windows[1] not in ids(), "restore --all remapped its hidden client"
+                command("window", "focus", windows[1])
+                command("window", "focus", focus_before)
                 # Restore exact source rectangles for the explode comparison.
                 for w in windows[:2]:
                     fields = [part.split("=", 1)[1] for part in original[w].split()]
@@ -174,7 +183,42 @@ def run():
                                        capture_output=True,text=True)
                 assert empty.returncode != 0
                 assert "no matching windows" in empty.stderr
-                print("PASS: mixed-layer fold raises, no-op repeats, participant order, unrelated focus, group explode raises, fold/grid equivalence, exact group restore, independent roots, migration, hidden restore, token mismatch, new members, destruction, focus")
+                # Exercise the six-client identity-history staging path and its
+                # restore through the same private WM fixture.
+                six = []
+                for i in range(6):
+                    p = start([sys.executable, __file__, "--client"], stdin=subprocess.PIPE,
+                              stdout=subprocess.PIPE, text=True)
+                    xid = p.stdout.readline().strip()
+                    p.stdin.write("map\n"); p.stdin.flush()
+                    assert p.stdout.readline().strip() == "OK"
+                    time.sleep(.1)
+                    command("group", "add", "2", xid)
+                    command("window", "apply-geometries", xid,
+                            str(25 + i * 35), str(40 + i * 20), "150", "110")
+                    six.append(xid)
+                six_original = {w: geometry(w) for w in six}
+                six_focus = focused()
+                layout("fold", "3", "--rows", "2", "--group", "2")
+                six_folded = {w: geometry(w) for w in six}
+                assert six_folded != six_original
+                assert focused() == six_focus
+                layout("restore", "--all")
+                assert {w: geometry(w) for w in six} == six_original
+                assert focused() == six_focus
+                layout("fold", "3", "--rows", "2", "--group", "2")
+                mismatch_folded = {w: geometry(w) for w in six}
+                record = Path(env["WINFO"]) / six[0]
+                identity = next(p for p in record.iterdir() if p.name.startswith("ID="))
+                identity.rename(identity.with_name("ID=" + "0" * 32 + ":0000000000000001"))
+                layout("restore", "--all")
+                assert geometry(six[0]) == mismatch_folded[six[0]]
+                assert {w: geometry(w) for w in six[1:]} == {
+                    w: six_original[w] for w in six[1:]
+                }
+                for w in six:
+                    command("window", "close", w)
+                print("PASS: mixed-layer fold raises, no-op repeats, participant order, unrelated focus, hidden restore-all, group explode raises, fold/grid equivalence, exact group restore, independent roots, migration, hidden restore, token mismatch, new members, destruction, focus, six-client identity fold/restore")
 
             except BaseException:
                 log.flush(); log.seek(0); print(log.read())

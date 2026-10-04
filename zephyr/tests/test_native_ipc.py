@@ -110,6 +110,12 @@ def run():
                 assert reply, (command, p.poll())
                 return reply.strip()
 
+            def probe_failure(command, expected):
+                result = sp.run([probe], input=command + "\n", env=env, text=True,
+                                capture_output=True, timeout=5)
+                assert result.returncode != 0, (command, result.stdout)
+                assert expected in result.stderr, (command, result.stderr)
+
             rd, wr = os.pipe()
             server = start(["Xvfb", "-displayfd", str(wr), "-screen", "0", "1024x768x24",
                             "-nolisten", "tcp"], pass_fds=(wr,))
@@ -131,6 +137,9 @@ def run():
                     windows.append(wid)
                 wid = windows[0]
                 cli("window", "focus", wid)
+                probe_failure("parse-empty-id", "invalid winid")
+                probe_failure("geometry 0x00000000", "invalid winid")
+                probe_failure("zero-geometry", "invalid explicit winid")
                 base_children = child_ids()
                 base_count = len(base_children)
                 client = session()
@@ -165,6 +174,22 @@ def run():
                     assert native("geometry " + wid) == geometry.replace("\n", "|")
                 for verb in ("stack", "stack-geometries"):
                     assert native(verb + " " + wid) == output("window", verb, wid).replace("\n", "|")
+                cli("window", "focus", wid)
+                focused_geometry = output("window", "geometry", wid).replace("\n", "|")
+                assert native("geometry-focused") == focused_geometry
+                before_move = tuple(int(line.split("=")[1]) for line in
+                                    output("window", "geometry", wid).splitlines())
+                native("move-focused 5 -3")
+                wait_for(lambda: tuple(int(line.split("=")[1]) for line in
+                    output("window", "geometry", wid).splitlines()) ==
+                    (before_move[0] + 5, before_move[1] - 3, before_move[2], before_move[3]),
+                    "focused target move")
+                native("move-focused -5 3")
+                wait_for(lambda: tuple(int(line.split("=")[1]) for line in
+                    output("window", "geometry", wid).splitlines()) == before_move,
+                    "focused target move restore")
+                native("layer-focused")
+                z("window", "layer", "normal", wid)
                 assert native("snapshot") == "0 " + output("window", "snapshot").replace("\n", "|")
                 token = next(line.split()[-1] for line in output("window", "snapshot").splitlines()
                              if line.startswith("CLIENT " + wid + " "))

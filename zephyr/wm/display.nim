@@ -22,7 +22,8 @@ proc width*(args: seq[string]): string =
 
 proc dimensions(args: seq[string]): string =
   requireNoArgs("display dimensions", args)
-  $dimensions().width & " " & $dimensions().height
+  let size = dimensions()
+  $size.width & " " & $size.height
 
 #
 # Predicates

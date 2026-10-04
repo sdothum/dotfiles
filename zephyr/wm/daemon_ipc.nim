@@ -5,6 +5,7 @@ import std/oserrors
 import std/strutils
 import std/times
 import std/re
+import std/options
 
 const
   ProtocolVersion* = 1'u16
@@ -21,7 +22,9 @@ const
   RequestWaitName* = 9'u8
   RequestQueryClassList* = 10'u8
   RequestQueryNameList* = 11'u8
+  RequestAwaitReady* = 12'u8
   ResponsePong = 1'u8
+  ResponseDaemonReady* = 13'u8
   StatusOk = 0'u8
   StatusError = 1'u8
   ErrorUnsupportedVersion = 1'u8
@@ -40,7 +43,7 @@ type
   DaemonRequestKind* = enum
     drPing, drQueryFocused, drQueryCurrentGroup, drQuerySnapshot,
       drQueryClientState, drQueryClientList, drQueryClientClass, drWaitClass,
-      drWaitName, drQueryClassList, drQueryNameList
+      drWaitName, drQueryClassList, drQueryNameList, drAwaitReady
 
   DaemonRequest* = object
     version*: uint16
@@ -49,6 +52,7 @@ type
     timeoutMs*: uint32
     includeAll*: bool
     groupNo*: uint32 # Zero means no group filter in the daemon protocol.
+    waitExpression: Regex
 
   DaemonCachedClient* = object
     winid*: string
@@ -61,22 +65,33 @@ type
     title*: string
     titleAvailable*: bool
 
+  WaiterKind = enum
+    WaitClass,
+    WaitName
+
+  Waiter = object
+    deadline: float
+    case kind: WaiterKind
+    of WaitClass:
+      className: string
+    of WaitName:
+      expression: Regex
+
   IpcClient = object
     fd: SocketHandle
     input: string
     output: string
     outputOffset: int
     closing: bool
-    waiting: bool
-    waitByName: bool
-    waitPattern: string
-    waitDeadline: float
+    waiter: Option[Waiter]
+    awaitingReady: bool
 
   IpcServer* = object
     listener*: SocketHandle
     path*: string
     clients: seq[IpcClient]
     initialized: bool
+    ready: bool
     snapshotReady*: bool
     snapshotBody: string
     focused: string
@@ -151,6 +166,9 @@ proc decodeRequest(payload: string): tuple[request: DaemonRequest, error: string
     of RequestPing:
       result.request = DaemonRequest(version: version, kind: drPing)
       return
+    of RequestAwaitReady:
+      result.request = DaemonRequest(version: version, kind: drAwaitReady)
+      return
     of RequestQueryFocused, RequestQueryCurrentGroup, RequestQuerySnapshot,
       RequestQueryClientList:
       result.request = DaemonRequest(version: version,
@@ -176,14 +194,16 @@ proc decodeRequest(payload: string): tuple[request: DaemonRequest, error: string
     if timeoutMs == 0 or timeoutMs > 60000:
       return (DaemonRequest(version: version), "invalid wait timeout",
         ErrorMalformedRequest)
+    var expression: Regex
     try:
-      discard re(payload[5 ..< timeoutOffset], {reIgnoreCase})
+      expression = re(payload[5 ..< timeoutOffset], {reIgnoreCase})
     except ValueError:
       return (DaemonRequest(version: version), "invalid wait pattern",
         ErrorMalformedRequest)
     result.request = DaemonRequest(version: version,
       kind: if kind == RequestWaitClass: drWaitClass else: drWaitName,
-      argument: payload[5 ..< timeoutOffset], timeoutMs: timeoutMs)
+      argument: payload[5 ..< timeoutOffset], timeoutMs: timeoutMs,
+      waitExpression: expression)
     return
   if kind == RequestQueryClassList or kind == RequestQueryNameList:
     if payload.len < 7:
@@ -258,46 +278,48 @@ proc matchingClassClients(clients: seq[DaemonCachedClient], pattern: string): se
     if client.mapped and client.metadataAvailable and client.className == pattern:
       result.add(client.winid)
 
-proc matchingNameClients(clients: seq[DaemonCachedClient], pattern: string): seq[string] =
-  let expression = re(pattern, {reIgnoreCase})
+proc matchingNameClients(clients: seq[DaemonCachedClient],
+    expression: Regex): seq[string] =
   for client in clients:
     if client.mapped and client.titleAvailable and client.title.match(expression):
       result.add(client.winid)
 
 proc filteredClients(clients: seq[DaemonCachedClient], byName, includeAll: bool,
     pattern: string, groupNo: uint32): seq[string] =
-  var eligible: seq[DaemonCachedClient] = @[]
-  for client in clients:
-    if (includeAll or client.mapped) and (groupNo == 0 or client.group == groupNo):
-      eligible.add(client)
   if byName:
     let expression = re(pattern, {reIgnoreCase})
-    for client in eligible:
-      if client.titleAvailable and client.title.match(expression):
+    for client in clients:
+      if (includeAll or client.mapped) and
+          (groupNo == 0 or client.group == groupNo) and
+          client.titleAvailable and client.title.match(expression):
         result.add(client.winid)
   else:
-    for client in eligible:
-      if client.metadataAvailable and client.className == pattern:
+    for client in clients:
+      if (includeAll or client.mapped) and
+          (groupNo == 0 or client.group == groupNo) and
+          client.metadataAvailable and client.className == pattern:
         result.add(client.winid)
 
-proc queueWaitResult(client: var IpcClient, clients: seq[DaemonCachedClient]) =
-  if not client.waiting:
-    return
-  let matches = if client.waitByName: matchingNameClients(clients, client.waitPattern)
-    else: matchingClassClients(clients, client.waitPattern)
+proc queueWaitResult(client: var IpcClient, waiter: Waiter,
+    clients: seq[DaemonCachedClient]) =
+  let matches = case waiter.kind
+    of WaitClass: matchingClassClients(clients, waiter.className)
+    of WaitName: matchingNameClients(clients, waiter.expression)
   if matches.len > 0:
     queueResponse(client, responseData(
-      if client.waitByName: ResponseWaitName else: ResponseWaitClass,
+      if waiter.kind == WaitName: ResponseWaitName else: ResponseWaitClass,
       matches.join("\n")))
 
 proc serviceWaiters(server: var IpcServer) =
   let now = epochTime()
   for client in server.clients.mitems:
-    if client.waiting and now >= client.waitDeadline:
-      queueResponse(client, responseError(ProtocolVersion, ErrorTimeout,
-        "window await timed out"))
-    elif client.waiting:
-      queueWaitResult(client, server.cachedClients)
+    if client.waiter.isSome:
+      let waiter = client.waiter.get
+      if now >= waiter.deadline:
+        queueResponse(client, responseError(ProtocolVersion, ErrorTimeout,
+          "window await timed out"))
+      else:
+        queueWaitResult(client, waiter, server.cachedClients)
 
 proc closeClient(server: var IpcServer, index: int) =
   if server.clients[index].fd != osInvalidSocket:
@@ -308,7 +330,8 @@ proc queueResponse(client: var IpcClient, payload: string) =
   client.output = payload
   client.outputOffset = 0
   client.closing = true
-  client.waiting = false
+  client.waiter = none(Waiter)
+  client.awaitingReady = false
 
 proc processInput(server: var IpcServer, client: var IpcClient): bool =
   ## Returns false when the client should be disconnected.
@@ -338,6 +361,11 @@ proc processInput(server: var IpcServer, client: var IpcClient): bool =
     case decoded.request.kind
     of drPing:
       queueResponse(client, responseOk(ResponsePong))
+    of drAwaitReady:
+      if server.ready:
+        queueResponse(client, responseOk(ResponseDaemonReady))
+      else:
+        client.awaitingReady = true
     of drQueryFocused, drQueryCurrentGroup, drQuerySnapshot, drQueryClientState,
         drQueryClientList, drQueryClientClass:
       let cached = server.cachedResponse(decoded.request)
@@ -369,23 +397,26 @@ proc processInput(server: var IpcServer, client: var IpcClient): bool =
         if matches.len > 0:
           queueResponse(client, responseData(ResponseWaitClass, matches.join("\n")))
         else:
-          client.waiting = true
-          client.waitByName = false
-          client.waitPattern = decoded.request.argument
-          client.waitDeadline = epochTime() + float(decoded.request.timeoutMs) / 1000.0
+          client.waiter = some(Waiter(
+            kind: WaitClass,
+            className: decoded.request.argument,
+            deadline: epochTime() + float(decoded.request.timeoutMs) / 1000.0
+          ))
     of drWaitName:
       if not server.snapshotReady:
         queueResponse(client, responseError(ProtocolVersion, ErrorNotReady,
           "daemon snapshot is not ready"))
       else:
-        let matches = matchingNameClients(server.cachedClients, decoded.request.argument)
+        let matches = matchingNameClients(server.cachedClients,
+          decoded.request.waitExpression)
         if matches.len > 0:
           queueResponse(client, responseData(ResponseWaitName, matches.join("\n")))
         else:
-          client.waiting = true
-          client.waitByName = true
-          client.waitPattern = decoded.request.argument
-          client.waitDeadline = epochTime() + float(decoded.request.timeoutMs) / 1000.0
+          client.waiter = some(Waiter(
+            kind: WaitName,
+            expression: decoded.request.waitExpression,
+            deadline: epochTime() + float(decoded.request.timeoutMs) / 1000.0
+          ))
     return true
   true
 
@@ -405,7 +436,7 @@ proc invalidateCache*(server: var IpcServer) =
   server.currentGroup = 0
   server.cachedClients.setLen(0)
   for client in server.clients.mitems:
-    if client.waiting:
+    if client.waiter.isSome:
       queueResponse(client, responseError(ProtocolVersion, ErrorNotReady,
         "daemon snapshot is not ready"))
 
@@ -496,6 +527,15 @@ proc close*(server: var IpcServer) =
   server.initialized = false
 
 proc descriptor*(server: IpcServer): cint = cint(server.listener)
+
+proc markReady*(server: var IpcServer) =
+  ## Readiness is monotonic for this daemon listener's lifetime.
+  if server.ready:
+    return
+  server.ready = true
+  for client in server.clients.mitems:
+    if client.awaitingReady:
+      queueResponse(client, responseOk(ResponseDaemonReady))
 
 proc service*(server: var IpcServer, invalidationFd: cint): bool =
   ## Services ready IPC descriptors and returns whether the invalidation fd is ready.

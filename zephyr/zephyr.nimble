@@ -1,12 +1,15 @@
 import std/os
 
 import wm/display
+import wm/daemon_client as daemonClient
 import wm/group
 import wm/layout
-import wm/rule
 import wm/screen
 import wm/state
 import wm/window
+
+import policy/rules
+import zephyr_errors
 
 #
 # Native Nim convenience overloads
@@ -41,6 +44,13 @@ proc dispatchCommand(cmd: seq[string]) =
       @[]
 
   case domain
+  of "daemon":
+    if verb != "await":
+      raiseZephyrError("unknown daemon command: " & verb)
+    if rest.len > 0:
+      raiseZephyrError("daemon await takes no arguments")
+    daemonClient.awaitReady()
+
   of "display":
     display.dispatch(verb, rest)
 
@@ -51,7 +61,7 @@ proc dispatchCommand(cmd: seq[string]) =
     layout.dispatch(verb, rest)
 
   of "rule":
-    rule.dispatch(verb, rest)
+    rules.dispatch(verb, rest)
 
   of "screen":
     screen.dispatch(verb, rest)
@@ -78,6 +88,7 @@ proc dispatchCommand(cmd: seq[string]) =
 proc usage() =
   echo "usage:"
   echo "  zephyr display height"
+  echo "  zephyr daemon await"
   echo "  zephyr display width"
   echo "  zephyr display width_test <args>"
   echo "  zephyr group add <args>"
@@ -140,5 +151,9 @@ let args = commandLineParams()
 if args.len == 0:
   usage()
 
-for cmd in splitCommands(args):
-  dispatchCommand(cmd)
+try:
+  for cmd in splitCommands(args):
+    dispatchCommand(cmd)
+except ZephyrError as error:
+  stderr.writeLine(error.msg)
+  quit(1)
