@@ -51,6 +51,9 @@ set -x PASSWORD_STORE_CLIP_TIME 60
 test -z $DISPLAY
 or set -x TERM xterm-256color
 
+# NOTE: xdotool requires delay to not mangle leading chars
+set -x KEYBOARD sleep 0.45 \&\& xdotool key (cat $HOME/.chocofi)
+
 # ......................................................................... Xorg
 
 set -x QT_QPA_PLATFORMTHEME qt5ct
