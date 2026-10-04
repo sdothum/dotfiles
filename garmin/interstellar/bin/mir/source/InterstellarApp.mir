@@ -1,0 +1,43 @@
+[ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarApp.mc"; @line = 1; @symbol_usingdef<0> = [Toybox,1,6,12]; @symbol_usingdef<1> = [Application,1,13,24]; @symbol_usingAlias = [App,1,28,31]; ]
+using Toybox.Application as :App;
+[ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarApp.mc"; @line = 2; @symbol_usingdef<0> = [Toybox,2,6,12]; @symbol_usingdef<1> = [Lang,2,13,17]; @symbol_usingAlias = [Lang,2,21,25]; ]
+using Toybox.Lang as :Lang;
+[ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarApp.mc"; @line = 3; @symbol_usingdef<0> = [Toybox,3,6,12]; @symbol_usingdef<1> = [WatchUi,3,13,20]; @symbol_usingAlias = [WatchUi,3,24,31]; ]
+using Toybox.WatchUi as :WatchUi;
+[ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarApp.mc"; @line = 5; @symbol_classdef = [InterstellarApp,5,6,21]; @symbol_extends<0> = [App,5,30,33]; @symbol_extends<1> = [AppBase,5,34,41]; ]
+class InterstellarApp extends App.AppBase {
+    [ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarApp.mc"; @line = 5; ]
+    <init> {
+    }
+    [ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarApp.mc"; @line = 5; ]
+    static
+    <init> {
+    }
+    [ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarApp.mc"; @line = 7; @symbol_functiondef = [initialize,7,10,20]; ]
+    function initialize() as Void {
+_home_shum_stow_garmin_interstellar_source_InterstellarApp_mc_7_23_9_2_start:
+[ "/home/shum/stow/garmin/interstellar/source/InterstellarApp.mc" 8 2 ]
+        symbol [ AppBase %tmp.2 8 2 9 ];
+        %tmp.2 = getv ? :AppBase;
+        symbol [ initialize %tmp.3 8 10 20 ];
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+_home_shum_stow_garmin_interstellar_source_InterstellarApp_mc_7_23_9_2_stop:
+    }
+    [ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarApp.mc"; @line = 11; @symbol_functiondef = [getInitialView,11,10,24]; @symbol_return<0> = [WatchUi,11,31,38]; @symbol_return<1> = [Views,11,39,44]; @symbol_return<2> = [WatchUi,11,50,57]; @symbol_return<3> = [Views,11,58,63]; @symbol_return<4> = [WatchUi,11,65,72]; @symbol_return<5> = [InputDelegates,11,73,87]; ]
+    function getInitialView() as [WatchUi.Views] or [WatchUi.Views, WatchUi.InputDelegates] {
+_home_shum_stow_garmin_interstellar_source_InterstellarApp_mc_11_89_13_1_start:
+[ "/home/shum/stow/garmin/interstellar/source/InterstellarApp.mc" 12 2 ]
+        %tmp.1 = newa 1;
+        symbol [ InterstellarView %tmp.5 12 15 31 ];
+        %tmp.5 = getv ? :InterstellarView;
+        %tmp.2 = newc %tmp.5 ();
+        %tmp.6 = dup %tmp.1;
+        %tmp.7 = aputv %tmp.6 0 %tmp.2;
+        ret %tmp.7;
+_home_shum_stow_garmin_interstellar_source_InterstellarApp_mc_11_89_13_1_stop:
+    }
+}
+[ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarApp.mc"; @line = 1; ]
+<init> {
+}

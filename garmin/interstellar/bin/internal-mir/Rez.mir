@@ -1,0 +1,1452 @@
+[ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 1; @symbol_importdef<0> = [Toybox,1,7,13]; @symbol_importdef<1> = [Lang,1,14,18]; ]
+import Toybox.Lang;
+[ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 2; @symbol_usingdef<0> = [Toybox,2,6,12]; @symbol_usingdef<1> = [WatchUi,2,13,20]; ]
+using Toybox.WatchUi;
+[ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 3; @symbol_usingdef<0> = [Toybox,3,6,12]; @symbol_usingdef<1> = [WatchUi,3,13,20]; @symbol_usingAlias = [Ui,3,24,26]; ]
+using Toybox.WatchUi as :Ui;
+[ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 4; @symbol_usingdef<0> = [Toybox,4,6,12]; @symbol_usingdef<1> = [Graphics,4,13,21]; ]
+using Toybox.Graphics;
+[ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 5; @symbol_usingdef<0> = [Toybox,5,6,12]; @symbol_usingdef<1> = [Graphics,5,13,21]; @symbol_usingAlias = [Gfx,5,25,28]; ]
+using Toybox.Graphics as :Gfx;
+[ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 7; @symbol_moduledef = [Rez,7,7,10]; ]
+module Rez {
+    [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 7; ]
+    <init> {
+    }
+    [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 8; @symbol_moduledef = [Drawables,8,11,20]; ]
+    module Drawables {
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 8; ]
+        <init> {
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 9; @position = 27; initialized = true; @symbol_vardef = [LauncherIcon,9,27,39]; @symbol_type<0> = [ResourceId,9,43,53]; ]
+        var LauncherIcon as ResourceId;
+    }
+    [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 12; @symbol_moduledef = [Fonts,12,11,16]; ]
+    module Fonts {
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 12; ]
+        <init> {
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 13; @position = 27; initialized = true; @symbol_vardef = [DialFour,13,27,35]; @symbol_type<0> = [ResourceId,13,39,49]; ]
+        var DialFour as ResourceId;
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 14; @position = 27; initialized = true; @symbol_vardef = [DialEight,14,27,36]; @symbol_type<0> = [ResourceId,14,40,50]; ]
+        var DialEight as ResourceId;
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 15; @position = 27; initialized = true; @symbol_vardef = [DialTwelve,15,27,37]; @symbol_type<0> = [ResourceId,15,41,51]; ]
+        var DialTwelve as ResourceId;
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 16; @position = 27; initialized = true; @symbol_vardef = [DateFont,16,27,35]; @symbol_type<0> = [ResourceId,16,39,49]; ]
+        var DateFont as ResourceId;
+    }
+    [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 19; @symbol_moduledef = [Strings,19,11,18]; ]
+    module Strings {
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 19; ]
+        <init> {
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 20; @position = 27; initialized = true; @symbol_vardef = [AppName,20,27,34]; @symbol_type<0> = [ResourceId,20,38,48]; ]
+        var AppName as ResourceId;
+    }
+    [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 23; @symbol_moduledef = [Styles,23,11,17]; ]
+    module Styles {
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 23; ]
+        <init> {
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 24; @symbol_moduledef = [prompt_font_enhanced_readability__body_with_title,24,15,64]; ]
+        module prompt_font_enhanced_readability__body_with_title {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 24; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 25; @position = 18; @symbol_constdef = [exclude,25,18,25]; @symbol_type<0> = [Boolean,25,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 28; @symbol_moduledef = [system_size__menu_header,28,15,39]; ]
+        module system_size__menu_header {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 28; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 29; @position = 18; @symbol_constdef = [width,29,18,23]; @symbol_type<0> = [Number,29,27,33]; ]
+            const width as Number = 260;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 30; @position = 18; @symbol_constdef = [height,30,18,24]; @symbol_type<0> = [Number,30,28,34]; ]
+            const height as Number = 81;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 33; @symbol_moduledef = [system_loc__hint_button_left_bottom,33,15,50]; ]
+        module system_loc__hint_button_left_bottom {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 33; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 34; @position = 18; @symbol_constdef = [x,34,18,19]; @symbol_type<0> = [Number,34,23,29]; ]
+            const x as Number = 10;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 35; @position = 18; @symbol_constdef = [y,35,18,19]; @symbol_type<0> = [Number,35,23,29]; ]
+            const y as Number = 173;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 38; @symbol_moduledef = [prompt_font_enhanced_readability__body_no_title,38,15,62]; ]
+        module prompt_font_enhanced_readability__body_no_title {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 38; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 39; @position = 18; @symbol_constdef = [exclude,39,18,25]; @symbol_type<0> = [Boolean,39,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 42; @symbol_moduledef = [prompt_loc__body_no_title,42,15,40]; ]
+        module prompt_loc__body_no_title {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 42; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 43; @position = 18; @symbol_constdef = [x,43,18,19]; @symbol_type<0> = [Number,43,23,29]; ]
+            const x as Number = 26;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 44; @position = 18; @symbol_constdef = [y,44,18,19]; @symbol_type<0> = [Number,44,23,29]; ]
+            const y as Number = 26;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 47; @symbol_moduledef = [system_icon_dark__about,47,15,38]; ]
+        module system_icon_dark__about {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 47; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 48; @position = 18; @symbol_constdef = [filename,48,18,26]; @symbol_type<0> = [String,48,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_dark__about.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 49; @position = 18; @symbol_constdef = [compress,49,18,26]; @symbol_type<0> = [String,49,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 50; @position = 18; @symbol_constdef = [dithering,50,18,27]; @symbol_type<0> = [String,50,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 51; @position = 18; @symbol_constdef = [automaticPalette,51,18,34]; @symbol_type<0> = [String,51,38,44]; ]
+            const automaticPalette as String = "true";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 54; @symbol_moduledef = [system_icon_light__question,54,15,42]; ]
+        module system_icon_light__question {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 54; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 55; @position = 18; @symbol_constdef = [filename,55,18,26]; @symbol_type<0> = [String,55,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_light__question.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 56; @position = 18; @symbol_constdef = [dithering,56,18,27]; @symbol_type<0> = [String,56,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 59; @symbol_moduledef = [system_loc__hint_button_left_top,59,15,47]; ]
+        module system_loc__hint_button_left_top {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 59; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 60; @position = 18; @symbol_constdef = [exclude,60,18,25]; @symbol_type<0> = [Boolean,60,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 63; @symbol_moduledef = [prompt_font__title,63,15,33]; ]
+        module prompt_font__title {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 63; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 64 18 ]
+                symbol [ Graphics %tmp.1 64 34 42 ];
+                %tmp.1 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_CENTER %tmp.2 64 43 62 ];
+                %tmp.2 = getv %tmp.1 :TEXT_JUSTIFY_CENTER;
+                symbol [ Graphics %tmp.3 64 63 71 ];
+                %tmp.3 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_VCENTER %tmp.4 64 72 92 ];
+                %tmp.4 = getv %tmp.3 :TEXT_JUSTIFY_VCENTER;
+                %tmp.5 = bitor %tmp.2 %tmp.4;
+                putv self :justification %tmp.5;
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 65 18 ]
+                symbol [ Graphics %tmp.6 65 25 33 ];
+                %tmp.6 = getm $.Toybox.Graphics;
+                symbol [ FONT_XTINY %tmp.7 65 34 44 ];
+                %tmp.7 = getv %tmp.6 :FONT_XTINY;
+                putv self :font %tmp.7;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 64; @position = 18; @symbol_constdef = [justification,64,18,31]; ]
+            const justification;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 65; @position = 18; @symbol_constdef = [font,65,18,22]; ]
+            const font;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 68; @symbol_moduledef = [system_icon_dark__discard,68,15,40]; ]
+        module system_icon_dark__discard {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 68; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 69; @position = 18; @symbol_constdef = [filename,69,18,26]; @symbol_type<0> = [String,69,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_dark__discard.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 70; @position = 18; @symbol_constdef = [compress,70,18,26]; @symbol_type<0> = [String,70,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 71; @position = 18; @symbol_constdef = [dithering,71,18,27]; @symbol_type<0> = [String,71,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 72; @position = 18; @symbol_constdef = [automaticPalette,72,18,34]; @symbol_type<0> = [String,72,38,44]; ]
+            const automaticPalette as String = "true";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 75; @symbol_moduledef = [system_size__menu_item,75,15,37]; ]
+        module system_size__menu_item {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 75; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 76; @position = 18; @symbol_constdef = [width,76,18,23]; @symbol_type<0> = [Number,76,27,33]; ]
+            const width as Number = 260;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 77; @position = 18; @symbol_constdef = [height,77,18,24]; @symbol_type<0> = [Number,77,28,34]; ]
+            const height as Number = 68;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 80; @symbol_moduledef = [system_color_dark__text,80,15,38]; ]
+        module system_color_dark__text {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 80; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 82 18 ]
+                symbol [ Graphics %tmp.8 82 31 39 ];
+                %tmp.8 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.9 82 40 57 ];
+                %tmp.9 = getv %tmp.8 :COLOR_TRANSPARENT;
+                putv self :background %tmp.9;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 81; @position = 18; @symbol_constdef = [color,81,18,23]; @symbol_type<0> = [Number,81,27,33]; ]
+            const color as Number = 0xFFFFFF;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 82; @position = 18; @symbol_constdef = [background,82,18,28]; ]
+            const background;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 85; @symbol_moduledef = [system_icon_destructive__discard,85,15,47]; ]
+        module system_icon_destructive__discard {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 85; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 86; @position = 18; @symbol_constdef = [filename,86,18,26]; @symbol_type<0> = [String,86,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_destructive__discard.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 87; @position = 18; @symbol_constdef = [dithering,87,18,27]; @symbol_type<0> = [String,87,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 90; @symbol_moduledef = [system_icon_dark__hint_action_menu,90,15,49]; ]
+        module system_icon_dark__hint_action_menu {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 90; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 91; @position = 18; @symbol_constdef = [filename,91,18,26]; @symbol_type<0> = [String,91,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_dark__hint_button_right_top.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 92; @position = 18; @symbol_constdef = [dithering,92,18,27]; @symbol_type<0> = [String,92,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 95; @symbol_moduledef = [prompt_size__title,95,15,33]; ]
+        module prompt_size__title {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 95; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 96; @position = 18; @symbol_constdef = [width,96,18,23]; @symbol_type<0> = [Number,96,27,33]; ]
+            const width as Number = 208;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 97; @position = 18; @symbol_constdef = [height,97,18,24]; @symbol_type<0> = [Number,97,28,34]; ]
+            const height as Number = 48;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 100; @symbol_moduledef = [confirmation_font__body,100,15,38]; ]
+        module confirmation_font__body {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 100; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 101 18 ]
+                symbol [ Graphics %tmp.10 101 34 42 ];
+                %tmp.10 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_CENTER %tmp.11 101 43 62 ];
+                %tmp.11 = getv %tmp.10 :TEXT_JUSTIFY_CENTER;
+                symbol [ Graphics %tmp.12 101 63 71 ];
+                %tmp.12 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_VCENTER %tmp.13 101 72 92 ];
+                %tmp.13 = getv %tmp.12 :TEXT_JUSTIFY_VCENTER;
+                %tmp.14 = bitor %tmp.11 %tmp.13;
+                putv self :justification %tmp.14;
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 102 18 ]
+                symbol [ Graphics %tmp.15 102 25 33 ];
+                %tmp.15 = getm $.Toybox.Graphics;
+                symbol [ FONT_TINY %tmp.16 102 34 43 ];
+                %tmp.16 = getv %tmp.15 :FONT_TINY;
+                putv self :font %tmp.16;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 101; @position = 18; @symbol_constdef = [justification,101,18,31]; ]
+            const justification;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 102; @position = 18; @symbol_constdef = [font,102,18,22]; ]
+            const font;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 105; @symbol_moduledef = [system_color_dark__background,105,15,44]; ]
+        module system_color_dark__background {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 105; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 106; @position = 18; @symbol_constdef = [color,106,18,23]; @symbol_type<0> = [Number,106,27,33]; ]
+            const color as Number = 0x000000;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 107; @position = 18; @symbol_constdef = [background,107,18,28]; @symbol_type<0> = [Number,107,32,38]; ]
+            const background as Number = 0x000000;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 110; @symbol_moduledef = [system_icon_destructive__hint_button_left_top,110,15,60]; ]
+        module system_icon_destructive__hint_button_left_top {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 110; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 111; @position = 18; @symbol_constdef = [filename,111,18,26]; @symbol_type<0> = [String,111,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_destructive__hint_button_left_top.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 112; @position = 18; @symbol_constdef = [dithering,112,18,27]; @symbol_type<0> = [String,112,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 115; @symbol_moduledef = [system_size__launch_icon,115,15,39]; ]
+        module system_size__launch_icon {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 115; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 116; @position = 18; @symbol_constdef = [scaleX,116,18,24]; @symbol_type<0> = [Number,116,28,34]; ]
+            const scaleX as Number = 40;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 117; @position = 18; @symbol_constdef = [scaleY,117,18,24]; @symbol_type<0> = [Number,117,28,34]; ]
+            const scaleY as Number = 40;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 118; @position = 18; @symbol_constdef = [scaleRelativeTo,118,18,33]; @symbol_type<0> = [String,118,37,43]; ]
+            const scaleRelativeTo as String = "screen";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 121; @symbol_moduledef = [confirmation_input__confirm,121,15,42]; ]
+        module confirmation_input__confirm {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 121; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 122 18 ]
+                symbol [ WatchUi %tmp.17 122 27 34 ];
+                %tmp.17 = getm $.Toybox.WatchUi;
+                symbol [ KEY_ENTER %tmp.18 122 35 44 ];
+                %tmp.18 = getv %tmp.17 :KEY_ENTER;
+                putv self :button %tmp.18;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 122; @position = 18; @symbol_constdef = [button,122,18,24]; ]
+            const button;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 125; @symbol_moduledef = [prompt_font__body_with_title,125,15,43]; ]
+        module prompt_font__body_with_title {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 125; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 126 18 ]
+                symbol [ Graphics %tmp.19 126 34 42 ];
+                %tmp.19 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_CENTER %tmp.20 126 43 62 ];
+                %tmp.20 = getv %tmp.19 :TEXT_JUSTIFY_CENTER;
+                putv self :justification %tmp.20;
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 127 18 ]
+                symbol [ Graphics %tmp.21 127 25 33 ];
+                %tmp.21 = getm $.Toybox.Graphics;
+                symbol [ FONT_TINY %tmp.22 127 34 43 ];
+                %tmp.22 = getv %tmp.21 :FONT_TINY;
+                putv self :font %tmp.22;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 126; @position = 18; @symbol_constdef = [justification,126,18,31]; ]
+            const justification;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 127; @position = 18; @symbol_constdef = [font,127,18,22]; ]
+            const font;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 130; @symbol_moduledef = [confirmation_loc__body,130,15,37]; ]
+        module confirmation_loc__body {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 130; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 131; @position = 18; @symbol_constdef = [x,131,18,19]; @symbol_type<0> = [Number,131,23,29]; ]
+            const x as Number = 52;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 132; @position = 18; @symbol_constdef = [y,132,18,19]; @symbol_type<0> = [Number,132,23,29]; ]
+            const y as Number = 52;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 135; @symbol_moduledef = [system_icon_destructive__hint_button_left_bottom,135,15,63]; ]
+        module system_icon_destructive__hint_button_left_bottom {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 135; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 136; @position = 18; @symbol_constdef = [filename,136,18,26]; @symbol_type<0> = [String,136,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_destructive__hint_button_left_bottom.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 137; @position = 18; @symbol_constdef = [dithering,137,18,27]; @symbol_type<0> = [String,137,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 140; @symbol_moduledef = [prompt_color_dark__background,140,15,44]; ]
+        module prompt_color_dark__background {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 140; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 141; @position = 18; @symbol_constdef = [color,141,18,23]; @symbol_type<0> = [Number,141,27,33]; ]
+            const color as Number = 0x000000;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 142; @position = 18; @symbol_constdef = [background,142,18,28]; @symbol_type<0> = [Number,142,32,38]; ]
+            const background as Number = 0x000000;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 145; @symbol_moduledef = [system_icon_destructive__hint_action_menu,145,15,56]; ]
+        module system_icon_destructive__hint_action_menu {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 145; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 146; @position = 18; @symbol_constdef = [filename,146,18,26]; @symbol_type<0> = [String,146,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_destructive__hint_button_right_top.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 147; @position = 18; @symbol_constdef = [dithering,147,18,27]; @symbol_type<0> = [String,147,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 150; @symbol_moduledef = [system_loc__hint_action_menu,150,15,43]; ]
+        module system_loc__hint_action_menu {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 150; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 151; @position = 18; @symbol_constdef = [x,151,18,19]; @symbol_type<0> = [Number,151,23,29]; ]
+            const x as Number = 227;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 152; @position = 18; @symbol_constdef = [y,152,18,19]; @symbol_type<0> = [Number,152,23,29]; ]
+            const y as Number = 53;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 155; @symbol_moduledef = [confirmation_icon__hint_confirm,155,15,46]; ]
+        module confirmation_icon__hint_confirm {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 155; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 156; @position = 18; @symbol_constdef = [filename,156,18,26]; @symbol_type<0> = [String,156,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/confirmation_icon__hint_completion.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 157; @position = 18; @symbol_constdef = [dithering,157,18,27]; @symbol_type<0> = [String,157,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 160; @symbol_moduledef = [system_loc__hint_button_left_middle,160,15,50]; ]
+        module system_loc__hint_button_left_middle {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 160; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 161; @position = 18; @symbol_constdef = [x,161,18,19]; @symbol_type<0> = [Number,161,23,29]; ]
+            const x as Number = 1;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 162; @position = 18; @symbol_constdef = [y,162,18,19]; @symbol_type<0> = [Number,162,23,29]; ]
+            const y as Number = 109;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 165; @symbol_moduledef = [prompt_size__body_no_title,165,15,41]; ]
+        module prompt_size__body_no_title {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 165; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 166; @position = 18; @symbol_constdef = [width,166,18,23]; @symbol_type<0> = [Number,166,27,33]; ]
+            const width as Number = 208;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 167; @position = 18; @symbol_constdef = [height,167,18,24]; @symbol_type<0> = [Number,167,28,34]; ]
+            const height as Number = 208;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 170; @symbol_moduledef = [system_icon_light__hint_button_left_top,170,15,54]; ]
+        module system_icon_light__hint_button_left_top {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 170; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 171; @position = 18; @symbol_constdef = [filename,171,18,26]; @symbol_type<0> = [String,171,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_light__hint_button_left_top.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 172; @position = 18; @symbol_constdef = [dithering,172,18,27]; @symbol_type<0> = [String,172,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 175; @symbol_moduledef = [prompt_color_light__background,175,15,45]; ]
+        module prompt_color_light__background {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 175; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 176; @position = 18; @symbol_constdef = [color,176,18,23]; @symbol_type<0> = [Number,176,27,33]; ]
+            const color as Number = 0xFFFFFF;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 177; @position = 18; @symbol_constdef = [background,177,18,28]; @symbol_type<0> = [Number,177,32,38]; ]
+            const background as Number = 0xFFFFFF;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 180; @symbol_moduledef = [confirmation_input__delete,180,15,41]; ]
+        module confirmation_input__delete {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 180; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 181 18 ]
+                symbol [ WatchUi %tmp.23 181 27 34 ];
+                %tmp.23 = getm $.Toybox.WatchUi;
+                symbol [ KEY_ENTER %tmp.24 181 35 44 ];
+                %tmp.24 = getv %tmp.23 :KEY_ENTER;
+                putv self :button %tmp.24;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 181; @position = 18; @symbol_constdef = [button,181,18,24]; ]
+            const button;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 184; @symbol_moduledef = [system_icon_dark__hint_button_left_top,184,15,53]; ]
+        module system_icon_dark__hint_button_left_top {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 184; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 185; @position = 18; @symbol_constdef = [filename,185,18,26]; @symbol_type<0> = [String,185,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_dark__hint_button_left_top.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 186; @position = 18; @symbol_constdef = [dithering,186,18,27]; @symbol_type<0> = [String,186,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 189; @symbol_moduledef = [system_input__action_menu,189,15,40]; ]
+        module system_input__action_menu {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 189; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 190 18 ]
+                symbol [ WatchUi %tmp.25 190 27 34 ];
+                %tmp.25 = getm $.Toybox.WatchUi;
+                symbol [ KEY_ENTER %tmp.26 190 35 44 ];
+                %tmp.26 = getv %tmp.25 :KEY_ENTER;
+                putv self :button %tmp.26;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 190; @position = 18; @symbol_constdef = [button,190,18,24]; ]
+            const button;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 193; @symbol_moduledef = [system_icon_light__save,193,15,38]; ]
+        module system_icon_light__save {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 193; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 194; @position = 18; @symbol_constdef = [filename,194,18,26]; @symbol_type<0> = [String,194,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_light__save.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 195; @position = 18; @symbol_constdef = [dithering,195,18,27]; @symbol_type<0> = [String,195,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 198; @symbol_moduledef = [prompt_color_light__body,198,15,39]; ]
+        module prompt_color_light__body {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 198; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 200 18 ]
+                symbol [ Graphics %tmp.27 200 31 39 ];
+                %tmp.27 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.28 200 40 57 ];
+                %tmp.28 = getv %tmp.27 :COLOR_TRANSPARENT;
+                putv self :background %tmp.28;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 199; @position = 18; @symbol_constdef = [color,199,18,23]; @symbol_type<0> = [Number,199,27,33]; ]
+            const color as Number = 0x000000;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 200; @position = 18; @symbol_constdef = [background,200,18,28]; ]
+            const background;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 203; @symbol_moduledef = [system_loc__subwindow,203,15,36]; ]
+        module system_loc__subwindow {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 203; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 204; @position = 18; @symbol_constdef = [exclude,204,18,25]; @symbol_type<0> = [Boolean,204,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 207; @symbol_moduledef = [system_icon_light__warning,207,15,41]; ]
+        module system_icon_light__warning {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 207; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 208; @position = 18; @symbol_constdef = [filename,208,18,26]; @symbol_type<0> = [String,208,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_light__warning.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 209; @position = 18; @symbol_constdef = [dithering,209,18,27]; @symbol_type<0> = [String,209,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 212; @symbol_moduledef = [confirmation_color_light__body,212,15,45]; ]
+        module confirmation_color_light__body {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 212; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 214 18 ]
+                symbol [ Graphics %tmp.29 214 31 39 ];
+                %tmp.29 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.30 214 40 57 ];
+                %tmp.30 = getv %tmp.29 :COLOR_TRANSPARENT;
+                putv self :background %tmp.30;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 213; @position = 18; @symbol_constdef = [color,213,18,23]; @symbol_type<0> = [Number,213,27,33]; ]
+            const color as Number = 0x000000;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 214; @position = 18; @symbol_constdef = [background,214,18,28]; ]
+            const background;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 217; @symbol_moduledef = [confirmation_icon_light__hint_keep,217,15,49]; ]
+        module confirmation_icon_light__hint_keep {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 217; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 218; @position = 18; @symbol_constdef = [filename,218,18,26]; @symbol_type<0> = [String,218,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/confirmation_icon__hint_keep.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 219; @position = 18; @symbol_constdef = [dithering,219,18,27]; @symbol_type<0> = [String,219,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 222; @symbol_moduledef = [activity_color_light__background,222,15,47]; ]
+        module activity_color_light__background {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 222; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 223; @position = 18; @symbol_constdef = [color,223,18,23]; @symbol_type<0> = [Number,223,27,33]; ]
+            const color as Number = 0xFFFFFF;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 224; @position = 18; @symbol_constdef = [background,224,18,28]; @symbol_type<0> = [Number,224,32,38]; ]
+            const background as Number = 0xFFFFFF;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 227; @symbol_moduledef = [system_icon_positive__hint_button_right_top,227,15,58]; ]
+        module system_icon_positive__hint_button_right_top {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 227; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 228; @position = 18; @symbol_constdef = [filename,228,18,26]; @symbol_type<0> = [String,228,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_positive__hint_button_right_top.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 229; @position = 18; @symbol_constdef = [dithering,229,18,27]; @symbol_type<0> = [String,229,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 232; @symbol_moduledef = [system_size__screen,232,15,34]; ]
+        module system_size__screen {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 232; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 233; @position = 18; @symbol_constdef = [width,233,18,23]; @symbol_type<0> = [Number,233,27,33]; ]
+            const width as Number = 260;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 234; @position = 18; @symbol_constdef = [height,234,18,24]; @symbol_type<0> = [Number,234,28,34]; ]
+            const height as Number = 260;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 237; @symbol_moduledef = [system_icon_destructive__hint_button_right_bottom,237,15,64]; ]
+        module system_icon_destructive__hint_button_right_bottom {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 237; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 238; @position = 18; @symbol_constdef = [filename,238,18,26]; @symbol_type<0> = [String,238,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_destructive__hint_button_right_bottom.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 239; @position = 18; @symbol_constdef = [dithering,239,18,27]; @symbol_type<0> = [String,239,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 242; @symbol_moduledef = [system_color_light__background,242,15,45]; ]
+        module system_color_light__background {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 242; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 243; @position = 18; @symbol_constdef = [color,243,18,23]; @symbol_type<0> = [Number,243,27,33]; ]
+            const color as Number = 0xFFFFFF;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 244; @position = 18; @symbol_constdef = [background,244,18,28]; @symbol_type<0> = [Number,244,32,38]; ]
+            const background as Number = 0xFFFFFF;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 247; @symbol_moduledef = [system_icon_destructive__hint_button_right_top,247,15,61]; ]
+        module system_icon_destructive__hint_button_right_top {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 247; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 248; @position = 18; @symbol_constdef = [filename,248,18,26]; @symbol_type<0> = [String,248,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_destructive__hint_button_right_top.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 249; @position = 18; @symbol_constdef = [dithering,249,18,27]; @symbol_type<0> = [String,249,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 252; @symbol_moduledef = [confirmation_loc__hint_confirm,252,15,45]; ]
+        module confirmation_loc__hint_confirm {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 252; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 253; @position = 18; @symbol_constdef = [x,253,18,19]; @symbol_type<0> = [Number,253,23,29]; ]
+            const x as Number = 205;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 254; @position = 18; @symbol_constdef = [y,254,18,19]; @symbol_type<0> = [Number,254,23,29]; ]
+            const y as Number = 50;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 257; @symbol_moduledef = [activity_color_dark__text,257,15,40]; ]
+        module activity_color_dark__text {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 257; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 259 18 ]
+                symbol [ Graphics %tmp.31 259 31 39 ];
+                %tmp.31 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.32 259 40 57 ];
+                %tmp.32 = getv %tmp.31 :COLOR_TRANSPARENT;
+                putv self :background %tmp.32;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 258; @position = 18; @symbol_constdef = [color,258,18,23]; @symbol_type<0> = [Number,258,27,33]; ]
+            const color as Number = 0xFFFFFF;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 259; @position = 18; @symbol_constdef = [background,259,18,28]; ]
+            const background;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 262; @symbol_moduledef = [confirmation_input__keep,262,15,39]; ]
+        module confirmation_input__keep {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 262; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 263 18 ]
+                symbol [ WatchUi %tmp.33 263 27 34 ];
+                %tmp.33 = getm $.Toybox.WatchUi;
+                symbol [ KEY_DOWN %tmp.34 263 35 43 ];
+                %tmp.34 = getv %tmp.33 :KEY_DOWN;
+                putv self :button %tmp.34;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 263; @position = 18; @symbol_constdef = [button,263,18,24]; ]
+            const button;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 266; @symbol_moduledef = [prompt_loc__body_with_title,266,15,42]; ]
+        module prompt_loc__body_with_title {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 266; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 267; @position = 18; @symbol_constdef = [x,267,18,19]; @symbol_type<0> = [Number,267,23,29]; ]
+            const x as Number = 26;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 268; @position = 18; @symbol_constdef = [y,268,18,19]; @symbol_type<0> = [Number,268,23,29]; ]
+            const y as Number = 78;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 271; @symbol_moduledef = [system_icon_dark__search,271,15,39]; ]
+        module system_icon_dark__search {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 271; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 272; @position = 18; @symbol_constdef = [filename,272,18,26]; @symbol_type<0> = [String,272,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_dark__search.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 273; @position = 18; @symbol_constdef = [compress,273,18,26]; @symbol_type<0> = [String,273,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 274; @position = 18; @symbol_constdef = [dithering,274,18,27]; @symbol_type<0> = [String,274,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 275; @position = 18; @symbol_constdef = [automaticPalette,275,18,34]; @symbol_type<0> = [String,275,38,44]; ]
+            const automaticPalette as String = "true";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 278; @symbol_moduledef = [activity_color_light__text,278,15,41]; ]
+        module activity_color_light__text {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 278; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 280 18 ]
+                symbol [ Graphics %tmp.35 280 31 39 ];
+                %tmp.35 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.36 280 40 57 ];
+                %tmp.36 = getv %tmp.35 :COLOR_TRANSPARENT;
+                putv self :background %tmp.36;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 279; @position = 18; @symbol_constdef = [color,279,18,23]; @symbol_type<0> = [Number,279,27,33]; ]
+            const color as Number = 0x000000;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 280; @position = 18; @symbol_constdef = [background,280,18,28]; ]
+            const background;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 283; @symbol_moduledef = [confirmation_icon__hint_keep,283,15,43]; ]
+        module confirmation_icon__hint_keep {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 283; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 284; @position = 18; @symbol_constdef = [filename,284,18,26]; @symbol_type<0> = [String,284,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/confirmation_icon__hint_keep.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 285; @position = 18; @symbol_constdef = [dithering,285,18,27]; @symbol_type<0> = [String,285,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 288; @symbol_moduledef = [system_icon_dark__save,288,15,37]; ]
+        module system_icon_dark__save {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 288; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 289; @position = 18; @symbol_constdef = [filename,289,18,26]; @symbol_type<0> = [String,289,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_dark__save.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 290; @position = 18; @symbol_constdef = [compress,290,18,26]; @symbol_type<0> = [String,290,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 291; @position = 18; @symbol_constdef = [dithering,291,18,27]; @symbol_type<0> = [String,291,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 292; @position = 18; @symbol_constdef = [automaticPalette,292,18,34]; @symbol_type<0> = [String,292,38,44]; ]
+            const automaticPalette as String = "true";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 295; @symbol_moduledef = [system_icon_destructive__hint_button_left_middle,295,15,63]; ]
+        module system_icon_destructive__hint_button_left_middle {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 295; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 296; @position = 18; @symbol_constdef = [filename,296,18,26]; @symbol_type<0> = [String,296,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_destructive__hint_button_left_middle.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 297; @position = 18; @symbol_constdef = [dithering,297,18,27]; @symbol_type<0> = [String,297,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 300; @symbol_moduledef = [system_icon_light__search,300,15,40]; ]
+        module system_icon_light__search {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 300; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 301; @position = 18; @symbol_constdef = [filename,301,18,26]; @symbol_type<0> = [String,301,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_light__search.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 302; @position = 18; @symbol_constdef = [dithering,302,18,27]; @symbol_type<0> = [String,302,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 305; @symbol_moduledef = [system_icon_dark__hint_button_left_bottom,305,15,56]; ]
+        module system_icon_dark__hint_button_left_bottom {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 305; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 306; @position = 18; @symbol_constdef = [filename,306,18,26]; @symbol_type<0> = [String,306,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_dark__hint_button_left_bottom.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 307; @position = 18; @symbol_constdef = [dithering,307,18,27]; @symbol_type<0> = [String,307,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 310; @symbol_moduledef = [system_icon_positive__hint_button_left_top,310,15,57]; ]
+        module system_icon_positive__hint_button_left_top {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 310; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 311; @position = 18; @symbol_constdef = [filename,311,18,26]; @symbol_type<0> = [String,311,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_positive__hint_button_left_top.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 312; @position = 18; @symbol_constdef = [dithering,312,18,27]; @symbol_type<0> = [String,312,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 315; @symbol_moduledef = [system_loc__hint_button_right_bottom,315,15,51]; ]
+        module system_loc__hint_button_right_bottom {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 315; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 316; @position = 18; @symbol_constdef = [x,316,18,19]; @symbol_type<0> = [Number,316,23,29]; ]
+            const x as Number = 224;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 317; @position = 18; @symbol_constdef = [y,317,18,19]; @symbol_type<0> = [Number,317,23,29]; ]
+            const y as Number = 172;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 320; @symbol_moduledef = [confirmation_icon_dark__hint_reject,320,15,50]; ]
+        module confirmation_icon_dark__hint_reject {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 320; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 321; @position = 18; @symbol_constdef = [filename,321,18,26]; @symbol_type<0> = [String,321,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/confirmation_icon__hint_reject.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 322; @position = 18; @symbol_constdef = [dithering,322,18,27]; @symbol_type<0> = [String,322,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 325; @symbol_moduledef = [confirmation_color_dark__body,325,15,44]; ]
+        module confirmation_color_dark__body {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 325; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 327 18 ]
+                symbol [ Graphics %tmp.37 327 31 39 ];
+                %tmp.37 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.38 327 40 57 ];
+                %tmp.38 = getv %tmp.37 :COLOR_TRANSPARENT;
+                putv self :background %tmp.38;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 326; @position = 18; @symbol_constdef = [color,326,18,23]; @symbol_type<0> = [Number,326,27,33]; ]
+            const color as Number = 0xFFFFFF;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 327; @position = 18; @symbol_constdef = [background,327,18,28]; ]
+            const background;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 330; @symbol_moduledef = [confirmation_icon_light__hint_confirm,330,15,52]; ]
+        module confirmation_icon_light__hint_confirm {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 330; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 331; @position = 18; @symbol_constdef = [filename,331,18,26]; @symbol_type<0> = [String,331,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/confirmation_icon__hint_completion.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 332; @position = 18; @symbol_constdef = [dithering,332,18,27]; @symbol_type<0> = [String,332,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 335; @symbol_moduledef = [prompt_color_dark__title,335,15,39]; ]
+        module prompt_color_dark__title {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 335; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 337 18 ]
+                symbol [ Graphics %tmp.39 337 31 39 ];
+                %tmp.39 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.40 337 40 57 ];
+                %tmp.40 = getv %tmp.39 :COLOR_TRANSPARENT;
+                putv self :background %tmp.40;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 336; @position = 18; @symbol_constdef = [color,336,18,23]; @symbol_type<0> = [Number,336,27,33]; ]
+            const color as Number = 0xFFFFFF;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 337; @position = 18; @symbol_constdef = [background,337,18,28]; ]
+            const background;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 340; @symbol_moduledef = [system_icon_destructive__cancel,340,15,46]; ]
+        module system_icon_destructive__cancel {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 340; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 341; @position = 18; @symbol_constdef = [filename,341,18,26]; @symbol_type<0> = [String,341,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_destructive__cancel.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 342; @position = 18; @symbol_constdef = [dithering,342,18,27]; @symbol_type<0> = [String,342,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 345; @symbol_moduledef = [system_icon_light__hint_button_right_bottom,345,15,58]; ]
+        module system_icon_light__hint_button_right_bottom {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 345; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 346; @position = 18; @symbol_constdef = [filename,346,18,26]; @symbol_type<0> = [String,346,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_light__hint_button_right_bottom.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 347; @position = 18; @symbol_constdef = [dithering,347,18,27]; @symbol_type<0> = [String,347,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 350; @symbol_moduledef = [prompt_loc__title,350,15,32]; ]
+        module prompt_loc__title {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 350; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 351; @position = 18; @symbol_constdef = [x,351,18,19]; @symbol_type<0> = [Number,351,23,29]; ]
+            const x as Number = 26;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 352; @position = 18; @symbol_constdef = [y,352,18,19]; @symbol_type<0> = [Number,352,23,29]; ]
+            const y as Number = 19;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 355; @symbol_moduledef = [confirmation_font_enhanced_readability__body,355,15,59]; ]
+        module confirmation_font_enhanced_readability__body {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 355; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 356; @position = 18; @symbol_constdef = [exclude,356,18,25]; @symbol_type<0> = [Boolean,356,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 359; @symbol_moduledef = [prompt_color_light__title,359,15,40]; ]
+        module prompt_color_light__title {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 359; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 361 18 ]
+                symbol [ Graphics %tmp.41 361 31 39 ];
+                %tmp.41 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.42 361 40 57 ];
+                %tmp.42 = getv %tmp.41 :COLOR_TRANSPARENT;
+                putv self :background %tmp.42;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 360; @position = 18; @symbol_constdef = [color,360,18,23]; @symbol_type<0> = [Number,360,27,33]; ]
+            const color as Number = 0x000000;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 361; @position = 18; @symbol_constdef = [background,361,18,28]; ]
+            const background;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 364; @symbol_moduledef = [system_icon_dark__hint_button_right_top,364,15,54]; ]
+        module system_icon_dark__hint_button_right_top {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 364; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 365; @position = 18; @symbol_constdef = [filename,365,18,26]; @symbol_type<0> = [String,365,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_dark__hint_button_right_top.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 366; @position = 18; @symbol_constdef = [dithering,366,18,27]; @symbol_type<0> = [String,366,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 369; @symbol_moduledef = [system_icon_dark__hint_button_left_middle,369,15,56]; ]
+        module system_icon_dark__hint_button_left_middle {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 369; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 370; @position = 18; @symbol_constdef = [filename,370,18,26]; @symbol_type<0> = [String,370,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_dark__hint_button_left_middle.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 371; @position = 18; @symbol_constdef = [dithering,371,18,27]; @symbol_type<0> = [String,371,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 374; @symbol_moduledef = [confirmation_icon_dark__hint_keep,374,15,48]; ]
+        module confirmation_icon_dark__hint_keep {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 374; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 375; @position = 18; @symbol_constdef = [filename,375,18,26]; @symbol_type<0> = [String,375,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/confirmation_icon__hint_keep.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 376; @position = 18; @symbol_constdef = [dithering,376,18,27]; @symbol_type<0> = [String,376,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 379; @symbol_moduledef = [system_icon_light__cancel,379,15,40]; ]
+        module system_icon_light__cancel {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 379; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 380; @position = 18; @symbol_constdef = [filename,380,18,26]; @symbol_type<0> = [String,380,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_light__cancel.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 381; @position = 18; @symbol_constdef = [dithering,381,18,27]; @symbol_type<0> = [String,381,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 384; @symbol_moduledef = [confirmation_icon_light__hint_reject,384,15,51]; ]
+        module confirmation_icon_light__hint_reject {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 384; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 385; @position = 18; @symbol_constdef = [filename,385,18,26]; @symbol_type<0> = [String,385,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/confirmation_icon__hint_reject.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 386; @position = 18; @symbol_constdef = [dithering,386,18,27]; @symbol_type<0> = [String,386,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 389; @symbol_moduledef = [system_icon_light__about,389,15,39]; ]
+        module system_icon_light__about {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 389; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 390; @position = 18; @symbol_constdef = [filename,390,18,26]; @symbol_type<0> = [String,390,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_light__about.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 391; @position = 18; @symbol_constdef = [dithering,391,18,27]; @symbol_type<0> = [String,391,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 394; @symbol_moduledef = [system_size__toast_icon,394,15,38]; ]
+        module system_size__toast_icon {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 394; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 395; @position = 18; @symbol_constdef = [scaleX,395,18,24]; @symbol_type<0> = [Number,395,28,34]; ]
+            const scaleX as Number = 21;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 396; @position = 18; @symbol_constdef = [scaleY,396,18,24]; @symbol_type<0> = [Number,396,28,34]; ]
+            const scaleY as Number = 21;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 397; @position = 18; @symbol_constdef = [scaleRelativeTo,397,18,33]; @symbol_type<0> = [String,397,37,43]; ]
+            const scaleRelativeTo as String = "screen";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 400; @symbol_moduledef = [system_icon_dark__hint_button_right_middle,400,15,57]; ]
+        module system_icon_dark__hint_button_right_middle {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 400; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 401; @position = 18; @symbol_constdef = [exclude,401,18,25]; @symbol_type<0> = [Boolean,401,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 404; @symbol_moduledef = [confirmation_icon__hint_reject,404,15,45]; ]
+        module confirmation_icon__hint_reject {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 404; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 405; @position = 18; @symbol_constdef = [filename,405,18,26]; @symbol_type<0> = [String,405,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/confirmation_icon__hint_reject.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 406; @position = 18; @symbol_constdef = [dithering,406,18,27]; @symbol_type<0> = [String,406,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 409; @symbol_moduledef = [system_icon_light__hint_action_menu,409,15,50]; ]
+        module system_icon_light__hint_action_menu {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 409; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 410; @position = 18; @symbol_constdef = [filename,410,18,26]; @symbol_type<0> = [String,410,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_light__hint_button_right_top.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 411; @position = 18; @symbol_constdef = [dithering,411,18,27]; @symbol_type<0> = [String,411,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 414; @symbol_moduledef = [system_icon_light__hint_button_right_middle,414,15,58]; ]
+        module system_icon_light__hint_button_right_middle {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 414; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 415; @position = 18; @symbol_constdef = [exclude,415,18,25]; @symbol_type<0> = [Boolean,415,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 418; @symbol_moduledef = [system_icon_destructive__hint_button_right_middle,418,15,64]; ]
+        module system_icon_destructive__hint_button_right_middle {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 418; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 419; @position = 18; @symbol_constdef = [exclude,419,18,25]; @symbol_type<0> = [Boolean,419,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 422; @symbol_moduledef = [confirmation_loc__hint_reject,422,15,44]; ]
+        module confirmation_loc__hint_reject {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 422; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 423; @position = 18; @symbol_constdef = [x,423,18,19]; @symbol_type<0> = [Number,423,23,29]; ]
+            const x as Number = 13;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 424; @position = 18; @symbol_constdef = [y,424,18,19]; @symbol_type<0> = [Number,424,23,29]; ]
+            const y as Number = 174;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 425; @position = 18; @symbol_constdef = [horizontalJustification,425,18,41]; @symbol_type<0> = [String,425,45,51]; ]
+            const horizontalJustification as String = "left";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 428; @symbol_moduledef = [confirmation_icon_dark__hint_delete,428,15,50]; ]
+        module confirmation_icon_dark__hint_delete {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 428; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 429; @position = 18; @symbol_constdef = [filename,429,18,26]; @symbol_type<0> = [String,429,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/confirmation_icon__hint_delete.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 430; @position = 18; @symbol_constdef = [dithering,430,18,27]; @symbol_type<0> = [String,430,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 433; @symbol_moduledef = [activity_color_dark__background,433,15,46]; ]
+        module activity_color_dark__background {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 433; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 434; @position = 18; @symbol_constdef = [color,434,18,23]; @symbol_type<0> = [Number,434,27,33]; ]
+            const color as Number = 0x000000;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 435; @position = 18; @symbol_constdef = [background,435,18,28]; @symbol_type<0> = [Number,435,32,38]; ]
+            const background as Number = 0x000000;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 438; @symbol_moduledef = [system_icon_light__hint_button_left_bottom,438,15,57]; ]
+        module system_icon_light__hint_button_left_bottom {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 438; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 439; @position = 18; @symbol_constdef = [filename,439,18,26]; @symbol_type<0> = [String,439,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_light__hint_button_left_bottom.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 440; @position = 18; @symbol_constdef = [dithering,440,18,27]; @symbol_type<0> = [String,440,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 443; @symbol_moduledef = [system_icon_positive__hint_button_left_middle,443,15,60]; ]
+        module system_icon_positive__hint_button_left_middle {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 443; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 444; @position = 18; @symbol_constdef = [filename,444,18,26]; @symbol_type<0> = [String,444,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_positive__hint_button_left_middle.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 445; @position = 18; @symbol_constdef = [dithering,445,18,27]; @symbol_type<0> = [String,445,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 448; @symbol_moduledef = [system_size__menu_icon,448,15,37]; ]
+        module system_size__menu_icon {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 448; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 449; @position = 18; @symbol_constdef = [scaleX,449,18,24]; @symbol_type<0> = [Number,449,28,34]; ]
+            const scaleX as Number = 40;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 450; @position = 18; @symbol_constdef = [scaleY,450,18,24]; @symbol_type<0> = [Number,450,28,34]; ]
+            const scaleY as Number = 40;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 451; @position = 18; @symbol_constdef = [scaleRelativeTo,451,18,33]; @symbol_type<0> = [String,451,37,43]; ]
+            const scaleRelativeTo as String = "screen";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 454; @symbol_moduledef = [system_icon_destructive__warning,454,15,47]; ]
+        module system_icon_destructive__warning {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 454; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 455; @position = 18; @symbol_constdef = [filename,455,18,26]; @symbol_type<0> = [String,455,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_destructive__warning.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 456; @position = 18; @symbol_constdef = [dithering,456,18,27]; @symbol_type<0> = [String,456,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 459; @symbol_moduledef = [system_loc__hint_button_right_middle,459,15,51]; ]
+        module system_loc__hint_button_right_middle {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 459; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 460; @position = 18; @symbol_constdef = [exclude,460,18,25]; @symbol_type<0> = [Boolean,460,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 463; @symbol_moduledef = [system_icon_dark__cancel,463,15,39]; ]
+        module system_icon_dark__cancel {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 463; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 464; @position = 18; @symbol_constdef = [filename,464,18,26]; @symbol_type<0> = [String,464,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_dark__cancel.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 465; @position = 18; @symbol_constdef = [compress,465,18,26]; @symbol_type<0> = [String,465,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 466; @position = 18; @symbol_constdef = [dithering,466,18,27]; @symbol_type<0> = [String,466,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 467; @position = 18; @symbol_constdef = [automaticPalette,467,18,34]; @symbol_type<0> = [String,467,38,44]; ]
+            const automaticPalette as String = "true";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 470; @symbol_moduledef = [prompt_size__body_with_title,470,15,43]; ]
+        module prompt_size__body_with_title {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 470; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 471; @position = 18; @symbol_constdef = [width,471,18,23]; @symbol_type<0> = [Number,471,27,33]; ]
+            const width as Number = 208;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 472; @position = 18; @symbol_constdef = [height,472,18,24]; @symbol_type<0> = [Number,472,28,34]; ]
+            const height as Number = 156;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 475; @symbol_moduledef = [system_loc__hint_button_right_top,475,15,48]; ]
+        module system_loc__hint_button_right_top {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 475; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 476; @position = 18; @symbol_constdef = [x,476,18,19]; @symbol_type<0> = [Number,476,23,29]; ]
+            const x as Number = 224;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 477; @position = 18; @symbol_constdef = [y,477,18,19]; @symbol_type<0> = [Number,477,23,29]; ]
+            const y as Number = 50;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 480; @symbol_moduledef = [system_color_light__text,480,15,39]; ]
+        module system_color_light__text {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 480; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 482 18 ]
+                symbol [ Graphics %tmp.43 482 31 39 ];
+                %tmp.43 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.44 482 40 57 ];
+                %tmp.44 = getv %tmp.43 :COLOR_TRANSPARENT;
+                putv self :background %tmp.44;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 481; @position = 18; @symbol_constdef = [color,481,18,23]; @symbol_type<0> = [Number,481,27,33]; ]
+            const color as Number = 0x000000;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 482; @position = 18; @symbol_constdef = [background,482,18,28]; ]
+            const background;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 485; @symbol_moduledef = [system_icon_light__check,485,15,39]; ]
+        module system_icon_light__check {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 485; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 486; @position = 18; @symbol_constdef = [filename,486,18,26]; @symbol_type<0> = [String,486,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_light__check.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 487; @position = 18; @symbol_constdef = [dithering,487,18,27]; @symbol_type<0> = [String,487,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 490; @symbol_moduledef = [confirmation_input__reject,490,15,41]; ]
+        module confirmation_input__reject {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 490; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 491 18 ]
+                symbol [ WatchUi %tmp.45 491 27 34 ];
+                %tmp.45 = getm $.Toybox.WatchUi;
+                symbol [ KEY_DOWN %tmp.46 491 35 43 ];
+                %tmp.46 = getv %tmp.45 :KEY_DOWN;
+                putv self :button %tmp.46;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 491; @position = 18; @symbol_constdef = [button,491,18,24]; ]
+            const button;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 494; @symbol_moduledef = [system_icon_light__revert,494,15,40]; ]
+        module system_icon_light__revert {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 494; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 495; @position = 18; @symbol_constdef = [filename,495,18,26]; @symbol_type<0> = [String,495,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_light__revert.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 496; @position = 18; @symbol_constdef = [dithering,496,18,27]; @symbol_type<0> = [String,496,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 499; @symbol_moduledef = [system_size__subwindow,499,15,37]; ]
+        module system_size__subwindow {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 499; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 500; @position = 18; @symbol_constdef = [exclude,500,18,25]; @symbol_type<0> = [Boolean,500,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 503; @symbol_moduledef = [system_icon_positive__hint_button_left_bottom,503,15,60]; ]
+        module system_icon_positive__hint_button_left_bottom {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 503; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 504; @position = 18; @symbol_constdef = [filename,504,18,26]; @symbol_type<0> = [String,504,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_positive__hint_button_left_bottom.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 505; @position = 18; @symbol_constdef = [dithering,505,18,27]; @symbol_type<0> = [String,505,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 508; @symbol_moduledef = [system_icon_dark__check,508,15,38]; ]
+        module system_icon_dark__check {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 508; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 509; @position = 18; @symbol_constdef = [filename,509,18,26]; @symbol_type<0> = [String,509,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_dark__check.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 510; @position = 18; @symbol_constdef = [compress,510,18,26]; @symbol_type<0> = [String,510,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 511; @position = 18; @symbol_constdef = [dithering,511,18,27]; @symbol_type<0> = [String,511,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 512; @position = 18; @symbol_constdef = [automaticPalette,512,18,34]; @symbol_type<0> = [String,512,38,44]; ]
+            const automaticPalette as String = "true";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 515; @symbol_moduledef = [confirmation_loc__hint_keep,515,15,42]; ]
+        module confirmation_loc__hint_keep {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 515; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 516; @position = 18; @symbol_constdef = [x,516,18,19]; @symbol_type<0> = [Number,516,23,29]; ]
+            const x as Number = 13;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 517; @position = 18; @symbol_constdef = [y,517,18,19]; @symbol_type<0> = [Number,517,23,29]; ]
+            const y as Number = 174;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 518; @position = 18; @symbol_constdef = [horizontalJustification,518,18,41]; @symbol_type<0> = [String,518,45,51]; ]
+            const horizontalJustification as String = "left";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 521; @symbol_moduledef = [confirmation_loc__hint_delete,521,15,44]; ]
+        module confirmation_loc__hint_delete {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 521; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 522; @position = 18; @symbol_constdef = [x,522,18,19]; @symbol_type<0> = [Number,522,23,29]; ]
+            const x as Number = 208;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 523; @position = 18; @symbol_constdef = [y,523,18,19]; @symbol_type<0> = [Number,523,23,29]; ]
+            const y as Number = 50;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 526; @symbol_moduledef = [system_icon_positive__hint_action_menu,526,15,53]; ]
+        module system_icon_positive__hint_action_menu {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 526; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 527; @position = 18; @symbol_constdef = [filename,527,18,26]; @symbol_type<0> = [String,527,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_positive__hint_button_right_top.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 528; @position = 18; @symbol_constdef = [dithering,528,18,27]; @symbol_type<0> = [String,528,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 531; @symbol_moduledef = [system_icon_positive__hint_button_right_middle,531,15,61]; ]
+        module system_icon_positive__hint_button_right_middle {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 531; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 532; @position = 18; @symbol_constdef = [exclude,532,18,25]; @symbol_type<0> = [Boolean,532,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 535; @symbol_moduledef = [system_icon_light__hint_button_left_middle,535,15,57]; ]
+        module system_icon_light__hint_button_left_middle {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 535; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 536; @position = 18; @symbol_constdef = [filename,536,18,26]; @symbol_type<0> = [String,536,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_light__hint_button_left_middle.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 537; @position = 18; @symbol_constdef = [dithering,537,18,27]; @symbol_type<0> = [String,537,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 540; @symbol_moduledef = [system_icon_dark__hint_button_right_bottom,540,15,57]; ]
+        module system_icon_dark__hint_button_right_bottom {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 540; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 541; @position = 18; @symbol_constdef = [filename,541,18,26]; @symbol_type<0> = [String,541,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_dark__hint_button_right_bottom.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 542; @position = 18; @symbol_constdef = [dithering,542,18,27]; @symbol_type<0> = [String,542,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 545; @symbol_moduledef = [system_icon_positive__hint_button_right_bottom,545,15,61]; ]
+        module system_icon_positive__hint_button_right_bottom {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 545; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 546; @position = 18; @symbol_constdef = [filename,546,18,26]; @symbol_type<0> = [String,546,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_positive__hint_button_right_bottom.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 547; @position = 18; @symbol_constdef = [dithering,547,18,27]; @symbol_type<0> = [String,547,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 550; @symbol_moduledef = [system_icon_dark__revert,550,15,39]; ]
+        module system_icon_dark__revert {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 550; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 551; @position = 18; @symbol_constdef = [filename,551,18,26]; @symbol_type<0> = [String,551,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_dark__revert.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 552; @position = 18; @symbol_constdef = [compress,552,18,26]; @symbol_type<0> = [String,552,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 553; @position = 18; @symbol_constdef = [dithering,553,18,27]; @symbol_type<0> = [String,553,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 554; @position = 18; @symbol_constdef = [automaticPalette,554,18,34]; @symbol_type<0> = [String,554,38,44]; ]
+            const automaticPalette as String = "true";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 557; @symbol_moduledef = [confirmation_icon_light__hint_delete,557,15,51]; ]
+        module confirmation_icon_light__hint_delete {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 557; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 558; @position = 18; @symbol_constdef = [filename,558,18,26]; @symbol_type<0> = [String,558,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/confirmation_icon__hint_delete.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 559; @position = 18; @symbol_constdef = [dithering,559,18,27]; @symbol_type<0> = [String,559,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 562; @symbol_moduledef = [system_icon_dark__question,562,15,41]; ]
+        module system_icon_dark__question {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 562; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 563; @position = 18; @symbol_constdef = [filename,563,18,26]; @symbol_type<0> = [String,563,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_dark__question.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 564; @position = 18; @symbol_constdef = [compress,564,18,26]; @symbol_type<0> = [String,564,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 565; @position = 18; @symbol_constdef = [dithering,565,18,27]; @symbol_type<0> = [String,565,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 566; @position = 18; @symbol_constdef = [automaticPalette,566,18,34]; @symbol_type<0> = [String,566,38,44]; ]
+            const automaticPalette as String = "true";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 569; @symbol_moduledef = [system_icon_light__discard,569,15,41]; ]
+        module system_icon_light__discard {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 569; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 570; @position = 18; @symbol_constdef = [filename,570,18,26]; @symbol_type<0> = [String,570,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_light__discard.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 571; @position = 18; @symbol_constdef = [dithering,571,18,27]; @symbol_type<0> = [String,571,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 574; @symbol_moduledef = [device_info,574,15,26]; ]
+        module device_info {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 574; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 576 18 ]
+                symbol [ Toybox %tmp.48 576 32 38 ];
+                %tmp.48 = getv ? :Toybox;
+                symbol [ System %tmp.49 576 39 45 ];
+                %tmp.49 = getv %tmp.48 :System;
+                symbol [ SCREEN_SHAPE_ROUND %tmp.50 576 46 64 ];
+                %tmp.50 = getv %tmp.49 :SCREEN_SHAPE_ROUND;
+                putv self :screenShape %tmp.50;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 575; @position = 18; @symbol_constdef = [screenWidth,575,18,29]; @symbol_type<0> = [Number,575,33,39]; ]
+            const screenWidth as Number = 260;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 576; @position = 18; @symbol_constdef = [screenShape,576,18,29]; ]
+            const screenShape;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 577; @position = 18; @symbol_constdef = [hasNightMode,577,18,30]; @symbol_type<0> = [Boolean,577,34,41]; ]
+            const hasNightMode as Boolean = false;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 578; @position = 18; @symbol_constdef = [hasGpu,578,18,24]; @symbol_type<0> = [Boolean,578,28,35]; ]
+            const hasGpu as Boolean = true;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 579; @position = 18; @symbol_constdef = [screenHeight,579,18,30]; @symbol_type<0> = [Number,579,34,40]; ]
+            const screenHeight as Number = 260;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 580; @position = 18; @symbol_constdef = [hasTouchScreen,580,18,32]; @symbol_type<0> = [Boolean,580,36,43]; ]
+            const hasTouchScreen as Boolean = true;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 581; @position = 18; @symbol_constdef = [hasEnhancedReadabilityMode,581,18,44]; @symbol_type<0> = [Boolean,581,48,55]; ]
+            const hasEnhancedReadabilityMode as Boolean = false;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 584; @symbol_moduledef = [confirmation_icon_dark__hint_confirm,584,15,51]; ]
+        module confirmation_icon_dark__hint_confirm {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 584; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 585; @position = 18; @symbol_constdef = [filename,585,18,26]; @symbol_type<0> = [String,585,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/confirmation_icon__hint_completion.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 586; @position = 18; @symbol_constdef = [dithering,586,18,27]; @symbol_type<0> = [String,586,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 589; @symbol_moduledef = [prompt_font__body_no_title,589,15,41]; ]
+        module prompt_font__body_no_title {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 589; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 590 18 ]
+                symbol [ Graphics %tmp.51 590 34 42 ];
+                %tmp.51 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_CENTER %tmp.52 590 43 62 ];
+                %tmp.52 = getv %tmp.51 :TEXT_JUSTIFY_CENTER;
+                symbol [ Graphics %tmp.53 590 63 71 ];
+                %tmp.53 = getm $.Toybox.Graphics;
+                symbol [ TEXT_JUSTIFY_VCENTER %tmp.54 590 72 92 ];
+                %tmp.54 = getv %tmp.53 :TEXT_JUSTIFY_VCENTER;
+                %tmp.55 = bitor %tmp.52 %tmp.54;
+                putv self :justification %tmp.55;
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 591 18 ]
+                symbol [ Graphics %tmp.56 591 25 33 ];
+                %tmp.56 = getm $.Toybox.Graphics;
+                symbol [ FONT_TINY %tmp.57 591 34 43 ];
+                %tmp.57 = getv %tmp.56 :FONT_TINY;
+                putv self :font %tmp.57;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 590; @position = 18; @symbol_constdef = [justification,590,18,31]; ]
+            const justification;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 591; @position = 18; @symbol_constdef = [font,591,18,22]; ]
+            const font;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 594; @symbol_moduledef = [prompt_size__title_icon,594,15,38]; ]
+        module prompt_size__title_icon {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 594; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 595; @position = 18; @symbol_constdef = [scaleX,595,18,24]; @symbol_type<0> = [Float,595,28,33]; ]
+            const scaleX as Float = 0.1539;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 596; @position = 18; @symbol_constdef = [scaleRelativeTo,596,18,33]; @symbol_type<0> = [String,596,37,43]; ]
+            const scaleRelativeTo as String = "screen";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 599; @symbol_moduledef = [system_icon_dark__warning,599,15,40]; ]
+        module system_icon_dark__warning {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 599; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 600; @position = 18; @symbol_constdef = [filename,600,18,26]; @symbol_type<0> = [String,600,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_dark__warning.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 601; @position = 18; @symbol_constdef = [compress,601,18,26]; @symbol_type<0> = [String,601,30,36]; ]
+            const compress as String = "true";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 602; @position = 18; @symbol_constdef = [dithering,602,18,27]; @symbol_type<0> = [String,602,31,37]; ]
+            const dithering as String = "none";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 603; @position = 18; @symbol_constdef = [automaticPalette,603,18,34]; @symbol_type<0> = [String,603,38,44]; ]
+            const automaticPalette as String = "true";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 606; @symbol_moduledef = [prompt_loc__title_icon,606,15,37]; ]
+        module prompt_loc__title_icon {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 606; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 607; @position = 18; @symbol_constdef = [x,607,18,19]; @symbol_type<0> = [Number,607,23,29]; ]
+            const x as Number = 130;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 608; @position = 18; @symbol_constdef = [y,608,18,19]; @symbol_type<0> = [Number,608,23,29]; ]
+            const y as Number = 39;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 609; @position = 18; @symbol_constdef = [horizontalJustification,609,18,41]; @symbol_type<0> = [String,609,45,51]; ]
+            const horizontalJustification as String = "center";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 610; @position = 18; @symbol_constdef = [verticalJustification,610,18,39]; @symbol_type<0> = [String,610,43,49]; ]
+            const verticalJustification as String = "center";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 613; @symbol_moduledef = [prompt_font_enhanced_readability__title,613,15,54]; ]
+        module prompt_font_enhanced_readability__title {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 613; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 614; @position = 18; @symbol_constdef = [exclude,614,18,25]; @symbol_type<0> = [Boolean,614,29,36]; ]
+            const exclude as Boolean = true;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 617; @symbol_moduledef = [prompt_color_dark__body,617,15,38]; ]
+        module prompt_color_dark__body {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 617; ]
+            <init> {
+[ "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen" 619 18 ]
+                symbol [ Graphics %tmp.58 619 31 39 ];
+                %tmp.58 = getm $.Toybox.Graphics;
+                symbol [ COLOR_TRANSPARENT %tmp.59 619 40 57 ];
+                %tmp.59 = getv %tmp.58 :COLOR_TRANSPARENT;
+                putv self :background %tmp.59;
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 618; @position = 18; @symbol_constdef = [color,618,18,23]; @symbol_type<0> = [Number,618,27,33]; ]
+            const color as Number = 0xFFFFFF;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 619; @position = 18; @symbol_constdef = [background,619,18,28]; ]
+            const background;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 622; @symbol_moduledef = [confirmation_icon__hint_delete,622,15,45]; ]
+        module confirmation_icon__hint_delete {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 622; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 623; @position = 18; @symbol_constdef = [filename,623,18,26]; @symbol_type<0> = [String,623,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/confirmation_icon__hint_delete.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 624; @position = 18; @symbol_constdef = [dithering,624,18,27]; @symbol_type<0> = [String,624,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 627; @symbol_moduledef = [system_icon_light__hint_button_right_top,627,15,55]; ]
+        module system_icon_light__hint_button_right_top {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 627; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 628; @position = 18; @symbol_constdef = [filename,628,18,26]; @symbol_type<0> = [String,628,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_light__hint_button_right_top.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 629; @position = 18; @symbol_constdef = [dithering,629,18,27]; @symbol_type<0> = [String,629,31,37]; ]
+            const dithering as String = "none";
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 632; @symbol_moduledef = [confirmation_size__body,632,15,38]; ]
+        module confirmation_size__body {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 632; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 633; @position = 18; @symbol_constdef = [width,633,18,23]; @symbol_type<0> = [Number,633,27,33]; ]
+            const width as Number = 156;
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 634; @position = 18; @symbol_constdef = [height,634,18,24]; @symbol_type<0> = [Number,634,28,34]; ]
+            const height as Number = 156;
+        }
+        [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 637; @symbol_moduledef = [system_icon_positive__check,637,15,42]; ]
+        module system_icon_positive__check {
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 637; ]
+            <init> {
+            }
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 638; @position = 18; @symbol_constdef = [filename,638,18,26]; @symbol_type<0> = [String,638,30,36]; ]
+            const filename as String = "/home/shum/.Garmin/ConnectIQ/Devices/fr955/system_icon_positive__check.svg";
+            [ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 639; @position = 18; @symbol_constdef = [dithering,639,18,27]; @symbol_type<0> = [String,639,31,37]; ]
+            const dithering as String = "none";
+        }
+    }
+}
+[ @file = "/home/shum/stow/garmin/interstellar/bin/gen/006-B4024-00/source/Rez.mcgen"; @line = 1; ]
+<init> {
+}

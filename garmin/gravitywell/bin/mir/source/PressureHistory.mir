@@ -1,0 +1,209 @@
+[ @file = "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc"; @line = 1; @symbol_usingdef<0> = [Toybox,1,6,12]; @symbol_usingdef<1> = [Lang,1,13,17]; @symbol_usingAlias = [Lang,1,21,25]; ]
+using Toybox.Lang as :Lang;
+[ @file = "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc"; @line = 2; @symbol_usingdef<0> = [Toybox,2,6,12]; @symbol_usingdef<1> = [SensorHistory,2,13,26]; @symbol_usingAlias = [SensorHistory,2,30,43]; ]
+using Toybox.SensorHistory as :SensorHistory;
+[ @file = "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc"; @line = 3; @symbol_usingdef<0> = [Toybox,3,6,12]; @symbol_usingdef<1> = [System,3,13,19]; @symbol_usingAlias = [System,3,23,29]; ]
+using Toybox.System as :System;
+[ @file = "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc"; @line = 5; @symbol_classdef = [PressureHistory,5,6,21]; ]
+class PressureHistory {
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc"; @line = 5; ]
+    <init> {
+    }
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc"; @line = 5; ]
+    static
+    <init> {
+    }
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc"; @line = 16; @symbol_functiondef = [read,16,10,14]; @symbol_param<0> = [sampleCount,16,15,26]; ]
+    function read(sampleCount) {
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_16_28_46_1_start:
+[ "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc" 17 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_16_28_46_1_start" "_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_16_28_46_1_stop" ]
+        %values.1 = local;
+        symbol [ values %values.1 17 6 12 ];
+        %tmp.1 = newa 0;
+        lputv %values.1 %tmp.1;
+        symbol [ values %values.1 17 6 12 ];
+[ "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc" 19 2 ]
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_19_2_22_2_if_stmt:
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_19_6_20_49_begin:
+        symbol [ Toybox %tmp.3 19 8 14 ];
+        %tmp.3 = getv ? :Toybox;
+        %tmp.5 = const :SensorHistory;
+        symbol [ SensorHistory %tmp.5 19 20 33 const ];
+        %tmp.6 = canhazplz %tmp.3 %tmp.5;
+        %tmp.7 = not %tmp.6;
+        bt %tmp.7 @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_19_2_22_2_if_true;
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_20_3_20_49_false:
+        symbol [ Toybox %tmp.9 20 5 11 ];
+        %tmp.9 = getv ? :Toybox;
+        %tmp.10 = as %tmp.9 { (interface { var SensorHistory; }) };
+        symbol [ SensorHistory %tmp.11 20 12 25 ];
+        %tmp.11 = getv %tmp.10 :SensorHistory;
+        %tmp.13 = const :getPressureHistory;
+        symbol [ getPressureHistory %tmp.13 20 31 49 const ];
+        %tmp.14 = canhazplz %tmp.11 %tmp.13;
+        %tmp.15 = not %tmp.14;
+        push %tmp.15;
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_20_3_20_49_end:
+        %tmp.16 = phi [%tmp.7 @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_19_6_20_49_begin] [%tmp.15 @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_20_3_20_49_false] [%tmp.16 @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_20_3_20_49_end];
+        bf %tmp.16 @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_19_2_22_2_if_end;
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_19_2_22_2_if_true:
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_20_52_22_2_start:
+[ "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc" 21 3 ]
+        %tmp.17 = lgetv %values.1;
+        symbol [ values %tmp.17 21 10 16 ];
+        ret %tmp.17;
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_20_52_22_2_stop:
+        goto @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_19_2_22_2_if_end;
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_19_2_22_2_if_end:
+[ "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc" 24 2 ]
+        try @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_2_43_2_beginTry @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_2_43_2_endTry @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_2_43_2_catch @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_2_43_2_finally;
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_2_43_2_beginTry:
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_6_41_2_start:
+[ "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc" 25 3 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_6_41_2_start" "_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_6_41_2_stop" ]
+        %iterator.2 = local;
+        symbol [ iterator %iterator.2 25 7 15 ];
+        symbol [ SensorHistory %tmp.18 25 18 31 ];
+        %tmp.18 = getm $.Toybox.SensorHistory;
+        symbol [ getPressureHistory %tmp.19 25 32 50 ];
+        %tmp.19 = getv function %tmp.18 :getPressureHistory;
+        %tmp.20 = newd 2;
+        %tmp.22 = const :period;
+        symbol [ period %tmp.22 26 5 11 const ];
+        %tmp.23 = lgetv %sampleCount;
+        symbol [ sampleCount %tmp.23 26 15 26 ];
+        %tmp.24 = dup %tmp.20;
+        %tmp.25 = aputv %tmp.24 %tmp.22 %tmp.23;
+        %tmp.27 = const :order;
+        symbol [ order %tmp.27 27 5 10 const ];
+        symbol [ SensorHistory %tmp.28 27 15 28 ];
+        %tmp.28 = getm $.Toybox.SensorHistory;
+        symbol [ ORDER_OLDEST_FIRST %tmp.29 27 29 47 ];
+        %tmp.29 = getv %tmp.28 :ORDER_OLDEST_FIRST;
+        %tmp.30 = dup %tmp.25;
+        %tmp.31 = aputv %tmp.30 %tmp.27 %tmp.29;
+        %tmp.32 = invoke %tmp.18 %tmp.19(%tmp.31);
+        lputv %iterator.2 %tmp.32;
+        symbol [ iterator %iterator.2 25 7 15 ];
+[ "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc" 30 3 ]
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_30_3_32_3_if_stmt:
+        %tmp.33 = lgetv %iterator.2;
+        symbol [ iterator %tmp.33 30 7 15 ];
+        %tmp.34 = null;
+        %tmp.35 = eq %tmp.33 %tmp.34;
+        bf %tmp.35 @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_30_3_32_3_if_end;
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_30_3_32_3_if_true:
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_30_25_32_3_start:
+[ "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc" 31 4 ]
+        %tmp.36 = lgetv %values.1;
+        symbol [ values %tmp.36 31 11 17 ];
+        jsr @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_2_43_2_finally;
+        ret %tmp.36;
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_30_25_32_3_stop:
+        goto @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_30_3_32_3_if_end;
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_30_3_32_3_if_end:
+[ "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc" 34 3 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_6_41_2_start" "_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_6_41_2_stop" ]
+        %sample.3 = local;
+        symbol [ sample %sample.3 34 7 13 ];
+        %tmp.37 = lgetv %iterator.2;
+        symbol [ iterator %tmp.37 34 16 24 ];
+        symbol [ next %tmp.38 34 25 29 ];
+        %tmp.38 = getv function %tmp.37 :next;
+        %tmp.39 = invoke %tmp.37 %tmp.38();
+        lputv %sample.3 %tmp.39;
+        symbol [ sample %sample.3 34 7 13 ];
+[ "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc" 35 3 ]
+        while @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_35_3_40_3_while_test @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_35_3_40_3_while_end;
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_35_3_40_3_while_test:
+        %tmp.40 = lgetv %sample.3;
+        symbol [ sample %tmp.40 35 10 16 ];
+        %tmp.41 = null;
+        %tmp.42 = ne %tmp.40 %tmp.41;
+        bf %tmp.42 @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_35_3_40_3_while_end;
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_35_3_40_3_while_begin:
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_35_26_40_3_start:
+[ "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc" 36 4 ]
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_36_4_38_4_if_stmt:
+        %tmp.43 = lgetv %sample.3;
+        symbol [ sample %tmp.43 36 8 14 ];
+        %tmp.44 = as %tmp.43 { (!Null) };
+        symbol [ data %tmp.45 36 15 19 ];
+        %tmp.45 = getv %tmp.44 :data;
+        %tmp.46 = null;
+        %tmp.47 = ne %tmp.45 %tmp.46;
+        bf %tmp.47 @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_36_4_38_4_if_end;
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_36_4_38_4_if_true:
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_36_29_38_4_start:
+[ "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc" 37 5 ]
+        %tmp.48 = lgetv %values.1;
+        symbol [ values %tmp.48 37 5 11 ];
+        symbol [ add %tmp.49 37 12 15 ];
+        %tmp.49 = getv function %tmp.48 :add;
+        %tmp.50 = lgetv %sample.3;
+        symbol [ sample %tmp.50 37 16 22 ];
+        %tmp.51 = as %tmp.50 { (!Null) };
+        symbol [ data %tmp.52 37 23 27 ];
+        %tmp.52 = getv %tmp.51 :data;
+        invoke %tmp.48 %tmp.49(%tmp.52);
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_36_29_38_4_stop:
+        goto @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_36_4_38_4_if_end;
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_36_4_38_4_if_end:
+[ "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc" 39 4 ]
+        %tmp.53 = lgetv %iterator.2;
+        symbol [ iterator %tmp.53 39 13 21 ];
+        symbol [ next %tmp.54 39 22 26 ];
+        %tmp.54 = getv function %tmp.53 :next;
+        %tmp.55 = invoke %tmp.53 %tmp.54();
+        lputv %sample.3 %tmp.55;
+        symbol [ sample %sample.3 39 4 10 ];
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_35_26_40_3_stop:
+        goto @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_35_3_40_3_while_test;
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_35_3_40_3_while_end:
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_6_41_2_stop:
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_2_43_2_endTry:
+        jsr @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_2_43_2_finally;
+        goto @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_2_43_2_end;
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_2_43_2_catch:
+        %tmp.56 = exception;
+        push %tmp.56;
+[ "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc" 41 4 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_2_43_2_catch" "_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_41_4_43_2_end" ]
+        %ex.4 = local;
+        symbol [ ex %ex.4 41 11 13 ];
+        %tmp.57 = dup %tmp.56;
+        lputv %ex.4 %tmp.57;
+        symbol [ ex %ex.4 41 11 13 ];
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_41_15_43_2_start:
+[ "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc" 42 3 ]
+        symbol [ System %tmp.58 42 3 9 ];
+        %tmp.58 = getm $.Toybox.System;
+        symbol [ println %tmp.59 42 10 17 ];
+        %tmp.59 = getv function %tmp.58 :println;
+        %tmp.60 = "Pressure history unavailable: ";
+        %tmp.61 = lgetv %ex.4;
+        symbol [ ex %tmp.61 42 53 55 ];
+        %tmp.62 = add %tmp.60 %tmp.61;
+        invoke %tmp.58 %tmp.59(%tmp.62);
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_41_15_43_2_stop:
+        jsr @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_2_43_2_finally;
+        pop;
+        goto @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_2_43_2_end;
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_41_4_43_2_end:
+        try @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_2_43_2_catch @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_41_4_43_2_end @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_41_4_43_2_end @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_2_43_2_finally;
+        jsr @_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_2_43_2_finally;
+        throw %tmp.56;
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_2_43_2_finally:
+        jsrret;
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_24_2_43_2_end:
+[ "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc" 45 2 ]
+        %tmp.63 = lgetv %values.1;
+        symbol [ values %tmp.63 45 9 15 ];
+        ret %tmp.63;
+_home_shum_stow_garmin_gravitywell_source_PressureHistory_mc_16_28_46_1_stop:
+    }
+}
+[ @file = "/home/shum/stow/garmin/gravitywell/source/PressureHistory.mc"; @line = 1; ]
+<init> {
+}

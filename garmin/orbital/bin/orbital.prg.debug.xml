@@ -87,153 +87,154 @@
         <entry filename="/home/shum/stow/garmin/orbital/source/DialRenderer.mc" id="20" lineNum="107" parent="globals/DialRenderer" pc="268437228" symbol="drawTicks"/>
         <entry filename="/home/shum/stow/garmin/orbital/source/DialRenderer.mc" id="20" lineNum="113" parent="globals/DialRenderer" pc="268437250" symbol="drawTicks"/>
         <entry filename="/home/shum/stow/garmin/orbital/source/DialRenderer.mc" id="20" lineNum="121" parent="globals/DialRenderer" pc="268437278" symbol="drawTicks"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/DateRenderer.mc" id="22" lineNum="11" parent="globals/DateRenderer" pc="268437291" symbol="initialize"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/DateRenderer.mc" id="22" lineNum="12" parent="globals/DateRenderer" pc="268437293" symbol="initialize"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/DateRenderer.mc" id="23" lineNum="15" parent="globals/DateRenderer" pc="268437332" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/DateRenderer.mc" id="23" lineNum="16" parent="globals/DateRenderer" pc="268437335" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/DateRenderer.mc" id="23" lineNum="21" parent="globals/DateRenderer" pc="268437360" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/DateRenderer.mc" id="23" lineNum="26" parent="globals/DateRenderer" pc="268437367" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/DateRenderer.mc" id="23" lineNum="29" parent="globals/DateRenderer" pc="268437394" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/DateRenderer.mc" id="23" lineNum="34" parent="globals/DateRenderer" pc="268437426" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/DateRenderer.mc" id="23" lineNum="36" parent="globals/DateRenderer" pc="268437443" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="11" parent="globals/FaceGeometry" pc="268437478" symbol="initialize"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="12" parent="globals/FaceGeometry" pc="268437481" symbol="initialize"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="13" parent="globals/FaceGeometry" pc="268437490" symbol="initialize"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="16" parent="globals/FaceGeometry" pc="268437499" symbol="initialize"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="17" parent="globals/FaceGeometry" pc="268437511" symbol="initialize"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="19" parent="globals/FaceGeometry" pc="268437523" symbol="initialize"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="20" parent="globals/FaceGeometry" pc="268437531" symbol="initialize"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="22" parent="globals/FaceGeometry" pc="268437538" symbol="initialize"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="25" parent="globals/FaceGeometry" pc="268437542" symbol="initialize"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="40" parent="globals/FaceGeometry" pc="268437554" symbol="initialize"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="41" parent="globals/FaceGeometry" pc="268437569" symbol="initialize"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="43" parent="globals/FaceGeometry" pc="268437584" symbol="initialize"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="12" parent="globals/CircleRenderer" pc="268437609" symbol="drawSmoothCircle"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="13" parent="globals/CircleRenderer" pc="268437612" symbol="drawSmoothCircle"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="15" parent="globals/CircleRenderer" pc="268437626" symbol="drawSmoothCircle"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="18" parent="globals/CircleRenderer" pc="268437636" symbol="drawSmoothCircle"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="21" parent="globals/CircleRenderer" pc="268437646" symbol="drawSmoothCircle"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="22" parent="globals/CircleRenderer" pc="268437658" symbol="drawSmoothCircle"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="25" parent="globals/CircleRenderer" pc="268437675" symbol="drawSmoothCircle"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="26" parent="globals/CircleRenderer" pc="268437691" symbol="drawSmoothCircle"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="28" parent="globals/CircleRenderer" pc="268437698" symbol="drawSmoothCircle"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="37" parent="globals/CircleRenderer" pc="268437749" symbol="drawSmoothCircle"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="39" parent="globals/CircleRenderer" pc="268437753" symbol="drawSmoothCircle"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="40" parent="globals/CircleRenderer" pc="268437769" symbol="drawSmoothCircle"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="42" parent="globals/CircleRenderer" pc="268437776" symbol="drawSmoothCircle"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="43" parent="globals/CircleRenderer" pc="268437787" symbol="drawSmoothCircle"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="44" parent="globals/CircleRenderer" pc="268437807" symbol="drawSmoothCircle"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="47" parent="globals/CircleRenderer" pc="268437817" symbol="drawSmoothCircle"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="131" parent="globals/CircleRenderer" pc="268437853" symbol="drawSmoothAnnulus"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="134" parent="globals/CircleRenderer" pc="268437856" symbol="drawSmoothAnnulus"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="135" parent="globals/CircleRenderer" pc="268437874" symbol="drawSmoothAnnulus"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="138" parent="globals/CircleRenderer" pc="268437884" symbol="drawSmoothAnnulus"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="140" parent="globals/CircleRenderer" pc="268437888" symbol="drawSmoothAnnulus"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="141" parent="globals/CircleRenderer" pc="268437904" symbol="drawSmoothAnnulus"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="143" parent="globals/CircleRenderer" pc="268437911" symbol="drawSmoothAnnulus"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="144" parent="globals/CircleRenderer" pc="268437922" symbol="drawSmoothAnnulus"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="145" parent="globals/CircleRenderer" pc="268437942" symbol="drawSmoothAnnulus"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="148" parent="globals/CircleRenderer" pc="268437952" symbol="drawSmoothAnnulus"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="155" parent="globals/CircleRenderer" pc="268438000" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="159" parent="globals/CircleRenderer" pc="268438003" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="160" parent="globals/CircleRenderer" pc="268438023" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="162" parent="globals/CircleRenderer" pc="268438033" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="166" parent="globals/CircleRenderer" pc="268438089" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="170" parent="globals/CircleRenderer" pc="268438105" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="172" parent="globals/CircleRenderer" pc="268438109" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="173" parent="globals/CircleRenderer" pc="268438120" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="174" parent="globals/CircleRenderer" pc="268438131" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="177" parent="globals/CircleRenderer" pc="268438139" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="178" parent="globals/CircleRenderer" pc="268438146" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="179" parent="globals/CircleRenderer" pc="268438153" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="181" parent="globals/CircleRenderer" pc="268438160" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="182" parent="globals/CircleRenderer" pc="268438174" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="184" parent="globals/CircleRenderer" pc="268438188" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="187" parent="globals/CircleRenderer" pc="268438213" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="190" parent="globals/CircleRenderer" pc="268438226" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="193" parent="globals/CircleRenderer" pc="268438239" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="194" parent="globals/CircleRenderer" pc="268438246" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="197" parent="globals/CircleRenderer" pc="268438252" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="198" parent="globals/CircleRenderer" pc="268438260" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="201" parent="globals/CircleRenderer" pc="268438267" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="202" parent="globals/CircleRenderer" pc="268438274" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="205" parent="globals/CircleRenderer" pc="268438280" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="206" parent="globals/CircleRenderer" pc="268438288" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="209" parent="globals/CircleRenderer" pc="268438295" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="212" parent="globals/CircleRenderer" pc="268438302" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="213" parent="globals/CircleRenderer" pc="268438309" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="216" parent="globals/CircleRenderer" pc="268438315" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="220" parent="globals/CircleRenderer" pc="268438348" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="224" parent="globals/CircleRenderer" pc="268438381" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="228" parent="globals/CircleRenderer" pc="268438414" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="231" parent="globals/CircleRenderer" pc="268438430" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="235" parent="globals/CircleRenderer" pc="268438479" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="243" parent="globals/CircleRenderer" pc="268438526" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="245" parent="globals/CircleRenderer" pc="268438542" symbol="getRingPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="51" parent="globals/CircleRenderer" pc="268438545" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="52" parent="globals/CircleRenderer" pc="268438548" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="53" parent="globals/CircleRenderer" pc="268438568" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="55" parent="globals/CircleRenderer" pc="268438578" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="57" parent="globals/CircleRenderer" pc="268438606" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="61" parent="globals/CircleRenderer" pc="268438622" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="62" parent="globals/CircleRenderer" pc="268438626" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="64" parent="globals/CircleRenderer" pc="268438630" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="65" parent="globals/CircleRenderer" pc="268438641" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="66" parent="globals/CircleRenderer" pc="268438652" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="68" parent="globals/CircleRenderer" pc="268438660" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="70" parent="globals/CircleRenderer" pc="268438667" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="71" parent="globals/CircleRenderer" pc="268438681" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="72" parent="globals/CircleRenderer" pc="268438684" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="74" parent="globals/CircleRenderer" pc="268438687" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="75" parent="globals/CircleRenderer" pc="268438701" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="76" parent="globals/CircleRenderer" pc="268438726" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="78" parent="globals/CircleRenderer" pc="268438739" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="79" parent="globals/CircleRenderer" pc="268438746" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="82" parent="globals/CircleRenderer" pc="268438752" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="84" parent="globals/CircleRenderer" pc="268438760" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="85" parent="globals/CircleRenderer" pc="268438766" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="88" parent="globals/CircleRenderer" pc="268438773" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="89" parent="globals/CircleRenderer" pc="268438777" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="93" parent="globals/CircleRenderer" pc="268438783" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="97" parent="globals/CircleRenderer" pc="268438816" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="101" parent="globals/CircleRenderer" pc="268438849" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="105" parent="globals/CircleRenderer" pc="268438882" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="108" parent="globals/CircleRenderer" pc="268438898" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="111" parent="globals/CircleRenderer" pc="268438937" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="112" parent="globals/CircleRenderer" pc="268438943" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="116" parent="globals/CircleRenderer" pc="268438985" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="123" parent="globals/CircleRenderer" pc="268439024" symbol="getPattern"/>
-        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="125" parent="globals/CircleRenderer" pc="268439040" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/DateRenderer.mc" id="22" lineNum="12" parent="globals/DateRenderer" pc="268437291" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/DateRenderer.mc" id="22" lineNum="13" parent="globals/DateRenderer" pc="268437293" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/DateRenderer.mc" id="23" lineNum="16" parent="globals/DateRenderer" pc="268437332" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/DateRenderer.mc" id="23" lineNum="17" parent="globals/DateRenderer" pc="268437335" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/DateRenderer.mc" id="23" lineNum="22" parent="globals/DateRenderer" pc="268437360" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/DateRenderer.mc" id="23" lineNum="27" parent="globals/DateRenderer" pc="268437367" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/DateRenderer.mc" id="23" lineNum="30" parent="globals/DateRenderer" pc="268437394" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/DateRenderer.mc" id="23" lineNum="35" parent="globals/DateRenderer" pc="268437426" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/DateRenderer.mc" id="23" lineNum="37" parent="globals/DateRenderer" pc="268437443" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="11" parent="globals/FaceGeometry" pc="268437481" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="12" parent="globals/FaceGeometry" pc="268437484" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="13" parent="globals/FaceGeometry" pc="268437493" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="16" parent="globals/FaceGeometry" pc="268437502" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="17" parent="globals/FaceGeometry" pc="268437514" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="19" parent="globals/FaceGeometry" pc="268437526" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="20" parent="globals/FaceGeometry" pc="268437534" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="22" parent="globals/FaceGeometry" pc="268437541" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="25" parent="globals/FaceGeometry" pc="268437545" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="40" parent="globals/FaceGeometry" pc="268437557" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="41" parent="globals/FaceGeometry" pc="268437572" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/FaceGeometry.mc" id="24" lineNum="43" parent="globals/FaceGeometry" pc="268437587" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="12" parent="globals/CircleRenderer" pc="268437612" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="13" parent="globals/CircleRenderer" pc="268437615" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="15" parent="globals/CircleRenderer" pc="268437629" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="18" parent="globals/CircleRenderer" pc="268437639" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="21" parent="globals/CircleRenderer" pc="268437649" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="22" parent="globals/CircleRenderer" pc="268437661" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="25" parent="globals/CircleRenderer" pc="268437678" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="26" parent="globals/CircleRenderer" pc="268437694" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="28" parent="globals/CircleRenderer" pc="268437701" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="37" parent="globals/CircleRenderer" pc="268437752" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="39" parent="globals/CircleRenderer" pc="268437756" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="40" parent="globals/CircleRenderer" pc="268437772" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="42" parent="globals/CircleRenderer" pc="268437779" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="43" parent="globals/CircleRenderer" pc="268437790" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="44" parent="globals/CircleRenderer" pc="268437810" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="25" lineNum="47" parent="globals/CircleRenderer" pc="268437820" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="131" parent="globals/CircleRenderer" pc="268437856" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="134" parent="globals/CircleRenderer" pc="268437859" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="135" parent="globals/CircleRenderer" pc="268437877" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="138" parent="globals/CircleRenderer" pc="268437887" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="140" parent="globals/CircleRenderer" pc="268437891" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="141" parent="globals/CircleRenderer" pc="268437907" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="143" parent="globals/CircleRenderer" pc="268437914" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="144" parent="globals/CircleRenderer" pc="268437925" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="145" parent="globals/CircleRenderer" pc="268437945" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="26" lineNum="148" parent="globals/CircleRenderer" pc="268437955" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="155" parent="globals/CircleRenderer" pc="268438003" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="159" parent="globals/CircleRenderer" pc="268438006" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="160" parent="globals/CircleRenderer" pc="268438026" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="162" parent="globals/CircleRenderer" pc="268438036" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="166" parent="globals/CircleRenderer" pc="268438092" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="170" parent="globals/CircleRenderer" pc="268438108" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="172" parent="globals/CircleRenderer" pc="268438112" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="173" parent="globals/CircleRenderer" pc="268438123" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="174" parent="globals/CircleRenderer" pc="268438134" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="177" parent="globals/CircleRenderer" pc="268438142" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="178" parent="globals/CircleRenderer" pc="268438149" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="179" parent="globals/CircleRenderer" pc="268438156" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="181" parent="globals/CircleRenderer" pc="268438163" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="182" parent="globals/CircleRenderer" pc="268438177" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="184" parent="globals/CircleRenderer" pc="268438191" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="187" parent="globals/CircleRenderer" pc="268438216" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="190" parent="globals/CircleRenderer" pc="268438229" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="193" parent="globals/CircleRenderer" pc="268438242" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="194" parent="globals/CircleRenderer" pc="268438249" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="197" parent="globals/CircleRenderer" pc="268438255" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="198" parent="globals/CircleRenderer" pc="268438263" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="201" parent="globals/CircleRenderer" pc="268438270" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="202" parent="globals/CircleRenderer" pc="268438277" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="205" parent="globals/CircleRenderer" pc="268438283" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="206" parent="globals/CircleRenderer" pc="268438291" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="209" parent="globals/CircleRenderer" pc="268438298" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="212" parent="globals/CircleRenderer" pc="268438305" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="213" parent="globals/CircleRenderer" pc="268438312" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="216" parent="globals/CircleRenderer" pc="268438318" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="220" parent="globals/CircleRenderer" pc="268438351" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="224" parent="globals/CircleRenderer" pc="268438384" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="228" parent="globals/CircleRenderer" pc="268438417" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="231" parent="globals/CircleRenderer" pc="268438433" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="235" parent="globals/CircleRenderer" pc="268438482" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="243" parent="globals/CircleRenderer" pc="268438529" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="27" lineNum="245" parent="globals/CircleRenderer" pc="268438545" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="51" parent="globals/CircleRenderer" pc="268438548" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="52" parent="globals/CircleRenderer" pc="268438551" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="53" parent="globals/CircleRenderer" pc="268438571" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="55" parent="globals/CircleRenderer" pc="268438581" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="57" parent="globals/CircleRenderer" pc="268438609" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="61" parent="globals/CircleRenderer" pc="268438625" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="62" parent="globals/CircleRenderer" pc="268438629" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="64" parent="globals/CircleRenderer" pc="268438633" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="65" parent="globals/CircleRenderer" pc="268438644" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="66" parent="globals/CircleRenderer" pc="268438655" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="68" parent="globals/CircleRenderer" pc="268438663" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="70" parent="globals/CircleRenderer" pc="268438670" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="71" parent="globals/CircleRenderer" pc="268438684" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="72" parent="globals/CircleRenderer" pc="268438687" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="74" parent="globals/CircleRenderer" pc="268438690" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="75" parent="globals/CircleRenderer" pc="268438704" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="76" parent="globals/CircleRenderer" pc="268438729" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="78" parent="globals/CircleRenderer" pc="268438742" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="79" parent="globals/CircleRenderer" pc="268438749" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="82" parent="globals/CircleRenderer" pc="268438755" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="84" parent="globals/CircleRenderer" pc="268438763" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="85" parent="globals/CircleRenderer" pc="268438769" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="88" parent="globals/CircleRenderer" pc="268438776" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="89" parent="globals/CircleRenderer" pc="268438780" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="93" parent="globals/CircleRenderer" pc="268438786" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="97" parent="globals/CircleRenderer" pc="268438819" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="101" parent="globals/CircleRenderer" pc="268438852" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="105" parent="globals/CircleRenderer" pc="268438885" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="108" parent="globals/CircleRenderer" pc="268438901" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="111" parent="globals/CircleRenderer" pc="268438940" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="112" parent="globals/CircleRenderer" pc="268438946" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="116" parent="globals/CircleRenderer" pc="268438988" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="123" parent="globals/CircleRenderer" pc="268439027" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/orbital/source/CircleRenderer.mc" id="29" lineNum="125" parent="globals/CircleRenderer" pc="268439043" symbol="getPattern"/>
     </pcToLineNum>
     <symbolTable>
         <entry id="8388639" module="true" symbol="Graphics"/>
-        <entry id="38" method="true" symbol="drawSmoothCircle"/>
+        <entry id="39" method="true" symbol="drawSmoothCircle"/>
         <entry field="true" id="22" symbol="&lt;globals/OrbitalView/&lt;&gt;_hands&gt;"/>
         <entry field="true" id="24" symbol="&lt;globals/DialRenderer/&lt;&gt;_fourFont&gt;"/>
         <entry field="true" id="16" symbol="&lt;globals/HandRenderer/&lt;&gt;_minuteRadius&gt;"/>
-        <entry field="true" id="33" symbol="tickInnerRadius"/>
+        <entry field="true" id="34" symbol="tickInnerRadius"/>
         <entry id="8388632" method="true" symbol="&lt;init&gt;"/>
         <entry id="8389759" symbol="radius"/>
         <entry id="7" object="true" symbol="CircleRenderer"/>
-        <entry field="true" id="31" symbol="screenRadius"/>
-        <entry field="true" id="43" symbol="DialEight"/>
+        <entry field="true" id="32" symbol="screenRadius"/>
+        <entry field="true" id="44" symbol="DialEight"/>
         <entry id="8388924" module="true" symbol="Gregorian"/>
         <entry field="true" id="8388611" module="true" symbol="Toybox"/>
-        <entry field="true" id="46" symbol="AppName"/>
+        <entry field="true" id="47" symbol="AppName"/>
         <entry field="true" id="25" symbol="&lt;globals/DialRenderer/&lt;&gt;_twelveFont&gt;"/>
         <entry id="6" module="true" symbol="globals/Rez/Strings"/>
         <entry id="8388772" module="true" object="true" symbol="Fonts"/>
         <entry id="8388648" module="true" symbol="WatchUi"/>
-        <entry id="47" symbol="spans"/>
+        <entry id="48" symbol="spans"/>
         <entry id="3" module="true" symbol="globals/Rez"/>
         <entry id="8" object="true" symbol="DateRenderer"/>
-        <entry id="48" symbol="edges"/>
+        <entry id="49" symbol="edges"/>
         <entry id="26" method="true" symbol="drawNumerals"/>
-        <entry field="true" id="36" symbol="_ringCache"/>
+        <entry field="true" id="37" symbol="_ringCache"/>
         <entry id="8389124" method="true" symbol="onUpdate"/>
-        <entry id="50" symbol="gap"/>
+        <entry id="51" symbol="gap"/>
         <entry id="13" object="true" symbol="OrbitalView"/>
         <entry id="8388771" module="true" object="true" symbol="Drawables"/>
+        <entry field="true" id="29" symbol="&lt;globals/DateRenderer/&lt;&gt;_offsetY&gt;"/>
         <entry field="true" id="8389066" symbol="width"/>
         <entry id="8389122" method="true" symbol="onLayout"/>
         <entry id="8389376" method="true" symbol="onEnterSleep"/>
@@ -241,21 +242,21 @@
         <entry field="true" id="19" symbol="&lt;globals/OrbitalView/&lt;&gt;_date&gt;"/>
         <entry field="true" id="21" symbol="&lt;globals/OrbitalView/&lt;&gt;_geometry&gt;"/>
         <entry id="4" module="true" symbol="globals/Rez/Drawables"/>
-        <entry field="true" id="35" symbol="_cache"/>
-        <entry field="true" id="42" symbol="DateFont"/>
-        <entry field="true" id="44" symbol="DialFour"/>
+        <entry field="true" id="36" symbol="_cache"/>
+        <entry field="true" id="43" symbol="DateFont"/>
+        <entry field="true" id="45" symbol="DialFour"/>
         <entry field="true" id="20" symbol="&lt;globals/OrbitalView/&lt;&gt;_dial&gt;"/>
         <entry id="12" object="true" symbol="OrbitalApp"/>
         <entry field="true" id="28" symbol="&lt;globals/DateRenderer/&lt;&gt;_font&gt;"/>
         <entry field="true" id="17" symbol="&lt;globals/HandRenderer/&lt;&gt;_tickClearance&gt;"/>
         <entry id="8389377" method="true" symbol="onExitSleep"/>
         <entry id="8388644" module="true" symbol="System"/>
-        <entry id="40" method="true" symbol="getRingPattern"/>
+        <entry id="41" method="true" symbol="getRingPattern"/>
         <entry id="8388645" module="true" symbol="Time"/>
         <entry id="8388769" module="true" object="true" symbol="Rez"/>
         <entry id="8388640" module="true" symbol="Lang"/>
         <entry id="8389068" method="true" symbol="draw"/>
-        <entry field="true" id="41" symbol="LauncherIcon"/>
+        <entry field="true" id="42" symbol="LauncherIcon"/>
         <entry id="8388610" symbol="statics"/>
         <entry id="8389123" method="true" symbol="onShow"/>
         <entry field="true" id="23" symbol="&lt;globals/DialRenderer/&lt;&gt;_eightFont&gt;"/>
@@ -263,25 +264,25 @@
         <entry id="8389350" module="true" symbol="globals"/>
         <entry id="2" module="true" symbol="globals/CircleRenderer/&lt;statics&gt;"/>
         <entry id="8388770" module="true" object="true" symbol="Strings"/>
-        <entry field="true" id="30" symbol="centerY"/>
-        <entry field="true" id="29" symbol="centerX"/>
+        <entry field="true" id="31" symbol="centerY"/>
+        <entry field="true" id="30" symbol="centerX"/>
         <entry id="8388702" method="true" symbol="initialize"/>
         <entry id="11" object="true" symbol="HandRenderer"/>
         <entry id="8388641" module="true" symbol="Math"/>
         <entry id="8389280" method="true" symbol="getInitialView"/>
         <entry field="true" id="8389347" symbol="color"/>
-        <entry id="39" method="true" symbol="getPattern"/>
-        <entry field="true" id="34" symbol="tickOuterRadius"/>
-        <entry field="true" id="32" symbol="tickCenterRadius"/>
+        <entry id="40" method="true" symbol="getPattern"/>
+        <entry field="true" id="35" symbol="tickOuterRadius"/>
+        <entry field="true" id="33" symbol="tickCenterRadius"/>
         <entry id="9" object="true" symbol="DialRenderer"/>
         <entry id="5" module="true" symbol="globals/Rez/Fonts"/>
-        <entry id="37" method="true" symbol="drawSmoothAnnulus"/>
+        <entry id="38" method="true" symbol="drawSmoothAnnulus"/>
         <entry id="18" method="true" symbol="drawRing"/>
         <entry id="14" object="true" symbol="Theme"/>
         <entry id="8389125" method="true" symbol="onHide"/>
         <entry field="true" id="15" symbol="&lt;globals/HandRenderer/&lt;&gt;_hourRadius&gt;"/>
-        <entry field="true" id="45" symbol="DialTwelve"/>
-        <entry id="49" symbol="pixels"/>
+        <entry field="true" id="46" symbol="DialTwelve"/>
+        <entry id="50" symbol="pixels"/>
     </symbolTable>
     <localVars>
         <entry arg="true" endPc="268435658" name="dc" stackId="1" startPc="268435523"/>
@@ -331,86 +332,86 @@
         <entry endPc="268437267" name="innerY" stackId="15" startPc="268436814"/>
         <entry endPc="268437267" name="outerX" stackId="16" startPc="268436814"/>
         <entry endPc="268437267" name="outerY" stackId="17" startPc="268436814"/>
-        <entry arg="true" endPc="268437477" name="dc" stackId="1" startPc="268437332"/>
-        <entry arg="true" endPc="268437477" name="geometry" stackId="2" startPc="268437332"/>
-        <entry endPc="268437476" name="today" stackId="3" startPc="268437335"/>
-        <entry endPc="268437476" name="days" stackId="4" startPc="268437335"/>
-        <entry endPc="268437476" name="label" stackId="5" startPc="268437335"/>
-        <entry endPc="268437476" name="color" stackId="6" startPc="268437335"/>
-        <entry arg="true" endPc="268437608" name="dc" stackId="1" startPc="268437478"/>
-        <entry endPc="268437607" name="width" stackId="2" startPc="268437481"/>
-        <entry endPc="268437607" name="height" stackId="3" startPc="268437481"/>
-        <entry endPc="268437607" name="diameter" stackId="4" startPc="268437481"/>
-        <entry arg="true" endPc="268437852" name="dc" stackId="1" startPc="268437609"/>
-        <entry arg="true" endPc="268437852" name="cx" stackId="2" startPc="268437609"/>
-        <entry arg="true" endPc="268437852" name="cy" stackId="3" startPc="268437609"/>
-        <entry arg="true" endPc="268437852" name="radius" stackId="4" startPc="268437609"/>
-        <entry arg="true" endPc="268437852" name="color" stackId="5" startPc="268437609"/>
-        <entry endPc="268437851" name="pattern" stackId="6" startPc="268437612"/>
-        <entry endPc="268437851" name="spans" stackId="7" startPc="268437612"/>
-        <entry endPc="268437851" name="edges" stackId="8" startPc="268437612"/>
-        <entry endPc="268437748" name="i" stackId="9" startPc="268437691"/>
-        <entry endPc="268437738" name="span" stackId="10" startPc="268437691"/>
-        <entry endPc="268437851" name="previousColor" stackId="11" startPc="268437612"/>
-        <entry endPc="268437851" name="i" stackId="12" startPc="268437769"/>
-        <entry endPc="268437841" name="pixel" stackId="13" startPc="268437769"/>
-        <entry arg="true" endPc="268437999" name="dc" stackId="1" startPc="268437853"/>
-        <entry arg="true" endPc="268437999" name="cx" stackId="2" startPc="268437853"/>
-        <entry arg="true" endPc="268437999" name="cy" stackId="3" startPc="268437853"/>
-        <entry arg="true" endPc="268437999" name="radius" stackId="4" startPc="268437853"/>
-        <entry arg="true" endPc="268437999" name="gap" stackId="5" startPc="268437853"/>
-        <entry arg="true" endPc="268437999" name="width" stackId="6" startPc="268437853"/>
-        <entry arg="true" endPc="268437999" name="color" stackId="7" startPc="268437853"/>
-        <entry endPc="268437998" name="pattern" stackId="8" startPc="268437856"/>
-        <entry endPc="268437998" name="pixels" stackId="9" startPc="268437856"/>
-        <entry endPc="268437998" name="previousColor" stackId="10" startPc="268437856"/>
-        <entry endPc="268437998" name="i" stackId="11" startPc="268437904"/>
-        <entry endPc="268437988" name="pixel" stackId="12" startPc="268437904"/>
-        <entry arg="true" endPc="268438544" name="radius" stackId="1" startPc="268438000"/>
-        <entry arg="true" endPc="268438544" name="gap" stackId="2" startPc="268438000"/>
-        <entry arg="true" endPc="268438544" name="width" stackId="3" startPc="268438000"/>
-        <entry arg="true" endPc="268438544" name="color" stackId="4" startPc="268438000"/>
-        <entry endPc="268438104" name="i" stackId="5" startPc="268438023"/>
-        <entry endPc="268438094" name="entry" stackId="6" startPc="268438023"/>
-        <entry endPc="268438544" name="pixels" stackId="7" startPc="268438003"/>
-        <entry endPc="268438544" name="red" stackId="8" startPc="268438003"/>
-        <entry endPc="268438544" name="green" stackId="9" startPc="268438003"/>
-        <entry endPc="268438544" name="blue" stackId="10" startPc="268438003"/>
-        <entry endPc="268438544" name="innerRadius" stackId="11" startPc="268438003"/>
-        <entry endPc="268438544" name="outerRadius" stackId="12" startPc="268438003"/>
-        <entry endPc="268438544" name="extent" stackId="13" startPc="268438003"/>
-        <entry endPc="268438478" name="y" stackId="14" startPc="268438174"/>
-        <entry endPc="268438468" name="x" stackId="15" startPc="268438188"/>
-        <entry endPc="268438458" name="distance" stackId="16" startPc="268438188"/>
-        <entry endPc="268438458" name="outerCoverage" stackId="17" startPc="268438188"/>
-        <entry endPc="268438458" name="innerCoverage" stackId="18" startPc="268438188"/>
-        <entry endPc="268438458" name="coverage" stackId="19" startPc="268438188"/>
-        <entry endPc="268438458" name="r" stackId="20" startPc="268438188"/>
-        <entry endPc="268438458" name="g" stackId="21" startPc="268438188"/>
-        <entry endPc="268438458" name="b" stackId="22" startPc="268438188"/>
-        <entry endPc="268438458" name="pixelColor" stackId="23" startPc="268438188"/>
-        <entry endPc="268438544" name="pattern" stackId="24" startPc="268438003"/>
-        <entry arg="true" endPc="268439042" name="radius" stackId="1" startPc="268438545"/>
-        <entry arg="true" endPc="268439042" name="color" stackId="2" startPc="268438545"/>
-        <entry endPc="268438621" name="i" stackId="3" startPc="268438568"/>
-        <entry endPc="268438611" name="entry" stackId="4" startPc="268438568"/>
-        <entry endPc="268439042" name="spans" stackId="5" startPc="268438548"/>
-        <entry endPc="268439042" name="edges" stackId="6" startPc="268438548"/>
-        <entry endPc="268439042" name="red" stackId="7" startPc="268438548"/>
-        <entry endPc="268439042" name="green" stackId="8" startPc="268438548"/>
-        <entry endPc="268439042" name="blue" stackId="9" startPc="268438548"/>
-        <entry endPc="268439042" name="extent" stackId="10" startPc="268438548"/>
-        <entry endPc="268438984" name="y" stackId="11" startPc="268438681"/>
-        <entry endPc="268438974" name="spanStart" stackId="12" startPc="268438681"/>
-        <entry endPc="268438974" name="spanEnd" stackId="13" startPc="268438681"/>
-        <entry endPc="268438936" name="x" stackId="14" startPc="268438701"/>
-        <entry endPc="268438926" name="distance" stackId="15" startPc="268438701"/>
-        <entry endPc="268438926" name="coverage" stackId="16" startPc="268438701"/>
-        <entry endPc="268438926" name="r" stackId="17" startPc="268438701"/>
-        <entry endPc="268438926" name="g" stackId="18" startPc="268438701"/>
-        <entry endPc="268438926" name="b" stackId="19" startPc="268438701"/>
-        <entry endPc="268438926" name="pixelColor" stackId="20" startPc="268438701"/>
-        <entry endPc="268439042" name="pattern" stackId="21" startPc="268438548"/>
+        <entry arg="true" endPc="268437480" name="dc" stackId="1" startPc="268437332"/>
+        <entry arg="true" endPc="268437480" name="geometry" stackId="2" startPc="268437332"/>
+        <entry endPc="268437479" name="today" stackId="3" startPc="268437335"/>
+        <entry endPc="268437479" name="days" stackId="4" startPc="268437335"/>
+        <entry endPc="268437479" name="label" stackId="5" startPc="268437335"/>
+        <entry endPc="268437479" name="color" stackId="6" startPc="268437335"/>
+        <entry arg="true" endPc="268437611" name="dc" stackId="1" startPc="268437481"/>
+        <entry endPc="268437610" name="width" stackId="2" startPc="268437484"/>
+        <entry endPc="268437610" name="height" stackId="3" startPc="268437484"/>
+        <entry endPc="268437610" name="diameter" stackId="4" startPc="268437484"/>
+        <entry arg="true" endPc="268437855" name="dc" stackId="1" startPc="268437612"/>
+        <entry arg="true" endPc="268437855" name="cx" stackId="2" startPc="268437612"/>
+        <entry arg="true" endPc="268437855" name="cy" stackId="3" startPc="268437612"/>
+        <entry arg="true" endPc="268437855" name="radius" stackId="4" startPc="268437612"/>
+        <entry arg="true" endPc="268437855" name="color" stackId="5" startPc="268437612"/>
+        <entry endPc="268437854" name="pattern" stackId="6" startPc="268437615"/>
+        <entry endPc="268437854" name="spans" stackId="7" startPc="268437615"/>
+        <entry endPc="268437854" name="edges" stackId="8" startPc="268437615"/>
+        <entry endPc="268437751" name="i" stackId="9" startPc="268437694"/>
+        <entry endPc="268437741" name="span" stackId="10" startPc="268437694"/>
+        <entry endPc="268437854" name="previousColor" stackId="11" startPc="268437615"/>
+        <entry endPc="268437854" name="i" stackId="12" startPc="268437772"/>
+        <entry endPc="268437844" name="pixel" stackId="13" startPc="268437772"/>
+        <entry arg="true" endPc="268438002" name="dc" stackId="1" startPc="268437856"/>
+        <entry arg="true" endPc="268438002" name="cx" stackId="2" startPc="268437856"/>
+        <entry arg="true" endPc="268438002" name="cy" stackId="3" startPc="268437856"/>
+        <entry arg="true" endPc="268438002" name="radius" stackId="4" startPc="268437856"/>
+        <entry arg="true" endPc="268438002" name="gap" stackId="5" startPc="268437856"/>
+        <entry arg="true" endPc="268438002" name="width" stackId="6" startPc="268437856"/>
+        <entry arg="true" endPc="268438002" name="color" stackId="7" startPc="268437856"/>
+        <entry endPc="268438001" name="pattern" stackId="8" startPc="268437859"/>
+        <entry endPc="268438001" name="pixels" stackId="9" startPc="268437859"/>
+        <entry endPc="268438001" name="previousColor" stackId="10" startPc="268437859"/>
+        <entry endPc="268438001" name="i" stackId="11" startPc="268437907"/>
+        <entry endPc="268437991" name="pixel" stackId="12" startPc="268437907"/>
+        <entry arg="true" endPc="268438547" name="radius" stackId="1" startPc="268438003"/>
+        <entry arg="true" endPc="268438547" name="gap" stackId="2" startPc="268438003"/>
+        <entry arg="true" endPc="268438547" name="width" stackId="3" startPc="268438003"/>
+        <entry arg="true" endPc="268438547" name="color" stackId="4" startPc="268438003"/>
+        <entry endPc="268438107" name="i" stackId="5" startPc="268438026"/>
+        <entry endPc="268438097" name="entry" stackId="6" startPc="268438026"/>
+        <entry endPc="268438547" name="pixels" stackId="7" startPc="268438006"/>
+        <entry endPc="268438547" name="red" stackId="8" startPc="268438006"/>
+        <entry endPc="268438547" name="green" stackId="9" startPc="268438006"/>
+        <entry endPc="268438547" name="blue" stackId="10" startPc="268438006"/>
+        <entry endPc="268438547" name="innerRadius" stackId="11" startPc="268438006"/>
+        <entry endPc="268438547" name="outerRadius" stackId="12" startPc="268438006"/>
+        <entry endPc="268438547" name="extent" stackId="13" startPc="268438006"/>
+        <entry endPc="268438481" name="y" stackId="14" startPc="268438177"/>
+        <entry endPc="268438471" name="x" stackId="15" startPc="268438191"/>
+        <entry endPc="268438461" name="distance" stackId="16" startPc="268438191"/>
+        <entry endPc="268438461" name="outerCoverage" stackId="17" startPc="268438191"/>
+        <entry endPc="268438461" name="innerCoverage" stackId="18" startPc="268438191"/>
+        <entry endPc="268438461" name="coverage" stackId="19" startPc="268438191"/>
+        <entry endPc="268438461" name="r" stackId="20" startPc="268438191"/>
+        <entry endPc="268438461" name="g" stackId="21" startPc="268438191"/>
+        <entry endPc="268438461" name="b" stackId="22" startPc="268438191"/>
+        <entry endPc="268438461" name="pixelColor" stackId="23" startPc="268438191"/>
+        <entry endPc="268438547" name="pattern" stackId="24" startPc="268438006"/>
+        <entry arg="true" endPc="268439045" name="radius" stackId="1" startPc="268438548"/>
+        <entry arg="true" endPc="268439045" name="color" stackId="2" startPc="268438548"/>
+        <entry endPc="268438624" name="i" stackId="3" startPc="268438571"/>
+        <entry endPc="268438614" name="entry" stackId="4" startPc="268438571"/>
+        <entry endPc="268439045" name="spans" stackId="5" startPc="268438551"/>
+        <entry endPc="268439045" name="edges" stackId="6" startPc="268438551"/>
+        <entry endPc="268439045" name="red" stackId="7" startPc="268438551"/>
+        <entry endPc="268439045" name="green" stackId="8" startPc="268438551"/>
+        <entry endPc="268439045" name="blue" stackId="9" startPc="268438551"/>
+        <entry endPc="268439045" name="extent" stackId="10" startPc="268438551"/>
+        <entry endPc="268438987" name="y" stackId="11" startPc="268438684"/>
+        <entry endPc="268438977" name="spanStart" stackId="12" startPc="268438684"/>
+        <entry endPc="268438977" name="spanEnd" stackId="13" startPc="268438684"/>
+        <entry endPc="268438939" name="x" stackId="14" startPc="268438704"/>
+        <entry endPc="268438929" name="distance" stackId="15" startPc="268438704"/>
+        <entry endPc="268438929" name="coverage" stackId="16" startPc="268438704"/>
+        <entry endPc="268438929" name="r" stackId="17" startPc="268438704"/>
+        <entry endPc="268438929" name="g" stackId="18" startPc="268438704"/>
+        <entry endPc="268438929" name="b" stackId="19" startPc="268438704"/>
+        <entry endPc="268438929" name="pixelColor" stackId="20" startPc="268438704"/>
+        <entry endPc="268439045" name="pattern" stackId="21" startPc="268438551"/>
     </localVars>
     <deviceInfo deviceVersion="3cbcff5b61d759a7585c5fa7606e74c0bd5dfa74" partNumber="006-B4024-00"/>
     <annotations>
@@ -430,12 +431,12 @@
         <dataEntry label="globals/DialRenderer" offset="508" parentId="globals" symbolId="DialRenderer" type="class"/>
         <dataEntry label="globals/Theme" offset="606" parentId="globals" symbolId="Theme" type="class"/>
         <dataEntry label="globals/DateRenderer" offset="650" parentId="globals" symbolId="DateRenderer" type="class"/>
-        <dataEntry label="globals/FaceGeometry" offset="712" parentId="globals" symbolId="FaceGeometry" type="class"/>
-        <dataEntry label="globals/CircleRenderer" offset="810" parentId="globals" symbolId="CircleRenderer" type="class"/>
-        <dataEntry label="globals/CircleRenderer/&lt;statics&gt;" offset="858" parentId="CircleRenderer" symbolId="&lt;statics&gt;" type="module"/>
-        <dataEntry label="globals/Rez/Drawables" offset="934" parentId="Rez" symbolId="Drawables" type="module"/>
-        <dataEntry label="globals/Rez/Fonts" offset="969" parentId="Rez" symbolId="Fonts" type="module"/>
-        <dataEntry label="globals/Rez/Strings" offset="1031" parentId="Rez" symbolId="Strings" type="module"/>
+        <dataEntry label="globals/FaceGeometry" offset="721" parentId="globals" symbolId="FaceGeometry" type="class"/>
+        <dataEntry label="globals/CircleRenderer" offset="819" parentId="globals" symbolId="CircleRenderer" type="class"/>
+        <dataEntry label="globals/CircleRenderer/&lt;statics&gt;" offset="867" parentId="CircleRenderer" symbolId="&lt;statics&gt;" type="module"/>
+        <dataEntry label="globals/Rez/Drawables" offset="943" parentId="Rez" symbolId="Drawables" type="module"/>
+        <dataEntry label="globals/Rez/Fonts" offset="978" parentId="Rez" symbolId="Fonts" type="module"/>
+        <dataEntry label="globals/Rez/Strings" offset="1040" parentId="Rez" symbolId="Strings" type="module"/>
     </dataEntryOffsetMappings>
     <functions>
         <functionEntry accessMode="public" name="&lt;init&gt;" parent="HandRenderer">
@@ -549,16 +550,16 @@
         <functionEntry accessMode="public" endPc="268437331" name="initialize" parent="DateRenderer" startPc="268437291">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437477" name="draw" parent="DateRenderer" startPc="268437332">
+        <functionEntry accessMode="public" endPc="268437480" name="draw" parent="DateRenderer" startPc="268437332">
             <param id="dc"/>
             <param id="geometry"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437608" name="initialize" parent="FaceGeometry" startPc="268437478">
+        <functionEntry accessMode="public" endPc="268437611" name="initialize" parent="FaceGeometry" startPc="268437481">
             <param id="dc"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437852" name="drawSmoothCircle" parent="CircleRenderer" startPc="268437609">
+        <functionEntry accessMode="public" endPc="268437855" name="drawSmoothCircle" parent="CircleRenderer" startPc="268437612">
             <param id="dc"/>
             <param id="cx"/>
             <param id="cy"/>
@@ -566,7 +567,7 @@
             <param id="color"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437999" name="drawSmoothAnnulus" parent="CircleRenderer" startPc="268437853">
+        <functionEntry accessMode="public" endPc="268438002" name="drawSmoothAnnulus" parent="CircleRenderer" startPc="268437856">
             <param id="dc"/>
             <param id="cx"/>
             <param id="cy"/>
@@ -576,7 +577,7 @@
             <param id="color"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268438544" name="getRingPattern" parent="CircleRenderer" startPc="268438000">
+        <functionEntry accessMode="public" endPc="268438547" name="getRingPattern" parent="CircleRenderer" startPc="268438003">
             <param id="radius"/>
             <param id="gap"/>
             <param id="width"/>
@@ -586,7 +587,7 @@
         <functionEntry accessMode="public" name="initialize" parent="CircleRenderer">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268439042" name="getPattern" parent="CircleRenderer" startPc="268438545">
+        <functionEntry accessMode="public" endPc="268439045" name="getPattern" parent="CircleRenderer" startPc="268438548">
             <param id="radius"/>
             <param id="color"/>
             <documentation/>

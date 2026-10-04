@@ -1,0 +1,130 @@
+[ @file = "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc"; @line = 2; @symbol_classdef = [FaceGeometry,2,6,18]; ]
+class FaceGeometry {
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc"; @line = 2; ]
+    <init> {
+    }
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc"; @line = 2; ]
+    static
+    <init> {
+    }
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc"; @line = 3; @position = 5; @symbol_vardef = [centerX,3,5,12]; ]
+    var centerX;
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc"; @line = 4; @position = 5; @symbol_vardef = [centerY,4,5,12]; ]
+    var centerY;
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc"; @line = 5; @position = 5; @symbol_vardef = [screenRadius,5,5,17]; ]
+    var screenRadius;
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc"; @line = 7; @position = 5; @symbol_vardef = [tickCenterRadius,7,5,21]; ]
+    var tickCenterRadius;
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc"; @line = 8; @position = 5; @symbol_vardef = [tickInnerRadius,8,5,20]; ]
+    var tickInnerRadius;
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc"; @line = 9; @position = 5; @symbol_vardef = [tickOuterRadius,9,5,20]; ]
+    var tickOuterRadius;
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc"; @line = 11; @symbol_functiondef = [initialize,11,10,20]; @symbol_param<0> = [dc,11,21,23]; ]
+    function initialize(dc) as Void {
+_home_shum_stow_garmin_gravitywell_source_FaceGeometry_mc_11_25_45_1_start:
+[ "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" 12 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_FaceGeometry_mc_11_25_45_1_start" "_home_shum_stow_garmin_gravitywell_source_FaceGeometry_mc_11_25_45_1_stop" ]
+        %width.1 = local;
+        symbol [ width %width.1 12 6 11 ];
+        %tmp.1 = lgetv %dc;
+        symbol [ dc %tmp.1 12 14 16 ];
+        symbol [ getWidth %tmp.2 12 17 25 ];
+        %tmp.2 = getv function %tmp.1 :getWidth;
+        %tmp.3 = invoke %tmp.1 %tmp.2();
+        lputv %width.1 %tmp.3;
+        symbol [ width %width.1 12 6 11 ];
+[ "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" 13 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_FaceGeometry_mc_11_25_45_1_start" "_home_shum_stow_garmin_gravitywell_source_FaceGeometry_mc_11_25_45_1_stop" ]
+        %height.2 = local;
+        symbol [ height %height.2 13 6 12 ];
+        %tmp.4 = lgetv %dc;
+        symbol [ dc %tmp.4 13 15 17 ];
+        symbol [ getHeight %tmp.5 13 18 27 ];
+        %tmp.5 = getv function %tmp.4 :getHeight;
+        %tmp.6 = invoke %tmp.4 %tmp.5();
+        lputv %height.2 %tmp.6;
+        symbol [ height %height.2 13 6 12 ];
+[ "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" 14 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_FaceGeometry_mc_11_25_45_1_start" "_home_shum_stow_garmin_gravitywell_source_FaceGeometry_mc_11_25_45_1_stop" ]
+        %diameter.3 = local;
+        symbol [ diameter %diameter.3 14 6 14 ];
+[ "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" 16 2 ]
+        %tmp.7 = lgetv %width.1;
+        symbol [ width %tmp.7 16 12 17 ];
+        %tmp.8 = 2;
+        %tmp.9 = div %tmp.7 %tmp.8;
+        symbol [ centerX ? 16 2 9 ];
+        putv self :centerX %tmp.9;
+[ "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" 17 2 ]
+        %tmp.10 = lgetv %height.2;
+        symbol [ height %tmp.10 17 12 18 ];
+        %tmp.11 = 2;
+        %tmp.12 = div %tmp.10 %tmp.11;
+        symbol [ centerY ? 17 2 9 ];
+        putv self :centerY %tmp.12;
+[ "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" 19 2 ]
+_home_shum_stow_garmin_gravitywell_source_FaceGeometry_mc_19_2_23_2_if_stmt:
+        %tmp.13 = lgetv %width.1;
+        symbol [ width %tmp.13 19 6 11 ];
+        %tmp.14 = lgetv %height.2;
+        symbol [ height %tmp.14 19 14 20 ];
+        %tmp.15 = lt %tmp.13 %tmp.14;
+        bf %tmp.15 @_home_shum_stow_garmin_gravitywell_source_FaceGeometry_mc_19_2_23_2_if_else_false;
+_home_shum_stow_garmin_gravitywell_source_FaceGeometry_mc_19_2_23_2_if_true:
+_home_shum_stow_garmin_gravitywell_source_FaceGeometry_mc_19_22_21_2_start:
+[ "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" 20 3 ]
+        %tmp.16 = lgetv %width.1;
+        symbol [ width %tmp.16 20 14 19 ];
+        lputv %diameter.3 %tmp.16;
+        symbol [ diameter %diameter.3 20 3 11 ];
+_home_shum_stow_garmin_gravitywell_source_FaceGeometry_mc_19_22_21_2_stop:
+        goto @_home_shum_stow_garmin_gravitywell_source_FaceGeometry_mc_19_2_23_2_if_end;
+_home_shum_stow_garmin_gravitywell_source_FaceGeometry_mc_19_2_23_2_if_else_false:
+_home_shum_stow_garmin_gravitywell_source_FaceGeometry_mc_21_9_23_2_start:
+[ "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" 22 3 ]
+        %tmp.17 = lgetv %height.2;
+        symbol [ height %tmp.17 22 14 20 ];
+        lputv %diameter.3 %tmp.17;
+        symbol [ diameter %diameter.3 22 3 11 ];
+_home_shum_stow_garmin_gravitywell_source_FaceGeometry_mc_21_9_23_2_stop:
+_home_shum_stow_garmin_gravitywell_source_FaceGeometry_mc_19_2_23_2_if_end:
+[ "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" 25 2 ]
+        %tmp.18 = lgetv %diameter.3;
+        symbol [ diameter %tmp.18 25 17 25 ];
+        %tmp.19 = 2;
+        %tmp.20 = div %tmp.18 %tmp.19;
+        symbol [ screenRadius ? 25 2 14 ];
+        putv self :screenRadius %tmp.20;
+[ "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" 40 2 ]
+        symbol [ screenRadius %tmp.22 40 20 32 ];
+        %tmp.22 = getv ? :screenRadius;
+        %tmp.23 = 13;
+        %tmp.24 = sub %tmp.22 %tmp.23;
+        symbol [ tickOuterRadius ? 40 2 17 ];
+        putv self :tickOuterRadius %tmp.24;
+[ "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" 41 2 ]
+        symbol [ tickOuterRadius %tmp.26 41 20 35 ];
+        %tmp.26 = getv ? :tickOuterRadius;
+        symbol [ Theme %tmp.28 41 38 43 ];
+        %tmp.28 = getv ? :Theme;
+        symbol [ TICK_LENGTH %tmp.29 41 44 55 ];
+        %tmp.29 = getv %tmp.28 :TICK_LENGTH;
+        %tmp.30 = sub %tmp.26 %tmp.29;
+        symbol [ tickInnerRadius ? 41 2 17 ];
+        putv self :tickInnerRadius %tmp.30;
+[ "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" 43 2 ]
+        symbol [ tickOuterRadius %tmp.32 44 4 19 ];
+        %tmp.32 = getv ? :tickOuterRadius;
+        symbol [ tickInnerRadius %tmp.34 44 22 37 ];
+        %tmp.34 = getv ? :tickInnerRadius;
+        %tmp.35 = add %tmp.32 %tmp.34;
+        %tmp.36 = 2.0;
+        %tmp.37 = div %tmp.35 %tmp.36;
+        symbol [ tickCenterRadius ? 43 2 18 ];
+        putv self :tickCenterRadius %tmp.37;
+_home_shum_stow_garmin_gravitywell_source_FaceGeometry_mc_11_25_45_1_stop:
+    }
+}
+[ @file = "/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc"; @line = 2; ]
+<init> {
+}

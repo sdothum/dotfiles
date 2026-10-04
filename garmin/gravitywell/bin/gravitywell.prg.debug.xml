@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<debugInfo>
+    <manifest filename="/home/shum/stow/garmin/gravitywell/manifest.xml"/>
+    <pcToLineNum>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellApp.mc" id="1" lineNum="5" parent="globals/GravityWellApp" pc="268435460" symbol="&lt;init&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellView.mc" id="2" lineNum="4" parent="globals/GravityWellView" pc="268435472" symbol="&lt;init&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/bin/gen/006-B4024-00/source/Rez.mcgen" id="3" lineNum="7" parent="globals/Rez" pc="268435484" symbol="&lt;init&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="4" lineNum="10" parent="globals/CircleRenderer/&lt;statics&gt;" pc="268435504" symbol="&lt;init&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="4" lineNum="129" parent="globals/CircleRenderer/&lt;statics&gt;" pc="268435513" symbol="&lt;init&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="5" lineNum="223" parent="globals/HandRenderer" pc="268435523" symbol="drawRing"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="5" lineNum="225" parent="globals/HandRenderer" pc="268435526" symbol="drawRing"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="5" lineNum="228" parent="globals/HandRenderer" pc="268435564" symbol="drawRing"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="5" lineNum="231" parent="globals/HandRenderer" pc="268435602" symbol="drawRing"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="5" lineNum="237" parent="globals/HandRenderer" pc="268435618" symbol="drawRing"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="5" lineNum="238" parent="globals/HandRenderer" pc="268435629" symbol="drawRing"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="12" parent="globals/HandRenderer" pc="268435659" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="15" parent="globals/HandRenderer" pc="268435662" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="16" parent="globals/HandRenderer" pc="268435666" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="17" parent="globals/HandRenderer" pc="268435670" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="18" parent="globals/HandRenderer" pc="268435677" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="20" parent="globals/HandRenderer" pc="268435684" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="21" parent="globals/HandRenderer" pc="268435700" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="23" parent="globals/HandRenderer" pc="268435716" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="24" parent="globals/HandRenderer" pc="268435727" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="25" parent="globals/HandRenderer" pc="268435738" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="27" parent="globals/HandRenderer" pc="268435746" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="31" parent="globals/HandRenderer" pc="268435750" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="36" parent="globals/HandRenderer" pc="268435767" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="38" parent="globals/HandRenderer" pc="268435776" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="39" parent="globals/HandRenderer" pc="268435783" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="42" parent="globals/HandRenderer" pc="268435789" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="44" parent="globals/HandRenderer" pc="268435796" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="45" parent="globals/HandRenderer" pc="268435807" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="48" parent="globals/HandRenderer" pc="268435817" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="50" parent="globals/HandRenderer" pc="268435827" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="54" parent="globals/HandRenderer" pc="268435848" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="58" parent="globals/HandRenderer" pc="268435862" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="60" parent="globals/HandRenderer" pc="268435871" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="61" parent="globals/HandRenderer" pc="268435878" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="64" parent="globals/HandRenderer" pc="268435887" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="68" parent="globals/HandRenderer" pc="268435900" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="71" parent="globals/HandRenderer" pc="268435913" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="72" parent="globals/HandRenderer" pc="268435921" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="75" parent="globals/HandRenderer" pc="268435928" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="76" parent="globals/HandRenderer" pc="268435935" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="79" parent="globals/HandRenderer" pc="268435941" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="80" parent="globals/HandRenderer" pc="268435952" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="83" parent="globals/HandRenderer" pc="268435962" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="87" parent="globals/HandRenderer" pc="268435995" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="91" parent="globals/HandRenderer" pc="268436028" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="95" parent="globals/HandRenderer" pc="268436061" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="98" parent="globals/HandRenderer" pc="268436077" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="101" parent="globals/HandRenderer" pc="268436094" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="104" parent="globals/HandRenderer" pc="268436101" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="107" parent="globals/HandRenderer" pc="268436114" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="110" parent="globals/HandRenderer" pc="268436127" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="119" parent="globals/HandRenderer" pc="268436183" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="121" parent="globals/HandRenderer" pc="268436189" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="124" parent="globals/HandRenderer" pc="268436202" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="6" lineNum="127" parent="globals/HandRenderer" pc="268436215" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="7" lineNum="135" parent="globals/HandRenderer" pc="268436292" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="7" lineNum="136" parent="globals/HandRenderer" pc="268436295" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="7" lineNum="140" parent="globals/HandRenderer" pc="268436323" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="7" lineNum="145" parent="globals/HandRenderer" pc="268436363" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="7" lineNum="153" parent="globals/HandRenderer" pc="268436374" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="7" lineNum="156" parent="globals/HandRenderer" pc="268436402" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="7" lineNum="159" parent="globals/HandRenderer" pc="268436440" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="7" lineNum="170" parent="globals/HandRenderer" pc="268436478" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="7" lineNum="173" parent="globals/HandRenderer" pc="268436488" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="7" lineNum="183" parent="globals/HandRenderer" pc="268436511" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="7" lineNum="197" parent="globals/HandRenderer" pc="268436537" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="7" lineNum="200" parent="globals/HandRenderer" pc="268436553" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="7" lineNum="203" parent="globals/HandRenderer" pc="268436591" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="7" lineNum="209" parent="globals/HandRenderer" pc="268436629" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" id="7" lineNum="213" parent="globals/HandRenderer" pc="268436659" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellApp.mc" id="9" lineNum="11" parent="globals/GravityWellApp" pc="268436694" symbol="getInitialView"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellApp.mc" id="9" lineNum="12" parent="globals/GravityWellApp" pc="268436696" symbol="getInitialView"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellApp.mc" id="10" lineNum="7" parent="globals/GravityWellApp" pc="268436722" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellApp.mc" id="10" lineNum="8" parent="globals/GravityWellApp" pc="268436724" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellView.mc" id="13" lineNum="21" parent="globals/GravityWellView" pc="268436737" symbol="onLayout"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellView.mc" id="13" lineNum="22" parent="globals/GravityWellView" pc="268436739" symbol="onLayout"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellView.mc" id="15" lineNum="12" parent="globals/GravityWellView" pc="268436767" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellView.mc" id="15" lineNum="13" parent="globals/GravityWellView" pc="268436769" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellView.mc" id="15" lineNum="15" parent="globals/GravityWellView" pc="268436781" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellView.mc" id="15" lineNum="16" parent="globals/GravityWellView" pc="268436789" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellView.mc" id="15" lineNum="17" parent="globals/GravityWellView" pc="268436814" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellView.mc" id="15" lineNum="18" parent="globals/GravityWellView" pc="268436839" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellView.mc" id="17" lineNum="37" parent="globals/GravityWellView" pc="268436865" symbol="onUpdate"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellView.mc" id="17" lineNum="38" parent="globals/GravityWellView" pc="268436868" symbol="onUpdate"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellView.mc" id="17" lineNum="39" parent="globals/GravityWellView" pc="268436877" symbol="onUpdate"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellView.mc" id="17" lineNum="42" parent="globals/GravityWellView" pc="268436907" symbol="onUpdate"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellView.mc" id="17" lineNum="46" parent="globals/GravityWellView" pc="268436923" symbol="onUpdate"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellView.mc" id="17" lineNum="48" parent="globals/GravityWellView" pc="268436931" symbol="onUpdate"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellView.mc" id="17" lineNum="50" parent="globals/GravityWellView" pc="268436952" symbol="onUpdate"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellView.mc" id="17" lineNum="52" parent="globals/GravityWellView" pc="268436964" symbol="onUpdate"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/GravityWellView.mc" id="17" lineNum="59" parent="globals/GravityWellView" pc="268436997" symbol="onUpdate"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="18" lineNum="124" parent="globals/DialRenderer" pc="268437019" symbol="drawNumerals"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="18" lineNum="126" parent="globals/DialRenderer" pc="268437022" symbol="drawNumerals"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="18" lineNum="133" parent="globals/DialRenderer" pc="268437038" symbol="drawNumerals"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="18" lineNum="136" parent="globals/DialRenderer" pc="268437049" symbol="drawNumerals"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="18" lineNum="146" parent="globals/DialRenderer" pc="268437086" symbol="drawNumerals"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="18" lineNum="158" parent="globals/DialRenderer" pc="268437186" symbol="drawNumerals"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="19" lineNum="12" parent="globals/DialRenderer" pc="268437287" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="19" lineNum="13" parent="globals/DialRenderer" pc="268437289" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="19" lineNum="14" parent="globals/DialRenderer" pc="268437327" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="19" lineNum="15" parent="globals/DialRenderer" pc="268437365" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="20" lineNum="18" parent="globals/DialRenderer" pc="268437404" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="20" lineNum="20" parent="globals/DialRenderer" pc="268437406" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="20" lineNum="21" parent="globals/DialRenderer" pc="268437419" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="24" parent="globals/DialRenderer" pc="268437433" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="27" parent="globals/DialRenderer" pc="268437436" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="28" parent="globals/DialRenderer" pc="268437447" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="29" parent="globals/DialRenderer" pc="268437458" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="31" parent="globals/DialRenderer" pc="268437469" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="34" parent="globals/DialRenderer" pc="268437480" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="43" parent="globals/DialRenderer" pc="268437551" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="46" parent="globals/DialRenderer" pc="268437557" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="50" parent="globals/DialRenderer" pc="268437585" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="51" parent="globals/DialRenderer" pc="268437601" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="53" parent="globals/DialRenderer" pc="268437617" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="55" parent="globals/DialRenderer" pc="268437626" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="61" parent="globals/DialRenderer" pc="268437642" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="66" parent="globals/DialRenderer" pc="268437671" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="70" parent="globals/DialRenderer" pc="268437697" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="76" parent="globals/DialRenderer" pc="268437723" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="79" parent="globals/DialRenderer" pc="268437746" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="83" parent="globals/DialRenderer" pc="268437752" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="85" parent="globals/DialRenderer" pc="268437756" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="88" parent="globals/DialRenderer" pc="268437780" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="91" parent="globals/DialRenderer" pc="268437790" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="95" parent="globals/DialRenderer" pc="268437816" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="99" parent="globals/DialRenderer" pc="268437842" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="103" parent="globals/DialRenderer" pc="268437868" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="107" parent="globals/DialRenderer" pc="268437894" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="113" parent="globals/DialRenderer" pc="268437916" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DialRenderer.mc" id="21" lineNum="121" parent="globals/DialRenderer" pc="268437944" symbol="drawTicks"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc" id="23" lineNum="12" parent="globals/DateRenderer" pc="268437957" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc" id="23" lineNum="13" parent="globals/DateRenderer" pc="268437959" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc" id="24" lineNum="16" parent="globals/DateRenderer" pc="268437998" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc" id="24" lineNum="17" parent="globals/DateRenderer" pc="268438001" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc" id="24" lineNum="22" parent="globals/DateRenderer" pc="268438026" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc" id="24" lineNum="27" parent="globals/DateRenderer" pc="268438033" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc" id="24" lineNum="30" parent="globals/DateRenderer" pc="268438060" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc" id="24" lineNum="35" parent="globals/DateRenderer" pc="268438092" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc" id="24" lineNum="37" parent="globals/DateRenderer" pc="268438109" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" id="25" lineNum="11" parent="globals/FaceGeometry" pc="268438147" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" id="25" lineNum="12" parent="globals/FaceGeometry" pc="268438150" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" id="25" lineNum="13" parent="globals/FaceGeometry" pc="268438159" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" id="25" lineNum="16" parent="globals/FaceGeometry" pc="268438168" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" id="25" lineNum="17" parent="globals/FaceGeometry" pc="268438180" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" id="25" lineNum="19" parent="globals/FaceGeometry" pc="268438192" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" id="25" lineNum="20" parent="globals/FaceGeometry" pc="268438200" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" id="25" lineNum="22" parent="globals/FaceGeometry" pc="268438207" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" id="25" lineNum="25" parent="globals/FaceGeometry" pc="268438211" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" id="25" lineNum="40" parent="globals/FaceGeometry" pc="268438223" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" id="25" lineNum="41" parent="globals/FaceGeometry" pc="268438238" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/FaceGeometry.mc" id="25" lineNum="43" parent="globals/FaceGeometry" pc="268438253" symbol="initialize"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="26" lineNum="12" parent="globals/CircleRenderer" pc="268438278" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="26" lineNum="13" parent="globals/CircleRenderer" pc="268438281" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="26" lineNum="15" parent="globals/CircleRenderer" pc="268438295" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="26" lineNum="18" parent="globals/CircleRenderer" pc="268438305" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="26" lineNum="21" parent="globals/CircleRenderer" pc="268438315" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="26" lineNum="22" parent="globals/CircleRenderer" pc="268438327" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="26" lineNum="25" parent="globals/CircleRenderer" pc="268438344" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="26" lineNum="26" parent="globals/CircleRenderer" pc="268438360" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="26" lineNum="28" parent="globals/CircleRenderer" pc="268438367" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="26" lineNum="37" parent="globals/CircleRenderer" pc="268438418" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="26" lineNum="39" parent="globals/CircleRenderer" pc="268438422" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="26" lineNum="40" parent="globals/CircleRenderer" pc="268438438" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="26" lineNum="42" parent="globals/CircleRenderer" pc="268438445" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="26" lineNum="43" parent="globals/CircleRenderer" pc="268438456" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="26" lineNum="44" parent="globals/CircleRenderer" pc="268438476" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="26" lineNum="47" parent="globals/CircleRenderer" pc="268438486" symbol="drawSmoothCircle"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="27" lineNum="131" parent="globals/CircleRenderer" pc="268438522" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="27" lineNum="134" parent="globals/CircleRenderer" pc="268438525" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="27" lineNum="135" parent="globals/CircleRenderer" pc="268438543" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="27" lineNum="138" parent="globals/CircleRenderer" pc="268438553" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="27" lineNum="140" parent="globals/CircleRenderer" pc="268438557" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="27" lineNum="141" parent="globals/CircleRenderer" pc="268438573" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="27" lineNum="143" parent="globals/CircleRenderer" pc="268438580" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="27" lineNum="144" parent="globals/CircleRenderer" pc="268438591" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="27" lineNum="145" parent="globals/CircleRenderer" pc="268438611" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="27" lineNum="148" parent="globals/CircleRenderer" pc="268438621" symbol="drawSmoothAnnulus"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="155" parent="globals/CircleRenderer" pc="268438669" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="159" parent="globals/CircleRenderer" pc="268438672" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="160" parent="globals/CircleRenderer" pc="268438692" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="162" parent="globals/CircleRenderer" pc="268438702" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="166" parent="globals/CircleRenderer" pc="268438758" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="170" parent="globals/CircleRenderer" pc="268438774" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="172" parent="globals/CircleRenderer" pc="268438778" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="173" parent="globals/CircleRenderer" pc="268438789" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="174" parent="globals/CircleRenderer" pc="268438800" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="177" parent="globals/CircleRenderer" pc="268438808" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="178" parent="globals/CircleRenderer" pc="268438815" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="179" parent="globals/CircleRenderer" pc="268438822" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="181" parent="globals/CircleRenderer" pc="268438829" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="182" parent="globals/CircleRenderer" pc="268438843" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="184" parent="globals/CircleRenderer" pc="268438857" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="187" parent="globals/CircleRenderer" pc="268438882" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="190" parent="globals/CircleRenderer" pc="268438895" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="193" parent="globals/CircleRenderer" pc="268438908" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="194" parent="globals/CircleRenderer" pc="268438915" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="197" parent="globals/CircleRenderer" pc="268438921" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="198" parent="globals/CircleRenderer" pc="268438929" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="201" parent="globals/CircleRenderer" pc="268438936" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="202" parent="globals/CircleRenderer" pc="268438943" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="205" parent="globals/CircleRenderer" pc="268438949" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="206" parent="globals/CircleRenderer" pc="268438957" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="209" parent="globals/CircleRenderer" pc="268438964" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="212" parent="globals/CircleRenderer" pc="268438971" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="213" parent="globals/CircleRenderer" pc="268438978" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="216" parent="globals/CircleRenderer" pc="268438984" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="220" parent="globals/CircleRenderer" pc="268439017" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="224" parent="globals/CircleRenderer" pc="268439050" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="228" parent="globals/CircleRenderer" pc="268439083" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="231" parent="globals/CircleRenderer" pc="268439099" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="235" parent="globals/CircleRenderer" pc="268439148" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="243" parent="globals/CircleRenderer" pc="268439195" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="28" lineNum="245" parent="globals/CircleRenderer" pc="268439211" symbol="getRingPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="51" parent="globals/CircleRenderer" pc="268439214" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="52" parent="globals/CircleRenderer" pc="268439217" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="53" parent="globals/CircleRenderer" pc="268439237" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="55" parent="globals/CircleRenderer" pc="268439247" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="57" parent="globals/CircleRenderer" pc="268439275" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="61" parent="globals/CircleRenderer" pc="268439291" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="62" parent="globals/CircleRenderer" pc="268439295" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="64" parent="globals/CircleRenderer" pc="268439299" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="65" parent="globals/CircleRenderer" pc="268439310" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="66" parent="globals/CircleRenderer" pc="268439321" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="68" parent="globals/CircleRenderer" pc="268439329" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="70" parent="globals/CircleRenderer" pc="268439336" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="71" parent="globals/CircleRenderer" pc="268439350" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="72" parent="globals/CircleRenderer" pc="268439353" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="74" parent="globals/CircleRenderer" pc="268439356" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="75" parent="globals/CircleRenderer" pc="268439370" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="76" parent="globals/CircleRenderer" pc="268439395" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="78" parent="globals/CircleRenderer" pc="268439408" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="79" parent="globals/CircleRenderer" pc="268439415" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="82" parent="globals/CircleRenderer" pc="268439421" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="84" parent="globals/CircleRenderer" pc="268439429" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="85" parent="globals/CircleRenderer" pc="268439435" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="88" parent="globals/CircleRenderer" pc="268439442" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="89" parent="globals/CircleRenderer" pc="268439446" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="93" parent="globals/CircleRenderer" pc="268439452" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="97" parent="globals/CircleRenderer" pc="268439485" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="101" parent="globals/CircleRenderer" pc="268439518" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="105" parent="globals/CircleRenderer" pc="268439551" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="108" parent="globals/CircleRenderer" pc="268439567" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="111" parent="globals/CircleRenderer" pc="268439606" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="112" parent="globals/CircleRenderer" pc="268439612" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="116" parent="globals/CircleRenderer" pc="268439654" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="123" parent="globals/CircleRenderer" pc="268439693" symbol="getPattern"/>
+        <entry filename="/home/shum/stow/garmin/gravitywell/source/CircleRenderer.mc" id="30" lineNum="125" parent="globals/CircleRenderer" pc="268439709" symbol="getPattern"/>
+    </pcToLineNum>
+    <symbolTable>
+        <entry id="8388639" module="true" symbol="Graphics"/>
+        <entry id="40" method="true" symbol="drawSmoothCircle"/>
+        <entry field="true" id="25" symbol="&lt;globals/DialRenderer/&lt;&gt;_fourFont&gt;"/>
+        <entry field="true" id="16" symbol="&lt;globals/HandRenderer/&lt;&gt;_minuteRadius&gt;"/>
+        <entry field="true" id="35" symbol="tickInnerRadius"/>
+        <entry id="8388632" method="true" symbol="&lt;init&gt;"/>
+        <entry id="8389759" symbol="radius"/>
+        <entry id="7" object="true" symbol="CircleRenderer"/>
+        <entry field="true" id="33" symbol="screenRadius"/>
+        <entry field="true" id="45" symbol="DialEight"/>
+        <entry id="8388924" module="true" symbol="Gregorian"/>
+        <entry id="18" method="true" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry field="true" id="8388611" module="true" symbol="Toybox"/>
+        <entry field="true" id="48" symbol="AppName"/>
+        <entry field="true" id="26" symbol="&lt;globals/DialRenderer/&lt;&gt;_twelveFont&gt;"/>
+        <entry id="6" module="true" symbol="globals/Rez/Strings"/>
+        <entry id="8388772" module="true" object="true" symbol="Fonts"/>
+        <entry id="8388648" module="true" symbol="WatchUi"/>
+        <entry id="49" symbol="spans"/>
+        <entry id="3" module="true" symbol="globals/Rez"/>
+        <entry id="8" object="true" symbol="DateRenderer"/>
+        <entry id="50" symbol="edges"/>
+        <entry id="27" method="true" symbol="drawNumerals"/>
+        <entry field="true" id="38" symbol="_ringCache"/>
+        <entry id="8389124" method="true" symbol="onUpdate"/>
+        <entry id="12" object="true" symbol="GravityWellView"/>
+        <entry id="52" symbol="gap"/>
+        <entry id="8388771" module="true" object="true" symbol="Drawables"/>
+        <entry field="true" id="30" symbol="&lt;globals/DateRenderer/&lt;&gt;_offsetY&gt;"/>
+        <entry field="true" id="8389066" symbol="width"/>
+        <entry id="8389122" method="true" symbol="onLayout"/>
+        <entry id="8389376" method="true" symbol="onEnterSleep"/>
+        <entry id="10" object="true" symbol="FaceGeometry"/>
+        <entry id="4" module="true" symbol="globals/Rez/Drawables"/>
+        <entry field="true" id="37" symbol="_cache"/>
+        <entry field="true" id="44" symbol="DateFont"/>
+        <entry field="true" id="46" symbol="DialFour"/>
+        <entry field="true" id="29" symbol="&lt;globals/DateRenderer/&lt;&gt;_font&gt;"/>
+        <entry field="true" id="17" symbol="&lt;globals/HandRenderer/&lt;&gt;_tickClearance&gt;"/>
+        <entry id="8389377" method="true" symbol="onExitSleep"/>
+        <entry id="8388644" module="true" symbol="System"/>
+        <entry id="42" method="true" symbol="getRingPattern"/>
+        <entry id="8388645" module="true" symbol="Time"/>
+        <entry id="8388769" module="true" object="true" symbol="Rez"/>
+        <entry id="8388640" module="true" symbol="Lang"/>
+        <entry id="8389068" method="true" symbol="draw"/>
+        <entry field="true" id="23" symbol="&lt;globals/GravityWellView/&lt;&gt;_hands&gt;"/>
+        <entry field="true" id="43" symbol="LauncherIcon"/>
+        <entry id="8388610" symbol="statics"/>
+        <entry id="8389123" method="true" symbol="onShow"/>
+        <entry field="true" id="24" symbol="&lt;globals/DialRenderer/&lt;&gt;_eightFont&gt;"/>
+        <entry id="28" method="true" symbol="drawTicks"/>
+        <entry id="8389350" module="true" symbol="globals"/>
+        <entry id="2" module="true" symbol="globals/CircleRenderer/&lt;statics&gt;"/>
+        <entry id="8388770" module="true" object="true" symbol="Strings"/>
+        <entry field="true" id="20" symbol="&lt;globals/GravityWellView/&lt;&gt;_date&gt;"/>
+        <entry field="true" id="32" symbol="centerY"/>
+        <entry field="true" id="31" symbol="centerX"/>
+        <entry id="8388702" method="true" symbol="initialize"/>
+        <entry id="13" object="true" symbol="HandRenderer"/>
+        <entry id="8388641" module="true" symbol="Math"/>
+        <entry id="8389280" method="true" symbol="getInitialView"/>
+        <entry field="true" id="8389347" symbol="color"/>
+        <entry id="41" method="true" symbol="getPattern"/>
+        <entry field="true" id="36" symbol="tickOuterRadius"/>
+        <entry field="true" id="34" symbol="tickCenterRadius"/>
+        <entry field="true" id="21" symbol="&lt;globals/GravityWellView/&lt;&gt;_dial&gt;"/>
+        <entry id="9" object="true" symbol="DialRenderer"/>
+        <entry id="5" module="true" symbol="globals/Rez/Fonts"/>
+        <entry id="39" method="true" symbol="drawSmoothAnnulus"/>
+        <entry id="19" method="true" symbol="drawRing"/>
+        <entry id="14" object="true" symbol="Theme"/>
+        <entry id="8389125" method="true" symbol="onHide"/>
+        <entry field="true" id="15" symbol="&lt;globals/HandRenderer/&lt;&gt;_hourRadius&gt;"/>
+        <entry field="true" id="47" symbol="DialTwelve"/>
+        <entry field="true" id="22" symbol="&lt;globals/GravityWellView/&lt;&gt;_geometry&gt;"/>
+        <entry id="11" object="true" symbol="GravityWellApp"/>
+        <entry id="51" symbol="pixels"/>
+    </symbolTable>
+    <localVars>
+        <entry arg="true" endPc="268435658" name="dc" stackId="1" startPc="268435523"/>
+        <entry arg="true" endPc="268435658" name="geometry" stackId="2" startPc="268435523"/>
+        <entry arg="true" endPc="268435658" name="angle" stackId="3" startPc="268435523"/>
+        <entry arg="true" endPc="268435658" name="gravitywellRadius" stackId="4" startPc="268435523"/>
+        <entry arg="true" endPc="268435658" name="ringRadius" stackId="5" startPc="268435523"/>
+        <entry arg="true" endPc="268435658" name="width" stackId="6" startPc="268435523"/>
+        <entry endPc="268435657" name="x" stackId="7" startPc="268435526"/>
+        <entry endPc="268435657" name="y" stackId="8" startPc="268435526"/>
+        <entry endPc="268435657" name="i" stackId="9" startPc="268435629"/>
+        <entry arg="true" endPc="268436291" name="dc" stackId="1" startPc="268435659"/>
+        <entry arg="true" endPc="268436291" name="cx" stackId="2" startPc="268435659"/>
+        <entry arg="true" endPc="268436291" name="cy" stackId="3" startPc="268435659"/>
+        <entry arg="true" endPc="268436291" name="angle" stackId="4" startPc="268435659"/>
+        <entry arg="true" endPc="268436291" name="radius" stackId="5" startPc="268435659"/>
+        <entry arg="true" endPc="268436291" name="color" stackId="6" startPc="268435659"/>
+        <entry endPc="268436290" name="extension" stackId="7" startPc="268435662"/>
+        <entry endPc="268436290" name="buried" stackId="8" startPc="268435662"/>
+        <entry endPc="268436290" name="startWidth" stackId="9" startPc="268435662"/>
+        <entry endPc="268436290" name="curvature" stackId="10" startPc="268435662"/>
+        <entry endPc="268436290" name="cosA" stackId="11" startPc="268435662"/>
+        <entry endPc="268436290" name="sinA" stackId="12" startPc="268435662"/>
+        <entry endPc="268436290" name="red" stackId="13" startPc="268435662"/>
+        <entry endPc="268436290" name="green" stackId="14" startPc="268435662"/>
+        <entry endPc="268436290" name="blue" stackId="15" startPc="268435662"/>
+        <entry endPc="268436290" name="halfExtent" stackId="16" startPc="268435662"/>
+        <entry endPc="268436290" name="lx" stackId="17" startPc="268435767"/>
+        <entry endPc="268436280" name="exposed" stackId="18" startPc="268435767"/>
+        <entry endPc="268436280" name="t" stackId="19" startPc="268435767"/>
+        <entry endPc="268436280" name="remaining" stackId="20" startPc="268435767"/>
+        <entry endPc="268436280" name="halfWidth" stackId="21" startPc="268435767"/>
+        <entry endPc="268436280" name="ly" stackId="22" startPc="268435862"/>
+        <entry endPc="268436270" name="absY" stackId="23" startPc="268435862"/>
+        <entry endPc="268436270" name="coverage" stackId="24" startPc="268435862"/>
+        <entry endPc="268436270" name="endCoverage" stackId="25" startPc="268435862"/>
+        <entry endPc="268436270" name="r" stackId="26" startPc="268435862"/>
+        <entry endPc="268436270" name="g" stackId="27" startPc="268435862"/>
+        <entry endPc="268436270" name="b" stackId="28" startPc="268435862"/>
+        <entry endPc="268436270" name="pixelColor" stackId="29" startPc="268435862"/>
+        <entry endPc="268436270" name="axial" stackId="30" startPc="268435862"/>
+        <entry endPc="268436270" name="sx" stackId="31" startPc="268435862"/>
+        <entry endPc="268436270" name="sy" stackId="32" startPc="268435862"/>
+        <entry arg="true" endPc="268436693" name="dc" stackId="1" startPc="268436292"/>
+        <entry arg="true" endPc="268436693" name="geometry" stackId="2" startPc="268436292"/>
+        <entry arg="true" endPc="268436693" name="hours" stackId="3" startPc="268436292"/>
+        <entry arg="true" endPc="268436693" name="minutes" stackId="4" startPc="268436292"/>
+        <entry endPc="268436692" name="minuteAngle" stackId="5" startPc="268436295"/>
+        <entry endPc="268436692" name="hourAngle" stackId="6" startPc="268436295"/>
+        <entry endPc="268436692" name="tickRadius" stackId="7" startPc="268436295"/>
+        <entry endPc="268436692" name="hourGravityWell" stackId="8" startPc="268436295"/>
+        <entry endPc="268436692" name="hourX" stackId="9" startPc="268436295"/>
+        <entry endPc="268436692" name="hourY" stackId="10" startPc="268436295"/>
+        <entry endPc="268436692" name="wellAngle" stackId="11" startPc="268436295"/>
+        <entry endPc="268436692" name="minuteGravityWell" stackId="12" startPc="268436295"/>
+        <entry endPc="268436692" name="minuteX" stackId="13" startPc="268436295"/>
+        <entry endPc="268436692" name="minuteY" stackId="14" startPc="268436295"/>
+        <entry arg="true" endPc="268436766" name="dc" stackId="1" startPc="268436737"/>
+        <entry arg="true" endPc="268437018" name="dc" stackId="1" startPc="268436865"/>
+        <entry endPc="268437017" name="clock" stackId="2" startPc="268436868"/>
+        <entry arg="true" endPc="268437286" name="dc" stackId="1" startPc="268437019"/>
+        <entry arg="true" endPc="268437286" name="geometry" stackId="2" startPc="268437019"/>
+        <entry endPc="268437285" name="radius" stackId="3" startPc="268437022"/>
+        <entry arg="true" endPc="268437432" name="dc" stackId="1" startPc="268437404"/>
+        <entry arg="true" endPc="268437432" name="geometry" stackId="2" startPc="268437404"/>
+        <entry arg="true" endPc="268437956" name="dc" stackId="1" startPc="268437433"/>
+        <entry arg="true" endPc="268437956" name="geometry" stackId="2" startPc="268437433"/>
+        <entry endPc="268437955" name="innerRadius" stackId="3" startPc="268437436"/>
+        <entry endPc="268437955" name="outerRadius" stackId="4" startPc="268437436"/>
+        <entry endPc="268437955" name="centerRadius" stackId="5" startPc="268437436"/>
+        <entry endPc="268437943" name="minute" stackId="6" startPc="268437480"/>
+        <entry endPc="268437933" name="angle" stackId="7" startPc="268437480"/>
+        <entry endPc="268437933" name="cosAngle" stackId="8" startPc="268437480"/>
+        <entry endPc="268437933" name="sinAngle" stackId="9" startPc="268437480"/>
+        <entry endPc="268437933" name="isFiveMinute" stackId="10" startPc="268437480"/>
+        <entry endPc="268437748" name="dotX" stackId="11" startPc="268437671"/>
+        <entry endPc="268437748" name="dotY" stackId="12" startPc="268437671"/>
+        <entry endPc="268437933" name="thisInnerRadius" stackId="13" startPc="268437480"/>
+        <entry endPc="268437933" name="innerX" stackId="14" startPc="268437480"/>
+        <entry endPc="268437933" name="innerY" stackId="15" startPc="268437480"/>
+        <entry endPc="268437933" name="outerX" stackId="16" startPc="268437480"/>
+        <entry endPc="268437933" name="outerY" stackId="17" startPc="268437480"/>
+        <entry arg="true" endPc="268438146" name="dc" stackId="1" startPc="268437998"/>
+        <entry arg="true" endPc="268438146" name="geometry" stackId="2" startPc="268437998"/>
+        <entry endPc="268438145" name="today" stackId="3" startPc="268438001"/>
+        <entry endPc="268438145" name="days" stackId="4" startPc="268438001"/>
+        <entry endPc="268438145" name="label" stackId="5" startPc="268438001"/>
+        <entry endPc="268438145" name="color" stackId="6" startPc="268438001"/>
+        <entry arg="true" endPc="268438277" name="dc" stackId="1" startPc="268438147"/>
+        <entry endPc="268438276" name="width" stackId="2" startPc="268438150"/>
+        <entry endPc="268438276" name="height" stackId="3" startPc="268438150"/>
+        <entry endPc="268438276" name="diameter" stackId="4" startPc="268438150"/>
+        <entry arg="true" endPc="268438521" name="dc" stackId="1" startPc="268438278"/>
+        <entry arg="true" endPc="268438521" name="cx" stackId="2" startPc="268438278"/>
+        <entry arg="true" endPc="268438521" name="cy" stackId="3" startPc="268438278"/>
+        <entry arg="true" endPc="268438521" name="radius" stackId="4" startPc="268438278"/>
+        <entry arg="true" endPc="268438521" name="color" stackId="5" startPc="268438278"/>
+        <entry endPc="268438520" name="pattern" stackId="6" startPc="268438281"/>
+        <entry endPc="268438520" name="spans" stackId="7" startPc="268438281"/>
+        <entry endPc="268438520" name="edges" stackId="8" startPc="268438281"/>
+        <entry endPc="268438417" name="i" stackId="9" startPc="268438360"/>
+        <entry endPc="268438407" name="span" stackId="10" startPc="268438360"/>
+        <entry endPc="268438520" name="previousColor" stackId="11" startPc="268438281"/>
+        <entry endPc="268438520" name="i" stackId="12" startPc="268438438"/>
+        <entry endPc="268438510" name="pixel" stackId="13" startPc="268438438"/>
+        <entry arg="true" endPc="268438668" name="dc" stackId="1" startPc="268438522"/>
+        <entry arg="true" endPc="268438668" name="cx" stackId="2" startPc="268438522"/>
+        <entry arg="true" endPc="268438668" name="cy" stackId="3" startPc="268438522"/>
+        <entry arg="true" endPc="268438668" name="radius" stackId="4" startPc="268438522"/>
+        <entry arg="true" endPc="268438668" name="gap" stackId="5" startPc="268438522"/>
+        <entry arg="true" endPc="268438668" name="width" stackId="6" startPc="268438522"/>
+        <entry arg="true" endPc="268438668" name="color" stackId="7" startPc="268438522"/>
+        <entry endPc="268438667" name="pattern" stackId="8" startPc="268438525"/>
+        <entry endPc="268438667" name="pixels" stackId="9" startPc="268438525"/>
+        <entry endPc="268438667" name="previousColor" stackId="10" startPc="268438525"/>
+        <entry endPc="268438667" name="i" stackId="11" startPc="268438573"/>
+        <entry endPc="268438657" name="pixel" stackId="12" startPc="268438573"/>
+        <entry arg="true" endPc="268439213" name="radius" stackId="1" startPc="268438669"/>
+        <entry arg="true" endPc="268439213" name="gap" stackId="2" startPc="268438669"/>
+        <entry arg="true" endPc="268439213" name="width" stackId="3" startPc="268438669"/>
+        <entry arg="true" endPc="268439213" name="color" stackId="4" startPc="268438669"/>
+        <entry endPc="268438773" name="i" stackId="5" startPc="268438692"/>
+        <entry endPc="268438763" name="entry" stackId="6" startPc="268438692"/>
+        <entry endPc="268439213" name="pixels" stackId="7" startPc="268438672"/>
+        <entry endPc="268439213" name="red" stackId="8" startPc="268438672"/>
+        <entry endPc="268439213" name="green" stackId="9" startPc="268438672"/>
+        <entry endPc="268439213" name="blue" stackId="10" startPc="268438672"/>
+        <entry endPc="268439213" name="innerRadius" stackId="11" startPc="268438672"/>
+        <entry endPc="268439213" name="outerRadius" stackId="12" startPc="268438672"/>
+        <entry endPc="268439213" name="extent" stackId="13" startPc="268438672"/>
+        <entry endPc="268439147" name="y" stackId="14" startPc="268438843"/>
+        <entry endPc="268439137" name="x" stackId="15" startPc="268438857"/>
+        <entry endPc="268439127" name="distance" stackId="16" startPc="268438857"/>
+        <entry endPc="268439127" name="outerCoverage" stackId="17" startPc="268438857"/>
+        <entry endPc="268439127" name="innerCoverage" stackId="18" startPc="268438857"/>
+        <entry endPc="268439127" name="coverage" stackId="19" startPc="268438857"/>
+        <entry endPc="268439127" name="r" stackId="20" startPc="268438857"/>
+        <entry endPc="268439127" name="g" stackId="21" startPc="268438857"/>
+        <entry endPc="268439127" name="b" stackId="22" startPc="268438857"/>
+        <entry endPc="268439127" name="pixelColor" stackId="23" startPc="268438857"/>
+        <entry endPc="268439213" name="pattern" stackId="24" startPc="268438672"/>
+        <entry arg="true" endPc="268439711" name="radius" stackId="1" startPc="268439214"/>
+        <entry arg="true" endPc="268439711" name="color" stackId="2" startPc="268439214"/>
+        <entry endPc="268439290" name="i" stackId="3" startPc="268439237"/>
+        <entry endPc="268439280" name="entry" stackId="4" startPc="268439237"/>
+        <entry endPc="268439711" name="spans" stackId="5" startPc="268439217"/>
+        <entry endPc="268439711" name="edges" stackId="6" startPc="268439217"/>
+        <entry endPc="268439711" name="red" stackId="7" startPc="268439217"/>
+        <entry endPc="268439711" name="green" stackId="8" startPc="268439217"/>
+        <entry endPc="268439711" name="blue" stackId="9" startPc="268439217"/>
+        <entry endPc="268439711" name="extent" stackId="10" startPc="268439217"/>
+        <entry endPc="268439653" name="y" stackId="11" startPc="268439350"/>
+        <entry endPc="268439643" name="spanStart" stackId="12" startPc="268439350"/>
+        <entry endPc="268439643" name="spanEnd" stackId="13" startPc="268439350"/>
+        <entry endPc="268439605" name="x" stackId="14" startPc="268439370"/>
+        <entry endPc="268439595" name="distance" stackId="15" startPc="268439370"/>
+        <entry endPc="268439595" name="coverage" stackId="16" startPc="268439370"/>
+        <entry endPc="268439595" name="r" stackId="17" startPc="268439370"/>
+        <entry endPc="268439595" name="g" stackId="18" startPc="268439370"/>
+        <entry endPc="268439595" name="b" stackId="19" startPc="268439370"/>
+        <entry endPc="268439595" name="pixelColor" stackId="20" startPc="268439370"/>
+        <entry endPc="268439711" name="pattern" stackId="21" startPc="268439217"/>
+    </localVars>
+    <deviceInfo deviceVersion="3cbcff5b61d759a7585c5fa7606e74c0bd5dfa74" partNumber="006-B4024-00"/>
+    <annotations>
+        <annotationEntry annotation="initialized" class="Fonts" module="globals/Rez" symbol="DialEight"/>
+        <annotationEntry annotation="initialized" class="Drawables" module="globals/Rez" symbol="LauncherIcon"/>
+        <annotationEntry annotation="initialized" class="Fonts" module="globals/Rez" symbol="DialTwelve"/>
+        <annotationEntry annotation="initialized" class="Fonts" module="globals/Rez" symbol="DateFont"/>
+        <annotationEntry annotation="initialized" class="Strings" module="globals/Rez" symbol="AppName"/>
+        <annotationEntry annotation="initialized" class="Fonts" module="globals/Rez" symbol="DialFour"/>
+    </annotations>
+    <dataEntryOffsetMappings>
+        <dataEntry label="globals" offset="67" parentId="" symbolId="globals" type="module"/>
+        <dataEntry label="globals/HandRenderer" offset="179" parentId="globals" symbolId="HandRenderer" type="class"/>
+        <dataEntry label="globals/GravityWellApp" offset="277" parentId="globals" symbolId="GravityWellApp" type="class"/>
+        <dataEntry label="globals/GravityWellView" offset="330" parentId="globals" symbolId="GravityWellView" type="class"/>
+        <dataEntry label="globals/Rez" offset="464" parentId="globals" symbolId="Rez" type="module"/>
+        <dataEntry label="globals/DialRenderer" offset="517" parentId="globals" symbolId="DialRenderer" type="class"/>
+        <dataEntry label="globals/Theme" offset="615" parentId="globals" symbolId="Theme" type="class"/>
+        <dataEntry label="globals/DateRenderer" offset="659" parentId="globals" symbolId="DateRenderer" type="class"/>
+        <dataEntry label="globals/FaceGeometry" offset="730" parentId="globals" symbolId="FaceGeometry" type="class"/>
+        <dataEntry label="globals/CircleRenderer" offset="828" parentId="globals" symbolId="CircleRenderer" type="class"/>
+        <dataEntry label="globals/CircleRenderer/&lt;statics&gt;" offset="876" parentId="CircleRenderer" symbolId="&lt;statics&gt;" type="module"/>
+        <dataEntry label="globals/Rez/Drawables" offset="952" parentId="Rez" symbolId="Drawables" type="module"/>
+        <dataEntry label="globals/Rez/Fonts" offset="987" parentId="Rez" symbolId="Fonts" type="module"/>
+        <dataEntry label="globals/Rez/Strings" offset="1049" parentId="Rez" symbolId="Strings" type="module"/>
+    </dataEntryOffsetMappings>
+    <functions>
+        <functionEntry accessMode="public" name="&lt;init&gt;" parent="HandRenderer">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435471" name="&lt;init&gt;" parent="GravityWellApp" startPc="268435460">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435483" name="&lt;init&gt;" parent="GravityWellView" startPc="268435472">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435503" name="&lt;init&gt;" parent="Rez" startPc="268435484">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" name="&lt;init&gt;" parent="DialRenderer">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" name="&lt;init&gt;" parent="Theme">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" name="&lt;init&gt;" parent="DateRenderer">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" name="&lt;init&gt;" parent="FaceGeometry">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" name="&lt;init&gt;" parent="CircleRenderer">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435522" name="&lt;init&gt;" parent="globals/CircleRenderer" startPc="268435504">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268435658" name="drawRing" parent="HandRenderer" startPc="268435523">
+            <param id="dc"/>
+            <param id="geometry"/>
+            <param id="angle"/>
+            <param id="gravitywellRadius"/>
+            <param id="ringRadius"/>
+            <param id="width"/>
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="private" endPc="268436291" name="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;" parent="HandRenderer" startPc="268435659">
+            <param id="dc"/>
+            <param id="cx"/>
+            <param id="cy"/>
+            <param id="angle"/>
+            <param id="radius"/>
+            <param id="color"/>
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268436693" name="draw" parent="HandRenderer" startPc="268436292">
+            <param id="dc"/>
+            <param id="geometry"/>
+            <param id="hours"/>
+            <param id="minutes"/>
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" name="initialize" parent="HandRenderer">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268436721" name="getInitialView" parent="GravityWellApp" startPc="268436694">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268436736" name="initialize" parent="GravityWellApp" startPc="268436722">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" name="onExitSleep" parent="GravityWellView">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" name="onShow" parent="GravityWellView">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268436766" name="onLayout" parent="GravityWellView" startPc="268436737">
+            <param id="dc"/>
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" name="onEnterSleep" parent="GravityWellView">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268436864" name="initialize" parent="GravityWellView" startPc="268436767">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" name="onHide" parent="GravityWellView">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268437018" name="onUpdate" parent="GravityWellView" startPc="268436865">
+            <param id="dc"/>
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" name="&lt;init&gt;" parent="Drawables">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" name="&lt;init&gt;" parent="Fonts">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" name="&lt;init&gt;" parent="Strings">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268437286" name="drawNumerals" parent="DialRenderer" startPc="268437019">
+            <param id="dc"/>
+            <param id="geometry"/>
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268437403" name="initialize" parent="DialRenderer" startPc="268437287">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268437432" name="draw" parent="DialRenderer" startPc="268437404">
+            <param id="dc"/>
+            <param id="geometry"/>
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268437956" name="drawTicks" parent="DialRenderer" startPc="268437433">
+            <param id="dc"/>
+            <param id="geometry"/>
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" name="initialize" parent="Theme">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268437997" name="initialize" parent="DateRenderer" startPc="268437957">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268438146" name="draw" parent="DateRenderer" startPc="268437998">
+            <param id="dc"/>
+            <param id="geometry"/>
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268438277" name="initialize" parent="FaceGeometry" startPc="268438147">
+            <param id="dc"/>
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268438521" name="drawSmoothCircle" parent="CircleRenderer" startPc="268438278">
+            <param id="dc"/>
+            <param id="cx"/>
+            <param id="cy"/>
+            <param id="radius"/>
+            <param id="color"/>
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268438668" name="drawSmoothAnnulus" parent="CircleRenderer" startPc="268438522">
+            <param id="dc"/>
+            <param id="cx"/>
+            <param id="cy"/>
+            <param id="radius"/>
+            <param id="gap"/>
+            <param id="width"/>
+            <param id="color"/>
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268439213" name="getRingPattern" parent="CircleRenderer" startPc="268438669">
+            <param id="radius"/>
+            <param id="gap"/>
+            <param id="width"/>
+            <param id="color"/>
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" name="initialize" parent="CircleRenderer">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268439711" name="getPattern" parent="CircleRenderer" startPc="268439214">
+            <param id="radius"/>
+            <param id="color"/>
+            <documentation/>
+        </functionEntry>
+    </functions>
+</debugInfo>

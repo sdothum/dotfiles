@@ -1,0 +1,7 @@
+<resources>
+	<fonts>
+	   <font id="DialFour" filename="four_34.fnt" antialias="true"/>
+	   <font id="DialEight" filename="eight_34.fnt" antialias="true"/>
+	   <font id="DialTwelve" filename="twelve_34.fnt" antialias="true"/>
+	</fonts>
+</resources>

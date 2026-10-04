@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<iq:manifest version="3"
+    xmlns:iq="http://www.garmin.com/xml/connectiq">
+
+    <iq:application
+        id="32a965db901b4e33b3fde093b977f5e6"
+        type="watchface"
+        name="@Strings.AppName"
+        entry="InterstellarApp"
+        launcherIcon="@Drawables.LauncherIcon"
+        minApiLevel="3.2.0">
+
+        <iq:products>
+            <iq:product id="fr955"/>
+        </iq:products>
+
+        <iq:permissions>
+            <iq:uses-permission id="SensorHistory"/>
+        </iq:permissions>
+
+        <iq:languages>
+            <iq:language>eng</iq:language>
+        </iq:languages>
+
+        <iq:barrels/>
+    </iq:application>
+</iq:manifest>

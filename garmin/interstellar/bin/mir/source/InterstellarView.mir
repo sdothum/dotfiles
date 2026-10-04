@@ -1,0 +1,181 @@
+[ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc"; @line = 1; @symbol_usingdef<0> = [Toybox,1,6,12]; @symbol_usingdef<1> = [Graphics,1,13,21]; @symbol_usingAlias = [Gfx,1,25,28]; ]
+using Toybox.Graphics as :Gfx;
+[ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc"; @line = 2; @symbol_usingdef<0> = [Toybox,2,6,12]; @symbol_usingdef<1> = [WatchUi,2,13,20]; @symbol_usingAlias = [WatchUi,2,24,31]; ]
+using Toybox.WatchUi as :WatchUi;
+[ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc"; @line = 4; @symbol_classdef = [InterstellarView,4,6,22]; @symbol_extends<0> = [WatchUi,4,31,38]; @symbol_extends<1> = [WatchFace,4,39,48]; ]
+class InterstellarView extends WatchUi.WatchFace {
+    [ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc"; @line = 4; ]
+    <init> {
+    }
+    [ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc"; @line = 4; ]
+    static
+    <init> {
+    }
+    [ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc"; @line = 6; @position = 13; @symbol_vardef = [_geometry,6,13,22]; ]
+    private
+    var _geometry;
+    [ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc"; @line = 7; @position = 13; @symbol_vardef = [_dial,7,13,18]; ]
+    private
+    var _dial;
+    [ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc"; @line = 9; @position = 13; @symbol_vardef = [_hands,9,13,19]; ]
+    private
+    var _hands;
+    [ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc"; @line = 10; @position = 13; @symbol_vardef = [_date,10,13,18]; ]
+    private
+    var _date;
+    [ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc"; @line = 12; @symbol_functiondef = [initialize,12,10,20]; ]
+    function initialize() as Void {
+_home_shum_stow_garmin_interstellar_source_InterstellarView_mc_12_23_19_1_start:
+[ "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc" 13 2 ]
+        symbol [ WatchFace %tmp.2 13 2 11 ];
+        %tmp.2 = getv ? :WatchFace;
+        symbol [ initialize %tmp.3 13 12 22 ];
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+[ "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc" 15 2 ]
+        %tmp.4 = null;
+        symbol [ _geometry ? 15 2 11 ];
+        putv self :_geometry %tmp.4;
+[ "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc" 16 2 ]
+        symbol [ DialRenderer %tmp.8 16 14 26 ];
+        %tmp.8 = getv ? :DialRenderer;
+        %tmp.5 = newc %tmp.8 ();
+        symbol [ _dial ? 16 2 7 ];
+        putv self :_dial %tmp.5;
+[ "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc" 17 2 ]
+        symbol [ HandRenderer %tmp.12 17 15 27 ];
+        %tmp.12 = getv ? :HandRenderer;
+        %tmp.9 = newc %tmp.12 ();
+        symbol [ _hands ? 17 2 8 ];
+        putv self :_hands %tmp.9;
+[ "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc" 18 2 ]
+        symbol [ DateRenderer %tmp.16 18 14 26 ];
+        %tmp.16 = getv ? :DateRenderer;
+        %tmp.13 = newc %tmp.16 ();
+        symbol [ _date ? 18 2 7 ];
+        putv self :_date %tmp.13;
+_home_shum_stow_garmin_interstellar_source_InterstellarView_mc_12_23_19_1_stop:
+    }
+    [ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc"; @line = 21; @symbol_functiondef = [onLayout,21,10,18]; @symbol_param<0> = [dc,21,19,21]; ]
+    function onLayout(dc) {
+_home_shum_stow_garmin_interstellar_source_InterstellarView_mc_21_23_23_1_start:
+[ "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc" 22 2 ]
+        symbol [ FaceGeometry %tmp.4 22 18 30 ];
+        %tmp.4 = getv ? :FaceGeometry;
+        %tmp.5 = lgetv %dc;
+        symbol [ dc %tmp.5 22 31 33 ];
+        %tmp.1 = newc %tmp.4 (%tmp.5);
+        symbol [ _geometry ? 22 2 11 ];
+        putv self :_geometry %tmp.1;
+_home_shum_stow_garmin_interstellar_source_InterstellarView_mc_21_23_23_1_stop:
+    }
+    [ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc"; @line = 25; @symbol_functiondef = [onShow,25,10,16]; ]
+    function onShow() {
+    }
+    [ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc"; @line = 28; @symbol_functiondef = [onHide,28,10,16]; ]
+    function onHide() {
+    }
+    [ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc"; @line = 31; @symbol_functiondef = [onEnterSleep,31,10,22]; ]
+    function onEnterSleep() {
+    }
+    [ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc"; @line = 34; @symbol_functiondef = [onExitSleep,34,10,21]; ]
+    function onExitSleep() {
+    }
+    [ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc"; @line = 37; @symbol_functiondef = [onUpdate,37,10,18]; @symbol_param<0> = [dc,37,19,21]; ]
+    function onUpdate(dc) {
+_home_shum_stow_garmin_interstellar_source_InterstellarView_mc_37_23_60_1_start:
+[ "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc" 38 2 ]
+_home_shum_stow_garmin_interstellar_source_InterstellarView_mc_38_2_40_2_if_stmt:
+        symbol [ _geometry %tmp.2 38 6 15 ];
+        %tmp.2 = getv ? :_geometry;
+        %tmp.3 = null;
+        %tmp.4 = eq %tmp.2 %tmp.3;
+        bf %tmp.4 @_home_shum_stow_garmin_interstellar_source_InterstellarView_mc_38_2_40_2_if_end;
+_home_shum_stow_garmin_interstellar_source_InterstellarView_mc_38_2_40_2_if_true:
+_home_shum_stow_garmin_interstellar_source_InterstellarView_mc_38_25_40_2_start:
+[ "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc" 39 3 ]
+        symbol [ FaceGeometry %tmp.8 39 19 31 ];
+        %tmp.8 = getv ? :FaceGeometry;
+        %tmp.9 = lgetv %dc;
+        symbol [ dc %tmp.9 39 32 34 ];
+        %tmp.5 = newc %tmp.8 (%tmp.9);
+        symbol [ _geometry ? 39 3 12 ];
+        putv self :_geometry %tmp.5;
+_home_shum_stow_garmin_interstellar_source_InterstellarView_mc_38_25_40_2_stop:
+        goto @_home_shum_stow_garmin_interstellar_source_InterstellarView_mc_38_2_40_2_if_end;
+_home_shum_stow_garmin_interstellar_source_InterstellarView_mc_38_2_40_2_if_end:
+[ "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc" 42 2 ]
+        %tmp.10 = lgetv %dc;
+        symbol [ dc %tmp.10 42 2 4 ];
+        symbol [ setColor %tmp.11 42 5 13 ];
+        %tmp.11 = getv function %tmp.10 :setColor;
+        symbol [ Gfx %tmp.12 43 3 6 ];
+        %tmp.12 = getm $.Toybox.Graphics;
+        symbol [ COLOR_BLACK %tmp.13 43 7 18 ];
+        %tmp.13 = getv %tmp.12 :COLOR_BLACK;
+        symbol [ Theme %tmp.15 44 3 8 ];
+        %tmp.15 = getv ? :Theme;
+        symbol [ BACKGROUND_COLOR %tmp.16 44 9 25 ];
+        %tmp.16 = getv %tmp.15 :BACKGROUND_COLOR;
+        invoke %tmp.10 %tmp.11(%tmp.13, %tmp.16);
+[ "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc" 46 2 ]
+        %tmp.17 = lgetv %dc;
+        symbol [ dc %tmp.17 46 2 4 ];
+        symbol [ clear %tmp.18 46 5 10 ];
+        %tmp.18 = getv function %tmp.17 :clear;
+        invoke %tmp.17 %tmp.18();
+[ "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc" 48 2 ]
+        symbol [ _dial %tmp.20 48 2 7 ];
+        %tmp.20 = getv ? :_dial;
+        symbol [ draw %tmp.21 48 8 12 ];
+        %tmp.21 = getv function %tmp.20 :draw;
+        %tmp.22 = lgetv %dc;
+        symbol [ dc %tmp.22 48 13 15 ];
+        symbol [ _geometry %tmp.24 48 17 26 ];
+        %tmp.24 = getv ? :_geometry;
+        invoke %tmp.20 %tmp.21(%tmp.22, %tmp.24);
+[ "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc" 50 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_InterstellarView_mc_37_23_60_1_start" "_home_shum_stow_garmin_interstellar_source_InterstellarView_mc_37_23_60_1_stop" ]
+        %clock.1 = local;
+        symbol [ clock %clock.1 50 6 11 ];
+        symbol [ System %tmp.26 50 14 20 ];
+        %tmp.26 = getv ? :System;
+        symbol [ getClockTime %tmp.27 50 21 33 ];
+        %tmp.27 = getv function %tmp.26 :getClockTime;
+        %tmp.28 = invoke %tmp.26 %tmp.27();
+        lputv %clock.1 %tmp.28;
+        symbol [ clock %clock.1 50 6 11 ];
+[ "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc" 52 2 ]
+        symbol [ _hands %tmp.30 52 2 8 ];
+        %tmp.30 = getv ? :_hands;
+        symbol [ draw %tmp.31 52 9 13 ];
+        %tmp.31 = getv function %tmp.30 :draw;
+        %tmp.32 = lgetv %dc;
+        symbol [ dc %tmp.32 53 3 5 ];
+        symbol [ _geometry %tmp.34 54 3 12 ];
+        %tmp.34 = getv ? :_geometry;
+        %tmp.35 = lgetv %clock.1;
+        symbol [ clock %tmp.35 55 3 8 ];
+        symbol [ hour %tmp.36 55 9 13 ];
+        %tmp.36 = getv %tmp.35 :hour;
+        %tmp.37 = lgetv %clock.1;
+        symbol [ clock %tmp.37 56 3 8 ];
+        symbol [ min %tmp.38 56 9 12 ];
+        %tmp.38 = getv %tmp.37 :min;
+        invoke %tmp.30 %tmp.31(%tmp.32, %tmp.34, %tmp.36, %tmp.38);
+[ "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc" 59 2 ]
+        symbol [ _date %tmp.40 59 2 7 ];
+        %tmp.40 = getv ? :_date;
+        symbol [ draw %tmp.41 59 8 12 ];
+        %tmp.41 = getv function %tmp.40 :draw;
+        %tmp.42 = lgetv %dc;
+        symbol [ dc %tmp.42 59 13 15 ];
+        symbol [ _geometry %tmp.44 59 17 26 ];
+        %tmp.44 = getv ? :_geometry;
+        invoke %tmp.40 %tmp.41(%tmp.42, %tmp.44);
+_home_shum_stow_garmin_interstellar_source_InterstellarView_mc_37_23_60_1_stop:
+    }
+}
+[ @file = "/home/shum/stow/garmin/interstellar/source/InterstellarView.mc"; @line = 1; ]
+<init> {
+}

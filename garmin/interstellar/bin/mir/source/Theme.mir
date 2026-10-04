@@ -1,0 +1,39 @@
+[ @file = "/home/shum/stow/garmin/interstellar/source/Theme.mc"; @line = 1; @symbol_usingdef<0> = [Toybox,1,6,12]; @symbol_usingdef<1> = [Graphics,1,13,21]; ]
+using Toybox.Graphics;
+[ @file = "/home/shum/stow/garmin/interstellar/source/Theme.mc"; @line = 3; @symbol_classdef = [Theme,3,6,11]; ]
+class Theme {
+    [ @file = "/home/shum/stow/garmin/interstellar/source/Theme.mc"; @line = 3; ]
+    <init> {
+    }
+    [ @file = "/home/shum/stow/garmin/interstellar/source/Theme.mc"; @line = 3; ]
+    static
+    <init> {
+[ "/home/shum/stow/garmin/interstellar/source/Theme.mc" 4 14 ]
+        symbol [ Graphics %tmp.1 4 33 41 ];
+        %tmp.1 = getm $.Toybox.Graphics;
+        symbol [ COLOR_WHITE %tmp.2 4 42 53 ];
+        %tmp.2 = getv %tmp.1 :COLOR_WHITE;
+        putv self :BACKGROUND_COLOR %tmp.2;
+    }
+    [ @file = "/home/shum/stow/garmin/interstellar/source/Theme.mc"; @line = 4; @position = 14; @symbol_constdef = [BACKGROUND_COLOR,4,14,30]; ]
+    static
+    const BACKGROUND_COLOR;
+    [ @file = "/home/shum/stow/garmin/interstellar/source/Theme.mc"; @line = 7; @position = 14; @symbol_constdef = [MINUTE_TICK_COLOR,7,14,31]; ]
+    static
+    const MINUTE_TICK_COLOR = 0xD8D8D8;
+    [ @file = "/home/shum/stow/garmin/interstellar/source/Theme.mc"; @line = 8; @position = 14; @symbol_constdef = [FIVE_TICK_COLOR,8,14,29]; ]
+    static
+    const FIVE_TICK_COLOR = 0xB8B8B8;
+    [ @file = "/home/shum/stow/garmin/interstellar/source/Theme.mc"; @line = 10; @position = 14; @symbol_constdef = [MINUTE_TICK_WIDTH,10,14,31]; ]
+    static
+    const MINUTE_TICK_WIDTH = 1;
+    [ @file = "/home/shum/stow/garmin/interstellar/source/Theme.mc"; @line = 11; @position = 14; @symbol_constdef = [FIVE_TICK_WIDTH,11,14,29]; ]
+    static
+    const FIVE_TICK_WIDTH = 3;
+    [ @file = "/home/shum/stow/garmin/interstellar/source/Theme.mc"; @line = 14; @position = 14; @symbol_constdef = [TICK_LENGTH,14,14,25]; ]
+    static
+    const TICK_LENGTH = 5;
+}
+[ @file = "/home/shum/stow/garmin/interstellar/source/Theme.mc"; @line = 1; ]
+<init> {
+}

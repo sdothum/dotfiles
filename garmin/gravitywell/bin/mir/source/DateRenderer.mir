@@ -1,0 +1,197 @@
+[ @file = "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc"; @line = 2; @symbol_usingdef<0> = [Toybox,2,6,12]; @symbol_usingdef<1> = [Graphics,2,13,21]; ]
+using Toybox.Graphics;
+[ @file = "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc"; @line = 3; @symbol_usingdef<0> = [Toybox,3,6,12]; @symbol_usingdef<1> = [System,3,13,19]; ]
+using Toybox.System;
+[ @file = "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc"; @line = 4; @symbol_usingdef<0> = [Toybox,4,6,12]; @symbol_usingdef<1> = [Time,4,13,17]; ]
+using Toybox.Time;
+[ @file = "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc"; @line = 5; @symbol_usingdef<0> = [Toybox,5,6,12]; @symbol_usingdef<1> = [Time,5,13,17]; @symbol_usingdef<2> = [Gregorian,5,18,27]; ]
+using Toybox.Time.Gregorian;
+[ @file = "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc"; @line = 6; @symbol_usingdef<0> = [Toybox,6,6,12]; @symbol_usingdef<1> = [WatchUi,6,13,20]; @symbol_usingAlias = [WatchUi,6,24,31]; ]
+using Toybox.WatchUi as :WatchUi;
+[ @file = "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc"; @line = 8; @symbol_classdef = [DateRenderer,8,6,18]; ]
+class DateRenderer {
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc"; @line = 8; ]
+    <init> {
+    }
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc"; @line = 8; ]
+    static
+    <init> {
+    }
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc"; @line = 9; @position = 13; @symbol_vardef = [_font,9,13,18]; ]
+    private
+    var _font;
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc"; @line = 10; @position = 13; @symbol_vardef = [_offsetY,10,13,21]; ]
+    private
+    var _offsetY = -1;
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc"; @line = 12; @symbol_functiondef = [initialize,12,10,20]; ]
+    function initialize() as Void {
+_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_12_23_14_1_start:
+[ "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc" 13 2 ]
+        symbol [ WatchUi %tmp.1 13 10 17 ];
+        %tmp.1 = getm $.Toybox.WatchUi;
+        symbol [ loadResource %tmp.2 13 18 30 ];
+        %tmp.2 = getv function %tmp.1 :loadResource;
+        symbol [ Rez %tmp.4 13 31 34 ];
+        %tmp.4 = getv ? :Rez;
+        symbol [ Fonts %tmp.5 13 35 40 ];
+        %tmp.5 = getv %tmp.4 :Fonts;
+        symbol [ DateFont %tmp.6 13 41 49 ];
+        %tmp.6 = getv %tmp.5 :DateFont;
+        %tmp.7 = invoke %tmp.1 %tmp.2(%tmp.6);
+        symbol [ _font ? 13 2 7 ];
+        putv self :_font %tmp.7;
+_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_12_23_14_1_stop:
+    }
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc"; @line = 16; @symbol_functiondef = [draw,16,10,14]; @symbol_param<0> = [dc,16,15,17]; @symbol_param<1> = [geometry,16,19,27]; ]
+    function draw(dc, geometry) {
+_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_16_29_45_1_start:
+[ "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc" 17 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_16_29_45_1_start" "_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_16_29_45_1_stop" ]
+        %today.1 = local;
+        symbol [ today %today.1 17 6 11 ];
+        symbol [ Gregorian %tmp.1 17 14 23 ];
+        %tmp.1 = getm $.Toybox.Time.Gregorian;
+        symbol [ info %tmp.2 17 24 28 ];
+        %tmp.2 = getv function %tmp.1 :info;
+        symbol [ Time %tmp.3 18 3 7 ];
+        %tmp.3 = getm $.Toybox.Time;
+        symbol [ now %tmp.4 18 8 11 ];
+        %tmp.4 = getv function %tmp.3 :now;
+        %tmp.5 = invoke %tmp.3 %tmp.4();
+        symbol [ Time %tmp.6 19 3 7 ];
+        %tmp.6 = getm $.Toybox.Time;
+        symbol [ FORMAT_SHORT %tmp.7 19 8 20 ];
+        %tmp.7 = getv %tmp.6 :FORMAT_SHORT;
+        %tmp.8 = invoke %tmp.1 %tmp.2(%tmp.5, %tmp.7);
+        lputv %today.1 %tmp.8;
+        symbol [ today %today.1 17 6 11 ];
+[ "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc" 22 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_16_29_45_1_start" "_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_16_29_45_1_stop" ]
+        %days.2 = local;
+        symbol [ days %days.2 22 6 10 ];
+        %tmp.9 = newa 7;
+        %tmp.10 = "Sun";
+        %tmp.11 = dup %tmp.9;
+        %tmp.12 = aputv %tmp.11 0 %tmp.10;
+        %tmp.13 = "Mon";
+        %tmp.14 = dup %tmp.12;
+        %tmp.15 = aputv %tmp.14 1 %tmp.13;
+        %tmp.16 = "Tue";
+        %tmp.17 = dup %tmp.15;
+        %tmp.18 = aputv %tmp.17 2 %tmp.16;
+        %tmp.19 = "Wed";
+        %tmp.20 = dup %tmp.18;
+        %tmp.21 = aputv %tmp.20 3 %tmp.19;
+        %tmp.22 = "Thu";
+        %tmp.23 = dup %tmp.21;
+        %tmp.24 = aputv %tmp.23 4 %tmp.22;
+        %tmp.25 = "Fri";
+        %tmp.26 = dup %tmp.24;
+        %tmp.27 = aputv %tmp.26 5 %tmp.25;
+        %tmp.28 = "Sat";
+        %tmp.29 = dup %tmp.27;
+        %tmp.30 = aputv %tmp.29 6 %tmp.28;
+        lputv %days.2 %tmp.30;
+        symbol [ days %days.2 22 6 10 ];
+[ "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc" 27 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_16_29_45_1_start" "_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_16_29_45_1_stop" ]
+        %label.3 = local;
+        symbol [ label %label.3 27 6 11 ];
+        %tmp.31 = lgetv %days.2;
+        symbol [ days %tmp.31 28 3 7 ];
+        %tmp.32 = lgetv %today.1;
+        symbol [ today %tmp.32 28 8 13 ];
+        symbol [ day_of_week %tmp.33 28 14 25 ];
+        %tmp.33 = getv %tmp.32 :day_of_week;
+        %tmp.34 = 1;
+        %tmp.35 = sub %tmp.33 %tmp.34;
+        %tmp.36 = agetv %tmp.31 %tmp.35;
+        %tmp.37 = " ";
+        %tmp.38 = add %tmp.36 %tmp.37;
+        %tmp.39 = lgetv %today.1;
+        symbol [ today %tmp.39 28 39 44 ];
+        symbol [ day %tmp.40 28 45 48 ];
+        %tmp.40 = getv %tmp.39 :day;
+        %tmp.41 = add %tmp.38 %tmp.40;
+        lputv %label.3 %tmp.41;
+        symbol [ label %label.3 27 6 11 ];
+[ "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc" 30 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_16_29_45_1_start" "_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_16_29_45_1_stop" ]
+        %color.4 = local;
+        symbol [ color %color.4 30 6 11 ];
+_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_31_3_33_14_begin:
+        symbol [ System %tmp.42 31 3 9 ];
+        %tmp.42 = getm $.Toybox.System;
+        symbol [ getSystemStats %tmp.43 31 10 24 ];
+        %tmp.43 = getv function %tmp.42 :getSystemStats;
+        %tmp.44 = invoke %tmp.42 %tmp.43();
+        symbol [ battery %tmp.45 31 27 34 ];
+        %tmp.45 = getv %tmp.44 :battery;
+        %tmp.46 = 20;
+        %tmp.47 = lte %tmp.45 %tmp.46;
+        bf %tmp.47 @_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_31_3_33_14_else_false;
+_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_31_3_33_14_true:
+        symbol [ Graphics %tmp.48 32 5 13 ];
+        %tmp.48 = getm $.Toybox.Graphics;
+        symbol [ COLOR_RED %tmp.49 32 14 23 ];
+        %tmp.49 = getv %tmp.48 :COLOR_RED;
+        push %tmp.49;
+        goto @_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_31_3_33_14_end;
+_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_31_3_33_14_else_false:
+        symbol [ Graphics %tmp.50 33 5 13 ];
+        %tmp.50 = getm $.Toybox.Graphics;
+        symbol [ COLOR_BLACK %tmp.51 33 14 25 ];
+        %tmp.51 = getv %tmp.50 :COLOR_BLACK;
+        push %tmp.51;
+_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_31_3_33_14_end:
+        %tmp.52 = phi [%tmp.47 @_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_31_3_33_14_begin] [%tmp.49 @_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_31_3_33_14_true] [%tmp.51 @_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_31_3_33_14_else_false] [%tmp.52 @_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_31_3_33_14_end];
+        lputv %color.4 %tmp.52;
+        symbol [ color %color.4 30 6 11 ];
+[ "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc" 35 2 ]
+        %tmp.53 = lgetv %dc;
+        symbol [ dc %tmp.53 35 2 4 ];
+        symbol [ setColor %tmp.54 35 5 13 ];
+        %tmp.54 = getv function %tmp.53 :setColor;
+        %tmp.55 = lgetv %color.4;
+        symbol [ color %tmp.55 35 14 19 ];
+        symbol [ Theme %tmp.57 35 21 26 ];
+        %tmp.57 = getv ? :Theme;
+        symbol [ BACKGROUND_COLOR %tmp.58 35 27 43 ];
+        %tmp.58 = getv %tmp.57 :BACKGROUND_COLOR;
+        invoke %tmp.53 %tmp.54(%tmp.55, %tmp.58);
+[ "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc" 37 2 ]
+        %tmp.59 = lgetv %dc;
+        symbol [ dc %tmp.59 37 2 4 ];
+        symbol [ drawText %tmp.60 37 5 13 ];
+        %tmp.60 = getv function %tmp.59 :drawText;
+        %tmp.61 = lgetv %geometry;
+        symbol [ geometry %tmp.61 38 3 11 ];
+        symbol [ centerX %tmp.62 38 12 19 ];
+        %tmp.62 = getv %tmp.61 :centerX;
+        %tmp.63 = lgetv %geometry;
+        symbol [ geometry %tmp.63 39 3 11 ];
+        symbol [ centerY %tmp.64 39 12 19 ];
+        %tmp.64 = getv %tmp.63 :centerY;
+        symbol [ _offsetY %tmp.66 39 22 30 ];
+        %tmp.66 = getv ? :_offsetY;
+        %tmp.67 = add %tmp.64 %tmp.66;
+        symbol [ _font %tmp.69 40 3 8 ];
+        %tmp.69 = getv ? :_font;
+        %tmp.70 = lgetv %label.3;
+        symbol [ label %tmp.70 41 3 8 ];
+        symbol [ Graphics %tmp.71 42 3 11 ];
+        %tmp.71 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.72 42 12 31 ];
+        %tmp.72 = getv %tmp.71 :TEXT_JUSTIFY_CENTER;
+        symbol [ Graphics %tmp.73 43 3 11 ];
+        %tmp.73 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_VCENTER %tmp.74 43 12 32 ];
+        %tmp.74 = getv %tmp.73 :TEXT_JUSTIFY_VCENTER;
+        %tmp.75 = bitor %tmp.72 %tmp.74;
+        invoke %tmp.59 %tmp.60(%tmp.62, %tmp.67, %tmp.69, %tmp.70, %tmp.75);
+_home_shum_stow_garmin_gravitywell_source_DateRenderer_mc_16_29_45_1_stop:
+    }
+}
+[ @file = "/home/shum/stow/garmin/gravitywell/source/DateRenderer.mc"; @line = 2; ]
+<init> {
+}

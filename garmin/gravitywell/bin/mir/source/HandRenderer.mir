@@ -1,0 +1,1019 @@
+[ @file = "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc"; @line = 1; @symbol_usingdef<0> = [Toybox,1,6,12]; @symbol_usingdef<1> = [Graphics,1,13,21]; ]
+using Toybox.Graphics;
+[ @file = "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc"; @line = 2; @symbol_usingdef<0> = [Toybox,2,6,12]; @symbol_usingdef<1> = [Math,2,13,17]; ]
+using Toybox.Math;
+[ @file = "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc"; @line = 4; @symbol_classdef = [HandRenderer,4,6,18]; ]
+class HandRenderer {
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc"; @line = 4; ]
+    <init> {
+    }
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc"; @line = 4; ]
+    static
+    <init> {
+    }
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc"; @line = 6; @position = 13; @symbol_vardef = [_hourRadius,6,13,24]; ]
+    private
+    var _hourRadius = 11;
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc"; @line = 7; @position = 13; @symbol_vardef = [_minuteRadius,7,13,26]; ]
+    private
+    var _minuteRadius = 6;
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc"; @line = 10; @position = 13; @symbol_vardef = [_tickClearance,10,13,27]; ]
+    private
+    var _tickClearance = 10;
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc"; @line = 12; @symbol_functiondef = [drawGravityWell,12,18,33]; @symbol_param<0> = [dc,13,2,4]; @symbol_param<1> = [cx,13,6,8]; @symbol_param<2> = [cy,13,10,12]; @symbol_param<3> = [angle,13,14,19]; @symbol_param<4> = [radius,13,21,27]; @symbol_param<5> = [color,13,29,34]; ]
+    private
+    function drawGravityWell(dc, cx, cy, angle, radius, color) {
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_start:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 15 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_stop" ]
+        %extension.1 = local;
+        symbol [ extension %extension.1 15 6 15 ];
+        %tmp.1 = 15;
+        lputv %extension.1 %tmp.1;
+        symbol [ extension %extension.1 15 6 15 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 16 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_stop" ]
+        %buried.2 = local;
+        symbol [ buried %buried.2 16 6 12 ];
+        %tmp.2 = 5;
+        lputv %buried.2 %tmp.2;
+        symbol [ buried %buried.2 16 6 12 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 17 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_stop" ]
+        %startWidth.3 = local;
+        symbol [ startWidth %startWidth.3 17 6 16 ];
+        %tmp.3 = 4.0;
+        lputv %startWidth.3 %tmp.3;
+        symbol [ startWidth %startWidth.3 17 6 16 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 18 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_stop" ]
+        %curvature.4 = local;
+        symbol [ curvature %curvature.4 18 6 15 ];
+        %tmp.4 = 2.25;
+        lputv %curvature.4 %tmp.4;
+        symbol [ curvature %curvature.4 18 6 15 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 20 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_stop" ]
+        %cosA.5 = local;
+        symbol [ cosA %cosA.5 20 6 10 ];
+        symbol [ Math %tmp.5 20 13 17 ];
+        %tmp.5 = getm $.Toybox.Math;
+        symbol [ cos %tmp.6 20 18 21 ];
+        %tmp.6 = getv function %tmp.5 :cos;
+        %tmp.7 = lgetv %angle;
+        symbol [ angle %tmp.7 20 22 27 ];
+        %tmp.8 = invoke %tmp.5 %tmp.6(%tmp.7);
+        lputv %cosA.5 %tmp.8;
+        symbol [ cosA %cosA.5 20 6 10 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 21 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_stop" ]
+        %sinA.6 = local;
+        symbol [ sinA %sinA.6 21 6 10 ];
+        symbol [ Math %tmp.9 21 13 17 ];
+        %tmp.9 = getm $.Toybox.Math;
+        symbol [ sin %tmp.10 21 18 21 ];
+        %tmp.10 = getv function %tmp.9 :sin;
+        %tmp.11 = lgetv %angle;
+        symbol [ angle %tmp.11 21 22 27 ];
+        %tmp.12 = invoke %tmp.9 %tmp.10(%tmp.11);
+        lputv %sinA.6 %tmp.12;
+        symbol [ sinA %sinA.6 21 6 10 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 23 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_stop" ]
+        %red.7 = local;
+        symbol [ red %red.7 23 6 9 ];
+        %tmp.13 = lgetv %color;
+        symbol [ color %tmp.13 23 15 20 ];
+        %tmp.14 = 16;
+        %tmp.15 = shr %tmp.13 %tmp.14;
+        %tmp.16 = 0xFF;
+        %tmp.17 = bitand %tmp.15 %tmp.16;
+        lputv %red.7 %tmp.17;
+        symbol [ red %red.7 23 6 9 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 24 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_stop" ]
+        %green.8 = local;
+        symbol [ green %green.8 24 6 11 ];
+        %tmp.18 = lgetv %color;
+        symbol [ color %tmp.18 24 15 20 ];
+        %tmp.19 = 8;
+        %tmp.20 = shr %tmp.18 %tmp.19;
+        %tmp.21 = 0xFF;
+        %tmp.22 = bitand %tmp.20 %tmp.21;
+        lputv %green.8 %tmp.22;
+        symbol [ green %green.8 24 6 11 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 25 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_stop" ]
+        %blue.9 = local;
+        symbol [ blue %blue.9 25 6 10 ];
+        %tmp.23 = lgetv %color;
+        symbol [ color %tmp.23 25 14 19 ];
+        %tmp.24 = 0xFF;
+        %tmp.25 = bitand %tmp.23 %tmp.24;
+        lputv %blue.9 %tmp.25;
+        symbol [ blue %blue.9 25 6 10 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 27 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_stop" ]
+        %halfExtent.10 = local;
+        symbol [ halfExtent %halfExtent.10 27 6 16 ];
+        %tmp.26 = 5;
+        lputv %halfExtent.10 %tmp.26;
+        symbol [ halfExtent %halfExtent.10 27 6 16 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 31 2 ]
+        for @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_31_2_132_2_for_test @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_31_2_132_2_for_incr @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_31_2_132_2_for_end;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_31_2_132_2_for_init:
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_31_2_132_2_for_begin" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_31_2_132_2_for_end" ]
+        %lx.11 = local;
+        symbol [ lx %lx.11 31 11 13 ];
+        %tmp.27 = lgetv %buried.2;
+        symbol [ buried %tmp.27 31 17 23 ];
+        %tmp.28 = sub 0 %tmp.27;
+        lputv %lx.11 %tmp.28;
+        symbol [ lx %lx.11 31 11 13 ];
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_31_2_132_2_for_test:
+        %tmp.29 = lgetv %lx.11;
+        symbol [ lx %tmp.29 32 5 7 ];
+        %tmp.30 = lgetv %extension.1;
+        symbol [ extension %tmp.30 32 11 20 ];
+        %tmp.31 = 1;
+        %tmp.32 = add %tmp.30 %tmp.31;
+        %tmp.33 = lte %tmp.29 %tmp.32;
+        bf %tmp.33 @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_31_2_132_2_for_end;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_31_2_132_2_for_begin:
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_33_14_132_2_start:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 36 3 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_33_14_132_2_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_33_14_132_2_stop" ]
+        %exposed.12 = local;
+        symbol [ exposed %exposed.12 36 7 14 ];
+        %tmp.34 = lgetv %lx.11;
+        symbol [ lx %tmp.34 36 17 19 ];
+        symbol [ toFloat %tmp.35 36 20 27 ];
+        %tmp.35 = getv function %tmp.34 :toFloat;
+        %tmp.36 = invoke %tmp.34 %tmp.35();
+        lputv %exposed.12 %tmp.36;
+        symbol [ exposed %exposed.12 36 7 14 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 38 3 ]
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_38_3_40_3_if_stmt:
+        %tmp.37 = lgetv %exposed.12;
+        symbol [ exposed %tmp.37 38 7 14 ];
+        %tmp.38 = 0.0;
+        %tmp.39 = lt %tmp.37 %tmp.38;
+        bf %tmp.39 @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_38_3_40_3_if_end;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_38_3_40_3_if_true:
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_38_22_40_3_start:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 39 4 ]
+        %tmp.40 = 0.0;
+        lputv %exposed.12 %tmp.40;
+        symbol [ exposed %exposed.12 39 4 11 ];
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_38_22_40_3_stop:
+        goto @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_38_3_40_3_if_end;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_38_3_40_3_if_end:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 42 3 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_33_14_132_2_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_33_14_132_2_stop" ]
+        %t.13 = local;
+        symbol [ t %t.13 42 7 8 ];
+        %tmp.41 = lgetv %exposed.12;
+        symbol [ exposed %tmp.41 42 11 18 ];
+        %tmp.42 = lgetv %extension.1;
+        symbol [ extension %tmp.42 42 21 30 ];
+        %tmp.43 = div %tmp.41 %tmp.42;
+        lputv %t.13 %tmp.43;
+        symbol [ t %t.13 42 7 8 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 44 3 ]
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_44_3_46_3_if_stmt:
+        %tmp.44 = lgetv %t.13;
+        symbol [ t %tmp.44 44 7 8 ];
+        %tmp.45 = 1.0;
+        %tmp.46 = gt %tmp.44 %tmp.45;
+        bf %tmp.46 @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_44_3_46_3_if_end;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_44_3_46_3_if_true:
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_44_16_46_3_start:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 45 4 ]
+        %tmp.47 = 1.0;
+        lputv %t.13 %tmp.47;
+        symbol [ t %t.13 45 4 5 ];
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_44_16_46_3_stop:
+        goto @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_44_3_46_3_if_end;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_44_3_46_3_if_end:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 48 3 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_33_14_132_2_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_33_14_132_2_stop" ]
+        %remaining.14 = local;
+        symbol [ remaining %remaining.14 48 7 16 ];
+        %tmp.48 = 1.0;
+        %tmp.49 = lgetv %t.13;
+        symbol [ t %tmp.49 48 25 26 ];
+        %tmp.50 = sub %tmp.48 %tmp.49;
+        lputv %remaining.14 %tmp.50;
+        symbol [ remaining %remaining.14 48 7 16 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 50 3 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_33_14_132_2_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_33_14_132_2_stop" ]
+        %halfWidth.15 = local;
+        symbol [ halfWidth %halfWidth.15 50 7 16 ];
+        %tmp.51 = lgetv %startWidth.3;
+        symbol [ startWidth %tmp.51 51 4 14 ];
+        symbol [ Math %tmp.52 52 4 8 ];
+        %tmp.52 = getm $.Toybox.Math;
+        symbol [ pow %tmp.53 52 9 12 ];
+        %tmp.53 = getv function %tmp.52 :pow;
+        %tmp.54 = lgetv %remaining.14;
+        symbol [ remaining %tmp.54 52 13 22 ];
+        %tmp.55 = lgetv %curvature.4;
+        symbol [ curvature %tmp.55 52 24 33 ];
+        %tmp.56 = invoke %tmp.52 %tmp.53(%tmp.54, %tmp.55);
+        %tmp.57 = mul %tmp.51 %tmp.56;
+        lputv %halfWidth.15 %tmp.57;
+        symbol [ halfWidth %halfWidth.15 50 7 16 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 54 3 ]
+        for @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_54_3_131_3_for_test @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_54_3_131_3_for_incr @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_54_3_131_3_for_end;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_54_3_131_3_for_init:
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_54_3_131_3_for_begin" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_54_3_131_3_for_end" ]
+        %ly.16 = local;
+        symbol [ ly %ly.16 54 12 14 ];
+        %tmp.58 = lgetv %halfExtent.10;
+        symbol [ halfExtent %tmp.58 54 18 28 ];
+        %tmp.59 = sub 0 %tmp.58;
+        lputv %ly.16 %tmp.59;
+        symbol [ ly %ly.16 54 12 14 ];
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_54_3_131_3_for_test:
+        %tmp.60 = lgetv %ly.16;
+        symbol [ ly %tmp.60 55 6 8 ];
+        %tmp.61 = lgetv %halfExtent.10;
+        symbol [ halfExtent %tmp.61 55 12 22 ];
+        %tmp.62 = lte %tmp.60 %tmp.61;
+        bf %tmp.62 @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_54_3_131_3_for_end;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_54_3_131_3_for_begin:
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_start:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 58 4 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_stop" ]
+        %absY.17 = local;
+        symbol [ absY %absY.17 58 8 12 ];
+        %tmp.63 = lgetv %ly.16;
+        symbol [ ly %tmp.63 58 15 17 ];
+        symbol [ toFloat %tmp.64 58 18 25 ];
+        %tmp.64 = getv function %tmp.63 :toFloat;
+        %tmp.65 = invoke %tmp.63 %tmp.64();
+        lputv %absY.17 %tmp.65;
+        symbol [ absY %absY.17 58 8 12 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 60 4 ]
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_60_4_62_4_if_stmt:
+        %tmp.66 = lgetv %absY.17;
+        symbol [ absY %tmp.66 60 8 12 ];
+        %tmp.67 = 0.0;
+        %tmp.68 = lt %tmp.66 %tmp.67;
+        bf %tmp.68 @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_60_4_62_4_if_end;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_60_4_62_4_if_true:
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_60_20_62_4_start:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 61 5 ]
+        %tmp.69 = lgetv %absY.17;
+        symbol [ absY %tmp.69 61 13 17 ];
+        %tmp.70 = sub 0 %tmp.69;
+        lputv %absY.17 %tmp.70;
+        symbol [ absY %absY.17 61 5 9 ];
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_60_20_62_4_stop:
+        goto @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_60_4_62_4_if_end;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_60_4_62_4_if_end:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 64 4 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_stop" ]
+        %coverage.18 = local;
+        symbol [ coverage %coverage.18 64 8 16 ];
+        %tmp.71 = lgetv %halfWidth.15;
+        symbol [ halfWidth %tmp.71 65 5 14 ];
+        %tmp.72 = 0.5;
+        %tmp.73 = add %tmp.71 %tmp.72;
+        %tmp.74 = lgetv %absY.17;
+        symbol [ absY %tmp.74 65 23 27 ];
+        %tmp.75 = sub %tmp.73 %tmp.74;
+        lputv %coverage.18 %tmp.75;
+        symbol [ coverage %coverage.18 64 8 16 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 68 4 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_stop" ]
+        %endCoverage.19 = local;
+        symbol [ endCoverage %endCoverage.19 68 8 19 ];
+        %tmp.76 = lgetv %extension.1;
+        symbol [ extension %tmp.76 69 5 14 ];
+        %tmp.77 = 0.5;
+        %tmp.78 = add %tmp.76 %tmp.77;
+        %tmp.79 = lgetv %exposed.12;
+        symbol [ exposed %tmp.79 69 23 30 ];
+        %tmp.80 = sub %tmp.78 %tmp.79;
+        lputv %endCoverage.19 %tmp.80;
+        symbol [ endCoverage %endCoverage.19 68 8 19 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 71 4 ]
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_71_4_73_4_if_stmt:
+        %tmp.81 = lgetv %endCoverage.19;
+        symbol [ endCoverage %tmp.81 71 8 19 ];
+        %tmp.82 = lgetv %coverage.18;
+        symbol [ coverage %tmp.82 71 22 30 ];
+        %tmp.83 = lt %tmp.81 %tmp.82;
+        bf %tmp.83 @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_71_4_73_4_if_end;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_71_4_73_4_if_true:
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_71_32_73_4_start:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 72 5 ]
+        %tmp.84 = lgetv %endCoverage.19;
+        symbol [ endCoverage %tmp.84 72 16 27 ];
+        lputv %coverage.18 %tmp.84;
+        symbol [ coverage %coverage.18 72 5 13 ];
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_71_32_73_4_stop:
+        goto @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_71_4_73_4_if_end;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_71_4_73_4_if_end:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 75 4 ]
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_75_4_77_4_if_stmt:
+        %tmp.85 = lgetv %coverage.18;
+        symbol [ coverage %tmp.85 75 8 16 ];
+        %tmp.86 = 0.0;
+        %tmp.87 = lte %tmp.85 %tmp.86;
+        bf %tmp.87 @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_75_4_77_4_if_end;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_75_4_77_4_if_true:
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_75_25_77_4_start:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 76 5 ]
+        goto break @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_54_3_131_3_for_incr;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_75_25_77_4_stop:
+        goto @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_75_4_77_4_if_end;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_75_4_77_4_if_end:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 79 4 ]
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_79_4_81_4_if_stmt:
+        %tmp.88 = lgetv %coverage.18;
+        symbol [ coverage %tmp.88 79 8 16 ];
+        %tmp.89 = 1.0;
+        %tmp.90 = gt %tmp.88 %tmp.89;
+        bf %tmp.90 @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_79_4_81_4_if_end;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_79_4_81_4_if_true:
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_79_24_81_4_start:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 80 5 ]
+        %tmp.91 = 1.0;
+        lputv %coverage.18 %tmp.91;
+        symbol [ coverage %coverage.18 80 5 13 ];
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_79_24_81_4_stop:
+        goto @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_79_4_81_4_if_end;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_79_4_81_4_if_end:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 83 4 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_stop" ]
+        %r.20 = local;
+        symbol [ r %r.20 83 8 9 ];
+        symbol [ Math %tmp.92 83 12 16 ];
+        %tmp.92 = getm $.Toybox.Math;
+        symbol [ round %tmp.93 83 17 22 ];
+        %tmp.93 = getv function %tmp.92 :round;
+        %tmp.94 = 255;
+        %tmp.95 = 255;
+        %tmp.96 = lgetv %red.7;
+        symbol [ red %tmp.96 84 18 21 ];
+        %tmp.97 = sub %tmp.95 %tmp.96;
+        %tmp.98 = lgetv %coverage.18;
+        symbol [ coverage %tmp.98 84 25 33 ];
+        %tmp.99 = mul %tmp.97 %tmp.98;
+        %tmp.100 = sub %tmp.94 %tmp.99;
+        %tmp.101 = invoke %tmp.92 %tmp.93(%tmp.100);
+        symbol [ toNumber %tmp.102 85 6 14 ];
+        %tmp.102 = getv function %tmp.101 :toNumber;
+        %tmp.103 = invoke %tmp.101 %tmp.102();
+        lputv %r.20 %tmp.103;
+        symbol [ r %r.20 83 8 9 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 87 4 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_stop" ]
+        %g.21 = local;
+        symbol [ g %g.21 87 8 9 ];
+        symbol [ Math %tmp.104 87 12 16 ];
+        %tmp.104 = getm $.Toybox.Math;
+        symbol [ round %tmp.105 87 17 22 ];
+        %tmp.105 = getv function %tmp.104 :round;
+        %tmp.106 = 255;
+        %tmp.107 = 255;
+        %tmp.108 = lgetv %green.8;
+        symbol [ green %tmp.108 88 18 23 ];
+        %tmp.109 = sub %tmp.107 %tmp.108;
+        %tmp.110 = lgetv %coverage.18;
+        symbol [ coverage %tmp.110 88 27 35 ];
+        %tmp.111 = mul %tmp.109 %tmp.110;
+        %tmp.112 = sub %tmp.106 %tmp.111;
+        %tmp.113 = invoke %tmp.104 %tmp.105(%tmp.112);
+        symbol [ toNumber %tmp.114 89 6 14 ];
+        %tmp.114 = getv function %tmp.113 :toNumber;
+        %tmp.115 = invoke %tmp.113 %tmp.114();
+        lputv %g.21 %tmp.115;
+        symbol [ g %g.21 87 8 9 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 91 4 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_stop" ]
+        %b.22 = local;
+        symbol [ b %b.22 91 8 9 ];
+        symbol [ Math %tmp.116 91 12 16 ];
+        %tmp.116 = getm $.Toybox.Math;
+        symbol [ round %tmp.117 91 17 22 ];
+        %tmp.117 = getv function %tmp.116 :round;
+        %tmp.118 = 255;
+        %tmp.119 = 255;
+        %tmp.120 = lgetv %blue.9;
+        symbol [ blue %tmp.120 92 18 22 ];
+        %tmp.121 = sub %tmp.119 %tmp.120;
+        %tmp.122 = lgetv %coverage.18;
+        symbol [ coverage %tmp.122 92 26 34 ];
+        %tmp.123 = mul %tmp.121 %tmp.122;
+        %tmp.124 = sub %tmp.118 %tmp.123;
+        %tmp.125 = invoke %tmp.116 %tmp.117(%tmp.124);
+        symbol [ toNumber %tmp.126 93 6 14 ];
+        %tmp.126 = getv function %tmp.125 :toNumber;
+        %tmp.127 = invoke %tmp.125 %tmp.126();
+        lputv %b.22 %tmp.127;
+        symbol [ b %b.22 91 8 9 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 95 4 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_stop" ]
+        %pixelColor.23 = local;
+        symbol [ pixelColor %pixelColor.23 95 8 18 ];
+        %tmp.128 = lgetv %r.20;
+        symbol [ r %tmp.128 96 6 7 ];
+        %tmp.129 = 16;
+        %tmp.130 = shl %tmp.128 %tmp.129;
+        %tmp.131 = lgetv %g.21;
+        symbol [ g %tmp.131 96 18 19 ];
+        %tmp.132 = 8;
+        %tmp.133 = shl %tmp.131 %tmp.132;
+        %tmp.134 = bitor %tmp.130 %tmp.133;
+        %tmp.135 = lgetv %b.22;
+        symbol [ b %tmp.135 96 28 29 ];
+        %tmp.136 = bitor %tmp.134 %tmp.135;
+        lputv %pixelColor.23 %tmp.136;
+        symbol [ pixelColor %pixelColor.23 95 8 18 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 98 4 ]
+        %tmp.137 = lgetv %dc;
+        symbol [ dc %tmp.137 98 4 6 ];
+        symbol [ setColor %tmp.138 98 7 15 ];
+        %tmp.138 = getv function %tmp.137 :setColor;
+        %tmp.139 = lgetv %pixelColor.23;
+        symbol [ pixelColor %tmp.139 98 16 26 ];
+        %tmp.140 = 0xFFFFFF;
+        invoke %tmp.137 %tmp.138(%tmp.139, %tmp.140);
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 101 4 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_stop" ]
+        %axial.24 = local;
+        symbol [ axial %axial.24 101 8 13 ];
+        %tmp.141 = lgetv %radius;
+        symbol [ radius %tmp.141 102 5 11 ];
+        %tmp.142 = lgetv %lx.11;
+        symbol [ lx %tmp.142 102 14 16 ];
+        %tmp.143 = add %tmp.141 %tmp.142;
+        lputv %axial.24 %tmp.143;
+        symbol [ axial %axial.24 101 8 13 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 104 4 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_stop" ]
+        %sx.25 = local;
+        symbol [ sx %sx.25 104 8 10 ];
+        %tmp.144 = lgetv %axial.24;
+        symbol [ axial %tmp.144 105 5 10 ];
+        %tmp.145 = lgetv %cosA.5;
+        symbol [ cosA %tmp.145 105 13 17 ];
+        %tmp.146 = mul %tmp.144 %tmp.145;
+        %tmp.147 = lgetv %ly.16;
+        symbol [ ly %tmp.147 105 20 22 ];
+        %tmp.148 = lgetv %sinA.6;
+        symbol [ sinA %tmp.148 105 25 29 ];
+        %tmp.149 = mul %tmp.147 %tmp.148;
+        %tmp.150 = sub %tmp.146 %tmp.149;
+        lputv %sx.25 %tmp.150;
+        symbol [ sx %sx.25 104 8 10 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 107 4 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_stop" ]
+        %sy.26 = local;
+        symbol [ sy %sy.26 107 8 10 ];
+        %tmp.151 = lgetv %axial.24;
+        symbol [ axial %tmp.151 108 5 10 ];
+        %tmp.152 = lgetv %sinA.6;
+        symbol [ sinA %tmp.152 108 13 17 ];
+        %tmp.153 = mul %tmp.151 %tmp.152;
+        %tmp.154 = lgetv %ly.16;
+        symbol [ ly %tmp.154 108 20 22 ];
+        %tmp.155 = lgetv %cosA.5;
+        symbol [ cosA %tmp.155 108 25 29 ];
+        %tmp.156 = mul %tmp.154 %tmp.155;
+        %tmp.157 = add %tmp.153 %tmp.156;
+        lputv %sy.26 %tmp.157;
+        symbol [ sy %sy.26 107 8 10 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 110 4 ]
+        %tmp.158 = lgetv %dc;
+        symbol [ dc %tmp.158 110 4 6 ];
+        symbol [ drawPoint %tmp.159 110 7 16 ];
+        %tmp.159 = getv function %tmp.158 :drawPoint;
+        symbol [ Math %tmp.160 111 5 9 ];
+        %tmp.160 = getm $.Toybox.Math;
+        symbol [ round %tmp.161 111 10 15 ];
+        %tmp.161 = getv function %tmp.160 :round;
+        %tmp.162 = lgetv %cx;
+        symbol [ cx %tmp.162 111 16 18 ];
+        %tmp.163 = lgetv %sx.25;
+        symbol [ sx %tmp.163 111 21 23 ];
+        %tmp.164 = add %tmp.162 %tmp.163;
+        %tmp.165 = invoke %tmp.160 %tmp.161(%tmp.164);
+        symbol [ toNumber %tmp.166 111 25 33 ];
+        %tmp.166 = getv function %tmp.165 :toNumber;
+        %tmp.167 = invoke %tmp.165 %tmp.166();
+        symbol [ Math %tmp.168 112 5 9 ];
+        %tmp.168 = getm $.Toybox.Math;
+        symbol [ round %tmp.169 112 10 15 ];
+        %tmp.169 = getv function %tmp.168 :round;
+        %tmp.170 = lgetv %cy;
+        symbol [ cy %tmp.170 112 16 18 ];
+        %tmp.171 = lgetv %sy.26;
+        symbol [ sy %tmp.171 112 21 23 ];
+        %tmp.172 = add %tmp.170 %tmp.171;
+        %tmp.173 = invoke %tmp.168 %tmp.169(%tmp.172);
+        symbol [ toNumber %tmp.174 112 25 33 ];
+        %tmp.174 = getv function %tmp.173 :toNumber;
+        %tmp.175 = invoke %tmp.173 %tmp.174();
+        invoke %tmp.158 %tmp.159(%tmp.167, %tmp.175);
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 119 4 ]
+        %tmp.176 = lgetv %axial.24;
+        symbol [ axial %tmp.176 119 13 18 ];
+        %tmp.177 = sub 0 %tmp.176;
+        lputv %axial.24 %tmp.177;
+        symbol [ axial %axial.24 119 4 9 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 121 4 ]
+        %tmp.178 = lgetv %axial.24;
+        symbol [ axial %tmp.178 122 5 10 ];
+        %tmp.179 = lgetv %cosA.5;
+        symbol [ cosA %tmp.179 122 13 17 ];
+        %tmp.180 = mul %tmp.178 %tmp.179;
+        %tmp.181 = lgetv %ly.16;
+        symbol [ ly %tmp.181 122 20 22 ];
+        %tmp.182 = lgetv %sinA.6;
+        symbol [ sinA %tmp.182 122 25 29 ];
+        %tmp.183 = mul %tmp.181 %tmp.182;
+        %tmp.184 = sub %tmp.180 %tmp.183;
+        lputv %sx.25 %tmp.184;
+        symbol [ sx %sx.25 121 4 6 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 124 4 ]
+        %tmp.185 = lgetv %axial.24;
+        symbol [ axial %tmp.185 125 5 10 ];
+        %tmp.186 = lgetv %sinA.6;
+        symbol [ sinA %tmp.186 125 13 17 ];
+        %tmp.187 = mul %tmp.185 %tmp.186;
+        %tmp.188 = lgetv %ly.16;
+        symbol [ ly %tmp.188 125 20 22 ];
+        %tmp.189 = lgetv %cosA.5;
+        symbol [ cosA %tmp.189 125 25 29 ];
+        %tmp.190 = mul %tmp.188 %tmp.189;
+        %tmp.191 = add %tmp.187 %tmp.190;
+        lputv %sy.26 %tmp.191;
+        symbol [ sy %sy.26 124 4 6 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 127 4 ]
+        %tmp.192 = lgetv %dc;
+        symbol [ dc %tmp.192 127 4 6 ];
+        symbol [ drawPoint %tmp.193 127 7 16 ];
+        %tmp.193 = getv function %tmp.192 :drawPoint;
+        symbol [ Math %tmp.194 128 5 9 ];
+        %tmp.194 = getm $.Toybox.Math;
+        symbol [ round %tmp.195 128 10 15 ];
+        %tmp.195 = getv function %tmp.194 :round;
+        %tmp.196 = lgetv %cx;
+        symbol [ cx %tmp.196 128 16 18 ];
+        %tmp.197 = lgetv %sx.25;
+        symbol [ sx %tmp.197 128 21 23 ];
+        %tmp.198 = add %tmp.196 %tmp.197;
+        %tmp.199 = invoke %tmp.194 %tmp.195(%tmp.198);
+        symbol [ toNumber %tmp.200 128 25 33 ];
+        %tmp.200 = getv function %tmp.199 :toNumber;
+        %tmp.201 = invoke %tmp.199 %tmp.200();
+        symbol [ Math %tmp.202 129 5 9 ];
+        %tmp.202 = getm $.Toybox.Math;
+        symbol [ round %tmp.203 129 10 15 ];
+        %tmp.203 = getv function %tmp.202 :round;
+        %tmp.204 = lgetv %cy;
+        symbol [ cy %tmp.204 129 16 18 ];
+        %tmp.205 = lgetv %sy.26;
+        symbol [ sy %tmp.205 129 21 23 ];
+        %tmp.206 = add %tmp.204 %tmp.205;
+        %tmp.207 = invoke %tmp.202 %tmp.203(%tmp.206);
+        symbol [ toNumber %tmp.208 129 25 33 ];
+        %tmp.208 = getv function %tmp.207 :toNumber;
+        %tmp.209 = invoke %tmp.207 %tmp.208();
+        invoke %tmp.192 %tmp.193(%tmp.201, %tmp.209);
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_56_15_131_3_stop:
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_54_3_131_3_for_incr:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 56 ]
+        %tmp.210 = lgetv %ly.16;
+        symbol [ ly %tmp.210 56 6 8 ];
+        %tmp.211 = 1;
+        %tmp.212 = add %tmp.210 %tmp.211;
+        lputv %ly.16 %tmp.212;
+        symbol [ ly %ly.16 56 6 8 ];
+        goto @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_54_3_131_3_for_test;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_54_3_131_3_for_end:
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_33_14_132_2_stop:
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_31_2_132_2_for_incr:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 33 ]
+        %tmp.213 = lgetv %lx.11;
+        symbol [ lx %tmp.213 33 5 7 ];
+        %tmp.214 = 1;
+        %tmp.215 = add %tmp.213 %tmp.214;
+        lputv %lx.11 %tmp.215;
+        symbol [ lx %lx.11 33 5 7 ];
+        goto @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_31_2_132_2_for_test;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_31_2_132_2_for_end:
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_14_3_133_1_stop:
+    }
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc"; @line = 135; @symbol_functiondef = [draw,135,10,14]; @symbol_param<0> = [dc,135,15,17]; @symbol_param<1> = [geometry,135,19,27]; @symbol_param<2> = [hours,135,29,34]; @symbol_param<3> = [minutes,135,36,43]; ]
+    function draw(dc, geometry, hours, minutes) {
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_start:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 136 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_stop" ]
+        %minuteAngle.1 = local;
+        symbol [ minuteAngle %minuteAngle.1 136 6 17 ];
+        %tmp.1 = lgetv %minutes;
+        symbol [ minutes %tmp.1 137 4 11 ];
+        symbol [ Math %tmp.2 137 14 18 ];
+        %tmp.2 = getm $.Toybox.Math;
+        symbol [ PI %tmp.3 137 19 21 ];
+        %tmp.3 = getv %tmp.2 :PI;
+        %tmp.4 = mul %tmp.1 %tmp.3;
+        %tmp.5 = 2.0;
+        %tmp.6 = mul %tmp.4 %tmp.5;
+        %tmp.7 = 60.0;
+        %tmp.8 = div %tmp.6 %tmp.7;
+        symbol [ Math %tmp.9 138 5 9 ];
+        %tmp.9 = getm $.Toybox.Math;
+        symbol [ PI %tmp.10 138 10 12 ];
+        %tmp.10 = getv %tmp.9 :PI;
+        %tmp.11 = 2.0;
+        %tmp.12 = div %tmp.10 %tmp.11;
+        %tmp.13 = sub %tmp.8 %tmp.12;
+        lputv %minuteAngle.1 %tmp.13;
+        symbol [ minuteAngle %minuteAngle.1 136 6 17 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 140 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_stop" ]
+        %hourAngle.2 = local;
+        symbol [ hourAngle %hourAngle.2 140 6 15 ];
+        %tmp.14 = lgetv %hours;
+        symbol [ hours %tmp.14 141 6 11 ];
+        %tmp.15 = 12;
+        %tmp.16 = mod %tmp.14 %tmp.15;
+        %tmp.17 = lgetv %minutes;
+        symbol [ minutes %tmp.17 141 20 27 ];
+        %tmp.18 = 60.0;
+        %tmp.19 = div %tmp.17 %tmp.18;
+        %tmp.20 = add %tmp.16 %tmp.19;
+        symbol [ Math %tmp.21 142 5 9 ];
+        %tmp.21 = getm $.Toybox.Math;
+        symbol [ PI %tmp.22 142 10 12 ];
+        %tmp.22 = getv %tmp.21 :PI;
+        %tmp.23 = mul %tmp.20 %tmp.22;
+        %tmp.24 = 2.0;
+        %tmp.25 = mul %tmp.23 %tmp.24;
+        %tmp.26 = 12.0;
+        %tmp.27 = div %tmp.25 %tmp.26;
+        symbol [ Math %tmp.28 143 5 9 ];
+        %tmp.28 = getm $.Toybox.Math;
+        symbol [ PI %tmp.29 143 10 12 ];
+        %tmp.29 = getv %tmp.28 :PI;
+        %tmp.30 = 2.0;
+        %tmp.31 = div %tmp.29 %tmp.30;
+        %tmp.32 = sub %tmp.27 %tmp.31;
+        lputv %hourAngle.2 %tmp.32;
+        symbol [ hourAngle %hourAngle.2 140 6 15 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 145 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_stop" ]
+        %tickRadius.3 = local;
+        symbol [ tickRadius %tickRadius.3 145 6 16 ];
+        %tmp.33 = lgetv %geometry;
+        symbol [ geometry %tmp.33 145 19 27 ];
+        symbol [ tickCenterRadius %tmp.34 145 28 44 ];
+        %tmp.34 = getv %tmp.33 :tickCenterRadius;
+        %tmp.35 = 2;
+        %tmp.36 = sub %tmp.34 %tmp.35;
+        lputv %tickRadius.3 %tmp.36;
+        symbol [ tickRadius %tickRadius.3 145 6 16 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 153 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_stop" ]
+        %hourGravityWell.4 = local;
+        symbol [ hourGravityWell %hourGravityWell.4 153 6 21 ];
+        %tmp.37 = lgetv %tickRadius.3;
+        symbol [ tickRadius %tmp.37 154 5 15 ];
+        symbol [ _hourRadius %tmp.39 154 18 29 ];
+        %tmp.39 = getv ? :_hourRadius;
+        %tmp.40 = sub %tmp.37 %tmp.39;
+        symbol [ _tickClearance %tmp.42 154 32 46 ];
+        %tmp.42 = getv ? :_tickClearance;
+        %tmp.43 = 5;
+        %tmp.44 = mul %tmp.42 %tmp.43;
+        %tmp.45 = 2;
+        %tmp.46 = div %tmp.44 %tmp.45;
+        %tmp.47 = sub %tmp.40 %tmp.46;
+        symbol [ _minuteRadius %tmp.49 154 57 70 ];
+        %tmp.49 = getv ? :_minuteRadius;
+        %tmp.50 = sub %tmp.47 %tmp.49;
+        lputv %hourGravityWell.4 %tmp.50;
+        symbol [ hourGravityWell %hourGravityWell.4 153 6 21 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 156 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_stop" ]
+        %hourX.5 = local;
+        symbol [ hourX %hourX.5 156 6 11 ];
+        %tmp.51 = lgetv %geometry;
+        symbol [ geometry %tmp.51 156 14 22 ];
+        symbol [ centerX %tmp.52 156 23 30 ];
+        %tmp.52 = getv %tmp.51 :centerX;
+        symbol [ Math %tmp.53 157 5 9 ];
+        %tmp.53 = getm $.Toybox.Math;
+        symbol [ round %tmp.54 157 10 15 ];
+        %tmp.54 = getv function %tmp.53 :round;
+        symbol [ Math %tmp.55 157 16 20 ];
+        %tmp.55 = getm $.Toybox.Math;
+        symbol [ cos %tmp.56 157 21 24 ];
+        %tmp.56 = getv function %tmp.55 :cos;
+        %tmp.57 = lgetv %hourAngle.2;
+        symbol [ hourAngle %tmp.57 157 25 34 ];
+        %tmp.58 = invoke %tmp.55 %tmp.56(%tmp.57);
+        %tmp.59 = lgetv %hourGravityWell.4;
+        symbol [ hourGravityWell %tmp.59 157 38 53 ];
+        %tmp.60 = mul %tmp.58 %tmp.59;
+        %tmp.61 = invoke %tmp.53 %tmp.54(%tmp.60);
+        %tmp.62 = add %tmp.52 %tmp.61;
+        lputv %hourX.5 %tmp.62;
+        symbol [ hourX %hourX.5 156 6 11 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 159 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_stop" ]
+        %hourY.6 = local;
+        symbol [ hourY %hourY.6 159 6 11 ];
+        %tmp.63 = lgetv %geometry;
+        symbol [ geometry %tmp.63 159 14 22 ];
+        symbol [ centerY %tmp.64 159 23 30 ];
+        %tmp.64 = getv %tmp.63 :centerY;
+        symbol [ Math %tmp.65 160 5 9 ];
+        %tmp.65 = getm $.Toybox.Math;
+        symbol [ round %tmp.66 160 10 15 ];
+        %tmp.66 = getv function %tmp.65 :round;
+        symbol [ Math %tmp.67 160 16 20 ];
+        %tmp.67 = getm $.Toybox.Math;
+        symbol [ sin %tmp.68 160 21 24 ];
+        %tmp.68 = getv function %tmp.67 :sin;
+        %tmp.69 = lgetv %hourAngle.2;
+        symbol [ hourAngle %tmp.69 160 25 34 ];
+        %tmp.70 = invoke %tmp.67 %tmp.68(%tmp.69);
+        %tmp.71 = lgetv %hourGravityWell.4;
+        symbol [ hourGravityWell %tmp.71 160 38 53 ];
+        %tmp.72 = mul %tmp.70 %tmp.71;
+        %tmp.73 = invoke %tmp.65 %tmp.66(%tmp.72);
+        %tmp.74 = add %tmp.64 %tmp.73;
+        lputv %hourY.6 %tmp.74;
+        symbol [ hourY %hourY.6 159 6 11 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 170 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_stop" ]
+        %wellAngle.7 = local;
+        symbol [ wellAngle %wellAngle.7 170 6 15 ];
+        %tmp.75 = lgetv %hourAngle.2;
+        symbol [ hourAngle %tmp.75 171 3 12 ];
+        symbol [ Math %tmp.76 171 15 19 ];
+        %tmp.76 = getm $.Toybox.Math;
+        symbol [ PI %tmp.77 171 20 22 ];
+        %tmp.77 = getv %tmp.76 :PI;
+        %tmp.78 = 2.0;
+        %tmp.79 = div %tmp.77 %tmp.78;
+        %tmp.80 = add %tmp.75 %tmp.79;
+        lputv %wellAngle.7 %tmp.80;
+        symbol [ wellAngle %wellAngle.7 170 6 15 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 173 2 ]
+        %tmp.81 = self;
+        symbol [ drawGravityWell %tmp.82 173 2 17 ];
+        %tmp.82 = getv function %tmp.81 :drawGravityWell;
+        %tmp.83 = lgetv %dc;
+        symbol [ dc %tmp.83 174 3 5 ];
+        %tmp.84 = lgetv %hourX.5;
+        symbol [ hourX %tmp.84 175 3 8 ];
+        %tmp.85 = lgetv %hourY.6;
+        symbol [ hourY %tmp.85 176 3 8 ];
+        %tmp.86 = lgetv %wellAngle.7;
+        symbol [ wellAngle %tmp.86 177 3 12 ];
+        symbol [ _hourRadius %tmp.88 178 3 14 ];
+        %tmp.88 = getv ? :_hourRadius;
+        %tmp.89 = 0x000000;
+        invoke %tmp.81 %tmp.82(%tmp.83, %tmp.84, %tmp.85, %tmp.86, %tmp.88, %tmp.89);
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 183 2 ]
+        symbol [ CircleRenderer %tmp.91 183 2 16 ];
+        %tmp.91 = getv ? :CircleRenderer;
+        symbol [ drawSmoothCircle %tmp.92 183 17 33 ];
+        %tmp.92 = getv function %tmp.91 :drawSmoothCircle;
+        %tmp.93 = lgetv %dc;
+        symbol [ dc %tmp.93 184 3 5 ];
+        %tmp.94 = lgetv %hourX.5;
+        symbol [ hourX %tmp.94 185 3 8 ];
+        %tmp.95 = lgetv %hourY.6;
+        symbol [ hourY %tmp.95 186 3 8 ];
+        symbol [ _hourRadius %tmp.97 187 3 14 ];
+        %tmp.97 = getv ? :_hourRadius;
+        %tmp.98 = 0x000000;
+        invoke %tmp.91 %tmp.92(%tmp.93, %tmp.94, %tmp.95, %tmp.97, %tmp.98);
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 197 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_stop" ]
+        %minuteGravityWell.8 = local;
+        symbol [ minuteGravityWell %minuteGravityWell.8 197 6 23 ];
+        %tmp.99 = lgetv %tickRadius.3;
+        symbol [ tickRadius %tmp.99 198 3 13 ];
+        symbol [ _minuteRadius %tmp.101 198 16 29 ];
+        %tmp.101 = getv ? :_minuteRadius;
+        %tmp.102 = sub %tmp.99 %tmp.101;
+        symbol [ _tickClearance %tmp.104 198 32 46 ];
+        %tmp.104 = getv ? :_tickClearance;
+        %tmp.105 = sub %tmp.102 %tmp.104;
+        lputv %minuteGravityWell.8 %tmp.105;
+        symbol [ minuteGravityWell %minuteGravityWell.8 197 6 23 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 200 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_stop" ]
+        %minuteX.9 = local;
+        symbol [ minuteX %minuteX.9 200 6 13 ];
+        %tmp.106 = lgetv %geometry;
+        symbol [ geometry %tmp.106 200 16 24 ];
+        symbol [ centerX %tmp.107 200 25 32 ];
+        %tmp.107 = getv %tmp.106 :centerX;
+        symbol [ Math %tmp.108 201 3 7 ];
+        %tmp.108 = getm $.Toybox.Math;
+        symbol [ round %tmp.109 201 8 13 ];
+        %tmp.109 = getv function %tmp.108 :round;
+        symbol [ Math %tmp.110 201 14 18 ];
+        %tmp.110 = getm $.Toybox.Math;
+        symbol [ cos %tmp.111 201 19 22 ];
+        %tmp.111 = getv function %tmp.110 :cos;
+        %tmp.112 = lgetv %minuteAngle.1;
+        symbol [ minuteAngle %tmp.112 201 23 34 ];
+        %tmp.113 = invoke %tmp.110 %tmp.111(%tmp.112);
+        %tmp.114 = lgetv %minuteGravityWell.8;
+        symbol [ minuteGravityWell %tmp.114 201 38 55 ];
+        %tmp.115 = mul %tmp.113 %tmp.114;
+        %tmp.116 = invoke %tmp.108 %tmp.109(%tmp.115);
+        %tmp.117 = add %tmp.107 %tmp.116;
+        lputv %minuteX.9 %tmp.117;
+        symbol [ minuteX %minuteX.9 200 6 13 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 203 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_stop" ]
+        %minuteY.10 = local;
+        symbol [ minuteY %minuteY.10 203 6 13 ];
+        %tmp.118 = lgetv %geometry;
+        symbol [ geometry %tmp.118 203 16 24 ];
+        symbol [ centerY %tmp.119 203 25 32 ];
+        %tmp.119 = getv %tmp.118 :centerY;
+        symbol [ Math %tmp.120 204 3 7 ];
+        %tmp.120 = getm $.Toybox.Math;
+        symbol [ round %tmp.121 204 8 13 ];
+        %tmp.121 = getv function %tmp.120 :round;
+        symbol [ Math %tmp.122 204 14 18 ];
+        %tmp.122 = getm $.Toybox.Math;
+        symbol [ sin %tmp.123 204 19 22 ];
+        %tmp.123 = getv function %tmp.122 :sin;
+        %tmp.124 = lgetv %minuteAngle.1;
+        symbol [ minuteAngle %tmp.124 204 23 34 ];
+        %tmp.125 = invoke %tmp.122 %tmp.123(%tmp.124);
+        %tmp.126 = lgetv %minuteGravityWell.8;
+        symbol [ minuteGravityWell %tmp.126 204 38 55 ];
+        %tmp.127 = mul %tmp.125 %tmp.126;
+        %tmp.128 = invoke %tmp.120 %tmp.121(%tmp.127);
+        %tmp.129 = add %tmp.119 %tmp.128;
+        lputv %minuteY.10 %tmp.129;
+        symbol [ minuteY %minuteY.10 203 6 13 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 209 2 ]
+        symbol [ CircleRenderer %tmp.131 209 2 16 ];
+        %tmp.131 = getv ? :CircleRenderer;
+        symbol [ drawSmoothCircle %tmp.132 209 17 33 ];
+        %tmp.132 = getv function %tmp.131 :drawSmoothCircle;
+        %tmp.133 = lgetv %dc;
+        symbol [ dc %tmp.133 210 3 5 ];
+        %tmp.134 = lgetv %minuteX.9;
+        symbol [ minuteX %tmp.134 210 7 14 ];
+        %tmp.135 = lgetv %minuteY.10;
+        symbol [ minuteY %tmp.135 210 16 23 ];
+        symbol [ _minuteRadius %tmp.137 210 25 38 ];
+        %tmp.137 = getv ? :_minuteRadius;
+        %tmp.138 = 0xFF0000;
+        invoke %tmp.131 %tmp.132(%tmp.133, %tmp.134, %tmp.135, %tmp.137, %tmp.138);
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 213 2 ]
+        symbol [ CircleRenderer %tmp.140 213 2 16 ];
+        %tmp.140 = getv ? :CircleRenderer;
+        symbol [ drawSmoothAnnulus %tmp.141 213 17 34 ];
+        %tmp.141 = getv function %tmp.140 :drawSmoothAnnulus;
+        %tmp.142 = lgetv %dc;
+        symbol [ dc %tmp.142 214 3 5 ];
+        %tmp.143 = lgetv %minuteX.9;
+        symbol [ minuteX %tmp.143 214 7 14 ];
+        %tmp.144 = lgetv %minuteY.10;
+        symbol [ minuteY %tmp.144 214 16 23 ];
+        symbol [ _minuteRadius %tmp.146 215 3 16 ];
+        %tmp.146 = getv ? :_minuteRadius;
+        %tmp.147 = 2;
+        %tmp.148 = 1;
+        %tmp.149 = 0xFF0000;
+        invoke %tmp.140 %tmp.141(%tmp.142, %tmp.143, %tmp.144, %tmp.146, %tmp.147, %tmp.148, %tmp.149);
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_135_45_221_1_stop:
+    }
+    [ @file = "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc"; @line = 223; @symbol_functiondef = [drawRing,223,10,18]; @symbol_param<0> = [dc,223,19,21]; @symbol_param<1> = [geometry,223,23,31]; @symbol_param<2> = [angle,223,33,38]; @symbol_param<3> = [gravitywellRadius,224,7,24]; @symbol_param<4> = [ringRadius,224,26,36]; @symbol_param<5> = [width,224,38,43]; ]
+    function drawRing(dc, geometry, angle, gravitywellRadius, ringRadius, width) {
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_224_45_240_1_start:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 225 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_224_45_240_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_224_45_240_1_stop" ]
+        %x.1 = local;
+        symbol [ x %x.1 225 6 7 ];
+        %tmp.1 = lgetv %geometry;
+        symbol [ geometry %tmp.1 225 10 18 ];
+        symbol [ centerX %tmp.2 225 19 26 ];
+        %tmp.2 = getv %tmp.1 :centerX;
+        symbol [ Math %tmp.3 226 3 7 ];
+        %tmp.3 = getm $.Toybox.Math;
+        symbol [ round %tmp.4 226 8 13 ];
+        %tmp.4 = getv function %tmp.3 :round;
+        symbol [ Math %tmp.5 226 14 18 ];
+        %tmp.5 = getm $.Toybox.Math;
+        symbol [ cos %tmp.6 226 19 22 ];
+        %tmp.6 = getv function %tmp.5 :cos;
+        %tmp.7 = lgetv %angle;
+        symbol [ angle %tmp.7 226 23 28 ];
+        %tmp.8 = invoke %tmp.5 %tmp.6(%tmp.7);
+        %tmp.9 = lgetv %gravitywellRadius;
+        symbol [ gravitywellRadius %tmp.9 226 32 49 ];
+        %tmp.10 = mul %tmp.8 %tmp.9;
+        %tmp.11 = invoke %tmp.3 %tmp.4(%tmp.10);
+        %tmp.12 = add %tmp.2 %tmp.11;
+        lputv %x.1 %tmp.12;
+        symbol [ x %x.1 225 6 7 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 228 2 ]
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_224_45_240_1_start" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_224_45_240_1_stop" ]
+        %y.2 = local;
+        symbol [ y %y.2 228 6 7 ];
+        %tmp.13 = lgetv %geometry;
+        symbol [ geometry %tmp.13 228 10 18 ];
+        symbol [ centerY %tmp.14 228 19 26 ];
+        %tmp.14 = getv %tmp.13 :centerY;
+        symbol [ Math %tmp.15 229 3 7 ];
+        %tmp.15 = getm $.Toybox.Math;
+        symbol [ round %tmp.16 229 8 13 ];
+        %tmp.16 = getv function %tmp.15 :round;
+        symbol [ Math %tmp.17 229 14 18 ];
+        %tmp.17 = getm $.Toybox.Math;
+        symbol [ sin %tmp.18 229 19 22 ];
+        %tmp.18 = getv function %tmp.17 :sin;
+        %tmp.19 = lgetv %angle;
+        symbol [ angle %tmp.19 229 23 28 ];
+        %tmp.20 = invoke %tmp.17 %tmp.18(%tmp.19);
+        %tmp.21 = lgetv %gravitywellRadius;
+        symbol [ gravitywellRadius %tmp.21 229 32 49 ];
+        %tmp.22 = mul %tmp.20 %tmp.21;
+        %tmp.23 = invoke %tmp.15 %tmp.16(%tmp.22);
+        %tmp.24 = add %tmp.14 %tmp.23;
+        lputv %y.2 %tmp.24;
+        symbol [ y %y.2 228 6 7 ];
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 231 2 ]
+        %tmp.25 = lgetv %dc;
+        symbol [ dc %tmp.25 231 2 4 ];
+        symbol [ setColor %tmp.26 231 5 13 ];
+        %tmp.26 = getv function %tmp.25 :setColor;
+        symbol [ Graphics %tmp.27 232 3 11 ];
+        %tmp.27 = getm $.Toybox.Graphics;
+        symbol [ COLOR_BLACK %tmp.28 232 12 23 ];
+        %tmp.28 = getv %tmp.27 :COLOR_BLACK;
+        symbol [ Theme %tmp.30 233 3 8 ];
+        %tmp.30 = getv ? :Theme;
+        symbol [ BACKGROUND_COLOR %tmp.31 233 9 25 ];
+        %tmp.31 = getv %tmp.30 :BACKGROUND_COLOR;
+        invoke %tmp.25 %tmp.26(%tmp.28, %tmp.31);
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 237 2 ]
+        for @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_237_2_239_2_for_test @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_237_2_239_2_for_incr @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_237_2_239_2_for_end;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_237_2_239_2_for_init:
+        [ "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_237_2_239_2_for_begin" "_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_237_2_239_2_for_end" ]
+        %i.3 = local;
+        symbol [ i %i.3 237 11 12 ];
+        %tmp.32 = 0;
+        lputv %i.3 %tmp.32;
+        symbol [ i %i.3 237 11 12 ];
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_237_2_239_2_for_test:
+        %tmp.33 = lgetv %i.3;
+        symbol [ i %tmp.33 237 18 19 ];
+        %tmp.34 = lgetv %width;
+        symbol [ width %tmp.34 237 22 27 ];
+        %tmp.35 = lt %tmp.33 %tmp.34;
+        bf %tmp.35 @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_237_2_239_2_for_end;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_237_2_239_2_for_begin:
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_237_37_239_2_start:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 238 3 ]
+        %tmp.36 = lgetv %dc;
+        symbol [ dc %tmp.36 238 3 5 ];
+        symbol [ drawCircle %tmp.37 238 6 16 ];
+        %tmp.37 = getv function %tmp.36 :drawCircle;
+        %tmp.38 = lgetv %x.1;
+        symbol [ x %tmp.38 238 17 18 ];
+        %tmp.39 = lgetv %y.2;
+        symbol [ y %tmp.39 238 20 21 ];
+        %tmp.40 = lgetv %ringRadius;
+        symbol [ ringRadius %tmp.40 238 23 33 ];
+        %tmp.41 = lgetv %i.3;
+        symbol [ i %tmp.41 238 36 37 ];
+        %tmp.42 = sub %tmp.40 %tmp.41;
+        invoke %tmp.36 %tmp.37(%tmp.38, %tmp.39, %tmp.42);
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_237_37_239_2_stop:
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_237_2_239_2_for_incr:
+[ "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc" 237 ]
+        %tmp.43 = lgetv %i.3;
+        symbol [ i %tmp.43 237 29 30 ];
+        %tmp.44 = 1;
+        %tmp.45 = add %tmp.43 %tmp.44;
+        lputv %i.3 %tmp.45;
+        symbol [ i %i.3 237 29 30 ];
+        goto @_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_237_2_239_2_for_test;
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_237_2_239_2_for_end:
+_home_shum_stow_garmin_gravitywell_source_HandRenderer_mc_224_45_240_1_stop:
+    }
+}
+[ @file = "/home/shum/stow/garmin/gravitywell/source/HandRenderer.mc"; @line = 1; ]
+<init> {
+}

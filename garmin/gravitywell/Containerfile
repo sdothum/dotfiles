@@ -1,0 +1,24 @@
+FROM ubuntu:22.04
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        libwebkit2gtk-4.0-37 \
+        libjavascriptcoregtk-4.0-18 \
+        libsoup2.4-1 \
+        libusb-1.0-0 \
+        libgtk-3-0 \
+        libgl1 \
+        libglu1-mesa \
+        libx11-6 \
+        libxext6 \
+        libxrender1 \
+        libxi6 \
+        libxtst6 \
+        libnss3 \
+        libasound2 \
+        libsm6 \
+        mesa-utils \
+        strace \
+        fonts-roboto \
+        ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
