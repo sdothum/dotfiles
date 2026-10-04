@@ -156,8 +156,8 @@ active_window() {
 			if [ "$groupno" != "$snapshot_group" ] ;then
 				groupno=$snapshot_group
 				groupname="----"
-				dunstctl close-all
-				notify Group "$groupno $groupname"
+				# dunstctl close-all
+				# notify Group "$groupno $groupname"
 			fi
 		elif [ "$groupno" != "$snapshot_group" ] &&
 				candidate_name=$($ZEPHYR group name "$snapshot_group" 2>/dev/null) && [ -n "$candidate_name" ] ;then

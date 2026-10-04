@@ -162,7 +162,7 @@ super + ctrl + shift + {1,2,3,4,5}
 	rm -f $WME/layout/fold:class:$C ;\
 	[ $N -le 5 ] && zephyr layout fold {1,2,3,4,5} $C || zephyr layout fold 4 --rows 3 $C
 
-super + shift + 0
+{alt + shift + space,super + shift + 0}
 	C=$(zephyr window classname) ;\
 	[ -e $WME/layout/fold:class:$C ] && exec zephyr layout unfold $C
 
@@ -307,8 +307,8 @@ ctrl + BackSpace
 super + {_,ctrl} + a
 	conky clock {_,toggle}
 
-super + shift + d ; {super + shift + d,d,D,P,p}
-	{toggle wallpaper,toggle wallpaper,toggle background,toggle panel,invert_panel}
+super + shift + d ; {super + shift + d,d,D,p,P}
+	{toggle wallpaper,toggle wallpaper,toggle background,invert_panel,toggle panel}
 
 # Applications
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -327,8 +327,11 @@ super + shift + a
 super + {_,shift} + o
 	menu {scripts,projects}
 
-super + shift + {p,v}
-	menu {passwords,media}
+super + shift + p ; {p,P}
+	{menu passwords,eval $KEYBOARD}
+
+super + shift + v
+	menu media
 
 # ........................................................................ terms
 
@@ -396,8 +399,8 @@ alt + ctrl + super + j
 
 # NOTE: {super + b} for sloppy trigger :-)
 
-super + b ; {super + b,b,c,f}
-	{qutebrowser,qutebrowser,chromium,firefox}
+super + b ; {super + b,b,c,f,y}
+	{qutebrowser,qutebrowser,chromium,firefox,qutebrowser https://www.youtube.com/}
 
 super + ctrl + b
 	qutebrowser closeall
