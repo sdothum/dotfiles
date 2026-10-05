@@ -73,4 +73,30 @@ sudo rm /etc/dinit.d
 sudo ln -s ${CHIMERA#*dinit} /etc/dinit.d
 sudo cp -v /bin/dinit /bin/dinit.chimera
 
+# handle rare early-fs-fstab btrfs availability SEE: /etc/dinit.d/early-fs-fstab.target
+echo "#!/bin/sh
+#
+# NOTE: Trap rare btrfs subvol availability/timing issue with simple retry
+
+mount_fstab()
+{
+	mount -a -t "nosysfs,nonfs,nonfs4,nosmbfs,nocifs" -O no_netdev
+}
+
+mount_fstab && exit 0
+
+echo "early-fs-fstab: mount failed; retrying in 1 second" >&2
+sleep 1
+mount_fstab && exit 0
+
+echo "early-fs-fstab: mount failed again; retrying in 2 seconds" >&2
+sleep 2
+
+exec mount -a -t "nosysfs,nonfs,nonfs4,nosmbfs,nocifs" -O no_netdev
+
+# kak: filetype=sh
+" >/usr/local/libexec/fs-fstab-retry
+
+sudo chmod 755 /usr/local/libexec/fs-fstab-retry
+
 # kak: filetype=sh
