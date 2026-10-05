@@ -1,0 +1,7 @@
+type = scripted
+command = /usr/local/libexec/fs-fstab-retry
+depends-on: early-fs-pre.target
+depends-ms: early-fs-fsck
+waits-for: early-fs-zfs
+waits-for: early-fs-btrfs
+waits-for: early-root-rw.target
