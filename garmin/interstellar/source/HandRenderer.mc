@@ -14,7 +14,7 @@ class HandRenderer {
 	private var _secondaryLagMinutes = 18;
 
 	private var _minuteSecondaryRadius = 4;
-	private var _minuteSecondaryGap = 36;
+	private var _minuteSecondaryGap = 24;
 	private var _minuteSecondaryLeadMinutes = 24;
 
 	private function drawGravityWell(
