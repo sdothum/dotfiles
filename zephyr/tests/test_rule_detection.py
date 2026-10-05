@@ -256,6 +256,11 @@ def run():
                 check_native_rule("audacious", "audacious", 6)
                 check_native_rule("gFTP", "gftp")
                 check_native_rule("pcmanfm", "pcmanfm", 5)
+                check_native_rule("term", "term", 3)
+                term_fold_state = Path(env["WME"]) / "layout" / "fold:class:term"
+                assert not term_fold_state.exists(), (
+                    "rule-driven terminal folding created interactive unfold state"
+                )
 
                 # The email rule's final operation must cycle the stack
                 # anchored at its own XID, even though an unrelated client

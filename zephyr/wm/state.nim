@@ -307,15 +307,26 @@ proc acquireExplodeLock*(root: string): string =
 proc releaseExplodeLock*(lock: string) =
   if dirExists(lock): removeDir(lock)
 
-proc beginExplodeStateStaging(root: string): ExplodeTransaction =
+proc beginExplodeStateLock(root: string): ExplodeTransaction =
   result.root = root
   result.stage = root & ".stage"
   result.backup = root & ".backup"
   result.marker = explodeTxnMarkerPath(root)
+  # acquireExplodeLock performs recovery before taking the lock.  The returned
+  # root is therefore the last committed generation, even if recovery had to
+  # publish it from a prepared transaction.
   result.lock = acquireExplodeLock(root)
-  if dirExists(result.stage): removeDir(result.stage)
-  if dirExists(result.backup): removeDir(result.backup)
-  createDir(result.stage)
+
+proc prepareExplodeStateStaging(transaction: var ExplodeTransaction) =
+  # Do not call this until preserveOriginal has read the recovered root.  It
+  # removes abandoned sibling generations while the operation lock is held.
+  if dirExists(transaction.stage): removeDir(transaction.stage)
+  if dirExists(transaction.backup): removeDir(transaction.backup)
+  createDir(transaction.stage)
+
+proc beginExplodeStateStaging(root: string): ExplodeTransaction =
+  result = beginExplodeStateLock(root)
+  prepareExplodeStateStaging(result)
 
 proc beginExplodeState*(root: string, records: seq[ExplodeStateRecord]): ExplodeTransaction =
   result = beginExplodeStateStaging(root)
@@ -327,21 +338,50 @@ proc beginExplodeState*(root: string, records: seq[ExplodeStateRecord]): Explode
 proc loadStateEntries*(root: string): seq[IdentityExplodeStateRecord]
 
 proc beginExplodeStateIdentity*(root: string,
-    records: seq[IdentityExplodeStateRecord], preserveOriginal = false): ExplodeTransaction =
+    records: seq[IdentityExplodeStateRecord],
+    preserveOriginal = false): ExplodeTransaction =
   for record in records:
     query.validateClientToken(record.token)
-  result = beginExplodeStateStaging(root)
+
+  # Take the lock (which first recovers an interrupted publication), then read
+  # the canonical committed generation before touching stage/backup siblings.
+  result = beginExplodeStateLock(root)
   var saved = records
+
   if preserveOriginal:
-    let existing = loadStateEntries(root) # Read while holding the operation lock.
-    if existing.len > 0:
-      saved = existing
+    var existing: seq[IdentityExplodeStateRecord]
+    try:
+      existing = loadStateEntries(root) # Read while holding the operation lock.
+    except CatchableError:
+      releaseExplodeLock(result.lock)
+      raise
+    saved = existing
+    for record in records:
+      var found = false
+      for original in existing:
+        if original.winid == record.winid and original.token == record.token:
+          found = true
+          break
+      if not found:
+        saved.add(record)
+
+  prepareExplodeStateStaging(result)
+
   for position, record in saved:
-    writeGeometry(record.geometry,
+    writeGeometry(
+      record.geometry,
       result.stage / align($(position + 1), 3, '0') & "=" & record.winid,
-      some(record.token))
-  writeRestoreMarker(result.marker, "PREPARED", result.stage, result.backup,
-    getCurrentProcessId())
+      some(record.token)
+    )
+
+  writeRestoreMarker(
+    result.marker,
+    "PREPARED",
+    result.stage,
+    result.backup,
+    getCurrentProcessId()
+  )
+
   result.active = true
 
 proc abortExplodeState*(transaction: var ExplodeTransaction) =

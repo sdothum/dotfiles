@@ -298,7 +298,7 @@ suite "restore-all history transaction recovery":
     commitExplodeState(replacement)
     check loadStateEntries(explodeRoot) == @[("0x00000002", tokenB, newC)]
 
-  test "preserving identity stage uses original generation on refold":
+  test "preserving identity stage keeps originals and adds new identities":
     clearExplodeState()
     let original = @[("0x00000001", tokenA, oldA)]
     var first = beginExplodeStateIdentity(explodeRoot, original,
@@ -306,16 +306,41 @@ suite "restore-all history transaction recovery":
     check hasGeometryForToken("001=0x00000001", tokenA, explodeStage)
     commitExplodeState(first)
 
-    # A refold candidate includes a newly appeared client. The committed
-    # original set remains authoritative and is reconstructed into the stage.
+    # A refold candidate includes a newly appeared client. Preserve the first
+    # geometry for A and capture B's geometry at its first fold participation.
     var refold = beginExplodeStateIdentity(explodeRoot,
       @[("0x00000001", tokenA, newA), ("0x00000002", tokenB, newC)],
       preserveOriginal = true)
-    check loadStateEntries(explodeStage) == original
-    check not hasGeometryForToken("002=0x00000002", tokenB, explodeStage)
+    let cumulative = original & @[("0x00000002", tokenB, newC)]
+    check loadStateEntries(explodeStage) == cumulative
+    check hasGeometryForToken("002=0x00000002", tokenB, explodeStage)
     check readFile(explodeMarker).splitLines()[0] == "PREPARED"
     commitExplodeState(refold)
-    check loadStateEntries(explodeRoot) == original
+    check loadStateEntries(explodeRoot) == cumulative
+
+  test "preservation reads the recovered committed generation before staging":
+    clearExplodeState()
+    createDir(explodeStage)
+    makeIdentityGeometry(explodeStage, "001=0x00000001", tokenA, oldA)
+    writeFile(explodeMarker, "PUBLISHING\n" & explodeStage & "\n" &
+      explodeBackup & "\n0\n")
+    createDir(explodeLock)
+    writeFile(explodeLock / "pid", "0\n")
+
+    let candidate = @[
+      ("0x00000001", tokenA, newA),
+      ("0x00000002", tokenB, newC)
+    ]
+    var transaction = beginExplodeStateIdentity(explodeRoot, candidate,
+      preserveOriginal = true)
+    let expected: seq[IdentityExplodeStateRecord] = @[
+      ("0x00000001", tokenA, oldA),
+      ("0x00000002", tokenB, newC)
+    ]
+    check loadStateEntries(explodeRoot) == @[ ("0x00000001", tokenA, oldA) ]
+    check loadStateEntries(explodeStage) == expected
+    commitExplodeState(transaction)
+    check loadStateEntries(explodeRoot) == expected
 
   test "preserve mode falls back to supplied identities for empty saved entries":
     clearExplodeState()

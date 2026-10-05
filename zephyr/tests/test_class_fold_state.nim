@@ -26,7 +26,7 @@ suite "independent class fold transactions":
       preserveOriginal = true)
     markExplodeGeometryApplied(refold)
     commitExplodeOperation(refold)
-    check loadStateEntries(a) == records
+    check loadStateEntries(a) == records & @[("0x00000002", token, changed)]
     check loadGeometryForToken("0x00000002", token) == changed
     let newer: seq[IdentityExplodeStateRecord] = @[("0x00000001", token, changed)]
     var operation = beginExplodeOperationIdentity(a, newer, @[("0x00000001", token, changed)])
@@ -45,3 +45,28 @@ suite "independent class fold transactions":
     check loadGeometryForToken("0x00000001", token) == changed
     recoverExplodeOperation(a)
     check loadStateEntries(a) == newer
+
+  test "preservation treats an XID reused with another token as a new identity":
+    let base = getTempDir() / ("zephyr-class-fold-xid-reuse-" & $getCurrentProcessId())
+    let foldRoot = base / "wme" / "layout" / "fold:class:Term"
+    let winfo = base / "winfo"
+    createDir(winfo)
+    putEnv("WINFO", winfo)
+    putEnv("WME", base / "wme")
+    defer: removeDir(base)
+    let oldToken = parseClientToken("0123456789abcdef0123456789abcdef:0000000000000001")
+    let newToken = parseClientToken("0123456789abcdef0123456789abcdef:0000000000000002")
+    let oldGeometry = Geometry(x: 10, y: 20, width: 200, height: 100)
+    let newGeometry = Geometry(x: 30, y: 40, width: 300, height: 150)
+    var initial = beginExplodeStateIdentity(foldRoot,
+      @[("0x00000001", oldToken, oldGeometry)], preserveOriginal = true)
+    commitExplodeState(initial)
+
+    var reused = beginExplodeStateIdentity(foldRoot,
+      @[("0x00000001", newToken, newGeometry)], preserveOriginal = true)
+    check loadStateEntries(foldRoot & ".stage") == @[
+      ("0x00000001", oldToken, oldGeometry),
+      ("0x00000001", newToken, newGeometry)
+    ]
+    commitExplodeState(reused)
+    check loadStateEntries(foldRoot).len == 2

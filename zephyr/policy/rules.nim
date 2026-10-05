@@ -148,10 +148,10 @@ proc term(winid: string, classname: string = ClassTerm) =
   case liveCount(classname)
   of 0..2:
     layout.fold("3", "--spread", classname)
-    setGeometry()
+    # setGeometry()
   else:
     layout.fold("3", "--rows", "2", "--spread", classname)
-    setGeometry()
+    # setGeometry()
 
 proc matchesInstance*(client: policyTypes.RuleClient, selector: string): bool =
   ## Exact WM_CLASS instance comparison for policies that explicitly use it.

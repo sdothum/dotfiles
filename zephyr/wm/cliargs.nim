@@ -107,6 +107,7 @@ type
     ArgName,
     ArgPosition,
     ArgPreset,
+    ArgRecord,
     ArgRotate,
     ArgRow,
     ArgRowName,
@@ -138,6 +139,7 @@ type
     name*: string
     position*: Option[int]
     preset*: string
+    record*: bool
     rotate*: bool
     row*: Option[int]
     rowName*: string
@@ -175,6 +177,7 @@ proc parseArguments*(
   result.name = ""
   result.position = none(int)
   result.preset = ""
+  result.record = false
   result.rotate = false
   result.row = none(int)
   result.rowName = ""
@@ -359,6 +362,9 @@ proc parseArguments*(
 
     of "--spread":
       result.spread = parseSwitch(result.spread, ArgSpread, allowed)
+
+    of "--record":
+      result.record = parseSwitch(result.record, ArgRecord, allowed)
 
     of "--teleport":
       result.teleport = parseSwitch(result.teleport, ArgTeleport, allowed)

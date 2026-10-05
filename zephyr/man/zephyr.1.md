@@ -104,10 +104,13 @@ commands; they are not zephyr public actions.
 * `layout fold` <args>: Fold matching windows into a grid, then raise participants
   in placement order within their effective stacking bands while preserving focus.
   Repeating an unchanged fold still raises the selected set. Group explode shares
-  this stacking behavior without sharing fold transaction ownership.
-* `layout unfold` <class>: Restore the identities and geometries saved by the first
-  class-targeted fold under `$WME/layout/fold:class:<class>`, then consume that
-  state. Re-folds preserve the first saved population and original geometries.
+  this stacking behavior without sharing fold transaction ownership. Add
+  `--record` to a class-targeted fold to create or extend its persistent unfold
+  checkpoint; without it, fold only arranges windows.
+* `layout unfold` <class>: Restore the identities and geometries saved by an
+  explicitly recorded class fold under `$WME/layout/fold:class:<class>`, then
+  consume that state. Re-folds preserve the first saved geometry per client
+  identity and add newly encountered identities.
   New clients, destroyed clients, and reused XIDs with different tokens are not
   restored. Current focus is preserved. Restoration changes geometry, not saved
   stacking order or persistent layers. Class names with path separators are

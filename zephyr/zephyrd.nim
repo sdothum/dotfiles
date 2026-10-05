@@ -15,6 +15,7 @@ import wm/panel_notification
 import wm/daemon_snapshot
 import wm/x11_snapshot
 import wm/daemon_ipc
+
 import policy/rules
 import policy/types as policyTypes
 

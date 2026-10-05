@@ -18,6 +18,8 @@ import window_query as query
 import group as groups
 import group_id
 
+import ../policy/layouts
+
 #
 # Helpers
 #
@@ -85,18 +87,8 @@ proc grid(
     if a.column.isSome:
       a.column.get
     else:
-      let columnOrder =
-        case columns
-        of 1: @[1]
-        of 2: @[2, 1]
-        of 3: @[2, 3, 1]
-        of 4: @[3, 4, 2, 1]
-        of 5: @[3, 4, 5, 2, 1]
-        else: toSeq(1 .. columns)
-      if rows == 1:
-        columnOrder[(position - 1) mod columns]
-      else:
-        columnOrder[((position - 1) div rows) mod columns]
+      layouts.columnOrder(columns, rows, position)
+
   let row = (position - 1) mod rows + 1
   action(columns, rows, column, row, a.winid,
     screenGeometry, sourceGeometry)
@@ -127,19 +119,8 @@ proc explodeDestination(
   columns, rows, position: int,
   s: ScreenGeometry
 ): Geometry =
-  let columnOrder =
-    case columns
-    of 1: @[1]
-    of 2: @[2, 1]
-    of 3: @[2, 3, 1]
-    of 4: @[3, 4, 2, 1]
-    of 5: @[3, 4, 5, 2, 1]
-    else: toSeq(1 .. columns)
-  let column =
-    if rows == 1:
-      columnOrder[(position - 1) mod columns]
-    else:
-      columnOrder[((position - 1) div rows) mod columns]
+  let column = layouts.columnOrder(columns, rows, position)
+
   let row = (position - 1) mod rows + 1
   let tileWidth = (s.width - (columns - 1) * s.gap) div columns
   let tileHeight = (s.height - (rows - 1) * s.gap) div rows
@@ -156,19 +137,8 @@ proc foldDestination(
   source: Geometry,
   spread: bool
 ): Geometry =
-  let columnOrder =
-    case columns
-    of 1: @[1]
-    of 2: @[2, 1]
-    of 3: @[2, 3, 1]
-    of 4: @[3, 4, 2, 1]
-    of 5: @[3, 4, 5, 2, 1]
-    else: toSeq(1 .. columns)
-  let column =
-    if rows == 1:
-      columnOrder[(position - 1) mod columns]
-    else:
-      columnOrder[((position - 1) div rows) mod columns]
+  let column = layouts.columnOrder(columns, rows, position)
+
   let row = (position - 1) mod rows + 1
   let tileWidth = (screen.width - (columns - 1) * screen.gap) div columns
   let tileHeight = (screen.height - (rows - 1) * screen.gap) div rows
@@ -388,7 +358,7 @@ proc classFoldRoot(classname: string): string =
   getEnv("WME") / "layout" / ("fold:class:" & encodeUrl(classname, usePlus = false))
 
 proc fold*(args: seq[string]) =
-  requireArgs("layout fold", args, 1, 6)
+  requireArgs("layout fold", args, 1, 7)
 
   let a = parseArguments(
     "layout fold",
@@ -398,9 +368,13 @@ proc fold*(args: seq[string]) =
       ArgRows,
       ArgClassname,
       ArgGroupNo,
-      ArgSpread
+      ArgSpread,
+      ArgRecord
     ], groups.count
   )
+
+  if a.record and (a.classname.len == 0 or a.groupNo.isSome):
+    raiseZephyrError("layout fold: --record requires a classname without --group")
 
   let identitySnapshot = query.wmSnapshot()
   let winid = snapshotFocusedWinid(identitySnapshot)
@@ -423,7 +397,7 @@ proc fold*(args: seq[string]) =
     raiseZephyrError("layout fold: no matching windows")
 
   let classRoot =
-    if a.groupNo.isNone and a.classname.len > 0: classFoldRoot(a.classname)
+    if a.record: classFoldRoot(a.classname)
     else: ""
   if classRoot.len > 0:
     state.recoverExplodeOperation(classRoot)
@@ -455,27 +429,6 @@ proc fold*(args: seq[string]) =
 
   restoreFoldFocus(winid, placement)
 
-proc spreadGrid(count: int): Spread =
-  result.columns = 1
-  result.rows = 1
-
-  case count
-  of 1:
-    return
-  of 2:
-    result.columns = 3
-  of 3:
-    result.columns = 4
-  of 4:
-    result.columns = 3
-    result.rows = 2
-  of 5 .. 9:
-    result.columns = 4
-    result.rows = 3
-  else:
-    result.columns = 5
-    result.rows = 3
-
 proc explodeGroup*(group: PublicGroupId) =
   let identitySnapshot = query.wmSnapshot()
   let winid = snapshotFocusedWinid(identitySnapshot)
@@ -485,7 +438,7 @@ proc explodeGroup*(group: PublicGroupId) =
   if winids.len == 0:
     raiseZephyrError("layout explode --group: no matching windows")
 
-  let spread = spreadGrid(winids.len)
+  let spread = layouts.spreadGrid(winids.len)
   let root = getEnv("WME") / "layout" / "explode:group:" & $group.intValue
 
   state.recoverExplodeOperation(root)
@@ -508,7 +461,7 @@ proc explodeStack*() =
   if stack.len == 0:
     raiseZephyrError("layout explode: no matching windows")
 
-  let spread = spreadGrid(stack.len)
+  let spread = layouts.spreadGrid(stack.len)
   let root = getEnv("WME") / "layout" / "explode"
 
   state.recoverExplodeOperation(root)

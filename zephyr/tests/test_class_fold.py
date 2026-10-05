@@ -118,6 +118,23 @@ def run():
                 wait_for(ready, "cache did not bootstrap")
                 def geometry(wid):
                     return command("window", "geometry", wid).strip()
+                def geometry_tuple(wid):
+                    return tuple(int(field.split("=", 1)[1]) for field in
+                        geometry(wid).split())
+                def saved_geometries(state_root):
+                    saved = {}
+                    for record in state_root.iterdir():
+                        winid = record.name[4:]
+                        values = {}
+                        for child in record.iterdir():
+                            name = child.name
+                            if "=" in name:
+                                key, value = name.split("=", 1)
+                                if key in ("X", "Y", "WIDTH", "HEIGHT"):
+                                    values[key] = int(value)
+                        saved[winid] = tuple(values[key] for key in
+                            ("X", "Y", "WIDTH", "HEIGHT"))
+                    return saved
                 def layout(*args):
                     subprocess.run([zephyr, "layout", *args], env=env, check=True, timeout=5)
                 def focused():
@@ -125,23 +142,49 @@ def run():
                 for i,w in enumerate(windows):
                     command("window","apply-geometries",w,str(80+i*40),"100","180","120")
                 original={w:geometry(w) for w in windows}
+                expected={w:geometry_tuple(w) for w in windows}
                 focus_before=focused()
                 layout("fold","4","--rows","3","--spread","LifecycleTest")
                 saved=Path(env["WME"])/"layout"/"fold:class:LifecycleTest"
+                assert not saved.exists()
+                assert any(geometry(w) != original[w] for w in windows)
+
+                # Reset the fixture, then create an explicit interactive
+                # checkpoint for the subsequent ordinary-fold immutability test.
+                for i,w in enumerate(windows):
+                    command("window","apply-geometries",w,str(80+i*40),"100","180","120")
+                layout("fold","4","--rows","3","--spread","LifecycleTest","--record")
                 assert saved.is_dir() and len(list(saved.iterdir()))==4
+                assert saved_geometries(saved)==expected, saved_geometries(saved)
                 first={str(p.relative_to(saved)) for p in saved.rglob("*")}
                 assert focused()==focus_before
+
+                # Ordinary policy-style folds leave explicit unfold state
+                # byte-for-byte equivalent at the geometry-record level.
                 layout("fold","3","LifecycleTest")
+                assert saved_geometries(saved)==expected
+                layout("unfold","LifecycleTest")
+                assert {w:geometry(w) for w in windows}==original
+                assert not saved.exists()
+                layout("fold","4","--rows","3","--spread","LifecycleTest","--record")
+                assert saved_geometries(saved)==expected
+                first={str(p.relative_to(saved)) for p in saved.rglob("*")}
+                layout("fold","3","LifecycleTest","--record")
                 assert first=={str(p.relative_to(saved)) for p in saved.rglob("*")}
-                # New instance after the first fold participates in re-fold, not unfold.
+                assert saved_geometries(saved)==expected
+                # A new member added later joins the preserved class generation
+                # with its geometry from before its first fold participation.
                 p=start([sys.executable,__file__,"--client"],stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True)
                 new=p.stdout.readline().strip();p.stdin.write("map\n");p.stdin.flush()
                 assert p.stdout.readline().strip()=="OK"
                 wait_for(lambda:new in ids("LifecycleTest"),"new class client not cached")
                 command("window","apply-geometries",new,"60","70","150","110")
-                layout("fold","4","LifecycleTest")
-                new_geometry=geometry(new)
-                assert first=={str(p.relative_to(saved)) for p in saved.rglob("*")}
+                new_original=geometry(new)
+                new_original_tuple=geometry_tuple(new)
+                layout("fold","4","LifecycleTest","--record")
+                assert saved_geometries(saved)==expected | {
+                    new: new_original_tuple
+                }, saved_geometries(saved)
                 # Independent class operation using a distinct window/class.
                 other=start([sys.executable,__file__,"--other-client"],stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True)
                 other_id=other.stdout.readline().strip()
@@ -149,7 +192,7 @@ def run():
                 wait_for(lambda:other_id in ids("Other"),"other class not cached")
                 command("window","apply-geometries",other_id,"200","200","180","120")
                 other_original=geometry(other_id)
-                layout("fold","3","Other")
+                layout("fold","3","Other","--record")
                 other_root=saved.with_name("fold:class:Other")
                 assert other_root.is_dir()
                 # Recorded identity remains authoritative despite a classname change.
@@ -168,7 +211,7 @@ def run():
                 assert geometry(windows[0])==original[windows[0]]
                 assert geometry(windows[3])==original[windows[3]]
                 assert geometry(windows[2])==reused_geometry
-                assert geometry(new)==new_geometry
+                assert geometry(new)==new_original
                 assert not saved.exists() and other_root.exists()
                 layout("unfold","Other")
                 assert geometry(other_id)==other_original and not other_root.exists()
@@ -176,6 +219,9 @@ def run():
                 assert missing.returncode!=0 and "no fold state for Other" in missing.stderr
                 for args in ([],["Other","extra"],["--group","2"]):
                     invalid=subprocess.run([zephyr,"layout","unfold",*args],env=env,capture_output=True,text=True)
+                    assert invalid.returncode!=0
+                for args in (["3","--record"], ["3","--group","2","--record"]):
+                    invalid=subprocess.run([zephyr,"layout","fold",*args],env=env,capture_output=True,text=True)
                     assert invalid.returncode!=0
                 # Existing default/group fold and stack/group explode paths remain independent.
                 survivors=[windows[0],windows[2],windows[3],new,other_id]
@@ -191,7 +237,7 @@ def run():
                 layout("fold","4","--group","4")
                 layout("fold","4")
                 assert not any((Path(env["WME"])/"layout").glob("fold:class:*"))
-                print("PASS: class fold/refold, new clients, destroyed clients, token mismatch, class change, hidden clients, independent classes, focus, one-shot state")
+                print("PASS: ordinary/recorded class folds, unfold, cumulative identities, token mismatch, class change, hidden clients, independent classes, focus")
 
             except BaseException:
                 log.flush(); log.seek(0); print(log.read())
