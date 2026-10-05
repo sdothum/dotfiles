@@ -152,7 +152,7 @@ super + shift + {1,2,3,4,5}
 	C=$(zephyr window classname) ;\
 	N=$(sirocco window count $C) ;\
 	fold_sync $C                 ;\
-	[ $N -le 5 ] && zephyr layout fold {1,2,3,4,5} $C || zephyr layout fold 4 --rows 3 $C
+	[ $N -le 5 ] && zephyr layout fold {1,2,3,4,5} --record $C || zephyr layout fold 4 --rows 3 --record $C
 
 # FOR: overriding first fold info created by rules
 
@@ -160,7 +160,7 @@ super + ctrl + shift + {1,2,3,4,5}
 	C=$(zephyr window classname)    ;\
 	N=$(sirocco window count $C)    ;\
 	rm -f $WME/layout/fold:class:$C ;\
-	[ $N -le 5 ] && zephyr layout fold {1,2,3,4,5} $C || zephyr layout fold 4 --rows 3 $C
+	[ $N -le 5 ] && zephyr layout fold {1,2,3,4,5} --record $C || zephyr layout fold 4 --rows 3 --record $C
 
 {alt + shift + space,super + shift + 0}
 	C=$(zephyr window classname) ;\
