@@ -21,7 +21,7 @@ root=true
 [ -e ${NFSMOUNT}/media/videos/series ] || { notify critical 'nfs error' '/net/media unavailable'; exit 1; }
 
 # meta menu menu!
-media=$(previous media)
+edia=$(previous media)
 while : ;do
 	media=$(echo "$MEDIA" | rmenu 'Media' $media -no-custom) || break
 	[ "${media#$(X)}" = "$CLEAR" ] || mhistory media $media
