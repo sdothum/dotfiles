@@ -7,7 +7,7 @@ using Toybox.WatchUi as WatchUi;
 
 class DateRenderer {
 	private var _font;
-	private var _offsetY = -1;
+	private var _offsetY = -2;
 
 	function initialize() {
 		_font = WatchUi.loadResource(Rez.Fonts.DateFont);
@@ -20,8 +20,12 @@ class DateRenderer {
 		);
 
 		var days = [
-			"Sun", "Mon", "Tue", "Wed",
-			"Thu", "Fri", "Sat"
+			// "Sun", "Mon", "Tue", "Wed",
+			// "Thu", "Fri", "Sat"
+			// "sun", "mon", "tue", "wed",
+			// "thu", "fri", "sat"
+			"su", "mo", "tu", "we",
+			"th", "fr", "sa"
 		];
 
 		var label =

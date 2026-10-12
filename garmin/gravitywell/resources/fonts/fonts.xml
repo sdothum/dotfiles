@@ -3,6 +3,6 @@
 	   <font id="DialFour" filename="four_32.fnt" antialias="true"/>
 	   <font id="DialEight" filename="eight_32.fnt" antialias="true"/>
 	   <font id="DialTwelve" filename="twelve_32.fnt" antialias="true"/>
-		<font id="DateFont" filename="date_23.fnt" antialias="true"/>
+		<font id="DateFont" filename="date_24.fnt" antialias="true"/>
 	</fonts>
 </resources>

@@ -4,10 +4,11 @@ using Toybox.Math;
 class HandRenderer {
 
 	private var _hourRadius = 11;
+	private var _hourGap = 25;
 	private var _minuteRadius = 6;
 	// private var _hourWidth = 4;
 	// private var _minuteWidth = 2;
-	private var _tickClearance = 10;
+	private var _tickClearance = 11;
 
 	private function drawGravityWell(
 		dc, cx, cy, angle, radius, color
@@ -151,7 +152,7 @@ class HandRenderer {
 		// );
 
 		var hourGravityWell =
-		   tickRadius - _hourRadius - _tickClearance * 5 / 2 - _minuteRadius;
+		   tickRadius - _hourRadius - _tickClearance - _minuteRadius - _hourGap;
 
 		var hourX = geometry.centerX +
 		   Math.round(Math.cos(hourAngle) * hourGravityWell);

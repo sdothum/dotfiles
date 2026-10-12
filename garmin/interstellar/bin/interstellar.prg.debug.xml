@@ -7,82 +7,82 @@
         <entry filename="/home/shum/stow/garmin/interstellar/source/InterstellarView.mc" id="3" lineNum="4" parent="globals/InterstellarView" pc="268435492" symbol="&lt;init&gt;"/>
         <entry filename="/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" id="4" lineNum="10" parent="globals/CircleRenderer/&lt;statics&gt;" pc="268435504" symbol="&lt;init&gt;"/>
         <entry filename="/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" id="4" lineNum="129" parent="globals/CircleRenderer/&lt;statics&gt;" pc="268435513" symbol="&lt;init&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="5" lineNum="325" parent="globals/HandRenderer" pc="268435523" symbol="drawRing"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="5" lineNum="327" parent="globals/HandRenderer" pc="268435526" symbol="drawRing"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="5" lineNum="330" parent="globals/HandRenderer" pc="268435564" symbol="drawRing"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="5" lineNum="333" parent="globals/HandRenderer" pc="268435602" symbol="drawRing"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="5" lineNum="339" parent="globals/HandRenderer" pc="268435618" symbol="drawRing"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="5" lineNum="340" parent="globals/HandRenderer" pc="268435629" symbol="drawRing"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="20" parent="globals/HandRenderer" pc="268435659" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="23" parent="globals/HandRenderer" pc="268435662" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="24" parent="globals/HandRenderer" pc="268435666" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="25" parent="globals/HandRenderer" pc="268435670" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="26" parent="globals/HandRenderer" pc="268435677" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="28" parent="globals/HandRenderer" pc="268435684" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="29" parent="globals/HandRenderer" pc="268435700" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="31" parent="globals/HandRenderer" pc="268435716" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="32" parent="globals/HandRenderer" pc="268435727" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="33" parent="globals/HandRenderer" pc="268435738" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="35" parent="globals/HandRenderer" pc="268435746" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="39" parent="globals/HandRenderer" pc="268435750" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="44" parent="globals/HandRenderer" pc="268435767" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="46" parent="globals/HandRenderer" pc="268435776" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="47" parent="globals/HandRenderer" pc="268435783" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="50" parent="globals/HandRenderer" pc="268435789" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="52" parent="globals/HandRenderer" pc="268435796" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="53" parent="globals/HandRenderer" pc="268435807" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="56" parent="globals/HandRenderer" pc="268435817" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="58" parent="globals/HandRenderer" pc="268435827" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="62" parent="globals/HandRenderer" pc="268435848" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="66" parent="globals/HandRenderer" pc="268435862" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="68" parent="globals/HandRenderer" pc="268435871" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="69" parent="globals/HandRenderer" pc="268435878" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="72" parent="globals/HandRenderer" pc="268435887" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="76" parent="globals/HandRenderer" pc="268435900" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="79" parent="globals/HandRenderer" pc="268435913" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="80" parent="globals/HandRenderer" pc="268435921" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="83" parent="globals/HandRenderer" pc="268435928" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="84" parent="globals/HandRenderer" pc="268435935" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="87" parent="globals/HandRenderer" pc="268435941" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="88" parent="globals/HandRenderer" pc="268435952" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="91" parent="globals/HandRenderer" pc="268435962" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="95" parent="globals/HandRenderer" pc="268435995" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="99" parent="globals/HandRenderer" pc="268436028" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="103" parent="globals/HandRenderer" pc="268436061" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="106" parent="globals/HandRenderer" pc="268436077" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="109" parent="globals/HandRenderer" pc="268436094" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="112" parent="globals/HandRenderer" pc="268436101" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="115" parent="globals/HandRenderer" pc="268436114" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="118" parent="globals/HandRenderer" pc="268436127" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="127" parent="globals/HandRenderer" pc="268436183" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="129" parent="globals/HandRenderer" pc="268436189" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="132" parent="globals/HandRenderer" pc="268436202" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="135" parent="globals/HandRenderer" pc="268436215" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="143" parent="globals/HandRenderer" pc="268436292" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="144" parent="globals/HandRenderer" pc="268436295" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="148" parent="globals/HandRenderer" pc="268436323" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="153" parent="globals/HandRenderer" pc="268436363" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="161" parent="globals/HandRenderer" pc="268436374" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="164" parent="globals/HandRenderer" pc="268436402" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="167" parent="globals/HandRenderer" pc="268436440" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="178" parent="globals/HandRenderer" pc="268436478" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="181" parent="globals/HandRenderer" pc="268436488" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="191" parent="globals/HandRenderer" pc="268436511" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="232" parent="globals/HandRenderer" pc="268436537" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="235" parent="globals/HandRenderer" pc="268436553" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="238" parent="globals/HandRenderer" pc="268436591" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="244" parent="globals/HandRenderer" pc="268436629" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="248" parent="globals/HandRenderer" pc="268436659" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="257" parent="globals/HandRenderer" pc="268436693" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="263" parent="globals/HandRenderer" pc="268436715" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="268" parent="globals/HandRenderer" pc="268436743" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="275" parent="globals/HandRenderer" pc="268436781" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="282" parent="globals/HandRenderer" pc="268436819" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="292" parent="globals/HandRenderer" pc="268436849" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="298" parent="globals/HandRenderer" pc="268436871" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="303" parent="globals/HandRenderer" pc="268436899" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="309" parent="globals/HandRenderer" pc="268436937" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="315" parent="globals/HandRenderer" pc="268436975" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="5" lineNum="326" parent="globals/HandRenderer" pc="268435523" symbol="drawRing"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="5" lineNum="328" parent="globals/HandRenderer" pc="268435526" symbol="drawRing"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="5" lineNum="331" parent="globals/HandRenderer" pc="268435564" symbol="drawRing"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="5" lineNum="334" parent="globals/HandRenderer" pc="268435602" symbol="drawRing"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="5" lineNum="340" parent="globals/HandRenderer" pc="268435618" symbol="drawRing"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="5" lineNum="341" parent="globals/HandRenderer" pc="268435629" symbol="drawRing"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="21" parent="globals/HandRenderer" pc="268435659" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="24" parent="globals/HandRenderer" pc="268435662" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="25" parent="globals/HandRenderer" pc="268435666" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="26" parent="globals/HandRenderer" pc="268435670" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="27" parent="globals/HandRenderer" pc="268435677" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="29" parent="globals/HandRenderer" pc="268435684" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="30" parent="globals/HandRenderer" pc="268435700" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="32" parent="globals/HandRenderer" pc="268435716" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="33" parent="globals/HandRenderer" pc="268435727" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="34" parent="globals/HandRenderer" pc="268435738" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="36" parent="globals/HandRenderer" pc="268435746" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="40" parent="globals/HandRenderer" pc="268435750" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="45" parent="globals/HandRenderer" pc="268435767" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="47" parent="globals/HandRenderer" pc="268435776" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="48" parent="globals/HandRenderer" pc="268435783" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="51" parent="globals/HandRenderer" pc="268435789" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="53" parent="globals/HandRenderer" pc="268435796" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="54" parent="globals/HandRenderer" pc="268435807" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="57" parent="globals/HandRenderer" pc="268435817" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="59" parent="globals/HandRenderer" pc="268435827" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="63" parent="globals/HandRenderer" pc="268435848" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="67" parent="globals/HandRenderer" pc="268435862" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="69" parent="globals/HandRenderer" pc="268435871" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="70" parent="globals/HandRenderer" pc="268435878" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="73" parent="globals/HandRenderer" pc="268435887" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="77" parent="globals/HandRenderer" pc="268435900" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="80" parent="globals/HandRenderer" pc="268435913" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="81" parent="globals/HandRenderer" pc="268435921" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="84" parent="globals/HandRenderer" pc="268435928" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="85" parent="globals/HandRenderer" pc="268435935" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="88" parent="globals/HandRenderer" pc="268435941" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="89" parent="globals/HandRenderer" pc="268435952" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="92" parent="globals/HandRenderer" pc="268435962" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="96" parent="globals/HandRenderer" pc="268435995" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="100" parent="globals/HandRenderer" pc="268436028" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="104" parent="globals/HandRenderer" pc="268436061" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="107" parent="globals/HandRenderer" pc="268436077" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="110" parent="globals/HandRenderer" pc="268436094" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="113" parent="globals/HandRenderer" pc="268436101" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="116" parent="globals/HandRenderer" pc="268436114" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="119" parent="globals/HandRenderer" pc="268436127" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="128" parent="globals/HandRenderer" pc="268436183" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="130" parent="globals/HandRenderer" pc="268436189" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="133" parent="globals/HandRenderer" pc="268436202" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="6" lineNum="136" parent="globals/HandRenderer" pc="268436215" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="144" parent="globals/HandRenderer" pc="268436292" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="145" parent="globals/HandRenderer" pc="268436295" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="149" parent="globals/HandRenderer" pc="268436323" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="154" parent="globals/HandRenderer" pc="268436363" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="162" parent="globals/HandRenderer" pc="268436374" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="165" parent="globals/HandRenderer" pc="268436402" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="168" parent="globals/HandRenderer" pc="268436440" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="179" parent="globals/HandRenderer" pc="268436478" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="182" parent="globals/HandRenderer" pc="268436488" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="192" parent="globals/HandRenderer" pc="268436511" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="233" parent="globals/HandRenderer" pc="268436537" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="236" parent="globals/HandRenderer" pc="268436553" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="239" parent="globals/HandRenderer" pc="268436591" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="245" parent="globals/HandRenderer" pc="268436629" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="249" parent="globals/HandRenderer" pc="268436659" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="258" parent="globals/HandRenderer" pc="268436693" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="264" parent="globals/HandRenderer" pc="268436715" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="269" parent="globals/HandRenderer" pc="268436743" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="276" parent="globals/HandRenderer" pc="268436781" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="283" parent="globals/HandRenderer" pc="268436819" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="293" parent="globals/HandRenderer" pc="268436849" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="299" parent="globals/HandRenderer" pc="268436871" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="304" parent="globals/HandRenderer" pc="268436899" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="310" parent="globals/HandRenderer" pc="268436937" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/HandRenderer.mc" id="7" lineNum="316" parent="globals/HandRenderer" pc="268436975" symbol="draw"/>
         <entry filename="/home/shum/stow/garmin/interstellar/source/InterstellarApp.mc" id="9" lineNum="11" parent="globals/InterstellarApp" pc="268437002" symbol="getInitialView"/>
         <entry filename="/home/shum/stow/garmin/interstellar/source/InterstellarApp.mc" id="9" lineNum="12" parent="globals/InterstellarApp" pc="268437004" symbol="getInitialView"/>
         <entry filename="/home/shum/stow/garmin/interstellar/source/InterstellarApp.mc" id="10" lineNum="7" parent="globals/InterstellarApp" pc="268437030" symbol="initialize"/>
@@ -149,10 +149,10 @@
         <entry filename="/home/shum/stow/garmin/interstellar/source/DateRenderer.mc" id="24" lineNum="16" parent="globals/DateRenderer" pc="268438306" symbol="draw"/>
         <entry filename="/home/shum/stow/garmin/interstellar/source/DateRenderer.mc" id="24" lineNum="17" parent="globals/DateRenderer" pc="268438309" symbol="draw"/>
         <entry filename="/home/shum/stow/garmin/interstellar/source/DateRenderer.mc" id="24" lineNum="22" parent="globals/DateRenderer" pc="268438334" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/DateRenderer.mc" id="24" lineNum="27" parent="globals/DateRenderer" pc="268438341" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/DateRenderer.mc" id="24" lineNum="30" parent="globals/DateRenderer" pc="268438368" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/DateRenderer.mc" id="24" lineNum="35" parent="globals/DateRenderer" pc="268438400" symbol="draw"/>
-        <entry filename="/home/shum/stow/garmin/interstellar/source/DateRenderer.mc" id="24" lineNum="37" parent="globals/DateRenderer" pc="268438417" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/DateRenderer.mc" id="24" lineNum="31" parent="globals/DateRenderer" pc="268438341" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/DateRenderer.mc" id="24" lineNum="34" parent="globals/DateRenderer" pc="268438368" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/DateRenderer.mc" id="24" lineNum="39" parent="globals/DateRenderer" pc="268438400" symbol="draw"/>
+        <entry filename="/home/shum/stow/garmin/interstellar/source/DateRenderer.mc" id="24" lineNum="41" parent="globals/DateRenderer" pc="268438417" symbol="draw"/>
         <entry filename="/home/shum/stow/garmin/interstellar/source/FaceGeometry.mc" id="25" lineNum="11" parent="globals/FaceGeometry" pc="268438455" symbol="initialize"/>
         <entry filename="/home/shum/stow/garmin/interstellar/source/FaceGeometry.mc" id="25" lineNum="12" parent="globals/FaceGeometry" pc="268438458" symbol="initialize"/>
         <entry filename="/home/shum/stow/garmin/interstellar/source/FaceGeometry.mc" id="25" lineNum="13" parent="globals/FaceGeometry" pc="268438467" symbol="initialize"/>
@@ -264,89 +264,90 @@
     </pcToLineNum>
     <symbolTable>
         <entry id="8388639" module="true" symbol="Graphics"/>
-        <entry field="true" id="32" symbol="&lt;globals/InterstellarView/&lt;&gt;_dial&gt;"/>
-        <entry id="46" method="true" symbol="drawSmoothCircle"/>
-        <entry field="true" id="27" symbol="&lt;globals/DialRenderer/&lt;&gt;_fourFont&gt;"/>
+        <entry field="true" id="33" symbol="&lt;globals/InterstellarView/&lt;&gt;_dial&gt;"/>
+        <entry id="47" method="true" symbol="drawSmoothCircle"/>
+        <entry field="true" id="28" symbol="&lt;globals/DialRenderer/&lt;&gt;_fourFont&gt;"/>
         <entry id="12" object="true" symbol="InterstellarApp"/>
-        <entry field="true" id="16" symbol="&lt;globals/HandRenderer/&lt;&gt;_minuteRadius&gt;"/>
-        <entry field="true" id="41" symbol="tickInnerRadius"/>
+        <entry field="true" id="17" symbol="&lt;globals/HandRenderer/&lt;&gt;_minuteRadius&gt;"/>
+        <entry field="true" id="42" symbol="tickInnerRadius"/>
         <entry id="8388632" method="true" symbol="&lt;init&gt;"/>
         <entry id="8389759" symbol="radius"/>
         <entry id="7" object="true" symbol="CircleRenderer"/>
-        <entry field="true" id="39" symbol="screenRadius"/>
-        <entry field="true" id="51" symbol="DialEight"/>
+        <entry field="true" id="40" symbol="screenRadius"/>
+        <entry field="true" id="52" symbol="DialEight"/>
         <entry id="8388924" module="true" symbol="Gregorian"/>
-        <entry id="24" method="true" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
+        <entry id="25" method="true" symbol="&lt;globals/HandRenderer/&lt;&gt;drawGravityWell&gt;"/>
         <entry field="true" id="8388611" module="true" symbol="Toybox"/>
-        <entry field="true" id="21" symbol="&lt;globals/HandRenderer/&lt;&gt;_secondaryLagMinutes&gt;"/>
-        <entry field="true" id="34" symbol="&lt;globals/InterstellarView/&lt;&gt;_hands&gt;"/>
-        <entry field="true" id="54" symbol="AppName"/>
-        <entry field="true" id="28" symbol="&lt;globals/DialRenderer/&lt;&gt;_twelveFont&gt;"/>
+        <entry field="true" id="22" symbol="&lt;globals/HandRenderer/&lt;&gt;_secondaryLagMinutes&gt;"/>
+        <entry field="true" id="35" symbol="&lt;globals/InterstellarView/&lt;&gt;_hands&gt;"/>
+        <entry field="true" id="55" symbol="AppName"/>
+        <entry field="true" id="29" symbol="&lt;globals/DialRenderer/&lt;&gt;_twelveFont&gt;"/>
         <entry id="6" module="true" symbol="globals/Rez/Strings"/>
         <entry id="8388772" module="true" object="true" symbol="Fonts"/>
         <entry id="8388648" module="true" symbol="WatchUi"/>
-        <entry id="55" symbol="spans"/>
+        <entry id="56" symbol="spans"/>
         <entry id="3" module="true" symbol="globals/Rez"/>
-        <entry field="true" id="22" symbol="&lt;globals/HandRenderer/&lt;&gt;_secondaryRadius&gt;"/>
+        <entry field="true" id="23" symbol="&lt;globals/HandRenderer/&lt;&gt;_secondaryRadius&gt;"/>
         <entry id="8" object="true" symbol="DateRenderer"/>
-        <entry id="56" symbol="edges"/>
-        <entry field="true" id="18" symbol="&lt;globals/HandRenderer/&lt;&gt;_minuteSecondaryLeadMinutes&gt;"/>
-        <entry id="29" method="true" symbol="drawNumerals"/>
-        <entry field="true" id="44" symbol="_ringCache"/>
+        <entry id="57" symbol="edges"/>
+        <entry field="true" id="19" symbol="&lt;globals/HandRenderer/&lt;&gt;_minuteSecondaryLeadMinutes&gt;"/>
+        <entry id="30" method="true" symbol="drawNumerals"/>
+        <entry field="true" id="45" symbol="_ringCache"/>
         <entry id="8389124" method="true" symbol="onUpdate"/>
-        <entry id="58" symbol="gap"/>
+        <entry id="59" symbol="gap"/>
         <entry id="8388771" module="true" object="true" symbol="Drawables"/>
-        <entry field="true" id="36" symbol="&lt;globals/DateRenderer/&lt;&gt;_offsetY&gt;"/>
+        <entry field="true" id="37" symbol="&lt;globals/DateRenderer/&lt;&gt;_offsetY&gt;"/>
         <entry field="true" id="8389066" symbol="width"/>
         <entry id="13" object="true" symbol="InterstellarView"/>
         <entry id="8389122" method="true" symbol="onLayout"/>
         <entry id="8389376" method="true" symbol="onEnterSleep"/>
         <entry id="10" object="true" symbol="FaceGeometry"/>
-        <entry field="true" id="20" symbol="&lt;globals/HandRenderer/&lt;&gt;_secondaryGap&gt;"/>
+        <entry field="true" id="15" symbol="&lt;globals/HandRenderer/&lt;&gt;_hourGap&gt;"/>
+        <entry field="true" id="21" symbol="&lt;globals/HandRenderer/&lt;&gt;_secondaryGap&gt;"/>
         <entry id="4" module="true" symbol="globals/Rez/Drawables"/>
-        <entry field="true" id="33" symbol="&lt;globals/InterstellarView/&lt;&gt;_geometry&gt;"/>
-        <entry field="true" id="43" symbol="_cache"/>
-        <entry field="true" id="50" symbol="DateFont"/>
-        <entry field="true" id="52" symbol="DialFour"/>
-        <entry field="true" id="35" symbol="&lt;globals/DateRenderer/&lt;&gt;_font&gt;"/>
-        <entry field="true" id="23" symbol="&lt;globals/HandRenderer/&lt;&gt;_tickClearance&gt;"/>
+        <entry field="true" id="34" symbol="&lt;globals/InterstellarView/&lt;&gt;_geometry&gt;"/>
+        <entry field="true" id="44" symbol="_cache"/>
+        <entry field="true" id="51" symbol="DateFont"/>
+        <entry field="true" id="53" symbol="DialFour"/>
+        <entry field="true" id="36" symbol="&lt;globals/DateRenderer/&lt;&gt;_font&gt;"/>
+        <entry field="true" id="24" symbol="&lt;globals/HandRenderer/&lt;&gt;_tickClearance&gt;"/>
         <entry id="8389377" method="true" symbol="onExitSleep"/>
         <entry id="8388644" module="true" symbol="System"/>
-        <entry id="48" method="true" symbol="getRingPattern"/>
+        <entry id="49" method="true" symbol="getRingPattern"/>
         <entry id="8388645" module="true" symbol="Time"/>
         <entry id="8388769" module="true" object="true" symbol="Rez"/>
         <entry id="8388640" module="true" symbol="Lang"/>
         <entry id="8389068" method="true" symbol="draw"/>
-        <entry field="true" id="49" symbol="LauncherIcon"/>
+        <entry field="true" id="50" symbol="LauncherIcon"/>
         <entry id="8388610" symbol="statics"/>
         <entry id="8389123" method="true" symbol="onShow"/>
-        <entry field="true" id="26" symbol="&lt;globals/DialRenderer/&lt;&gt;_eightFont&gt;"/>
-        <entry id="30" method="true" symbol="drawTicks"/>
+        <entry field="true" id="27" symbol="&lt;globals/DialRenderer/&lt;&gt;_eightFont&gt;"/>
+        <entry id="31" method="true" symbol="drawTicks"/>
         <entry id="8389350" module="true" symbol="globals"/>
         <entry id="2" module="true" symbol="globals/CircleRenderer/&lt;statics&gt;"/>
         <entry id="8388770" module="true" object="true" symbol="Strings"/>
-        <entry field="true" id="38" symbol="centerY"/>
-        <entry field="true" id="37" symbol="centerX"/>
+        <entry field="true" id="39" symbol="centerY"/>
+        <entry field="true" id="38" symbol="centerX"/>
         <entry id="8388702" method="true" symbol="initialize"/>
         <entry id="11" object="true" symbol="HandRenderer"/>
         <entry id="8388641" module="true" symbol="Math"/>
-        <entry field="true" id="19" symbol="&lt;globals/HandRenderer/&lt;&gt;_minuteSecondaryRadius&gt;"/>
+        <entry field="true" id="20" symbol="&lt;globals/HandRenderer/&lt;&gt;_minuteSecondaryRadius&gt;"/>
         <entry id="8389280" method="true" symbol="getInitialView"/>
         <entry field="true" id="8389347" symbol="color"/>
-        <entry id="47" method="true" symbol="getPattern"/>
-        <entry field="true" id="42" symbol="tickOuterRadius"/>
-        <entry field="true" id="40" symbol="tickCenterRadius"/>
-        <entry field="true" id="31" symbol="&lt;globals/InterstellarView/&lt;&gt;_date&gt;"/>
-        <entry field="true" id="17" symbol="&lt;globals/HandRenderer/&lt;&gt;_minuteSecondaryGap&gt;"/>
+        <entry id="48" method="true" symbol="getPattern"/>
+        <entry field="true" id="43" symbol="tickOuterRadius"/>
+        <entry field="true" id="41" symbol="tickCenterRadius"/>
+        <entry field="true" id="32" symbol="&lt;globals/InterstellarView/&lt;&gt;_date&gt;"/>
+        <entry field="true" id="18" symbol="&lt;globals/HandRenderer/&lt;&gt;_minuteSecondaryGap&gt;"/>
         <entry id="9" object="true" symbol="DialRenderer"/>
         <entry id="5" module="true" symbol="globals/Rez/Fonts"/>
-        <entry id="45" method="true" symbol="drawSmoothAnnulus"/>
-        <entry id="25" method="true" symbol="drawRing"/>
+        <entry id="46" method="true" symbol="drawSmoothAnnulus"/>
+        <entry id="26" method="true" symbol="drawRing"/>
         <entry id="14" object="true" symbol="Theme"/>
         <entry id="8389125" method="true" symbol="onHide"/>
-        <entry field="true" id="15" symbol="&lt;globals/HandRenderer/&lt;&gt;_hourRadius&gt;"/>
-        <entry field="true" id="53" symbol="DialTwelve"/>
-        <entry id="57" symbol="pixels"/>
+        <entry field="true" id="16" symbol="&lt;globals/HandRenderer/&lt;&gt;_hourRadius&gt;"/>
+        <entry field="true" id="54" symbol="DialTwelve"/>
+        <entry id="58" symbol="pixels"/>
     </symbolTable>
     <localVars>
         <entry arg="true" endPc="268435658" name="dc" stackId="1" startPc="268435523"/>
@@ -530,18 +531,18 @@
     <dataEntryOffsetMappings>
         <dataEntry label="globals" offset="67" parentId="" symbolId="globals" type="module"/>
         <dataEntry label="globals/HandRenderer" offset="179" parentId="globals" symbolId="HandRenderer" type="class"/>
-        <dataEntry label="globals/InterstellarApp" offset="331" parentId="globals" symbolId="InterstellarApp" type="class"/>
-        <dataEntry label="globals/Rez" offset="384" parentId="globals" symbolId="Rez" type="module"/>
-        <dataEntry label="globals/DialRenderer" offset="437" parentId="globals" symbolId="DialRenderer" type="class"/>
-        <dataEntry label="globals/Theme" offset="535" parentId="globals" symbolId="Theme" type="class"/>
-        <dataEntry label="globals/InterstellarView" offset="579" parentId="globals" symbolId="InterstellarView" type="class"/>
-        <dataEntry label="globals/DateRenderer" offset="713" parentId="globals" symbolId="DateRenderer" type="class"/>
-        <dataEntry label="globals/FaceGeometry" offset="784" parentId="globals" symbolId="FaceGeometry" type="class"/>
-        <dataEntry label="globals/CircleRenderer" offset="882" parentId="globals" symbolId="CircleRenderer" type="class"/>
-        <dataEntry label="globals/CircleRenderer/&lt;statics&gt;" offset="930" parentId="CircleRenderer" symbolId="&lt;statics&gt;" type="module"/>
-        <dataEntry label="globals/Rez/Drawables" offset="1006" parentId="Rez" symbolId="Drawables" type="module"/>
-        <dataEntry label="globals/Rez/Fonts" offset="1041" parentId="Rez" symbolId="Fonts" type="module"/>
-        <dataEntry label="globals/Rez/Strings" offset="1103" parentId="Rez" symbolId="Strings" type="module"/>
+        <dataEntry label="globals/InterstellarApp" offset="340" parentId="globals" symbolId="InterstellarApp" type="class"/>
+        <dataEntry label="globals/Rez" offset="393" parentId="globals" symbolId="Rez" type="module"/>
+        <dataEntry label="globals/DialRenderer" offset="446" parentId="globals" symbolId="DialRenderer" type="class"/>
+        <dataEntry label="globals/Theme" offset="544" parentId="globals" symbolId="Theme" type="class"/>
+        <dataEntry label="globals/InterstellarView" offset="588" parentId="globals" symbolId="InterstellarView" type="class"/>
+        <dataEntry label="globals/DateRenderer" offset="722" parentId="globals" symbolId="DateRenderer" type="class"/>
+        <dataEntry label="globals/FaceGeometry" offset="793" parentId="globals" symbolId="FaceGeometry" type="class"/>
+        <dataEntry label="globals/CircleRenderer" offset="891" parentId="globals" symbolId="CircleRenderer" type="class"/>
+        <dataEntry label="globals/CircleRenderer/&lt;statics&gt;" offset="939" parentId="CircleRenderer" symbolId="&lt;statics&gt;" type="module"/>
+        <dataEntry label="globals/Rez/Drawables" offset="1015" parentId="Rez" symbolId="Drawables" type="module"/>
+        <dataEntry label="globals/Rez/Fonts" offset="1050" parentId="Rez" symbolId="Fonts" type="module"/>
+        <dataEntry label="globals/Rez/Strings" offset="1112" parentId="Rez" symbolId="Strings" type="module"/>
     </dataEntryOffsetMappings>
     <functions>
         <functionEntry accessMode="public" name="&lt;init&gt;" parent="HandRenderer">

@@ -4,10 +4,11 @@ using Toybox.Math;
 class HandRenderer {
 
 	private var _hourRadius = 11;
+	private var _hourGap = 20;
 	private var _minuteRadius = 6;
 	// private var _hourWidth = 4;
 	// private var _minuteWidth = 2;
-	private var _tickClearance = 10;
+	private var _tickClearance = 11;
 
 
 	function draw(dc, geometry, hours, minutes) {
@@ -29,7 +30,7 @@ class HandRenderer {
 		// );
 
 		var hourOrbital =
-		   tickRadius - _hourRadius - _tickClearance * 5 / 2 - _minuteRadius;
+		   tickRadius - _hourRadius - _tickClearance - _minuteRadius - _hourGap;
 
 		var hourX = geometry.centerX +
 		   Math.round(Math.cos(hourAngle) * hourOrbital);
