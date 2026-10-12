@@ -1,5 +1,5 @@
 type = scripted
-command = /usr/local/libexec/fs-fstab-retry
+command = /usr/lib/dinit.d/early/scripts/fs-fstab.sh start
 depends-on: early-fs-pre.target
 depends-ms: early-fs-fsck
 waits-for: early-fs-zfs
