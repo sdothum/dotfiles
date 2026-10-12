@@ -64,7 +64,7 @@ case $1 in
 		fontbm                                         \
 			--font-file watchface-normalbookupright.ttf \
 			--font-size ${fontsize}                     \
-			--chars '32,48-57,70,77,83,84,87,97,100,101,104,105,110,111,114,116,117' \
+			--chars '32,48-57,70,77,83,84,87,97,100-102,104,105,107,109-111,114-116,117,119' \
 			--output date_${fontsize}
 		;;
 	*  ) usage

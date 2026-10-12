@@ -5,20 +5,22 @@
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ................................................................ Media session
-
-usage() { usage: "$(basename $0) on | off"; exit 1; }
+set -x
+usage() { usage: "$(basename $0) [-b] on | off"; exit 1; }
 
 V_DYNAMIC=/tmp/$(basename $0):dynamic
+
+[ $1 = '-b' ] && { BLACKBOARD=true; shift; }
 
 case $1 in
 	on  )
 		conky clock stop
-		[ -e $BLACKBOARD ] || blackboard  # bypass blackboard toggling if already on
-		# interface -q hdmi && pulse         # check hdmi audio
+		[ $BLACKBOARD ] && term BLACKBOARD  # bypass blackboard toggling if already on
+		# interface -q hdmi && pulse        # check hdmi audio
 		;;
 	off )
 		conky clock auto
-		pstat 'menu (media|movies|series)' || restore root
+		pstat 'menu (media|movies|series)' || { pkill blackboard; restore root; }
 		# xdotool key Ctrl+space          # clear potential pulse message
 		;;
 	*   ) usage ;;

@@ -298,7 +298,7 @@ variant() {
 			t-cross+       ) glyph t=hookless-short-neck                                ;;
 			t-flat         ) glyph t=flat-hook-short-neck2                              ;;
 			u-tailed       ) glyph u=tailed-serifless                                   ;;
-			u-toothed      ) glyph u=toothed                                            ;;
+			u-toothed      ) glyph u=toothed-serifless                                  ;;
 			w-asymmetric   ) glyph w=straight-asymmetric-serifless                      ;;
 			y-straight     ) glyph y=straight-serifless                                 ;;
 			y-turn         ) glyph y=straight-turn-serifless                            ;;

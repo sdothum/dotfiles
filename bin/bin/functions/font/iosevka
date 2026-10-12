@@ -310,7 +310,8 @@ elif [ "$test" ] ;then
 elif [ "$watchface" ] ;then
 	cmdopts quasi-ext Q-straight open+ j-flat l-ascending Q-open f-extended+= a-double_ d-tailed y-turn J-serifless utf-8 serifless serifed pseudokern percent/ 0-tall ascii 1-nobase_
 	emdash
-	e_ink watchface grote I-serifless t-descending=+ f-extended+= y-turn ascii smallcaps space=0.75  # space must follow pseudokern
+	# e_ink watchface grote I-serifless t-descending=+ f-extended+= y-turn ascii space=0.5  # space must follow pseudokern
+	e_ink watchface grote I-serifless t-descending=+ f-extended+= y-turn ascii smallcaps space=0.5  # space must follow pseudokern
 elif [ "$hyperlegible" ] ;then
 	cmdopts quasi-ext ${space:-space=M} Q-straight open+ j-flat l-ascending Q-open 1-nobase f-extended+= a-double_ d-tailed y-turn utf-8 serifless serifed pseudokern percent/ 0-tall
  	emdash

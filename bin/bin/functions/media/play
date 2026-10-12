@@ -61,7 +61,7 @@ while : ;do
 			;;
 
 		next   )
-			(sleep $delay; xdotool key Down; xdotool key Return;) &  # key presses for episodes menu
+			(sleep $delay; xdotool key Down; xdotool key Return;) &    # key presses for episodes menu
 			break
 			;;
 
