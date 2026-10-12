@@ -203,7 +203,7 @@ case $menu in
 				;;
 			tile   )
 				tile=$(echo "$tiles" | pick "by") || exit
-				zephyr layout fold ${tile%% *} $(zephyr window classname)
+				zephyr layouts fold ${tile%% *} $(zephyr window classname)
 				;;
 		esac
 		;;

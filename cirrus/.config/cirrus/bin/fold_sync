@@ -7,14 +7,22 @@
 
 # .......................................................... Dangling fold check
 
-# Usage: fold_sync <class>
+# Usage: fold_sync <class> | <group>
+
+[ "$1" ] || exit
 
 # remove dangling fold/unfold state tree
-if [ -d $WME/layout/fold:class:$1 ] ;then
-	for W in $(zephyr window ids --all $1) ;do
-		[ -e $WME/layout/fold:class:$1/*$W ] && exit
+case $1 in
+	[0-9] ) layout=group; group=--group ;;
+	*     ) layout=class ;;
+esac
+
+if [ -d $WME/layout/fold:$layout:$1 ] ;then
+	for W in $(zephyr window ids --all $group $1) ;do
+		[ -e $WME/layout/fold:$layout:$1/*$W ] && exit
 	done
-	rm -rf $WME/layout/fold:class:$1
+	# ls "$WME/layout/fold:$layout:$1" | grep -Eq "$(zephyr window ids --all $group "$1" | tr '\n' '|')EOD" && exit  # 0x..|EOD regex
+	rm -rf $WME/layout/fold:$layout:$1
 fi
 
 # kak: filetype=sh

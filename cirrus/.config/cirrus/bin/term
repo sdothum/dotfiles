@@ -31,7 +31,7 @@ theme()  { theme="$theme $@"; }
 while : ;do
 	case $1 in
 		''            ) break ;;
-		BLACKBOARD    ) theme $1 ;;
+		BLACKBOARD    ) theme $1 $(zephyr display width)x$(zephyr display height); name="--class blackboard"; export NOFISH=true; export PS1=''; cmd="-e $SHELL" ;;
 		TRANSPARENT   ) theme $1 ;;
 		OPACITY=*     ) theme $1 ;;
 		PAPER         ) theme $1 ;;

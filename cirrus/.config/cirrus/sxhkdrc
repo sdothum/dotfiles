@@ -144,42 +144,65 @@ super + {4,8,7,9}
 super + shift + {t,s}
 	zephyr window tile {left,right}
 
-# ...................................................................... explode
+# ............................................................... fold & explode
 
-# NOTE: prevent dangling (window delete) layout/fold:* info from interfering with new folds
+# NOTE: prevent dangling (window delete) layout/fold:* info from interfering with new folds SEE: fold_sync
 
-super + shift + {1,2,3,4,5}
+super + shift + c ; {1,2,3,4,5}
 	C=$(zephyr window classname) ;\
-	N=$(sirocco window count $C) ;\
-	fold_sync $C                 ;\
-	[ $N -le 5 ] && zephyr layout fold {1,2,3,4,5} --record $C || zephyr layout fold 4 --rows 3 --record $C
+	fold_sync "$C"               ;\
+	zephyr layouts fold $(zephyr layouts grid {1,2,3,4,5} "$C") --record "$C"
+
+super + shift + c ; 0
+	C=$(zephyr window classname) ;\
+	[ -e $WME/layout/fold:class:"$C" ] && exec zephyr layouts unfold "$C"
+
+super + shift + g ; {1,2,3,4,5}
+	G=$(zephyr group current) ;\
+	fold_sync $G              ;\
+	zephyr layouts fold $(zephyr layouts grid {1,2,3,4,5} --group $G) --record --group $G
+
+super + shift + g ; 0
+	G=$(zephyr group current) ;\
+	[ -e $WME/layout/fold:group:$G ] && exec zephyr layouts unfold --group $G
+
+super + shift + {c,g} ; c
+	rm -rf "$WME/layout/fold:class:" ;\
+	zephyr layouts fold $(zephyr layouts grid 4 --rows 2) --record
+
+super + shift + {c,g} ; g
+	rm -rf "$WME/layout/fold:class:" ;\
+	zephyr layouts fold $(zephyr layouts grid 4 --rows 3) --record
+
+super + shift + {c,g} ; {C,G}
+	zephyr layouts unfold
 
 # FOR: overriding first fold info created by rules
 
-super + ctrl + shift + {1,2,3,4,5}
-	C=$(zephyr window classname)    ;\
-	N=$(sirocco window count $C)    ;\
-	rm -f $WME/layout/fold:class:$C ;\
-	[ $N -le 5 ] && zephyr layout fold {1,2,3,4,5} --record $C || zephyr layout fold 4 --rows 3 --record $C
+super + shift + c ; minus
+	C=$(zephyr group current)            ;\
+	notify Class "$C --record discarded" ;\
+	rm -rf "$WME/layout/fold:class:$C"
 
-{alt + shift + space,super + shift + 0}
-	C=$(zephyr window classname) ;\
-	[ -e $WME/layout/fold:class:$C ] && exec zephyr layout unfold $C
+super + shift + g ; minus
+	G=$(zephyr group current)                                    ;\
+	notify Group "$G $(zephyr group name $G) --record discarded" ;\
+	rm -rf $WME/layout/fold:group:$G
 
 alt + ctrl + super + 0
-	zephyr layout restore
+	zephyr layouts restore
 
 alt + super + space
-	[ -e $WME/layout/explode ] && zephyr layout unexplode || zephyr layout explode
+	[ -e $WME/layout/explode ] && zephyr layouts unexplode || zephyr layouts explode
 
 alt + ctrl + space
 	G=$(sirocco group current) ;\
-	[ -e $WME/layout/explode:group:$G ] && zephyr layout unexplode --group $G || zephyr layout explode --group $G
+	[ -e $WME/layout/explode:group:$G ] && zephyr layouts unexplode --group $G || zephyr layouts explode --group $G
 
 # .................................................................. level (all)
 
 super + ctrl + e
-	zephyr layout level
+	zephyr layouts level
 
 # ......................................................................... move
 #
@@ -209,9 +232,6 @@ super + ctrl + {p,l,n,f}
 super + {d,n,m,p,l,f}
 	zephyr window snap {top left,top,top right,bottom left,bottom,bottom right}
 
-super + {_,shift} + r
-	zephyr window snap center {vertical,horizontal}
-
 super + {t,s}
 	side="{left,right}" ;\
 	zephyr window snap $side
@@ -220,8 +240,8 @@ super + ctrl + {t,s}
 	side="{left,right}" ;\
 	zephyr window spread $side
 
-super + {_,ctrl,shift} + g
-	zephyr window snap center {_,left,right}
+super + r ; {super + r,r,R,t,s}
+	zephyr window snap center {_,horizontal,vertical,left,right}
 
 # ......................................................................... swap
 
@@ -406,7 +426,7 @@ super + ctrl + b
 	qutebrowser closeall
 
 super + shift + b
-	zephyr layout fold 3 qutebrowser
+	zephyr layouts fold 3 qutebrowser
 
 super + h
 	zephyr window toggle Luakit && exit || hangouts
