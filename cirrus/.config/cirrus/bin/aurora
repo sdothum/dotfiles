@@ -11,7 +11,7 @@
 
 # NOTE: panel is lost on exit, cause unknown (cirrusrc?) SEE: abbreviations.fish for usage fix (respawn)
 
-THEMES="ui/themes"
+THEMES="ui/aurora:themes"
 verbose=$1
 
 usage() {
@@ -37,7 +37,7 @@ snapshot() {
 	gap_width_bottom=$(recipe 'ui/gap_width bottom')
 	gap_width_left=$(recipe 'ui/gap_width left')
 	gap_width_right=$(recipe 'ui/gap_width right')
-	grid_gap_width=$(recipe ui/grid_gap_width)
+	gap_width_grid=$(recipe 'ui/gap_width grid')
 	panel_height=$(recipe panel/height)
 	panel_indent=$(recipe panel/indent)
 }
@@ -57,7 +57,7 @@ recover() {
 	recipe 'ui/gap_width bottom' $gap_width_bottom
 	recipe 'ui/gap_width left' $gap_width_left
 	recipe 'ui/gap_width right' $gap_width_right
-	recipe ui/grid_gap_width $grid_gap_width
+	recipe 'ui/gap_width grid' $gap_width_grid
 	recipe panel/height $panel_height
 	recipe panel/indent $panel_indent
 
@@ -82,7 +82,7 @@ settings() {
    ${cyan}gap width ${ORANGE}b${cyan}ottom         "${NOCOLOR}$(recipe 'ui/gap_width bottom')"
    ${cyan}gap width ${ORANGE}l${cyan}eft           "${NOCOLOR}$(recipe 'ui/gap_width left')"
    ${cyan}gap width ${ORANGE}r${cyan}ight          "${NOCOLOR}$(recipe 'ui/gap_width right')"
-   ${ORANGE}g${cyan}rid gap spacing         "${NOCOLOR}$(recipe ui/grid_gap_width)"
+   ${ORANGE}g${cyan}rid gap width           "${NOCOLOR}$(recipe 'ui/gap_width grid')"
    ${cyan}panel ${ORANGE}h${cyan}eight             "${NOCOLOR}$(recipe panel/height)"
    ${cyan}panel ${ORANGE}i${cyan}ndent             "${NOCOLOR}$(recipe panel/indent)"
 "
@@ -232,7 +232,7 @@ while : ;do
 		b     ) recipe 'ui/gap_width bottom' $value ;;
 		l     ) recipe 'ui/gap_width left' $value; recipe 'ui/gap_width right' $value ;;
 		r     ) recipe 'ui/gap_width right' $value ;;
-		g     ) recipe ui/grid_gap_width $value ;;
+		g     ) recipe 'ui/gap_width grid' $value ;;
 		h     ) recipe panel/height $value; panel=true ;;
 		i     ) recipe panel/indent $value; panel=true ;;
 		*     ) usage; continue ;;

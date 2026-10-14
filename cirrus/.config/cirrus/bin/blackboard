@@ -1,0 +1,38 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="cbonsai $@" . $PARENT
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................ blackboard ui
+
+# Usage: blackboard on | off | toggle
+
+BLACKBOARD=/tmp/blackboard:root
+
+statusbar() { for i in $(pgrep -a 'lemonbar' | cut -d' ' -f5) ;do xdotool search -name "$i" $1 ;done; }
+
+case $1 in
+	on  )
+		# [ -e $BLACKBOARD ] && return
+		touch $BLACKBOARD
+		draw root color 000000
+		# killall -q lemonbar
+		statusbar windowunmap
+		cirrusrc blackboard  # SEE: sxhkdrc "monocle"
+		;;
+	off )
+		# [ -e $BLACKBOARD ] || return
+		rm -f $BLACKBOARD
+		draw root
+		# draw panel
+		statusbar windowmap
+		cirrusrc refresh
+		;;
+	*   )
+		[ -e $BLACKBOARD ] && exec blackboard off || exec blackboard on
+		;;
+esac
+
+# kak: filetype=sh

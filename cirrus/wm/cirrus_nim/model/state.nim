@@ -1,9 +1,20 @@
 ## Authoritative Stage 2 identities. No X11 types or operations are imported.
 
-import std/[tables, options, hashes]
+import std/[tables, options, hashes, algorithm]
 import ./types
 
 type
+  WmConfiguration* = object
+    ## Canonical frozen-C configuration values. Values retain the source
+    ## protocol's uint32 representation unless the C field is narrower.
+    applySettings*, borders*, replayClickOnFocus*, resizeHints*,
+      stickyWindows*: bool
+    borderStyle*, outerColorFocused*, outerColorUnfocused*, cornerMask*,
+      cornerPercent*, cursorPosition*, innerColorFocused*, innerColorUnfocused*: uint32
+    outerBorderWidth*, gapLeft*, gapDown*, gapUp*, gapRight*, innerBorderWidth*: int32
+    clickToFocus*: int8
+    pointerActions*: array[3, uint32]
+
   WmState* = object
     nextGeneration: uint64
     generationExhausted: bool
@@ -15,11 +26,13 @@ type
     currentGroup*: RawGroup
     groupCount*: uint32
     activeGroups*: seq[bool]
+    sparseActiveGroups: Table[uint32, bool]
     lastWindowFocus*: bool
     sloppyFocus*: bool
     pointerInteraction*: PointerInteraction
     pointerModifier*: uint16
     pointerLockMasks*: array[3, uint16]
+    config*: WmConfiguration
 
   AddIdentityResult* = object
     state*: ClientState
@@ -41,8 +54,42 @@ proc newWmState*(firstGeneration = 1'u64): WmState =
   result.currentGroup = NullGroup
   result.groupCount = 10
   result.activeGroups = newSeq[bool](int(result.groupCount))
+  result.sparseActiveGroups = initTable[uint32, bool]()
   result.lastWindowFocus = true
   result.sloppyFocus = true
+  result.config = WmConfiguration(applySettings: true, borders: true,
+      replayClickOnFocus: true, resizeHints: false,
+      stickyWindows: false, borderStyle: 5, outerBorderWidth: 5,
+      outerColorFocused: 0xff97a293'u32,
+      outerColorUnfocused: 0xff393638'u32, cornerMask: 10,
+      cornerPercent: 28, cursorPosition: 8, gapLeft: 0, gapDown: 0,
+      gapUp: 0, gapRight: 0, innerBorderWidth: 0,
+      innerColorFocused: 0xff393638'u32,
+      innerColorUnfocused: 0xff97a293'u32, clickToFocus: 0,
+      pointerActions: [2'u32, 4'u32, 3'u32])
+
+proc groupIsActive*(state: WmState; group: RawGroup): bool =
+  if group.raw < uint32(state.activeGroups.len):
+    state.activeGroups[int(group.raw)]
+  else:
+    state.sparseActiveGroups.getOrDefault(group.raw)
+
+proc setGroupActive*(state: var WmState; group: RawGroup; active: bool) =
+  if group.raw < uint32(state.activeGroups.len):
+    state.activeGroups[int(group.raw)] = active
+  elif active:
+    state.sparseActiveGroups[group.raw] = true
+  elif state.sparseActiveGroups.hasKey(group.raw):
+    state.sparseActiveGroups.del(group.raw)
+
+proc activeGroupIds*(state: WmState): seq[RawGroup] =
+  for index, active in state.activeGroups:
+    if active: result.add(RawGroup(index))
+  var sparse: seq[uint32]
+  for group, active in state.sparseActiveGroups:
+    if active and group < state.groupCount: sparse.add(group)
+  sparse.sort()
+  for group in sparse: result.add(RawGroup(group))
 
 proc contains*(state: WmState; window: WindowId): bool =
   state.byWindow.hasKey(window)
@@ -113,7 +160,7 @@ proc addAdoptedClient*(state: var WmState; epoch: ProcessEpoch;
   state.managedOrder.insert(client.id, 0)
   state.focusOrder.insert(client.id, 0)
   if group != NullGroup and group.raw < state.groupCount:
-    state.activeGroups[int(group.raw)] = true
+    state.setGroupActive(group, true)
   state.identities[client.id].geometry = Geometry(x: int32(x), y: int32(y),
       width: uint32(width), height: uint32(height))
   state.identities[client.id].origGeometry = state.identities[client.id].geometry
@@ -140,7 +187,7 @@ proc addRuntimeClient*(state: var WmState; epoch: ProcessEpoch;
   state.managedOrder.insert(client.id, 0)
   state.focusOrder.insert(client.id, 0)
   if group != NullGroup and group.raw < state.groupCount:
-    state.activeGroups[int(group.raw)] = true
+    state.setGroupActive(group, true)
   result.state = client
   result.created = true
 
@@ -196,6 +243,28 @@ proc setPointerModifiers*(state: var WmState; modifier: uint16;
   state.pointerModifier = modifier
   state.pointerLockMasks = [numLock, capsLock, scrollLock]
 
+proc setConfiguredGroupCount*(state: var WmState; count: uint32):
+    tuple[represented: bool, changedClients: seq[ClientState]] =
+  ## Mirrors change_nr_of_groups without allocating one model slot per
+  ## configured group. High group IDs use the sparse active-state table.
+  let oldCount = state.groupCount
+  if count < oldCount:
+    for client in state.clientsInManagedOrder():
+      if client.group != NullGroup and client.group.raw >= count:
+        var updated = client
+        updated.group = NullGroup
+        if state.replaceClient(updated): result.changedClients.add(updated)
+        if state.focused.isSome and state.focused.get == client.id:
+          state.currentGroup = NullGroup
+  state.groupCount = count
+  if count < uint32(state.activeGroups.len):
+    state.activeGroups.setLen(int(count))
+  var staleGroups: seq[uint32]
+  for group in state.sparseActiveGroups.keys:
+    if group >= count: staleGroups.add(group)
+  for group in staleGroups: state.sparseActiveGroups.del(group)
+  result.represented = true
+
 proc clearFocused*(state: var WmState) =
   state.focused = none(ClientId)
   state.currentGroup = NullGroup
@@ -205,7 +274,7 @@ proc setClientGroup*(state: var WmState; id: ClientId; group: RawGroup): bool =
   if group != NullGroup and group.raw >= state.groupCount: return false
   state.identities[id].group = group
   if group != NullGroup and group.raw < state.groupCount:
-    state.activeGroups[int(group.raw)] = true
+    state.setGroupActive(group, true)
   if state.focused.isSome and state.focused.get == id:
     state.currentGroup = group
   true

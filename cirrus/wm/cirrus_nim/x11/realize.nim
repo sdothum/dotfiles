@@ -172,6 +172,47 @@ proc passUnmanagedConfigureGeometry*(connection: XConnection; window: uint32;
       window, packed.mask, addr values), "forward unmanaged geometry ConfigureRequest",
       missingIsOk = true)
 
+when defined(stage7d3cPrivateExecution):
+  proc realizePrivateGeometryUnchecked*(connection: XConnection;
+      effect: WmEffect): uint32 =
+    ## Diagnostic-only compatibility path for the frozen-C unchecked move / resize
+    ## requests. It deliberately does not call xcb_request_check.
+    let raw = connection.rawHandleForX11()
+    var values: XcbConfigureWindowValueList
+    var mask: uint16
+    case effect.kind
+    of weMoveClient:
+      mask = 1'u16 or 2'u16
+      values.data32 = [uint32(effect.geometry.x and 0xffff'i32),
+          uint32(effect.geometry.y and 0xffff'i32), 0, 0]
+    of weResizeClient:
+      mask = 4'u16 or 8'u16
+      values.data32 = [effect.geometry.width, effect.geometry.height, 0, 0]
+    else:
+      raise newException(ValueError,
+          "diagnostic unchecked geometry path only accepts move/resize effects")
+    let cookie = xcbConfigureWindow(raw, effect.window.raw, mask, addr values)
+    result = uint32(cookie.sequence)
+
+proc realizePrivateButtonEffect*(connection: XConnection;
+                                 effect: PrivateEffect): seq[uint32] =
+  ## Diagnostic private realization only. Requests are unchecked like frozen C;
+  ## their sequence numbers are returned for attribution by the coordinator.
+  let raw = connection.rawHandleForX11()
+  case effect.kind
+  of pfeUngrabButtons:
+    let cookie = xcbUngrabButton(raw, ButtonIndexAny, effect.window.raw,
+        ModMaskAny)
+    result.add(uint32(cookie.sequence))
+  of pfeGrabButtons:
+    for spec in effect.buttonGrabs:
+      let cookie = xcbGrabButton(raw, 0, effect.window.raw,
+          uint16(EventMaskButtonPress), GrabModeSync, GrabModeAsync,
+          0, 0, spec.button, spec.modifiers)
+      result.add(uint32(cookie.sequence))
+  else:
+    raise newException(ValueError, "not a button-grab private effect")
+
 proc realize*(connection: XConnection; effect: WmEffect;
               managedWindows: openArray[uint32]; diagnosticRaiseSubrequest = -1) =
   let raw = connection.rawHandleForX11()
@@ -205,8 +246,11 @@ proc realize*(connection: XConnection; effect: WmEffect;
   of weCreateDecoration:
     if connection.decorationVisual == 0 or connection.decorationFormat == 0:
       raise newException(IOError, "ARGB decoration resources unavailable")
-    var values = [0'u32, 0'u32, 1'u32, connection.decorationColormap]
-    let mask = CwBackPixel or (1'u32 shl 3) or CwOverrideRedirect or (1'u32 shl 13)
+    # Selected-value order follows the XCB CW bit order.
+    var values = [0'u32, 0'u32, 1'u32, 1'u32 shl 15,
+        connection.decorationColormap]
+    let mask = CwBackPixel or (1'u32 shl 3) or (1'u32 shl 11) or
+        CwOverrideRedirect or (1'u32 shl 13)
     checked(connection, xcbCreateWindowChecked(raw, 32,
         effect.decoration.raw, connection.root, effect.x, effect.y,
         effect.width, effect.height, 0, WindowClassInputOutput,

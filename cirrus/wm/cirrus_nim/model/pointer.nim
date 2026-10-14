@@ -29,3 +29,16 @@ proc buttonGrabPlan*(pointerModifier: uint16;
     for base in [0'u16, pointerModifier]:
       for modifiers in modifierVariants(base, locks):
         result.add(ButtonGrabSpec(button: button, modifiers: modifiers))
+
+proc sourceButtonGrabPlan*(clickToFocus: int8;
+    pointerActions: array[3, uint32]; pointerModifier: uint16;
+    locks: array[3, uint16]): seq[ButtonGrabSpec] =
+  ## Mirrors input.c:window_grab_buttons. Preserve duplicate requests when
+  ## click-focus and pointer-action policies select the same button/mask.
+  for index, button in [1'u8, 2'u8, 3'u8]:
+    if clickToFocus == 0'i8 or clickToFocus == int8(button):
+      for modifiers in modifierVariants(0'u16, locks):
+        result.add(ButtonGrabSpec(button: button, modifiers: modifiers))
+    if pointerActions[index] != 0'u32:
+      for modifiers in modifierVariants(pointerModifier, locks):
+        result.add(ButtonGrabSpec(button: button, modifiers: modifiers))

@@ -7,7 +7,7 @@
 # .............................................................. Draw background
 
 # Usage: draw root (restore)
-#                  color [<rgb> [luminance]] | random  | palette
+#                  color [<rgb> [luminance]] | random  | palette, 000000 (blackboard)
 #                  wallpaper                 | shuffle | gallery
 
 exists xwallpaper && XSETROOT=xwallpaper || XSETROOT=hsetroot  # alpine wallpaper
@@ -32,13 +32,15 @@ color() {
 	if [ $1 ] ;then
 		color=$1
 		[ $color = 000000 ] && blackboard=true  # blackboard reserved for media
-		recipe -d theme/random:rgb
+		[ $blackboard ] || recipe -d theme/random:rgb
 	else
 		color=$(rand h)
 		recipe theme/random:rgb $color
 	fi
-	recipe theme/setroot color
-	[ $2 ] || { luminance -$color && recipe theme/contrast light || recipe theme/contrast dark; }  # luminance set by menu root
+	if [ -z $blackboard ] ;then
+		recipe theme/setroot color
+		[ $2 ] || { luminance -$color && recipe theme/contrast light || recipe theme/contrast dark; }  # luminance set by menu root
+	fi
 	exec hsetroot -solid "#$color" 2>/dev/null  # setroot --blank-color "#$color" 2>/dev/null
 }
 

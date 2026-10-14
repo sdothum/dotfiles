@@ -51,6 +51,14 @@ proc readProperty(connection: XConnection; window, property,
       result.present = reply.typeAtom != 0
       result.typeAtom = reply.typeAtom
       result.format = reply.format
+    if expectedType != 0 and reply.typeAtom != 0 and
+        reply.typeAtom != expectedType:
+      result.present = true
+      result.typeAtom = reply.typeAtom
+      result.format = reply.format
+      result.values.setLen(0)
+      cFree(reply)
+      break
     if reply.typeAtom == 0 or reply.format != 32:
       cFree(reply)
       break

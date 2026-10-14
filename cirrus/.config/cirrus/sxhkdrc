@@ -119,8 +119,15 @@ super + ctrl + v
 super + ctrl + w
 	derecho window paper
 
+# NOTE: hide borders on monocle SEE: blackboard
+#       1440p width (2560) scaled to screen height
+
 super + {_,shift} + z
-	sirocco window {monocle,maximize}
+	[ -z "$(pfw)" ] && exit                                                        ;\
+	sirocco window {monocle,maximize}                                              ;\
+	W=$(zephyr window geometry | grep 'WIDTH=' | cut -d= -f2)                      ;\
+	V=$(( 2560 * (1440 - $(zephyr screen top) - $(zephyr screen bottom)) / 1440 )) ;\
+	[ $W -gt $V ] && [ $W -lt $(zephyr display width) ] && blackboard on || blackboard off
 
 # ......................................................................... tile
 #
@@ -327,8 +334,8 @@ ctrl + BackSpace
 super + {_,ctrl} + a
 	conky clock {_,toggle}
 
-super + shift + d ; {super + shift + d,d,D,p,P}
-	{toggle wallpaper,toggle wallpaper,toggle background,invert_panel,toggle panel}
+super + shift + d ; {super + shift + d,d,D,b,p,P}
+	{toggle wallpaper,toggle wallpaper,toggle background,blackboard toggle,invert_panel,toggle panel}
 
 # Applications
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

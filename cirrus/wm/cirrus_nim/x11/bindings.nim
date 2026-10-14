@@ -54,6 +54,15 @@ type
     sequence: uint16
     length: uint32
     atom*: uint32
+  XcbGetAtomNameCookie* {.importc: "xcb_get_atom_name_cookie_t", header: "xcb/xproto.h", bycopy.} = object
+    sequence*: cuint
+  XcbGetAtomNameReply* {.importc: "xcb_get_atom_name_reply_t", header: "xcb/xproto.h", bycopy.} = object
+    responseType: uint8
+    pad0: uint8
+    sequence: uint16
+    length: uint32
+    nameLen* {.importc: "name_len".}: uint16
+    pad1: array[22, uint8]
   XcbQueryTreeCookie* {.importc: "xcb_query_tree_cookie_t", header: "xcb/xproto.h", bycopy.} = object
     sequence*: cuint
   XcbQueryTreeReply* {.importc: "xcb_query_tree_reply_t", header: "xcb/xproto.h", bycopy.} = object
@@ -359,6 +368,9 @@ else:
   proc xcbRequestCheck*(connection: ptr XcbConnection; cookie: XcbVoidCookie): ptr XcbGenericError {.importc: "xcb_request_check", cdecl, header: "xcb/xcb.h".}
 proc xcbInternAtom*(connection: ptr XcbConnection; onlyIfExists: uint8; nameLength: uint16; name: cstring): XcbInternAtomCookie {.importc: "xcb_intern_atom", cdecl, header: "xcb/xproto.h".}
 proc xcbInternAtomReply*(connection: ptr XcbConnection; cookie: XcbInternAtomCookie; error: ptr ptr XcbGenericError): ptr XcbInternAtomReply {.importc: "xcb_intern_atom_reply", cdecl, header: "xcb/xproto.h".}
+proc xcbGetAtomName*(connection: ptr XcbConnection; atom: uint32): XcbGetAtomNameCookie {.importc: "xcb_get_atom_name", cdecl, header: "xcb/xproto.h".}
+proc xcbGetAtomNameReply*(connection: ptr XcbConnection; cookie: XcbGetAtomNameCookie; error: ptr ptr XcbGenericError): ptr XcbGetAtomNameReply {.importc: "xcb_get_atom_name_reply", cdecl, header: "xcb/xproto.h".}
+proc xcbGetAtomNameName*(reply: ptr XcbGetAtomNameReply): pointer {.importc: "xcb_get_atom_name_name", cdecl, header: "xcb/xproto.h".}
 proc xcbChangeProperty*(connection: ptr XcbConnection; mode: uint8; window, property, kind: uint32; format: uint8; dataLength: uint32; data: pointer): XcbVoidCookie {.importc: "xcb_change_property", cdecl, header: "xcb/xproto.h".}
 proc xcbQueryTree*(connection: ptr XcbConnection; window: uint32): XcbQueryTreeCookie {.importc: "xcb_query_tree", cdecl, header: "xcb/xproto.h".}
 proc xcbQueryTreeReply*(connection: ptr XcbConnection; cookie: XcbQueryTreeCookie; error: ptr ptr XcbGenericError): ptr XcbQueryTreeReply {.importc: "xcb_query_tree_reply", cdecl, header: "xcb/xproto.h".}
@@ -389,6 +401,7 @@ proc xcbWaitForEvent*(connection: ptr XcbConnection): ptr XcbGenericEvent {.impo
 proc xcbPollForEvent*(connection: ptr XcbConnection): ptr XcbGenericEvent {.importc: "xcb_poll_for_event", cdecl, header: "xcb/xcb.h".}
 proc xcbGetFileDescriptor*(connection: ptr XcbConnection): cint {.importc: "xcb_get_file_descriptor", cdecl, header: "xcb/xcb.h".}
 proc xcbGrabButton*(connection: ptr XcbConnection; ownerEvents: uint8; grabWindow: uint32; eventMask: uint16; pointerMode, keyboardMode: uint8; confineTo, cursor: uint32; button: uint8; modifiers: uint16): XcbVoidCookie {.importc: "xcb_grab_button", cdecl, header: "xcb/xproto.h".}
+proc xcbUngrabButton*(connection: ptr XcbConnection; button: uint8; grabWindow: uint32; modifiers: uint16): XcbVoidCookie {.importc: "xcb_ungrab_button", cdecl, header: "xcb/xproto.h".}
 proc xcbAllowEvents*(connection: ptr XcbConnection; mode: uint8; time: uint32): XcbVoidCookie {.importc: "xcb_allow_events", cdecl, header: "xcb/xproto.h".}
 proc xcbGrabPointer*(connection: ptr XcbConnection; ownerEvents: uint8; grabWindow: uint32; eventMask: uint16; pointerMode, keyboardMode: uint8; confineTo, cursor: uint32; time: uint32): XcbGrabPointerCookie {.importc: "xcb_grab_pointer", cdecl, header: "xcb/xproto.h".}
 proc xcbGrabPointerReply*(connection: ptr XcbConnection; cookie: XcbGrabPointerCookie; error: ptr ptr XcbGenericError): ptr XcbGrabPointerReply {.importc: "xcb_grab_pointer_reply", cdecl, header: "xcb/xproto.h".}

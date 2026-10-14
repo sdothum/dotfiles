@@ -78,6 +78,7 @@ proc main(): int =
   var testStage4 = false
   var testStage5 = false
   var testStage6 = false
+  var testPrivateEffects = false
   for arg in commandLineParams():
     case arg
     of "--test-events": logEvents = true
@@ -96,10 +97,18 @@ proc main(): int =
     of "--test-stage6":
       testStage6 = true
       testLifecycle = true
+    of "--test-private-effects":
+      testPrivateEffects = true
+      testLifecycle = true
     of "--abi":
       stdout.write(eventAbiReport())
       return 0
     else:
+      usage()
+      return 2
+
+  when not defined(stage7d3cPrivateExecution):
+    if testPrivateEffects:
       usage()
       return 2
 
@@ -154,7 +163,8 @@ proc main(): int =
       var coordinator = LifecycleCoordinator(connection: connection,
           state: addr state, epoch: epoch, trace: testLifecycle,
           pauseBeforeEffects: pauseBeforeEffects, testControls: testStage4 or testStage5 or testStage6,
-          testGeometry: testStage5, testStacking: testStage6)
+          testGeometry: testStage5, testStacking: testStage6,
+          privateExecution: testPrivateEffects)
       let handler: EventHandler = proc(event: XEvent) = coordinator.handle(event)
       runEventLoop(connection, testLifecycle, handler)
     result = 0
