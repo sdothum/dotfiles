@@ -37,10 +37,10 @@ class HandRenderer {
     var _minuteSecondaryRadius = 4;
     [ @file = "/home/shum/stow/garmin/interstellar/source/HandRenderer.mc"; @line = 18; @position = 13; @symbol_vardef = [_minuteSecondaryGap,18,13,32]; ]
     private
-    var _minuteSecondaryGap = 15;
+    var _minuteSecondaryGap = 49;
     [ @file = "/home/shum/stow/garmin/interstellar/source/HandRenderer.mc"; @line = 19; @position = 13; @symbol_vardef = [_minuteSecondaryLeadMinutes,19,13,40]; ]
     private
-    var _minuteSecondaryLeadMinutes = 24;
+    var _minuteSecondaryLeadMinutes = 30;
     [ @file = "/home/shum/stow/garmin/interstellar/source/HandRenderer.mc"; @line = 21; @symbol_functiondef = [drawGravityWell,21,18,33]; @symbol_param<0> = [dc,22,2,4]; @symbol_param<1> = [cx,22,6,8]; @symbol_param<2> = [cy,22,10,12]; @symbol_param<3> = [angle,22,14,19]; @symbol_param<4> = [radius,22,21,27]; @symbol_param<5> = [color,22,29,34]; ]
     private
     function drawGravityWell(dc, cx, cy, angle, radius, color) {
