@@ -5,22 +5,20 @@
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ................................................................ Media session
-set -x
-usage() { usage: "$(basename $0) [-b] on | off"; exit 1; }
+
+usage() { usage: "$(basename $0) on | off"; exit 1; }
 
 V_DYNAMIC=/tmp/$(basename $0):dynamic
-
-[ $1 = '-b' ] && { BLACKBOARD=true; shift; }
 
 case $1 in
 	on  )
 		conky clock stop
-		[ $BLACKBOARD ] && term BLACKBOARD  # bypass blackboard toggling if already on
-		# interface -q hdmi && pulse        # check hdmi audio
+		# blackboard on               # SEE: sxhkdrc "monocle"
+		# interface -q hdmi && pulse  # check hdmi audio
 		;;
 	off )
 		conky clock auto
-		pstat 'menu (media|movies|series)' || { pkill blackboard; restore root; }
+		pstat 'menu (media|movies|series)' || blackboard off
 		# xdotool key Ctrl+space          # clear potential pulse message
 		;;
 	*   ) usage ;;
