@@ -22,785 +22,860 @@ class DialRenderer {
     [ @file = "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc"; @line = 10; @position = 13; @symbol_vardef = [_twelveFont,10,13,24]; ]
     private
     var _twelveFont;
-    [ @file = "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc"; @line = 12; @symbol_functiondef = [initialize,12,10,20]; ]
+    [ @file = "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc"; @line = 12; @position = 13; @symbol_vardef = [_numeralRadius,12,13,27]; ]
+    private
+    var _numeralRadius = 2;
+    [ @file = "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc"; @line = 13; @position = 13; @symbol_vardef = [_eightRadius,13,13,25]; ]
+    private
+    var _eightRadius = 0;
+    [ @file = "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc"; @line = 14; @position = 13; @symbol_vardef = [_fourRadius,14,13,24]; ]
+    private
+    var _fourRadius = 2;
+    [ @file = "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc"; @line = 15; @position = 13; @symbol_vardef = [_minuteTicks,15,13,25]; ]
+    private
+    var _minuteTicks;
+    [ @file = "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc"; @line = 17; @symbol_functiondef = [initialize,17,10,20]; ]
     function initialize() as Void {
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_12_23_16_1_start:
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 13 2 ]
-        symbol [ WatchUi %tmp.1 13 14 21 ];
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_17_23_25_1_start:
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 18 2 ]
+        symbol [ WatchUi %tmp.1 18 14 21 ];
         %tmp.1 = getm $.Toybox.WatchUi;
-        symbol [ loadResource %tmp.2 13 22 34 ];
+        symbol [ loadResource %tmp.2 18 22 34 ];
         %tmp.2 = getv function %tmp.1 :loadResource;
-        symbol [ Rez %tmp.4 13 35 38 ];
+        symbol [ Rez %tmp.4 18 35 38 ];
         %tmp.4 = getv ? :Rez;
-        symbol [ Fonts %tmp.5 13 39 44 ];
+        symbol [ Fonts %tmp.5 18 39 44 ];
         %tmp.5 = getv %tmp.4 :Fonts;
-        symbol [ DialFour %tmp.6 13 45 53 ];
+        symbol [ DialFour %tmp.6 18 45 53 ];
         %tmp.6 = getv %tmp.5 :DialFour;
         %tmp.7 = invoke %tmp.1 %tmp.2(%tmp.6);
-        symbol [ _fourFont ? 13 2 11 ];
+        symbol [ _fourFont ? 18 2 11 ];
         putv self :_fourFont %tmp.7;
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 14 2 ]
-        symbol [ WatchUi %tmp.8 14 15 22 ];
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 19 2 ]
+        symbol [ WatchUi %tmp.8 19 15 22 ];
         %tmp.8 = getm $.Toybox.WatchUi;
-        symbol [ loadResource %tmp.9 14 23 35 ];
+        symbol [ loadResource %tmp.9 19 23 35 ];
         %tmp.9 = getv function %tmp.8 :loadResource;
-        symbol [ Rez %tmp.11 14 36 39 ];
+        symbol [ Rez %tmp.11 19 36 39 ];
         %tmp.11 = getv ? :Rez;
-        symbol [ Fonts %tmp.12 14 40 45 ];
+        symbol [ Fonts %tmp.12 19 40 45 ];
         %tmp.12 = getv %tmp.11 :Fonts;
-        symbol [ DialEight %tmp.13 14 46 55 ];
+        symbol [ DialEight %tmp.13 19 46 55 ];
         %tmp.13 = getv %tmp.12 :DialEight;
         %tmp.14 = invoke %tmp.8 %tmp.9(%tmp.13);
-        symbol [ _eightFont ? 14 2 12 ];
+        symbol [ _eightFont ? 19 2 12 ];
         putv self :_eightFont %tmp.14;
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 15 2 ]
-        symbol [ WatchUi %tmp.15 15 16 23 ];
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 20 2 ]
+        symbol [ WatchUi %tmp.15 20 16 23 ];
         %tmp.15 = getm $.Toybox.WatchUi;
-        symbol [ loadResource %tmp.16 15 24 36 ];
+        symbol [ loadResource %tmp.16 20 24 36 ];
         %tmp.16 = getv function %tmp.15 :loadResource;
-        symbol [ Rez %tmp.18 15 37 40 ];
+        symbol [ Rez %tmp.18 20 37 40 ];
         %tmp.18 = getv ? :Rez;
-        symbol [ Fonts %tmp.19 15 41 46 ];
+        symbol [ Fonts %tmp.19 20 41 46 ];
         %tmp.19 = getv %tmp.18 :Fonts;
-        symbol [ DialTwelve %tmp.20 15 47 57 ];
+        symbol [ DialTwelve %tmp.20 20 47 57 ];
         %tmp.20 = getv %tmp.19 :DialTwelve;
         %tmp.21 = invoke %tmp.15 %tmp.16(%tmp.20);
-        symbol [ _twelveFont ? 15 2 13 ];
+        symbol [ _twelveFont ? 20 2 13 ];
         putv self :_twelveFont %tmp.21;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_12_23_16_1_stop:
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 22 2 ]
+        symbol [ WatchUi %tmp.22 23 3 10 ];
+        %tmp.22 = getm $.Toybox.WatchUi;
+        symbol [ loadResource %tmp.23 23 11 23 ];
+        %tmp.23 = getv function %tmp.22 :loadResource;
+        symbol [ Rez %tmp.25 23 24 27 ];
+        %tmp.25 = getv ? :Rez;
+        symbol [ Drawables %tmp.26 23 28 37 ];
+        %tmp.26 = getv %tmp.25 :Drawables;
+        symbol [ MinuteTicks %tmp.27 23 38 49 ];
+        %tmp.27 = getv %tmp.26 :MinuteTicks;
+        %tmp.28 = invoke %tmp.22 %tmp.23(%tmp.27);
+        symbol [ _minuteTicks ? 22 2 14 ];
+        putv self :_minuteTicks %tmp.28;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_17_23_25_1_stop:
     }
-    [ @file = "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc"; @line = 18; @symbol_functiondef = [draw,18,10,14]; @symbol_param<0> = [dc,18,15,17]; @symbol_param<1> = [geometry,18,19,27]; ]
+    [ @file = "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc"; @line = 27; @symbol_functiondef = [draw,27,10,14]; @symbol_param<0> = [dc,27,15,17]; @symbol_param<1> = [geometry,27,19,27]; ]
     function draw(dc, geometry) {
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_18_29_22_1_start:
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 20 2 ]
-        %tmp.1 = self;
-        symbol [ drawNumerals %tmp.2 20 2 14 ];
-        %tmp.2 = getv function %tmp.1 :drawNumerals;
-        %tmp.3 = lgetv %dc;
-        symbol [ dc %tmp.3 20 15 17 ];
-        %tmp.4 = lgetv %geometry;
-        symbol [ geometry %tmp.4 20 19 27 ];
-        invoke %tmp.1 %tmp.2(%tmp.3, %tmp.4);
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 21 2 ]
-        %tmp.5 = self;
-        symbol [ drawTicks %tmp.6 21 2 11 ];
-        %tmp.6 = getv function %tmp.5 :drawTicks;
-        %tmp.7 = lgetv %dc;
-        symbol [ dc %tmp.7 21 12 14 ];
-        %tmp.8 = lgetv %geometry;
-        symbol [ geometry %tmp.8 21 16 24 ];
-        invoke %tmp.5 %tmp.6(%tmp.7, %tmp.8);
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_18_29_22_1_stop:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_27_29_34_1_start:
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 29 2 ]
+        %tmp.1 = lgetv %dc;
+        symbol [ dc %tmp.1 29 2 4 ];
+        symbol [ drawBitmap %tmp.2 29 5 15 ];
+        %tmp.2 = getv function %tmp.1 :drawBitmap;
+        %tmp.3 = 0;
+        %tmp.4 = 0;
+        symbol [ _minuteTicks %tmp.6 29 22 34 ];
+        %tmp.6 = getv ? :_minuteTicks;
+        invoke %tmp.1 %tmp.2(%tmp.3, %tmp.4, %tmp.6);
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 32 2 ]
+        %tmp.7 = self;
+        symbol [ drawNumerals %tmp.8 32 2 14 ];
+        %tmp.8 = getv function %tmp.7 :drawNumerals;
+        %tmp.9 = lgetv %dc;
+        symbol [ dc %tmp.9 32 15 17 ];
+        %tmp.10 = lgetv %geometry;
+        symbol [ geometry %tmp.10 32 19 27 ];
+        invoke %tmp.7 %tmp.8(%tmp.9, %tmp.10);
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 33 2 ]
+        %tmp.11 = self;
+        symbol [ drawTicks %tmp.12 33 2 11 ];
+        %tmp.12 = getv function %tmp.11 :drawTicks;
+        %tmp.13 = lgetv %dc;
+        symbol [ dc %tmp.13 33 12 14 ];
+        %tmp.14 = lgetv %geometry;
+        symbol [ geometry %tmp.14 33 16 24 ];
+        invoke %tmp.11 %tmp.12(%tmp.13, %tmp.14);
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_27_29_34_1_stop:
     }
-    [ @file = "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc"; @line = 24; @symbol_functiondef = [drawTicks,24,10,19]; @symbol_param<0> = [dc,24,20,22]; @symbol_param<1> = [geometry,24,24,32]; ]
+    [ @file = "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc"; @line = 36; @symbol_functiondef = [drawTicks,36,10,19]; @symbol_param<0> = [dc,36,20,22]; @symbol_param<1> = [geometry,36,24,32]; ]
     function drawTicks(dc, geometry) {
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_24_34_122_1_start:
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 27 2 ]
-        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_24_34_122_1_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_24_34_122_1_stop" ]
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_36_34_140_1_start:
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 39 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_36_34_140_1_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_36_34_140_1_stop" ]
         %innerRadius.1 = local;
-        symbol [ innerRadius %innerRadius.1 27 6 17 ];
+        symbol [ innerRadius %innerRadius.1 39 6 17 ];
         %tmp.1 = lgetv %geometry;
-        symbol [ geometry %tmp.1 27 20 28 ];
-        symbol [ tickInnerRadius %tmp.2 27 29 44 ];
+        symbol [ geometry %tmp.1 39 20 28 ];
+        symbol [ tickInnerRadius %tmp.2 39 29 44 ];
         %tmp.2 = getv %tmp.1 :tickInnerRadius;
         %tmp.3 = 2;
         %tmp.4 = sub %tmp.2 %tmp.3;
         lputv %innerRadius.1 %tmp.4;
-        symbol [ innerRadius %innerRadius.1 27 6 17 ];
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 28 2 ]
-        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_24_34_122_1_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_24_34_122_1_stop" ]
+        symbol [ innerRadius %innerRadius.1 39 6 17 ];
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 40 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_36_34_140_1_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_36_34_140_1_stop" ]
         %outerRadius.2 = local;
-        symbol [ outerRadius %outerRadius.2 28 6 17 ];
+        symbol [ outerRadius %outerRadius.2 40 6 17 ];
         %tmp.5 = lgetv %geometry;
-        symbol [ geometry %tmp.5 28 20 28 ];
-        symbol [ tickOuterRadius %tmp.6 28 29 44 ];
+        symbol [ geometry %tmp.5 40 20 28 ];
+        symbol [ tickOuterRadius %tmp.6 40 29 44 ];
         %tmp.6 = getv %tmp.5 :tickOuterRadius;
         %tmp.7 = 2;
         %tmp.8 = sub %tmp.6 %tmp.7;
         lputv %outerRadius.2 %tmp.8;
-        symbol [ outerRadius %outerRadius.2 28 6 17 ];
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 29 2 ]
-        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_24_34_122_1_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_24_34_122_1_stop" ]
+        symbol [ outerRadius %outerRadius.2 40 6 17 ];
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 41 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_36_34_140_1_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_36_34_140_1_stop" ]
         %centerRadius.3 = local;
-        symbol [ centerRadius %centerRadius.3 29 6 18 ];
+        symbol [ centerRadius %centerRadius.3 41 6 18 ];
         %tmp.9 = lgetv %geometry;
-        symbol [ geometry %tmp.9 29 21 29 ];
-        symbol [ tickCenterRadius %tmp.10 29 30 46 ];
+        symbol [ geometry %tmp.9 41 21 29 ];
+        symbol [ tickCenterRadius %tmp.10 41 30 46 ];
         %tmp.10 = getv %tmp.9 :tickCenterRadius;
         %tmp.11 = 2;
         %tmp.12 = sub %tmp.10 %tmp.11;
         lputv %centerRadius.3 %tmp.12;
-        symbol [ centerRadius %centerRadius.3 29 6 18 ];
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 31 2 ]
-        for @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_2_119_2_for_test @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_2_119_2_for_incr @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_2_119_2_for_end;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_2_119_2_for_init:
-        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_2_119_2_for_begin" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_2_119_2_for_end" ]
+        symbol [ centerRadius %centerRadius.3 41 6 18 ];
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 43 2 ]
+        for @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_2_137_2_for_test @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_2_137_2_for_incr @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_2_137_2_for_end;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_2_137_2_for_init:
+        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_2_137_2_for_begin" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_2_137_2_for_end" ]
         %minute.4 = local;
-        symbol [ minute %minute.4 31 11 17 ];
+        symbol [ minute %minute.4 43 11 17 ];
         %tmp.13 = 0;
         lputv %minute.4 %tmp.13;
-        symbol [ minute %minute.4 31 11 17 ];
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_2_119_2_for_test:
+        symbol [ minute %minute.4 43 11 17 ];
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_2_137_2_for_test:
         %tmp.14 = lgetv %minute.4;
-        symbol [ minute %tmp.14 31 23 29 ];
+        symbol [ minute %tmp.14 43 23 29 ];
         %tmp.15 = 60;
         %tmp.16 = lt %tmp.14 %tmp.15;
-        bf %tmp.16 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_2_119_2_for_end;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_2_119_2_for_begin:
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_start:
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 34 3 ]
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_3_44_3_if_stmt:
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_7_42_15_begin:
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_7_41_15_begin:
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_7_40_15_begin:
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_7_39_15_begin:
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_7_38_15_begin:
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_7_37_15_begin:
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_7_36_15_begin:
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_7_35_15_begin:
+        bf %tmp.16 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_2_137_2_for_end;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_2_137_2_for_begin:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_start:
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 46 3 ]
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_3_56_3_if_stmt:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_7_54_15_begin:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_7_53_15_begin:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_7_52_15_begin:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_7_51_15_begin:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_7_50_15_begin:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_7_49_15_begin:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_7_48_15_begin:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_7_47_15_begin:
         %tmp.17 = lgetv %minute.4;
-        symbol [ minute %tmp.17 34 7 13 ];
+        symbol [ minute %tmp.17 46 7 13 ];
         %tmp.18 = 0;
         %tmp.19 = eq %tmp.17 %tmp.18;
-        bt %tmp.19 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_3_44_3_if_true;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_35_5_35_15_false:
+        bt %tmp.19 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_3_56_3_if_true;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_47_5_47_15_false:
         %tmp.20 = lgetv %minute.4;
-        symbol [ minute %tmp.20 35 5 11 ];
+        symbol [ minute %tmp.20 47 5 11 ];
         %tmp.21 = 1;
         %tmp.22 = eq %tmp.20 %tmp.21;
         push %tmp.22;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_35_5_35_15_end:
-        %tmp.23 = phi [%tmp.19 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_7_35_15_begin] [%tmp.22 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_35_5_35_15_false] [%tmp.23 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_35_5_35_15_end];
-        bt %tmp.23 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_3_44_3_if_true;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_36_5_36_15_false:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_47_5_47_15_end:
+        %tmp.23 = phi [%tmp.19 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_7_47_15_begin] [%tmp.22 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_47_5_47_15_false] [%tmp.23 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_47_5_47_15_end];
+        bt %tmp.23 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_3_56_3_if_true;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_48_5_48_15_false:
         %tmp.24 = lgetv %minute.4;
-        symbol [ minute %tmp.24 36 5 11 ];
+        symbol [ minute %tmp.24 48 5 11 ];
         %tmp.25 = 19;
         %tmp.26 = eq %tmp.24 %tmp.25;
         push %tmp.26;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_36_5_36_15_end:
-        %tmp.27 = phi [%tmp.23 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_7_36_15_begin] [%tmp.26 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_36_5_36_15_false] [%tmp.27 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_36_5_36_15_end];
-        bt %tmp.27 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_3_44_3_if_true;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_37_5_37_15_false:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_48_5_48_15_end:
+        %tmp.27 = phi [%tmp.23 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_7_48_15_begin] [%tmp.26 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_48_5_48_15_false] [%tmp.27 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_48_5_48_15_end];
+        bt %tmp.27 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_3_56_3_if_true;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_49_5_49_15_false:
         %tmp.28 = lgetv %minute.4;
-        symbol [ minute %tmp.28 37 5 11 ];
+        symbol [ minute %tmp.28 49 5 11 ];
         %tmp.29 = 20;
         %tmp.30 = eq %tmp.28 %tmp.29;
         push %tmp.30;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_37_5_37_15_end:
-        %tmp.31 = phi [%tmp.27 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_7_37_15_begin] [%tmp.30 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_37_5_37_15_false] [%tmp.31 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_37_5_37_15_end];
-        bt %tmp.31 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_3_44_3_if_true;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_38_5_38_15_false:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_49_5_49_15_end:
+        %tmp.31 = phi [%tmp.27 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_7_49_15_begin] [%tmp.30 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_49_5_49_15_false] [%tmp.31 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_49_5_49_15_end];
+        bt %tmp.31 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_3_56_3_if_true;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_50_5_50_15_false:
         %tmp.32 = lgetv %minute.4;
-        symbol [ minute %tmp.32 38 5 11 ];
+        symbol [ minute %tmp.32 50 5 11 ];
         %tmp.33 = 21;
         %tmp.34 = eq %tmp.32 %tmp.33;
         push %tmp.34;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_38_5_38_15_end:
-        %tmp.35 = phi [%tmp.31 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_7_38_15_begin] [%tmp.34 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_38_5_38_15_false] [%tmp.35 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_38_5_38_15_end];
-        bt %tmp.35 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_3_44_3_if_true;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_39_5_39_15_false:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_50_5_50_15_end:
+        %tmp.35 = phi [%tmp.31 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_7_50_15_begin] [%tmp.34 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_50_5_50_15_false] [%tmp.35 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_50_5_50_15_end];
+        bt %tmp.35 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_3_56_3_if_true;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_51_5_51_15_false:
         %tmp.36 = lgetv %minute.4;
-        symbol [ minute %tmp.36 39 5 11 ];
+        symbol [ minute %tmp.36 51 5 11 ];
         %tmp.37 = 39;
         %tmp.38 = eq %tmp.36 %tmp.37;
         push %tmp.38;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_39_5_39_15_end:
-        %tmp.39 = phi [%tmp.35 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_7_39_15_begin] [%tmp.38 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_39_5_39_15_false] [%tmp.39 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_39_5_39_15_end];
-        bt %tmp.39 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_3_44_3_if_true;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_40_5_40_15_false:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_51_5_51_15_end:
+        %tmp.39 = phi [%tmp.35 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_7_51_15_begin] [%tmp.38 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_51_5_51_15_false] [%tmp.39 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_51_5_51_15_end];
+        bt %tmp.39 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_3_56_3_if_true;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_52_5_52_15_false:
         %tmp.40 = lgetv %minute.4;
-        symbol [ minute %tmp.40 40 5 11 ];
+        symbol [ minute %tmp.40 52 5 11 ];
         %tmp.41 = 40;
         %tmp.42 = eq %tmp.40 %tmp.41;
         push %tmp.42;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_40_5_40_15_end:
-        %tmp.43 = phi [%tmp.39 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_7_40_15_begin] [%tmp.42 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_40_5_40_15_false] [%tmp.43 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_40_5_40_15_end];
-        bt %tmp.43 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_3_44_3_if_true;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_41_5_41_15_false:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_52_5_52_15_end:
+        %tmp.43 = phi [%tmp.39 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_7_52_15_begin] [%tmp.42 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_52_5_52_15_false] [%tmp.43 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_52_5_52_15_end];
+        bt %tmp.43 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_3_56_3_if_true;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_53_5_53_15_false:
         %tmp.44 = lgetv %minute.4;
-        symbol [ minute %tmp.44 41 5 11 ];
+        symbol [ minute %tmp.44 53 5 11 ];
         %tmp.45 = 41;
         %tmp.46 = eq %tmp.44 %tmp.45;
         push %tmp.46;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_41_5_41_15_end:
-        %tmp.47 = phi [%tmp.43 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_7_41_15_begin] [%tmp.46 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_41_5_41_15_false] [%tmp.47 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_41_5_41_15_end];
-        bt %tmp.47 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_3_44_3_if_true;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_42_5_42_15_false:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_53_5_53_15_end:
+        %tmp.47 = phi [%tmp.43 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_7_53_15_begin] [%tmp.46 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_53_5_53_15_false] [%tmp.47 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_53_5_53_15_end];
+        bt %tmp.47 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_3_56_3_if_true;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_54_5_54_15_false:
         %tmp.48 = lgetv %minute.4;
-        symbol [ minute %tmp.48 42 5 11 ];
+        symbol [ minute %tmp.48 54 5 11 ];
         %tmp.49 = 59;
         %tmp.50 = eq %tmp.48 %tmp.49;
         push %tmp.50;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_42_5_42_15_end:
-        %tmp.51 = phi [%tmp.47 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_7_42_15_begin] [%tmp.50 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_42_5_42_15_false] [%tmp.51 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_42_5_42_15_end];
-        bf %tmp.51 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_3_44_3_if_end;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_3_44_3_if_true:
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_42_19_44_3_start:
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 43 4 ]
-        goto break @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_2_119_2_for_incr;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_42_19_44_3_stop:
-        goto @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_3_44_3_if_end;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_34_3_44_3_if_end:
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 46 3 ]
-        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_stop" ]
-        %angle.5 = local;
-        symbol [ angle %angle.5 46 7 12 ];
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_54_5_54_15_end:
+        %tmp.51 = phi [%tmp.47 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_7_54_15_begin] [%tmp.50 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_54_5_54_15_false] [%tmp.51 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_54_5_54_15_end];
+        bf %tmp.51 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_3_56_3_if_end;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_3_56_3_if_true:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_54_19_56_3_start:
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 55 4 ]
+        goto break @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_2_137_2_for_incr;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_54_19_56_3_stop:
+        goto @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_3_56_3_if_end;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_46_3_56_3_if_end:
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 60 3 ]
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_60_3_62_3_if_stmt:
         %tmp.52 = lgetv %minute.4;
-        symbol [ minute %tmp.52 47 6 12 ];
-        symbol [ Math %tmp.53 47 15 19 ];
-        %tmp.53 = getm $.Toybox.Math;
-        symbol [ PI %tmp.54 47 20 22 ];
-        %tmp.54 = getv %tmp.53 :PI;
-        %tmp.55 = mul %tmp.52 %tmp.54;
-        %tmp.56 = 2.0;
-        %tmp.57 = mul %tmp.55 %tmp.56;
-        %tmp.58 = 60.0;
-        %tmp.59 = div %tmp.57 %tmp.58;
-        symbol [ Math %tmp.60 48 7 11 ];
-        %tmp.60 = getm $.Toybox.Math;
-        symbol [ PI %tmp.61 48 12 14 ];
-        %tmp.61 = getv %tmp.60 :PI;
-        %tmp.62 = 2.0;
-        %tmp.63 = div %tmp.61 %tmp.62;
-        %tmp.64 = sub %tmp.59 %tmp.63;
-        lputv %angle.5 %tmp.64;
-        symbol [ angle %angle.5 46 7 12 ];
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 50 3 ]
-        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_stop" ]
-        %cosAngle.6 = local;
-        symbol [ cosAngle %cosAngle.6 50 7 15 ];
-        symbol [ Math %tmp.65 50 18 22 ];
+        symbol [ minute %tmp.52 60 8 14 ];
+        %tmp.53 = 5;
+        %tmp.54 = mod %tmp.52 %tmp.53;
+        %tmp.55 = 0;
+        %tmp.56 = ne %tmp.54 %tmp.55;
+        bf %tmp.56 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_60_3_62_3_if_end;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_60_3_62_3_if_true:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_60_26_62_3_start:
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 61 4 ]
+        goto break @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_2_137_2_for_incr;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_60_26_62_3_stop:
+        goto @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_60_3_62_3_if_end;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_60_3_62_3_if_end:
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 64 3 ]
+        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_stop" ]
+        %angle.5 = local;
+        symbol [ angle %angle.5 64 7 12 ];
+        %tmp.57 = lgetv %minute.4;
+        symbol [ minute %tmp.57 65 6 12 ];
+        symbol [ Math %tmp.58 65 15 19 ];
+        %tmp.58 = getm $.Toybox.Math;
+        symbol [ PI %tmp.59 65 20 22 ];
+        %tmp.59 = getv %tmp.58 :PI;
+        %tmp.60 = mul %tmp.57 %tmp.59;
+        %tmp.61 = 2.0;
+        %tmp.62 = mul %tmp.60 %tmp.61;
+        %tmp.63 = 60.0;
+        %tmp.64 = div %tmp.62 %tmp.63;
+        symbol [ Math %tmp.65 66 7 11 ];
         %tmp.65 = getm $.Toybox.Math;
-        symbol [ cos %tmp.66 50 23 26 ];
-        %tmp.66 = getv function %tmp.65 :cos;
-        %tmp.67 = lgetv %angle.5;
-        symbol [ angle %tmp.67 50 27 32 ];
-        %tmp.68 = invoke %tmp.65 %tmp.66(%tmp.67);
-        lputv %cosAngle.6 %tmp.68;
-        symbol [ cosAngle %cosAngle.6 50 7 15 ];
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 51 3 ]
-        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_stop" ]
+        symbol [ PI %tmp.66 66 12 14 ];
+        %tmp.66 = getv %tmp.65 :PI;
+        %tmp.67 = 2.0;
+        %tmp.68 = div %tmp.66 %tmp.67;
+        %tmp.69 = sub %tmp.64 %tmp.68;
+        lputv %angle.5 %tmp.69;
+        symbol [ angle %angle.5 64 7 12 ];
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 68 3 ]
+        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_stop" ]
+        %cosAngle.6 = local;
+        symbol [ cosAngle %cosAngle.6 68 7 15 ];
+        symbol [ Math %tmp.70 68 18 22 ];
+        %tmp.70 = getm $.Toybox.Math;
+        symbol [ cos %tmp.71 68 23 26 ];
+        %tmp.71 = getv function %tmp.70 :cos;
+        %tmp.72 = lgetv %angle.5;
+        symbol [ angle %tmp.72 68 27 32 ];
+        %tmp.73 = invoke %tmp.70 %tmp.71(%tmp.72);
+        lputv %cosAngle.6 %tmp.73;
+        symbol [ cosAngle %cosAngle.6 68 7 15 ];
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 69 3 ]
+        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_stop" ]
         %sinAngle.7 = local;
-        symbol [ sinAngle %sinAngle.7 51 7 15 ];
-        symbol [ Math %tmp.69 51 18 22 ];
-        %tmp.69 = getm $.Toybox.Math;
-        symbol [ sin %tmp.70 51 23 26 ];
-        %tmp.70 = getv function %tmp.69 :sin;
-        %tmp.71 = lgetv %angle.5;
-        symbol [ angle %tmp.71 51 27 32 ];
-        %tmp.72 = invoke %tmp.69 %tmp.70(%tmp.71);
-        lputv %sinAngle.7 %tmp.72;
-        symbol [ sinAngle %sinAngle.7 51 7 15 ];
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 53 3 ]
-        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_stop" ]
+        symbol [ sinAngle %sinAngle.7 69 7 15 ];
+        symbol [ Math %tmp.74 69 18 22 ];
+        %tmp.74 = getm $.Toybox.Math;
+        symbol [ sin %tmp.75 69 23 26 ];
+        %tmp.75 = getv function %tmp.74 :sin;
+        %tmp.76 = lgetv %angle.5;
+        symbol [ angle %tmp.76 69 27 32 ];
+        %tmp.77 = invoke %tmp.74 %tmp.75(%tmp.76);
+        lputv %sinAngle.7 %tmp.77;
+        symbol [ sinAngle %sinAngle.7 69 7 15 ];
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 71 3 ]
+        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_stop" ]
         %isFiveMinute.8 = local;
-        symbol [ isFiveMinute %isFiveMinute.8 53 7 19 ];
-        %tmp.73 = lgetv %minute.4;
-        symbol [ minute %tmp.73 53 24 30 ];
-        %tmp.74 = 5;
-        %tmp.75 = mod %tmp.73 %tmp.74;
-        %tmp.76 = 0;
-        %tmp.77 = eq %tmp.75 %tmp.76;
-        lputv %isFiveMinute.8 %tmp.77;
-        symbol [ isFiveMinute %isFiveMinute.8 53 7 19 ];
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 55 3 ]
-        %tmp.78 = lgetv %dc;
-        symbol [ dc %tmp.78 55 3 5 ];
-        symbol [ setColor %tmp.79 55 6 14 ];
-        %tmp.79 = getv function %tmp.78 :setColor;
-        symbol [ Graphics %tmp.80 56 4 12 ];
-        %tmp.80 = getm $.Toybox.Graphics;
-        symbol [ COLOR_BLACK %tmp.81 56 13 24 ];
-        %tmp.81 = getv %tmp.80 :COLOR_BLACK;
-        symbol [ Theme %tmp.83 57 4 9 ];
-        %tmp.83 = getv ? :Theme;
-        symbol [ BACKGROUND_COLOR %tmp.84 57 10 26 ];
-        %tmp.84 = getv %tmp.83 :BACKGROUND_COLOR;
-        invoke %tmp.78 %tmp.79(%tmp.81, %tmp.84);
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 61 3 ]
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_61_3_80_3_if_stmt:
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_61_7_64_15_begin:
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_61_7_63_15_begin:
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_61_7_62_15_begin:
-        %tmp.85 = lgetv %isFiveMinute.8;
-        symbol [ isFiveMinute %tmp.85 61 7 19 ];
-        bf %tmp.85 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_61_3_80_3_if_end;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_62_5_62_15_true:
-        %tmp.86 = lgetv %minute.4;
-        symbol [ minute %tmp.86 62 5 11 ];
-        %tmp.87 = 15;
-        %tmp.88 = ne %tmp.86 %tmp.87;
-        push %tmp.88;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_62_5_62_15_end:
-        %tmp.89 = phi [%tmp.85 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_61_7_62_15_begin] [%tmp.88 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_62_5_62_15_true] [%tmp.89 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_62_5_62_15_end];
-        bf %tmp.89 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_61_3_80_3_if_end;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_63_5_63_15_true:
-        %tmp.90 = lgetv %minute.4;
-        symbol [ minute %tmp.90 63 5 11 ];
-        %tmp.91 = 30;
-        %tmp.92 = ne %tmp.90 %tmp.91;
-        push %tmp.92;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_63_5_63_15_end:
-        %tmp.93 = phi [%tmp.89 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_61_7_63_15_begin] [%tmp.92 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_63_5_63_15_true] [%tmp.93 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_63_5_63_15_end];
-        bf %tmp.93 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_61_3_80_3_if_end;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_64_5_64_15_true:
-        %tmp.94 = lgetv %minute.4;
-        symbol [ minute %tmp.94 64 5 11 ];
-        %tmp.95 = 45;
-        %tmp.96 = ne %tmp.94 %tmp.95;
-        push %tmp.96;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_64_5_64_15_end:
-        %tmp.97 = phi [%tmp.93 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_61_7_64_15_begin] [%tmp.96 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_64_5_64_15_true] [%tmp.97 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_64_5_64_15_end];
-        bf %tmp.97 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_61_3_80_3_if_end;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_61_3_80_3_if_true:
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_64_19_80_3_start:
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 66 4 ]
-        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_64_19_80_3_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_64_19_80_3_stop" ]
+        symbol [ isFiveMinute %isFiveMinute.8 71 7 19 ];
+        %tmp.78 = lgetv %minute.4;
+        symbol [ minute %tmp.78 71 24 30 ];
+        %tmp.79 = 5;
+        %tmp.80 = mod %tmp.78 %tmp.79;
+        %tmp.81 = 0;
+        %tmp.82 = eq %tmp.80 %tmp.81;
+        lputv %isFiveMinute.8 %tmp.82;
+        symbol [ isFiveMinute %isFiveMinute.8 71 7 19 ];
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 73 3 ]
+        %tmp.83 = lgetv %dc;
+        symbol [ dc %tmp.83 73 3 5 ];
+        symbol [ setColor %tmp.84 73 6 14 ];
+        %tmp.84 = getv function %tmp.83 :setColor;
+        symbol [ Graphics %tmp.85 74 4 12 ];
+        %tmp.85 = getm $.Toybox.Graphics;
+        symbol [ COLOR_BLACK %tmp.86 74 13 24 ];
+        %tmp.86 = getv %tmp.85 :COLOR_BLACK;
+        symbol [ Theme %tmp.88 75 4 9 ];
+        %tmp.88 = getv ? :Theme;
+        symbol [ BACKGROUND_COLOR %tmp.89 75 10 26 ];
+        %tmp.89 = getv %tmp.88 :BACKGROUND_COLOR;
+        invoke %tmp.83 %tmp.84(%tmp.86, %tmp.89);
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 79 3 ]
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_79_3_98_3_if_stmt:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_79_7_82_15_begin:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_79_7_81_15_begin:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_79_7_80_15_begin:
+        %tmp.90 = lgetv %isFiveMinute.8;
+        symbol [ isFiveMinute %tmp.90 79 7 19 ];
+        bf %tmp.90 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_79_3_98_3_if_end;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_80_5_80_15_true:
+        %tmp.91 = lgetv %minute.4;
+        symbol [ minute %tmp.91 80 5 11 ];
+        %tmp.92 = 15;
+        %tmp.93 = ne %tmp.91 %tmp.92;
+        push %tmp.93;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_80_5_80_15_end:
+        %tmp.94 = phi [%tmp.90 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_79_7_80_15_begin] [%tmp.93 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_80_5_80_15_true] [%tmp.94 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_80_5_80_15_end];
+        bf %tmp.94 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_79_3_98_3_if_end;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_81_5_81_15_true:
+        %tmp.95 = lgetv %minute.4;
+        symbol [ minute %tmp.95 81 5 11 ];
+        %tmp.96 = 30;
+        %tmp.97 = ne %tmp.95 %tmp.96;
+        push %tmp.97;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_81_5_81_15_end:
+        %tmp.98 = phi [%tmp.94 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_79_7_81_15_begin] [%tmp.97 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_81_5_81_15_true] [%tmp.98 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_81_5_81_15_end];
+        bf %tmp.98 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_79_3_98_3_if_end;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_82_5_82_15_true:
+        %tmp.99 = lgetv %minute.4;
+        symbol [ minute %tmp.99 82 5 11 ];
+        %tmp.100 = 45;
+        %tmp.101 = ne %tmp.99 %tmp.100;
+        push %tmp.101;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_82_5_82_15_end:
+        %tmp.102 = phi [%tmp.98 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_79_7_82_15_begin] [%tmp.101 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_82_5_82_15_true] [%tmp.102 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_82_5_82_15_end];
+        bf %tmp.102 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_79_3_98_3_if_end;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_79_3_98_3_if_true:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_82_19_98_3_start:
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 84 4 ]
+        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_82_19_98_3_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_82_19_98_3_stop" ]
         %dotX.9 = local;
-        symbol [ dotX %dotX.9 66 8 12 ];
-        %tmp.98 = lgetv %geometry;
-        symbol [ geometry %tmp.98 67 5 13 ];
-        symbol [ centerX %tmp.99 67 14 21 ];
-        %tmp.99 = getv %tmp.98 :centerX;
-        symbol [ Math %tmp.100 68 5 9 ];
-        %tmp.100 = getm $.Toybox.Math;
-        symbol [ round %tmp.101 68 10 15 ];
-        %tmp.101 = getv function %tmp.100 :round;
-        %tmp.102 = lgetv %cosAngle.6;
-        symbol [ cosAngle %tmp.102 68 16 24 ];
-        %tmp.103 = lgetv %centerRadius.3;
-        symbol [ centerRadius %tmp.103 68 27 39 ];
-        %tmp.104 = mul %tmp.102 %tmp.103;
-        %tmp.105 = invoke %tmp.100 %tmp.101(%tmp.104);
-        %tmp.106 = add %tmp.99 %tmp.105;
-        lputv %dotX.9 %tmp.106;
-        symbol [ dotX %dotX.9 66 8 12 ];
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 70 4 ]
-        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_64_19_80_3_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_64_19_80_3_stop" ]
-        %dotY.10 = local;
-        symbol [ dotY %dotY.10 70 8 12 ];
-        %tmp.107 = lgetv %geometry;
-        symbol [ geometry %tmp.107 71 5 13 ];
-        symbol [ centerY %tmp.108 71 14 21 ];
-        %tmp.108 = getv %tmp.107 :centerY;
-        symbol [ Math %tmp.109 72 5 9 ];
-        %tmp.109 = getm $.Toybox.Math;
-        symbol [ round %tmp.110 72 10 15 ];
-        %tmp.110 = getv function %tmp.109 :round;
-        %tmp.111 = lgetv %sinAngle.7;
-        symbol [ sinAngle %tmp.111 72 16 24 ];
-        %tmp.112 = lgetv %centerRadius.3;
-        symbol [ centerRadius %tmp.112 72 27 39 ];
-        %tmp.113 = mul %tmp.111 %tmp.112;
-        %tmp.114 = invoke %tmp.109 %tmp.110(%tmp.113);
-        %tmp.115 = add %tmp.108 %tmp.114;
-        lputv %dotY.10 %tmp.115;
-        symbol [ dotY %dotY.10 70 8 12 ];
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 76 4 ]
-        symbol [ CircleRenderer %tmp.117 76 4 18 ];
-        %tmp.117 = getv ? :CircleRenderer;
-        symbol [ drawSmoothCircle %tmp.118 76 19 35 ];
-        %tmp.118 = getv function %tmp.117 :drawSmoothCircle;
-        %tmp.119 = lgetv %dc;
-        symbol [ dc %tmp.119 77 5 7 ];
-        %tmp.120 = lgetv %dotX.9;
-        symbol [ dotX %tmp.120 77 9 13 ];
-        %tmp.121 = lgetv %dotY.10;
-        symbol [ dotY %tmp.121 77 15 19 ];
-        %tmp.122 = 3;
-        %tmp.123 = 0x000000;
-        invoke %tmp.117 %tmp.118(%tmp.119, %tmp.120, %tmp.121, %tmp.122, %tmp.123);
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 79 4 ]
-        goto break @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_2_119_2_for_incr;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_64_19_80_3_stop:
-        goto @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_61_3_80_3_if_end;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_61_3_80_3_if_end:
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 83 3 ]
-        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_stop" ]
-        %thisInnerRadius.11 = local;
-        symbol [ thisInnerRadius %thisInnerRadius.11 83 7 22 ];
-        %tmp.124 = lgetv %innerRadius.1;
-        symbol [ innerRadius %tmp.124 83 25 36 ];
-        lputv %thisInnerRadius.11 %tmp.124;
-        symbol [ thisInnerRadius %thisInnerRadius.11 83 7 22 ];
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 85 3 ]
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_85_3_89_3_if_stmt:
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_85_7_87_15_begin:
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_85_7_86_15_begin:
-        %tmp.125 = lgetv %minute.4;
-        symbol [ minute %tmp.125 85 7 13 ];
-        %tmp.126 = 15;
-        %tmp.127 = eq %tmp.125 %tmp.126;
-        bt %tmp.127 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_85_3_89_3_if_true;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_86_5_86_15_false:
-        %tmp.128 = lgetv %minute.4;
-        symbol [ minute %tmp.128 86 5 11 ];
-        %tmp.129 = 30;
-        %tmp.130 = eq %tmp.128 %tmp.129;
-        push %tmp.130;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_86_5_86_15_end:
-        %tmp.131 = phi [%tmp.127 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_85_7_86_15_begin] [%tmp.130 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_86_5_86_15_false] [%tmp.131 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_86_5_86_15_end];
-        bt %tmp.131 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_85_3_89_3_if_true;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_87_5_87_15_false:
-        %tmp.132 = lgetv %minute.4;
-        symbol [ minute %tmp.132 87 5 11 ];
-        %tmp.133 = 45;
-        %tmp.134 = eq %tmp.132 %tmp.133;
-        push %tmp.134;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_87_5_87_15_end:
-        %tmp.135 = phi [%tmp.131 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_85_7_87_15_begin] [%tmp.134 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_87_5_87_15_false] [%tmp.135 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_87_5_87_15_end];
-        bf %tmp.135 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_85_3_89_3_if_end;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_85_3_89_3_if_true:
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_87_19_89_3_start:
+        symbol [ dotX %dotX.9 84 8 12 ];
+        %tmp.103 = lgetv %geometry;
+        symbol [ geometry %tmp.103 85 5 13 ];
+        symbol [ centerX %tmp.104 85 14 21 ];
+        %tmp.104 = getv %tmp.103 :centerX;
+        symbol [ Math %tmp.105 86 5 9 ];
+        %tmp.105 = getm $.Toybox.Math;
+        symbol [ round %tmp.106 86 10 15 ];
+        %tmp.106 = getv function %tmp.105 :round;
+        %tmp.107 = lgetv %cosAngle.6;
+        symbol [ cosAngle %tmp.107 86 16 24 ];
+        %tmp.108 = lgetv %centerRadius.3;
+        symbol [ centerRadius %tmp.108 86 27 39 ];
+        %tmp.109 = mul %tmp.107 %tmp.108;
+        %tmp.110 = invoke %tmp.105 %tmp.106(%tmp.109);
+        %tmp.111 = add %tmp.104 %tmp.110;
+        lputv %dotX.9 %tmp.111;
+        symbol [ dotX %dotX.9 84 8 12 ];
 [ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 88 4 ]
-        %tmp.136 = lgetv %thisInnerRadius.11;
-        symbol [ thisInnerRadius %tmp.136 88 4 19 ];
-        %tmp.137 = 2;
-        %tmp.138 = sub %tmp.136 %tmp.137;
-        lputv %thisInnerRadius.11 %tmp.138;
-        symbol [ thisInnerRadius %thisInnerRadius.11 88 4 19 ];
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_87_19_89_3_stop:
-        goto @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_85_3_89_3_if_end;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_85_3_89_3_if_end:
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 91 3 ]
-        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_stop" ]
-        %innerX.12 = local;
-        symbol [ innerX %innerX.12 91 7 13 ];
-        %tmp.139 = lgetv %geometry;
-        symbol [ geometry %tmp.139 92 4 12 ];
-        symbol [ centerX %tmp.140 92 13 20 ];
-        %tmp.140 = getv %tmp.139 :centerX;
-        symbol [ Math %tmp.141 93 4 8 ];
-        %tmp.141 = getm $.Toybox.Math;
-        symbol [ round %tmp.142 93 9 14 ];
-        %tmp.142 = getv function %tmp.141 :round;
-        %tmp.143 = lgetv %cosAngle.6;
-        symbol [ cosAngle %tmp.143 93 15 23 ];
-        %tmp.144 = lgetv %thisInnerRadius.11;
-        symbol [ thisInnerRadius %tmp.144 93 26 41 ];
-        %tmp.145 = mul %tmp.143 %tmp.144;
-        %tmp.146 = invoke %tmp.141 %tmp.142(%tmp.145);
-        %tmp.147 = add %tmp.140 %tmp.146;
-        lputv %innerX.12 %tmp.147;
-        symbol [ innerX %innerX.12 91 7 13 ];
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 95 3 ]
-        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_stop" ]
-        %innerY.13 = local;
-        symbol [ innerY %innerY.13 95 7 13 ];
-        %tmp.148 = lgetv %geometry;
-        symbol [ geometry %tmp.148 96 4 12 ];
-        symbol [ centerY %tmp.149 96 13 20 ];
-        %tmp.149 = getv %tmp.148 :centerY;
-        symbol [ Math %tmp.150 97 4 8 ];
-        %tmp.150 = getm $.Toybox.Math;
-        symbol [ round %tmp.151 97 9 14 ];
-        %tmp.151 = getv function %tmp.150 :round;
-        %tmp.152 = lgetv %sinAngle.7;
-        symbol [ sinAngle %tmp.152 97 15 23 ];
-        %tmp.153 = lgetv %thisInnerRadius.11;
-        symbol [ thisInnerRadius %tmp.153 97 26 41 ];
-        %tmp.154 = mul %tmp.152 %tmp.153;
-        %tmp.155 = invoke %tmp.150 %tmp.151(%tmp.154);
-        %tmp.156 = add %tmp.149 %tmp.155;
-        lputv %innerY.13 %tmp.156;
-        symbol [ innerY %innerY.13 95 7 13 ];
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 99 3 ]
-        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_stop" ]
-        %outerX.14 = local;
-        symbol [ outerX %outerX.14 99 7 13 ];
-        %tmp.157 = lgetv %geometry;
-        symbol [ geometry %tmp.157 100 4 12 ];
-        symbol [ centerX %tmp.158 100 13 20 ];
-        %tmp.158 = getv %tmp.157 :centerX;
-        symbol [ Math %tmp.159 101 4 8 ];
-        %tmp.159 = getm $.Toybox.Math;
-        symbol [ round %tmp.160 101 9 14 ];
-        %tmp.160 = getv function %tmp.159 :round;
-        %tmp.161 = lgetv %cosAngle.6;
-        symbol [ cosAngle %tmp.161 101 15 23 ];
-        %tmp.162 = lgetv %outerRadius.2;
-        symbol [ outerRadius %tmp.162 101 26 37 ];
-        %tmp.163 = mul %tmp.161 %tmp.162;
-        %tmp.164 = invoke %tmp.159 %tmp.160(%tmp.163);
-        %tmp.165 = add %tmp.158 %tmp.164;
-        lputv %outerX.14 %tmp.165;
-        symbol [ outerX %outerX.14 99 7 13 ];
+        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_82_19_98_3_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_82_19_98_3_stop" ]
+        %dotY.10 = local;
+        symbol [ dotY %dotY.10 88 8 12 ];
+        %tmp.112 = lgetv %geometry;
+        symbol [ geometry %tmp.112 89 5 13 ];
+        symbol [ centerY %tmp.113 89 14 21 ];
+        %tmp.113 = getv %tmp.112 :centerY;
+        symbol [ Math %tmp.114 90 5 9 ];
+        %tmp.114 = getm $.Toybox.Math;
+        symbol [ round %tmp.115 90 10 15 ];
+        %tmp.115 = getv function %tmp.114 :round;
+        %tmp.116 = lgetv %sinAngle.7;
+        symbol [ sinAngle %tmp.116 90 16 24 ];
+        %tmp.117 = lgetv %centerRadius.3;
+        symbol [ centerRadius %tmp.117 90 27 39 ];
+        %tmp.118 = mul %tmp.116 %tmp.117;
+        %tmp.119 = invoke %tmp.114 %tmp.115(%tmp.118);
+        %tmp.120 = add %tmp.113 %tmp.119;
+        lputv %dotY.10 %tmp.120;
+        symbol [ dotY %dotY.10 88 8 12 ];
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 94 4 ]
+        symbol [ CircleRenderer %tmp.122 94 4 18 ];
+        %tmp.122 = getv ? :CircleRenderer;
+        symbol [ drawSmoothCircle %tmp.123 94 19 35 ];
+        %tmp.123 = getv function %tmp.122 :drawSmoothCircle;
+        %tmp.124 = lgetv %dc;
+        symbol [ dc %tmp.124 95 5 7 ];
+        %tmp.125 = lgetv %dotX.9;
+        symbol [ dotX %tmp.125 95 9 13 ];
+        %tmp.126 = lgetv %dotY.10;
+        symbol [ dotY %tmp.126 95 15 19 ];
+        %tmp.127 = 3;
+        %tmp.128 = 0x000000;
+        invoke %tmp.122 %tmp.123(%tmp.124, %tmp.125, %tmp.126, %tmp.127, %tmp.128);
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 97 4 ]
+        goto break @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_2_137_2_for_incr;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_82_19_98_3_stop:
+        goto @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_79_3_98_3_if_end;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_79_3_98_3_if_end:
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 101 3 ]
+        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_stop" ]
+        %thisInnerRadius.11 = local;
+        symbol [ thisInnerRadius %thisInnerRadius.11 101 7 22 ];
+        %tmp.129 = lgetv %innerRadius.1;
+        symbol [ innerRadius %tmp.129 101 25 36 ];
+        lputv %thisInnerRadius.11 %tmp.129;
+        symbol [ thisInnerRadius %thisInnerRadius.11 101 7 22 ];
 [ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 103 3 ]
-        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_stop" ]
-        %outerY.15 = local;
-        symbol [ outerY %outerY.15 103 7 13 ];
-        %tmp.166 = lgetv %geometry;
-        symbol [ geometry %tmp.166 104 4 12 ];
-        symbol [ centerY %tmp.167 104 13 20 ];
-        %tmp.167 = getv %tmp.166 :centerY;
-        symbol [ Math %tmp.168 105 4 8 ];
-        %tmp.168 = getm $.Toybox.Math;
-        symbol [ round %tmp.169 105 9 14 ];
-        %tmp.169 = getv function %tmp.168 :round;
-        %tmp.170 = lgetv %sinAngle.7;
-        symbol [ sinAngle %tmp.170 105 15 23 ];
-        %tmp.171 = lgetv %outerRadius.2;
-        symbol [ outerRadius %tmp.171 105 26 37 ];
-        %tmp.172 = mul %tmp.170 %tmp.171;
-        %tmp.173 = invoke %tmp.168 %tmp.169(%tmp.172);
-        %tmp.174 = add %tmp.167 %tmp.173;
-        lputv %outerY.15 %tmp.174;
-        symbol [ outerY %outerY.15 103 7 13 ];
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 107 3 ]
-        %tmp.175 = lgetv %dc;
-        symbol [ dc %tmp.175 107 3 5 ];
-        symbol [ setPenWidth %tmp.176 107 6 17 ];
-        %tmp.176 = getv function %tmp.175 :setPenWidth;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_108_4_110_13_begin:
-        %tmp.177 = lgetv %isFiveMinute.8;
-        symbol [ isFiveMinute %tmp.177 108 4 16 ];
-        bf %tmp.177 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_108_4_110_13_else_false;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_108_4_110_13_true:
-        symbol [ Theme %tmp.179 109 7 12 ];
-        %tmp.179 = getv ? :Theme;
-        symbol [ FIVE_TICK_WIDTH %tmp.180 109 13 28 ];
-        %tmp.180 = getv %tmp.179 :FIVE_TICK_WIDTH;
-        push %tmp.180;
-        goto @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_108_4_110_13_end;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_108_4_110_13_else_false:
-        symbol [ Theme %tmp.182 110 7 12 ];
-        %tmp.182 = getv ? :Theme;
-        symbol [ MINUTE_TICK_WIDTH %tmp.183 110 13 30 ];
-        %tmp.183 = getv %tmp.182 :MINUTE_TICK_WIDTH;
-        push %tmp.183;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_108_4_110_13_end:
-        %tmp.184 = phi [%tmp.177 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_108_4_110_13_begin] [%tmp.180 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_108_4_110_13_true] [%tmp.183 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_108_4_110_13_else_false] [%tmp.184 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_108_4_110_13_end];
-        invoke %tmp.175 %tmp.176(%tmp.184);
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_103_3_107_3_if_stmt:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_103_7_105_15_begin:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_103_7_104_15_begin:
+        %tmp.130 = lgetv %minute.4;
+        symbol [ minute %tmp.130 103 7 13 ];
+        %tmp.131 = 15;
+        %tmp.132 = eq %tmp.130 %tmp.131;
+        bt %tmp.132 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_103_3_107_3_if_true;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_104_5_104_15_false:
+        %tmp.133 = lgetv %minute.4;
+        symbol [ minute %tmp.133 104 5 11 ];
+        %tmp.134 = 30;
+        %tmp.135 = eq %tmp.133 %tmp.134;
+        push %tmp.135;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_104_5_104_15_end:
+        %tmp.136 = phi [%tmp.132 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_103_7_104_15_begin] [%tmp.135 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_104_5_104_15_false] [%tmp.136 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_104_5_104_15_end];
+        bt %tmp.136 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_103_3_107_3_if_true;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_105_5_105_15_false:
+        %tmp.137 = lgetv %minute.4;
+        symbol [ minute %tmp.137 105 5 11 ];
+        %tmp.138 = 45;
+        %tmp.139 = eq %tmp.137 %tmp.138;
+        push %tmp.139;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_105_5_105_15_end:
+        %tmp.140 = phi [%tmp.136 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_103_7_105_15_begin] [%tmp.139 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_105_5_105_15_false] [%tmp.140 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_105_5_105_15_end];
+        bf %tmp.140 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_103_3_107_3_if_end;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_103_3_107_3_if_true:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_105_19_107_3_start:
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 106 4 ]
+        %tmp.141 = lgetv %thisInnerRadius.11;
+        symbol [ thisInnerRadius %tmp.141 106 4 19 ];
+        %tmp.142 = 2;
+        %tmp.143 = sub %tmp.141 %tmp.142;
+        lputv %thisInnerRadius.11 %tmp.143;
+        symbol [ thisInnerRadius %thisInnerRadius.11 106 4 19 ];
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_105_19_107_3_stop:
+        goto @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_103_3_107_3_if_end;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_103_3_107_3_if_end:
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 109 3 ]
+        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_stop" ]
+        %innerX.12 = local;
+        symbol [ innerX %innerX.12 109 7 13 ];
+        %tmp.144 = lgetv %geometry;
+        symbol [ geometry %tmp.144 110 4 12 ];
+        symbol [ centerX %tmp.145 110 13 20 ];
+        %tmp.145 = getv %tmp.144 :centerX;
+        symbol [ Math %tmp.146 111 4 8 ];
+        %tmp.146 = getm $.Toybox.Math;
+        symbol [ round %tmp.147 111 9 14 ];
+        %tmp.147 = getv function %tmp.146 :round;
+        %tmp.148 = lgetv %cosAngle.6;
+        symbol [ cosAngle %tmp.148 111 15 23 ];
+        %tmp.149 = lgetv %thisInnerRadius.11;
+        symbol [ thisInnerRadius %tmp.149 111 26 41 ];
+        %tmp.150 = mul %tmp.148 %tmp.149;
+        %tmp.151 = invoke %tmp.146 %tmp.147(%tmp.150);
+        %tmp.152 = add %tmp.145 %tmp.151;
+        lputv %innerX.12 %tmp.152;
+        symbol [ innerX %innerX.12 109 7 13 ];
 [ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 113 3 ]
-        %tmp.185 = lgetv %dc;
-        symbol [ dc %tmp.185 113 3 5 ];
-        symbol [ drawLine %tmp.186 113 6 14 ];
-        %tmp.186 = getv function %tmp.185 :drawLine;
-        %tmp.187 = lgetv %innerX.12;
-        symbol [ innerX %tmp.187 114 4 10 ];
-        %tmp.188 = lgetv %innerY.13;
-        symbol [ innerY %tmp.188 115 4 10 ];
-        %tmp.189 = lgetv %outerX.14;
-        symbol [ outerX %tmp.189 116 4 10 ];
-        %tmp.190 = lgetv %outerY.15;
-        symbol [ outerY %tmp.190 117 4 10 ];
-        invoke %tmp.185 %tmp.186(%tmp.187, %tmp.188, %tmp.189, %tmp.190);
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_49_119_2_stop:
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_2_119_2_for_incr:
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 31 ]
-        %tmp.191 = lgetv %minute.4;
-        symbol [ minute %tmp.191 31 36 42 ];
-        %tmp.192 = 1;
-        %tmp.193 = add %tmp.191 %tmp.192;
-        lputv %minute.4 %tmp.193;
-        symbol [ minute %minute.4 31 36 42 ];
-        goto @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_2_119_2_for_test;
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_31_2_119_2_for_end:
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 121 2 ]
-        %tmp.194 = lgetv %dc;
-        symbol [ dc %tmp.194 121 2 4 ];
-        symbol [ setPenWidth %tmp.195 121 5 16 ];
-        %tmp.195 = getv function %tmp.194 :setPenWidth;
-        %tmp.196 = 1;
-        invoke %tmp.194 %tmp.195(%tmp.196);
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_24_34_122_1_stop:
+        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_stop" ]
+        %innerY.13 = local;
+        symbol [ innerY %innerY.13 113 7 13 ];
+        %tmp.153 = lgetv %geometry;
+        symbol [ geometry %tmp.153 114 4 12 ];
+        symbol [ centerY %tmp.154 114 13 20 ];
+        %tmp.154 = getv %tmp.153 :centerY;
+        symbol [ Math %tmp.155 115 4 8 ];
+        %tmp.155 = getm $.Toybox.Math;
+        symbol [ round %tmp.156 115 9 14 ];
+        %tmp.156 = getv function %tmp.155 :round;
+        %tmp.157 = lgetv %sinAngle.7;
+        symbol [ sinAngle %tmp.157 115 15 23 ];
+        %tmp.158 = lgetv %thisInnerRadius.11;
+        symbol [ thisInnerRadius %tmp.158 115 26 41 ];
+        %tmp.159 = mul %tmp.157 %tmp.158;
+        %tmp.160 = invoke %tmp.155 %tmp.156(%tmp.159);
+        %tmp.161 = add %tmp.154 %tmp.160;
+        lputv %innerY.13 %tmp.161;
+        symbol [ innerY %innerY.13 113 7 13 ];
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 117 3 ]
+        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_stop" ]
+        %outerX.14 = local;
+        symbol [ outerX %outerX.14 117 7 13 ];
+        %tmp.162 = lgetv %geometry;
+        symbol [ geometry %tmp.162 118 4 12 ];
+        symbol [ centerX %tmp.163 118 13 20 ];
+        %tmp.163 = getv %tmp.162 :centerX;
+        symbol [ Math %tmp.164 119 4 8 ];
+        %tmp.164 = getm $.Toybox.Math;
+        symbol [ round %tmp.165 119 9 14 ];
+        %tmp.165 = getv function %tmp.164 :round;
+        %tmp.166 = lgetv %cosAngle.6;
+        symbol [ cosAngle %tmp.166 119 15 23 ];
+        %tmp.167 = lgetv %outerRadius.2;
+        symbol [ outerRadius %tmp.167 119 26 37 ];
+        %tmp.168 = mul %tmp.166 %tmp.167;
+        %tmp.169 = invoke %tmp.164 %tmp.165(%tmp.168);
+        %tmp.170 = add %tmp.163 %tmp.169;
+        lputv %outerX.14 %tmp.170;
+        symbol [ outerX %outerX.14 117 7 13 ];
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 121 3 ]
+        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_stop" ]
+        %outerY.15 = local;
+        symbol [ outerY %outerY.15 121 7 13 ];
+        %tmp.171 = lgetv %geometry;
+        symbol [ geometry %tmp.171 122 4 12 ];
+        symbol [ centerY %tmp.172 122 13 20 ];
+        %tmp.172 = getv %tmp.171 :centerY;
+        symbol [ Math %tmp.173 123 4 8 ];
+        %tmp.173 = getm $.Toybox.Math;
+        symbol [ round %tmp.174 123 9 14 ];
+        %tmp.174 = getv function %tmp.173 :round;
+        %tmp.175 = lgetv %sinAngle.7;
+        symbol [ sinAngle %tmp.175 123 15 23 ];
+        %tmp.176 = lgetv %outerRadius.2;
+        symbol [ outerRadius %tmp.176 123 26 37 ];
+        %tmp.177 = mul %tmp.175 %tmp.176;
+        %tmp.178 = invoke %tmp.173 %tmp.174(%tmp.177);
+        %tmp.179 = add %tmp.172 %tmp.178;
+        lputv %outerY.15 %tmp.179;
+        symbol [ outerY %outerY.15 121 7 13 ];
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 125 3 ]
+        %tmp.180 = lgetv %dc;
+        symbol [ dc %tmp.180 125 3 5 ];
+        symbol [ setPenWidth %tmp.181 125 6 17 ];
+        %tmp.181 = getv function %tmp.180 :setPenWidth;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_126_4_128_13_begin:
+        %tmp.182 = lgetv %isFiveMinute.8;
+        symbol [ isFiveMinute %tmp.182 126 4 16 ];
+        bf %tmp.182 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_126_4_128_13_else_false;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_126_4_128_13_true:
+        symbol [ Theme %tmp.184 127 7 12 ];
+        %tmp.184 = getv ? :Theme;
+        symbol [ FIVE_TICK_WIDTH %tmp.185 127 13 28 ];
+        %tmp.185 = getv %tmp.184 :FIVE_TICK_WIDTH;
+        push %tmp.185;
+        goto @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_126_4_128_13_end;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_126_4_128_13_else_false:
+        symbol [ Theme %tmp.187 128 7 12 ];
+        %tmp.187 = getv ? :Theme;
+        symbol [ MINUTE_TICK_WIDTH %tmp.188 128 13 30 ];
+        %tmp.188 = getv %tmp.187 :MINUTE_TICK_WIDTH;
+        push %tmp.188;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_126_4_128_13_end:
+        %tmp.189 = phi [%tmp.182 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_126_4_128_13_begin] [%tmp.185 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_126_4_128_13_true] [%tmp.188 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_126_4_128_13_else_false] [%tmp.189 @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_126_4_128_13_end];
+        invoke %tmp.180 %tmp.181(%tmp.189);
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 131 3 ]
+        %tmp.190 = lgetv %dc;
+        symbol [ dc %tmp.190 131 3 5 ];
+        symbol [ drawLine %tmp.191 131 6 14 ];
+        %tmp.191 = getv function %tmp.190 :drawLine;
+        %tmp.192 = lgetv %innerX.12;
+        symbol [ innerX %tmp.192 132 4 10 ];
+        %tmp.193 = lgetv %innerY.13;
+        symbol [ innerY %tmp.193 133 4 10 ];
+        %tmp.194 = lgetv %outerX.14;
+        symbol [ outerX %tmp.194 134 4 10 ];
+        %tmp.195 = lgetv %outerY.15;
+        symbol [ outerY %tmp.195 135 4 10 ];
+        invoke %tmp.190 %tmp.191(%tmp.192, %tmp.193, %tmp.194, %tmp.195);
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_49_137_2_stop:
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_2_137_2_for_incr:
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 43 ]
+        %tmp.196 = lgetv %minute.4;
+        symbol [ minute %tmp.196 43 36 42 ];
+        %tmp.197 = 1;
+        %tmp.198 = add %tmp.196 %tmp.197;
+        lputv %minute.4 %tmp.198;
+        symbol [ minute %minute.4 43 36 42 ];
+        goto @_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_2_137_2_for_test;
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_43_2_137_2_for_end:
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 139 2 ]
+        %tmp.199 = lgetv %dc;
+        symbol [ dc %tmp.199 139 2 4 ];
+        symbol [ setPenWidth %tmp.200 139 5 16 ];
+        %tmp.200 = getv function %tmp.199 :setPenWidth;
+        %tmp.201 = 1;
+        invoke %tmp.199 %tmp.200(%tmp.201);
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_36_34_140_1_stop:
     }
-    [ @file = "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc"; @line = 124; @symbol_functiondef = [drawNumerals,124,10,22]; @symbol_param<0> = [dc,124,23,25]; @symbol_param<1> = [geometry,124,27,35]; ]
+    [ @file = "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc"; @line = 142; @symbol_functiondef = [drawNumerals,142,10,22]; @symbol_param<0> = [dc,142,23,25]; @symbol_param<1> = [geometry,142,27,35]; ]
     function drawNumerals(dc, geometry) {
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_124_37_168_1_start:
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 126 2 ]
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_142_37_184_1_start:
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 144 2 ]
         %tmp.1 = lgetv %dc;
-        symbol [ dc %tmp.1 126 2 4 ];
-        symbol [ setColor %tmp.2 126 5 13 ];
+        symbol [ dc %tmp.1 144 2 4 ];
+        symbol [ setColor %tmp.2 144 5 13 ];
         %tmp.2 = getv function %tmp.1 :setColor;
-        symbol [ Graphics %tmp.3 127 3 11 ];
+        symbol [ Graphics %tmp.3 145 3 11 ];
         %tmp.3 = getm $.Toybox.Graphics;
-        symbol [ COLOR_BLACK %tmp.4 127 12 23 ];
+        symbol [ COLOR_BLACK %tmp.4 145 12 23 ];
         %tmp.4 = getv %tmp.3 :COLOR_BLACK;
-        symbol [ Theme %tmp.6 128 3 8 ];
+        symbol [ Theme %tmp.6 146 3 8 ];
         %tmp.6 = getv ? :Theme;
-        symbol [ BACKGROUND_COLOR %tmp.7 128 9 25 ];
+        symbol [ BACKGROUND_COLOR %tmp.7 146 9 25 ];
         %tmp.7 = getv %tmp.6 :BACKGROUND_COLOR;
         invoke %tmp.1 %tmp.2(%tmp.4, %tmp.7);
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 133 2 ]
-        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_124_37_168_1_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_124_37_168_1_stop" ]
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 150 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_142_37_184_1_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_142_37_184_1_stop" ]
         %radius.1 = local;
-        symbol [ radius %radius.1 133 6 12 ];
+        symbol [ radius %radius.1 150 6 12 ];
         %tmp.8 = lgetv %geometry;
-        symbol [ geometry %tmp.8 133 15 23 ];
-        symbol [ tickCenterRadius %tmp.9 133 24 40 ];
+        symbol [ geometry %tmp.8 150 15 23 ];
+        symbol [ tickCenterRadius %tmp.9 150 24 40 ];
         %tmp.9 = getv %tmp.8 :tickCenterRadius;
-        %tmp.10 = 4;
-        %tmp.11 = sub %tmp.9 %tmp.10;
-        lputv %radius.1 %tmp.11;
-        symbol [ radius %radius.1 133 6 12 ];
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 136 2 ]
-        %tmp.12 = lgetv %dc;
-        symbol [ dc %tmp.12 136 2 4 ];
-        symbol [ drawText %tmp.13 136 5 13 ];
-        %tmp.13 = getv function %tmp.12 :drawText;
-        %tmp.14 = lgetv %geometry;
-        symbol [ geometry %tmp.14 137 3 11 ];
-        symbol [ centerX %tmp.15 137 12 19 ];
-        %tmp.15 = getv %tmp.14 :centerX;
-        %tmp.16 = lgetv %geometry;
-        symbol [ geometry %tmp.16 138 3 11 ];
-        symbol [ centerY %tmp.17 138 12 19 ];
-        %tmp.17 = getv %tmp.16 :centerY;
-        %tmp.18 = lgetv %radius.1;
-        symbol [ radius %tmp.18 138 22 28 ];
-        %tmp.19 = sub %tmp.17 %tmp.18;
-        symbol [ _twelveFont %tmp.21 139 3 14 ];
-        %tmp.21 = getv ? :_twelveFont;
-        %tmp.22 = "12";
-        symbol [ Graphics %tmp.23 141 3 11 ];
-        %tmp.23 = getm $.Toybox.Graphics;
-        symbol [ TEXT_JUSTIFY_CENTER %tmp.24 141 12 31 ];
-        %tmp.24 = getv %tmp.23 :TEXT_JUSTIFY_CENTER;
-        symbol [ Graphics %tmp.25 142 3 11 ];
-        %tmp.25 = getm $.Toybox.Graphics;
-        symbol [ TEXT_JUSTIFY_VCENTER %tmp.26 142 12 32 ];
-        %tmp.26 = getv %tmp.25 :TEXT_JUSTIFY_VCENTER;
-        %tmp.27 = bitor %tmp.24 %tmp.26;
-        invoke %tmp.12 %tmp.13(%tmp.15, %tmp.19, %tmp.21, %tmp.22, %tmp.27);
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 146 2 ]
-        %tmp.28 = lgetv %dc;
-        symbol [ dc %tmp.28 146 2 4 ];
-        symbol [ drawText %tmp.29 146 5 13 ];
-        %tmp.29 = getv function %tmp.28 :drawText;
-        %tmp.30 = lgetv %geometry;
-        symbol [ geometry %tmp.30 147 3 11 ];
-        symbol [ centerX %tmp.31 147 12 19 ];
-        %tmp.31 = getv %tmp.30 :centerX;
-        symbol [ Math %tmp.32 148 4 8 ];
-        %tmp.32 = getm $.Toybox.Math;
-        symbol [ round %tmp.33 148 9 14 ];
-        %tmp.33 = getv function %tmp.32 :round;
-        symbol [ Math %tmp.34 148 15 19 ];
-        %tmp.34 = getm $.Toybox.Math;
-        symbol [ cos %tmp.35 148 20 23 ];
-        %tmp.35 = getv function %tmp.34 :cos;
-        symbol [ Math %tmp.36 148 24 28 ];
-        %tmp.36 = getm $.Toybox.Math;
-        symbol [ PI %tmp.37 148 29 31 ];
-        %tmp.37 = getv %tmp.36 :PI;
-        %tmp.38 = 6.0;
-        %tmp.39 = div %tmp.37 %tmp.38;
-        %tmp.40 = invoke %tmp.34 %tmp.35(%tmp.39);
-        %tmp.41 = lgetv %radius.1;
-        symbol [ radius %tmp.41 148 41 47 ];
-        %tmp.42 = mul %tmp.40 %tmp.41;
-        %tmp.43 = invoke %tmp.32 %tmp.33(%tmp.42);
-        %tmp.44 = add %tmp.31 %tmp.43;
-        %tmp.45 = lgetv %geometry;
-        symbol [ geometry %tmp.45 149 3 11 ];
-        symbol [ centerY %tmp.46 149 12 19 ];
-        %tmp.46 = getv %tmp.45 :centerY;
-        symbol [ Math %tmp.47 150 4 8 ];
-        %tmp.47 = getm $.Toybox.Math;
-        symbol [ round %tmp.48 150 9 14 ];
-        %tmp.48 = getv function %tmp.47 :round;
-        symbol [ Math %tmp.49 150 15 19 ];
-        %tmp.49 = getm $.Toybox.Math;
-        symbol [ sin %tmp.50 150 20 23 ];
-        %tmp.50 = getv function %tmp.49 :sin;
-        symbol [ Math %tmp.51 150 24 28 ];
-        %tmp.51 = getm $.Toybox.Math;
-        symbol [ PI %tmp.52 150 29 31 ];
-        %tmp.52 = getv %tmp.51 :PI;
-        %tmp.53 = 6.0;
-        %tmp.54 = div %tmp.52 %tmp.53;
-        %tmp.55 = invoke %tmp.49 %tmp.50(%tmp.54);
-        %tmp.56 = lgetv %radius.1;
-        symbol [ radius %tmp.56 150 41 47 ];
-        %tmp.57 = mul %tmp.55 %tmp.56;
-        %tmp.58 = invoke %tmp.47 %tmp.48(%tmp.57);
-        %tmp.59 = add %tmp.46 %tmp.58;
-        symbol [ _fourFont %tmp.61 151 3 12 ];
-        %tmp.61 = getv ? :_fourFont;
-        %tmp.62 = "4";
-        symbol [ Graphics %tmp.63 153 3 11 ];
-        %tmp.63 = getm $.Toybox.Graphics;
-        symbol [ TEXT_JUSTIFY_CENTER %tmp.64 153 12 31 ];
-        %tmp.64 = getv %tmp.63 :TEXT_JUSTIFY_CENTER;
-        symbol [ Graphics %tmp.65 154 3 11 ];
-        %tmp.65 = getm $.Toybox.Graphics;
-        symbol [ TEXT_JUSTIFY_VCENTER %tmp.66 154 12 32 ];
-        %tmp.66 = getv %tmp.65 :TEXT_JUSTIFY_VCENTER;
-        %tmp.67 = bitor %tmp.64 %tmp.66;
-        invoke %tmp.28 %tmp.29(%tmp.44, %tmp.59, %tmp.61, %tmp.62, %tmp.67);
-[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 158 2 ]
-        %tmp.68 = lgetv %dc;
-        symbol [ dc %tmp.68 158 2 4 ];
-        symbol [ drawText %tmp.69 158 5 13 ];
-        %tmp.69 = getv function %tmp.68 :drawText;
-        %tmp.70 = lgetv %geometry;
-        symbol [ geometry %tmp.70 159 3 11 ];
-        symbol [ centerX %tmp.71 159 12 19 ];
-        %tmp.71 = getv %tmp.70 :centerX;
-        symbol [ Math %tmp.72 160 4 8 ];
-        %tmp.72 = getm $.Toybox.Math;
-        symbol [ round %tmp.73 160 9 14 ];
-        %tmp.73 = getv function %tmp.72 :round;
-        symbol [ Math %tmp.74 160 15 19 ];
-        %tmp.74 = getm $.Toybox.Math;
-        symbol [ cos %tmp.75 160 20 23 ];
-        %tmp.75 = getv function %tmp.74 :cos;
-        %tmp.76 = 5.0;
-        symbol [ Math %tmp.77 160 30 34 ];
-        %tmp.77 = getm $.Toybox.Math;
-        symbol [ PI %tmp.78 160 35 37 ];
-        %tmp.78 = getv %tmp.77 :PI;
-        %tmp.79 = mul %tmp.76 %tmp.78;
-        %tmp.80 = 6.0;
-        %tmp.81 = div %tmp.79 %tmp.80;
-        %tmp.82 = invoke %tmp.74 %tmp.75(%tmp.81);
-        %tmp.83 = lgetv %radius.1;
-        symbol [ radius %tmp.83 160 47 53 ];
-        %tmp.84 = mul %tmp.82 %tmp.83;
-        %tmp.85 = invoke %tmp.72 %tmp.73(%tmp.84);
-        %tmp.86 = add %tmp.71 %tmp.85;
-        %tmp.87 = lgetv %geometry;
-        symbol [ geometry %tmp.87 161 3 11 ];
-        symbol [ centerY %tmp.88 161 12 19 ];
-        %tmp.88 = getv %tmp.87 :centerY;
-        symbol [ Math %tmp.89 162 4 8 ];
-        %tmp.89 = getm $.Toybox.Math;
-        symbol [ round %tmp.90 162 9 14 ];
-        %tmp.90 = getv function %tmp.89 :round;
-        symbol [ Math %tmp.91 162 15 19 ];
-        %tmp.91 = getm $.Toybox.Math;
-        symbol [ sin %tmp.92 162 20 23 ];
-        %tmp.92 = getv function %tmp.91 :sin;
-        %tmp.93 = 5.0;
-        symbol [ Math %tmp.94 162 30 34 ];
-        %tmp.94 = getm $.Toybox.Math;
-        symbol [ PI %tmp.95 162 35 37 ];
-        %tmp.95 = getv %tmp.94 :PI;
-        %tmp.96 = mul %tmp.93 %tmp.95;
-        %tmp.97 = 6.0;
-        %tmp.98 = div %tmp.96 %tmp.97;
-        %tmp.99 = invoke %tmp.91 %tmp.92(%tmp.98);
-        %tmp.100 = lgetv %radius.1;
-        symbol [ radius %tmp.100 162 47 53 ];
-        %tmp.101 = mul %tmp.99 %tmp.100;
-        %tmp.102 = invoke %tmp.89 %tmp.90(%tmp.101);
-        %tmp.103 = add %tmp.88 %tmp.102;
-        symbol [ _eightFont %tmp.105 163 3 13 ];
-        %tmp.105 = getv ? :_eightFont;
-        %tmp.106 = "8";
-        symbol [ Graphics %tmp.107 165 3 11 ];
-        %tmp.107 = getm $.Toybox.Graphics;
-        symbol [ TEXT_JUSTIFY_CENTER %tmp.108 165 12 31 ];
-        %tmp.108 = getv %tmp.107 :TEXT_JUSTIFY_CENTER;
-        symbol [ Graphics %tmp.109 166 3 11 ];
-        %tmp.109 = getm $.Toybox.Graphics;
-        symbol [ TEXT_JUSTIFY_VCENTER %tmp.110 166 12 32 ];
-        %tmp.110 = getv %tmp.109 :TEXT_JUSTIFY_VCENTER;
-        %tmp.111 = bitor %tmp.108 %tmp.110;
-        invoke %tmp.68 %tmp.69(%tmp.86, %tmp.103, %tmp.105, %tmp.106, %tmp.111);
-_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_124_37_168_1_stop:
+        symbol [ _numeralRadius %tmp.11 150 43 57 ];
+        %tmp.11 = getv ? :_numeralRadius;
+        %tmp.12 = sub %tmp.9 %tmp.11;
+        lputv %radius.1 %tmp.12;
+        symbol [ radius %radius.1 150 6 12 ];
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 151 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_142_37_184_1_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_142_37_184_1_stop" ]
+        %eightRadius.2 = local;
+        symbol [ eightRadius %eightRadius.2 151 6 17 ];
+        %tmp.13 = lgetv %radius.1;
+        symbol [ radius %tmp.13 151 20 26 ];
+        symbol [ _eightRadius %tmp.15 151 29 41 ];
+        %tmp.15 = getv ? :_eightRadius;
+        %tmp.16 = add %tmp.13 %tmp.15;
+        lputv %eightRadius.2 %tmp.16;
+        symbol [ eightRadius %eightRadius.2 151 6 17 ];
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 152 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_142_37_184_1_start" "_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_142_37_184_1_stop" ]
+        %fourRadius.3 = local;
+        symbol [ fourRadius %fourRadius.3 152 6 16 ];
+        %tmp.17 = lgetv %radius.1;
+        symbol [ radius %tmp.17 152 19 25 ];
+        symbol [ _fourRadius %tmp.19 152 28 39 ];
+        %tmp.19 = getv ? :_fourRadius;
+        %tmp.20 = add %tmp.17 %tmp.19;
+        lputv %fourRadius.3 %tmp.20;
+        symbol [ fourRadius %fourRadius.3 152 6 16 ];
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 155 2 ]
+        %tmp.21 = lgetv %dc;
+        symbol [ dc %tmp.21 155 2 4 ];
+        symbol [ drawText %tmp.22 155 5 13 ];
+        %tmp.22 = getv function %tmp.21 :drawText;
+        %tmp.23 = lgetv %geometry;
+        symbol [ geometry %tmp.23 156 3 11 ];
+        symbol [ centerX %tmp.24 156 12 19 ];
+        %tmp.24 = getv %tmp.23 :centerX;
+        %tmp.25 = lgetv %geometry;
+        symbol [ geometry %tmp.25 157 3 11 ];
+        symbol [ centerY %tmp.26 157 12 19 ];
+        %tmp.26 = getv %tmp.25 :centerY;
+        %tmp.27 = lgetv %radius.1;
+        symbol [ radius %tmp.27 157 22 28 ];
+        %tmp.28 = sub %tmp.26 %tmp.27;
+        symbol [ _twelveFont %tmp.30 158 3 14 ];
+        %tmp.30 = getv ? :_twelveFont;
+        %tmp.31 = "12";
+        symbol [ Graphics %tmp.32 160 3 11 ];
+        %tmp.32 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.33 160 12 31 ];
+        %tmp.33 = getv %tmp.32 :TEXT_JUSTIFY_CENTER;
+        symbol [ Graphics %tmp.34 161 3 11 ];
+        %tmp.34 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_VCENTER %tmp.35 161 12 32 ];
+        %tmp.35 = getv %tmp.34 :TEXT_JUSTIFY_VCENTER;
+        %tmp.36 = bitor %tmp.33 %tmp.35;
+        invoke %tmp.21 %tmp.22(%tmp.24, %tmp.28, %tmp.30, %tmp.31, %tmp.36);
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 164 2 ]
+        %tmp.37 = lgetv %dc;
+        symbol [ dc %tmp.37 164 2 4 ];
+        symbol [ drawText %tmp.38 164 5 13 ];
+        %tmp.38 = getv function %tmp.37 :drawText;
+        %tmp.39 = lgetv %geometry;
+        symbol [ geometry %tmp.39 165 3 11 ];
+        symbol [ centerX %tmp.40 165 12 19 ];
+        %tmp.40 = getv %tmp.39 :centerX;
+        symbol [ Math %tmp.41 166 4 8 ];
+        %tmp.41 = getm $.Toybox.Math;
+        symbol [ round %tmp.42 166 9 14 ];
+        %tmp.42 = getv function %tmp.41 :round;
+        symbol [ Math %tmp.43 166 15 19 ];
+        %tmp.43 = getm $.Toybox.Math;
+        symbol [ cos %tmp.44 166 20 23 ];
+        %tmp.44 = getv function %tmp.43 :cos;
+        symbol [ Math %tmp.45 166 24 28 ];
+        %tmp.45 = getm $.Toybox.Math;
+        symbol [ PI %tmp.46 166 29 31 ];
+        %tmp.46 = getv %tmp.45 :PI;
+        %tmp.47 = 6.0;
+        %tmp.48 = div %tmp.46 %tmp.47;
+        %tmp.49 = invoke %tmp.43 %tmp.44(%tmp.48);
+        %tmp.50 = lgetv %fourRadius.3;
+        symbol [ fourRadius %tmp.50 166 41 51 ];
+        %tmp.51 = mul %tmp.49 %tmp.50;
+        %tmp.52 = invoke %tmp.41 %tmp.42(%tmp.51);
+        %tmp.53 = add %tmp.40 %tmp.52;
+        %tmp.54 = lgetv %geometry;
+        symbol [ geometry %tmp.54 167 3 11 ];
+        symbol [ centerY %tmp.55 167 12 19 ];
+        %tmp.55 = getv %tmp.54 :centerY;
+        symbol [ Math %tmp.56 168 4 8 ];
+        %tmp.56 = getm $.Toybox.Math;
+        symbol [ round %tmp.57 168 9 14 ];
+        %tmp.57 = getv function %tmp.56 :round;
+        symbol [ Math %tmp.58 168 15 19 ];
+        %tmp.58 = getm $.Toybox.Math;
+        symbol [ sin %tmp.59 168 20 23 ];
+        %tmp.59 = getv function %tmp.58 :sin;
+        symbol [ Math %tmp.60 168 24 28 ];
+        %tmp.60 = getm $.Toybox.Math;
+        symbol [ PI %tmp.61 168 29 31 ];
+        %tmp.61 = getv %tmp.60 :PI;
+        %tmp.62 = 6.0;
+        %tmp.63 = div %tmp.61 %tmp.62;
+        %tmp.64 = invoke %tmp.58 %tmp.59(%tmp.63);
+        %tmp.65 = lgetv %fourRadius.3;
+        symbol [ fourRadius %tmp.65 168 41 51 ];
+        %tmp.66 = mul %tmp.64 %tmp.65;
+        %tmp.67 = invoke %tmp.56 %tmp.57(%tmp.66);
+        %tmp.68 = add %tmp.55 %tmp.67;
+        symbol [ _fourFont %tmp.70 169 3 12 ];
+        %tmp.70 = getv ? :_fourFont;
+        %tmp.71 = "4";
+        symbol [ Graphics %tmp.72 171 3 11 ];
+        %tmp.72 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.73 171 12 31 ];
+        %tmp.73 = getv %tmp.72 :TEXT_JUSTIFY_CENTER;
+        symbol [ Graphics %tmp.74 171 34 42 ];
+        %tmp.74 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_VCENTER %tmp.75 171 43 63 ];
+        %tmp.75 = getv %tmp.74 :TEXT_JUSTIFY_VCENTER;
+        %tmp.76 = bitor %tmp.73 %tmp.75;
+        invoke %tmp.37 %tmp.38(%tmp.53, %tmp.68, %tmp.70, %tmp.71, %tmp.76);
+[ "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc" 174 2 ]
+        %tmp.77 = lgetv %dc;
+        symbol [ dc %tmp.77 174 2 4 ];
+        symbol [ drawText %tmp.78 174 5 13 ];
+        %tmp.78 = getv function %tmp.77 :drawText;
+        %tmp.79 = lgetv %geometry;
+        symbol [ geometry %tmp.79 175 3 11 ];
+        symbol [ centerX %tmp.80 175 12 19 ];
+        %tmp.80 = getv %tmp.79 :centerX;
+        symbol [ Math %tmp.81 176 4 8 ];
+        %tmp.81 = getm $.Toybox.Math;
+        symbol [ round %tmp.82 176 9 14 ];
+        %tmp.82 = getv function %tmp.81 :round;
+        symbol [ Math %tmp.83 176 15 19 ];
+        %tmp.83 = getm $.Toybox.Math;
+        symbol [ cos %tmp.84 176 20 23 ];
+        %tmp.84 = getv function %tmp.83 :cos;
+        %tmp.85 = 5.0;
+        symbol [ Math %tmp.86 176 30 34 ];
+        %tmp.86 = getm $.Toybox.Math;
+        symbol [ PI %tmp.87 176 35 37 ];
+        %tmp.87 = getv %tmp.86 :PI;
+        %tmp.88 = mul %tmp.85 %tmp.87;
+        %tmp.89 = 6.0;
+        %tmp.90 = div %tmp.88 %tmp.89;
+        %tmp.91 = invoke %tmp.83 %tmp.84(%tmp.90);
+        %tmp.92 = lgetv %eightRadius.2;
+        symbol [ eightRadius %tmp.92 176 47 58 ];
+        %tmp.93 = mul %tmp.91 %tmp.92;
+        %tmp.94 = invoke %tmp.81 %tmp.82(%tmp.93);
+        %tmp.95 = add %tmp.80 %tmp.94;
+        %tmp.96 = lgetv %geometry;
+        symbol [ geometry %tmp.96 177 3 11 ];
+        symbol [ centerY %tmp.97 177 12 19 ];
+        %tmp.97 = getv %tmp.96 :centerY;
+        symbol [ Math %tmp.98 178 4 8 ];
+        %tmp.98 = getm $.Toybox.Math;
+        symbol [ round %tmp.99 178 9 14 ];
+        %tmp.99 = getv function %tmp.98 :round;
+        symbol [ Math %tmp.100 178 15 19 ];
+        %tmp.100 = getm $.Toybox.Math;
+        symbol [ sin %tmp.101 178 20 23 ];
+        %tmp.101 = getv function %tmp.100 :sin;
+        %tmp.102 = 5.0;
+        symbol [ Math %tmp.103 178 30 34 ];
+        %tmp.103 = getm $.Toybox.Math;
+        symbol [ PI %tmp.104 178 35 37 ];
+        %tmp.104 = getv %tmp.103 :PI;
+        %tmp.105 = mul %tmp.102 %tmp.104;
+        %tmp.106 = 6.0;
+        %tmp.107 = div %tmp.105 %tmp.106;
+        %tmp.108 = invoke %tmp.100 %tmp.101(%tmp.107);
+        %tmp.109 = lgetv %eightRadius.2;
+        symbol [ eightRadius %tmp.109 178 47 58 ];
+        %tmp.110 = mul %tmp.108 %tmp.109;
+        %tmp.111 = invoke %tmp.98 %tmp.99(%tmp.110);
+        %tmp.112 = add %tmp.97 %tmp.111;
+        symbol [ _eightFont %tmp.114 179 3 13 ];
+        %tmp.114 = getv ? :_eightFont;
+        %tmp.115 = "8";
+        symbol [ Graphics %tmp.116 181 3 11 ];
+        %tmp.116 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.117 181 12 31 ];
+        %tmp.117 = getv %tmp.116 :TEXT_JUSTIFY_CENTER;
+        symbol [ Graphics %tmp.118 181 34 42 ];
+        %tmp.118 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_VCENTER %tmp.119 181 43 63 ];
+        %tmp.119 = getv %tmp.118 :TEXT_JUSTIFY_VCENTER;
+        %tmp.120 = bitor %tmp.117 %tmp.119;
+        invoke %tmp.77 %tmp.78(%tmp.95, %tmp.112, %tmp.114, %tmp.115, %tmp.120);
+_home_shum_stow_garmin_interstellar_source_DialRenderer_mc_142_37_184_1_stop:
     }
 }
 [ @file = "/home/shum/stow/garmin/interstellar/source/DialRenderer.mc"; @line = 2; ]

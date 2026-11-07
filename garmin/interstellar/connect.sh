@@ -1,5 +1,8 @@
 #!/usr/bin/dash
 
+udev
+sleep 1
+
 cd ~/stow/garmin/interstellar
 
 ./build.sh fr955

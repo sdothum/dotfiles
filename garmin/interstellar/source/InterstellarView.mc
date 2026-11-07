@@ -3,6 +3,12 @@ using Toybox.WatchUi as WatchUi;
 
 class InterstellarView extends WatchUi.WatchFace {
 
+	private var _awake = true;
+
+	function onEnterSleep() {
+		_awake = false;
+	}
+
 	private var _geometry;
 	private var _dial;
 
@@ -28,10 +34,8 @@ class InterstellarView extends WatchUi.WatchFace {
 	function onHide() {
 	}
 
-	function onEnterSleep() {
-	}
-
 	function onExitSleep() {
+		_awake = true;
 	}
 
 	function onUpdate(dc) {
@@ -49,6 +53,8 @@ class InterstellarView extends WatchUi.WatchFace {
 
 		var clock = System.getClockTime();
 
+		_date.draw(dc, _geometry);
+
 		_hands.draw(
 			dc,
 			_geometry,
@@ -56,7 +62,13 @@ class InterstellarView extends WatchUi.WatchFace {
 			clock.min
 		);
 
-		_date.draw(dc, _geometry);
+		if (_awake) {
+			_hands.drawSeconds(
+				dc,
+				_geometry,
+				clock.sec
+			);
+		}
 	}
 }
 

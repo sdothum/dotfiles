@@ -128,123 +128,119 @@ static function getPattern(radius, color) as Lang.Dictionary {
 
 	static var _ringCache as Lang.Array<Lang.Dictionary> = [];
 
+
 	static function drawSmoothAnnulus(
 		dc, cx, cy, radius, gap, width, color
 	) {
-		var pattern = getRingPattern(radius, gap, width, color);
-		var pixels = pattern[:pixels]
-			as Lang.Array<Lang.Array<Lang.Number>>;
+		var innerRadius = radius + gap;
+		var outerRadius = innerRadius + width;
 
-		var previousColor = -1;
-
-		for (var i = 0; i < pixels.size(); i += 1) {
-			var pixel = pixels[i];
-
-			if (pixel[2] != previousColor) {
-				dc.setColor(pixel[2], 0xFFFFFF);
-				previousColor = pixel[2];
-			}
-
-			dc.drawPoint(
-				(cx + pixel[0]).toNumber(),
-				(cy + pixel[1]).toNumber()
-			);
-		}
-	}
-
-	static function getRingPattern(
-		radius, gap, width, color
-	) as Lang.Dictionary {
-
-		for (var i = 0; i < _ringCache.size(); i += 1) {
-			var entry = _ringCache[i];
-
-			if (entry[:radius] == radius &&
-				 entry[:gap] == gap &&
-				 entry[:width] == width &&
-				 entry[:color] == color) {
-				return entry;
-			}
+		if (innerRadius < 0.0 || width <= 0.0) {
+			return;
 		}
 
-		var pixels = [] as Lang.Array<Lang.Array<Lang.Number>>;
+		var outerAA = outerRadius + 0.5;
+		var innerAA = innerRadius - 0.5;
+
+		var outerSquared = outerAA * outerAA;
+		var innerSquared = innerAA * innerAA;
+
+		var extent = Math.ceil(outerAA).toNumber();
 
 		var red = (color >> 16) & 0xFF;
 		var green = (color >> 8) & 0xFF;
 		var blue = color & 0xFF;
 
-		// The inner boundary is outside the existing dot.
-		var innerRadius = radius + gap;
-		var outerRadius = innerRadius + width;
-		var extent = outerRadius + 1;
+		var previousColor = -1;
 
 		for (var y = -extent; y <= extent; y += 1) {
-			for (var x = -extent; x <= extent; x += 1) {
+			var yy = y * y;
 
-				var distance = Math.sqrt(x * x + y * y);
+			if (yy >= outerSquared) {
+				continue;
+			}
 
-				// Antialias both boundaries independently.
-				var outerCoverage =
-					outerRadius + 0.5 - distance;
+			// Largest X coordinate potentially covered.
+			var outerX = Math.ceil(
+				Math.sqrt(outerSquared - yy)
+			).toNumber();
 
-				var innerCoverage =
-					innerRadius + 0.5 - distance;
+			// Smallest positive X coordinate potentially covered.
+			var innerX = 0;
 
-				if (outerCoverage <= 0) {
-					continue;
-				}
-
-				if (outerCoverage > 1) {
-					outerCoverage = 1;
-				}
-
-				if (innerCoverage < 0) {
-					innerCoverage = 0;
-				}
-
-				if (innerCoverage > 1) {
-					innerCoverage = 1;
-				}
-
-				var coverage =
-					outerCoverage - innerCoverage;
-
-				if (coverage <= 0) {
-					continue;
-				}
-
-				var r = Math.round(
-					255 - (255 - red) * coverage
+			if (yy < innerSquared) {
+				innerX = Math.floor(
+					Math.sqrt(innerSquared - yy)
 				).toNumber();
+			}
 
-				var g = Math.round(
-					255 - (255 - green) * coverage
-				).toNumber();
+			// Draw both sides, avoiding duplicate x=0.
+			for (var side = -1; side <= 1; side += 2) {
+				for (var ax = innerX; ax <= outerX; ax += 1) {
+					if (side == 1 && ax == 0) {
+						continue;
+					}
 
-				var b = Math.round(
-					255 - (255 - blue) * coverage
-				).toNumber();
+					var x = side * ax;
+					var distance = Math.sqrt(x * x + yy);
 
-				var pixelColor =
-					(r << 16) | (g << 8) | b;
+					var outerCoverage =
+						outerRadius + 0.5 - distance;
 
-				pixels.add([x, y, pixelColor]);
+					var innerCoverage =
+						innerRadius + 0.5 - distance;
+
+					if (outerCoverage <= 0.0) {
+						continue;
+					}
+
+					if (outerCoverage > 1.0) {
+						outerCoverage = 1.0;
+					}
+
+					if (innerCoverage < 0.0) {
+						innerCoverage = 0.0;
+					}
+
+					if (innerCoverage > 1.0) {
+						innerCoverage = 1.0;
+					}
+
+					var coverage =
+						outerCoverage - innerCoverage;
+
+					if (coverage <= 0.0) {
+						continue;
+					}
+
+					var r = Math.round(
+						255 - (255 - red) * coverage
+					).toNumber();
+
+					var g = Math.round(
+						255 - (255 - green) * coverage
+					).toNumber();
+
+					var b = Math.round(
+						255 - (255 - blue) * coverage
+					).toNumber();
+
+					var pixelColor =
+						(r << 16) | (g << 8) | b;
+
+					if (pixelColor != previousColor) {
+						dc.setColor(pixelColor, 0xFFFFFF);
+						previousColor = pixelColor;
+					}
+
+					dc.drawPoint(
+						(cx + x).toNumber(),
+						(cy + y).toNumber()
+					);
+				}
 			}
 		}
-
-		var pattern = {
-			:radius => radius,
-			:gap => gap,
-			:width => width,
-			:color => color,
-			:pixels => pixels
-		};
-
-		_ringCache.add(pattern);
-
-		return pattern;
 	}
-
 
 }
 

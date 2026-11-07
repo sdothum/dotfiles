@@ -9,14 +9,26 @@ class DialRenderer {
 	private var _eightFont;
 	private var _twelveFont;
 
+	private var _numeralRadius = 2;
+	private var _eightRadius = 0;
+	private var _fourRadius = 2;
+	private var _minuteTicks;
+
 	function initialize() {
 		_fourFont = WatchUi.loadResource(Rez.Fonts.DialFour);
 		_eightFont = WatchUi.loadResource(Rez.Fonts.DialEight);
 		_twelveFont = WatchUi.loadResource(Rez.Fonts.DialTwelve);
+
+		_minuteTicks =
+			WatchUi.loadResource(Rez.Drawables.MinuteTicks);
+
 	}
 
 	function draw(dc, geometry) {
-		// Draw numerals first so ticks appear over them.
+
+		dc.drawBitmap(0, 0, _minuteTicks);
+
+		// Draw numerals and remaining tick elements.
 		drawNumerals(dc, geometry);
 		drawTicks(dc, geometry);
 	}
@@ -40,6 +52,12 @@ class DialRenderer {
 				 minute == 40 ||
 				 minute == 41 ||
 				 minute == 59) {
+				continue;
+			}
+
+			// Intermediate minute ticks are rendered by the bitmap.
+			// Retain only five-minute markers in this loop.
+			if ((minute % 5) != 0) {
 				continue;
 			}
 
@@ -128,9 +146,10 @@ class DialRenderer {
 			Theme.BACKGROUND_COLOR
 		);
 
-		// Move all three numerals 2 pixels inward.
-		// var radius = geometry.tickCenterRadius - 2;
-		var radius = geometry.tickCenterRadius - 4;
+		// Move all three numerals N pixels inward.
+		var radius = geometry.tickCenterRadius - _numeralRadius;
+		var eightRadius = radius + _eightRadius;
+		var fourRadius = radius + _fourRadius;
 
 		// 12 o'clock
 		dc.drawText(
@@ -142,29 +161,26 @@ class DialRenderer {
 			Graphics.TEXT_JUSTIFY_VCENTER
 		);
 
-		// 4 o'clock
 		dc.drawText(
 			geometry.centerX +
-				Math.round(Math.cos(Math.PI / 6.0) * radius),
+				Math.round(Math.cos(Math.PI / 6.0) * fourRadius),
 			geometry.centerY +
-				Math.round(Math.sin(Math.PI / 6.0) * radius),
+				Math.round(Math.sin(Math.PI / 6.0) * fourRadius),
 			_fourFont,
 			"4",
-			Graphics.TEXT_JUSTIFY_CENTER |
-			Graphics.TEXT_JUSTIFY_VCENTER
+			Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
 		);
 
-		// 8 o'clock
 		dc.drawText(
 			geometry.centerX +
-				Math.round(Math.cos(5.0 * Math.PI / 6.0) * radius),
+				Math.round(Math.cos(5.0 * Math.PI / 6.0) * eightRadius),
 			geometry.centerY +
-				Math.round(Math.sin(5.0 * Math.PI / 6.0) * radius),
+				Math.round(Math.sin(5.0 * Math.PI / 6.0) * eightRadius),
 			_eightFont,
 			"8",
-			Graphics.TEXT_JUSTIFY_CENTER |
-			Graphics.TEXT_JUSTIFY_VCENTER
+			Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
 		);
+
 	}
 }
 
