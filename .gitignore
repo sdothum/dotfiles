@@ -8,6 +8,7 @@
 **/*AppImage
 **/astroid
 **/autokey
+**/*.bak
 **/beets
 **/berry
 **/*.diff
@@ -176,6 +177,7 @@
 **/nzbget
 !**/dinit.d*/nzbget
 **/*\.o
+**/*.old
 !**/office/chromium
 **/openbox
 **/openrc
