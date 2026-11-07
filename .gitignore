@@ -304,5 +304,6 @@
 **/zephyr/experiments
 **/zephyr/host-probe*
 **/zephyr/sirocco-nim*
+**/zephyr/tests
 **/*.zip
 **/zk
