@@ -1,14 +1,13 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
-# Shell
+# Hardware
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ................................................................. tmux session
+# ................................................................. Memory usage
 
-SCROLLBACK=/tmp/tmux:scrollback-$(rand 4).txt
+# Usage: echo $(mem_usage)G
 
-tmux capture-pane -S - -E - && tmux save-buffer $SCROLLBACK
-kak $SCROLLBACK
+awk '/MemTotal/{t=$2} /MemAvailable/{a=$2; printf "%.2f\n", (t-a)/1024/1024}' /proc/meminfo
 
 # kak: filetype=sh

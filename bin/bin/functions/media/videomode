@@ -13,11 +13,13 @@ V_DYNAMIC=/tmp/$(basename $0):dynamic
 case $1 in
 	on  )
 		conky clock stop
+		mpc | grep -q 'playing' && mpc -q pause
 		# blackboard on               # SEE: sxhkdrc "monocle"
 		# interface -q hdmi && pulse  # check hdmi audio
 		;;
 	off )
 		conky clock auto
+		mpc | grep -q 'paused' && mpc -q toggle
 		pstat 'menu (media|movies|series)' || blackboard off
 		# xdotool key Ctrl+space          # clear potential pulse message
 		;;

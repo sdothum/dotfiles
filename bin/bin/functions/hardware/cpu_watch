@@ -1,0 +1,14 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Hardware
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .......................................................................... CPU
+
+# Usage: cpu_watch [<5GHz range>], default 5.5GHz and above
+
+clear
+watch -fn 0.1 "grep MHz /proc/cpuinfo | sort -nr | grep ' 5[${1:-5}-9]'"
+
+# kak: filetype=sh

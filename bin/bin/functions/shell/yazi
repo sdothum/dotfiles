@@ -35,10 +35,10 @@ trash() {
 	notify critical 10 Trash "$subvol\n$trash"
 }
 
-export TMUXCONF=$HOME/.tmux.conf  # SEE: tmux_session
+export TMUXCONF=$HOME/.tmux.conf  # SEE: tmux wrapper
 case $1 in
-	ROOT    ) tmux_session class=yazi-root 'yazi-root' sudo -E $YAZI $TAB; trash ;;
-	TMUX    ) tmux_session class=yazi      'yazi'              $YAZI $TAB; trash ;;
+	ROOT    ) tmux session class=yazi-root 'yazi-root' sudo -E $YAZI $TAB; trash ;;
+	TMUX    ) tmux session class=yazi      'yazi'              $YAZI $TAB; trash ;;
 	XFTP    ) term xftp class=xftp /bin/yazi /net/downloads/http ;;
 	''      ) $termyazi             $YAZI .            ;;
 	WAIT    ) shift; $termyazi WAIT $YAZI "${MTP:-$@}" ;; # don't pass WAIT in command string

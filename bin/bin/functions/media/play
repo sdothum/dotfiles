@@ -65,7 +65,7 @@ while : ;do
 			break
 			;;
 
-		quit   ) pkill -f 'menu'; blackboard; videomode off; exit ;;  # restore dynamic windows
+		quit   ) pkill -f 'menu'; recipe -t blackboard && blackboard off; videomode off; exit ;;  # restore dynamic windows
 		replay ) continue ;;  # pulse; continue ;;
 		pulse  ) pulse ;;
 		sonarr ) sonarr $STREAM; break ;;

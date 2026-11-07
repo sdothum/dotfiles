@@ -1,0 +1,8 @@
+#!/usr/bin/dash
+
+# startx /home/shum/stow/zephyr/experiments/nim-cirrus/desktop_trial/normal-xinitrc.sh
+# startx /home/shum/stow/zephyr/experiments/nim-cirrus/border_lifecycle_correction/normal-xinitrc-corrected.sh
+# startx /home/shum/stow/zephyr/experiments/nim-cirrus/spine_border_correction/normal-xinitrc-spine.sh
+# startx /home/shum/stow/zephyr/experiments/nim-cirrus/border_style_mapping_correction/normal-xinitrc-style-mapping.sh
+
+startx /home/shum/stow/zephyr/experiments/nim-cirrus/border_consolidation/normal-xinitrc-consolidated.sh

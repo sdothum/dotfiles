@@ -58,12 +58,12 @@ mtp mount && { [ "$1" ] || MTP=$HOME/mtp; }
 udev                                        # reload udev rules
 
 # BECAUSE: tmux Home End keys echo H L in nnn input..
-export TMUXCONF=$HOME/.tmux.conf.nnn  # SEE: tmux_session
+export TMUXCONF=$HOME/.tmux.conf.nnn  # SEE: tmux wrapper
 grep -Ev '^bind-key.*(Home|End)' $HOME/.tmux.conf >$TMUXCONF
 # export TERM=st
 case $1 in
-	ROOT ) tmux_session 'root' sudo -E $NNN $TAB 2>/tmp/nnn.log ;;
-	TMUX ) tmux_session 'nnn'          $NNN $TAB 2>/tmp/nnn.log ;;
+	ROOT ) tmux session 'root' sudo -E $NNN $TAB 2>/tmp/nnn.log ;;
+	TMUX ) tmux session 'nnn'          $NNN $TAB 2>/tmp/nnn.log ;;
 	*    ) $NNN "${MTP:-$@}"                      2>/tmp/nnn.log ;;
 esac
 

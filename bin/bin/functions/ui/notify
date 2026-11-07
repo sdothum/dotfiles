@@ -24,7 +24,7 @@ while : ;do
 		time=*  ) expire="--expire-time=$(( ${1#time=} * 1000 ))" ;;
 		:*      ) expire="--expire-time=$(( ${1#:} * 1000 ))" ;;
 		cons*   ) console=true ;;
-		trace   ) recipe -q trace || exit ;;  # trace messages only
+		trace   ) recipe -t trace || exit ;;  # trace messages only
 		X       ) X=true ;;
 		low    |\
 		norm*  |\

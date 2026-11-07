@@ -30,7 +30,7 @@ fi
 
 [ "$SCROLLING" ] || SCROLLING=10000  # set envar to 0 to disable history
 
-if recipe -q "term" ;then
+if recipe -t "term" ;then
 	columns=$(recipe "term" | cut -dx -f1)
 	lines=$(recipe "term" | cut -dx -f2)
 else

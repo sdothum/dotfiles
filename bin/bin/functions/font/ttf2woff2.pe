@@ -1,0 +1,17 @@
+#!/usr/bin/env fontforge
+# sdothum - 2016 (c) wtfpl
+
+# Fonts
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................... fontforge
+
+# Usage: fontforge -script ttf2woff2.pe <*.ttf>
+
+i = 1
+while (i < $argc)
+    Open($argv[i])
+    Generate($argv[i]:r + ".woff2")
+    Close()
+    i++
+endloop

@@ -93,16 +93,16 @@ pstat gpaste-client || gpaste-client start &
 if [ -e $JABBER ] ;then
 	# is multihead && herbstclient focus_monitor 1 || switch tag $HANGOUT
 	# wait for window visibility before switching monitors, for urxvt font handling
-	tmux_session jabber mcabber &
+	tmux session jabber mcabber &
 fi
 if [ -e $IRC ] ;then
 	# is multihead && herbstclient focus_monitor 1 || switch tag $HANGOUT
 	# wait for window visibility before switching monitors, for urxvt font handling
-	tmux_session irc weechat &
+	tmux session irc weechat &
 fi
 server && herbstclient focus_monitor 0
 [ -e $CALENDAR ] && term 'calendar' wyrd &
-[ -e $MAIL     ] && tmux_session mail alot &
+[ -e $MAIL     ] && tmux session mail alot &
 [ -e $PING     ] && term 'ping' pingchk &
 
 # .................................................................. Window apps

@@ -1,4 +1,4 @@
-#!/usr/bin/dash
+#!/usr/bin/bash
 # sdothum - 2016 (c) wtfpl
 
 # Hardware
@@ -8,6 +8,7 @@
 
 # Usage: echo $(cpu_percent)%
 
-sar -u --dec=0 1 1 | tail -1 | sed 's/  */ /g' | cut -d' ' -f3,5 | tr ' ' '+' | bc | sed -r 's/^/00/; s/.*(.)(..)$/\1.\2/' | sed 's/0\./ ./'
+# sar -u --dec=0 1 1 | tail -1 | sed 's/  */ /g' | cut -d' ' -f3,5 | tr ' ' '+' | bc | sed -r 's/^/00/; s/.*(.)(..)$/\1.\2/' | sed 's/0\./ ./'
+awk '/^cpu /{u=$2+$3+$4; t=u+$5+$6+$7+$8; if(last_t) printf "%.2f\n", (u-last_u)/(t-last_t)*100; last_u=u; last_t=t}' <(grep '^cpu ' /proc/stat; sleep 0.2; grep '^cpu ' /proc/stat)
 
 # kak: filetype=sh

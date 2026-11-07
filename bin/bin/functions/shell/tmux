@@ -1,0 +1,36 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Shell
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. tmux session
+
+usage() { usage: "$(basename $0) [session [class=<class>] [name [command]]* | c'apture | C'lipboard]"; exit 1; }
+
+CMD=/usr/bin/tmux
+SCROLLBACK=/tmp/tmux:scrollback-$(rand 4).txt
+TMUXCONF=${TMUXCONF:-$HOME/.tmux.conf}
+
+case $1 in
+	session )
+		shift
+		[ "${1#class=}" != "$1" ] && { class=${1#class=}; shift; }
+		[ $1   ] && { export TMUX=$1; shift; } || export TMUX=tmux
+		[ "$1" = aerc ] && export MONOFONT=Iosevka-proof
+
+		if $CMD -S /tmp/tmux:$TMUX has-session 2>/dev/null ;then
+			term ${TMUX} class=${class:-tmux} $CMD -S /tmp/tmux:$TMUX attach -d
+		else
+			term ${TMUX} class=${class:-tmux} "FORTUNE=$TMUX" $CMD -f $TMUXCONF -S /tmp/tmux:$TMUX "new-session -n ° $@"
+		fi
+		;;
+	# c     ) $CMD capture-pane -S - -E - && $CMD save-buffer $SCROLLBACK; kak $SCROLLBACK   ;;
+	# C     ) $CMD capture-pane -S - -E - && $CMD save-buffer - | xclip -selection clipboard ;;
+	c       ) $CMD capture-pane -p -S - >$SCROLLBACK; kak $SCROLLBACK ;;
+	C       ) $CMD capture-pane -p -S - | xclip -selection clipboard  ;;
+	-h      ) usage ;;
+	*       ) $CMD $@ ;;
+esac
+
+# kak: filetype=sh

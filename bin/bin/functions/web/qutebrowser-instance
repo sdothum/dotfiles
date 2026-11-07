@@ -13,8 +13,9 @@
 #       -s tabs.last_close 'close' to close window on livedown-stop
 # SEE: qutebrowser wrapper template
 
-# QUTEBROWSER='/usr/bin/qutebrowser --target private-window --override-restore --temp-basedir --qt-arg name ${name:-livedown}'  # BUG: causes config.py temp dir error on close
-QUTEBROWSER='/usr/bin/qutebrowser --temp-basedir --target private-window --override-restore --qt-arg name ${name:-livedown}'
+NAME=${name:-livedown}
+
+QUTEBROWSER='/usr/bin/qutebrowser --temp-basedir --target private-window --override-restore --qt-arg name $NAME'
 FONT=${FONT:-ottawa}
 
 size="$(fontsize)pt $FONT"
@@ -50,8 +51,9 @@ settings="
 "
 
 eval $QUTEBROWSER $RUNOPT $settings $startpage 2>/dev/null &
+[ "$NAME" != 'thelounge' ] && xdotool search -sync -onlyvisible -classname "$NAME" set_window -class "$NAME"
 
-case "${name:-livedown}" in
+case "$NAME" in
 	livedown  ) $ZEPHYR window await --name 'livedown'  URL tile 3 && sirocco window cycle --group             ;;  # focus editor
 	sonarr    ) $ZEPHYR window await --name 'sonarr'    URL size monocle . window group focus $($ZEPHYR group id "PEER") ;;
 	nicotine  ) $ZEPHYR window await --name 'nicotine'  URL size monocle . window group focus $($ZEPHYR group id "PEER") ;;

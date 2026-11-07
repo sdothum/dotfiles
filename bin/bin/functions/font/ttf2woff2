@@ -1,0 +1,19 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Fonts
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................... fontforge
+
+# Usage: ttf2woff <*.ttf>
+
+ROOT=$(dirname $0)
+for i in *.ttf ;do
+	ditto ttf2woff2 ${i%.ttf}.woff2
+	fontforge -script ${ROOT}/ttf2woff2.pe $i 2>/dev/null  # suppress fontforge license message
+done
+
+ifno "update miniflux" && exit
+sudo cp -i -v *woff2 /var/www/miniflux/fonts/
+sv restart miniflux

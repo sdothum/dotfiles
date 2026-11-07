@@ -32,6 +32,8 @@ rotate() {
 Open(\"watchface-normal${WEIGHT}upright.ttf\");
 Select($(utf $1));
 Rotate($2);
+SetWidth(800);
+CenterInWidth();
 Generate(\"$3\");
 " >/tmp/garminfont.script
 
@@ -72,7 +74,7 @@ esac
 
 for i in $GARMIN/* ;do
 	for f in *_${fontsize}.fnt *_${fontsize}_0.png ;do
-		[ -e "$f" ] && mv -v ${i}/$FONTS/$f ${i}/$FONTS/$f.bak
+		[ -e "$f" ] && mv -vf ${i}/$FONTS/$f ${i}/$FONTS/$f.bak
 		cp -v $f ${i}/$FONTS/$f
 	done
 	case $1 in
