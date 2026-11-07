@@ -301,5 +301,8 @@
 **/xpad
 **/xscreensaver
 **/yaourt
+**/zephyr/experiments
+**/zephyr/host-probe*
+**/zephyr/sirocco-nim*
 **/*.zip
 **/zk
