@@ -13,6 +13,7 @@ resusitate() {
 	sudo ifconfig $interface up
 	timestamp "interface: down.. up⠁⠁⠁"
 	# speedtest --progress=no | tr -d '\r'  # clean up '^M' from log
+	notify 15 critical ifconfig "restarting interface $interface"
 }
 
 heartbeat() {
