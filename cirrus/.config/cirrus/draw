@@ -15,7 +15,7 @@
 if [ "$1" = '--' ] ;then
 	shift
 
-	recipe -q panel/format             || exit  # no panel
+	recipe -t panel/format             || exit  # no panel
 	exists lemonbar                    || exit
 	pstat "lemonbar -d -n lemonbar:$1" && exit
 

@@ -26,6 +26,7 @@ type
     currentGroup*: RawGroup
     groupCount*: uint32
     activeGroups*: seq[bool]
+    lastGroup*: RawGroup
     sparseActiveGroups: Table[uint32, bool]
     lastWindowFocus*: bool
     sloppyFocus*: bool
@@ -54,6 +55,7 @@ proc newWmState*(firstGeneration = 1'u64): WmState =
   result.currentGroup = NullGroup
   result.groupCount = 10
   result.activeGroups = newSeq[bool](int(result.groupCount))
+  result.lastGroup = RawGroup(1)
   result.sparseActiveGroups = initTable[uint32, bool]()
   result.lastWindowFocus = true
   result.sloppyFocus = true
@@ -313,20 +315,22 @@ proc completeStartupClient*(state: var WmState; window, decoration: WindowId;
   some(state.identities[id])
 
 proc confirmMap*(state: var WmState; window: WindowId):
-    tuple[known: bool, autofocus: bool] =
+    tuple[known: bool, autofocus: bool, wasMapped: bool] =
   if not state.byWindow.hasKey(window): return
   let id = state.byWindow[window]
   result.known = true
   result.autofocus = not state.identities[id].groupMapPending
+  result.wasMapped = state.identities[id].mapped
   state.identities[id].mapped = true
   state.identities[id].groupMapPending = false
 
 proc confirmUnmap*(state: var WmState; window: WindowId):
-    tuple[known: bool, wasFocused: bool, groupPending: bool] =
+    tuple[known: bool, wasFocused: bool, groupPending: bool, wasMapped: bool] =
   if not state.byWindow.hasKey(window): return
   let id = state.byWindow[window]
   result.known = true
   result.wasFocused = state.focused.isSome and state.focused.get == id
   result.groupPending = state.identities[id].groupUnmapPending
+  result.wasMapped = state.identities[id].mapped
   state.identities[id].mapped = false
   state.identities[id].groupUnmapPending = false

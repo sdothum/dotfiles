@@ -105,6 +105,100 @@ suite "Stage 5 geometry arithmetic and transitions":
         window: client.window, x: -120, y: 1000, geometryBounds: screen))
     check moved.client.geometry.x == -120 and moved.client.geometry.y == 1000
 
+  test "opcode 18 absolute and relative resize preserve position and use C hints":
+    var state = newWmState()
+    let client = state.addClient(Geometry(x: -35, y: 77, width: 180, height: 90),
+        ResizeHints(minWidth: 120, minHeight: 40,
+                    widthIncrement: 10, heightIncrement: 8))
+    let absolute = state.transition(epoch, WmInput(kind: wiResizeAbsolute,
+        window: client.window, width: 177, height: 47, geometryBounds: screen))
+    check absolute.client.geometry == Geometry(x: -35, y: 77,
+        width: 177, height: 47)
+    check absolute.effects.mapIt(it.kind) == @[weResizeClient, wePublishStatus]
+    check weMoveClient notin absolute.effects.mapIt(it.kind)
+    check wePublishInvalidation notin absolute.effects.mapIt(it.kind)
+
+    check state.replaceClient(absolute.client)
+    check not state.config.resizeHints
+    let enabled = state.applyPrivateCommand(epoch,
+        PrivateSemanticInput(opcode: 10'u32,
+            words: [11'u32, 1'u32, 0'u32, 0'u32]))
+    check enabled.disposition == pcdSemanticAccepted
+    check state.config.resizeHints
+    check enabled.transition.effects.len == 0
+    let relative = state.transition(epoch, WmInput(kind: wiResizeRelative,
+        window: client.window, deltaWidth: -13, deltaHeight: -7,
+        geometryBounds: screen))
+    check relative.client.geometry == Geometry(x: -35, y: 77,
+        width: 160, height: 40)
+    check weMoveClient notin relative.effects.mapIt(it.kind)
+    check wePublishInvalidation notin relative.effects.mapIt(it.kind)
+
+  test "opcode 18 nonpositive and overflowing requests follow C dimension rules":
+    var state = newWmState()
+    let client = state.addClient(Geometry(x: 11, y: -12, width: 100, height: 80),
+        ResizeHints(minWidth: 30, minHeight: 20,
+                    widthIncrement: 1, heightIncrement: 1))
+    let zeroAbsolute = state.transition(epoch, WmInput(kind: wiResizeAbsolute,
+        window: client.window, width: 0, height: 0, geometryBounds: screen))
+    check zeroAbsolute.client.geometry == Geometry(x: 11, y: -12,
+        width: 30, height: 20)
+    check state.replaceClient(zeroAbsolute.client)
+    let negativeRelative = state.transition(epoch, WmInput(kind: wiResizeRelative,
+        window: client.window, deltaWidth: -500, deltaHeight: -500,
+        geometryBounds: screen))
+    check negativeRelative.client.geometry == Geometry(x: 11, y: -12,
+        width: 30, height: 20)
+    let overflow = resizeRelative(Geometry(width: 50000, height: 100),
+        ResizeHints(), 20000, 0, false)
+    check overflow.width == 4464
+    check overflow.height == 100
+
+  test "opcode 18 missing targets are no-op and ordinary resize avoids focus policy":
+    var state = newWmState()
+    let client = state.addClient(Geometry(x: 10, y: 20, width: 100, height: 60))
+    let missing = state.transition(epoch, WmInput(kind: wiResizeAbsolute,
+        window: WindowId(0xdeadbeef), width: 200, height: 140,
+        geometryBounds: screen))
+    check not missing.hasClient
+    check missing.effects.len == 0
+    check state.focusedClient.isNone
+    check state.lookup(client.window).get.geometry ==
+        Geometry(x: 10, y: 20, width: 100, height: 60)
+
+  test "opcode 17 narrows signed coordinates and resolves explicit or focused target":
+    var state = newWmState()
+    let a = state.addAdoptedClient(epoch, WindowId(0x80000a), true,
+        RawGroup(1), wsvNormal, 30, 40, 160, 90).state
+    let b = state.addAdoptedClient(epoch, WindowId(0x80000b), true,
+        RawGroup(1), wsvNormal, 5, 6, 70, 50).state
+    discard state.transition(epoch, WmInput(kind: wiFocusClient, window: a.window))
+    let absolute = state.applyPrivateCommand(epoch, PrivateSemanticInput(
+        opcode: 17, words: [1'u32, cast[uint32](-123'i32),
+            cast[uint32](90000'i32), a.window.raw]))
+    check absolute.disposition == pcdSemanticAccepted
+    check not absolute.reply.required
+    check absolute.transition.client.geometry == Geometry(x: -123, y: 24464,
+        width: 160, height: 90)
+    check state.lookup(b.window).get.geometry == Geometry(x: 5, y: 6,
+        width: 70, height: 50)
+    check not absolute.invalidationRequired
+
+    let implicit = state.applyPrivateCommand(epoch, PrivateSemanticInput(
+        opcode: 17, words: [0'u32, 20'u32, cast[uint32](-10'i32), 0'u32]))
+    check implicit.disposition == pcdSemanticAccepted
+    check implicit.transition.client.window == a.window
+    check implicit.transition.client.geometry == Geometry(x: -103, y: 24454,
+        width: 160, height: 90)
+    check not implicit.reply.required
+    check not implicit.invalidationRequired
+
+    let unmanaged = state.applyPrivateCommand(epoch, PrivateSemanticInput(
+        opcode: 17, words: [1'u32, 10'u32, 10'u32, 0xdeadbeef'u32]))
+    check unmanaged.disposition == pcdSemanticAccepted
+    check unmanaged.transition.effects.len == 0
+    check unmanaged.transition.hasClient == false
+
   test "H, V, full, monocle and reset overwrite orig geometry per C":
     var state = newWmState()
     let initial = Geometry(x: 90, y: 70, width: 400, height: 250)
@@ -133,6 +227,14 @@ suite "Stage 5 geometry arithmetic and transitions":
     check restored.effects.mapIt(it.kind).find(weRestackLayers) <
         restored.effects.mapIt(it.kind).find(weSetInputFocus)
     check weRaiseClient in restored.effects.mapIt(it.kind)
+    let restoredEwmh = restored.effects.filterIt(it.kind == wePublishEwmhState)
+    check restoredEwmh.len == 1
+    check not restoredEwmh[0].maxed and not restoredEwmh[0].hmaxed and
+        not restoredEwmh[0].vmaxed
+    check restored.effects.mapIt(it.kind).find(weRestackLayers) <
+        restored.effects.mapIt(it.kind).find(wePublishEwmhState)
+    check restored.effects.mapIt(it.kind).find(wePublishEwmhState) <
+        restored.effects.mapIt(it.kind).find(weSetInputFocus)
     check state.transition(epoch, WmInput(kind: wiResetGeometry,
         window: client.window, geometryBounds: screen)).effects.len == 0
     let monocle = state.transition(epoch, WmInput(kind: wiMonocle,
@@ -141,6 +243,11 @@ suite "Stage 5 geometry arithmetic and transitions":
     let ordinaryReset = state.transition(epoch, WmInput(kind: wiResetGeometry,
         window: client.window, geometryBounds: screen))
     check ordinaryReset.client.geometry == initial
+    let monocleResetEwmh = ordinaryReset.effects.filterIt(
+        it.kind == wePublishEwmhState)
+    check monocleResetEwmh.len == 1
+    check not monocleResetEwmh[0].maxed and not monocleResetEwmh[0].hmaxed and
+        not monocleResetEwmh[0].vmaxed
 
   test "ConfigureRequest respects masks then fits; hint records are setup state":
     var state = newWmState()

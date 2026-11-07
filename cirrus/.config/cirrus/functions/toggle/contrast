@@ -6,7 +6,7 @@
 
 # ......................................................................... Root
 
-[ $(recipe theme/contrast) = dark ] && recipe theme/contrast light || recipe theme/contrast dark
+[ "$(recipe theme/contrast)" = dark ] && recipe theme/contrast light || recipe theme/contrast dark
 theme $(recipe theme/contrast)
 toggle picom on
 draw panel

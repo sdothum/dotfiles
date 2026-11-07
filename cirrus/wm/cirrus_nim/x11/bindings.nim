@@ -71,7 +71,7 @@ type
     sequence: uint16
     length: uint32
     root: uint32
-    parent: uint32
+    parent*: uint32
     childrenLen* {.importc: "children_len".}: uint16
     pad1: array[14, uint8]
   XcbGetWindowAttributesCookie* {.importc: "xcb_get_window_attributes_cookie_t", header: "xcb/xproto.h", bycopy.} = object
@@ -93,7 +93,7 @@ type
     overrideRedirect* {.importc: "override_redirect".}: uint8
     colormap: uint32
     allEventMasks: uint32
-    yourEventMask: uint32
+    yourEventMask* {.importc: "your_event_mask".}: uint32
     doNotPropagateMask: uint16
     pad0: array[2, uint8]
   XcbGetPropertyCookie* {.importc: "xcb_get_property_cookie_t", header: "xcb/xproto.h", bycopy.} = object
@@ -325,6 +325,7 @@ const
   SaveSetDelete* = 1'u8
   MapStateViewable* = 2'u8
   ErrorBadWindow* = 3'u8
+  ErrorBadValue* = 2'u8
   EventMaskButtonPress* = 1'u32 shl 2
   EventMaskButtonRelease* = 1'u32 shl 3
   EventMaskButtonMotion* = 1'u32 shl 13
@@ -344,8 +345,10 @@ proc xcbGetSetup*(connection: ptr XcbConnection): ptr XcbSetup {.importc: "xcb_g
 proc xcbSetupRootsIterator*(setup: ptr XcbSetup): XcbScreenIterator {.importc: "xcb_setup_roots_iterator", cdecl, header: "xcb/xcb.h".}
 proc xcbScreenNext*(screenIterator: ptr XcbScreenIterator) {.importc: "xcb_screen_next", cdecl, header: "xcb/xcb.h".}
 proc xcbChangeWindowAttributesChecked*(connection: ptr XcbConnection; window, mask: uint32; values: ptr uint32): XcbVoidCookie {.importc: "xcb_change_window_attributes_checked", cdecl, header: "xcb/xproto.h".}
+proc xcbChangeWindowAttributes*(connection: ptr XcbConnection; window, mask: uint32; values: ptr uint32): XcbVoidCookie {.importc: "xcb_change_window_attributes", cdecl, header: "xcb/xproto.h".}
 proc xcbCreateWindowChecked*(connection: ptr XcbConnection; depth: uint8; window, parent: uint32; x, y: int16; width, height, borderWidth: uint16; windowClass: uint16; visual, valueMask: uint32; values: ptr uint32): XcbVoidCookie {.importc: "xcb_create_window_checked", cdecl, header: "xcb/xproto.h".}
 proc xcbChangeSaveSetChecked*(connection: ptr XcbConnection; mode: uint8; window: uint32): XcbVoidCookie {.importc: "xcb_change_save_set_checked", cdecl, header: "xcb/xproto.h".}
+proc xcbReparentWindowChecked*(connection: ptr XcbConnection; window, parent: uint32; x, y: int16): XcbVoidCookie {.importc: "xcb_reparent_window_checked", cdecl, header: "xcb/xproto.h".}
 proc xcbMapWindowChecked*(connection: ptr XcbConnection; window: uint32): XcbVoidCookie {.importc: "xcb_map_window_checked", cdecl, header: "xcb/xproto.h".}
 proc xcbWarpPointerChecked*(connection: ptr XcbConnection; srcWindow, dstWindow: uint32; srcX, srcY: int16; srcWidth, srcHeight: uint16; dstX, dstY: int16): XcbVoidCookie {.importc: "xcb_warp_pointer_checked", cdecl, header: "xcb/xproto.h".}
 proc xcbUnmapWindowChecked*(connection: ptr XcbConnection; window: uint32): XcbVoidCookie {.importc: "xcb_unmap_window_checked", cdecl, header: "xcb/xproto.h".}
@@ -386,8 +389,11 @@ proc xcbGetProperty*(connection: ptr XcbConnection; delete: uint8; window, prope
 proc xcbGetPropertyReply*(connection: ptr XcbConnection; cookie: XcbGetPropertyCookie; error: ptr ptr XcbGenericError): ptr XcbGetPropertyReply {.importc: "xcb_get_property_reply", cdecl, header: "xcb/xproto.h".}
 proc xcbGetPropertyValue*(reply: ptr XcbGetPropertyReply): pointer {.importc: "xcb_get_property_value", cdecl, header: "xcb/xproto.h".}
 proc xcbGetPropertyValueLength*(reply: ptr XcbGetPropertyReply): cint {.importc: "xcb_get_property_value_length", cdecl, header: "xcb/xproto.h".}
+proc xcbSendEventChecked*(connection: ptr XcbConnection; propagate: uint8; destination, eventMask: uint32; event: pointer): XcbVoidCookie {.importc: "xcb_send_event_checked", cdecl, header: "xcb/xproto.h".}
+proc xcbKillClientChecked*(connection: ptr XcbConnection; resource: uint32): XcbVoidCookie {.importc: "xcb_kill_client_checked", cdecl, header: "xcb/xproto.h".}
 proc xcbFlush*(connection: ptr XcbConnection): cint {.importc: "xcb_flush", cdecl, header: "xcb/xcb.h".}
 proc xcbSetInputFocusChecked*(connection: ptr XcbConnection; revertTo: uint8; focus: uint32; time: uint32): XcbVoidCookie {.importc: "xcb_set_input_focus_checked", cdecl, header: "xcb/xproto.h".}
+proc xcbSetInputFocus*(connection: ptr XcbConnection; revertTo: uint8; focus: uint32; time: uint32): XcbVoidCookie {.importc: "xcb_set_input_focus", cdecl, header: "xcb/xproto.h".}
 proc xcbGetInputFocus*(connection: ptr XcbConnection): XcbGetInputFocusCookie {.importc: "xcb_get_input_focus", cdecl, header: "xcb/xproto.h".}
 proc xcbGetInputFocusReply*(connection: ptr XcbConnection; cookie: XcbGetInputFocusCookie; error: ptr ptr XcbGenericError): ptr XcbGetInputFocusReply {.importc: "xcb_get_input_focus_reply", cdecl, header: "xcb/xproto.h".}
 proc xcbConfigureWindowChecked*(connection: ptr XcbConnection; window, mask: uint32; values: ptr XcbConfigureWindowValueList): XcbVoidCookie {.importc: "xcb_configure_window_checked", cdecl, header: "xcb/xproto.h".}

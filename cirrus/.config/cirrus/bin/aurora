@@ -67,7 +67,7 @@ recover() {
 settings() {
 	themes="$(recipe $THEMES | grep -v '^-' | tr '\n' ' ')"
 	echo "
-   ${ORANGE}T${cyan}heme                    "${NOCOLOR}${theme:----} \ \ ${brown}L${cyan}oad \| ${brown}S${cyan}ave as \| ${brown}D${cyan}elete  \"${theme:----}\" \| ${BROWN}${themes% *}"
+   ${ORANGE}T${cyan}heme                    "${NOCOLOR}${theme:----} \ \ ${brown}L${cyan}oad \| ${brown}S${cyan}ave as \| ${brown}D${cyan}elete \| ${BROWN}${themes% *}"
    ${ORANGE}!${cyan} borders                "${NOCOLOR}$(recipe ui/enable_borders)"
    ${cyan}border ${ORANGE}s${cyan}tyle             "${NOCOLOR}$(decoration $(recipe ui/border_style)) \ \ ${brown}f${cyan}rame \| ${brown}l${cyan}eft \| ${brown}t${cyan}op \| ${brown}r${cyan}ight \| ${brown}b${cyan}ottom \| ${brown}c${cyan}orners [\<${BROWN}mask${cyan}\>]"
    ${cyan}outer border ${ORANGE}w${cyan}idth       "${NOCOLOR}$(recipe ui/outer_border_width)"
@@ -133,11 +133,11 @@ decoration() {
 	esac
 }
 
-delete() { recipe -q "$THEMES/$1" && rm -r $WMSE/$THEMES/$1; }
+delete() { recipe -t "$THEMES/$1" && rm -r $WMSE/$THEMES/$1; }
 
 load() {
 	theme="${1-:$theme}"
-	recipe -q "$THEMES/$theme"
+	recipe -t "$THEMES/$theme"
 	find $WMSE/$THEMES/$theme -maxdepth 1 >/tmp/cirrus:aurora 2>/dev/null
 	[ -n "$(cat /tmp/cirrus:aurora)" ] || return 1
 	while read attr <&3 ;do

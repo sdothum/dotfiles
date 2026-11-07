@@ -1,10 +1,12 @@
 ## XCB realization for the ordered, X-free lifecycle effects.
 
-import std/[os, sets, strformat, strutils]
+import std/[options, os, sets, strformat, strutils]
 import ./[bindings, connection, configure_values, queries, decoration]
 import ../model/lifecycle
 import ../model/types
 import ../model/pointer
+
+const ClientListPropModeAppend = 2'u8
 
 when defined(stage6FailureInjection):
   var stage6RestackCall = 0
@@ -42,8 +44,22 @@ when defined(stage6FailureInjection):
       stream.writeLine(line)
       stream.close()
 
+type CheckedErrorDisposition* = enum
+  cedRequestSucceeded, cedIgnoreMissingWindow, cedIgnoreBadValue, cedPropagate
+
+proc checkedErrorDisposition*(errorCode: Option[uint8];
+    missingIsOk: bool; badValueIsOk = false): CheckedErrorDisposition =
+  if errorCode.isNone:
+    return cedRequestSucceeded
+  if missingIsOk and errorCode.get == ErrorBadWindow:
+    return cedIgnoreMissingWindow
+  if badValueIsOk and errorCode.get == ErrorBadValue:
+    return cedIgnoreBadValue
+  cedPropagate
+
 proc checked(connection: XConnection; cookie: XcbVoidCookie;
-             operation: string; missingIsOk = false) =
+             operation: string; missingIsOk = false;
+             badValueIsOk = false) =
   let raw = connection.rawHandleForX11()
   let error = xcbRequestCheck(raw, cookie)
   if error != nil:
@@ -53,8 +69,17 @@ proc checked(connection: XConnection; cookie: XcbVoidCookie;
       stage6FailureTrace("CHECK sequence=" & $cookie.sequence &
           " operation=" & operation & " result=ERROR code=" & $code &
           " resource=0x" & toHex(resource, 8))
+    let disposition = checkedErrorDisposition(some(code), missingIsOk,
+        badValueIsOk)
     cFree(error)
-    if missingIsOk and code == ErrorBadWindow: return
+    if disposition in {cedIgnoreMissingWindow, cedIgnoreBadValue}:
+      if operation == "publish CIRRUS_STATUS" and
+          getEnv("CIRRUS_NIM_LIFECYCLE_INVALIDATION_TRACE") == "1":
+        stderr.writeLine(&"LIFECYCLE_STATUS_PUBLICATION disposition=ignored-stale-window error={code} resource=0x{resource:08x}")
+        stderr.flushFile()
+      if not connection.isConnected:
+        raise newException(IOError, operation & " lost the X connection")
+      return
     raise newException(IOError, &"{operation} failed (X error {code}, resource 0x{resource:08x})")
   when defined(stage6FailureInjection):
     stage6FailureTrace("CHECK sequence=" & $cookie.sequence &
@@ -101,6 +126,14 @@ proc beginConfigureRequestStacking*(connection: XConnection) =
   # ConfigureWindow request and the subsequent checked layer enforcement.
   discard xcbGrabServer(connection.rawHandleForX11())
 
+proc raiseWindowUnchecked*(connection: XConnection; window: WindowId): uint32 =
+  ## C configure_window_stacking submits the target raise unchecked while
+  ## holding the server grab; layer repair is checked separately afterward.
+  var values = XcbConfigureWindowValueList(data32: [0'u32, 0, 0, 0])
+  let cookie = xcbConfigureWindow(connection.rawHandleForX11(), window.raw,
+      1'u16 shl 6, addr values)
+  uint32(cookie.sequence)
+
 proc endConfigureRequestStacking*(connection: XConnection) =
   discard xcbUngrabServer(connection.rawHandleForX11())
   # The coordinator polls the XCB file descriptor rather than calling
@@ -138,23 +171,81 @@ proc restackPhysicalBottomToTop*(connection: XConnection;
     checked(connection, cookie,
         "restack root child above predecessor")
 
-proc publishClientLists*(connection: XConnection; managedWindows: openArray[uint32]) =
+proc projectManagedRootOrder*(rootChildren,
+                              managedWindows: openArray[uint32]): seq[uint32] =
   let managed = toHashSet(managedWindows)
-  var physicalOrder: seq[uint32]
-  for window in connection.queryRootChildren():
+  for window in rootChildren:
     if window in managed:
-      physicalOrder.add(window)
+      result.add(window)
+
+proc managedClientRootOrder(connection: XConnection;
+                            managedWindows: openArray[uint32]): seq[uint32] =
+  projectManagedRootOrder(connection.queryRootChildren(), managedWindows)
+
+type
+  ClientListMutationKind* = enum
+    clmkDelete, clmkAppend
+
+  ClientListMutation* = object
+    kind*: ClientListMutationKind
+    property*: uint32
+    window*: uint32
+
+proc clientListMutationPlan*(physicalOrder: openArray[uint32];
+    clientListAtom, stackingAtom: uint32): seq[ClientListMutation] =
+  ## Match C update_client_list(): clear both properties, then append each
+  ## managed root child to both properties in physical bottom-to-top order.
+  result.add(ClientListMutation(kind: clmkDelete, property: clientListAtom))
+  result.add(ClientListMutation(kind: clmkDelete, property: stackingAtom))
+  for window in physicalOrder:
+    result.add(ClientListMutation(kind: clmkAppend, property: clientListAtom,
+        window: window))
+    result.add(ClientListMutation(kind: clmkAppend, property: stackingAtom,
+        window: window))
+
+proc republishClientLists*(connection: XConnection;
+                           managedWindows: openArray[uint32]) =
+  let physicalOrder = connection.managedClientRootOrder(managedWindows)
+  let raw = connection.rawHandleForX11()
+  let plan = clientListMutationPlan(physicalOrder,
+      connection.atoms.netClientList, connection.atoms.netClientListStacking)
+  for mutation in plan:
+    case mutation.kind
+    of clmkDelete:
+      checked(connection, xcbDeletePropertyChecked(raw, connection.root,
+          mutation.property), "republish root client-list property")
+    of clmkAppend:
+      var window = mutation.window
+      checked(connection, xcbChangePropertyChecked(raw, ClientListPropModeAppend,
+          connection.root, mutation.property, connection.atoms.window,
+          32, 1, addr window), "append root client-list window")
+
+proc publishClientLists*(connection: XConnection; managedWindows: openArray[uint32]) =
+  ## Preserve the existing _NET_CLIENT_LIST trigger while allowing the
+  ## physical stacking property to be refreshed after restacking completes.
+  let physicalOrder = connection.managedClientRootOrder(managedWindows)
   let raw = connection.rawHandleForX11()
   if physicalOrder.len == 0:
     checked(connection, xcbDeletePropertyChecked(raw, connection.root,
         connection.atoms.netClientList), "clear _NET_CLIENT_LIST")
-    checked(connection, xcbDeletePropertyChecked(raw, connection.root,
-        connection.atoms.netClientListStacking), "clear _NET_CLIENT_LIST_STACKING")
     return
   let valuesPtr = if physicalOrder.len == 0: nil else: unsafeAddr physicalOrder[0]
   checked(connection, xcbChangePropertyChecked(raw, PropModeReplace,
       connection.root, connection.atoms.netClientList, connection.atoms.window,
       32, uint32(physicalOrder.len), valuesPtr), "publish _NET_CLIENT_LIST")
+
+proc publishClientListStacking*(connection: XConnection;
+                                managedWindows: openArray[uint32]) =
+  ## Publish managed root children in QueryTree's bottom-to-top order. The
+  ## query is deliberately independent of _NET_CLIENT_LIST publication.
+  let physicalOrder = connection.managedClientRootOrder(managedWindows)
+  let raw = connection.rawHandleForX11()
+  if physicalOrder.len == 0:
+    checked(connection, xcbDeletePropertyChecked(raw, connection.root,
+        connection.atoms.netClientListStacking),
+        "clear _NET_CLIENT_LIST_STACKING")
+    return
+  let valuesPtr = unsafeAddr physicalOrder[0]
   checked(connection, xcbChangePropertyChecked(raw, PropModeReplace,
       connection.root, connection.atoms.netClientListStacking,
       connection.atoms.window, 32, uint32(physicalOrder.len), valuesPtr),
@@ -172,32 +263,31 @@ proc passUnmanagedConfigureGeometry*(connection: XConnection; window: uint32;
       window, packed.mask, addr values), "forward unmanaged geometry ConfigureRequest",
       missingIsOk = true)
 
-when defined(stage7d3cPrivateExecution):
-  proc realizePrivateGeometryUnchecked*(connection: XConnection;
-      effect: WmEffect): uint32 =
-    ## Diagnostic-only compatibility path for the frozen-C unchecked move / resize
-    ## requests. It deliberately does not call xcb_request_check.
-    let raw = connection.rawHandleForX11()
-    var values: XcbConfigureWindowValueList
-    var mask: uint16
-    case effect.kind
-    of weMoveClient:
-      mask = 1'u16 or 2'u16
-      values.data32 = [uint32(effect.geometry.x and 0xffff'i32),
-          uint32(effect.geometry.y and 0xffff'i32), 0, 0]
-    of weResizeClient:
-      mask = 4'u16 or 8'u16
-      values.data32 = [effect.geometry.width, effect.geometry.height, 0, 0]
-    else:
-      raise newException(ValueError,
-          "diagnostic unchecked geometry path only accepts move/resize effects")
-    let cookie = xcbConfigureWindow(raw, effect.window.raw, mask, addr values)
-    result = uint32(cookie.sequence)
+proc realizePrivateGeometryUnchecked*(connection: XConnection;
+    effect: WmEffect): uint32 =
+  ## Shared compatibility path for the frozen-C unchecked move / resize
+  ## requests used by geometry batches and diagnostic execution.
+  let raw = connection.rawHandleForX11()
+  var values: XcbConfigureWindowValueList
+  var mask: uint16
+  case effect.kind
+  of weMoveClient:
+    mask = 1'u16 or 2'u16
+    values.data32 = [uint32(effect.geometry.x and 0xffff'i32),
+        uint32(effect.geometry.y and 0xffff'i32), 0, 0]
+  of weResizeClient:
+    mask = 4'u16 or 8'u16
+    values.data32 = [effect.geometry.width, effect.geometry.height, 0, 0]
+  else:
+    raise newException(ValueError,
+        "diagnostic unchecked geometry path only accepts move/resize effects")
+  let cookie = xcbConfigureWindow(raw, effect.window.raw, mask, addr values)
+  result = uint32(cookie.sequence)
 
 proc realizePrivateButtonEffect*(connection: XConnection;
                                  effect: PrivateEffect): seq[uint32] =
-  ## Diagnostic private realization only. Requests are unchecked like frozen C;
-  ## their sequence numbers are returned for attribution by the coordinator.
+  ## Realize the unchecked button operations shared with the frozen-C handler.
+  ## Sequence numbers are available to the diagnostic coordinator for attribution.
   let raw = connection.rawHandleForX11()
   case effect.kind
   of pfeUngrabButtons:
@@ -213,7 +303,25 @@ proc realizePrivateButtonEffect*(connection: XConnection;
   else:
     raise newException(ValueError, "not a button-grab private effect")
 
-proc realize*(connection: XConnection; effect: WmEffect;
+proc realizeCloseEffect*(connection: var XConnection;
+                         effect: PrivateEffect) =
+  let raw = connection.rawHandleForX11()
+  case effect.kind
+  of pfeSendWmDelete:
+    var message = XcbClientMessageEvent(responseType: EventClientMessage,
+        format: 32, window: effect.window.raw,
+        messageType: connection.atoms.wmProtocols)
+    message.data.data32[0] = connection.atoms.wmDeleteWindow
+    message.data.data32[1] = 0'u32 # CurrentTime
+    checked(connection, xcbSendEventChecked(raw, 0, effect.window.raw, 0,
+        addr message), "send WM_DELETE_WINDOW", missingIsOk = true)
+  of pfeKillClient:
+    checked(connection, xcbKillClientChecked(raw, effect.window.raw),
+        "kill X11 client")
+  else:
+    raise newException(ValueError, "not a close private effect")
+
+proc realize*(connection: var XConnection; effect: WmEffect;
               managedWindows: openArray[uint32]; diagnosticRaiseSubrequest = -1) =
   let raw = connection.rawHandleForX11()
   case effect.kind
@@ -257,7 +365,9 @@ proc realize*(connection: XConnection; effect: WmEffect;
         connection.decorationVisual, mask, addr values[0]), "create sibling decoration")
   of wePaintDecoration:
     paintDecoration(raw, effect.decoration.raw, connection.decorationFormat,
-        effect.geometry.width, effect.geometry.height, effect.outerColor)
+        effect.geometry.width, effect.geometry.height, effect.outerColor,
+        effect.innerColor, effect.borderStyle, effect.cornerMask,
+        effect.cornerPercent, effect.outerBorderWidth, effect.innerBorderWidth)
   of weMapDecoration:
     # C's frame-map path is unchecked and continues if a frame disappeared.
     # Preserve that stale-decoration behavior while still surfacing other X errors.
@@ -291,8 +401,14 @@ proc realize*(connection: XConnection; effect: WmEffect;
     var values = XcbConfigureWindowValueList(data32: [
         uint32(min(effect.geometry.width, uint32(high(uint16)))),
         uint32(min(effect.geometry.height, uint32(high(uint16)))), 0, 0])
-    checked(connection, xcbConfigureWindowChecked(raw, effect.window.raw,
-        4'u32 or 8'u32, addr values), "resize client")
+    let cookie = xcbConfigureWindowChecked(raw, effect.window.raw,
+        4'u32 or 8'u32, addr values)
+    if effect.ignoreBadValue:
+      checked(connection, cookie, "resize client", badValueIsOk = true)
+    elif effect.ignoreFailure:
+      checkedIgnoringError(connection, cookie)
+    else:
+      checked(connection, cookie, "resize client")
   of weConfigureDecoration:
     if effect.geometry.width == 0 or effect.geometry.height == 0:
       checked(connection, xcbUnmapWindowChecked(raw, effect.decoration.raw),
@@ -380,11 +496,17 @@ proc realize*(connection: XConnection; effect: WmEffect;
         effect.window.raw, connection.atoms.wmState, connection.atoms.wmState,
         32, 2, addr values[0]), "publish WM_STATE")
   of weCenterPointerOnClient:
+    let pointerX = if effect.pointerPositionExplicit: effect.x
+        else: int16(effect.width div 2)
+    let pointerY = if effect.pointerPositionExplicit: effect.y
+        else: int16(effect.height div 2)
     checked(connection, xcbWarpPointerChecked(raw, 0, effect.window.raw,
-        0, 0, 0, 0, int16(effect.width div 2), int16(effect.height div 2)),
+        0, 0, 0, 0, pointerX, pointerY),
         "center pointer on managed client", missingIsOk = true)
   of wePublishClientLists:
     connection.publishClientLists(managedWindows)
+  of weRepublishClientLists:
+    connection.republishClientLists(managedWindows)
   of weRestackLayers:
     raise newException(ValueError, "layer restacking must be coordinated with a fresh runtime observation")
   of wePublishLayerState:
@@ -460,6 +582,12 @@ proc realize*(connection: XConnection; effect: WmEffect;
       checkedIgnoringError(connection, cookie)
     else:
       checked(connection, cookie, "publish _NET_CURRENT_DESKTOP")
+  of wePublishNumberOfDesktops:
+    var count = effect.desktopCount
+    checked(connection, xcbChangePropertyChecked(raw, PropModeReplace,
+        connection.root, connection.atoms.netNumberOfDesktops,
+        connection.atoms.cardinal, 32, 1, addr count),
+        "publish _NET_NUMBER_OF_DESKTOPS")
   of weRaiseClient:
     var values = XcbConfigureWindowValueList(data32: [0'u32, 0, 0, 0])
     if effect.decoration.raw != 0:
@@ -516,9 +644,18 @@ proc realize*(connection: XConnection; effect: WmEffect;
         "\"width_inc\":" & $effect.resizeHints.widthIncrement &
         ",\"height_inc\":" & $effect.resizeHints.heightIncrement & "," &
         "\"mapped\":" & (if effect.mapped: "true" else: "false") &
-        ",\"group\":" & $effect.group.raw & "}"
+        ",\"group\":" & (if effect.group == NullGroup: "-1" else: $effect.group.raw) & "}"
     checked(connection, xcbChangePropertyChecked(raw, PropModeReplace,
         effect.window.raw, connection.atoms.cirrusStatus, connection.atoms.string,
-        8, uint32(status.len), unsafeAddr status[0]), "publish CIRRUS_STATUS")
+        8, uint32(status.len), unsafeAddr status[0]), "publish CIRRUS_STATUS",
+        missingIsOk = true)
+  of wePublishInvalidation:
+    connection.snapshotInvalidation =
+        nextSnapshotInvalidation(connection.snapshotInvalidation)
+    var counter = connection.snapshotInvalidation
+    checked(connection, xcbChangePropertyChecked(raw, PropModeReplace,
+        connection.root, connection.atoms.cirrusStateInvalidate,
+        connection.atoms.cardinal, 32, 1, addr counter),
+        "publish _CIRRUS_STATE_INVALIDATE")
   if xcbFlush(raw) <= 0:
     raise newException(IOError, "failed to flush lifecycle effect " & $effect.kind)

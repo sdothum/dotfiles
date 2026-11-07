@@ -7,7 +7,7 @@
 
 # .................................................... cirrus persistent states
 
-usage() { echo "$(basename $0) -[a'dd | d'elete | p'ath | q'uiet (test) | /'utf-8] <path>
+usage() { echo "$(basename $0) -[a'dd | d'elete | r'eplace | p'ath | t'est | /'utf-8] <path>
 >       -[c'onfig | e'cho | /'utf-8 (escape)] <path> <value>" | usage:
 	exit 1
 }
@@ -19,8 +19,13 @@ case "$1" in
 	-d  ) rm -rf "$WMSE/$2" ;;                                # delete branch
 	-e  ) recipe "$2" "$3" && [ "$3" ] && echo "$3" ;;        # set with echo
 	-p  ) echo "$WMSE/$2"   ;;
-	-q  ) recipe "$2" >/dev/null ;;                           # quiet test
+	-t  ) recipe "$2" >/dev/null ;;                           # quiet test
 	-/  ) [ "$3" ] && recipe "$2" "$(echo "$3" | utfslash)" || recipe "$2" | utfslash - ;;  # add utf-8 / return ascii slashes
+	-r  )
+		branch="$WMSE/${2%/*}"
+		rm -rf "$branch"/*
+		recipe -a "$2"
+		;;
 	*   ) # set or return branch (or error code)
 		branch="$WMSE/$1"
 		if [ "$2" ] ;then

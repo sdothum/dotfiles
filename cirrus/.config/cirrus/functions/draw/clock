@@ -52,7 +52,7 @@ FORECAST=$WME/weather
 
 weather() { unset update_weather; rm -rf $FORECAST; mkdir -p "$FORECAST/$(conky weather panel | utfslash)" & }
 
-recipe -q panel/weather && weather
+recipe -t panel/weather && weather
 
 # ...................................................... Clock & weather refresh
 
@@ -76,7 +76,7 @@ currently() {
 	fi
 
 	# update weather every 10 minutes
-	if recipe -q panel/weather ;then
+	if recipe -t panel/weather ;then
 		[ $DMS ] && minute=${line#*;?} || minute=${line#*:?}  # hh:mm:ss.* -> m:ss.*
 		case $(printf '%.1s' "$minute") in                    # -> m
 			0 ) [ $update_weather ] && weather ;;              # every 10 minutes

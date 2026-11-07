@@ -4,8 +4,10 @@ import std/[options, strutils, sequtils]
 import ./[types, state, pointer]
 import ./geometry as geometryMath
 import ./stacking
+import ./geometry_batch
 
 const DefaultOuterBorderWidth* = 5'i32
+const InitialEwmhDesktopCount = 10'u32
 
 type
   WmInputKind* = enum
@@ -15,14 +17,15 @@ type
     wiClearFocus, wiFocusLast,
     wiCycle, wiReverseCycle, wiCycleGroup, wiReverseCycleGroup,
     wiFocusReconcile, wiAssignGroup, wiRemoveGroup, wiActivateGroup,
-    wiDeactivateGroup, wiSetLastWindowFocus, wiStartupFocus,
+    wiDeactivateGroup, wiSetLastWindowFocus, wiInitializeEwmh, wiStartupFocus,
     wiCompleteStartupClient, wiMoveBy, wiMoveTo, wiResizeRelative,
     wiResizeAbsolute, wiConfigureRequest, wiStackCycle, wiSetLayer,
     wiLayerRestackFailed, wiLayerPublicationFailed, wiRaiseMany, wiCirculateRequest,
     wiEwmhWmState, wiEwmhActiveWindow,
     wiButtonPress, wiPointerMotion, wiButtonRelease,
     wiMaximizeHorizontal,
-    wiMaximizeVertical, wiMaximizeFull, wiMonocle, wiResetGeometry
+    wiMaximizeVertical, wiMaximizeFull, wiMonocle, wiResetGeometry,
+    wiFitOnScreen
   WmInput* = object
     kind*: WmInputKind
     window*, decoration*, actualFocus*, rootWindow*: WindowId
@@ -54,23 +57,25 @@ type
     layer*: WindowLayer
     resizeHintsEnabled*: bool
     setByUser*, enabled*, centerOnPointer*: bool
+    forceActivation*: bool
   WmEffectKind* = enum
     weSelectClientEvents, weAddToSaveSet, weRemoveFromSaveSet,
     wePublishDesktop, weMapClient, weUnmapClient, weCreateDecoration,
     weMapDecoration, wePaintDecoration, wePlaceClientAboveDecoration,
     weUnmapDecoration, weDestroyDecoration,
-    wePublishWmStateNormal, wePublishClientLists, weSetInputFocus,
+    wePublishWmStateNormal, wePublishClientLists, weRepublishClientLists, weSetInputFocus,
     weCenterPointerOnClient,
-    wePublishActiveWindow, wePublishCurrentDesktop, weRaiseClient,
+    wePublishActiveWindow, wePublishCurrentDesktop, wePublishNumberOfDesktops, weRaiseClient,
     weInstallButtonGrabs, weAllowPointer, weGrabPointer, weUngrabPointer,
     wePublishActiveGroups, wePublishStatus, weMoveClient, weResizeClient,
     weConfigureDecoration, weConfigureRequest, weCirculateRequest,
     weRestackLayers, wePublishLayerState, weApplyEwmhGeometry,
-    wePublishEwmhState, weSetUnmanagedEwmhState
+    wePublishEwmhState, weSetUnmanagedEwmhState, wePublishInvalidation
   WmEffect* = object
     kind*: WmEffectKind
     window*, decoration*: WindowId
     group*: RawGroup
+    desktopCount*: uint32
     groups*: seq[RawGroup]
     x*, y*: int16
     width*, height*: uint16
@@ -84,13 +89,18 @@ type
     stateAtoms*: seq[uint32]
     aboveAtom*: uint32
     outerColor*: uint32
+    innerColor*: uint32
+    borderStyle*, cornerMask*, cornerPercent*: uint32
+    outerBorderWidth*, innerBorderWidth*: int32
     stackingState*: seq[StackingLayerSnapshot]
     resizeHints*: ResizeHints
     mapped*, setByUser*: bool
+    pointerPositionExplicit*: bool
     maxed*, hmaxed*, vmaxed*, monocled*: bool
     layer*: WindowLayer
     previousLayer*: WindowLayer
-    previousLayerExplicit*, restoreLayerOnFailure*, ignoreFailure*: bool
+    previousLayerExplicit*, restoreLayerOnFailure*, ignoreFailure*,
+        ignoreBadValue*: bool
     activationRaise*: bool
     pointerAllowMode*: PointerAllowMode
     pointerTime*: uint32
@@ -181,10 +191,7 @@ type
     termination*: PrivateTerminationIntent
     privateEffects*: seq[PrivateEffect]
     detail*: string
-  PrivateGeometryRecord = object
-    window: WindowId
-    x, y: int32
-    width, height: uint16
+  PrivateGeometryRecord = GeometryBatchRecord
 
 proc effect(kind: WmEffectKind; window: WindowId;
             decoration = WindowId(0); group = NullGroup;
@@ -204,14 +211,19 @@ proc statusEffect(client: ClientState): WmEffect =
       resizeHints: client.resizeHints, maxed: client.maxed,
       hmaxed: client.hmaxed, vmaxed: client.vmaxed, monocled: client.monocled)
 
-proc paintEffect(client: ClientState; focused: bool): WmEffect =
+proc paintEffect(client: ClientState; focused: bool; config: WmConfiguration): WmEffect =
   WmEffect(kind: wePaintDecoration, window: client.window,
       decoration: client.decoration.get, geometry: client.geometry,
-      outerColor: if focused: 0xff97a293'u32 else: 0xff393638'u32)
+      outerColor: if focused: config.outerColorFocused else: config.outerColorUnfocused,
+      innerColor: if focused: config.innerColorFocused else: config.innerColorUnfocused,
+      borderStyle: config.borderStyle, cornerMask: config.cornerMask,
+      cornerPercent: config.cornerPercent,
+      outerBorderWidth: config.outerBorderWidth,
+      innerBorderWidth: config.innerBorderWidth)
 
 proc geometryEffects(client: ClientState; moveClient, resizeClient: bool;
                      bounds: geometryMath.GeometryBounds; focused: bool;
-                     frameExtent: int32): seq[WmEffect] =
+                     config: WmConfiguration): seq[WmEffect] =
   if moveClient:
     result.add(WmEffect(kind: weMoveClient, window: client.window,
         geometry: client.geometry))
@@ -219,13 +231,12 @@ proc geometryEffects(client: ClientState; moveClient, resizeClient: bool;
     result.add(WmEffect(kind: weResizeClient, window: client.window,
         geometry: client.geometry))
   if client.decoration.isSome and client.mapped:
-    let derived = geometryMath.decorationGeometry(client.geometry,
-        frameExtent)
+    let derived = geometryMath.decorationGeometry(client.geometry, config)
     if not geometryMath.decorationClipWouldFailC(derived, bounds):
       let frame = geometryMath.fitDecoration(derived, bounds)
       result.add(WmEffect(kind: weConfigureDecoration, window: client.window,
           decoration: client.decoration.get, geometry: frame))
-      result.add(paintEffect(client, focused))
+      result.add(paintEffect(client, focused, config))
   result.add(statusEffect(client))
 
 proc resetGeometry(state: var WmState; client: var ClientState) =
@@ -241,19 +252,17 @@ proc focusEffects(state: var WmState; id: ClientId;
 
 proc ewmhGeometryEffects(client: ClientState;
                          bounds: geometryMath.GeometryBounds;
-                         focused: bool; frameExtent: int32;
-                         zeroBorder = false): seq[WmEffect] =
+                         focused: bool; config: WmConfiguration; zeroBorder = false): seq[WmEffect] =
   var geometry = WmEffect(kind: weApplyEwmhGeometry,
       window: client.window, geometry: client.geometry, maxed: zeroBorder)
   if client.decoration.isSome and client.mapped:
-    let derived = geometryMath.decorationGeometry(client.geometry,
-        frameExtent)
+    let derived = geometryMath.decorationGeometry(client.geometry, config)
     if not geometryMath.decorationClipWouldFailC(derived, bounds):
       geometry.decoration = client.decoration.get
       geometry.frameGeometry = geometryMath.fitDecoration(derived, bounds)
   result.add(geometry)
   if geometry.decoration.raw != 0:
-    result.add(paintEffect(client, focused))
+    result.add(paintEffect(client, focused, config))
 
 proc ewmhStatePropertyEffect(client: ClientState): WmEffect =
   WmEffect(kind: wePublishEwmhState, window: client.window,
@@ -276,7 +285,7 @@ proc resetForEwmh(state: var WmState; client: var ClientState;
   state.resetGeometry(client)
   for geometryEffect in client.ewmhGeometryEffects(bounds,
       state.focusedId.isSome and state.focusedId.get == client.id,
-      state.config.outerBorderWidth + state.config.innerBorderWidth):
+      state.config):
     effects.add(geometryEffect)
   effects.add(state.ewmhRestackEffect(client.window))
   effects.add(ewmhStatePropertyEffect(client))
@@ -308,7 +317,7 @@ proc applyEwmhMaximize(state: var WmState; client: var ClientState;
   discard state.replaceClient(client)
   for geometryEffect in client.ewmhGeometryEffects(bounds,
       state.focusedId.isSome and state.focusedId.get == client.id,
-      state.config.outerBorderWidth + state.config.innerBorderWidth,
+      state.config,
       kind == wiMaximizeFull):
     effects.add(geometryEffect)
   if kind == wiMaximizeFull:
@@ -324,7 +333,7 @@ proc resetEwmhMaximize(state: var WmState; client: var ClientState;
   state.resetGeometry(client)
   for geometryEffect in client.ewmhGeometryEffects(bounds,
       state.focusedId.isSome and state.focusedId.get == client.id,
-      state.config.outerBorderWidth + state.config.innerBorderWidth):
+      state.config):
     effects.add(geometryEffect)
   effects.add(state.ewmhRestackEffect(client.window))
   effects.add(ewmhStatePropertyEffect(client))
@@ -450,13 +459,15 @@ proc focusEffects(state: var WmState; id: ClientId;
     result.add(effect(weMapDecoration, client.window, client.decoration.get))
   result.add(effect(weMapClient, client.window))
   if client.decoration.isSome and client.mapped and not client.maxed:
-    result.add(paintEffect(client, true))
+    result.add(paintEffect(client, true, state.config))
   result.add(effect(weSetInputFocus, client.window))
   result.add(effect(wePublishActiveWindow, client.window))
   if previous.isSome and previous.get.id != id and previous.get.mapped and
       previous.get.decoration.isSome:
-    result.add(paintEffect(previous.get, false))
+    result.add(paintEffect(previous.get, false, state.config))
   result.add(effect(wePublishCurrentDesktop, client.window, group = client.group))
+  if previous.isNone or previous.get.id != id:
+    result.add(WmEffect(kind: wePublishInvalidation))
   if state.pointerModifier != 0:
     result.add(WmEffect(kind: weInstallButtonGrabs, window: client.window,
         pointerModifier: state.pointerModifier,
@@ -476,9 +487,14 @@ proc chooseLast(state: WmState): Option[ClientId] =
 proc cycleTarget(state: WmState; reverse, sameGroup: bool): Option[ClientId] =
   let ordered = state.clientsInManagedOrder
   let count = ordered.len
-  if count < 2: return none(ClientId)
+  if count == 0: return none(ClientId)
   let focused = state.focusedId
   if sameGroup and focused.isNone: return none(ClientId)
+  if count == 1:
+    # C's global cycle handlers focus the sole mapped list member when there
+    # is no current focus; with that member already focused they are a no-op.
+    if focused.isNone and ordered[0].mapped: return some(ordered[0].id)
+    return none(ClientId)
   var index = -1
   if focused.isSome:
     for itemIndex, client in ordered:
@@ -642,7 +658,7 @@ proc transition*(state: var WmState; epoch: ProcessEpoch;
       client.geometry = geom
       result.effects = client.geometryEffects(true, true, input.geometryBounds,
           state.focusedId.isSome and state.focusedId.get == client.id,
-          state.config.outerBorderWidth + state.config.innerBorderWidth)
+          state.config)
       if result.effects.len >= 2:
         swap(result.effects[0], result.effects[1])
     of poNone: return
@@ -698,6 +714,7 @@ proc transition*(state: var WmState; epoch: ProcessEpoch;
     result.effects.add(effect(wePublishDesktop, input.window, group = input.initialGroup))
     result.effects.add(groupEffect(state, input.window))
     result.effects.add(statusEffect(managed))
+    result.effects.add(WmEffect(kind: wePublishInvalidation))
     result.effects.add(effect(weMapClient, input.window))
     if input.geometryBounds.width > 0 and input.geometryBounds.height > 0:
       let fitted = geometryMath.fitConfigure(managed.geometry,
@@ -715,11 +732,10 @@ proc transition*(state: var WmState; epoch: ProcessEpoch;
         if resized:
           result.effects.add(WmEffect(kind: weResizeClient, window: input.window,
               geometry: fitted))
-    let border = state.config.outerBorderWidth + state.config.innerBorderWidth
+    let frame = geometryMath.decorationGeometry(managed.geometry, state.config)
     result.effects.add(effect(weCreateDecoration, input.window, input.decoration,
-        x = int16(managed.geometry.x - border), y = int16(managed.geometry.y - border),
-        width = uint16(managed.geometry.width + uint32(border * 2)),
-        height = uint16(managed.geometry.height + uint32(border * 2))))
+        x = int16(frame.x), y = int16(frame.y),
+        width = uint16(frame.width), height = uint16(frame.height)))
     result.effects.add(effect(weMapDecoration, input.window, input.decoration))
     result.effects.add(effect(wePublishWmStateNormal, input.window))
     result.effects.add(WmEffect(kind: weCenterPointerOnClient,
@@ -740,6 +756,8 @@ proc transition*(state: var WmState; epoch: ProcessEpoch;
       if confirmed.autofocus:
         result.effects.add(state.focusEffects(result.client.id, true))
       result.effects.add(statusEffect(result.client))
+      if not confirmed.wasMapped:
+        result.effects.add(WmEffect(kind: wePublishInvalidation))
   of wiDecorationMapConfirmed, wiDecorationUnmapConfirmed:
     discard
   of wiUnmapConfirmed:
@@ -759,11 +777,14 @@ proc transition*(state: var WmState; epoch: ProcessEpoch;
         result.effects.add(effect(weSetInputFocus, WindowId(0)))
         result.effects.add(effect(wePublishActiveWindow, WindowId(0)))
         result.effects.add(effect(wePublishCurrentDesktop, WindowId(0), group = NullGroup))
+        result.effects.add(WmEffect(kind: wePublishInvalidation))
         if not confirmed.groupPending and state.lastWindowFocus:
           let last = state.chooseLast
           if last.isSome: result.effects.add(state.focusEffects(last.get, true))
-      result.effects.add(effect(wePublishClientLists, input.window))
+      result.effects.add(effect(weRepublishClientLists, input.window))
       result.effects.add(statusEffect(result.client))
+      if confirmed.wasMapped:
+        result.effects.add(WmEffect(kind: wePublishInvalidation))
   of wiDestroyConfirmed:
     let existing = state.lookup(input.window)
     if existing.isSome:
@@ -778,6 +799,7 @@ proc transition*(state: var WmState; epoch: ProcessEpoch;
         result.effects.add(effect(weSetInputFocus, WindowId(0)))
         result.effects.add(effect(wePublishActiveWindow, WindowId(0)))
         result.effects.add(effect(wePublishCurrentDesktop, WindowId(0), group = NullGroup))
+        result.effects.add(WmEffect(kind: wePublishInvalidation))
       result.client = existing.get
       result.hasClient = true
       result.removed = state.removeIdentity(input.window)
@@ -787,11 +809,17 @@ proc transition*(state: var WmState; epoch: ProcessEpoch;
               state.groupClients(result.client.group).len > 0)
         if result.client.decoration.isSome:
           result.effects.add(effect(weDestroyDecoration, input.window, result.client.decoration.get))
+        result.effects.add(WmEffect(kind: wePublishInvalidation))
         if focused and state.lastWindowFocus:
           let last = state.chooseLast
           if last.isSome: result.effects.add(state.focusEffects(last.get, true))
         result.effects.add(effect(wePublishClientLists, input.window))
         result.effects.add(groupEffect(state, input.window))
+    else:
+      # C update_client_list() republishes both root client-list properties
+      # for every DestroyNotify, including unmanaged requester windows.
+      result.effects.add(WmEffect(kind: weRepublishClientLists, window: input.window))
+      result.effects.add(groupEffect(state, input.window))
   of wiManagementFailed:
     let existing = state.lookup(input.window)
     if existing.isSome:
@@ -815,11 +843,13 @@ proc transition*(state: var WmState; epoch: ProcessEpoch;
     let previous = state.focusedClient
     if previous.isSome and previous.get.mapped and not previous.get.maxed and
         previous.get.decoration.isSome:
-      result.effects.add(paintEffect(previous.get, false))
+      result.effects.add(paintEffect(previous.get, false, state.config))
     state.clearFocused()
     result.effects.add(effect(weSetInputFocus, WindowId(0)))
     result.effects.add(effect(wePublishActiveWindow, WindowId(0)))
     result.effects.add(effect(wePublishCurrentDesktop, WindowId(0), group = NullGroup))
+    if previous.isSome:
+      result.effects.add(WmEffect(kind: wePublishInvalidation))
   of wiFocusLast, wiCycle, wiReverseCycle, wiCycleGroup, wiReverseCycleGroup:
     let target = if input.kind == wiFocusLast: state.chooseLast else:
         state.cycleTarget(input.kind in {wiReverseCycle, wiReverseCycleGroup},
@@ -892,15 +922,18 @@ proc transition*(state: var WmState; epoch: ProcessEpoch;
           window: client.window, layer: client.layer, ignoreFailure: true))
   of wiFocusReconcile:
     if input.actualFocus == input.rootWindow or input.actualFocus == WindowId(0):
-      if state.focusedId.isSome:
+      let hadFocus = state.focusedId.isSome
+      if hadFocus:
         let previous = state.focusedClient
         if previous.isSome and previous.get.mapped and not previous.get.maxed and
             previous.get.decoration.isSome:
-          result.effects.add(paintEffect(previous.get, false))
+          result.effects.add(paintEffect(previous.get, false, state.config))
         state.clearFocused()
-        result.effects.add(effect(weSetInputFocus, input.rootWindow))
-        result.effects.add(effect(wePublishActiveWindow, WindowId(0)))
-        result.effects.add(effect(wePublishCurrentDesktop, WindowId(0), group = NullGroup))
+      result.effects.add(effect(weSetInputFocus, input.rootWindow))
+      result.effects.add(effect(wePublishActiveWindow, WindowId(0)))
+      result.effects.add(effect(wePublishCurrentDesktop, WindowId(0), group = NullGroup))
+      if hadFocus:
+        result.effects.add(WmEffect(kind: wePublishInvalidation))
     else:
       let target = state.lookup(input.actualFocus)
       if target.isSome and (state.focusedId.isNone or state.focusedId.get != target.get.id):
@@ -925,27 +958,32 @@ proc transition*(state: var WmState; epoch: ProcessEpoch;
         if state.focusedId.isSome and state.focusedId.get == targetId:
           result.effects.add(effect(wePublishCurrentDesktop, result.client.window, group = group))
   of wiActivateGroup:
-    if input.group.raw < state.groupCount and not state.groupIsActive(input.group):
+    if input.group.raw < state.groupCount and
+        (input.forceActivation or not state.groupIsActive(input.group)):
       let members = state.groupClients(input.group)
       if members.len > 0:
         for client in members:
           if not client.mapped:
             state.setGroupMapPending(client.window, true)
+            result.effects.add(state.ewmhRestackEffect(client.window))
             if client.decoration.isSome:
               result.effects.add(effect(weMapDecoration, client.window, client.decoration.get))
+            result.effects.add(state.ewmhRestackEffect(client.window))
             result.effects.add(effect(weMapClient, client.window))
         state.setGroupActive(input.group, true)
+        state.lastGroup = input.group
         result.effects.add(groupEffect(state, WindowId(0)))
   of wiDeactivateGroup:
     if input.group.raw < state.groupCount and state.groupIsActive(input.group):
       let focused = state.focusedClient
       if focused.isSome and focused.get.group == input.group:
         if focused.get.mapped and not focused.get.maxed and focused.get.decoration.isSome:
-          result.effects.add(paintEffect(focused.get, false))
+          result.effects.add(paintEffect(focused.get, false, state.config))
         state.clearFocused()
         result.effects.add(effect(weSetInputFocus, WindowId(0)))
         result.effects.add(effect(wePublishActiveWindow, WindowId(0)))
         result.effects.add(effect(wePublishCurrentDesktop, WindowId(0), group = NullGroup))
+        result.effects.add(WmEffect(kind: wePublishInvalidation))
       for client in state.groupClients(input.group):
         if client.mapped:
           state.setGroupUnmapPending(client.window, true)
@@ -956,6 +994,11 @@ proc transition*(state: var WmState; epoch: ProcessEpoch;
       result.effects.add(groupEffect(state, WindowId(0)))
   of wiSetLastWindowFocus:
     state.lastWindowFocus = input.enabled
+  of wiInitializeEwmh:
+    result.effects.add(effect(wePublishCurrentDesktop, WindowId(0),
+        group = RawGroup(0)))
+    result.effects.add(WmEffect(kind: wePublishNumberOfDesktops,
+        desktopCount: InitialEwmhDesktopCount))
   of wiStartupFocus:
     let target = state.lookup(input.actualFocus)
     if target.isSome and target.get.mapped:
@@ -963,7 +1006,7 @@ proc transition*(state: var WmState; epoch: ProcessEpoch;
       result.client = target.get
       result.hasClient = true
       if target.get.decoration.isSome:
-        result.effects.add(paintEffect(target.get, true))
+        result.effects.add(paintEffect(target.get, true, state.config))
       result.effects.add(effect(wePublishActiveWindow, target.get.window))
       result.effects.add(effect(wePublishCurrentDesktop, target.get.window, group = target.get.group))
       if state.pointerModifier != 0:
@@ -979,15 +1022,14 @@ proc transition*(state: var WmState; epoch: ProcessEpoch;
       result.effects.add(effect(weSelectClientEvents, input.window))
       result.effects.add(effect(weAddToSaveSet, input.window))
       result.effects.add(effect(wePublishDesktop, input.window, group = completed.get.group))
-      let border = state.config.outerBorderWidth + state.config.innerBorderWidth
+      let frame = geometryMath.decorationGeometry(completed.get.geometry, state.config)
       result.effects.add(effect(weCreateDecoration, input.window, input.decoration,
-          x = int16(int32(input.x) - border), y = int16(int32(input.y) - border),
-          width = uint16(uint32(input.width) + uint32(border * 2)),
-          height = uint16(uint32(input.height) + uint32(border * 2))))
+          x = int16(frame.x), y = int16(frame.y),
+          width = uint16(frame.width), height = uint16(frame.height)))
       result.effects.add(statusEffect(completed.get))
       if completed.get.mapped:
         result.effects.add(effect(weMapDecoration, input.window, input.decoration))
-        result.effects.add(paintEffect(completed.get, false))
+        result.effects.add(paintEffect(completed.get, false, state.config))
         result.effects.add(effect(wePlaceClientAboveDecoration, input.window,
             input.decoration))
       if state.pointerModifier != 0:
@@ -996,7 +1038,7 @@ proc transition*(state: var WmState; epoch: ProcessEpoch;
             pointerLockMasks: state.pointerLockMasks))
   of wiMoveBy, wiMoveTo, wiResizeRelative, wiResizeAbsolute,
       wiConfigureRequest, wiMaximizeHorizontal, wiMaximizeVertical,
-      wiMaximizeFull, wiMonocle, wiResetGeometry:
+      wiMaximizeFull, wiMonocle, wiResetGeometry, wiFitOnScreen:
     let found = state.lookup(input.window)
     if found.isNone:
       if input.kind == wiConfigureRequest:
@@ -1016,6 +1058,7 @@ proc transition*(state: var WmState; epoch: ProcessEpoch;
     var moved = false
     var resized = false
     var configurePromotedToMaximize = false
+    var fitWasMaxed = false
     var configureStackEffect = none(WmEffect)
     case input.kind
     of wiMoveBy:
@@ -1087,6 +1130,37 @@ proc transition*(state: var WmState; epoch: ProcessEpoch;
         state.resetGeometry(client)
         moved = true
         resized = true
+    of wiFitOnScreen:
+      let beforeGeometry = client.geometry
+      fitWasMaxed = client.maxed
+      let normalGeometry = client.geometry
+      client.hmaxed = false
+      client.vmaxed = false
+      if client.maxed:
+        client.maxed = false
+        result.effects.add(WmEffect(kind: weRestackLayers,
+            window: client.window))
+        client.geometry = geometryMath.fitConfigure(client.geometry,
+            client.resizeHints, input.geometryBounds)
+        moved = beforeGeometry.x != client.geometry.x or
+            beforeGeometry.y != client.geometry.y
+        resized = beforeGeometry.width != client.geometry.width or
+            beforeGeometry.height != client.geometry.height
+      elif client.geometry.width == uint32(input.geometryBounds.width) and
+          client.geometry.height == uint32(input.geometryBounds.height):
+        discard state.applySpecialGeometry(client, wiMaximizeFull,
+            input.geometryBounds)
+        client.origGeometry = normalGeometry
+        moved = true
+        resized = true
+        configurePromotedToMaximize = true
+      else:
+        client.geometry = geometryMath.fitConfigure(client.geometry,
+            client.resizeHints, input.geometryBounds)
+        moved = beforeGeometry.x != client.geometry.x or
+            beforeGeometry.y != client.geometry.y
+        resized = beforeGeometry.width != client.geometry.width or
+            beforeGeometry.height != client.geometry.height
     else:
       discard
     if moved or resized:
@@ -1095,13 +1169,22 @@ proc transition*(state: var WmState; epoch: ProcessEpoch;
       result.hasClient = true
       result.effects = client.geometryEffects(moved, resized,
           input.geometryBounds, state.focusedId.isSome and state.focusedId.get == client.id,
-          state.config.outerBorderWidth + state.config.innerBorderWidth)
+          state.config)
+      if input.kind == wiFitOnScreen and fitWasMaxed:
+        result.effects.insert(WmEffect(kind: weRestackLayers,
+            window: client.window), 0)
       if configureStackEffect.isSome:
         result.effects.insert(configureStackEffect.get, 0)
       if configurePromotedToMaximize:
         result.effects.add(state.focusEffects(client.id, false))
         result.effects.add(WmEffect(kind: weRestackLayers,
             window: client.window))
+        result.effects.add(ewmhStatePropertyEffect(client))
+      if input.kind == wiFitOnScreen and resized:
+        for other in state.clientsInManagedOrder():
+          if other.id != client.id and other.mapped and other.decoration.isSome:
+            result.effects.add(paintEffect(other,
+                state.focusedId.isSome and state.focusedId.get == other.id, state.config))
       if input.kind in {wiMaximizeHorizontal, wiMaximizeVertical}:
         # C's maximize command runs set_focused after changing either axis.
         result.effects.add(state.focusEffects(client.id, true))
@@ -1113,7 +1196,13 @@ proc transition*(state: var WmState; epoch: ProcessEpoch;
       elif input.kind == wiResetGeometry and wasSpecial:
         # reset_window enforces layers, then its IPC caller focuses and raises.
         result.effects.add(WmEffect(kind: weRestackLayers, window: client.window))
+        # C reset_window publishes EWMH state after clearing special flags.
+        result.effects.add(ewmhStatePropertyEffect(client))
         result.effects.add(state.focusEffects(client.id, true))
+    if input.kind == wiFitOnScreen:
+      discard state.replaceClient(client)
+      result.client = client
+      result.hasClient = true
 
 proc privateSignedWord(value: uint32): int16 {.inline.} =
   ## The C transport casts through int32_t and then int16_t for these fields.
@@ -1125,45 +1214,7 @@ proc privateTarget(state: WmState; xid: uint32): Option[ClientState] =
 
 proc decodePrivateGeometry(payload: seq[byte]; state: WmState;
                            records: var seq[PrivateGeometryRecord]): bool =
-  const MaxRequestBytes = 65536
-  if payload.len == 0 or payload.len > MaxRequestBytes: return false
-  var text = newString(payload.len)
-  for index, value in payload:
-    if value == 0: return false
-    text[index] = char(value)
-  var lines = text.split('\n')
-  if lines.len > 0 and lines[^1].len == 0: lines.setLen(lines.len - 1)
-  if lines.len == 0 or lines.len > MaxRequestBytes div 2: return false
-  var seen: seq[WindowId]
-  for line in lines:
-    if line.len == 0 or line[0] == ' ' or line[^1] == ' ' or "  " in line:
-      return false
-    let fields = line.split(' ')
-    if fields.len != 5 or fields[0].len != 10 or
-        not fields[0].startsWith("0x"):
-      return false
-    var rawXid: int
-    var x, y, width, height: int
-    try:
-      rawXid = parseHexInt(fields[0][2..^1])
-      x = parseInt(fields[1])
-      y = parseInt(fields[2])
-      width = parseInt(fields[3])
-      height = parseInt(fields[4])
-    except ValueError:
-      return false
-    if rawXid < 0 or uint64(rawXid) > uint64(high(uint32)) or
-        x < int(low(int32)) or x > int(high(int32)) or
-        y < int(low(int32)) or y > int(high(int32)) or
-        width < 0 or width > int(high(uint16)) or
-        height < 0 or height > int(high(uint16)):
-      return false
-    let window = WindowId(uint32(rawXid))
-    if state.lookup(window).isNone or window in seen: return false
-    seen.add(window)
-    records.add(PrivateGeometryRecord(window: window, x: int32(x),
-        y: int32(y), width: uint16(width), height: uint16(height)))
-  true
+  state.decodeGeometryBatch(33, payload, records)
 
 proc privateXid(window: WindowId): string =
   "0x" & toHex(window.raw, 8).toLowerAscii
@@ -1191,35 +1242,64 @@ proc privateQueryError(input: PrivateSemanticInput): string =
   if input.words[1] != 0: "ERROR unknown or unmanaged window"
   else: "ERROR no focused managed window"
 
-proc decodeRaiseMany(payload: seq[byte]; state: WmState;
-                     input: WmInput): tuple[valid: bool, windows: seq[WindowId]] =
+proc parseRaiseWindow(value: string; window: var WindowId): bool =
+  var index = 0
+  while index < value.len and value[index] in {' ', '\t', '\n', '\v', '\f', '\r'}:
+    inc index
+  var negative = false
+  if index < value.len and value[index] in {'+', '-'}:
+    negative = value[index] == '-'
+    inc index
+  if index + 1 < value.len and value[index] == '0' and
+      value[index + 1] in {'x', 'X'}:
+    index += 2
+  let digitStart = index
+  var raw = 0'u64
+  while index < value.len:
+    let digit = case value[index]
+      of '0'..'9': ord(value[index]) - ord('0')
+      of 'a'..'f': ord(value[index]) - ord('a') + 10
+      of 'A'..'F': ord(value[index]) - ord('A') + 10
+      else: -1
+    if digit < 0: break
+    raw = raw * 16'u64 + uint64(digit)
+    if raw > uint64(high(uint32)): return false
+    inc index
+  if index == digitStart or index != value.len: return false
+  if negative and raw != 0: return false
+  window = WindowId(uint32(raw))
+  true
+
+proc decodeRaiseMany(payload: seq[byte]; state: WmState):
+    tuple[valid: bool, windows: seq[WindowId]] =
   const MaxRequestBytes = 65536
   if payload.len == 0 or payload.len > MaxRequestBytes: return
-  var text = newString(payload.len)
+  var rawCount = 0
+  var prefixLength = payload.len
   for index, value in payload:
-    if value == 0: return
-    text[index] = char(value)
-  var lines = text.split('\n')
-  if lines.len > 0 and lines[^1].len == 0: lines.setLen(lines.len - 1)
-  if lines.len == 0 or lines.len > MaxRequestBytes div 3: return
+    if value == 10: inc rawCount
+    if value == 0:
+      prefixLength = index
+      break
+  if payload[^1] != 10: inc rawCount
+  if rawCount == 0 or rawCount > MaxRequestBytes div 3: return
+  var text = newString(prefixLength)
+  for index in 0 ..< prefixLength:
+    text[index] = char(payload[index])
   var seen: seq[WindowId]
-  for line in lines:
+  var tokenCount = 0
+  for line in text.split('\n'):
+    if line.len == 0: continue # C strtok skips repeated delimiters.
+    inc tokenCount
+    if tokenCount > rawCount: return
     if line.len != 10 or not line.startsWith("0x"): return
-    var raw: int
-    try:
-      raw = parseHexInt(line[2..^1])
-    except ValueError:
-      return
-    if raw < 0 or uint64(raw) > uint64(high(uint32)): return
-    let window = WindowId(uint32(raw))
+    var window: WindowId
+    if not parseRaiseWindow(line[2..^1], window): return
     let client = state.lookup(window)
-    if client.isNone or not client.get.mapped or window in seen or
-        window notin input.physicalBottomToTop:
-      return
-    if client.get.decoration.isSome and
-        client.get.decoration.get notin input.physicalBottomToTop:
+    if client.isNone or not client.get.mapped or window in seen:
       return
     seen.add(window)
+  if tokenCount != rawCount: return
   result.valid = true
   result.windows = seen
 
@@ -1251,54 +1331,7 @@ proc privateQueryCandidates*(state: WmState; input: PrivateSemanticInput):
 
 proc decodePrivateCheckedGeometry(payload: seq[byte]; state: WmState;
     records: var seq[PrivateGeometryRecord]): bool =
-  const MaxRequestBytes = 65536
-  if payload.len == 0 or payload.len > MaxRequestBytes: return false
-  var text = newString(payload.len)
-  for index, value in payload:
-    if value == 0: return false
-    text[index] = char(value)
-  var lines = text.split('\n')
-  if lines.len > 0 and lines[^1].len == 0: lines.setLen(lines.len - 1)
-  if lines.len == 0 or lines.len > MaxRequestBytes div 3: return false
-  var seen: seq[WindowId]
-  for line in lines:
-    if line.len == 0 or line[0] == ' ' or line[^1] == ' ' or "  " in line:
-      return false
-    let fields = line.split(' ')
-    if fields.len != 6 or fields[0].len != 10 or
-        not fields[0].startsWith("0x") or fields[1].len != 49 or
-        fields[1][32] != ':': return false
-    for index, ch in fields[1]:
-      if index == 32: continue
-      if not (ch in {'0'..'9'} or ch in {'a'..'f'}): return false
-    if fields[1][33..^1] == repeat('0', 16): return false
-    var rawXid: int
-    var x, y, width, height: int
-    try:
-      rawXid = parseHexInt(fields[0][2..^1])
-      x = parseInt(fields[2])
-      y = parseInt(fields[3])
-      width = parseInt(fields[4])
-      height = parseInt(fields[5])
-    except ValueError:
-      return false
-    if rawXid < 0 or uint64(rawXid) > uint64(high(uint32)) or
-        x < int(low(int32)) or x > int(high(int32)) or
-        y < int(low(int32)) or y > int(high(int32)) or
-        width < 0 or width > int(high(uint16)) or
-        height < 0 or height > int(high(uint16)):
-      return false
-    let window = WindowId(uint32(rawXid))
-    let client = state.lookup(window)
-    if client.isNone or window in seen: return false
-    let token = toHex(client.get.token.epoch.hi, 16).toLowerAscii &
-        toHex(client.get.token.epoch.lo, 16).toLowerAscii & ":" &
-        toHex(client.get.token.generation.raw, 16).toLowerAscii
-    if fields[1] != token: return false
-    seen.add(window)
-    records.add(PrivateGeometryRecord(window: window, x: int32(x),
-        y: int32(y), width: uint16(width), height: uint16(height)))
-  true
+  state.decodeGeometryBatch(35, payload, records)
 
 proc appendPrivateButtonRegrab(result: var PrivateCommandResult;
                                 state: WmState) =
@@ -1314,28 +1347,6 @@ proc appendPrivateButtonRegrab(result: var PrivateCommandResult;
             state.config.pointerActions, state.pointerModifier,
             state.pointerLockMasks)))
 
-proc borderFrameGeometry(client: Geometry; config: WmConfiguration): Geometry =
-  let border = config.outerBorderWidth
-  let gap = config.innerBorderWidth
-  case config.borderStyle
-  of 1'u32:
-    result = Geometry(x: client.x - border - gap, y: client.y,
-        width: cast[uint32](border + gap), height: client.height)
-  of 2'u32:
-    result = Geometry(x: client.x, y: client.y - border - gap,
-        width: client.width, height: cast[uint32](border + gap))
-  of 3'u32:
-    result = Geometry(x: client.x, y: client.y + int32(client.height),
-        width: client.width, height: cast[uint32](border + gap))
-  of 4'u32:
-    result = Geometry(x: client.x + int32(client.width), y: client.y,
-        width: cast[uint32](border + gap), height: client.height)
-  else:
-    let extent = border + gap
-    result = Geometry(x: client.x - extent, y: client.y - extent,
-        width: cast[uint32](int64(client.width) + int64(2 * extent)),
-        height: cast[uint32](int64(client.height) + int64(2 * extent)))
-
 proc refreshBorderEffects(state: var WmState; input: PrivateSemanticInput;
                           output: var PrivateCommandResult) =
   if not state.config.borders:
@@ -1348,7 +1359,11 @@ proc refreshBorderEffects(state: var WmState; input: PrivateSemanticInput;
         discard state.replaceClient(updated)
     return
   for clientValue in state.clientsInManagedOrder():
-    if not clientValue.mapped: continue
+    if not clientValue.mapped:
+      if clientValue.decoration.isSome:
+        output.transition.effects.add(effect(weUnmapDecoration,
+            clientValue.window, clientValue.decoration.get))
+      continue
     var client = clientValue
     var created = false
     if client.decoration.isNone:
@@ -1359,7 +1374,7 @@ proc refreshBorderEffects(state: var WmState; input: PrivateSemanticInput;
           discard state.replaceClient(client)
           break
     if client.decoration.isNone: continue
-    let rawFrame = borderFrameGeometry(client.geometry, state.config)
+    let rawFrame = geometryMath.decorationGeometry(client.geometry, state.config)
     let fitted = geometryMath.fitDecoration(rawFrame,
         input.observations.geometryBounds)
     if created:
@@ -1372,15 +1387,9 @@ proc refreshBorderEffects(state: var WmState; input: PrivateSemanticInput;
     output.transition.effects.add(WmEffect(kind: weConfigureDecoration,
         window: client.window, decoration: client.decoration.get,
         geometry: fitted))
-    output.transition.effects.add(WmEffect(kind: weConfigureDecoration,
-        window: client.window, decoration: client.decoration.get,
-        geometry: fitted))
     let focused = state.focusedClient
-    output.transition.effects.add(WmEffect(kind: wePaintDecoration,
-        window: client.window, decoration: client.decoration.get,
-        geometry: client.geometry,
-        outerColor: if focused.isSome and focused.get.id == client.id:
-            state.config.outerColorFocused else: state.config.outerColorUnfocused))
+    output.transition.effects.add(paintEffect(client,
+        focused.isSome and focused.get.id == client.id, state.config))
     # C update_frame_geometry maps through map_window_stacking, which
     # re-enforces the owner layer after frame creation or refresh.
     output.transition.effects.add(WmEffect(kind: weRestackLayers,
@@ -1433,7 +1442,6 @@ proc applyPrivateCommand*(state: var WmState; epoch: ProcessEpoch;
     result.invalidationRequired = result.invalidationSites.len > 0
   of 2'u32:
     result.invalidationRequirementKnown = true
-    let previousFocus = state.focusedId
     let group = RawGroup(input.words[0])
     result.disposition = pcdSemanticAccepted
     if group.raw >= state.groupCount:
@@ -1446,31 +1454,56 @@ proc applyPrivateCommand*(state: var WmState; epoch: ProcessEpoch;
       request.kind = wiRemoveGroup
       request.clientId = member.id
       let part = state.transition(epoch, request)
-      result.transition.effects.add(part.effects)
+      # group_remove_window calls update_group_list, which clears every
+      # in-use bit whose group has become empty before publishing that list.
+      for groupIndex in 0'u32 ..< state.groupCount:
+        let candidate = RawGroup(groupIndex)
+        if state.groupClients(candidate).len == 0:
+          state.setGroupActive(candidate, false)
+      # Frozen C publishes per member in this order:
+      # desktop, active groups, focused desktop (if applicable), status,
+      # then snapshot invalidation.
+      for effectKind in [wePublishDesktop, wePublishActiveGroups,
+          wePublishCurrentDesktop, wePublishStatus]:
+        for memberEffect in part.effects:
+          if memberEffect.kind == effectKind:
+            if effectKind == wePublishActiveGroups:
+              result.transition.effects.add(groupEffect(state, member.window))
+            else:
+              result.transition.effects.add(memberEffect)
+      for memberEffect in part.effects:
+        if memberEffect.kind notin {wePublishDesktop, wePublishActiveGroups,
+            wePublishCurrentDesktop, wePublishStatus}:
+          result.transition.effects.add(memberEffect)
+      if part.hasClient and part.client.group == NullGroup:
+        result.transition.effects.add(WmEffect(kind: wePublishInvalidation))
+        result.invalidationSites.add("groups.c:group_remove_window")
       result.transition.client = part.client
       result.transition.hasClient = result.transition.hasClient or part.hasClient
-    result.invalidationRequired = members.len > 0
-    if result.invalidationRequired:
-      result.invalidationSites.add("groups.c:group_remove_window")
-    if previousFocus != state.focusedId:
-      result.invalidationRequired = true
-      result.invalidationSites.add("focus.c:clear_focused")
+    state.setGroupActive(group, false)
+    result.invalidationRequired = result.invalidationSites.len > 0
   of 3'u32:
-    if not input.hasCardinalFocusTarget:
-      result.disposition = pcdDeferred
-      result.detail = "cardinal candidate requires normalized source-algorithm observation"
-      return
-    let target = state.lookup(input.cardinalFocusTarget)
     let previousFocus = state.focusedId
     result.disposition = pcdSemanticAccepted
+    let targetWindow = if input.hasCardinalFocusTarget:
+        some(input.cardinalFocusTarget)
+      else:
+        let focused = state.focusedClient
+        if focused.isSome:
+          geometryMath.cardinalFocusCandidate(focused.get,
+              state.clientsInManagedOrder(), input.words[0])
+        else:
+          none(WindowId)
+    let target = if targetWindow.isSome: state.lookup(targetWindow.get)
+                 else: none(ClientState)
     if target.isSome and target.get.mapped and target.get.window !=
         (if state.focusedClient.isSome: state.focusedClient.get.window else: WindowId(0)):
       request = input.observations
       request.window = target.get.window
       run(wiFocusClient)
-      result.detail = "focus candidate selected by normalized frozen-C cardinal geometry observation"
+      result.detail = "focus candidate selected by frozen-C cardinal geometric score"
     else:
-      result.detail = "source cardinal-focus selection has no usable candidate"
+      result.detail = "source cardinal-focus selection has no eligible candidate"
     result.invalidationRequirementKnown = true
     result.invalidationRequired = previousFocus != state.focusedId
     if result.invalidationRequired:
@@ -1511,8 +1544,12 @@ proc applyPrivateCommand*(state: var WmState; epoch: ProcessEpoch;
       result.invalidationRequirementKnown = true
   of 7'u32:
     let previousFocus = state.focusedId
-    request = input.observations
-    run(wiFocusLast)
+    if previousFocus.isSome:
+      request = input.observations
+      run(wiFocusLast)
+    else:
+      result.disposition = pcdSemanticAccepted
+      result.detail = "source handler ignores focus-last when there is no focused client"
     result.invalidationRequirementKnown = true
     result.invalidationRequired = previousFocus != state.focusedId
     if result.invalidationRequired:
@@ -1909,12 +1946,19 @@ proc applyPrivateCommand*(state: var WmState; epoch: ProcessEpoch;
     run(wiSetLayer)
     acceptedReply()
     result.invalidationRequirementKnown = true
-  of 11'u32, 37'u32:
+  of 11'u32:
     result.disposition = pcdSemanticAccepted
     result.termination = PrivateTerminationIntent(requested: true,
         exitStatus: cast[int32](input.words[0]))
     result.reply.required = false
-    result.detail = "inert process-exit intent; no termination or respawn is performed"
+    result.detail = "quit request with C-supplied exit status"
+    result.invalidationRequirementKnown = true
+  of 37'u32:
+    result.disposition = pcdSemanticAccepted
+    result.termination = PrivateTerminationIntent(requested: true,
+        exitStatus: 75'i32)
+    result.reply.required = false
+    result.detail = "restart request returns the C WM_EXIT_RESTART status"
     result.invalidationRequirementKnown = true
   of 31'u32:
     result.disposition = pcdSemanticAccepted
@@ -1963,7 +2007,12 @@ proc applyPrivateCommand*(state: var WmState; epoch: ProcessEpoch;
     case key
     of 0'u32: state.config.applySettings = values[0] != 0
     of 1'u32:
-      state.config.borderStyle = values[0]
+      # Public style numbers follow Aurora: right=3, bottom=4. Keep the
+      # established geometry/renderer tags (bottom=3, right=4) internal.
+      state.config.borderStyle = case values[0]
+        of 3'u32: 4'u32
+        of 4'u32: 3'u32
+        else: values[0]
       if state.config.applySettings: result.privateEffects.add(PrivateEffect(kind: pfeRefreshBorders))
     of 2'u32:
       state.config.outerBorderWidth = cast[int32](values[0])
@@ -2016,22 +2065,32 @@ proc applyPrivateCommand*(state: var WmState; epoch: ProcessEpoch;
       else: discard # frozen C silently ignores an unrecognized position
     of 14'u32:
       # Frozen C activates each to-be-removed group while the old group count
-      # still applies, then clears its clients before installing the new count.
+      # still applies, then clears each client before installing the new count.
+      var changedClients: seq[ClientState]
       if values[0] < state.groupCount:
         for client in state.clientsInManagedOrder():
-          if client.group != NullGroup and client.group.raw >= values[0] and
-              client.group.raw < state.groupCount and
-              not state.groupIsActive(client.group):
+          let current = state.lookup(client.id)
+          if current.isSome and current.get.group != NullGroup and
+              current.get.group.raw >= values[0] and
+              current.get.group.raw < state.groupCount:
+            let group = current.get.group
+            state.setGroupActive(group, false)
             let activated = state.transition(epoch, WmInput(kind: wiActivateGroup,
-                group: client.group))
+                group: group, forceActivation: true))
             result.transition.effects.add(activated.effects)
-      let resized = state.setConfiguredGroupCount(values[0])
-      for client in resized.changedClients:
-        result.transition.effects.add(WmEffect(kind: wePublishDesktop,
-            window: client.window, group: NullGroup))
-      if resized.changedClients.len > 0:
+            var updated = state.lookup(client.id).get
+            updated.group = NullGroup
+            if state.replaceClient(updated):
+              changedClients.add(updated)
+              if state.focusedId.isSome and state.focusedId.get == updated.id:
+                state.currentGroup = NullGroup
+              result.transition.effects.add(WmEffect(kind: wePublishDesktop,
+                window: updated.window, group: NullGroup))
+      discard state.setConfiguredGroupCount(values[0])
+      if changedClients.len > 0:
         result.invalidationRequired = true
         result.invalidationSites.add("groups.c:change_nr_of_groups")
+        result.transition.effects.add(WmEffect(kind: wePublishInvalidation))
     of 15'u32: 
       state.config.innerBorderWidth = cast[int32](values[0])
       if state.config.applySettings: result.privateEffects.add(PrivateEffect(kind: pfeRefreshBorders))
@@ -2058,7 +2117,7 @@ proc applyPrivateCommand*(state: var WmState; epoch: ProcessEpoch;
       result.disposition = pcdDeferred
       result.detail = "raise-many requires a normalized physical root-child observation"
       return
-    let decoded = decodeRaiseMany(input.propertyPayload, state, input.observations)
+    let decoded = decodeRaiseMany(input.propertyPayload, state)
     if not decoded.valid:
       result.disposition = pcdSemanticRejected
       result.reply = privateReply("ERROR invalid raise request")

@@ -67,6 +67,52 @@ suite "focus and asynchronous group model":
         actualFocus: WindowId(1), rootWindow: WindowId(1)))
     check state.focusedId.isNone
 
+  test "root focus reconciliation republishes even when already unfocused":
+    var state = newWmState()
+    let a = state.addClient(0x311, 1)
+    let beforeClient = state.lookup(a.id).get
+    let beforeGroups = state.activeGroups
+    let input = WmInput(kind: wiFocusReconcile,
+        actualFocus: WindowId(1), rootWindow: WindowId(1))
+
+    let first = state.transition(epoch, input)
+    check first.effects.mapIt(it.kind) == @[
+        weSetInputFocus, wePublishActiveWindow, wePublishCurrentDesktop]
+    check first.effects[0].window == WindowId(1)
+    check first.effects[2].group == NullGroup
+    check first.effects.countIt(it.kind == wePublishInvalidation) == 0
+    check state.focusedId.isNone
+    check state.activeGroups == beforeGroups
+    check state.lookup(a.id).get == beforeClient
+
+    let repeated = state.transition(epoch, input)
+    check repeated.effects.mapIt(it.kind) == first.effects.mapIt(it.kind)
+    check repeated.effects.countIt(it.kind == wePublishInvalidation) == 0
+    check state.focusedId.isNone
+    check state.activeGroups == beforeGroups
+    check state.lookup(a.id).get == beforeClient
+
+  test "root focus reconciliation clears focused client and invalidates once":
+    var state = newWmState()
+    let a = state.addClient(0x312, 1)
+    discard state.transition(epoch, WmInput(kind: wiFocusClient, clientId: a.id))
+    let beforeClient = state.lookup(a.id).get
+    let beforeGroups = state.activeGroups
+    let cleared = state.transition(epoch, WmInput(kind: wiFocusReconcile,
+        actualFocus: WindowId(1), rootWindow: WindowId(1)))
+    let kinds = cleared.effects.mapIt(it.kind)
+    check kinds[^4..^1] == @[
+        weSetInputFocus, wePublishActiveWindow, wePublishCurrentDesktop,
+        wePublishInvalidation]
+    check cleared.effects.countIt(it.kind == wePublishInvalidation) == 1
+    check state.focusedId.isNone
+    check state.activeGroups == beforeGroups
+    let afterClient = state.lookup(a.id).get
+    check afterClient.window == beforeClient.window
+    check afterClient.geometry == beforeClient.geometry
+    check afterClient.group == beforeClient.group
+    check afterClient.mapped == beforeClient.mapped
+
   test "group assignment and activation retain pending confirmation semantics":
     var state = newWmState()
     let a = state.addClient(0x401, 1, false)
@@ -85,6 +131,57 @@ suite "focus and asynchronous group model":
     check not state.lookup(a.id).get.groupMapPending
     check not mapNotify.effects.mapIt(it.kind).contains(weSetInputFocus)
 
+  test "activation tracks last group and layer restacking in effect order":
+    var state = newWmState()
+    let a = state.addClient(0x441, 2, false)
+    let b = state.addClient(0x442, 2, false)
+    state.setGroupActive(RawGroup(2), false)
+    check state.lastGroup == RawGroup(1)
+    let activated = state.transition(epoch, WmInput(kind: wiActivateGroup,
+        group: RawGroup(2)))
+    check state.lastGroup == RawGroup(2)
+    check activated.effects.mapIt(it.kind) == @[
+        weRestackLayers, weRestackLayers, weMapClient,
+        weRestackLayers, weRestackLayers, weMapClient,
+        wePublishActiveGroups]
+    check activated.effects[0].stackingState.len == 2
+    check activated.effects[1].stackingState.len == 2
+    check state.groupIsActive(RawGroup(2))
+    check state.lookup(a.id).get.groupMapPending
+    check state.lookup(b.id).get.groupMapPending
+    let lastGroup = state.lastGroup
+    let repeated = state.transition(epoch, WmInput(kind: wiActivateGroup,
+        group: RawGroup(2)))
+    check repeated.effects.len == 0
+    check state.lastGroup == lastGroup
+
+  test "empty activation and deactivation do not rewrite last group":
+    var state = newWmState()
+    state.lastGroup = RawGroup(3)
+    let empty = state.transition(epoch, WmInput(kind: wiActivateGroup,
+        group: RawGroup(4)))
+    check empty.effects.len == 0
+    check not state.groupIsActive(RawGroup(4))
+    check state.lastGroup == RawGroup(3)
+    let inactive = state.transition(epoch, WmInput(kind: wiDeactivateGroup,
+        group: RawGroup(3)))
+    check inactive.effects.len == 0
+    check state.lastGroup == RawGroup(3)
+
+  test "group zero is distinct from the empty active-group sentinel":
+    var state = newWmState()
+    discard state.addClient(0x448, 0)
+    check state.activeGroupIds == @[RawGroup(0)]
+    let deactivated = state.transition(epoch, WmInput(kind: wiDeactivateGroup,
+        group: RawGroup(0)))
+    check not state.groupIsActive(RawGroup(0))
+    check state.activeGroupIds.len == 0
+    check deactivated.effects[^1].kind == wePublishActiveGroups
+    check deactivated.effects[^1].groups.len == 0
+    let sentinel = if deactivated.effects[^1].groups.len == 0:
+        @[RawGroup(0)] else: deactivated.effects[^1].groups
+    check sentinel == @[RawGroup(0)]
+
   test "group removal publishes NullGroup without disturbing another member":
     var state = newWmState()
     let a = state.addClient(0x451, 2)
@@ -102,6 +199,7 @@ suite "focus and asynchronous group model":
     let deactivated = state.transition(epoch, WmInput(kind: wiDeactivateGroup,
         group: RawGroup(1)))
     check deactivated.effects.mapIt(it.kind).contains(weUnmapClient)
+    check deactivated.effects.mapIt(it.kind).contains(wePublishInvalidation)
     check state.lookup(a.id).get.mapped
     check state.lookup(a.id).get.groupUnmapPending
     let unmapNotify = state.transition(epoch, WmInput(kind: wiUnmapConfirmed,

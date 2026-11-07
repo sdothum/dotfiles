@@ -6,7 +6,7 @@ calibre
 digikam
 gthumb
 term 'Trace' tail -f /tmp/herbstluftwm.log  # herbstluftwm :: log
-tmux_session irc weechat                    # irc
+tmux session irc weechat                    # irc
 tmux_session jabber mcabber                 # jabber
 tmux_session mail alot                      # mail
 rawtherapee

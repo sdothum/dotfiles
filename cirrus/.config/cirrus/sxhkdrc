@@ -70,7 +70,7 @@ alt + {_,shift} + Tab
 alt + {Left,Down,Up,Right}
 	sirocco window focus --cardinal {west,south,north,east}
 
-# ........................................................................ focus
+# ................................................................ focus / stack
 
 super + i
 	echo "$(timestamp) sxhkd window hide $(pfw)" >>$WMLOG ;\
@@ -151,7 +151,7 @@ super + {4,8,7,9}
 super + shift + {t,s}
 	zephyr window tile {left,right}
 
-# ............................................................... fold & explode
+# ......................................................................... fold
 
 # NOTE: prevent dangling (window delete) layout/fold:* info from interfering with new folds SEE: fold_sync
 
@@ -196,8 +196,7 @@ super + shift + g ; minus
 	notify Group "$G $(zephyr group name $G) --record discarded" ;\
 	rm -rf $WME/layout/fold:group:$G
 
-alt + ctrl + super + 0
-	zephyr layouts restore
+# ...................................................................... explode
 
 alt + super + space
 	[ -e $WME/layout/explode ] && zephyr layouts unexplode || zephyr layouts explode
@@ -205,11 +204,6 @@ alt + super + space
 alt + ctrl + space
 	G=$(sirocco group current) ;\
 	[ -e $WME/layout/explode:group:$G ] && zephyr layouts unexplode --group $G || zephyr layouts explode --group $G
-
-# .................................................................. level (all)
-
-super + ctrl + e
-	zephyr layouts level
 
 # ......................................................................... move
 #
@@ -249,6 +243,9 @@ super + ctrl + {t,s}
 
 super + r ; {super + r,r,R,t,s}
 	zephyr window snap center {_,horizontal,vertical,left,right}
+
+super + shift + minus ; {super + shift + minus,minus,0}
+	zephyr layouts {level,level,restore}
 
 # ......................................................................... swap
 
@@ -345,8 +342,11 @@ super + shift + d ; {super + shift + d,d,D,b,p,P}
 super + shift + space
 	menu
 
-super + {_,shift,ctrl} + apostrophe
-	winid=$(pfw) menu {shortcuts,wikis,notes}
+super + apostrophe
+	winid=$(pfw) menu shortcuts
+
+super + shift + apostrophe ; {super + shift + apostrophe,w,n,d,D}
+	winid=$(pfw) menu {wikis,wikis,notes,notes diary,notes draft}
 
 super + shift + a
 	menu reminder
@@ -366,7 +366,7 @@ super + shift + v
 
 super + {_,shift} + Return
 	scratchpad={scratchy,itchy} ;\
-	zephyr window toggle --name $scratchpad || tmux_session $scratchpad
+	zephyr window toggle --name $scratchpad || tmux session $scratchpad
 
 super + ctrl + Return
 	term

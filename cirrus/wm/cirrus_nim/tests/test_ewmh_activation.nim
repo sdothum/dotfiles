@@ -23,7 +23,7 @@ suite "Stage 6D-2C-2 pure _NET_ACTIVE_WINDOW transitions":
     check state.focusOrderClients()[0].id == a.id
     check activation.effects.mapIt(it.kind) == @[
       weMapDecoration, weMapClient, wePaintDecoration, weSetInputFocus, wePublishActiveWindow,
-      wePublishCurrentDesktop, weRaiseClient]
+      wePublishCurrentDesktop, wePublishInvalidation, weRaiseClient]
     check activation.effects[^1].decoration == WindowId(0xa11)
     check activation.effects[^1].activationRaise
     check activation.effects.allIt(it.ignoreFailure)
@@ -44,7 +44,7 @@ suite "Stage 6D-2C-2 pure _NET_ACTIVE_WINDOW transitions":
     check not state.lookup(a.id).get.mapped
     check activation.effects.mapIt(it.kind) == @[
       weMapDecoration, weMapClient, weSetInputFocus, wePublishActiveWindow,
-      wePublishCurrentDesktop, weRaiseClient]
+      wePublishCurrentDesktop, wePublishInvalidation, weRaiseClient]
     let confirmed = state.transition(epoch, WmInput(kind: wiMapConfirmed,
         window: a.window))
     check confirmed.client.mapped

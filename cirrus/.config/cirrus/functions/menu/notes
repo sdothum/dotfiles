@@ -14,6 +14,7 @@ EDITOR='kak ID=note WAIT'  # default
 NEW='new'
 EDIT='file manager'
 PURGE='purge'
+ext=mkd  # markdown default
 
 TOPMENU='view\nedit'
 DELETE='\ndelete'
@@ -23,34 +24,35 @@ while : ;do
 	case $1 in
 		''  ) break ;;
 		*/* ) FOLDER=$1; shift ;;
-		*   ) ext=$1; shift ;;
+		*   ) category=$1; shift ;;
 	esac
 done
 
 # housekeeping
-[ $ext ] || ext=note
+[ $category ] || category=note
 if [ -z $FOLDER ] ;then
-	EDITOR="kak ID=$ext WAIT"
-	case $ext in
+	EDITOR="kak ID=$category WAIT"
+	case $category in
 		note      ) FOLDER=$HOME/notes  ;;
-		draft     ) FOLDER=$HOME/drafts ;;
+		diary     ) FOLDER=$HOME/diary; ;;
+		draft     ) FOLDER=$HOME/drafts; ext=eml ;;
 		poem      ) FOLDER=$HOME/poems; TOPMENU='edit\nview' ;;
 		supernote ) FOLDER=$HOME/Dropbox/Supernote/EXPORT; ext=txt; unset DELETE PRINT; TOPMENU="$TOPMENU\nwiki"; supernote=true ;;
-		*         ) FOLDER=$HOME/tmp; EDITOR='kak ID=misc WAIT' ;;
+		*         ) FOLDER=$HOME/tmp; EDITOR='kak ID=misc WAIT'; ext=$category ;;
 	esac
 fi
 
 # no archive needed for Dropbox
 if [ $ext != txt ] ;then
 	ARCHIVE=$FOLDER/archive
-	catlg=$FOLDER/.${ext}s
+	catlg=$FOLDER/.${category}s
 	mkdir -p $FOLDER || exit 1
 fi
 
 NOTES=/tmp/menu:notes:$ext
 trap "rm -f $NOTES*" EXIT
 
-if [ $ext = draft ] ;then
+if [ $category = draft ] ;then
 	purge=$(X $PURGE)
 	PROMPT="$(X $NEW)\n$(X $EDIT)\n$(X $PURGE)"
 	offset=3
@@ -77,7 +79,7 @@ cache() {
 	find -L $FOLDER -maxdepth 1 -type f -size 0c -exec rm {} \;
 	files=$(find -L $FOLDER -maxdepth 1 -name "*.$ext")
 	rm -f $NOTES
-	notify low "Updating ${ext}s cache" 'Please be patient..'
+	notify low "Updating ${category}s cache" 'Please be patient..'
 	if [ "$files" ] ;then
 		for i in $files ;do
 			[ "$search" ] && { grep -E -iq "$search" $i || continue; }
@@ -105,7 +107,7 @@ mdbreak() { sed 's/^@ *$//' $file; }
 
 WIKIS="$HOME/vimwiki"
 
-wiki() { 
+wiki() {
 	wiki=$(find -L $WIKIS -maxdepth 2 -type d | exclude 'mail|templates|xref' | sed "s,$WIKIS/,,; 1d" | rmenu wiki)
 	[ "$wiki" ] || return
 	WIKI="$WIKIS/$wiki/$(head -1 $file | sed 's/#//g; s/^ *//; s/  */ /g').wiki";
@@ -117,14 +119,14 @@ wiki() {
 #   /regex to filter
 #   //     to clear filter
 search=''
-while note=$(notes | rmenu "$(echo $ext | sed -r 's/./\u&/') [/search]" $(highlight)) || exit ;do
+while note=$(notes | rmenu "$(echo $category | sed -r 's/./\u&/') [/search]" $(highlight)) || exit ;do
 	case ${note#$(X)} in
 		/*       ) search="${note#*/}"; continue ;;
 		"$EDIT"  ) yazi WAIT $FOLDER ;;
 		"$NEW"   ) file=$(mktemp -p $FOLDER --suffix=.$ext); update=true; action=edit ;;
-	
+
 		"$purge" )
-			[ -f $NOTES ] && find -L $FOLDER -maxdepth 1 -name "*.$ext" -exec notify low "Archiving $ext" {} \; -exec mv -f {} $ARCHIVE \;
+			[ -f $NOTES ] && find -L $FOLDER -maxdepth 1 -name "*.$ext" -exec notify low "Archiving $category" {} \; -exec mv -f {} $ARCHIVE \;
 			search=''; cache; continue
 			;;
 
@@ -140,13 +142,13 @@ while note=$(notes | rmenu "$(echo $ext | sed -r 's/./\u&/') [/search]" $(highli
 
 	[ $ext != txt ] && mhistory $catlg $file  # no need for supernote history
 	# mhistory=$file
-	
+
 	case $action in
 		edit      ) $EDITOR $file; update=true ;;
 		print     ) hardcopy wiki $file ;;
 		wiki      ) wiki; exit ;;
 		delete    ) mv $file /tmp; update=true; sed -i "\,$file,s,$,  (DELETED)," $NOTES ;;  # file contains /'s
-	
+
 		clipboard )
 			[ $supernote ] && mdbreak | mdcat --nocolor --columns=55 >$NOTES || unset NOTES  # convert markdown for email text, see wiki comment above
 			clipboard "${NOTES:-$file}"

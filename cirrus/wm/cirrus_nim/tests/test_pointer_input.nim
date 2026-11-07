@@ -37,7 +37,7 @@ suite "Stage 6D pointer protocol model":
     check state.focusedClient.get.id == a.id
     check press.effects.mapIt(it.kind) == @[
       weRaiseClient, weMapClient, weSetInputFocus, wePublishActiveWindow,
-      wePublishCurrentDesktop, weInstallButtonGrabs, weRaiseClient,
+      wePublishCurrentDesktop, wePublishInvalidation, weInstallButtonGrabs, weRaiseClient,
       weAllowPointer]
     check press.effects[^1].pointerAllowMode == pamReplayPointer
 

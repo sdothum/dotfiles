@@ -14,7 +14,7 @@ export COLSEP=⁋  # NOTE: '^' used for kak split regex SEE: menu (picklist)
 shortcuts() {
 echo "
 |    ⁋ | xclip -selection clipboard
-/    ⁋ >/dev/null
+<    ⁋ >/dev/null
 !    ⁋ 2>/dev/null
 &    ⁋ >/dev/null 2>&1
 ^    ⁋ [^\\\\n]*
@@ -29,6 +29,7 @@ w    ⁋ [[:alnum:]]
 s    ⁋ ¯\(°_o)/¯
 x    ⁋ (⊙_☉)
 k    ⁋ K1Y 0K4
+q    ⁋ Authorized.
 " | picklist
 }
 
@@ -44,7 +45,8 @@ case "${string%% *}" in
 		for i in $(echo "$string" | sed "s/.*$SEP //; s/ /⁋/g; s/./& /g") ;do      # NOTE: to avoid xdotool type keystroke delay
 			[ "$i" = '⁋' ] && xdotool key space || xdotool key $(printf "U%x" "'$i")
 		done
-		[ "${string%% *}" = '|' ] && xdotool key return
+
+		echo "$string" | grep -Eq "^(\||q)" && xdotool key return
 		;;
 esac
 

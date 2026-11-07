@@ -24,10 +24,14 @@ type
 
   PointerPosition* = object
     x*, y*: int16
+    child*: uint32
+    sameScreen*: bool
+    sequence*: uint32
 
   StackingEnterGuard* = object
     active*: bool
     rootX*, rootY*: int16
+    child*: uint32
     lowerSequence*: uint32
     focusWindow*: uint32
 
@@ -35,6 +39,8 @@ type
     rootX*, rootY*: int16
     lowerSequence*, upperSequence*: uint32
     focusWindow*: uint32
+    enteredWindow*: uint32
+    matchEnteredWindow*: bool
 
 proc readProperty(connection: XConnection; window, property,
                   expectedType: uint32): Property32 =
@@ -91,16 +97,18 @@ proc hasDefaultAbovePriority*(connection: XConnection; window: uint32): bool =
 
 proc queryRootPointer*(connection: XConnection): PointerPosition =
   let raw = connection.rawHandleForX11()
+  let cookie = xcbQueryPointer(raw, connection.root)
   var error: ptr XcbGenericError
-  let reply = xcbQueryPointerReply(raw,
-      xcbQueryPointer(raw, connection.root), addr error)
+  let reply = xcbQueryPointerReply(raw, cookie, addr error)
   if error != nil:
     let code = error.errorCode
     cFree(error)
     raise newException(IOError, "XQueryPointer failed (X error " & $code & ")")
   if reply == nil:
     raise newException(IOError, "XQueryPointer returned no reply")
-  result = PointerPosition(x: reply.rootX, y: reply.rootY)
+  result = PointerPosition(x: reply.rootX, y: reply.rootY,
+      child: reply.child, sameScreen: reply.sameScreen != 0,
+      sequence: uint32(cookie.sequence))
   cFree(reply)
 
 proc beginStackingEnterGuard*(connection: XConnection): StackingEnterGuard =
@@ -118,6 +126,7 @@ proc beginStackingEnterGuard*(connection: XConnection): StackingEnterGuard =
     result.active = reply.sameScreen != 0
     result.rootX = reply.rootX
     result.rootY = reply.rootY
+    result.child = reply.child
     result.lowerSequence = uint32(cookie.sequence)
     cFree(reply)
 

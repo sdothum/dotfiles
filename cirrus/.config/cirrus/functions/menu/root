@@ -56,7 +56,7 @@ setroot() {
 
 colors() { [ "$menu" ] && echo | mhistory root | sed "1i$menu" || echo | mhistory root | sed "1i$(X $RANDOM)\n$(X $VIEWER)\n$(X $INVERT)\n$KEEP$(X $COLORS)\n$(X $PICK)\n$(X $UPDATE)"; }
 
-recipe -q theme/random:rgb && KEEP="$(X $SAVE)\n"
+recipe -t theme/random:rgb && KEEP="$(X $SAVE)\n"
 while color=$(colors | column -s^ -t | rmenu 'Setroot') || exit ;do
 	unset KEEP
 	case ${color#$(X)} in

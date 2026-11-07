@@ -26,7 +26,7 @@ case $1 in
 	default ) draw -- system  ; draw -- clock 0; draw -- desktop 0 ;;
 	bottom  ) draw -- system  ; draw -- clock  ; draw -- desktop   ;;
 	top     ) draw -- system 0; draw -- clock 0; draw -- desktop 0 ;;
-	asym*   ) draw -- system  ; draw -- clock  ; draw -- desktop 0; draw -- music 0 ;;
+	asym*   ) draw -- system  ; draw -- clock  ; draw -- desktop 0; recipe -t blackboard || draw -- music 0 ;;
 	*       ) restore ;;
 esac
 

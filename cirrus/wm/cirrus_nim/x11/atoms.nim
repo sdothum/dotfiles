@@ -5,7 +5,9 @@ import ./bindings
 type
   Atoms* = object
     netSupportingWmCheck*: uint32
+    netSupported*: uint32
     netWmName*: uint32
+    netWmIconName*: uint32
     netWmPid*: uint32
     utf8String*: uint32
     window*: uint32
@@ -21,7 +23,10 @@ type
     netClientListStacking*: uint32
     netActiveWindow*: uint32
     netCurrentDesktop*: uint32
+    netNumberOfDesktops*: uint32
+    netDesktopViewport*: uint32
     cirrusActiveGroups*: uint32
+    cirrusStateInvalidate*: uint32
     integer*: uint32
     stage4TestCommand*: uint32
     stage5TestCommand*: uint32
@@ -37,6 +42,7 @@ type
     netWmStateAbove*: uint32
     netWmStateBelow*, netWmStateFullscreen*: uint32
     netWmStateMaximizedVert*, netWmStateMaximizedHorz*: uint32
+    wmProtocols*, wmDeleteWindow*: uint32
 
 proc internAtom(connection: ptr XcbConnection; name: string): uint32 =
   let cookie = xcbInternAtom(connection, 0, uint16(name.len), name.cstring)
@@ -54,7 +60,9 @@ proc internAtom(connection: ptr XcbConnection; name: string): uint32 =
 
 proc initializeAtoms*(connection: ptr XcbConnection): Atoms =
   result.netSupportingWmCheck = internAtom(connection, "_NET_SUPPORTING_WM_CHECK")
+  result.netSupported = internAtom(connection, "_NET_SUPPORTED")
   result.netWmName = internAtom(connection, "_NET_WM_NAME")
+  result.netWmIconName = internAtom(connection, "_NET_WM_ICON_NAME")
   result.netWmPid = internAtom(connection, "_NET_WM_PID")
   result.utf8String = internAtom(connection, "UTF8_STRING")
   result.window = internAtom(connection, "WINDOW")
@@ -70,7 +78,10 @@ proc initializeAtoms*(connection: ptr XcbConnection): Atoms =
   result.netClientListStacking = internAtom(connection, "_NET_CLIENT_LIST_STACKING")
   result.netActiveWindow = internAtom(connection, "_NET_ACTIVE_WINDOW")
   result.netCurrentDesktop = internAtom(connection, "_NET_CURRENT_DESKTOP")
+  result.netNumberOfDesktops = internAtom(connection, "_NET_NUMBER_OF_DESKTOPS")
+  result.netDesktopViewport = internAtom(connection, "_NET_DESKTOP_VIEWPORT")
   result.cirrusActiveGroups = internAtom(connection, "CIRRUS_ACTIVE_GROUPS")
+  result.cirrusStateInvalidate = internAtom(connection, "_CIRRUS_STATE_INVALIDATE")
   result.integer = internAtom(connection, "INTEGER")
   result.stage4TestCommand = internAtom(connection, "_CIRRUS_NIM_STAGE4_TEST")
   result.stage5TestCommand = internAtom(connection, "_CIRRUS_NIM_STAGE5_TEST")
@@ -88,3 +99,5 @@ proc initializeAtoms*(connection: ptr XcbConnection): Atoms =
   result.netWmStateFullscreen = internAtom(connection, "_NET_WM_STATE_FULLSCREEN")
   result.netWmStateMaximizedVert = internAtom(connection, "_NET_WM_STATE_MAXIMIZED_VERT")
   result.netWmStateMaximizedHorz = internAtom(connection, "_NET_WM_STATE_MAXIMIZED_HORZ")
+  result.wmProtocols = internAtom(connection, "WM_PROTOCOLS")
+  result.wmDeleteWindow = internAtom(connection, "WM_DELETE_WINDOW")

@@ -10,7 +10,7 @@
 #
 # NOTE: this script is executed via "draw panel" SEE: also draw panel
 
-recipe -q panel/system || exit
+recipe -t panel/system || exit
 [ $1 ] && panel_offsetY=$1
 
 if [ $STARTREK ] ;then
@@ -28,7 +28,8 @@ cpu_temp='__._°'
 cpu_speed='.__ᴳ'
 mem_usage='_._ᴹ'
 
-SEP="${TAG_PAD} %{F$INACTIVE_FG}%{F-}${TAG_PAD#?}"
+SEP="  %{F$INACTIVE_FG}%{F-}  "  # bottom bar
+DIV="${TAG_PAD}%{F$INACTIVE_FG}%{F-}${TAG_PAD#?}"
 selected_group=
 
 # ............................................................ Desktops (groups)
@@ -72,7 +73,7 @@ currently() {
 	desktops
 
 	if [ $STARTREK ] ;then
-		[ $counter -lt $((tagcount - 1)) ] && counter=$(( counter + 1 )) || counter=1
+		[ $counter -lt $tagcount ] && counter=$(( counter + 1 )) || counter=1
 
 		set -- ${viewscreen}
 		unset desktops
@@ -88,7 +89,8 @@ currently() {
 
 SPC=" "  # U+00a0 monospace cell width
 
-cpu_stat() { stat="$cpu_usage ${STATPAD}$cpu_speed ${STATPAD}$cpu_temp ${STATPAD}$mem_usage${TAG_PAD}"; }
+# cpu_stat() { stat="$cpu_usage ${STATPAD}$cpu_speed ${STATPAD}$cpu_temp ${STATPAD}$mem_usage${TAG_PAD}"; }
+cpu_stat() { stat="$cpu_usage${SEP}$cpu_speed  $cpu_temp${SEP}$mem_usage"; }
 # caps()   { capslock && { [ "$CAPS" = "$SPC$SPC$SPC$SPC" ] && CAPS="CAPS" || CAPS="$SPC$SPC$SPC$SPC"; } || unset CAPS; }
 caps()     { capslock && { [ "$CAPS" = "$SPC$SPC$SPC$SPC$SPC$SPC$SPC$SPC" ] && CAPS="CAPSLOCK" || CAPS="$SPC$SPC$SPC$SPC$SPC$SPC$SPC$SPC"; } || unset CAPS; }
 
@@ -103,7 +105,7 @@ panel() {
 			M*         ) mem_usage=${line#?}; cpu_stat ;;
 		esac
 
-		[ $EPOCH ] && printf "%s\n" "%{c}${desktops}${SEP}${stat}%{U$ACTIVE_FG}%{+u}${CAPS}%{-u}%{U-}"
+		[ $EPOCH ] && printf "%s\n" "%{c}${desktops}${DIV}${stat}%{U$ACTIVE_FG}%{+u}${CAPS}%{-u}%{U-}"
 		unset line EPOCH
 	done
 }
@@ -115,11 +117,40 @@ STREAM=$(mkfifo $FIFO/$msg)  # SEE: panel wrapper
 # desktop panel update
 clock -i 1 -sf "S%s" >$STREAM &
 
-# cpu usage, cpu temperature, memory usage stats
-while : ;do echo "U$(cpu_percent)ᵁ" >$STREAM          ;done &  # sar cycle >~ 1 second
-while : ;do echo "C$(cpu_speed)ᴳ"   >$STREAM; sleep 1 ;done &
-while : ;do echo "T$(cpu_temp)°"    >$STREAM; sleep 2 ;done &
-while : ;do free -h | grep 'Mem:' | sed -r 's/^[^ ]* *[^ ]* *([0-9.]*)Mi.*/\1ᴹ/; s/^[^ ]* *[^ ]* *([0-9.]*)Gi.*/\1ᴹ/; s/^/M/' >$STREAM; sleep 3; done &
+prev_busy=0
+prev_total=0
+cpu_usage() {
+	read -r _ u n s i w q sq _ < /proc/stat
+	busy=$(( u + n + s ))
+	total=$(( busy + i + w + q + sq ))
+	if [ -n "$prev_total" ]; then
+		awk -v u="$(( busy - prev_busy ))"  \
+			-v t="$(( total - prev_total ))" \
+			'BEGIN { if (t>0) printf "U%5.2f° usᴀɢᴇ\n", 100*u/t }'
+	fi
+	prev_busy=$busy
+	prev_total=$total
+}
+
+if [ "$(recipe statusbar)" = 'average' ] ;then
+	cpu_freq() { awk '{sum+=$1; count++} END {if (count > 0) printf "C%4.2fɢʜz\n", sum/count/1000000}' /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq; }
+else
+	cpu_freq() { awk '$1>max {max=$1} END {printf "C%4.2fɢʜz\n", max/1000000}' /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq; }
+fi
+
+for h in /sys/class/hwmon/hwmon*; do
+	read -r name < "$h/name"
+	[ "$name" = k10temp ] && SENSOR=$(printf '%s\n' "$h")
+done
+cpu_temp()  { awk '{printf "T%4.1f°c\n", $1/1000}' $SENSOR/temp1_input; }
+
+mem_usage() { awk '/MemTotal/{t=$2} /MemAvailable/{a=$2; printf "M%4.2fɢʙ\n", (t-a)/1024/1024}' /proc/meminfo; }
+
+# cpu usage, cpu frequency/temperature, memory usage stats
+while : ;do cpu_usage >$STREAM; sleep 1 ;done &
+while : ;do cpu_freq  >$STREAM; sleep 1 ;done &
+while : ;do cpu_temp  >$STREAM; sleep 1 ;done &
+while : ;do mem_usage >$STREAM; sleep 1 ;done &
 
 cat $STREAM | panel | handlebar &
 

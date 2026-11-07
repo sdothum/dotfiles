@@ -13,10 +13,11 @@ import x11/realize
 import model/[identity, state, types]
 import model/lifecycle
 import model/pointer
-import startup/[adoption, identity_service]
+import startup/[adoption, identity_service, legacy_cli]
+import startup/cirrusrc
 
 proc usage() =
-  stderr.writeLine("usage: cirrus-nim [--test-events | --test-state | --test-lifecycle [--test-pause-before-effects]] | --abi")
+  stderr.writeLine("usage: cirrus-nim [-c CONFIG_PATH] [--test-events | --test-state | --test-lifecycle [--test-pause-before-effects]] | --abi")
 
 proc stateJson(state: WmState): string =
   var clients = newJArray()
@@ -71,6 +72,16 @@ proc legacyStateJson(state: WmState): string =
   $(%*{"clients": clients})
 
 proc main(): int =
+  let startupOptions = parseLegacyStartupOptions(commandLineParams(), paramStr(0))
+  for diagnostic in startupOptions.diagnostics:
+    stderr.writeLine(diagnostic)
+  case startupOptions.action
+  of lsaHelp, lsaVersion:
+    stderr.write(startupOptions.earlyOutput)
+    return 0
+  of lsaContinue:
+    discard
+  var configPath = startupOptions.configPath
   var logEvents = false
   var dumpState = false
   var testLifecycle = false
@@ -79,7 +90,10 @@ proc main(): int =
   var testStage5 = false
   var testStage6 = false
   var testPrivateEffects = false
-  for arg in commandLineParams():
+  let params = startupOptions.remainingArgs
+  var paramIndex = 0
+  while paramIndex < params.len:
+    let arg = params[paramIndex]
     case arg
     of "--test-events": logEvents = true
     of "--test-state": dumpState = true
@@ -106,6 +120,7 @@ proc main(): int =
     else:
       usage()
       return 2
+    inc paramIndex
 
   when not defined(stage7d3cPrivateExecution):
     if testPrivateEffects:
@@ -113,6 +128,7 @@ proc main(): int =
       return 2
 
   var connection: XConnection
+  var cirrusrcChild: CirrusrcChild
   try:
     connection = connect()
     connection.claimWindowManager()
@@ -122,7 +138,31 @@ proc main(): int =
     let discoveredPointerMasks = discoverPointerLockMasks(connection.rawHandleForX11())
     let pointerMasks = normalizeLockMasks(discoveredPointerMasks, ModMaskLock)
     state.setPointerModifiers(defaultPointerModifier(), pointerMasks[0], pointerMasks[1], pointerMasks[2])
+    let normalStartup = not (logEvents or dumpState or testLifecycle or testStage4 or
+        testStage5 or testStage6 or testPrivateEffects)
+    when not defined(stage7d2PrivateTransport) and
+        not defined(stage7d3cPrivateExecution):
+      if normalStartup:
+        let initialEwmh = state.transition(epoch,
+            WmInput(kind: wiInitializeEwmh))
+        for effect in initialEwmh.effects:
+          connection.realize(effect,
+              state.clientsInManagedOrder().mapIt(it.window.raw))
+        connection.publishEwmhStartup()
+        connection.initializeRandr()
+        try:
+          cirrusrcChild = launchCirrusrc(configPath,
+              connection.fileDescriptor())
+        except CatchableError as error:
+          stderr.writeLine("cirrus-nim: could not start cirrusrc: " & error.msg)
+      else:
+        connection.initializeRandr()
+    else:
+      connection.initializeRandr()
     connection.adoptStartup(state, epoch)
+    for client in state.clientsInManagedOrder():
+      connection.assignMonitor(client.window.raw, client.geometry.x,
+          client.geometry.y, fallback = true)
     # Stage 2's legacy --test-state seam remains observation-only. Production
     # startup and Stage 4 tests complete management without replacing IDs.
     let observationOnlyTest = (dumpState and not testStage4 and not testStage5 and not testStage6) or
@@ -151,7 +191,9 @@ proc main(): int =
     var adoptedWindows: seq[uint32]
     for client in state.clientsInManagedOrder():
       adoptedWindows.add(client.window.raw)
-    if not observationOnlyTest: connection.publishClientLists(adoptedWindows)
+    if not observationOnlyTest:
+      connection.publishClientLists(adoptedWindows)
+      connection.publishClientListStacking(adoptedWindows)
     if dumpState:
       echo "STATE " & (if testStage4 or testStage5: state.stateJson else: state.legacyStateJson)
       stdout.flushFile()
@@ -166,12 +208,24 @@ proc main(): int =
           testGeometry: testStage5, testStacking: testStage6,
           privateExecution: testPrivateEffects)
       let handler: EventHandler = proc(event: XEvent) = coordinator.handle(event)
-      runEventLoop(connection, testLifecycle, handler)
-    result = 0
+      let terminationHandler: StopHandler = proc(): bool =
+        coordinator.terminationRequested
+      var idleHandler: IdleHandler
+      if cirrusrcChild != nil:
+        idleHandler = proc(): bool = cirrusrcChild.pollExit()
+      runEventLoop(connection, testLifecycle, handler, idleHandler,
+          terminationHandler)
+      if coordinator.terminationRequested:
+        connection.prepareForTermination(state.clientsInManagedOrder(),
+            coordinator.restartRequested)
+        result = int(coordinator.terminationStatus)
+      else:
+        result = 0
   except CatchableError as error:
     stderr.writeLine("cirrus-nim: " & error.msg)
     result = 1
   finally:
+    cirrusrcChild.stop()
     connection.close()
 
 when isMainModule:

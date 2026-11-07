@@ -83,7 +83,7 @@ restore() {
 			[ $contrast ] && { [ $contrast = light ] && recipe theme/contrast dark || recipe theme/contrast light; }
 			exec draw root color ${rgb%.png} $(recipe theme/contrast)
 			;;
-		wallpaper ) recipe -q theme/shuffle && exec draw root shuffle || exec draw root wallpaper ;;
+		wallpaper ) recipe -t theme/shuffle && exec draw root shuffle || exec draw root wallpaper ;;
 		*         ) exec draw root color ;;  # random
 	esac
 }
@@ -109,6 +109,6 @@ root() {
 	invert_panel notify  # keybind message
 }
 
-[ $blackboard ] || recipe -q theme/random:rgb || $XSETROOT $(root 0) >/dev/null &
+[ $blackboard ] || recipe -t theme/random:rgb || $XSETROOT $(root 0) >/dev/null &
 
 # kak: filetype=sh

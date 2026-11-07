@@ -10,7 +10,7 @@ DELAY=0.10                      # window draw time separation
 
 sudo iwconfig wlp9s0 power off  # disable powersave mode (to prevent sleeping connection)
 draw root
-recipe -q unclutter && toggle unclutter on
+recipe -t unclutter && toggle unclutter on
 conky clock auto
 dunst &
 displaycal3                     # load color profile
@@ -27,9 +27,9 @@ zephyr daemon await
 
 zephyr group focus $(zephyr group id "DESK")
 # order commands in ascending order of "rulerrc" complexity SEE: $HOME/.session/cirrus/autostart/[<order>. ]<command>
-recipe -q autostart:oneshot && recipe autostart | while read cmd ;do
+recipe -t autostart:oneshot && recipe autostart | while read cmd ;do
 	ditto autostart "$cmd"
-	eval ${cmd#*. } &
+	[ "${cmd%%#*}" ] && eval ${cmd#*. } &
 	sleep $DELAY  # allow window time to draw
 done
 recipe -d autostart:oneshot  # SEE: .xinitrc

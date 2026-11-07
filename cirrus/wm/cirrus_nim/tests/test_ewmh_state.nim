@@ -59,8 +59,8 @@ suite "Stage 6D-2C-1 pure _NET_WM_STATE transitions":
     check added.client.origGeometry == initial
     check added.effects.mapIt(it.kind) == @[
       weApplyEwmhGeometry, weMapClient, weSetInputFocus,
-      wePublishActiveWindow, wePublishCurrentDesktop, weRestackLayers,
-      wePublishEwmhState, wePublishStatus]
+      wePublishActiveWindow, wePublishCurrentDesktop, wePublishInvalidation,
+      weRestackLayers, wePublishEwmhState, wePublishStatus]
     check added.effects[0].maxed # C sets client border width to zero.
     let repeated = pair.state.apply(pair.client.window, 1, esaFullscreen)
     check repeated.client.maxed
