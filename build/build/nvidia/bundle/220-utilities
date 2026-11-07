@@ -57,6 +57,7 @@ m cbftp
   psensor
   socklog-void
   sysstat
+  turbostat
 
 
 = test
@@ -66,6 +67,7 @@ m cbftp
   memtest86+
 " memtest installed for boot invocation
   speedtest
+  stress-ng
 
 
 # vim: set ft=conf: #

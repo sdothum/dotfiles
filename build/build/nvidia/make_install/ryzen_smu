@@ -1,0 +1,35 @@
+# sdothum - 2016 (c) wtfpl
+
+# Make_install
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .................................................................... ryzen_smu
+
+sudo xbps-install -S zstd
+
+cd /home/depot
+exists --repo ryzen_smu || git clone  https://github.com/amkillam/ryzen_smu.git
+
+cd ryzen_smu
+make
+sudo insmod ./ryzen_smu.ko
+
+# install module
+sudo install -Dm644 ./ryzen_smu.ko \
+	/usr/lib/modules/$(uname -r)/extra/ryzen_smu.ko
+
+sudo depmod -a
+sudo modprobe ryzen_smu
+
+sudo mkdir -p /etc/modules-load.d
+printf 'ryzen_smu\n' | sudo tee /etc/modules-load.d/ryzen_smu.conf
+
+# dkms update
+sudo rm /lib/modules/$(uname -r)/extra/ryzen_smu.ko
+sudo dkms install ryzen_smu/0.1.7
+
+for i in dkms.conf /usr/src/ryzen_smu-0.1.7/dkms.conf ;do
+	sed -i '/CLEAN=/s/^/#/' $i
+done
+
+# vim: set ft=sh: #

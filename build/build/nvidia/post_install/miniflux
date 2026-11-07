@@ -55,16 +55,16 @@ sleep 5  # wait for database to come back up
 # HACK: user/password changed from postgres/secret (on miniflux documentation)
 echo "
 BASE_URL=http://10.1.0.11
-BATCH_SIZE=6
-CLEANUP_ARCHIVE_READ_DAYS=4
-CLEANUP_ARCHIVE_UNREAD_DAYS=4
-CLEANUP_FREQUENCY_HOURS=1
+BATCH_SIZE=100
+CLEANUP_ARCHIVE_READ_DAYS=7
+CLEANUP_ARCHIVE_UNREAD_DAYS=14
+CLEANUP_FREQUENCY_HOURS=24
 CLEANUP_REMOVE_SESSIONS_DAYS=9999
 DATABASE_URL=user=miniflux password=miniflux dbname=miniflux sslmode=disable
 INTEGRATION_ALLOW_PRIVATE_NETWORKS=1
 LISTEN_ADDR=127.0.0.1:8080
 LOG_DATE_TIME=yes
-POLLING_FREQUENCY=1
+POLLING_FREQUENCY=30
 POLLING_PARSING_ERROR_LIMIT=0
 POLLING_SCHEDULER=round_robin
 USER_AGENT=Miniflux/RedditFeed (by /u/sdothum) Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 MyMinifluxBot/1.0
