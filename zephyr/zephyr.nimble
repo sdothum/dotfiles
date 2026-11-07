@@ -3,11 +3,11 @@ import std/os
 import wm/display
 import wm/daemon_client as daemonClient
 import wm/group
-import wm/layout
 import wm/screen
 import wm/state
 import wm/window
 
+import policy/layouts
 import policy/rules
 import zephyr_errors
 
@@ -57,8 +57,8 @@ proc dispatchCommand(cmd: seq[string]) =
   of "group":
     group.dispatch(verb, rest)
 
-  of "layout":
-    layout.dispatch(verb, rest)
+  of "layouts":
+    layouts.dispatch(verb, rest)
 
   of "rule":
     rules.dispatch(verb, rest)
@@ -104,15 +104,15 @@ proc usage() =
   echo "  zephyr group remove [<args>]"
   echo "  zephyr group restore"
   echo "  zephyr group toggle <args>"
-  echo "  zephyr layout explode"
-  echo "  zephyr layout fold <args>"
-  echo "  zephyr layout unfold <class>"
-  echo "  zephyr layout level <args>"
-  echo "  zephyr layout restore <args>"
-  echo "  zephyr layout spread <args>"
-  echo "  zephyr layout tile <args>"
-  echo "  zephyr layout unexplode"
-  echo "  zephyr layout unfold <args>"
+  echo "  zephyr layouts explode"
+  echo "  zephyr layouts fold <args>"
+  echo "  zephyr layouts unfold [<class> | --group <group>]"
+  echo "  zephyr layouts level <args>"
+  echo "  zephyr layouts restore <args>"
+  echo "  zephyr layouts spread <args>"
+  echo "  zephyr layouts tile <args>"
+  echo "  zephyr layouts unexplode"
+  echo "  zephyr layouts grid <args>"
   echo "  zephyr screen indent"
   echo "  zephyr screen panel"
   echo "  zephyr state snapshot"

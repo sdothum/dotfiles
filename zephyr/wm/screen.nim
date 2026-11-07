@@ -30,7 +30,7 @@ proc metrics*(): ScreenMetrics =
       result.top = value(entry)
     of "gap_width left":
       result.margin = value(entry)
-    of "grid_gap_width":
+    of "gap_width grid":
       result.gap = value(entry)
     else:
       discard

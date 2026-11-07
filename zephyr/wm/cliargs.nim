@@ -347,7 +347,7 @@ proc parseArguments*(
       result.row = parsePositiveOption(result.row, ArgRow, allowed)
       inc i
 
-    of "paper", "video", A3, B4, A4, B5, A5, B6, A6, B7, "480p", "720p", "1080p", Viewport, Terminal:
+    of "paper", "video", A3, B4, A4, B5, A5, B6, A6, B7, "480p", "720p", "1080p", "1440p", Viewport, Terminal:
       result.preset = parseArgument(result.preset, ArgPreset, allowed)
 
     of "--position":
@@ -382,7 +382,8 @@ proc parseArguments*(
         of constants.Overlay, "overlay": result.layer = Layer.Overlay
         else: fail("layer must be normal, above or overlay")
 
-      elif allowed.len == 1 and ArgClassname in allowed:
+      elif ArgClassname in allowed and ArgColumns notin allowed and
+          ArgGroup notin allowed and ArgXY notin allowed and ArgLayer notin allowed:
         result.classname = parseArgument(result.classname, ArgClassname, allowed)
 
       elif ArgXY in allowed:
@@ -456,8 +457,7 @@ proc parseArguments*(
             elif ArgCardinal in allowed and
                 result.cardinal == "" and
                 args[i] in [Left, Up, Right, Down, North, East, South, West]:
-
-              result.cardinal = args[i]
+             result.cardinal = args[i]
 
             elif ArgDirection in allowed and
                 result.direction == "" and

@@ -5,7 +5,7 @@ import std/strutils
 import ../wm/compat
 import ../wm/constants
 import ../wm/group as groups
-import ../wm/layout
+import ./layouts as layouts
 import ../wm/state
 import ../wm/window
 import ../wm/window_query as query
@@ -43,7 +43,7 @@ proc sizeA4Centered(winid: string, groupname: string = GroupUtil) =
 
 proc tile3Columns(winid, groupname, classname: string) =
   discard window.target(winid).group(groupname)
-  layout.fold("3", classname)
+  layouts.fold(@["3", classname])
   setGeometry()
 
 proc video1080p(winid: string, groupname: string = GroupPlay) =
@@ -59,7 +59,7 @@ proc video1080p(winid: string, groupname: string = GroupPlay) =
 proc btop(winid: string) =
   discard window.target(winid)
     .group(GroupUtil)
-    # .size(A5)
+    .size(B5,Rotate)
     .snap(Center)
 
   groups.focus(GroupDesk)
@@ -80,14 +80,14 @@ proc kak(winid: string) =
     case liveCount(ClassQutebrowser)
     of 0:
       discard w.tile("3", "2")
-      # layout.fold("3", ClassKak)
+      # layouts.fold(@["3", ClassKak])
     else:
       discard w.tile("3", "3")
   of 2 .. 3:
-    layout.fold("4", ClassKak)
+    layouts.fold(@["4", ClassKak])
     setGeometry()
   else:
-    layout.fold("4", "--rows", "2", ClassKak)
+    layouts.fold(@["4", "--rows", "2", ClassKak])
     setGeometry()
 
 proc luakit(winid: string) =
@@ -102,7 +102,7 @@ proc manpage(winid: string) =
     .group(GroupCode)
     .size(A5)
 
-  layout.spread("3", "1")
+  layouts.spread(@["3", "1"])
 
 proc pavucontrol(winid: string) =
   discard window.target(winid)
@@ -147,10 +147,10 @@ proc term(winid: string, classname: string = ClassTerm) =
 
   case liveCount(classname)
   of 0..2:
-    layout.fold("3", "--spread", classname)
+    layouts.fold(@["3", "--spread", classname])
     # setGeometry()
   else:
-    layout.fold("3", "--rows", "2", "--spread", classname)
+    layouts.fold(@["3", "--rows", "2", "--spread", classname])
     # setGeometry()
 
 proc matchesInstance*(client: policyTypes.RuleClient, selector: string): bool =
@@ -185,6 +185,7 @@ proc matchCreated*(client: policyTypes.RuleClient): Option[string] =
   of "calibre": some("calibre")
   of "cbftp": some("cbftp")
   of "chromium": some("chromium")
+  of "Chromium": some("Chromium")
   of "compose": some("compose")
   of "darktable": some("darktable")
   of "email": some("email")
@@ -195,7 +196,7 @@ proc matchCreated*(client: policyTypes.RuleClient): Option[string] =
   of "gimp": some("gimp")
   of "kak": some("kak")
   of "krita": some("krita")
-  of "Luakit": some("luakit")
+  of "luakit", "Luakit": some("luakit")
   of "manpage": some("manpage")
   of "mpv": some("mpv")
   of "music": some("music")
@@ -237,7 +238,7 @@ proc applyRule*(verb, winid: string) =
   of "calibre", "darktable", "gimp", "krita", "palette", "rawtherapee":
     center(winid)
 
-  of "chromium", "firefox", "foliate", "oculante", "rapidraw":
+  of "chromium", "Chromium", "firefox", "foliate", "oculante", "rapidraw":
     viewport(winid)
   of "aerc", "halloy":
     viewport(winid, GroupComm)

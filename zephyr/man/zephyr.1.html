@@ -175,34 +175,33 @@ commands; they are not zephyr public actions.</p>
 <h3 id="LAYOUT">LAYOUT</h3>
 
 <ul>
-<li><code>layout explode</code>: Capture the current overlap-connected stack, save original
+<li><code>layouts explode</code>: Capture the current overlap-connected stack, save original
 geometry, and arrange those windows according to the existing layout rule.</li>
-<li><code>layout unexplode</code>: Restore saved geometry for surviving exploded windows.</li>
-<li><code>layout explode --group</code> <var>group</var>: Place visible group members using the fold
+<li><code>layouts unexplode</code>: Restore saved geometry for surviving exploded windows.</li>
+<li><code>layouts explode --group</code> <var>group</var>: Place visible group members using the fold
 grid engine and save a dedicated identity-bearing explode operation under
 <code>$WME/layout/explode:group:N</code>. Each group retains independent state.</li>
-<li><code>layout unexplode --group</code> <var>group</var>: Restore that recorded operation, including
+<li><code>layouts unexplode --group</code> <var>group</var>: Restore that recorded operation, including
 surviving clients that changed groups or became hidden. New members and
 reused XIDs with different identity tokens are not restored. Preserve current
 focus and remove the saved operation after restoration.</li>
-<li><code>layout fold</code> <var>args</var>: Fold matching windows into a grid, then raise participants
+<li><code>layouts fold</code> <var>args</var>: Fold matching windows into a grid, then raise participants
 in placement order within their effective stacking bands while preserving focus.
 Repeating an unchanged fold still raises the selected set. Group explode shares
 this stacking behavior without sharing fold transaction ownership. Add
-<code>--record</code> to a class-targeted fold to create or extend its persistent
-unfold checkpoint; without it, fold only arranges windows.</li>
-<li><code>layout unfold</code> <var>class</var>: Restore the identities and geometries saved by the first
-explicitly recorded class fold under <code>$WME/layout/fold:class:&lt;class></code>, then consume that
-state. Re-folds preserve the first saved geometry per client identity and add newly encountered identities.
-New clients, destroyed clients, and reused XIDs with different tokens are not
-restored. Current focus is preserved. Restoration changes geometry, not saved
-stacking order or persistent layers. Class names with path separators are
-percent-encoded in the state directory name. Group/default folds do not create
-class-fold state. Ordinary fold history remains independently available.</li>
-<li><code>layout level</code> <var>args</var>: Level windows vertically.</li>
-<li><code>layout restore</code> [<var>args</var>]: Restore layout state.</li>
-<li><code>layout spread</code> <var>args</var>: Spread windows across a grid.</li>
-<li><code>layout tile</code> <var>args</var>: Tile windows into a grid.</li>
+<code>--record</code> to create or extend a persistent checkpoint for the selected class, group, or all
+visible windows. Without it, fold only arranges windows.</li>
+<li><code>layouts unfold</code> [<var>class</var> | <code>--group</code> <var>group</var>]: Restore and
+consume the matching recorded class or group checkpoint. With no selector, restore the checkpoint
+created by a recorded selector-less fold. Each scope preserves the first geometry per
+(winid, ClientToken) and adds newly encountered identities on later recorded folds; clients
+appearing after the last recorded fold are not included. Restoration preserves current focus and
+does not restore stacking order or persistent layers. Class names with path separators are
+percent-encoded in the state directory name. Ordinary fold history remains available independently.</li>
+<li><code>layouts level</code> <var>args</var>: Level windows vertically.</li>
+<li><code>layouts restore</code> [<var>args</var>]: Restore layout state.</li>
+<li><code>layouts spread</code> <var>args</var>: Spread windows across a grid.</li>
+<li><code>layouts tile</code> <var>args</var>: Tile windows into a grid.</li>
 </ul>
 
 

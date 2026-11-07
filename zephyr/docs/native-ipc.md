@@ -161,7 +161,7 @@ and alternating before/after invocations. Wall time includes process launch.
 | Operation | Samples per binary | Before median | After median |
 | --- | ---: | ---: | ---: |
 | `group count` | 40 | 1.713 ms | 0.910 ms |
-| `layout fold 3 --rows 2 --group 2` (six clients) | 20 | 7.517 ms | 3.548 ms |
+| `layouts fold 3 --rows 2 --group 2` (six clients) | 20 | 7.517 ms | 3.548 ms |
 
 These are local measurements, not general latency guarantees. The architectural
 result is removal of subprocess command construction and repeated X connections.

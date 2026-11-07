@@ -86,7 +86,8 @@ proc restoreTxnLockPath(root: string): string =
 
 proc explodeMetadataPath(root, legacyName: string): string =
   let name = extractFilename(root)
-  if name.startsWith("explode:group:") or name.startsWith("fold:class:"):
+  if name.startsWith("explode:group:") or name.startsWith("fold:class:") or
+      name.startsWith("fold:group:") or name == "fold:all":
     return splitFile(root).dir / ("." & name & legacyName[".explode".len .. ^1])
   splitFile(root).dir / legacyName
 
@@ -298,7 +299,7 @@ proc acquireExplodeLock*(root: string): string =
   if dirExists(result):
     let owner = lockOwner(result)
     if processAlive(owner):
-      raiseZephyrError("layout explode: transaction is already active")
+      raiseZephyrError("layouts explode: transaction is already active")
     removeDir(result)
   createDir(splitFile(root).dir)
   createDir(result)

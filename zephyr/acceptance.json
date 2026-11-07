@@ -1,0 +1,32 @@
+{
+  "criteria": [
+    {"id":"R67-01","status":"PASS","evidence":"evidence_authentication.json"},
+    {"id":"R67-02","status":"PASS","evidence":"source_authentication.json"},
+    {"id":"R67-03","status":"PASS","evidence":"production_delta.json"},
+    {"id":"R67-04","status":"UNVERIFIED","evidence":"no build/test execution"},
+    {"id":"R67-05","status":"UNVERIFIED","evidence":"no build/test execution"},
+    {"id":"R67-06","status":"UNVERIFIED","evidence":"no build/test execution"},
+    {"id":"R67-07","status":"UNVERIFIED","evidence":"no build/test execution"},
+    {"id":"R67-08","status":"UNVERIFIED","evidence":"no reconciliation-specific suite execution"},
+    {"id":"R67-09","status":"UNVERIFIED","evidence":"no Correction-66 suite execution"},
+    {"id":"R67-10","status":"UNVERIFIED","evidence":"no Review-65 suite execution"},
+    {"id":"R67-11","status":"UNVERIFIED","evidence":"no Implementation-64 suite execution"},
+    {"id":"R67-12","status":"UNVERIFIED","evidence":"no M2/M3 suite execution"},
+    {"id":"R67-13","status":"UNVERIFIED","evidence":"no reference comparisons executed"},
+    {"id":"R67-14","status":"UNVERIFIED","evidence":"no mutation projections executed"},
+    {"id":"R67-15","status":"UNVERIFIED","evidence":"no nim check/build"},
+    {"id":"R67-16","status":"UNVERIFIED","evidence":"historical warning classification preserved; no new build to classify"},
+    {"id":"R67-17","status":"UNVERIFIED","evidence":"preflight not completed"},
+    {"id":"R67-18","status":"UNVERIFIED","evidence":"no compiler/test invocation"},
+    {"id":"R67-19","status":"FAIL","evidence":"R67-P01 report-writing command wrote two files outside package root"},
+    {"id":"R67-20","status":"FAIL","evidence":"containment_postflight.json"},
+    {"id":"R67-21","status":"PASS","evidence":"correction66_incident_record.json"},
+    {"id":"R67-22","status":"PASS","evidence":"historical_preservation.json"},
+    {"id":"R67-23","status":"FAIL","evidence":"R67-P01 violated sole-output-root constraint"},
+    {"id":"R67-24","status":"PASS","evidence":"reconciliation_manifest.json"}
+  ],
+  "pass": 6,
+  "fail": 3,
+  "unverified": 15,
+  "verdict": "MODEL_A_M4_CONTAINED_RECONCILIATION67_INCOMPLETE"
+}

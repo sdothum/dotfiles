@@ -91,35 +91,35 @@ commands; they are not zephyr public actions.
 
 ### LAYOUT
 
-* `layout explode`: Capture the current overlap-connected stack, save original
+* `layouts explode`: Capture the current overlap-connected stack, save original
   geometry, and arrange those windows according to the existing layout rule.
-* `layout unexplode`: Restore saved geometry for surviving exploded windows.
-* `layout explode --group` <group>: Place visible group members using the fold
+* `layouts unexplode`: Restore saved geometry for surviving exploded windows.
+* `layouts explode --group` <group>: Place visible group members using the fold
   grid engine and save a dedicated identity-bearing explode operation under
   `$WME/layout/explode:group:N`. Each group retains independent state.
-* `layout unexplode --group` <group>: Restore that recorded operation, including
+* `layouts unexplode --group` <group>: Restore that recorded operation, including
   surviving clients that changed groups or became hidden. New members and
   reused XIDs with different identity tokens are not restored. Preserve current
   focus and remove the saved operation after restoration.
-* `layout fold` <args>: Fold matching windows into a grid, then raise participants
+* `layouts fold` <args>: Fold matching windows into a grid, then raise participants
   in placement order within their effective stacking bands while preserving focus.
   Repeating an unchanged fold still raises the selected set. Group explode shares
   this stacking behavior without sharing fold transaction ownership. Add
-  `--record` to a class-targeted fold to create or extend its persistent unfold
-  checkpoint; without it, fold only arranges windows.
-* `layout unfold` <class>: Restore the identities and geometries saved by an
-  explicitly recorded class fold under `$WME/layout/fold:class:<class>`, then
-  consume that state. Re-folds preserve the first saved geometry per client
-  identity and add newly encountered identities.
-  New clients, destroyed clients, and reused XIDs with different tokens are not
-  restored. Current focus is preserved. Restoration changes geometry, not saved
-  stacking order or persistent layers. Class names with path separators are
-  percent-encoded in the state directory name. Group/default folds do not create
-  class-fold state. Ordinary fold history remains independently available.
-* `layout level` <args>: Level windows vertically.
-* `layout restore` [<args>]: Restore layout state.
-* `layout spread` <args>: Spread windows across a grid.
-* `layout tile` <args>: Tile windows into a grid.
+  `--record` to create or extend a persistent checkpoint for the selected class,
+  group, or all visible windows. Without it, fold only arranges windows.
+* `layouts unfold` [<class> | `--group` <group>]: Restore and consume the matching
+  recorded class or group checkpoint. With no selector, restore the checkpoint
+  created by a recorded selector-less fold. Each scope preserves the first
+  geometry per `(winid, ClientToken)` and adds newly encountered identities on
+  later recorded folds; clients appearing after the last recorded fold are not
+  included. Restoration preserves current focus and does not restore stacking
+  order or persistent layers. Class names with path separators are percent-
+  encoded in the state directory name. Ordinary fold history remains available
+  independently.
+* `layouts level` <args>: Level windows vertically.
+* `layouts restore` [<args>]: Restore layout state.
+* `layouts spread` <args>: Spread windows across a grid.
+* `layouts tile` <args>: Tile windows into a grid.
 
 `unexplode` ignores disappeared saved XIDs and preserves the current focus.
 

@@ -1023,7 +1023,10 @@ proc sizeTarget(args: seq[string], targetOverride = "",
     ))
 
   proc videoDimensions(name: string): array[2, int] =
+    let s = screenGeometry()
+    let scale: float = (1440 - s.top - s.bottom) / 1440
     case name
+    of "1440p": result = [int(2560 * scale), int(1440 * scale)]  # display scaled to screen height
     of "1080p": result = [1920, 1080]
     of "720p": result = [1280, 720]
     of "480p": result = [720, 480]
@@ -1138,13 +1141,15 @@ proc sizeTarget(args: seq[string], targetOverride = "",
     of "video":
       let size =
         if a.zoom == "--larger":
-          if area >= videoArea("720p"): "1080p"
+          if area >= videoArea("1080p"): "1440p"
+          elif area >= videoArea("720p"): "1080p"
           elif area >= videoArea("480p"): "720p"
           else: "480p"
         else:         # "--smaller"
           if area <= videoArea("720p"): "480p"
           elif area <= videoArea("1080p"): "720p"
-          else: "1080p"
+          elif area <= videoArea("1440p"): "1080p"
+          else: "1440p"
 
       videoSize(size, centerVertical = true)
 
@@ -1154,7 +1159,7 @@ proc sizeTarget(args: seq[string], targetOverride = "",
       a.rotate
     )
 
-  of "1080p", "720p", "480p":
+  of "1440p", "1080p", "720p", "480p":
     if a.rotate or a.zoom != "":
       raiseZephyrError("invalid option")
 
