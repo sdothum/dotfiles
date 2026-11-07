@@ -196,7 +196,7 @@ end
 pidof tmux >/dev/null 
 	and begin 
 		console 
-			or tmux rename-window '' 
+			or tmux rename-window '°' 
 	end
 
 exists zoxide
