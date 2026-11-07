@@ -11,7 +11,7 @@ define-command console-plugins %{ nop }  # USAGE: try %{ console-plugins } catch
 # Ncurses console plugins
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# ............................................................."... ansi manpages
+# ................................................................ ansi manpages
 
 # NOTE: export MANPAGES='kak -ro'  # readonly
 
@@ -21,13 +21,13 @@ bundle kak-ansi https://github.com/eraserhd/kak-ansi.git %{
 	}
 }
 
-# ................................................................"... auto-pairs
+# ................................................................... auto-pairs
 
 nop bundle auto-pairs https://github.com/alexherbo2/auto-pairs.kak.git %{
 	enable-auto-pairs
 }
 
-# .........................................................."... change-directory
+# ............................................................. change-directory
 
 if-else %{ [ -z "$DIFF" ] } %{
 	# change-directory action fails diff-jump - within a "dirdiff" loop SEE: kakdiff
@@ -39,7 +39,7 @@ if-else %{ [ -z "$DIFF" ] } %{
 	define-command -hidden change-directory-current-buffer %{ nop }
 }
 
-# ................................................................"... crosshairs
+# ................................................................... crosshairs
 
 bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
 	addm %{ focus x1 : map global select + ': crosshairs<ret>'   -docstring "visual     —— crosshairs,column,line" }
@@ -54,13 +54,13 @@ bundle kak-crosshairs https://github.com/insipx/kak-crosshairs.git %{
 	}
 }
 
-# ....................................................................."... fandt
+# ........................................................................ fandt
 
 nop bundle kakoune-fandt https://github.com/listentolist/kakoune-fandt.git %{
 	require-module fandt
 }
 
-# .........................................................."... find and replace
+# ............................................................. find and replace
 
 bundle search https://github.com/sdothum/search.kak.git %{
 	define-command -hidden commit-edits %{
@@ -90,7 +90,7 @@ bundle search https://github.com/sdothum/search.kak.git %{
 	map global normal '\' ': search ' -docstring "search buffers"
 }
 
-# .........................................................."... focus selections
+# ............................................................. focus selections
 
 bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
 	declare-option -hidden str focus_sep '━'
@@ -127,7 +127,7 @@ bundle kakoune-focus https://github.com/caksoylar/kakoune-focus.git %{
 	addm %{ focus 0 : map global select <space> ': toggle-focus<ret>' -docstring "focus selections" }
 }
 
-# ......................................................................."... hop
+# .......................................................................... hop
 
 bundle hop https://git.sr.ht/~hadronized/hop.kak %{
 	evaluate-commands %sh{ hop-kak --init }
@@ -153,7 +153,7 @@ bundle hop https://git.sr.ht/~hadronized/hop.kak %{
 	cargo install hop-kak
 }
 
-# ..................................................................."... kakpipe
+# ...................................................................... kakpipe
 
 bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 	require-module kakpipe
@@ -165,14 +165,14 @@ bundle kakpipe https://github.com/eburghar/kakpipe.git %{
 	cargo install --path . --root ~/.local
 }
 
-# ..........................................................."... lua interpreter
+# .............................................................. lua interpreter
 
 bundle luar https://github.com/gustavo-hms/luar.git %{
 	require-module luar
 	set-option global luar_interpreter luajit
 }
 
-# ................................................................"... move lines
+# ................................................................... move lines
 
 bundle kak-move-lines https://git.sr.ht/~raiguard/kak-move-lines %{
 	map global normal <c-up>    ': move-lines-up %val{count}<ret>'   -docstring 'shift up'
@@ -181,7 +181,7 @@ bundle kak-move-lines https://git.sr.ht/~raiguard/kak-move-lines %{
 	map global normal <c-right> '>'                                  -docstring 'shift right'
 }
 
-# ...................................................."... peneira (fuzzy finder)
+# ....................................................... peneira (fuzzy finder)
 
 bundle peneira https://github.com/gustavo-hms/peneira.git %{
 	require-module luar
@@ -223,7 +223,7 @@ bundle peneira https://github.com/gustavo-hms/peneira.git %{
 	addm %{ find 1 : map global buffer e     ': sync<ret>: files<ret>'   -docstring 'edit file'    }
 }
 
-# ..............................................................."... Reasymotion
+# .................................................................. Reasymotion
 
 bundle reasymotion https://github.com/sdothum/reasymotion.git %{
 	# suppress environment variable error opening new file SEE: sxhkdrc scratchpad
@@ -237,7 +237,7 @@ bundle reasymotion https://github.com/sdothum/reasymotion.git %{
 	cargo install --path .
 }
 
-# ..........................................................."... render markdown
+# .............................................................. render markdown
 
 bundle render-markdown https://github.com/kmafeni04/render-markdown.kak.git %{
 	hook global WinSetOption filetype=markdown %{
@@ -245,14 +245,14 @@ bundle render-markdown https://github.com/kmafeni04/render-markdown.kak.git %{
 	}
 }
 
-# ..............................................................."... search docs
+# .................................................................. search docs
 
 bundle search-doc https://github.com/jbomanson/search-doc.kak.git %{
 	require-module search-doc
 	alias global sd search-doc
 }
 
-# .................................................................."... smarttab
+# ..................................................................... smarttab
 
 bundle smarttab https://github.com/andreyorst/smarttab.kak.git %{
 	require-module smarttab
@@ -262,7 +262,7 @@ bundle smarttab https://github.com/andreyorst/smarttab.kak.git %{
 	hook global BufNewFile  .* smarttab
 }
 
-# ................................................................"... sudo-write
+# ................................................................... sudo-write
 
 bundle kakoune-sudo-write https://github.com/occivink/kakoune-sudo-write.git %{
 	# no sudo-write-all so sync root owned files on buffer switching SEE: ux.kak
@@ -271,7 +271,7 @@ bundle kakoune-sudo-write https://github.com/occivink/kakoune-sudo-write.git %{
 	}
 }
 
-# ..............................................................."... tree-sitter
+# .................................................................. tree-sitter
 
 bundle kak-tree-sitter https://git.sr.ht/~hadronized/kak-tree-sitter %{
 	nop evaluate-commands %sh{ kak-tree-sitter -d -k --init $kak_session -s }
@@ -282,7 +282,7 @@ bundle kak-tree-sitter https://git.sr.ht/~hadronized/kak-tree-sitter %{
 	ktsctl sync nim
 }
 
-# ......................................................................"... twos
+# ......................................................................... twos
 
 # NOTE: autopairs alternative
 

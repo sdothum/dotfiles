@@ -51,11 +51,14 @@ hook global WinCreate .* %{
 	hook window ModeChange (push|pop):insert:.* %{ typewriter-off }
 }
 
-# more granular scrolling than <c-d> and <c-u> while holding visual cursor position within screen
-map global normal <up>   'vkk' -docstring 'scroll up one row'  # sort of a toss whether to use cursor keys or "kj"
-map global normal <down> 'vjj' -docstring 'scroll down one row'
+# more granular scrolling than <c-d> and <c-u> (while holding visual cursor position within screen)
+map global normal <up>       'vkk' -docstring 'scroll up one row holding visual cursor'
+map global normal <down>     'vjj' -docstring 'scroll down one row holding visual cursor'
+# map global normal <c-up>   'vk'  -docstring 'scroll up one row'  # conflicts with move selection
+# map global normal <c-down> 'vj'  -docstring 'scroll down one row'
 
 # UI
+# modal line numbers
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 # ....................................................................... Screen
@@ -66,7 +69,6 @@ set-option global ui_options terminal_assistant=none
 
 # ................................................................. Line numbers
 
-# modal line numbers
 declare-option str ruler '│'
 
 if %{ [ -n "$RULER" ] } %{ set-option global ruler %sh{ echo "$RULER" }}  # SEE: statusline and kak wrapper

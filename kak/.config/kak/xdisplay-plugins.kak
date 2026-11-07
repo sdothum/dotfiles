@@ -8,7 +8,7 @@ echo -debug "... loading xdisplay-plugins.kak"
 # Terminal $DISPLAY plugins
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# .........................................................."... kakoune-livedown
+# ............................................................. kakoune-livedown
 
 # (??) filenames with special characters "()" do not live update, requiring manual browser refresh
 
@@ -17,7 +17,7 @@ bundle kakoune-livedown https://github.com/Delapouite/kakoune-livedown.git %{
 	set-option global livedown_browser "qutebrowser-instance"
 
 	define-command -hidden livedown-enable %{
-		if %{ [ "${kak_bufname##*.}" != 'eml' ] && [ "${kak_bufname%/*}" != "$HOME/diary" ] } %{  # exclude mail compose
+		if %{ [ "${kak_bufname##*.}" = 'wiki' ] } %{  # exclude eml (mail) markdown
 			set-option global livedown "%val{bufname}"
 			# livedown-start-with-write-on-idle  # NOTE: InsertIdle hook forces char by char "undo" action, instead..
 			livedown-start
@@ -50,13 +50,13 @@ bundle kakoune-livedown https://github.com/Delapouite/kakoune-livedown.git %{
 	sudo npm install -g livedown
 }
 
-# ....................................................................."... popup
+# ........................................................................ popup
 
 bundle popup https://github.com/enricozb/popup.kak.git %{
 	evaluate-commands %sh{ kak-popup init }
 }
 
-# ...................................................................."... splash
+# ....................................................................... splash
 
 bundle splash https://github.com/Hjagu09/splash.kak.git
 # bundle texture.kak https://github.com/ftonneau/texture.kak.git
