@@ -7,29 +7,29 @@
 
 
 @font-face {
-	font-family: "ottawa";
+	font-family: "hyperlegible";
 	font-weight: 400;
-	src: url("/fonts/ottawa-normalbookupright.woff2") format("woff2"); */
+	src: url("/fonts/hyperlegible-normalbookupright.woff2") format("woff2"); */
 }
 
 @font-face {
-	font-family: "ottawa";
+	font-family: "hyperlegible";
 	font-weight: 400;
 	font-style: italic;
-	src: url("/fonts/ottawa-normalbookitalic.woff2") format("woff2"); */
+	src: url("/fonts/hyperlegible-normalbookitalic.woff2") format("woff2"); */
 }
 
 @font-face {
-	font-family: "ottawa";
+	font-family: "hyperlegible";
 	font-weight: 600;
-	src: url("/fonts/ottawa-normalboldupright.woff2") format("woff2"); */
+	src: url("/fonts/hyperlegible-normalboldupright.woff2") format("woff2"); */
 }
 
 @font-face {
-	font-family: "ottawa";
+	font-family: "hyperlegible";
 	font-weight: 600;
 	font-style: italic;
-	src: url("/fonts/ottawa-normalbolditalic.woff2") format("woff2"); */
+	src: url("/fonts/hyperlegible-normalbolditalic.woff2") format("woff2"); */
 }
 
 :root {
@@ -133,7 +133,7 @@
 	--title-color: var(--color-default);
 	--title-focus-color: var(--color-red);
 
-	--font-family: "ottawa", system-ui, -apple-system, "Segoe UI", roboto,
+	--font-family: "hyperlegible", system-ui, -apple-system, "Segoe UI", roboto,
 		"Helvetica Neue", arial, "Noto Sans", sans-serif, "Apple Color Emoji",
 		"Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
@@ -175,7 +175,7 @@
 
 .logo {
 	color: var(--color-default);
-	font-family: "ottawa", sans-serif !important;
+	font-family: "hyperlegible", sans-serif !important;
 	font-weight: 900;
 	font-size: 12pt;
 	margin-left: 0;
@@ -216,7 +216,7 @@ nav #header-menu {
 .logo a,
 .logo a span {
 	/* color: var(--color-default); */
-	font-family: "ottawa", sans-serif !important;
+	font-family: "hyperlegible", sans-serif !important;
 	letter-spacing: 3px !important;
 	/* transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1),
 		background-color 0.2s cubic-bezier(0.19, 1, 0.22, 1); */
@@ -257,7 +257,7 @@ section nav ul li .icon {
 
 section nav ul li a,
 section nav ul li button {
-	font-family: "ottawa", sans-serif !important;
+	font-family: "hyperlegible", sans-serif !important;
 	opacity: 0.7 !important;
 	color: var(--color-grey) !important;
 }
@@ -298,7 +298,7 @@ section nav ul li:nth-child(5) {
 
 section nav ul li form button {
 	display: none;
-	font-family: "ottawa", sans-serif !important;
+	font-family: "hyperlegible", sans-serif !important;
 	font-size: 10.45px !important;
 	color: var(--color-grey) !important;
 	opacity: 1 !important;
@@ -536,7 +536,7 @@ body .item {
 }
 
 .entry-content {
-	font-family: "ottawa", sans-serif !important;
+	font-family: "hyperlegible", sans-serif !important;
 	line-height: var(--entry-content-line-height);
 }
 
@@ -644,7 +644,7 @@ body .entry-header h1 {
 
 .entry-actions  span.icon-label {
 	font-size: 13px !important;
-	font-family: "ottawa", sans-serif !important;
+	font-family: "hyperlegible", sans-serif !important;
 	text-decoration: none !important;
 }
 
@@ -954,7 +954,7 @@ article .item-meta .item-meta-icons {
 }
 
 article .item-meta .item-meta-icons * {
-	font-family: "ottawa", sans-serif !important;
+	font-family: "hyperlegible", sans-serif !important;
 	font-size: 1.08em !important;
 }
 
