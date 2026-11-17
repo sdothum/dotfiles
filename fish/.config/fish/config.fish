@@ -52,7 +52,7 @@ test -z $DISPLAY
 or set -x TERM xterm-256color
 
 # NOTE: xdotool requires delay to not mangle leading chars
-set -x KEYBOARD sleep 0.45 \&\& xdotool key (cat $HOME/.chocofi)
+set -x TAPDANCE sleep 0.45 \&\& xdotool key (grep -v '^# ' $HOME/.tapdance)
 
 # ......................................................................... Xorg
 
