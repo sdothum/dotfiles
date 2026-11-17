@@ -34,6 +34,9 @@ services:
      - /net/downloads/nicotine:/downloads
      - /home/music:/music
      - /home/library/calibre:/calibre
+     - /net/videos/animation:/animation
+     - /net/videos/movies:/movies
+     - /net/videos/series:/series
      - /home/shum/.config/nicotine:/config # Save your config persistently
      - /home/shum/.local/share/nicotine:/data # Store your logs, database, and history
    restart: unless-stopped
