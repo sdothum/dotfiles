@@ -7,7 +7,8 @@
 # ........................................................................ Media
 
 CLEAR='clear'
-MEDIA="$(X $CLEAR)\nblackboard\nanimation\nanime\nmovies\nseries\nsonarr\ndust\niai\nnetflix\nkodi\nprime\nnzbgeek\nusenet-crawler\nnzbget\ntorrent\npulse\ncalibre\nebooks\nreferences\nzlibrary\npatricia\nthought of you\nfamily hum"
+# MEDIA="$(X $CLEAR)\nblackboard\nanimation\nanime\nmovies\nseries\nsonarr\ndust\niai\nnetflix\nkodi\nprime\nnzbgeek\nusenet-crawler\nnzbget\ntorrent\npulse\ncalibre\nebooks\nreferences\nzlibrary\npatricia\nthought of you\nfamily hum"
+MEDIA="$(X $CLEAR)\nblackboard\nanimation\nmovies\nseries\nsonarr\ndust\niai\nnetflix\nkodi\nprime\nnzbgeek\nusenet-crawler\nnzbget\ntorrent\npulse\ncalibre\nebooks\nreferences\nzlibrary\npatricia\nthought of you\nfamily hum"
 
 video='play kodi vstream'
 USENET_CRAWLER=https://www.usenet-crawler.com/movies?t=2040
@@ -29,7 +30,7 @@ while : ;do
 	case ${media#$(X)} in
 		"$CLEAR"       ) pkill mpv; pkill -f 'menu (series|movies)'; media=$(previous media); ;;
 		animation      ) menu movies animation ;;
-		anime          ) menu series anime ;;
+		# anime        ) menu series anime ;;
 		blackboard     ) exec blackboard ;;
 		calibre        ) calibre; exit ;;
 		dust           ) vstream dust ;;

@@ -7,29 +7,34 @@
 
 # ................................................................ blackboard ui
 
-# Usage: blackboard on | off | toggle
+# Usage: blackboard on | off | toggle | hide (statusbars)
 
-# statusbar() { for i in $(pgrep -a 'lemonbar' | cut -d' ' -f5) ;do xdotool search -name "$i" $1 ;done; }
+BLACKBOARD="blackboard/contrast"
+THEME="theme/contrast"
+
+hide() {
+	recipe -t $BLACKBOARD || return 0
+	for i in $(recipe blackboard/hide) ;do statusbar windowunmap $i ;done
+}
 
 case $1 in
-	on  )
-		recipe -r blackboard/contrast/$(recipe theme/contrast)
+	on   )
+		recipe -r $BLACKBOARD/$(recipe $THEME)
 		draw root color 000000
+		[ $(recipe $THEME) != 'light' ] && invert_panel
 		# killall -q lemonbar
-		statusbar windowunmap
+		hide || statusbar windowunmap
 		cirrusrc blackboard  # SEE: sxhkdrc "monocle"
 		;;
-	off )
-		recipe -t blackboard && [ $(recipe blackboard/contrast) != $(recipe theme/contrast) ] && invert_panel
-		recipe -d blackboard
+	off  )
+		recipe -t $BLACKBOARD && [ $(recipe $BLACKBOARD) != $(recipe $THEME) ] && invert_panel
+		recipe -d $BLACKBOARD
 		draw root
-		# pgrep -f 'draw -- music' >/dev/null && statusbar windowmap || draw panel
-		statusbar windowmap
 		cirrusrc refresh
+		statusbar windowmap
 		;;
-	*   )
-		recipe -t blackboard && exec blackboard off || exec blackboard on
-		;;
+	hide ) hide ;;
+	*    ) recipe -t $BLACKBOARD && exec blackboard off || exec blackboard on ;;
 esac
 
 # kak: filetype=sh

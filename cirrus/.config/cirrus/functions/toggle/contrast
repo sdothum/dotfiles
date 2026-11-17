@@ -8,14 +8,9 @@
 
 [ "$(recipe theme/contrast)" = dark ] && recipe theme/contrast light || recipe theme/contrast dark
 theme $(recipe theme/contrast)
-# toggle picom on  # panel restart replaced with dynamic lemonbar contrast SEE: draw panel <statusbar>
-# draw panel
 
 for i in $(ls -1 $FIFO) ;do
 	echo "#CONTRAST" >$FIFO/$i
 done
-
-statusbar windowmap
-recipe -t blackboard && statusbar windowunmap music  # reduce video playback screen noise :-)
 
 # kak: filetype=sh
