@@ -355,7 +355,7 @@ super + {_,shift} + o
 	menu {scripts,projects}
 
 super + shift + p ; {p,P}
-	{menu passwords,eval $KEYBOARD}
+	{menu passwords,eval $TAPDANCE}
 
 super + shift + v
 	menu media

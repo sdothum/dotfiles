@@ -11,13 +11,9 @@
 # NOTE: this script is executed via "draw panel" SEE: also draw panel
 
 [ $1 ] && panel_offsetY=$1
-panel_len=${panel_len:-200}          # HACK: arbitrary display length (for wide screen monitor)
+panel_len=${panel_len:-400}          # HACK: arbitrary display length (for wide screen monitor) NOTE: includes lemonbar %FORMAT
 
-if [ "$panel_offsetY" = "0" ] ;then  # (??) use of -eq fails comparison
-	SEP="  %{F$INACTIVE_FG}%{F-}  "  # top bar
-else
-	SEP="  %{F$INACTIVE_FG}%{F-}  "  # bottom bar
-fi
+sep
 
 # ............................................................... Current window
 
@@ -142,7 +138,8 @@ map() {
 
 name() {
 		name=$(xtitle | sed -r "s/^(.)/\u\1/; s/'(.*)'/\1/")  # trap unfocused error messages & discard xtitle quotes
-		[ "$name" ] && echo "${SEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}$name%{F-}%{B-}%{F$DEFAULT_FG}"
+		# [ "$name" ] && echo "${SEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}$name%{F-}%{B-}%{F$DEFAULT_FG}"
+		[ "$name" ] && echo "${SEP}%{B$DEFAULT_BG}%{F$ACTIVE_FG}$name"  # NOTE: prevents final printf cut length SEE: panel
 }
 
 # group details NOTE: cirrus does not track window visibility states
@@ -193,8 +190,13 @@ active_window() {
 
 panel() {
 	while read -r line ;do
+		case $line in
+			\#* ) panelcolor; sep ;;
+			*   ) ;;
+		esac
+
 		active_window
-		printf "%s\n" "$(echo "%{l}${title}$(name)" | cut -c1-$panel_len)"
+		printf "%s\n" "$(echo "%{F$ACTIVE_FG}%{l}${title}$(name)" | cut -c1-$panel_len)"
 	done
 }
 

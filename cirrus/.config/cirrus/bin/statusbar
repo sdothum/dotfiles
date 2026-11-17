@@ -1,0 +1,19 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+# [ $TRACE ] && CHILD="pfw $@" . $PARENT
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ............................................................ statusbar (panel)
+
+# Usage: statusbar windowmap | windowunmap [clock | desktop | music | system]
+
+[ "$2" ] && exec xdotool search -name "lemonbar:$2" $1
+
+for i in $(pgrep -a 'lemonbar' | cut -d' ' -f5) ;do
+	xdotool search -name "$i" $1
+done
+
+# kak: filetype=sh
+

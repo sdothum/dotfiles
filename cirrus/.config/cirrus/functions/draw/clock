@@ -12,11 +12,7 @@
 
 [ $1 ] && panel_offsetY=$1
 
-if [ "$panel_offsetY" = "0" ] ;then   # (??) use of -eq fails comparison
-	SEP="  %{F$INACTIVE_FG}%{F-}  "  # top bar
-else
-	SEP="  %{F$INACTIVE_FG}%{F-}  "  # bottom bar
-fi
+sep
 
 # ....................................................................... Clocks
 
@@ -85,8 +81,8 @@ currently() {
 	fi
 	[ -s $FORECAST ] && [ "$(ls -1 $FORECAST)" ] && current_weather="$(ls -1 $FORECAST | sed "s/\^/$SEP/g")"  # prevent blanking during update, see weather()
 
-	line="${line%%^*}${current_weather}${line#*^}"
-	line="${line%%|*}${clock}%{F-}${line##*|}"
+	line="${line%%^*}${current_weather}${SEP}${line#*^}"
+	line="${line%%|*}${clock}%{F-}${SEP}${line##*|}"
 	system="%{F$DEFAULT_FG}%{B$DEFAULT_BG}${line#?}%{B-}%{F-}"
 }
 
@@ -94,7 +90,11 @@ currently() {
 
 panel() {
 	while read -r line ;do
-		EPOCH=${line%%^*}
+		case $line in
+			\#* ) panelcolor; sep; continue ;;
+			*   ) eval EPOCH=${line%%^*}    ;;  # embedded \$COLOR
+		esac
+
 		currently
 
 		[ $EPOCH ] && printf "%s\n" "%{r}${system}"
@@ -111,15 +111,15 @@ STREAM=$(mkfifo $FIFO/$msg)  # SEE: panel wrapper
 # NOTE: added time since epoch for race condition trap
 if [ $DMS ] ;then
 	case $TIC in
-		se* ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I°%M %S%p|#{F-}${SEP}%a %-d %b ’%y"   >$STREAM & ;;
-		t*  ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I;%M.%S, %p|#{F-}${SEP}%a %-d %b ’%y" >$STREAM & ;;  # SEE: tape() sed utf-8
-		*   ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}%-I°%M#{F-} %p|%S|${SEP}%a %-d %b ’%y"    >$STREAM & ;;
+		se* ) clock -i 1 -sf "S%s^#{F\$ACTIVE_FG}| %-I°%M %S%p|%a %-d %b ’%y"   >$STREAM & ;;
+		t*  ) clock -i 1 -sf "S%s^#{F\$ACTIVE_FG}| %-I;%M.%S, %p|%a %-d %b ’%y" >$STREAM & ;;  # SEE: tape() sed utf-8
+		*   ) clock -i 1 -sf "S%s^#{F\$ACTIVE_FG}%-I°%M %p|%S|%a %-d %b ’%y"    >$STREAM & ;;
 	esac
 else
 	case $TIC in
-		se* ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I:%M %S%p|#{F-}${SEP}%a %-d %b ’%y"   >$STREAM & ;;
-		t*  ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}| %-I:%M:%S%p|#{F-}${SEP}%a %-d %b ’%y"   >$STREAM & ;;
-		*   ) clock -i 1 -sf "S%s^${SEP}#{F$ACTIVE_FG}%-I:%M#{F-} %p|%S|${SEP}%a %-d %b ’%y"    >$STREAM & ;;
+		se* ) clock -i 1 -sf "S%s^#{F\$ACTIVE_FG}| %-I:%M %S%p|%a %-d %b ’%y"   >$STREAM & ;;
+		t*  ) clock -i 1 -sf "S%s^#{F\$ACTIVE_FG}| %-I:%M:%S%p|%a %-d %b ’%y"   >$STREAM & ;;
+		*   ) clock -i 1 -sf "S%s^#{F\$ACTIVE_FG}%-I:%M %p|%S|%a %-d %b ’%y"    >$STREAM & ;;
 	esac
 fi
 

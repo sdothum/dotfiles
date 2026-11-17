@@ -6,8 +6,6 @@
 
 # ................................................................. Toggle panel
 
-# NOTE: lemonbar instances are not managed by cirrus (no winids), hence, cannot be hidden
-
-pgrep lemonbar >/dev/null && killall lemonbar || draw panel
+pgrep lemonbar >/dev/null && statusbar windowunmap|| statusbar windowmap
 
 # kak: filetype=sh

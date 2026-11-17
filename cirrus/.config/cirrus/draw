@@ -23,13 +23,17 @@ if [ "$1" = '--' ] ;then
 
 	# .................................................................. Panel theme
 
-	DEFAULT_BG='#00000000'     # alpha channel for panel transparency with picom
-	DEFAULT_FG="#$(color default)"
-	ACTIVE_FG="#$(color active)"
-	INACTIVE_FG="#$(color inactive)"
-	FREE_FG="#$(color free)"
-	OCCUPIED_FG=$FREE_FG
-	STARTREK=$(recipe panel/startrek) && ICANDY="#$STARTREK" || ICANDY="$DEFAULT_FG"
+	panelcolor() {
+		DEFAULT_BG='#00000000'     # alpha channel for panel transparency with picom
+		DEFAULT_FG="#$(color default)"
+		ACTIVE_FG="#$(color active)"
+		INACTIVE_FG="#$(color inactive)"
+		FREE_FG="#$(color free)"
+		OCCUPIED_FG=$FREE_FG
+		STARTREK=$(recipe panel/startrek) && ICANDY="#$STARTREK" || ICANDY="$DEFAULT_FG"
+	}
+
+	panelcolor
 
 	# panel font
 	# PANEL_FONT=$(recipe panel/font) || PANEL_FONT=monograffic  # NOTE: this font does not have NerdFont glyphs (not a pure monospaced font)
@@ -45,6 +49,16 @@ if [ "$1" = '--' ] ;then
 
 	[ $($ZEPHYR display width) -lt 1920 ] && scaledown=true
 	[ $scaledown ] && { LSEP=${LSEP# }; LSEP=${LSEP% }; RSEP=${RSEP# }; RSEP=${RSEP% }; }
+
+	sep() {
+		if [ "$panel_offsetY" = "0" ] ;then   # (??) use of -eq fails comparison
+			SEP="  %{F-}%{F$INACTIVE_FG}%{F-}%{F$ACTIVE_FG}  "  # top bar
+			DIV="${TAG_PAD}%{F$INACTIVE_FG}%{F-}${TAG_PAD#?}"
+		else
+			SEP="  %{F-}%{F$INACTIVE_FG}%{F-}%{F$ACTIVE_FG}  "  # bottom bar
+			DIV="${TAG_PAD}%{F$INACTIVE_FG}%{F-}${TAG_PAD#?}"
+		fi
+	}
 
 	# ..................................................................... Geometry
 

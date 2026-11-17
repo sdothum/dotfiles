@@ -9,11 +9,12 @@
 # NOTE: in lieu of quikeys no longer working with python3
 
 export COLSEP=⁋  # NOTE: '^' used for kak split regex SEE: menu (picklist)
+CR='↩'
 
 # NOTE: unique glyphs chosen for single keypress trigger (save for /return first item)
 shortcuts() {
 echo "
-|    ⁋ | xclip -selection clipboard
+|    ⁋ | xclip -selection clipboard${CR}
 <    ⁋ >/dev/null
 !    ⁋ 2>/dev/null
 &    ⁋ >/dev/null 2>&1
@@ -29,7 +30,7 @@ w    ⁋ [[:alnum:]]
 s    ⁋ ¯\(°_o)/¯
 x    ⁋ (⊙_☉)
 k    ⁋ K1Y 0K4
-q    ⁋ Authorized.
+q    ⁋ authorize${CR}
 " | picklist
 }
 
@@ -43,10 +44,12 @@ case "${string%% *}" in
 		;;
 	*     )
 		for i in $(echo "$string" | sed "s/.*$SEP //; s/ /⁋/g; s/./& /g") ;do      # NOTE: to avoid xdotool type keystroke delay
-			[ "$i" = '⁋' ] && xdotool key space || xdotool key $(printf "U%x" "'$i")
+			case "$i" in
+				"⁋" ) xdotool key space  ;;
+				"↩" ) xdotool key return ;;
+				*   ) xdotool key $(printf "U%x" "'$i") ;;
+			esac
 		done
-
-		echo "$string" | grep -Eq "^(\||q)" && xdotool key return
 		;;
 esac
 

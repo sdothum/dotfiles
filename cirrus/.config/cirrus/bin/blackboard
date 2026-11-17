@@ -9,7 +9,7 @@
 
 # Usage: blackboard on | off | toggle
 
-statusbar() { for i in $(pgrep -a 'lemonbar' | cut -d' ' -f5) ;do xdotool search -name "$i" $1 ;done; }
+# statusbar() { for i in $(pgrep -a 'lemonbar' | cut -d' ' -f5) ;do xdotool search -name "$i" $1 ;done; }
 
 case $1 in
 	on  )
@@ -23,7 +23,8 @@ case $1 in
 		recipe -t blackboard && [ $(recipe blackboard/contrast) != $(recipe theme/contrast) ] && invert_panel
 		recipe -d blackboard
 		draw root
-		pgrep -f 'draw -- musc' >/dev/null && statusbar windowmap || draw panel
+		# pgrep -f 'draw -- music' >/dev/null && statusbar windowmap || draw panel
+		statusbar windowmap
 		cirrusrc refresh
 		;;
 	*   )

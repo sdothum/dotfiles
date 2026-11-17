@@ -13,6 +13,8 @@
 recipe -t panel/system || exit
 [ $1 ] && panel_offsetY=$1
 
+sep
+
 if [ $STARTREK ] ;then
 	OCCUPIED=''
 	FREE=''
@@ -28,9 +30,7 @@ cpu_temp='__._°'
 cpu_speed='.__ᴳ'
 mem_usage='_._ᴹ'
 
-SEP="  %{F$INACTIVE_FG}%{F-}  "  # bottom bar
-DIV="${TAG_PAD}%{F$INACTIVE_FG}%{F-}${TAG_PAD#?}"
-selected_group=
+selected_group=''
 
 # ............................................................ Desktops (groups)
 
@@ -90,22 +90,30 @@ currently() {
 SPC=" "  # U+00a0 monospace cell width
 
 # cpu_stat() { stat="$cpu_usage ${STATPAD}$cpu_speed ${STATPAD}$cpu_temp ${STATPAD}$mem_usage${TAG_PAD}"; }
-cpu_stat() { stat="$cpu_usage${SEP}$cpu_speed  $cpu_temp${SEP}$mem_usage"; }
-# caps()   { capslock && { [ "$CAPS" = "$SPC$SPC$SPC$SPC" ] && CAPS="CAPS" || CAPS="$SPC$SPC$SPC$SPC"; } || unset CAPS; }
-caps()     { capslock && { [ "$CAPS" = "$SPC$SPC$SPC$SPC$SPC$SPC$SPC$SPC" ] && CAPS="CAPSLOCK" || CAPS="$SPC$SPC$SPC$SPC$SPC$SPC$SPC$SPC"; } || unset CAPS; }
+cpu_stat() { stat="%{F$ACTIVE_FG}$cpu_usage${SEP}$cpu_speed  $cpu_temp${SEP}$mem_usage%{F-}"; }
+
+caps() {
+	if capslock ;then
+		[ "$caps" = "$SPC$SPC$SPC$SPC$SPC$SPC$SPC$SPC" ] && caps="CAPSLOCK" || caps="$SPC$SPC$SPC$SPC$SPC$SPC$SPC$SPC"
+		CAPS="${SEP}%{U$ACTIVE_FG}%{+u}${caps}%{-u}%{U-}"
+	else
+		unset CAPS
+	fi
+	}
 
 panel() {
 	desktops  # initialize
 	while read -r line ;do
 		case $line in
-			S*         ) EPOCH=${line}; caps; currently  ;;
-			U*         ) [ "${line#?}" = '  0%' ] || cpu_usage=${line#?}; cpu_stat ;;  # ignore 0%
-			T*         ) cpu_temp=${line#?};  cpu_stat ;;
-			C*         ) cpu_speed=${line#?}; cpu_stat ;;
-			M*         ) mem_usage=${line#?}; cpu_stat ;;
+			\#* ) panelcolor; sep; desktops >/dev/null; caps >/dev/null; cpu_stat ;;
+			S*  ) EPOCH=${line}; caps; currently  ;;
+			U*  ) [ "${line#?}" = '  0%' ] || cpu_usage=${line#?}; cpu_stat ;;  # ignore 0%
+			T*  ) cpu_temp=${line#?};  cpu_stat ;;
+			C*  ) cpu_speed=${line#?}; cpu_stat ;;
+			M*  ) mem_usage=${line#?}; cpu_stat ;;
 		esac
 
-		[ $EPOCH ] && printf "%s\n" "%{c}${desktops}${DIV}${stat}%{U$ACTIVE_FG}%{+u}${CAPS}%{-u}%{U-}"
+		[ $EPOCH ] && printf "%s\n" "%{c}${desktops}${DIV}${stat}${CAPS}"
 		unset line EPOCH
 	done
 }
