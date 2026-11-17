@@ -4,5 +4,7 @@
 # startx /home/shum/stow/zephyr/experiments/nim-cirrus/border_lifecycle_correction/normal-xinitrc-corrected.sh
 # startx /home/shum/stow/zephyr/experiments/nim-cirrus/spine_border_correction/normal-xinitrc-spine.sh
 # startx /home/shum/stow/zephyr/experiments/nim-cirrus/border_style_mapping_correction/normal-xinitrc-style-mapping.sh
+# startx /home/shum/stow/zephyr/experiments/nim-cirrus/border_consolidation/normal-xinitrc-consolidated.sh
 
-startx /home/shum/stow/zephyr/experiments/nim-cirrus/border_consolidation/normal-xinitrc-consolidated.sh
+startx /home/shum/stow/zephyr/experiments/nim-cirrus/badwindow-correction-1/desktop-trial/normal-xinitrc-badwindow.sh
+

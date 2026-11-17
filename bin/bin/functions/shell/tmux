@@ -6,11 +6,14 @@
 
 # ................................................................. tmux session
 
-usage() { usage: "$(basename $0) [session [class=<class>] [name [command]]* | c'apture | C'lipboard]"; exit 1; }
+usage() { usage: "$(basename $0) [session [class=<class>] [name [command]]* | c'apture (tmux:report) | selec't (clipboard) | e'dit]"; exit 1; }
 
 CMD=/usr/bin/tmux
-SCROLLBACK=/tmp/tmux:scrollback-$(rand 4).txt
+CAPTURE=/tmp/tmux:capture-$(rand 4).txt
+REPORT=/tmp/tmux:report
 TMUXCONF=${TMUXCONF:-$HOME/.tmux.conf}
+
+# NOTE: command keys optimized for chatgpt codex iterations SEE: tmux.conf for C-k/C-t keybyinds
 
 case $1 in
 	session )
@@ -25,10 +28,9 @@ case $1 in
 			term ${TMUX} class=${class:-tmux} "FORTUNE=$TMUX" $CMD -f $TMUXCONF -S /tmp/tmux:$TMUX "new-session -n ° $@"
 		fi
 		;;
-	# c     ) $CMD capture-pane -S - -E - && $CMD save-buffer $SCROLLBACK; kak $SCROLLBACK   ;;
-	# C     ) $CMD capture-pane -S - -E - && $CMD save-buffer - | xclip -selection clipboard ;;
-	c       ) $CMD capture-pane -p -S - >$SCROLLBACK; kak $SCROLLBACK ;;
-	C       ) $CMD capture-pane -p -S - | xclip -selection clipboard  ;;
+	c       ) $CMD capture-pane -p -S - >$REPORT; notify tmux "$(wc -l $REPORT)" ;;
+	t       ) $CMD capture-pane -p -S - | xclip -selection clipboard  ;;
+	e       ) $CMD capture-pane -p -S - >$CAPTURE; kak $CAPTURE ;;
 	-h      ) usage ;;
 	*       ) $CMD $@ ;;
 esac

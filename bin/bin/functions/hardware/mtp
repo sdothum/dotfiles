@@ -42,7 +42,9 @@ case $1 in
 		if $(device) ;then
 			# [ "$(name)" = '' ] && { jmtpfs $MTP -o big_writes >/dev/null && notify critical "$(name)" "$MTP mounted" || notify critical "$MTP" "mount failed"; } || notify "$(name)" 'already mounted'
 			[ "$(name)" = '' ] && { mount || retry; } || notify "$(name)" 'already mounted'
-		else exit 1
+		else
+			notify critical "$name" "$MTP mount failed"
+			exit 1
 		fi
 		;;
 

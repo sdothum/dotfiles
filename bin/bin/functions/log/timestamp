@@ -14,8 +14,7 @@
 # ditto @ "$(date "+%a" | tr '[:upper:]' '[:lower:]') $(date "+%-H°%M'%S\"")"
 
 # ditto @ "$(date "+%a" | tr '[:lower:]' '[:upper:]' | cut -c1-2) $(date "+%-H°%M'%S\"")"
-# ditto @ "$(date "+%a" | cut -c1-2) $(date "+%-H°%M'%S\"")"
-# ditto @ "$(date "+%a" | cut -c1-2) $(date "+%-H°%M’%S”")"
-ditto @ "$(date "+%e").$(date "+%H°%M’%S”")"
+ditto @ "$(date "+%a" | cut -c1-2) $(date "+%-H°%M’%S”")"
+# ditto @ "$(date "+%d") $(date "+%H°%M’%S”")"
 
 # kak: filetype=sh

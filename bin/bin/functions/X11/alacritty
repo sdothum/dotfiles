@@ -30,9 +30,9 @@ fi
 
 [ "$SCROLLING" ] || SCROLLING=10000  # set envar to 0 to disable history
 
-if recipe -t "term" ;then
-	columns=$(recipe "term" | cut -dx -f1)
-	lines=$(recipe "term" | cut -dx -f2)
+if recipe -t "term/size" ;then
+	columns=$(recipe "term/size" | cut -dx -f1)
+	lines=$(recipe "term/size" | cut -dx -f2)
 else
 	[ $(xdpyinfo | grep dimensions | cut -dx -f2 | cut -d' ' -f1) -ge 1440 ] && { columns=130; lines=28; } || { columns=120; lines=20; }
 fi

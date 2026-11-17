@@ -21,7 +21,7 @@ case $1 in
 		conky clock auto
 		mpc | grep -q 'paused' && mpc -q toggle
 		pstat 'menu (media|movies|series)' || blackboard off
-		# xdotool key Ctrl+space          # clear potential pulse message
+		# xdotool key Ctrl+space      # clear potential pulse message
 		;;
 	*   ) usage ;;
 esac
