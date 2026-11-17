@@ -4,13 +4,13 @@ using Toybox.Math;
 class HandRenderer {
 
 	private var _hourRadius = 13;
-	private var _hourGap = 24;
+	private var _hourGap = 21;
 	private var _hourOuterGap = 2;
 	private var _hourOuterWidth = 1;
-	private var _minuteRadius = 6;
-	private var _minuteGap = 18;
-	private var _minuteInnerGap = 3;
-	private var _minuteInnerWidth = 1;
+	private var _minuteRadius = 8;
+	private var _minuteGap = 17;
+	// private var _minuteInnerGap = 3;
+	// private var _minuteInnerWidth = 1;
 	// private var _minuteOuterGap = 4;
 	// private var _minuteOuterWidth = 1;
 	private var _secondsRadius = 5;
@@ -18,22 +18,25 @@ class HandRenderer {
 	private var _secondsColor = 0xff0000;
 
 	private var _extension = 31;
-	private var _gravityPull = 13;
+	private var _gravityPull = 10;
 	private var _wellWidth = 6.0;
 	private var _wellCurvarture = 4.00;
 	private var _steepness = 4.0;
 	private var _influence = 30.0;
+	var hourGap = 0;
+	var oppositeGap = 28;
+	var pulseGap = 60;
 
-	private var _secondaryRadius = 5;
-	private var _secondaryGap = 12;
-	private var _secondaryLagMinutes = 0;
+	// private var _secondaryRadius = 5;
+	// private var _secondaryGap = 12;
+	// private var _secondaryLagMinutes = 0;
 
 	// private var _tertiaryRadius = 2;
 	// private var _tertiaryGap = 24;
 	// private var _tertiaryLagMinutes = 0;
 
 	private var _minuteSecondaryRadius = 3;
-	private var _minuteSecondaryGap = -33;
+	private var _minuteSecondaryGap = -36;
 	private var _minuteSecondaryLeadMinutes = 0;
 
 	function proximityValue(minuteAngle, hourAngle, maxValue, rangeDegrees) {
@@ -205,6 +208,23 @@ class HandRenderer {
 		var hourY = geometry.centerY +
 		   Math.round(Math.sin(hourAngle) * hourInterstellar);
 
+		// particle jet
+
+		var distance = minutes <= 30 ? minutes : 60 - minutes;
+		var pulse = pulseGap * distance / 30.0;
+		var oppositeReach = oppositeGap + pulse;
+
+		CircleRenderer.drawSmoothDiameter(
+			dc,
+			geometry.centerX,
+			geometry.centerY,
+			hourAngle,
+			geometry.screenRadius,
+			hourGap,
+			oppositeReach,
+			0x000000
+		);
+
 		// Curved tapered extensions behind the hour dot.
 		var wellAngle =
 			hourAngle + Math.PI / 2.0;
@@ -217,6 +237,7 @@ class HandRenderer {
 			_hourRadius,
 			0x000000
 		);
+
 
 		// Existing hour dot drawn over the attachment points.
 		CircleRenderer.drawSmoothCircle(
@@ -237,36 +258,36 @@ class HandRenderer {
 
 		// gravity well planet
 
-		var secondaryOrbit =
-			hourInterstellar +
-			_hourRadius +
-			_secondaryGap +
-			_secondaryRadius;
+		// var secondaryOrbit =
+		// 	hourInterstellar +
+		// 	_hourRadius +
+		// 	_secondaryGap +
+		// 	_secondaryRadius;
 
-		var secondaryAngle =
-			hourAngle -
-			(_secondaryLagMinutes *
-			 Math.PI * 2.0 / (12.0 * 60.0));
+		// var secondaryAngle =
+		// 	hourAngle -
+		// 	(_secondaryLagMinutes *
+		// 	 Math.PI * 2.0 / (12.0 * 60.0));
 
-		var secondaryX =
-			geometry.centerX +
-			Math.round(
-				Math.cos(secondaryAngle) * secondaryOrbit
-			);
+		// var secondaryX =
+		// 	geometry.centerX +
+		// 	Math.round(
+		// 		Math.cos(secondaryAngle) * secondaryOrbit
+		// 	);
 
-		var secondaryY =
-			geometry.centerY +
-			Math.round(
-				Math.sin(secondaryAngle) * secondaryOrbit
-			);
+		// var secondaryY =
+		// 	geometry.centerY +
+		// 	Math.round(
+		// 		Math.sin(secondaryAngle) * secondaryOrbit
+		// 	);
 
-		CircleRenderer.drawSmoothCircle(
-			dc,
-			secondaryX,
-			secondaryY,
-			_secondaryRadius,
-			0x000000
-		);
+		// CircleRenderer.drawSmoothCircle(
+		// 	dc,
+		// 	secondaryX,
+		// 	secondaryY,
+		// 	_secondaryRadius,
+		// 	0x000000
+		// );
 
 		// var tertiaryOrbit =
 		// 	hourInterstellar +
@@ -318,13 +339,13 @@ class HandRenderer {
 			dc, minuteX, minuteY, _minuteRadius, 0xFF0000
 		);
 
-		CircleRenderer.drawSmoothAnnulus(
-			dc, minuteX, minuteY,
-			_minuteRadius,
-			_minuteInnerGap,
-			_minuteInnerWidth,
-			0xFF0000
-		);
+		// CircleRenderer.drawSmoothAnnulus(
+		// 	dc, minuteX, minuteY,
+		// 	_minuteRadius,
+		// 	_minuteInnerGap,
+		// 	_minuteInnerWidth,
+		// 	0xFF0000
+		// );
 
 		// CircleRenderer.drawSmoothAnnulus(
 		// 	dc, minuteX, minuteY,

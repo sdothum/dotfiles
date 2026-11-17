@@ -242,6 +242,98 @@ static function getPattern(radius, color) as Lang.Dictionary {
 		}
 	}
 
+	static function drawSmoothDiameter(
+		dc, cx, cy, angle, screenRadius,
+		hourGap, oppositeGap, color
+	) {
+		var hourReach = screenRadius - hourGap;
+		var oppositeReach = screenRadius - oppositeGap;
+
+		if (hourReach <= 0 && oppositeReach <= 0) {
+			return;
+		}
+
+		var cosA = Math.cos(angle);
+		var sinA = Math.sin(angle);
+
+		var red = (color >> 16) & 0xFF;
+		var green = (color >> 8) & 0xFF;
+		var blue = color & 0xFF;
+
+		// One-pixel-wide antialiased line.
+		// Use the dominant axis to visit each screen pixel once.
+		var absCos = cosA < 0.0 ? -cosA : cosA;
+		var absSin = sinA < 0.0 ? -sinA : sinA;
+		var useX = absCos >= absSin;
+
+		var dominant = useX ? cosA : sinA;
+		var minor = useX ? sinA : cosA;
+
+		var absDominant = dominant < 0.0 ?
+			-dominant : dominant;
+
+		var hourLimit = Math.round(
+			hourReach * absDominant
+		).toNumber();
+
+		var oppositeLimit = Math.round(
+			oppositeReach * absDominant
+		).toNumber();
+
+		// The dominant axis can point opposite to the hour angle.
+		var start;
+		var end;
+
+		if (dominant >= 0.0) {
+			start = -oppositeLimit;
+			end = hourLimit;
+		} else {
+			start = -hourLimit;
+			end = oppositeLimit;
+		}
+
+		for (var p = start; p <= end; p += 1) {
+			var other = p * minor / dominant;
+
+			var base = Math.floor(other).toNumber();
+			var fraction = other - base;
+
+			for (var edge = 0; edge <= 1; edge += 1) {
+				var coverage = edge == 0 ?
+					1.0 - fraction : fraction;
+
+				if (coverage <= 0.0) {
+					continue;
+				}
+
+				var r = Math.round(
+					255 - (255 - red) * coverage
+				).toNumber();
+
+				var g = Math.round(
+					255 - (255 - green) * coverage
+				).toNumber();
+
+				var b = Math.round(
+					255 - (255 - blue) * coverage
+				).toNumber();
+
+				dc.setColor(
+					(r << 16) | (g << 8) | b,
+					0xFFFFFF
+				);
+
+				var x = useX ? cx + p : cx + base + edge;
+				var y = useX ? cy + base + edge : cy + p;
+
+				dc.drawPoint(
+					x.toNumber(),
+					y.toNumber()
+				);
+			}
+		}
+	}
+
 }
 
 // kak: filetype=c

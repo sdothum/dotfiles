@@ -1406,6 +1406,628 @@ _home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_156_2_242_2_for_inc
 _home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_156_2_242_2_for_end:
 _home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_134_3_243_1_stop:
     }
+    [ @file = "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc"; @line = 245; @symbol_functiondef = [drawSmoothDiameter,245,17,35]; @symbol_param<0> = [dc,246,2,4]; @symbol_param<1> = [cx,246,6,8]; @symbol_param<2> = [cy,246,10,12]; @symbol_param<3> = [angle,246,14,19]; @symbol_param<4> = [screenRadius,246,21,33]; @symbol_param<5> = [hourGap,247,2,9]; @symbol_param<6> = [oppositeGap,247,11,22]; @symbol_param<7> = [color,247,24,29]; ]
+    static
+    function drawSmoothDiameter(dc, cx, cy, angle, screenRadius, hourGap, oppositeGap, color) {
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_start:
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 249 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_stop" ]
+        %hourReach.1 = local;
+        symbol [ hourReach %hourReach.1 249 6 15 ];
+        %tmp.1 = lgetv %screenRadius;
+        symbol [ screenRadius %tmp.1 249 18 30 ];
+        %tmp.2 = lgetv %hourGap;
+        symbol [ hourGap %tmp.2 249 33 40 ];
+        %tmp.3 = sub %tmp.1 %tmp.2;
+        lputv %hourReach.1 %tmp.3;
+        symbol [ hourReach %hourReach.1 249 6 15 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 250 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_stop" ]
+        %oppositeReach.2 = local;
+        symbol [ oppositeReach %oppositeReach.2 250 6 19 ];
+        %tmp.4 = lgetv %screenRadius;
+        symbol [ screenRadius %tmp.4 250 22 34 ];
+        %tmp.5 = lgetv %oppositeGap;
+        symbol [ oppositeGap %tmp.5 250 37 48 ];
+        %tmp.6 = sub %tmp.4 %tmp.5;
+        lputv %oppositeReach.2 %tmp.6;
+        symbol [ oppositeReach %oppositeReach.2 250 6 19 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 252 2 ]
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_252_2_254_2_if_stmt:
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_252_6_252_41_begin:
+        %tmp.7 = lgetv %hourReach.1;
+        symbol [ hourReach %tmp.7 252 6 15 ];
+        %tmp.8 = 0;
+        %tmp.9 = lte %tmp.7 %tmp.8;
+        bf %tmp.9 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_252_2_254_2_if_end;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_252_24_252_41_true:
+        %tmp.10 = lgetv %oppositeReach.2;
+        symbol [ oppositeReach %tmp.10 252 24 37 ];
+        %tmp.11 = 0;
+        %tmp.12 = lte %tmp.10 %tmp.11;
+        push %tmp.12;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_252_24_252_41_end:
+        %tmp.13 = phi [%tmp.9 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_252_6_252_41_begin] [%tmp.12 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_252_24_252_41_true] [%tmp.13 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_252_24_252_41_end];
+        bf %tmp.13 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_252_2_254_2_if_end;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_252_2_254_2_if_true:
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_252_44_254_2_start:
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 253 3 ]
+        ret ?;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_252_44_254_2_stop:
+        goto @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_252_2_254_2_if_end;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_252_2_254_2_if_end:
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 256 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_stop" ]
+        %cosA.3 = local;
+        symbol [ cosA %cosA.3 256 6 10 ];
+        symbol [ Math %tmp.14 256 13 17 ];
+        %tmp.14 = getm $.Toybox.Math;
+        symbol [ cos %tmp.15 256 18 21 ];
+        %tmp.15 = getv function %tmp.14 :cos;
+        %tmp.16 = lgetv %angle;
+        symbol [ angle %tmp.16 256 22 27 ];
+        %tmp.17 = invoke %tmp.14 %tmp.15(%tmp.16);
+        lputv %cosA.3 %tmp.17;
+        symbol [ cosA %cosA.3 256 6 10 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 257 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_stop" ]
+        %sinA.4 = local;
+        symbol [ sinA %sinA.4 257 6 10 ];
+        symbol [ Math %tmp.18 257 13 17 ];
+        %tmp.18 = getm $.Toybox.Math;
+        symbol [ sin %tmp.19 257 18 21 ];
+        %tmp.19 = getv function %tmp.18 :sin;
+        %tmp.20 = lgetv %angle;
+        symbol [ angle %tmp.20 257 22 27 ];
+        %tmp.21 = invoke %tmp.18 %tmp.19(%tmp.20);
+        lputv %sinA.4 %tmp.21;
+        symbol [ sinA %sinA.4 257 6 10 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 259 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_stop" ]
+        %red.5 = local;
+        symbol [ red %red.5 259 6 9 ];
+        %tmp.22 = lgetv %color;
+        symbol [ color %tmp.22 259 13 18 ];
+        %tmp.23 = 16;
+        %tmp.24 = shr %tmp.22 %tmp.23;
+        %tmp.25 = 0xFF;
+        %tmp.26 = bitand %tmp.24 %tmp.25;
+        lputv %red.5 %tmp.26;
+        symbol [ red %red.5 259 6 9 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 260 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_stop" ]
+        %green.6 = local;
+        symbol [ green %green.6 260 6 11 ];
+        %tmp.27 = lgetv %color;
+        symbol [ color %tmp.27 260 15 20 ];
+        %tmp.28 = 8;
+        %tmp.29 = shr %tmp.27 %tmp.28;
+        %tmp.30 = 0xFF;
+        %tmp.31 = bitand %tmp.29 %tmp.30;
+        lputv %green.6 %tmp.31;
+        symbol [ green %green.6 260 6 11 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 261 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_stop" ]
+        %blue.7 = local;
+        symbol [ blue %blue.7 261 6 10 ];
+        %tmp.32 = lgetv %color;
+        symbol [ color %tmp.32 261 13 18 ];
+        %tmp.33 = 0xFF;
+        %tmp.34 = bitand %tmp.32 %tmp.33;
+        lputv %blue.7 %tmp.34;
+        symbol [ blue %blue.7 261 6 10 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 265 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_stop" ]
+        %absCos.8 = local;
+        symbol [ absCos %absCos.8 265 6 12 ];
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_265_15_265_36_begin:
+        %tmp.35 = lgetv %cosA.3;
+        symbol [ cosA %tmp.35 265 15 19 ];
+        %tmp.36 = 0.0;
+        %tmp.37 = lt %tmp.35 %tmp.36;
+        bf %tmp.37 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_265_15_265_36_else_false;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_265_15_265_36_true:
+        %tmp.38 = lgetv %cosA.3;
+        symbol [ cosA %tmp.38 265 29 33 ];
+        %tmp.39 = sub 0 %tmp.38;
+        push %tmp.39;
+        goto @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_265_15_265_36_end;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_265_15_265_36_else_false:
+        %tmp.40 = lgetv %cosA.3;
+        symbol [ cosA %tmp.40 265 36 40 ];
+        push %tmp.40;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_265_15_265_36_end:
+        %tmp.41 = phi [%tmp.37 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_265_15_265_36_begin] [%tmp.39 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_265_15_265_36_true] [%tmp.40 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_265_15_265_36_else_false] [%tmp.41 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_265_15_265_36_end];
+        lputv %absCos.8 %tmp.41;
+        symbol [ absCos %absCos.8 265 6 12 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 266 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_stop" ]
+        %absSin.9 = local;
+        symbol [ absSin %absSin.9 266 6 12 ];
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_266_15_266_36_begin:
+        %tmp.42 = lgetv %sinA.4;
+        symbol [ sinA %tmp.42 266 15 19 ];
+        %tmp.43 = 0.0;
+        %tmp.44 = lt %tmp.42 %tmp.43;
+        bf %tmp.44 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_266_15_266_36_else_false;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_266_15_266_36_true:
+        %tmp.45 = lgetv %sinA.4;
+        symbol [ sinA %tmp.45 266 29 33 ];
+        %tmp.46 = sub 0 %tmp.45;
+        push %tmp.46;
+        goto @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_266_15_266_36_end;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_266_15_266_36_else_false:
+        %tmp.47 = lgetv %sinA.4;
+        symbol [ sinA %tmp.47 266 36 40 ];
+        push %tmp.47;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_266_15_266_36_end:
+        %tmp.48 = phi [%tmp.44 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_266_15_266_36_begin] [%tmp.46 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_266_15_266_36_true] [%tmp.47 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_266_15_266_36_else_false] [%tmp.48 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_266_15_266_36_end];
+        lputv %absSin.9 %tmp.48;
+        symbol [ absSin %absSin.9 266 6 12 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 267 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_stop" ]
+        %useX.10 = local;
+        symbol [ useX %useX.10 267 6 10 ];
+        %tmp.49 = lgetv %absCos.8;
+        symbol [ absCos %tmp.49 267 13 19 ];
+        %tmp.50 = lgetv %absSin.9;
+        symbol [ absSin %tmp.50 267 23 29 ];
+        %tmp.51 = gte %tmp.49 %tmp.50;
+        lputv %useX.10 %tmp.51;
+        symbol [ useX %useX.10 267 6 10 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 269 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_stop" ]
+        %dominant.11 = local;
+        symbol [ dominant %dominant.11 269 6 14 ];
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_269_17_269_31_begin:
+        %tmp.52 = lgetv %useX.10;
+        symbol [ useX %tmp.52 269 17 21 ];
+        bf %tmp.52 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_269_17_269_31_else_false;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_269_17_269_31_true:
+        %tmp.53 = lgetv %cosA.3;
+        symbol [ cosA %tmp.53 269 24 28 ];
+        push %tmp.53;
+        goto @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_269_17_269_31_end;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_269_17_269_31_else_false:
+        %tmp.54 = lgetv %sinA.4;
+        symbol [ sinA %tmp.54 269 31 35 ];
+        push %tmp.54;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_269_17_269_31_end:
+        %tmp.55 = phi [%tmp.52 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_269_17_269_31_begin] [%tmp.53 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_269_17_269_31_true] [%tmp.54 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_269_17_269_31_else_false] [%tmp.55 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_269_17_269_31_end];
+        lputv %dominant.11 %tmp.55;
+        symbol [ dominant %dominant.11 269 6 14 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 270 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_stop" ]
+        %minor.12 = local;
+        symbol [ minor %minor.12 270 6 11 ];
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_270_14_270_28_begin:
+        %tmp.56 = lgetv %useX.10;
+        symbol [ useX %tmp.56 270 14 18 ];
+        bf %tmp.56 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_270_14_270_28_else_false;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_270_14_270_28_true:
+        %tmp.57 = lgetv %sinA.4;
+        symbol [ sinA %tmp.57 270 21 25 ];
+        push %tmp.57;
+        goto @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_270_14_270_28_end;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_270_14_270_28_else_false:
+        %tmp.58 = lgetv %cosA.3;
+        symbol [ cosA %tmp.58 270 28 32 ];
+        push %tmp.58;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_270_14_270_28_end:
+        %tmp.59 = phi [%tmp.56 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_270_14_270_28_begin] [%tmp.57 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_270_14_270_28_true] [%tmp.58 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_270_14_270_28_else_false] [%tmp.59 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_270_14_270_28_end];
+        lputv %minor.12 %tmp.59;
+        symbol [ minor %minor.12 270 6 11 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 272 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_stop" ]
+        %absDominant.13 = local;
+        symbol [ absDominant %absDominant.13 272 6 17 ];
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_272_20_273_15_begin:
+        %tmp.60 = lgetv %dominant.11;
+        symbol [ dominant %tmp.60 272 20 28 ];
+        %tmp.61 = 0.0;
+        %tmp.62 = lt %tmp.60 %tmp.61;
+        bf %tmp.62 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_272_20_273_15_else_false;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_272_20_273_15_true:
+        %tmp.63 = lgetv %dominant.11;
+        symbol [ dominant %tmp.63 273 4 12 ];
+        %tmp.64 = sub 0 %tmp.63;
+        push %tmp.64;
+        goto @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_272_20_273_15_end;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_272_20_273_15_else_false:
+        %tmp.65 = lgetv %dominant.11;
+        symbol [ dominant %tmp.65 273 15 23 ];
+        push %tmp.65;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_272_20_273_15_end:
+        %tmp.66 = phi [%tmp.62 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_272_20_273_15_begin] [%tmp.64 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_272_20_273_15_true] [%tmp.65 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_272_20_273_15_else_false] [%tmp.66 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_272_20_273_15_end];
+        lputv %absDominant.13 %tmp.66;
+        symbol [ absDominant %absDominant.13 272 6 17 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 275 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_stop" ]
+        %hourLimit.14 = local;
+        symbol [ hourLimit %hourLimit.14 275 6 15 ];
+        symbol [ Math %tmp.67 275 18 22 ];
+        %tmp.67 = getm $.Toybox.Math;
+        symbol [ round %tmp.68 275 23 28 ];
+        %tmp.68 = getv function %tmp.67 :round;
+        %tmp.69 = lgetv %hourReach.1;
+        symbol [ hourReach %tmp.69 276 3 12 ];
+        %tmp.70 = lgetv %absDominant.13;
+        symbol [ absDominant %tmp.70 276 15 26 ];
+        %tmp.71 = mul %tmp.69 %tmp.70;
+        %tmp.72 = invoke %tmp.67 %tmp.68(%tmp.71);
+        symbol [ toNumber %tmp.73 277 4 12 ];
+        %tmp.73 = getv function %tmp.72 :toNumber;
+        %tmp.74 = invoke %tmp.72 %tmp.73();
+        lputv %hourLimit.14 %tmp.74;
+        symbol [ hourLimit %hourLimit.14 275 6 15 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 279 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_stop" ]
+        %oppositeLimit.15 = local;
+        symbol [ oppositeLimit %oppositeLimit.15 279 6 19 ];
+        symbol [ Math %tmp.75 279 22 26 ];
+        %tmp.75 = getm $.Toybox.Math;
+        symbol [ round %tmp.76 279 27 32 ];
+        %tmp.76 = getv function %tmp.75 :round;
+        %tmp.77 = lgetv %oppositeReach.2;
+        symbol [ oppositeReach %tmp.77 280 3 16 ];
+        %tmp.78 = lgetv %absDominant.13;
+        symbol [ absDominant %tmp.78 280 19 30 ];
+        %tmp.79 = mul %tmp.77 %tmp.78;
+        %tmp.80 = invoke %tmp.75 %tmp.76(%tmp.79);
+        symbol [ toNumber %tmp.81 281 4 12 ];
+        %tmp.81 = getv function %tmp.80 :toNumber;
+        %tmp.82 = invoke %tmp.80 %tmp.81();
+        lputv %oppositeLimit.15 %tmp.82;
+        symbol [ oppositeLimit %oppositeLimit.15 279 6 19 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 284 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_stop" ]
+        %start.16 = local;
+        symbol [ start %start.16 284 6 11 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 285 2 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_stop" ]
+        %end.17 = local;
+        symbol [ end %end.17 285 6 9 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 287 2 ]
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_287_2_293_2_if_stmt:
+        %tmp.83 = lgetv %dominant.11;
+        symbol [ dominant %tmp.83 287 6 14 ];
+        %tmp.84 = 0.0;
+        %tmp.85 = gte %tmp.83 %tmp.84;
+        bf %tmp.85 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_287_2_293_2_if_else_false;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_287_2_293_2_if_true:
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_287_23_290_2_start:
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 288 3 ]
+        %tmp.86 = lgetv %oppositeLimit.15;
+        symbol [ oppositeLimit %tmp.86 288 12 25 ];
+        %tmp.87 = sub 0 %tmp.86;
+        lputv %start.16 %tmp.87;
+        symbol [ start %start.16 288 3 8 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 289 3 ]
+        %tmp.88 = lgetv %hourLimit.14;
+        symbol [ hourLimit %tmp.88 289 9 18 ];
+        lputv %end.17 %tmp.88;
+        symbol [ end %end.17 289 3 6 ];
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_287_23_290_2_stop:
+        goto @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_287_2_293_2_if_end;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_287_2_293_2_if_else_false:
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_290_9_293_2_start:
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 291 3 ]
+        %tmp.89 = lgetv %hourLimit.14;
+        symbol [ hourLimit %tmp.89 291 12 21 ];
+        %tmp.90 = sub 0 %tmp.89;
+        lputv %start.16 %tmp.90;
+        symbol [ start %start.16 291 3 8 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 292 3 ]
+        %tmp.91 = lgetv %oppositeLimit.15;
+        symbol [ oppositeLimit %tmp.91 292 9 22 ];
+        lputv %end.17 %tmp.91;
+        symbol [ end %end.17 292 3 6 ];
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_290_9_293_2_stop:
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_287_2_293_2_if_end:
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 295 2 ]
+        for @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_2_334_2_for_test @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_2_334_2_for_incr @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_2_334_2_for_end;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_2_334_2_for_init:
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_2_334_2_for_begin" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_2_334_2_for_end" ]
+        %p.18 = local;
+        symbol [ p %p.18 295 11 12 ];
+        %tmp.92 = lgetv %start.16;
+        symbol [ start %tmp.92 295 15 20 ];
+        lputv %p.18 %tmp.92;
+        symbol [ p %p.18 295 11 12 ];
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_2_334_2_for_test:
+        %tmp.93 = lgetv %p.18;
+        symbol [ p %tmp.93 295 22 23 ];
+        %tmp.94 = lgetv %end.17;
+        symbol [ end %tmp.94 295 27 30 ];
+        %tmp.95 = lte %tmp.93 %tmp.94;
+        bf %tmp.95 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_2_334_2_for_end;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_2_334_2_for_begin:
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_40_334_2_start:
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 296 3 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_40_334_2_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_40_334_2_stop" ]
+        %other.19 = local;
+        symbol [ other %other.19 296 7 12 ];
+        %tmp.96 = lgetv %p.18;
+        symbol [ p %tmp.96 296 15 16 ];
+        %tmp.97 = lgetv %minor.12;
+        symbol [ minor %tmp.97 296 19 24 ];
+        %tmp.98 = mul %tmp.96 %tmp.97;
+        %tmp.99 = lgetv %dominant.11;
+        symbol [ dominant %tmp.99 296 27 35 ];
+        %tmp.100 = div %tmp.98 %tmp.99;
+        lputv %other.19 %tmp.100;
+        symbol [ other %other.19 296 7 12 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 298 3 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_40_334_2_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_40_334_2_stop" ]
+        %base.20 = local;
+        symbol [ base %base.20 298 7 11 ];
+        symbol [ Math %tmp.101 298 14 18 ];
+        %tmp.101 = getm $.Toybox.Math;
+        symbol [ floor %tmp.102 298 19 24 ];
+        %tmp.102 = getv function %tmp.101 :floor;
+        %tmp.103 = lgetv %other.19;
+        symbol [ other %tmp.103 298 25 30 ];
+        %tmp.104 = invoke %tmp.101 %tmp.102(%tmp.103);
+        symbol [ toNumber %tmp.105 298 32 40 ];
+        %tmp.105 = getv function %tmp.104 :toNumber;
+        %tmp.106 = invoke %tmp.104 %tmp.105();
+        lputv %base.20 %tmp.106;
+        symbol [ base %base.20 298 7 11 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 299 3 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_40_334_2_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_40_334_2_stop" ]
+        %fraction.21 = local;
+        symbol [ fraction %fraction.21 299 7 15 ];
+        %tmp.107 = lgetv %other.19;
+        symbol [ other %tmp.107 299 18 23 ];
+        %tmp.108 = lgetv %base.20;
+        symbol [ base %tmp.108 299 26 30 ];
+        %tmp.109 = sub %tmp.107 %tmp.108;
+        lputv %fraction.21 %tmp.109;
+        symbol [ fraction %fraction.21 299 7 15 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 301 3 ]
+        for @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_3_333_3_for_test @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_3_333_3_for_incr @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_3_333_3_for_end;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_3_333_3_for_init:
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_3_333_3_for_begin" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_3_333_3_for_end" ]
+        %edge.22 = local;
+        symbol [ edge %edge.22 301 12 16 ];
+        %tmp.110 = 0;
+        lputv %edge.22 %tmp.110;
+        symbol [ edge %edge.22 301 12 16 ];
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_3_333_3_for_test:
+        %tmp.111 = lgetv %edge.22;
+        symbol [ edge %tmp.111 301 22 26 ];
+        %tmp.112 = 1;
+        %tmp.113 = lte %tmp.111 %tmp.112;
+        bf %tmp.113 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_3_333_3_for_end;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_3_333_3_for_begin:
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_44_333_3_start:
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 302 4 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_44_333_3_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_44_333_3_stop" ]
+        %coverage.23 = local;
+        symbol [ coverage %coverage.23 302 8 16 ];
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_302_19_303_22_begin:
+        %tmp.114 = lgetv %edge.22;
+        symbol [ edge %tmp.114 302 19 23 ];
+        %tmp.115 = 0;
+        %tmp.116 = eq %tmp.114 %tmp.115;
+        bf %tmp.116 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_302_19_303_22_else_false;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_302_19_303_22_true:
+        %tmp.117 = 1.0;
+        %tmp.118 = lgetv %fraction.21;
+        symbol [ fraction %tmp.118 303 11 19 ];
+        %tmp.119 = sub %tmp.117 %tmp.118;
+        push %tmp.119;
+        goto @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_302_19_303_22_end;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_302_19_303_22_else_false:
+        %tmp.120 = lgetv %fraction.21;
+        symbol [ fraction %tmp.120 303 22 30 ];
+        push %tmp.120;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_302_19_303_22_end:
+        %tmp.121 = phi [%tmp.116 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_302_19_303_22_begin] [%tmp.119 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_302_19_303_22_true] [%tmp.120 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_302_19_303_22_else_false] [%tmp.121 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_302_19_303_22_end];
+        lputv %coverage.23 %tmp.121;
+        symbol [ coverage %coverage.23 302 8 16 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 305 4 ]
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_305_4_307_4_if_stmt:
+        %tmp.122 = lgetv %coverage.23;
+        symbol [ coverage %tmp.122 305 8 16 ];
+        %tmp.123 = 0.0;
+        %tmp.124 = lte %tmp.122 %tmp.123;
+        bf %tmp.124 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_305_4_307_4_if_end;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_305_4_307_4_if_true:
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_305_25_307_4_start:
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 306 5 ]
+        goto break @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_3_333_3_for_incr;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_305_25_307_4_stop:
+        goto @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_305_4_307_4_if_end;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_305_4_307_4_if_end:
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 309 4 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_44_333_3_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_44_333_3_stop" ]
+        %r.24 = local;
+        symbol [ r %r.24 309 8 9 ];
+        symbol [ Math %tmp.125 309 12 16 ];
+        %tmp.125 = getm $.Toybox.Math;
+        symbol [ round %tmp.126 309 17 22 ];
+        %tmp.126 = getv function %tmp.125 :round;
+        %tmp.127 = 255;
+        %tmp.128 = 255;
+        %tmp.129 = lgetv %red.5;
+        symbol [ red %tmp.129 310 18 21 ];
+        %tmp.130 = sub %tmp.128 %tmp.129;
+        %tmp.131 = lgetv %coverage.23;
+        symbol [ coverage %tmp.131 310 25 33 ];
+        %tmp.132 = mul %tmp.130 %tmp.131;
+        %tmp.133 = sub %tmp.127 %tmp.132;
+        %tmp.134 = invoke %tmp.125 %tmp.126(%tmp.133);
+        symbol [ toNumber %tmp.135 311 6 14 ];
+        %tmp.135 = getv function %tmp.134 :toNumber;
+        %tmp.136 = invoke %tmp.134 %tmp.135();
+        lputv %r.24 %tmp.136;
+        symbol [ r %r.24 309 8 9 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 313 4 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_44_333_3_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_44_333_3_stop" ]
+        %g.25 = local;
+        symbol [ g %g.25 313 8 9 ];
+        symbol [ Math %tmp.137 313 12 16 ];
+        %tmp.137 = getm $.Toybox.Math;
+        symbol [ round %tmp.138 313 17 22 ];
+        %tmp.138 = getv function %tmp.137 :round;
+        %tmp.139 = 255;
+        %tmp.140 = 255;
+        %tmp.141 = lgetv %green.6;
+        symbol [ green %tmp.141 314 18 23 ];
+        %tmp.142 = sub %tmp.140 %tmp.141;
+        %tmp.143 = lgetv %coverage.23;
+        symbol [ coverage %tmp.143 314 27 35 ];
+        %tmp.144 = mul %tmp.142 %tmp.143;
+        %tmp.145 = sub %tmp.139 %tmp.144;
+        %tmp.146 = invoke %tmp.137 %tmp.138(%tmp.145);
+        symbol [ toNumber %tmp.147 315 6 14 ];
+        %tmp.147 = getv function %tmp.146 :toNumber;
+        %tmp.148 = invoke %tmp.146 %tmp.147();
+        lputv %g.25 %tmp.148;
+        symbol [ g %g.25 313 8 9 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 317 4 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_44_333_3_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_44_333_3_stop" ]
+        %b.26 = local;
+        symbol [ b %b.26 317 8 9 ];
+        symbol [ Math %tmp.149 317 12 16 ];
+        %tmp.149 = getm $.Toybox.Math;
+        symbol [ round %tmp.150 317 17 22 ];
+        %tmp.150 = getv function %tmp.149 :round;
+        %tmp.151 = 255;
+        %tmp.152 = 255;
+        %tmp.153 = lgetv %blue.7;
+        symbol [ blue %tmp.153 318 18 22 ];
+        %tmp.154 = sub %tmp.152 %tmp.153;
+        %tmp.155 = lgetv %coverage.23;
+        symbol [ coverage %tmp.155 318 26 34 ];
+        %tmp.156 = mul %tmp.154 %tmp.155;
+        %tmp.157 = sub %tmp.151 %tmp.156;
+        %tmp.158 = invoke %tmp.149 %tmp.150(%tmp.157);
+        symbol [ toNumber %tmp.159 319 6 14 ];
+        %tmp.159 = getv function %tmp.158 :toNumber;
+        %tmp.160 = invoke %tmp.158 %tmp.159();
+        lputv %b.26 %tmp.160;
+        symbol [ b %b.26 317 8 9 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 321 4 ]
+        %tmp.161 = lgetv %dc;
+        symbol [ dc %tmp.161 321 4 6 ];
+        symbol [ setColor %tmp.162 321 7 15 ];
+        %tmp.162 = getv function %tmp.161 :setColor;
+        %tmp.163 = lgetv %r.24;
+        symbol [ r %tmp.163 322 6 7 ];
+        %tmp.164 = 16;
+        %tmp.165 = shl %tmp.163 %tmp.164;
+        %tmp.166 = lgetv %g.25;
+        symbol [ g %tmp.166 322 18 19 ];
+        %tmp.167 = 8;
+        %tmp.168 = shl %tmp.166 %tmp.167;
+        %tmp.169 = bitor %tmp.165 %tmp.168;
+        %tmp.170 = lgetv %b.26;
+        symbol [ b %tmp.170 322 28 29 ];
+        %tmp.171 = bitor %tmp.169 %tmp.170;
+        %tmp.172 = 0xFFFFFF;
+        invoke %tmp.161 %tmp.162(%tmp.171, %tmp.172);
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 326 4 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_44_333_3_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_44_333_3_stop" ]
+        %x.27 = local;
+        symbol [ x %x.27 326 8 9 ];
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_326_12_326_40_begin:
+        %tmp.173 = lgetv %useX.10;
+        symbol [ useX %tmp.173 326 12 16 ];
+        bf %tmp.173 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_326_12_326_40_else_false;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_326_12_326_40_true:
+        %tmp.174 = lgetv %cx;
+        symbol [ cx %tmp.174 326 19 21 ];
+        %tmp.175 = lgetv %p.18;
+        symbol [ p %tmp.175 326 24 25 ];
+        %tmp.176 = add %tmp.174 %tmp.175;
+        push %tmp.176;
+        goto @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_326_12_326_40_end;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_326_12_326_40_else_false:
+        %tmp.177 = lgetv %cx;
+        symbol [ cx %tmp.177 326 28 30 ];
+        %tmp.178 = lgetv %base.20;
+        symbol [ base %tmp.178 326 33 37 ];
+        %tmp.179 = add %tmp.177 %tmp.178;
+        %tmp.180 = lgetv %edge.22;
+        symbol [ edge %tmp.180 326 40 44 ];
+        %tmp.181 = add %tmp.179 %tmp.180;
+        push %tmp.181;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_326_12_326_40_end:
+        %tmp.182 = phi [%tmp.173 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_326_12_326_40_begin] [%tmp.176 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_326_12_326_40_true] [%tmp.181 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_326_12_326_40_else_false] [%tmp.182 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_326_12_326_40_end];
+        lputv %x.27 %tmp.182;
+        symbol [ x %x.27 326 8 9 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 327 4 ]
+        [ "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_44_333_3_start" "_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_44_333_3_stop" ]
+        %y.28 = local;
+        symbol [ y %y.28 327 8 9 ];
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_327_12_327_43_begin:
+        %tmp.183 = lgetv %useX.10;
+        symbol [ useX %tmp.183 327 12 16 ];
+        bf %tmp.183 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_327_12_327_43_else_false;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_327_12_327_43_true:
+        %tmp.184 = lgetv %cy;
+        symbol [ cy %tmp.184 327 19 21 ];
+        %tmp.185 = lgetv %base.20;
+        symbol [ base %tmp.185 327 24 28 ];
+        %tmp.186 = add %tmp.184 %tmp.185;
+        %tmp.187 = lgetv %edge.22;
+        symbol [ edge %tmp.187 327 31 35 ];
+        %tmp.188 = add %tmp.186 %tmp.187;
+        push %tmp.188;
+        goto @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_327_12_327_43_end;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_327_12_327_43_else_false:
+        %tmp.189 = lgetv %cy;
+        symbol [ cy %tmp.189 327 38 40 ];
+        %tmp.190 = lgetv %p.18;
+        symbol [ p %tmp.190 327 43 44 ];
+        %tmp.191 = add %tmp.189 %tmp.190;
+        push %tmp.191;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_327_12_327_43_end:
+        %tmp.192 = phi [%tmp.183 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_327_12_327_43_begin] [%tmp.188 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_327_12_327_43_true] [%tmp.191 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_327_12_327_43_else_false] [%tmp.192 @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_327_12_327_43_end];
+        lputv %y.28 %tmp.192;
+        symbol [ y %y.28 327 8 9 ];
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 329 4 ]
+        %tmp.193 = lgetv %dc;
+        symbol [ dc %tmp.193 329 4 6 ];
+        symbol [ drawPoint %tmp.194 329 7 16 ];
+        %tmp.194 = getv function %tmp.193 :drawPoint;
+        %tmp.195 = lgetv %x.27;
+        symbol [ x %tmp.195 330 5 6 ];
+        symbol [ toNumber %tmp.196 330 7 15 ];
+        %tmp.196 = getv function %tmp.195 :toNumber;
+        %tmp.197 = invoke %tmp.195 %tmp.196();
+        %tmp.198 = lgetv %y.28;
+        symbol [ y %tmp.198 331 5 6 ];
+        symbol [ toNumber %tmp.199 331 7 15 ];
+        %tmp.199 = getv function %tmp.198 :toNumber;
+        %tmp.200 = invoke %tmp.198 %tmp.199();
+        invoke %tmp.193 %tmp.194(%tmp.197, %tmp.200);
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_44_333_3_stop:
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_3_333_3_for_incr:
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 301 ]
+        %tmp.201 = lgetv %edge.22;
+        symbol [ edge %tmp.201 301 33 37 ];
+        %tmp.202 = 1;
+        %tmp.203 = add %tmp.201 %tmp.202;
+        lputv %edge.22 %tmp.203;
+        symbol [ edge %edge.22 301 33 37 ];
+        goto @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_3_333_3_for_test;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_301_3_333_3_for_end:
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_40_334_2_stop:
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_2_334_2_for_incr:
+[ "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc" 295 ]
+        %tmp.204 = lgetv %p.18;
+        symbol [ p %tmp.204 295 32 33 ];
+        %tmp.205 = 1;
+        %tmp.206 = add %tmp.204 %tmp.205;
+        lputv %p.18 %tmp.206;
+        symbol [ p %p.18 295 32 33 ];
+        goto @_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_2_334_2_for_test;
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_295_2_334_2_for_end:
+_home_shum_stow_garmin_interstellar_source_CircleRenderer_mc_248_3_335_1_stop:
+    }
 }
 [ @file = "/home/shum/stow/garmin/interstellar/source/CircleRenderer.mc"; @line = 2; ]
 <init> {
