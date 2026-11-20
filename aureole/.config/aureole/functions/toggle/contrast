@@ -1,0 +1,16 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="toggle/contrast $@" . $PARENT
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ......................................................................... Root
+
+[ "$(recipe theme/contrast)" = dark ] && recipe theme/contrast light || recipe theme/contrast dark
+theme $(recipe theme/contrast)
+
+for i in $(ls -1 $FIFO) ;do
+	echo "#CONTRAST" >$FIFO/$i
+done
+
+# kak: filetype=sh

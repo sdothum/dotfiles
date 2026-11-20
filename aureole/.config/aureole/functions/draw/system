@@ -1,0 +1,165 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="draw/system $@" . $PARENT
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................... Draw panel
+
+# Usage: panel systembar [<offset Y>]
+#
+# NOTE: this script is executed via "draw panel" SEE: also draw panel
+
+recipe -t panel/system || exit
+[ $1 ] && panel_offsetY=$1
+
+sep
+
+if [ $STARTREK ] ;then
+	OCCUPIED=''
+	FREE=''
+	CURRENT=''    # active and FREE
+else
+	OCCUPIED='●'
+	FREE='○'
+	CURRENT='◯'     # active and FREE
+fi
+
+cpu_usage=' .00ᵁ'  # avoid line centering jitter on launch
+cpu_temp='__._°'
+cpu_speed='.__ᴳ'
+mem_usage='_._ᴹ'
+
+selected_group=''
+
+# ............................................................ Desktops (groups)
+
+desktops() {
+	unset desktops viewscreen
+	if observed_group=$(group 2>/dev/null) ;then
+		selected_group=$observed_group
+	fi
+	for d in $DESKTOPS ;do
+		format="%{B$DEFAULT_BG}"
+
+		has_windows $d && ! deactivated $d && icon=$OCCUPIED || { [ "$d" = "$selected_group" ] && icon=$CURRENT || icon=$FREE; }
+
+		if [ "$d" = "$selected_group" ] ;then
+			has_windows $d && format="${format}%{F$ACTIVE_FG}"
+			# deactivated $d && format="${format}%{U$ACTIVE_FG}%{+u}"
+		elif ! has_windows $d ;then
+			format="${format}%{F$FREE_FG}"
+			# deactivated $d && format="${format}%{U$FREE_FG}%{+u}"
+		else
+			format="${format}%{F$INACTIVE_FG}"
+			# deactivated $d && format="${format}%{U$INACTIVE_FG}%{+u}"
+		fi
+		deactivated $d && format="${format}%{U$ACTIVE_FG}%{+u}"
+
+		desktops="${desktops}${TAG_PAD}${format}${icon}%{-u}%{U-}%{B-}%{F-}"
+		viewscreen="${viewscreen} ${format} ${icon}"  # star trek!
+	done
+	desktops="${desktops}$TAG_PAD"  # center tags with triple padding, see $stat
+}
+
+# .................................................................... Animation
+
+beacon="▶"
+counter=0   # desktops
+
+currently() {
+	# prevent lemonbar race to catch up (impossible to force race condition to test..)
+	[ ${EPOCH#S} -lt $(date +%s -d "-1 seconds") ] && { unset EPOCH; return; }
+	desktops
+
+	if [ $STARTREK ] ;then
+		[ $counter -lt $tagcount ] && counter=$(( counter + 1 )) || counter=1
+
+		set -- ${viewscreen}
+		unset desktops
+		for j in $DESKTOPS ;do
+			[ $j = $counter ] && { deactivated $j && icon="%{F$ICANDY}$OCCUPIED" || { ! has_windows $j && icon="%{F$ICANDY}$beacon" || icon="%{F$ICANDY}$2"; } } || icon=$2
+			desktops="${desktops}${TAG_PAD}$1${icon}%{-u}%{U-}%{B-}%{F-}"
+			shift 2
+		done
+	fi
+}
+
+# ............................................................... FIFO read loop
+
+SPC=" "  # U+00a0 monospace cell width
+
+# cpu_stat() { stat="$cpu_usage ${STATPAD}$cpu_speed ${STATPAD}$cpu_temp ${STATPAD}$mem_usage${TAG_PAD}"; }
+cpu_stat() { stat="%{F$ACTIVE_FG}$cpu_usage${SEP}$cpu_speed  $cpu_temp${SEP}$mem_usage%{F-}"; }
+
+caps() {
+	if capslock ;then
+		[ "$caps" = "$SPC$SPC$SPC$SPC$SPC$SPC$SPC$SPC" ] && caps="CAPSLOCK" || caps="$SPC$SPC$SPC$SPC$SPC$SPC$SPC$SPC"
+		CAPS="${SEP}%{U$ACTIVE_FG}%{+u}${caps}%{-u}%{U-}"
+	else
+		unset CAPS
+	fi
+	}
+
+panel() {
+	desktops  # initialize
+	while read -r line ;do
+		case $line in
+			\#* ) panelcolor; sep; desktops >/dev/null; caps >/dev/null; cpu_stat ;;
+			S*  ) EPOCH=${line}; caps; currently  ;;
+			U*  ) [ "${line#?}" = '  0%' ] || cpu_usage=${line#?}; cpu_stat ;;  # ignore 0%
+			T*  ) cpu_temp=${line#?};  cpu_stat ;;
+			C*  ) cpu_speed=${line#?}; cpu_stat ;;
+			M*  ) mem_usage=${line#?}; cpu_stat ;;
+		esac
+
+		[ $EPOCH ] && printf "%s\n" "%{c}${desktops}${DIV}${stat}${CAPS}"
+		unset line EPOCH
+	done
+}
+
+# ......................................................................... FIFO
+
+STREAM=$(mkfifo $FIFO/$msg)  # SEE: panel wrapper
+
+# desktop panel update
+clock -i 1 -sf "S%s" >$STREAM &
+
+prev_busy=0
+prev_total=0
+cpu_usage() {
+	read -r _ u n s i w q sq _ < /proc/stat
+	busy=$(( u + n + s ))
+	total=$(( busy + i + w + q + sq ))
+	if [ -n "$prev_total" ]; then
+		awk -v u="$(( busy - prev_busy ))"  \
+			-v t="$(( total - prev_total ))" \
+			'BEGIN { if (t>0) printf "U%5.2f° usᴀɢᴇ\n", 100*u/t }'
+	fi
+	prev_busy=$busy
+	prev_total=$total
+}
+
+if [ "$(recipe statusbar)" = 'average' ] ;then
+	cpu_freq() { awk '{sum+=$1; count++} END {if (count > 0) printf "C%4.2fɢʜz\n", sum/count/1000000}' /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq; }
+else
+	cpu_freq() { awk '$1>max {max=$1} END {printf "C%4.2fɢʜz\n", max/1000000}' /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq; }
+fi
+
+for h in /sys/class/hwmon/hwmon*; do
+	read -r name < "$h/name"
+	[ "$name" = k10temp ] && SENSOR=$(printf '%s\n' "$h")
+done
+cpu_temp()  { awk '{printf "T%4.1f°c\n", $1/1000}' $SENSOR/temp1_input; }
+
+mem_usage() { awk '/MemTotal/{t=$2} /MemAvailable/{a=$2; printf "M%4.2fɢʙ\n", (t-a)/1024/1024}' /proc/meminfo; }
+
+# cpu usage, cpu frequency/temperature, memory usage stats
+while : ;do cpu_usage >$STREAM; sleep 1 ;done &
+while : ;do cpu_freq  >$STREAM; sleep 1 ;done &
+while : ;do cpu_temp  >$STREAM; sleep 1 ;done &
+while : ;do mem_usage >$STREAM; sleep 1 ;done &
+
+cat $STREAM | panel | handlebar &
+
+# kak: filetype=sh

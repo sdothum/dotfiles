@@ -1,0 +1,191 @@
+# sdothum - 2016 (c) wtfpl
+#
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+#
+# ........................................................................ Rules
+#
+# WARNING: blank lines before first rule requires patched ruler SEE: dotfiles
+#
+# FIXED:   patched ruler handling of #comment lines NOT starting on column 1
+
+# Term applications
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ......................................................................... mail
+
+class="aerc"
+	ZEPHYR_TRACE=1 aether rule aerc ;\
+	sleep 1 && xdotool type ':vsplit' && xdotool key Return
+
+# open compose window but raise aerc to complete to/subject fields
+
+class="email"
+	aether window tile 3 2 . window group $(aether group id "COMM") ;\
+	borealis window stack cycle
+
+class="compose"
+	aether window tile 3 2 . window group $(aether group id "COMM")
+
+# ......................................................................... edit
+
+class="kak"
+	ZEPHYR_TRACE=1 aether rule kak
+
+class="wiki"
+	ZEPHYR_TRACE=1 aether rule wiki
+
+# ................................................................. music player
+
+class="music"
+	ZEPHYR_TRACE=1 aether rule music
+
+# ................................................................. file manager
+
+# paired windows SEE: xftp script
+
+class="cbftp"
+	aether window tile 3 2
+
+class="xftp"
+	aether window tile 3 3
+
+class="yazi"
+	ZEPHYR_TRACE=1 aether rule yazi
+
+class="yazi-root"
+	ZEPHYR_TRACE=1 aether rule yazi-root
+
+# ........................................................................ terms
+
+# handle resizing multiple opened manpages
+
+class="btop"
+	ZEPHYR_TRACE=1 aether rule btop
+
+class="manpage"
+	ZEPHYR_TRACE=1 aether rule manpage
+
+class="term"
+	ZEPHYR_TRACE=1 aether rule term
+
+class="tmux"
+	ZEPHYR_TRACE=1 aether rule tmux
+
+class="palette"
+	ZEPHYR_TRACE=1 aether rule palette
+
+# GUI applications
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ........................................................................ audio
+
+class="audacious"
+	aether window group $(aether group id "PLAY") . window snap center
+
+# delay for pavucontrol/pipewire sync SEE: pulse
+
+class="pavucontrol"
+	ZEPHYR_TRACE=1 aether rule pavucontrol
+
+# ........................................................................ media
+
+class="asunder"
+	aether window group $(aether group id "UTIL")                                                            ;\
+	[ -e /tmp/rulerrc:asunder ] && borealis window stack cycle || aether window size 1/3 . window snap center ;\
+	touch /tmp/rulerrc:asunder
+
+class="calibre"
+	ZEPHYR_TRACE=1 aether rule calibre
+
+class="nicotine"
+	ZEPHYR_TRACE=1 aether rule nicotine
+
+# ......................................................................... draw
+
+class="darktable"
+	ZEPHYR_TRACE=1 aether rule darktable
+
+class="gimp"
+	ZEPHYR_TRACE=1 aether rule gimp
+
+class="krita"
+	ZEPHYR_TRACE=1 aether rule krita
+
+class="RapidRAW"
+	ZEPHYR_TRACE=1 aether rule rapidraw
+
+class="rawtherapee"
+	ZEPHYR_TRACE=1 aether rule rawtherapee
+
+# ...................................................................... viewers
+
+# HACK: for yazi photo display requires initial delay to prevent triggering "menu" from sxhkd "toggle wallpaper"
+
+class="feh"
+	sleep 0.25                         ;\
+	xdotool key space                  ;\
+	sleep 0.1 && xdotool key BackSpace ;\
+	aether window size 1080x1690 . window snap center
+
+class="foliate"
+	ZEPHYR_TRACE=1 aether rule foliate
+
+class="fontmatrix"
+	ZEPHYR_TRACE=1 aether rule fontmatrix
+
+# handle video and youtube streaming SEE: qutebrowser config.py
+
+name="\- \- mpv"
+	ZEPHYR_TRACE=1 aether rule youtube
+
+class="mpv"
+	ZEPHYR_TRACE=1 aether rule mpv
+
+class="oculante"
+	ZEPHYR_TRACE=1 aether rule oculante
+
+class="zathura"
+	ZEPHYR_TRACE=1 aether rule zathura
+
+# ..................................................................... browsers
+
+class="chromium"
+	ZEPHYR_TRACE=1 aether rule chromium
+
+name="Mozilla Firefox"
+	ZEPHYR_TRACE=1 aether rule firefox
+
+# qutebrowser crash window
+
+name="Whoops!"
+	aether window await 'Whoops!' Name . window close
+
+# BUG: qutebrowser can fail to render so avoid tiling rule
+
+class="qutebrowser"
+	ZEPHYR_TRACE=1 aether rule qutebrowser
+
+# NOTE: single purpose hangouts browser (for zoom and custom font control) SEE: hangouts script
+# TODO: zephyr window await "$(recipe hangouts/name)" Name . window.. requires window.sync timing fix NOTE: rule works (faster) without
+
+class="luakit"
+	ZEPHYR_TRACE=1 aether rule luakit
+
+class="Surf"
+	aether window await "@cgDIS:T | " URL . aether window tile 4 1 . window group $(aether group id "COMM")
+
+# .......................................................................... irc
+
+class="org.squidowl.halloy"
+	ZEPHYR_TRACE=1 aether rule halloy
+
+# ....................................................................... system
+
+class="gFTP"
+	aether window size viewport
+
+class="pcmanfm"
+	aether window group $(aether group id "UTIL") . window tile 3
+
+# kak: filetype=sh

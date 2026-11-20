@@ -1,0 +1,472 @@
+# sdothum - 2016 (c) wtfpl
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# NOTE: only use groups 1-9 with group 0 reserved for special actions (typically, "last")
+
+# NOTE: block { statements.. } must be escaped \{ statements.. \}
+#       lest block be treated as positional sxhkd parameter list
+
+# Hotkeys
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ........................................................................ sxhkd
+
+super + Escape
+	notify reloading "sxhkd & ruler" ;\
+	pkill -USR1 -x sxhkd             ;\
+	pkill -KILL -x ruler             ;\
+	ruler -i -c $HOME/.config/$WM/rulerrc &
+
+super + shift + Escape
+	kak $(find $HOME/.config/${WM}/ -maxdepth 1 -type f -name '*rc')
+
+# .................................................................... clipboard
+
+# BUG: manual keybinds circumvent (random) X session clipboard loss (cause unknown)
+# HISTORY: cb replaces "xclip {-in,-out} -selection clipboard"
+
+~ctrl + {c,x}
+	S=$(xsel -p) && [ -n "$S" ] && echo -n "$S" | cb {copy,cut}
+
+~ctrl + v
+	cb paste
+
+# ~ctrl + c
+# 	S=$(xsel -p) && [ -n "$S" ] && echo -n "$S" | copyq copy
+
+# ~ctrl + x
+# 	S=$(xsel -p) && [ -n "$S" ] && echo -n "$S" | copyq copy ;\
+# 	xdotool key Del
+
+# ~ctrl + v
+# 	copyq paste
+
+# Window manager
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ........................................................................ menus
+
+super + {F1,F2}
+	derecho {group,window}
+
+super + {shift,ctrl} + q
+	{menu halt,borealis wm restart}
+
+# Windows
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ....................................................................... select
+
+# NOTE: a null selector value must include a " " (space)
+
+super + {_,shift,ctrl} + Tab
+	borealis window {cycle,cycle --reverse,focus --last}
+
+alt + {_,shift} + Tab
+	borealis window cycle --group {_,--reverse}
+
+alt + {Left,Down,Up,Right}
+	borealis window focus --cardinal {west,south,north,east}
+
+# ................................................................ focus / stack
+
+super + i
+	echo "$(timestamp) sxhkd window hide $(pfw)" >>$WMLOG ;\
+	aether window hide                                    ;\
+	group_sync
+
+super + shift + i
+	menu unhide ;\
+	group_sync
+
+# Rotate the canonical overlap stack by raising its bottommost window.
+
+super + {_,ctrl,shift} + e
+	borealis window {stack cycle,layer Above,layer Normal}
+
+super + w
+	echo "$(timestamp) sxhkd window close $(pfw)" >>$WMLOG ;\
+	W=$(pfw)                                               ;\
+	borealis window cycle --group                           ;\
+	aether group remove --close $W                         ;\
+	refresh_panel  # for last visible window removal
+
+super + shift + w
+	menu windowfocus
+
+# ....................................................................... resize
+
+super + {_,ctrl} + 0
+	aether window {restore,rotate}
+
+super + {_,ctrl} + space
+	borealis window maximize --{vertical,horizontal}
+
+super + shift + m ; {super + shift + m,p,f,d,m}
+	aether window size {video --larger,paper --smaller,paper --larger,video --smaller,video --larger}
+
+super + shift + {Left,Down,Up,Right}
+	borealis window resize --relative {-50 0,0 50,0 -50,50 0}
+
+super + ctrl + shift + {Left,Down,Up,Right}
+	borealis window resize --relative {-20 0,0 20,0 -20,20 0}
+
+super + ctrl + v
+	derecho window video
+
+super + ctrl + w
+	derecho window paper
+
+# NOTE: hide borders on monocle SEE: blackboard
+#       1440p width (2560) scaled to screen height
+
+super + {_,shift} + z
+	[ -z "$(pfw)" ] && exit                                                        ;\
+	borealis window {monocle,maximize}                                              ;\
+	W=$(aether window geometry | grep 'WIDTH=' | cut -d= -f2)                      ;\
+	V=$(( 2560 * (1440 - $(aether screen top) - $(aether screen bottom)) / 1440 )) ;\
+	[ $W -gt $V ] && [ $W -lt $(aether display width) ] && blackboard on || blackboard off
+
+# ......................................................................... tile
+#
+# NOTE: beaklwi keyboard layout numpad
+#       4 5 9
+#       1 2 3
+#       8 6 7
+
+super + 5
+	aether state snapshot . window tile 3 2 . window tile right . window snap center . state restore
+
+super + 6
+	aether window size viewport  # half screen mono
+
+super + {1,2,3}
+	aether window tile 3 {1,2,3}
+
+super + {4,8,7,9}
+	aether window tile 4 {1,2,3,4}
+
+super + shift + {t,s}
+	aether window tile {left,right}
+
+# ......................................................................... fold
+
+# NOTE: prevent dangling (window delete) layout/fold:* info from interfering with new folds SEE: fold_sync
+
+super + shift + c ; {1,2,3,4,5}
+	C=$(aether window classname) ;\
+	fold_sync "$C"               ;\
+	aether layouts fold $(aether layouts grid {1,2,3,4,5} "$C") --record "$C"
+
+super + shift + c ; 0
+	C=$(aether window classname) ;\
+	[ -e $WME/layout/fold:class:"$C" ] && exec aether layouts unfold "$C"
+
+super + shift + g ; {1,2,3,4,5}
+	G=$(aether group current) ;\
+	fold_sync $G              ;\
+	aether layouts fold $(aether layouts grid {1,2,3,4,5} --group $G) --record --group $G
+
+super + shift + g ; 0
+	G=$(aether group current) ;\
+	[ -e $WME/layout/fold:group:$G ] && exec aether layouts unfold --group $G
+
+super + shift + {c,g} ; c
+	rm -rf "$WME/layout/fold:class:" ;\
+	aether layouts fold $(aether layouts grid 4 --rows 2) --record
+
+super + shift + {c,g} ; g
+	rm -rf "$WME/layout/fold:class:" ;\
+	aether layouts fold $(aether layouts grid 4 --rows 3) --record
+
+super + shift + {c,g} ; {C,G}
+	aether layouts unfold
+
+# FOR: overriding first fold info created by rules
+
+super + shift + c ; minus
+	C=$(aether group current)            ;\
+	notify Class "$C --record discarded" ;\
+	rm -rf "$WME/layout/fold:class:$C"
+
+super + shift + g ; minus
+	G=$(aether group current)                                    ;\
+	notify Group "$G $(aether group name $G) --record discarded" ;\
+	rm -rf $WME/layout/fold:group:$G
+
+# ...................................................................... explode
+
+alt + super + space
+	[ -e $WME/layout/explode ] && aether layouts unexplode || aether layouts explode
+
+alt + ctrl + space
+	G=$(borealis group current) ;\
+	[ -e $WME/layout/explode:group:$G ] && aether layouts unexplode --group $G || aether layouts explode --group $G
+
+# ......................................................................... move
+#
+# NOinfobeaklwi keyboard layout numpad alph overlay
+#       d n m
+#       t r s
+#       p l f
+
+super + {Left,Down,Up,Right}
+	aether window move {-50 0,0 50,0 -50,50 0}
+	# sirocco window move --relative {-50 0,0 50,0 -50,50 0}
+
+super + ctrl + {Left,Down,Up,Right}
+	aether window move {-20 0,0 20,0 -20,20 0}
+	# sirocco window move --relative {-20 0,0 20,0 -20,20 0}
+
+super + ctrl + {p,l,n,f}
+	aether window shift {left,down,up,right}
+
+# ......................................................................... snap
+#
+# NOTE: beaklwi keyboard layout numpad alph overlay
+#       d n m
+#       t r s
+#       p l f
+
+super + {d,n,m,p,l,f}
+	aether window snap {top left,top,top right,bottom left,bottom,bottom right}
+
+super + {t,s}
+	side="{left,right}" ;\
+	aether window snap $side
+
+super + ctrl + {t,s}
+	side="{left,right}" ;\
+	aether window spread $side
+
+super + r ; {super + r,r,R,t,s}
+	aether window snap center {_,horizontal,vertical,left,right}
+
+super + shift + minus ; {super + shift + minus,minus,0}
+	aether layouts {level,level,restore}
+
+# ......................................................................... swap
+
+alt + super + {Left,Down,Up,Right}
+	aether window swap {west,south,north,east}
+
+# Groups
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ........................................................................ focus
+
+alt + {0,1,2,3,4,5,6,7,8,9}
+	aether group {last,1,2,3,4,5,6,7,8,9}
+
+alt + super + {0,1,2,3,4,5,6,7,8,9}
+	aether group toggle {$(aether group),1,2,3,4,5,6,7,8,9}
+
+alt + shift + {0,1,2,3,4,5,6,7,8,9}
+	aether group desktop {$(aether group),1,2,3,4,5,6,7,8,9}
+
+alt + ctrl + 0
+	aether group restore
+
+super + ctrl + {1,2,3,4,5,6,7,8,9}
+	aether group close {1,2,3,4,5,6,7,8,9} ;\
+	borealis window focus --last
+
+# ....................................................................... window
+
+alt + ctrl + {1,2,3,4,5,6,7,8,9}
+	aether window group {1,2,3,4,5,6,7,8,9}
+
+alt + ctrl + super + {1,2,3,4,5,6,7,8,9}
+	aether window group {1,2,3,4,5,6,7,8,9} --teleport
+
+alt + ctrl + {comma,period}
+	aether window group $(aether group get {-1,+1})
+
+alt + ctrl + super + {comma,period}
+	aether window group $(aether group get {-1,+1}) --teleport
+
+alt + ctrl + r
+	borealis group remove
+
+# UI
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ...................................................................... monitor
+
+super + {F6,F5}
+	brightness {-5,+5}
+
+# ........................................................................ mouse
+
+# center mouse pointer
+
+super + ctrl + shift + space
+	xdotool mousemove $(( $(aether display width) / 2 )) $(( $(aether display height) / 2 ))
+
+# NOTE: restore mouse focus after group focus (of top of zephyr window stack)
+# HACK: bypass QT apps to avoid interference with mouse menus
+
+~button1
+	borealis window focus $(pfw)
+	# xdotool key Escape
+
+# ..................................................................... keyboard
+
+# HACK: kak hook *Idle only triggers on keypress SEE: kakrc
+# ATTENTION: use {shift,alt,ctrl,super} + Caps_Lock to bypass keypress trigger event
+
+~Caps_Lock
+	xdotool key Right Left
+
+# ...................................................................... desktop
+
+ctrl + {_,shift} + space
+	dunstctl {close,close-all}
+
+ctrl + BackSpace
+	dunstctl history-pop
+
+super + {_,ctrl} + a
+	conky clock {_,toggle}
+
+super + shift + d ; {super + shift + d,d,D,b,p,P}
+	{toggle wallpaper,toggle wallpaper,toggle background,blackboard toggle,invert_panel,toggle panel}
+
+# Applications
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ........................................................................ menus
+
+super + shift + space
+	menu
+
+super + apostrophe
+	winid=$(pfw) menu shortcuts
+
+super + shift + apostrophe ; {super + shift + apostrophe,w,n,d,D}
+	winid=$(pfw) menu {wikis,wikis,notes,notes diary,notes draft}
+
+super + shift + a
+	menu reminder
+
+super + {_,shift} + o
+	menu {scripts,projects}
+
+super + shift + p ; {p,P}
+	{menu passwords,eval $TAPDANCE}
+
+super + shift + v
+	menu media
+
+# ........................................................................ terms
+
+# NOTE: a macro may only define a single matching {selection} list
+
+super + {_,shift} + Return
+	scratchpad={scratchy,itchy} ;\
+	aether window toggle --name $scratchpad || tmux session $scratchpad
+
+super + ctrl + Return
+	term
+
+alt + super + Return
+	term_geometry ;\
+	aether state snapshot . window size terminal . window snap center vertical . state restore
+
+# ....................................................................... system
+
+# NOTE: super + shift + colon == super + colon
+
+super + colon
+	menu system
+
+super + ctrl + colon
+	aether window toggle btop || term btop class=btop BLACKBOARD btop
+
+# ........................................................................ music
+
+# NOTE: switch out to DESK group after hiding app to avoid attaching new windows to app group
+
+super + j
+	piano stop ;\
+	aether window toggle music && exit || music
+
+super + ctrl + j
+	mpc toggle ;\
+	mpc | grep -q playing && \{ piano stop; mpc:settings volume; mpc:settings; \}
+
+super + shift + {comma,period}
+	mpc {prev,next} ;\
+	mpc:settings
+
+super + {_,ctrl} + k
+	piano {toggle || piano,stop}
+
+# super + ctrl + k
+# 	piano stop
+
+# ................................................................. audio volume
+
+super + {comma,period}
+	audio_volume mpc   ;\
+	mpc volume {-5,+5} ;\
+	mpc:settings volume
+
+super + ctrl + {comma,period}
+	audio_volume pactl                             ;\
+	pactl set-sink-volume @DEFAULT_SINK@ {-5%,+5%} ;\
+	wp:volume clear
+
+alt + ctrl + super + j
+	pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+# ......................................................................... http
+
+# NOTE: {super + b} for sloppy trigger :-)
+
+super + b ; {super + b,b,c,f,y}
+	{qutebrowser,qutebrowser,chromium,firefox,qutebrowser https://www.youtube.com/}
+
+super + ctrl + b
+	qutebrowser closeall
+
+super + shift + b
+	aether layouts fold 3 qutebrowser
+
+super + h
+	aether window toggle Luakit && exit || hangouts
+
+super + shift + h
+	aether window toggle halloy || halloy
+
+# NOTE: nicotine (direct gui -- not docker browser) leaves dangling child zephyr window frames SEE: winids
+
+super + shift + j
+	aether window toggle --name nicotine || nicotine
+
+# ......................................................................... yazi
+
+super + x
+	aether window toggle yazi && exit || yazi TMUX
+
+super + ctrl + x
+	notify critical 0 yazi '<b>root</b> user' ;\
+	aether window toggle yazi-root && exit || yazi ROOT
+
+# ......................................................................... user
+
+super + shift + ctrl + j
+	aether window toggle "Asunder" || asunder
+
+super + y
+	aether window toggle aerc || aerc
+
+super + shift + y
+	menu abook
+
+alt + ctrl + super + space
+	kak -PROOF $HOME/diary/$(date '+%Y-%m-%d').mkd
+
+# kak: filetype=sh

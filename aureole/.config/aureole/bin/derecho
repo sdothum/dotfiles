@@ -1,0 +1,212 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="derecho $@" . $PARENT
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# .............................................................. derecho desktop
+
+# Usage: derecho [group | window [<action>]]
+
+TREE=$WME/derecho:tree
+> $TREE
+
+tree() { echo -n "$1 / " | tee -a $TREE >/dev/null; }
+
+pick() {
+	pick=$(rmenu "$(cat $TREE)$1" -no-custom -auto-select) || return 1
+	tree "$1"
+	echo $pick  # echo returns single spaced words
+}
+
+mactions="
+group
+window
+"
+
+gactions="
+close
+filter
+raise
+toggle
+"
+
+wactions="
+beam
+column
+draw
+group
+paper
+snap
+tile
+"
+
+columns="
+3:1   left
+3:2
+3:3
+4:1
+4:2
+4:3
+4:4   right
+"
+
+tiles="
+0   fill
+1   monocle
+2   halves
+3   thirds
+4   quarters
+5   fifths
+"
+
+regions="
++   center
+a   left
+d   right
+j   top
+k   top     left
+q   top     right
+s   center  vertical
+u   center  left
+w   center  right
+x   bottom
+y   bottom  left
+z   bottom  right
+"
+
+formats="
+c   B4  --rotate
+d   A4
+f   A4  --rotate
+g   B5
+h   B5  --rotate
+i   A5
+j   A5  --rotate
+k   B6
+l   B6  --rotate
+n   A6
+p   A6  --rotate
+q   B7
+s   B7  --rotate
+"
+
+screens="
+1   1080p
+7   720p
+4   480p
+"
+
+directions="
+a   tile    left
+c   tile    right
+d   top
+j   left
+k   right
+n   bottom
+q   top     left
+s   top     right
+u   bottom  left
+v   bottom  right
+"
+
+for i in $(seq 1 9);do groups="${groups}$i   $(aether group name $i | grep -v "''")\n" ;done
+
+while [ $1 ] ;do
+	case $1 in
+		group  ) menu=$1 ;;
+		window ) menu=$1 ;;
+		*      ) action=$1; tree "$menu" ;;
+	esac
+	shift
+done
+
+[ $menu ] || menu=$(echo "$mactions" | pick "derecho") || exit
+case $menu in
+	group  )
+		[ $action ] || action=$(echo "$gactions" | pick "group") || exit
+		tree "$action"
+		case $action in
+			close  )
+				group=$(echo "$groups" | pick "close") || exit
+				aether group ${group%% *} close
+				borealis window focus --last
+				;;
+			filter )
+				group=$(echo "$groups" | sed '1i-   restore all\n0   current' | pick "by") || exit
+				[ ${group%% *} = 0 ] && group=$(borealis group current)
+				case ${group%% *} in
+					- ) aether group restore              ;;
+					* ) aether group desktop ${group%% *} ;;
+				esac
+				;;
+			raise  )
+				group=$(echo "$groups" | sed '1i0 last' | pick "raise") || exit
+				[ ${group%% *} = 0 ] && group=last
+				aether group focus ${group%% *}
+				;;
+			toggle )
+				group=$(echo "$groups" | sed '1i0   current' | pick "toggle") || exit
+				[ ${group%% *} = 0 ] && group=$(borealis group current)
+				aether group toggle ${group%% *}
+				;;
+		esac
+		;;
+	window )
+		W=$(pfw)  # rmenu overlay can shift window focus
+		[ $action ] || action=$(echo "$wactions" | pick "window") || exit
+		tree "$action"
+		case $action in
+			beam   )
+				group=$(echo "$groups" | pick "group") || exit
+				aether window group ${group%% *} --teleport
+				;;
+			column )
+				column=$(echo "$columns" | pick "tile : column") || exit
+				borealis window focus $W
+				column=${column%% *}
+				aether window tile ${column%:*} ${column#*:}
+				;;
+			draw   )
+				extend=$(echo "$directions" | pick "direction") || exit
+				borealis window focus $W
+				extend=${extend#* }
+				case ${extend%% *} in
+					tile ) aether window tile ${extend} ;;
+					*    ) aether window snap ${extend} ;;
+				esac
+				;;
+			paper  )
+				size=$(echo "$formats" | pick "size") || exit
+				borealis window focus $W
+				aether window size ${size#* }
+				# window -- snap center vertical  # preserve size history
+				;;
+			video  )
+				size=$(echo "$screens" | pick "size") || exit
+				borealis window focus $W
+				aether window size ${size#* }
+				;;
+			group  )
+				group=$(echo "$groups" | pick "group") || exit
+				aether group ${group%% *}
+				;;
+			snap   )
+				snap=$(echo "$regions" | pick "to") || exit
+				borealis window focus $W
+				snap=${snap#* }
+				case $snap in
+					left | right ) [ "$(aether window classname)"  = "term" ] && window spread $snap || window snap $snap ;;
+					*            ) window snap ${snap} ;;
+				esac
+				;;
+			tile   )
+				tile=$(echo "$tiles" | pick "by") || exit
+				aether layouts fold ${tile%% *} $(aether window classname)
+				;;
+		esac
+		;;
+esac
+
+# kak: filetype=sh

@@ -1,0 +1,78 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Usage: cirrusrc [refresh | blackboard] SEE: play/videomode, blackboard
+
+# ...................................................................... Borders
+
+borealis wm config enable_borders              $(recipe -c ui/enable_borders true)
+borealis wm config outer_border_width          $(recipe -c ui/outer_border_width 6)
+borealis wm config inner_border_width          $(recipe -c ui/inner_border_width 4)
+borealis wm config border_style                $(recipe -c ui/border_style 1)
+borealis wm config corner_percent              $(recipe -c ui/corner_percent 20)
+borealis wm config corner_mask                 $(recipe -c ui/corner_mask 8)
+
+if [ "$1" = 'blackboard' ] ;then
+	borealis wm config outer_color_focused      0x00000000
+	borealis wm config outer_color_unfocused    0x00000000
+	borealis wm config inner_color_focused      0x00000000
+	borealis wm config inner_color_unfocused    0x00000000
+else
+	borealis wm config outer_color_focused      0x$(recipe -c ui/outer_color_focused ffff0000)
+	borealis wm config outer_color_unfocused    0x$(recipe -c ui/outer_color_unfocused 00000000)
+	borealis wm config inner_color_focused      0x$(recipe -c ui/inner_color_focused 00000000)
+	borealis wm config inner_color_unfocused    0x$(recipe -c ui/inner_color_unfocused $(recipe ui/inner_color_focused))
+fi
+
+# ......................................................................... Gaps
+
+borealis wm config gap_width top               $(recipe -c 'ui/gap_width top' 45)
+borealis wm config gap_width bottom            $(recipe -c 'ui/gap_width bottom' 45)
+borealis wm config gap_width left              $(recipe -c 'ui/gap_width left' 58)
+borealis wm config gap_width right             $(recipe -c 'ui/gap_width right' $(recipe 'ui/gap_width left'))
+recipe -c 'ui/gap_width grid' 33 >/dev/null   # NOTE: cirrus does not implement layout policy
+
+[ $1 ] && exit  # SEE: aurora
+
+# ....................................................................... Groups
+
+borealis wm config groups_nr                   10  # SEE: group (action) and rulerrc for group labels
+borealis wm config sticky_windows              false
+
+# .................................................................... Behaviour
+
+borealis wm config cursor_position             center
+borealis wm config enable_resize_hints         true
+borealis wm config enable_sloppy_focus         true
+borealis wm config enable_last_window_focusing true
+borealis wm config apply_settings              true
+
+# ........................................................................ Mouse
+
+borealis wm config replay_click_on_focus       true
+borealis wm config pointer_actions             move resize_side resize_corner
+borealis wm config pointer_modifier            super
+borealis wm config click_to_focus              any
+
+# ................................................................... State tree
+
+mkdir -p $GROUP/-1
+mkdir -p $GROUP/last/-1
+mkdir -p $GROUP:deactivated
+mkdir -p $HIDDEN
+
+# allow pseudo (file) writes to yet as undefined $FIFO/<fifo> buffer during startup SEE: panel
+mkdir -p $FIFO
+
+# ...................................................................... Startup
+
+recipe -d pfw  # pfw wrapper winid mismatch stats
+
+autostart
+
+# WM membership and current-group reconciliation is owned by zephyrd.
+
+# kak: filetype=sh

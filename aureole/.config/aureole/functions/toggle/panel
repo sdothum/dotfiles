@@ -1,0 +1,18 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="toggle/panel $@" . $PARENT
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................. Toggle panel
+
+for i in $(ls -1 $FIFO) ;do
+	W="$(xdotool search -name lemonbar:$i)"
+	[ "$W" ] && xwininfo -id $W | grep -q "Map State: IsViewable" && exec statusbar windowunmap
+	unmapped=true
+done
+
+[ $unmapped ] && statusbar windowmap
+blackboard hide
+
+# kak: filetype=sh

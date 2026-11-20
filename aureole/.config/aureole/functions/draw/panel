@@ -1,0 +1,35 @@
+# sdothum - 2016 (c) wtfpl
+[ $TRACE ] && CHILD="draw/panel $@" . $PARENT
+
+# Cirrus
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ................................................................... Draw panel
+
+# Usage: draw panel (restore)
+#                   clock   | desktop | music | system [Yoffset], Yoffset >= 0 ? (top) : (bottom)
+#                   default | bottom  | top   | asymmetric
+
+
+restore() {
+	pkill -KILL -f "$WM/draw --"
+	sleep 0.1
+	theme=$(recipe -e panel/format)
+	exec draw panel ${theme:-default}
+}
+
+case $1 in
+	clock   ) draw -- clock   $2 ;;
+	desktop ) draw -- desktop $2 ;;
+	music   ) draw -- music   $2 ;;
+	system  ) draw -- system  $2 ;;
+	default ) draw -- system  ; draw -- clock 0; draw -- desktop 0 ;;
+	bottom  ) draw -- system  ; draw -- clock  ; draw -- desktop   ;;
+	top     ) draw -- system 0; draw -- clock 0; draw -- desktop 0 ;;
+	asym*   ) draw -- system  ; draw -- clock  ; draw -- desktop 0; draw -- music 0 ;;
+	*       ) restore ;;
+esac
+
+blackboard hide
+
+# kak: filetype=sh
