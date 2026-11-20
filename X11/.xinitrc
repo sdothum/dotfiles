@@ -111,6 +111,7 @@ esac
 # ............................................................... Window manager
 
 export XDG_CONFIG_HOME=$HOME/.config
+export XDG_SESSION_TYPE=x11
 export ROOT=${ROOT:-/tmp}
 mv -f  $ROOT/$wm.log $ROOT/$wm.last.log 2>/dev/null
 rm -f  $ROOT/$wm:*
@@ -118,7 +119,7 @@ rm -rf $ROOT/$wm/*         # windowchef tree
 ditto -t $wm "starting.." >$ROOT/$wm.log
 
 xexec() {
-	pkill -f "$WM/draw --"  # kill all dangling panel processes
+	pkill -f "$WM/draw --"  # kill any dangling panel processes
 	pkill -f "fifo"
 	pkill -f "firefox"
 	pkill -f "pavucontrol"
@@ -174,6 +175,9 @@ case $wm in
 	(sleep 0.15; autostart >/tmp/2bwm.log 2>&1) &
 	xexec 2bwm ;;
 
+au* )
+	. "$HOME/stow/caelwm/config/aureole-session.sh" ;;
+
 aw* ) xexec awesome ;;
 be* )
 	setpath $HOME/.config/berry
@@ -208,7 +212,7 @@ ci* )
 		zephyrd >>/tmp/cirrus.log &
 	}
 
-	tvover ${interface:-HDMI-0} 3440x14440
+	# tvover ${interface:-HDMI-0} 3440x1440
 	sxhkd -t $TIMEOUT -c $HOME/.config/cirrus/sxhkdrc >/tmp/sxhkd.log &
 	rm -f /tmp/ruler.log
 	touch /tmp/ruler.log
@@ -235,7 +239,7 @@ fa* )
 		faouziad >>/tmp/faouzia.log &
 	}
 
-	tvover ${interface:-HDMI-0} 3440x14440
+	# tvover ${interface:-HDMI-0} 3440x14440
 	sxhkd -t $TIMEOUT -c $HOME/.config/faouzia/sxhkdrc >/tmp/sxhkd.log &
 	rm -f /tmp/ruler.log
 	touch /tmp/ruler.log
@@ -275,7 +279,7 @@ wi* )
 	setpath $HOME/.config/windowchef
 	. $(which ENV)
 
-	tvover ${interface:-HDMI-0} 3440x14440
+	# tvover ${interface:-HDMI-0} 3440x14440
 	sxhkd -t $TIMEOUT -c $HOME/.config/windowchef/sxhkdrc &
 	ruler -i -s /usr/bin/dash -c $HOME/.config/windowchef/rulerrc &
 	# $TERM &  # NOTE: windowchef cannot properly manage windows opened before it!
