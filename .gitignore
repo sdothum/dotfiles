@@ -25,6 +25,8 @@
 **/.cache
 **/cache
 **/caddy
+**/caelwm/build*
+**/caelwm/caelwm-kernel*
 !**/dinit.d.@*/caddy
 **/calcurse
 **/calibre
@@ -58,6 +60,7 @@
 **/elinks
 **/emacs
 **/*.experimental
+**/experiments
 **/fasd
 **/fbreader
 **/firefox
