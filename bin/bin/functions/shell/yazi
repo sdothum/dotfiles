@@ -9,6 +9,7 @@
 #             upgrade (all plugins)
 
 export YAZI="/usr/bin/yazi"                 # NOTE: envar is also used in alacrityt/kak wrappers for conditional tweaks
+export YAZI_LOG=debug
 # export EDITOR=/usr/bin/kak
 export EDITOR=kak  # wrapper checks whether attached to yazi (for bulk file renaming)
 THEME=$HOME/.config/yazi/theme.toml

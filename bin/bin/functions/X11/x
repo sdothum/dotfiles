@@ -122,6 +122,7 @@ if console ;then
 
 	# session specific clean up
 	pkill -KILL $wm
+	pkill -f "$wm/draw --"  # kill any dangling panel processes
 	case $wm in
 		2b*  ) ;;
 		aw*  ) ;;
