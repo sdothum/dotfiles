@@ -7,7 +7,7 @@ using Toybox.WatchUi as WatchUi;
 
 class DateRenderer {
 	private var _font;
-	private var _offsetY = -2;
+	private var _offsetY = -3;
 
 	function initialize() {
 		_font = WatchUi.loadResource(Rez.Fonts.DateFont);

@@ -22,7 +22,7 @@ class DateRenderer {
     var _font;
     [ @file = "/home/shum/stow/garmin/interstellar/source/DateRenderer.mc"; @line = 10; @position = 13; @symbol_vardef = [_offsetY,10,13,21]; ]
     private
-    var _offsetY = -2;
+    var _offsetY = -3;
     [ @file = "/home/shum/stow/garmin/interstellar/source/DateRenderer.mc"; @line = 12; @symbol_functiondef = [initialize,12,10,20]; ]
     function initialize() as Void {
 _home_shum_stow_garmin_interstellar_source_DateRenderer_mc_12_23_14_1_start:
