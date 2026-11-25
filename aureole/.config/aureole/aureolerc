@@ -34,9 +34,13 @@ borealis wm config gap_width bottom            $(recipe -c 'ui/gap_width bottom'
 borealis wm config gap_width left              $(recipe -c 'ui/gap_width left' 58)
 borealis wm config gap_width right             $(recipe -c 'ui/gap_width right' $(recipe 'ui/gap_width left'))
 
-recipe -c 'ui/gap_width grid' 33 >/dev/null    # NOTE: aureole does not implement layout policy
+# ................................................................ Layout policy
 
-[ $1 ] && exit  # SEE: aurora
+recipe -c 'ui/gap_width grid' 33 >/dev/null    # NOTE: aureole does not implement layout policy
+aether daemon await || exit 1
+aether layout bias                             "$(recipe -c 'ui/bias' "${BIAS:-left}")" || exit 1
+
+[ "$1" ] && exit  # SEE: aurora
 
 # ....................................................................... Groups
 

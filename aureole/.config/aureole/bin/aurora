@@ -17,13 +17,13 @@ verbose=$1
 
 usage() {
 	themes="$(recipe $THEMES | grep -v '^-' | tr '\n' ' ')"
-	echo "$(basename $0) [-verbose]
-> ${BROWN}Note: ${cyan}corner length 0% == full length of both sides (versus % of short side)
-> <return> to exit" | usage:
+	echo "$(basename $0) [-verbose], <return> to exit
+> ${BROWN}Note: ${cyan}corner length 0 == full length of both sides (versus % of short side)" | usage:
 }
 
 # SEE: aureolerc
 snapshot() {
+	bias=$(recipe ui/bias)
 	enable_borders=$(recipe ui/enable_borders)
 	border_style=$(recipe ui/border_style)
 	outer_border_width=$(recipe ui/outer_border_width)
@@ -44,6 +44,7 @@ snapshot() {
 }
 
 recover() {
+	recipe ui/bias $bias
 	recipe ui/enable_borders $enable_borders
 	recipe ui/border_style $border_style
 	recipe ui/outer_border_width $outer_border_width
@@ -69,6 +70,7 @@ settings() {
 	themes="$(recipe $THEMES | grep -v '^-' | tr '\n' ' ')"
 	echo "
    ${ORANGE}T${cyan}heme                    "${NOCOLOR}${theme:----} \ \ ${brown}S${cyan}ave \(as\) \| ${brown}D${cyan}elete \| ${BROWN}${themes% *}"
+   ${cyan}layout ${ORANGE}B${cyan}ias              "${NOCOLOR}$(recipe ui/bias)"
    ${ORANGE}!${cyan} borders                "${NOCOLOR}$(recipe ui/enable_borders)"
    ${cyan}border ${ORANGE}s${cyan}tyle             "${NOCOLOR}$(decoration $(recipe ui/border_style)) \ \ ${brown}f${cyan}rame \| ${brown}l${cyan}eft \| ${brown}t${cyan}op \| ${brown}r${cyan}ight \| ${brown}b${cyan}ottom \| ${brown}c${cyan}orners [\<${BROWN}mask${cyan}\>]"
    ${cyan}outer border ${ORANGE}w${cyan}idth       "${NOCOLOR}$(recipe ui/outer_border_width)"
@@ -134,6 +136,14 @@ decoration() {
 	esac
 }
 
+bias() {
+	case $1 in
+		left  ) ;;
+		right ) ;;
+		*     ) return 1 ;;
+	esac
+}
+
 delete() { recipe -t "$THEMES/$1" && rm -r $WMSE/$THEMES/$1; }
 
 load() {
@@ -175,6 +185,7 @@ while : ;do
 			T ) echo -n Load theme ;;
 			S ) echo -n Save as theme ;;
 			D ) echo -n Delete theme ;;
+			B ) echo -n layout bias ;;
 			! ) echo -n toggle borders ;;
 			s ) echo -n border style ;;
 			w ) echo -n outer border width ;;
@@ -205,6 +216,7 @@ while : ;do
 		T ) [ "$value" ] || [ "$theme" ] || { usage; continue; } ;;
 		S ) [ "$value" ] || [ "$theme" ] || { usage; continue; } ;;
 		D ) [ "$value" ] || [ "$theme" ] || { usage; continue; } ;;
+		B ) bias $value  || { usage; continue; } ;;
 		! ) [ $(recipe ui/enable_borders) = 'true' ] && value=false || value=true ;;
 		s ) style $value $option || { usage; continue; } ;;
 		c ) mask=$(mask $value)  || { usage; continue; } ;;
@@ -219,6 +231,7 @@ while : ;do
 		T ) load   ${value:-$theme} || msg="$theme not found" ;;
 		S ) save   ${value:-$theme} ;;
 		D ) delete ${value:-$theme} ;;
+		B ) recipe ui/bias $value ;;
 		! ) recipe ui/enable_borders $value ;;
 		s ) recipe ui/border_style $value; [ $mask ] && recipe ui/corner_mask $mask ;;
 		w ) recipe ui/outer_border_width $value ;;

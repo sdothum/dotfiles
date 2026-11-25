@@ -29,6 +29,7 @@ export HIDDEN=$WME/hidden
 export WINFO=$WME/window
 export WMSE=$HOME/.session/$WM
 export FIFO=$WME/fifo
+export BIAS=right
 
 recipe display $DISPLAY
 
