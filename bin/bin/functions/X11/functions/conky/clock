@@ -35,7 +35,7 @@ case $1 in
 
 	on     )
 		clock && exit
-		silent=true toggle unclutter on
+		silent=true timeout=0 toggle unclutter on
 		for i in $panels; do
 			xdotool search --name "$i" windowunmap >/dev/null  # hide panel
 		done
@@ -54,7 +54,7 @@ case $1 in
 
 	off    )
 		clock || exit
-		restore unclutter
+		recipe -t unclutter && silent=true toggle unclutter on || toggle unclutter off
 		for i in $panels; do
 			xdotool search --name "$i" windowmap >/dev/null  # unhide panel
 		done

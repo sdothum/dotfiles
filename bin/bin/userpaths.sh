@@ -13,8 +13,8 @@
 # NOTE: update list as required for language environments
 
 SINGLES="
-	$HOME/.cargo/bin
 	$HOME/.local/bin
+	$HOME/.cargo/bin
 	$HOME/.nimble/bin
 	$HOME/go/bin
 "

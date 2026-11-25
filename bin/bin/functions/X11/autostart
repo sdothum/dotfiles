@@ -119,7 +119,7 @@ switch tag $DESK
 
 # .............................................................. Cleanup desktop
 
-[ -e $UNCLUTTER ] && toggle unclutter on || toggle unclutter off
+recipe -t unclutter && toggle unclutter on || toggle unclutter off
 # autocutsel leaves a small square of black pixels in the bottom right corner
 # void && (xdotool search --sync --onlyvisible --name autocutsel windowunmap) &
 

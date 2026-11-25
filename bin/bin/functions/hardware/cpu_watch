@@ -8,7 +8,16 @@
 
 # Usage: cpu_watch [<5GHz range>], default 5.5GHz and above
 
+# NOTE: font (weight) bolding ${COLOR} with watch -c
+BLUE=$(printf '\033[94m')
+CYAN=$(printf '\033[96m')
+GREEN=$(printf '\033[92m')
+RED=$(printf '\033[91m')
+YELLOW=$(printf '\033[93m')
+NOCOLOR=$(printf '\033[0m')
+
 clear
-watch -fn 0.1 "grep MHz /proc/cpuinfo | sort -nr | grep ' 5[${1:-5}-9]'"
+# watch -fn 0.1 "grep MHz /proc/cpuinfo | sort -nr | grep ' 5[${1:-5}-9]'"
+TERM=xterm-256color watch -cfn 0.1 "grep MHz /proc/cpuinfo | sort -nr | grep ' 5[${1:-5}-9]' | sed '/: 56/s/ 5.*/${YELLOW}&${NOCOLOR}/; /: 57/s/ 5.*/${CYAN}&${NOCOLOR}/; /: 58/s/ 5.*/${GREEN}&${NOCOLOR}/; /: 59/s/ 5.*/${RED}&${NOCOLOR}/'"
 
 # kak: filetype=sh
