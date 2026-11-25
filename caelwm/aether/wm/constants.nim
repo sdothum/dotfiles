@@ -8,6 +8,7 @@ const
 
   ClassKak* = "kak"
   ClassManpage* = "manpage"
+  ClassFirefox* = "firefox"
   ClassQutebrowser* = "qutebrowser"
   ClassTerm* = "term"
   ClassTmux* = "tmux"

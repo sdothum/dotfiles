@@ -9,12 +9,23 @@ import std/uri
 import ../zephyr_errors
 import ../wm/cliargs
 import ../wm/compat
+import ../wm/constants
 import ../wm/group as groups
 import ../wm/group_id
 import ../wm/placement
 import ../wm/types
 import ../wm/window
 import ../wm/window_query as query
+
+let defaultOrientation = Left  # to Right
+
+proc orientation*(): string =
+  let side = shvArgs("recipe", "orientation", @[], 0, 0)
+  case side
+  of Left:  return Left
+  of Right: return Right
+  of "":    return defaultOrientation
+  else:     raiseZephyrError("unknown orientation: " & side)
 
 proc snapshotWinids*(snapshot: query.WmSnapshot, mappedOnly: bool,
     groupNo = none(PublicGroupId)): seq[string] =
@@ -63,13 +74,22 @@ proc spreadGrid*(count: int): Spread =
 
 proc columnOrder*(columns, rows, position: int): int =
   let order =
-    case columns
-    of 1: @[1]
-    of 2: @[2, 1]
-    of 3: @[2, 3, 1]
-    of 4: @[3, 4, 2, 1]
-    of 5: @[3, 4, 5, 2, 1]
-    else: toSeq(1 .. columns)
+    if orientation() == Left:
+      case columns
+      of 1: @[1]
+      of 2: @[2, 1]
+      of 3: @[2, 3, 1]
+      of 4: @[3, 4, 2, 1]
+      of 5: @[3, 4, 5, 2, 1]
+      else: toSeq(1 .. columns)
+    else:
+      case columns
+      of 1: @[1]
+      of 2: @[1, 2]
+      of 3: @[2, 1, 3]
+      of 4: @[2, 1, 3, 4]
+      of 5: @[3, 2, 1, 4, 5]
+      else: toSeq(1 .. columns)
   if rows == 1:
     result = order[(position - 1) mod columns]
   else:

@@ -9,11 +9,12 @@ CaelWM's consolidated Nim components are:
 | aether | aether/aether.nim | Controller |
 | aetherd | aether/aetherd.nim | Controller daemon |
 
-Run `make all BUILD_DIR=build-finalization` for an offline build. Preserve an
-existing build directory when changing toolchains; choose a fresh project-local
-BUILD_DIR instead. See [BUILDING.md](BUILDING.md) for checks, dependencies,
-controlled switchover commands and rollback. There is deliberately no install
-target. Building does not install or activate anything.
+Build unprivileged with `make`, then install the four executables and manual
+pages under `/usr/local` with `sudo make install`. Installation copies already-built
+artifacts and never invokes the compiler. It does not install configuration or
+activate a session. See [BUILDING.md](BUILDING.md) for dependencies, variable
+overrides, staged installation, cleanup and uninstall instructions. Preserve
+existing build evidence when changing toolchains; choose a fresh BUILD_DIR.
 
 The finalization build passed four entrypoint static checks and compiled all
 four outputs with installed Nim 2.4.2. Runtime behavior has not been smoke-tested
@@ -38,8 +39,9 @@ selector still chooses Cirrus; see BUILDING.md for the remaining activation and
 rollback commands, including the inherited tvover availability check.
 
 Protocol atoms, schemas, opcodes, daemon endpoint names, trace keys, internal
-zephyr_errors and C bridge symbols remain compatible. The rc basename remains
-cirrusrc under the aureole configuration directory. The new daemon retains
+zephyr_errors and C bridge symbols remain compatible. The Aureole rc basename is
+aureolerc under the aureole configuration directory. Its startup module, session
+helper and configuration callers use that name; Cirrus retains cirrusrc. The new daemon retains
 the legacy endpoint formula, so old/new controller daemons must not serve the
 same endpoint concurrently. The startup fragment checks for prior-session
 WM/controller processes and delegates socket probing to the existing daemon.

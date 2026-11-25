@@ -1,4 +1,4 @@
-# Offline build and controlled switchover
+# Build, installation and controlled switchover
 
 ## Build
 
@@ -40,6 +40,129 @@ logs and build.log are directly under build-finalization/. No runtime program,
 CLI smoke probe, unit test or daemon was executed by this assignment. The
 historical source-to-binary claims in earlier reports remain historical; a
 successful new build does not establish runtime equivalence.
+
+## System-wide installation
+
+Build as your normal user, then copy only the completed artifacts as root:
+
+```sh
+cd /home/shum/stow/caelwm
+make
+sudo make install
+```
+
+`make` defaults to `all` and builds `build/{aureole,borealis,aether,aetherd}`.
+The existing component compiler flags and memory-manager defaults are retained;
+the Aureole startup module remains `startup/aureolerc.nim` and the default
+configuration basename remains `aureolerc`.
+
+`install` has no build prerequisites. It checks all four executable inputs and
+four manual sources before making destination directories, then installs binaries
+with mode 0755 and manuals with mode 0644. Missing inputs cause failure with an
+instruction to build unprivileged; even stale sources do not trigger compilation
+during installation. Run `make` before every install. If changing toolchain,
+VERSION or compiler settings, use a fresh BUILD_DIR or clean the selected build
+first. No network/package fetch, executable invocation or manual-index update is
+part of installation.
+
+Defaults and overrides:
+
+```make
+PREFIX ?= /usr/local
+DESTDIR ?=
+BINDIR ?= $(PREFIX)/bin
+MANDIR ?= $(PREFIX)/share/man
+```
+
+Executables go to `$(DESTDIR)$(BINDIR)/NAME`; manuals go to
+`$(DESTDIR)$(MANDIR)/man1/NAME.1`, for exactly the four CaelWM names. MANDIR
+names the manual root, not its man1 child. `NIM`, `VERSION`, `BUILD_DIR`,
+`CACHE_DIR` and `INSTALL` can also be overridden. Use the same BUILD_DIR for
+build and installation, and repeat installation path overrides for uninstall:
+
+```sh
+make BUILD_DIR=build-local
+sudo make BUILD_DIR=build-local PREFIX=/opt/caelwm install
+```
+
+Installation replaces existing files at the eight CaelWM destination paths.
+It does not install compatibility aliases, user configuration, persistent session
+settings, X session files, `.xinitrc` or `.windowmanager`. Original Cirrus,
+Sirocco, Zephyr and Zephyrd names and manuals are outside these rules.
+Existing `~/.local/bin` programs and the prepared session helper may continue
+to take precedence over system-wide binaries: installation does not change PATH
+or session selection. Activation remains a separate owner operation.
+
+### Staged installation (unprivileged)
+
+Use a fresh private staging root rather than reusing a fixed directory:
+
+```sh
+make
+caelwm_stage=$(mktemp -d /tmp/caelwm-install-test.XXXXXXXX)
+make DESTDIR="$caelwm_stage" install
+find "$caelwm_stage" -type f -print
+```
+
+The tree contains `usr/local/bin/{aureole,borealis,aether,aetherd}` and
+`usr/local/share/man/man1/{aureole,borealis,aether,aetherd}.1`. Verify contents
+with `cmp` against build outputs/manual sources and modes with `stat`; for
+manual lookup use `man -M "$caelwm_stage/usr/local/share/man" NAME`.
+Never execute the staged WM or daemon as an installation check.
+
+To verify that install never tries to compile, repeat it with an unusable compiler:
+
+```sh
+make DESTDIR="$caelwm_stage" NIM=/nonexistent/caelwm-nim install
+```
+
+Remove only the staged owned files, then the empty directories created above:
+
+```sh
+make DESTDIR="$caelwm_stage" uninstall
+rmdir "$caelwm_stage/usr/local/bin" "$caelwm_stage/usr/local/share/man/man1"
+rmdir "$caelwm_stage/usr/local/share/man" "$caelwm_stage/usr/local/share"
+rmdir "$caelwm_stage/usr/local" "$caelwm_stage/usr" "$caelwm_stage"
+```
+
+### Clean and uninstall
+
+`make clean` removes the four outputs from the selected BUILD_DIR and their four
+component cache directories under CACHE_DIR. It does not recursively remove the
+build root, verification logs, other caches, source manuals, historical builds or
+installed files. Select only the build/cache directory you intend to clean;
+source-tree roots and obvious unsafe paths are rejected. Keep historical evidence
+builds intact. For example, `make BUILD_DIR=build-local clean` cleans that build.
+
+For the owner to remove a real default installation:
+
+```sh
+sudo make uninstall
+```
+
+The uninstall recipe names exactly the same four executable and four manual
+paths and uses no recursive deletion. It retains shared directories, configuration
+and every original legacy name. With custom PREFIX/BINDIR/MANDIR/DESTDIR, repeat
+the same values used to install. It does not track later replacement of those
+owned paths; review them before uninstalling. This assignment does not execute
+privileged installation or uninstallation.
+
+## Aureole rc rename — 2026-11-20
+
+After the owner reported restarting into the original C Cirrus session, the
+inactive Aureole configuration was renamed from cirrusrc to aureolerc. The
+Aureole startup module/default paths, session helper and active configuration
+callers (blackboard and aurora) now use aureolerc. Explicit `-c CONFIG_PATH`
+semantics and startup execution/lifecycle behavior are unchanged.
+
+The configuration remains at /home/shum/stow/aureole/.config/aureole (linked from
+~/.config/aureole). The session helper passes `-c` with the new absolute path;
+installed binaries were not replaced. Rebuild Aureole separately to include the
+new default basename and diagnostics in a binary. Previously recorded build
+hashes and MIGRATION_FINALIZATION_REVIEW.md describe earlier artifacts, not this
+source revision. Historical reports, deprecated scripts and menu history retain
+the old name. The Cirrus configuration, session selector and X startup script
+were not changed. Runtime testing and activation are separate operations.
 
 ## Prepared configuration
 

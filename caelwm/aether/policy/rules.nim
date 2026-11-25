@@ -77,12 +77,21 @@ proc kak(winid: string) =
 
   case liveCount(ClassKak)
   of 1:
-    case liveCount(ClassQutebrowser)
+    let qutebrowser = liveCount(ClassQutebrowser)
+    case qutebrowser + liveCount(ClassFirefox)
     of 0:
       discard w.tile("3", "2")
-      # layouts.fold(@["3", ClassKak])
     else:
-      discard w.tile("3", "3")
+      if orientation() == Left:
+        if qutebrowser > 0:
+          discard w.tile("3", "3")
+        else:
+          discard w.tile("4", "4")
+      else:
+        if qutebrowser > 0:
+          discard w.tile("3", "1")
+        else:
+          discard w.tile("4", "1")
   of 2 .. 3:
     layouts.fold(@["4", ClassKak])
     setGeometry()
@@ -95,7 +104,7 @@ proc luakit(winid: string) =
     .group(GroupComm)
     .size("690x1080")
     .snap(Center, Vertical)
-    .spread(Left)
+    .spread(orientation())
 
 proc manpage(winid: string) =
   discard window.target(winid)
@@ -306,6 +315,10 @@ proc applyRule*(verb, winid: string) =
     pavucontrol(winid)
   else:
     raiseZephyrError("unknown rule: " & verb)
+
+#
+# layout direction
+#
 
 proc dispatch*(verb: string, rest: seq[string]) =
   requireNoArgs(verb, rest)

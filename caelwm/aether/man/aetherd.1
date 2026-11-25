@@ -1,0 +1,111 @@
+.\" Checked against aether/aetherd.nim and aether/wm/daemon_*.nim.
+.TH AETHERD 1 "November 22, 2026" CaelWM "CaelWM Manual"
+.SH NAME
+aetherd \- foreground Aether observation and policy daemon
+.SH SYNOPSIS
+.B aetherd
+.SH DESCRIPTION
+.B aetherd
+observes Aureole through X11, maintains a local snapshot cache for
+.BR aether (1),
+publishes filesystem state, reconciles group records, applies built-in
+application rules, and notifies session panels.
+It remains in the foreground and writes observations to standard output
+and diagnostics to standard error. It does not fork, detach, create a PID
+file, or launch the window manager.
+.SH OPTIONS
+There are no supported command-line options or subcommands.
+The current entrypoint does not parse command-line arguments, so even
+\-\-help and \-\-version do not request informational output.
+.SH SOCKET
+The Unix-domain stream socket is
+.B $XDG_RUNTIME_DIR/zephyr/zephyrd.sock
+when XDG_RUNTIME_DIR is nonempty, otherwise
+.BR $WME/zephyrd.sock .
+The legacy zephyr names are retained for compatibility and are not replaced
+with aether names. With neither variable set, socket creation cannot succeed.
+.PP
+The daemon creates a missing parent directory, rejects a parent writable
+by group or others, and sets socket permissions to owner read/write (0600).
+If the path already exists, it attempts a connection: a successful connection
+causes startup to fail because another daemon is serving the endpoint.
+If the connection fails, it removes the stale path and attempts to bind.
+Old and new controller daemons must not serve the same endpoint concurrently.
+.PP
+Ordinary socket-open failures log IPC_SOCKET_FAILED and retry every second.
+A successful open logs IPC_SOCKET_READY followed by the socket path.
+This reports socket availability, not completion of the WM baseline.
+The socket carries framed, versioned binary requests; use aether for public
+queries and readiness synchronization.
+.SH LIFECYCLE
+After opening IPC, the daemon attaches X11 observation, subscribes to events,
+reconciles stale state, and queries the WM snapshot.
+It logs a BASELINE and marks readiness after the first successful refresh
+has established the baseline and completed initial refresh processing.
+.B aether daemon await
+waits for that readiness response without an overall timeout.
+.PP
+Existing baseline clients do not receive ClientAdded rules simply because
+the daemon started. Later added clients and selected title changes can
+trigger built-in application rules. Rule actions may change window geometry,
+groups, focus or stacking according to their compiled policy.
+.PP
+X11 invalidation events trigger refreshes. Periodic authoritative snapshots
+also detect a missing or replacement WM. On observation loss the daemon
+invalidates the cache, removes the published WM snapshot, and retries
+attachment after about one second while continuing to service local IPC.
+Unavailable snapshot queries report errors rather than cached success.
+.PP
+There is no stop, restart, reload or daemonize command, and no custom
+termination handler in the entrypoint. Terminate the foreground process
+through the session supervisor or normal process signals. Socket cleanup
+on termination is not guaranteed; the next startup probes an existing path.
+.SH STATE AND FILES
+.TP
+.B $WME/wm/snapshot
+Normalized WM snapshot, published by temporary-file rename.
+Publication requires an absolute WME path.
+.TP
+.B $GROUP
+Group membership and selection mirror, with $GROUP:focus and
+$GROUP:deactivated companion trees. Snapshot reconciliation owns group
+membership and focus records.
+.TP
+.B $WINFO/WINID
+Geometry history and identity state. DestroyNotify and startup/reconnection
+scans schedule current X11 existence checks. Confirmed missing windows lose
+state; hidden, unmapped and inactive-group windows retain it. Uncertain
+X11 errors preserve state for retry. Active restore-history transactions
+defer WINFO cleanup.
+.TP
+.B $HIDDEN/WINID
+Hidden metadata. MapNotify, DestroyNotify and startup/reconnection scans
+check current visibility. Visible or destroyed windows lose hidden metadata;
+genuinely unmapped windows retain it. This cleanup proceeds independently
+of deferred WINFO cleanup, including entries without WINFO records.
+.TP
+.B $FIFO/desktop, $FIFO/system
+Panel notification FIFOs. Relevant snapshot differences send X followed
+by a newline to desktop, or S followed by an epoch timestamp and newline
+to system. Opens are nonblocking; absent readers do not require panel startup.
+.SH ENVIRONMENT
+.B DISPLAY
+and
+.B XAUTHORITY
+select and authorize the X11 connection.
+XDG_RUNTIME_DIR, WME, GROUP, WINFO, HIDDEN
+and
+.B FIFO
+select the paths above. Rules also use the WMSE screen settings and
+CENTER_BIAS described in
+.BR aether (1).
+The entrypoint does not read a separate daemon configuration file.
+.SH DIAGNOSTICS
+Observation and rule events go to standard output. Socket, snapshot,
+reconciliation and deferred-cleanup diagnostics go to standard error.
+Some messages retain the legacy name zephyrd.
+The daemon normally runs indefinitely; fatal startup errors exit nonzero.
+.SH SEE ALSO
+.BR aether (1),
+.BR aureole (1),
+.BR borealis (1)

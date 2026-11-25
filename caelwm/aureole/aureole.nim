@@ -14,7 +14,7 @@ import model/[identity, state, types]
 import model/lifecycle
 import model/pointer
 import startup/[adoption, identity_service, legacy_cli]
-import startup/cirrusrc
+import startup/aureolerc
 
 proc usage() =
   stderr.writeLine("usage: aureole [-c CONFIG_PATH] [--test-events | --test-state | --test-lifecycle [--test-pause-before-effects]] | --abi")
@@ -128,7 +128,7 @@ proc main(): int =
       return 2
 
   var connection: XConnection
-  var cirrusrcChild: CirrusrcChild
+  var aureolercChild: AureolercChild
   try:
     connection = connect()
     connection.claimWindowManager()
@@ -151,10 +151,10 @@ proc main(): int =
         connection.publishEwmhStartup()
         connection.initializeRandr()
         try:
-          cirrusrcChild = launchCirrusrc(configPath,
+          aureolercChild = launchAureolerc(configPath,
               connection.fileDescriptor())
         except CatchableError as error:
-          stderr.writeLine("aureole: could not start cirrusrc: " & error.msg)
+          stderr.writeLine("aureole: could not start aureolerc: " & error.msg)
       else:
         connection.initializeRandr()
     else:
@@ -211,8 +211,8 @@ proc main(): int =
       let terminationHandler: StopHandler = proc(): bool =
         coordinator.terminationRequested
       var idleHandler: IdleHandler
-      if cirrusrcChild != nil:
-        idleHandler = proc(): bool = cirrusrcChild.pollExit()
+      if aureolercChild != nil:
+        idleHandler = proc(): bool = aureolercChild.pollExit()
       runEventLoop(connection, testLifecycle, handler, idleHandler,
           terminationHandler)
       if coordinator.terminationRequested:
@@ -225,7 +225,7 @@ proc main(): int =
     stderr.writeLine("aureole: " & error.msg)
     result = 1
   finally:
-    cirrusrcChild.stop()
+    aureolercChild.stop()
     connection.close()
 
 when isMainModule:

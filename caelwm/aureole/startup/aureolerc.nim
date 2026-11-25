@@ -1,18 +1,18 @@
-## Asynchronous, source-compatible startup execution for cirrusrc.
+## Asynchronous, source-compatible startup execution for aureolerc.
 import std/[os, osproc, strformat, times, monotimes, posix]
 
-type CirrusrcChild* = ref object
+type AureolercChild* = ref object
   process: Process
   scriptPath: string
 
-proc resolveCirrusrcPath*(explicitPath: string): string =
+proc resolveAureolercPath*(explicitPath: string): string =
   if explicitPath.len > 0:
     return explicitPath
   if existsEnv("XDG_CONFIG_HOME"):
-    return getEnv("XDG_CONFIG_HOME") & "/aureole/cirrusrc"
+    return getEnv("XDG_CONFIG_HOME") & "/aureole/aureolerc"
   if not existsEnv("HOME"):
     return ""
-  getEnv("HOME") & "/.config/aureole/cirrusrc"
+  getEnv("HOME") & "/.config/aureole/aureolerc"
 
 proc protectXcbDescriptor(fd: cint) =
   if fd < 0:
@@ -23,10 +23,10 @@ proc protectXcbDescriptor(fd: cint) =
   if posix.fcntl(fd, posix.F_SETFD, currentFlags or posix.FD_CLOEXEC) < 0:
     raise newException(IOError, "cannot mark XCB descriptor close-on-exec")
 
-proc launchCirrusrc*(explicitPath: string; xcbFd: cint): CirrusrcChild =
-  let scriptPath = resolveCirrusrcPath(explicitPath)
+proc launchAureolerc*(explicitPath: string; xcbFd: cint): AureolercChild =
+  let scriptPath = resolveAureolercPath(explicitPath)
   if scriptPath.len == 0:
-    stderr.writeLine("aureole: HOME is unset; skipping cirrusrc")
+    stderr.writeLine("aureole: HOME is unset; skipping aureolerc")
     return nil
   if not fileExists(scriptPath):
     stderr.writeLine(&"aureole: no startup script at {scriptPath}; continuing")
@@ -48,24 +48,24 @@ proc launchCirrusrc*(explicitPath: string; xcbFd: cint): CirrusrcChild =
   if not isAbsolute(execPath) and '/' notin execPath:
     execPath = "./" & execPath
 
-  result = CirrusrcChild(scriptPath: scriptPath,
+  result = AureolercChild(scriptPath: scriptPath,
       process: startProcess(setsidPath, args = ["--", execPath],
           options = {poParentStreams}))
-  stderr.writeLine(&"aureole: started cirrusrc pid={result.process.processID} path={scriptPath}")
+  stderr.writeLine(&"aureole: started aureolerc pid={result.process.processID} path={scriptPath}")
 
-proc pollExit*(child: CirrusrcChild): bool =
+proc pollExit*(child: AureolercChild): bool =
   if child == nil or child.process == nil:
     return false
   let code = child.process.peekExitCode()
   if code == -1:
     return true
   if code != -1:
-    stderr.writeLine(&"aureole: cirrusrc exited status={code}")
+    stderr.writeLine(&"aureole: aureolerc exited status={code}")
     child.process.close()
     child.process = nil
   false
 
-proc stop*(child: CirrusrcChild) =
+proc stop*(child: AureolercChild) =
   if child == nil or child.process == nil:
     return
   let process = child.process

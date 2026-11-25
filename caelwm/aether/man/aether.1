@@ -1,0 +1,457 @@
+.\" Adapted from ~/stow/zephyr/man/zephyr.1; checked against Aether Nim sources.
+.\" Maintained directly as man(7) source.
+.
+.TH "AETHER" "1" "November 22, 2026" "aether" "aether Manual"
+.
+.SH "NAME"
+\fBaether\fR \- Aureole policy and workflow controller
+.
+.SH "SYNOPSIS"
+\fBaether\fR \fIdomain\fR \fIaction\fR [\fIargs\fR\.\.\.]
+.
+.P
+Commands may be chained with a separate period argument (\fB.\fR).
+.
+.SH "DESCRIPTION"
+\fBaether\fR is the policy, workflow, geometry, and filesystem helper layer
+for Aureole\. It provides higher\-level window, group, layout, rule, and state
+operations with explicit window IDs on commands that accept them\.
+.
+.SH "ARGUMENTS"
+Commands have no global option parser or supported help/version switch.
+Window IDs, where accepted, use 0x followed by eight hexadecimal digits.
+Omitted target IDs default to the focused window.
+Grid counts, indices and positions are positive and one-based.
+An optional argument in one command does not imply support in other commands.
+.SH "COMMANDS"
+.SS "DAEMON"
+.TP 7
+.B daemon await
+Wait for the daemon to establish its snapshot baseline and finish initial
+refresh processing. Retry an unavailable socket every 100 milliseconds;
+there is no overall timeout. Other IPC errors fail immediately.
+This command does not launch the daemon.
+
+.
+.SS "DISPLAY"
+.
+.IP "\(bu" 4
+\fBdisplay height\fR: Print display height\.
+.
+.IP "\(bu" 4
+\fBdisplay width\fR: Print display width\.
+.
+.IP "\(bu" 4
+\fBdisplay width_test ge|gt|ne|eq|le|lt WIDTH\fR: Compare display width with
+an integer; exit 0 if true, 1 if false. Initial-capital operators such as Ge
+are also accepted\.
+.
+.TP 7
+.B display dimensions
+Print display width and height separated by a space.
+.SS "SCREEN"
+.
+.IP "\(bu" 4
+\fBscreen gap\fR: Print the configured gap\.
+.
+.IP "\(bu" 4
+\fBscreen indent\fR: Print the configured indentation\.
+.
+.IP "\(bu" 4
+\fBscreen margin\fR: Print the configured margin\.
+.
+.IP "\(bu" 4
+\fBscreen panel\fR: Print the configured panel height as an integer\.
+.
+.IP "\(bu" 4
+\fBscreen top\fR: Print the configured top offset\.
+.
+.IP "\(bu" 4
+\fBscreen bottom\fR: Print the configured bottom offset\.
+.
+.SS "GROUP"
+.
+.IP "\(bu" 4
+\fBgroup add GROUP [WINID]\fR: Record filesystem membership and remembered
+focus for the target, defaulting to the focused window. This does not assign
+WM membership; use window group for that\.
+.
+.IP "\(bu" 4
+\fBgroup remove [\-\-close] [WINID]\fR: Remove filesystem membership and
+remembered-focus entries for the target, defaulting to the focused window.
+With \-\-close, also request closure. This does not itself remove WM
+membership\.
+.
+.IP "\(bu" 4
+\fBgroup close GROUP\fR: Request closure of recorded group members, clear the
+WM group, and remove its filesystem membership, focus and deactivation
+records\.
+.
+.IP "\(bu" 4
+\fBgroup count\fR: Print the WM group-slot count, including reserved slot 0\.
+.
+.IP "\(bu" 4
+\fBgroup current\fR: Print the current WM group from the daemon cache\.
+.
+.IP "\(bu" 4
+\fBgroup desktop GROUP\fR: Deactivate other public groups, activate the
+requested group, and focus its remembered window if still valid\.
+.
+.IP "\(bu" 4
+\fBgroup focus GROUP\fR: Activate the requested group and focus its valid
+remembered window. If already current, record the focused window in that
+group\.
+.
+.IP "\(bu" 4
+\fBgroup id NAME\fR: Print a built-in group-name ID. Names are case-sensitive:
+VOID=0, DESK=1, COMM=2, CODE=3, WIKI=4, UTIL=5, PLAY=6, PEER=7\.
+.
+.IP "\(bu" 4
+\fBgroup last\fR: Focus the public group recorded under $GROUP/last, if
+present\.
+.
+.IP "\(bu" 4
+\fBgroup name [GROUP]\fR: Print the name for an ID, defaulting to the live
+current group. This observation accepts reserved ID 0 (VOID); IDs beyond
+built-in names print GROUP N\.
+.
+.IP "\(bu" 4
+\fBgroup reconcile GROUP\fR: Validate a public group argument against the live
+WM. The current implementation makes no filesystem or WM changes\.
+.
+.IP "\(bu" 4
+\fBgroup restore\fR: Activate every public group, clear deactivation records,
+and preserve the focused window\.
+.
+.IP "\(bu" 4
+\fBgroup toggle GROUP\fR: Deactivate a populated group, or reactivate one
+recorded as deactivated and focus its remembered window\.
+.
+.P
+Public action group IDs are one\-based and less than \fBgroup count\fR; 0 is
+reserved VOID. Observation commands may report 0. Numeric group arguments do
+not accept built-in names; use \fBgroup id NAME\fR to look up a name.
+.
+.TP 7
+.B group next
+Print the next public group ID, wrapping at the public range boundary.
+This does not change groups.
+.TP 7
+.B group previous
+Print the previous public group ID, wrapping at the public range boundary.
+This does not change groups.
+.TP 7
+.B group tagcount
+Print the number of built-in public group names (7).
+.SS "WINDOW"
+.
+.IP "\(bu" 4
+\fBwindow await CLASS | \-\-name PATTERN | SECONDS\fR: Wait up to five seconds
+for a matching managed class or title, then focus the unique match. Class
+matching is exact; title matching uses a case-insensitive regular expression.
+Multiple matches fail. A positive numeric argument sleeps for that many
+seconds instead. No property argument is supported\.
+.
+.IP "\(bu" 4
+\fBwindow classname\fR: Print the focused window class\.
+.
+.IP "\(bu" 4
+\fBwindow count [CLASS | \-\-name PATTERN] [\-\-all]\fR: Count daemon-cached
+matching windows; defaults to mapped windows. The group filter is not accepted
+here\.
+.
+.IP "\(bu" 4
+\fBwindow extend DIRECTION [left|right] [WINID]\fR: Extend the target toward
+left, right, near, far, top or bottom; the optional side qualifies top or
+bottom\.
+.
+.IP "\(bu" 4
+\fBwindow geometry [WINID]\fR: Print X=, Y=, WIDTH= and HEIGHT= lines for the
+explicit or focused window\.
+.
+.IP "\(bu" 4
+\fBwindow group GROUP [\-\-teleport]\fR: Assign the focused window to a public
+WM group. With \-\-teleport, also focus a surviving recorded member of the
+source group, when available\.
+.
+.IP "\(bu" 4
+\fBwindow layer\fR \fInormal|above|overlay\fR [\fIwinid\fR]: Set a persistent
+WM stacking layer without changing focus\. \fBoverlay\fR stays above
+\fBabove\fR, which stays above \fBnormal\fR\. The target defaults to the
+focused window; normal restores ordinary stacking\. An explicit assignment
+overrides EWMH defaults until the managed client is destroyed/unmanaged,
+including across hide/remap\. Title\-case layer names remain accepted\. Docks
+and EWMH ABOVE windows automatically participate in the WM above tier without
+aether or aetherd rules\.
+.
+.IP "\(bu" 4
+\fBwindow hide\fR [\fIwinid\fR]: Hide a window\.
+.
+.IP "\(bu" 4
+\fBwindow ids [CLASS | \-\-name PATTERN] [\-\-all] [\-\-group GROUP]\fR: Print
+matching daemon-cached window IDs, one per line. Defaults to mapped windows.
+Class matching is exact; title matching uses a case-insensitive regular
+expression. The group filter narrows membership without implying \-\-all. Use
+either a class or a title selector\.
+.
+.IP "\(bu" 4
+\fBwindow restore\fR [\fIwinid\fR]: Restore saved window geometry\.
+.
+.IP "\(bu" 4
+\fBwindow rotate\fR [\fIwinid\fR]: Swap the selected window's width and
+height\.
+.
+.IP "\(bu" 4
+\fBwindow shift up|down|left|right [WINID]\fR: Move the target by one current
+window height or width and save its previous geometry\.
+.
+.IP "\(bu" 4
+\fBwindow size SIZE [\-\-rotate] [\-\-larger|\-\-smaller] [WINID]\fR: Resize
+using WIDTHxHEIGHT, a non-square WIDTH:HEIGHT ratio, or a preset. Presets are
+viewport, terminal, paper, video, A3, B4, A4, B5, A5, B6, A6, B7, 480p, 720p,
+1080p and 1440p. paper and video require \-\-larger or \-\-smaller. \-\-rotate
+swaps the selected dimensions\.
+.
+.IP "\(bu" 4
+\fBwindow move X Y\fR: Move the focused window by signed relative pixel
+offsets. Exactly two arguments are accepted; an explicit window ID is not
+accepted\.
+.
+.IP "\(bu" 4
+\fBwindow snap DIRECTION [AXIS] [WINID]\fR: Position the target at left,
+right, near, center, top or bottom. AXIS may be left, right, horizontal or
+vertical where applicable (for example center horizontal or top left)\.
+.
+.IP "\(bu" 4
+\fBwindow spread POSITION [QUALIFIERS] [WINID]\fR: Place the target without
+resizing. POSITION is left, right, center, a column number, or COLUMNS COLUMN.
+Optional \-\-rows ROWS and \-\-row ROW choose a grid row; top or bottom may
+select the row. A lone number selects a column in an automatically sized grid.
+With COLUMNS, COLUMN may be numeric, left, right or center\.
+.
+.IP "\(bu" 4
+\fBwindow stack\fR [\fIwinid\fR]: Print the overlap\-connected stack for a
+window\.
+.
+.IP "\(bu" 4
+\fBwindow swap up|down|left|right|north|south|east|west\fR: Focus the adjacent
+window in the requested direction and exchange its geometry with the
+previously focused window; fail if no adjacent window is found\.
+.
+.IP "\(bu" 4
+\fBwindow tile left|right|COLUMNS [COLUMN] [\-\-rows ROWS] [\-\-row ROW]
+[WINID]\fR: Resize and position the target in the grid (default COLUMN is
+COLUMNS; default row count and row are 1). left or right extends the target to
+that edge and fills the usable height\.
+.
+.IP "\(bu" 4
+\fBwindow toggle CLASS | \-\-name PATTERN\fR: Find matching windows including
+unmapped windows; hide each, or focus it if the hide request fails. Exit 1 if
+there are no matches\.
+.
+.IP "\(bu" 4
+\fBwindow wm\-group\fR \fIwinid\fR: Print the WM\-reported group for an
+explicit ID\.
+.
+.IP "\(bu" 4
+\fBwindow wm\-groups\fR: Print WM groups for managed windows\.
+.
+.IP "\(bu" 4
+\fBwindow snapshot\fR: Print the normalized WM snapshot\.
+.
+.P
+\fBwm\-group\fR, \fBwm\-groups\fR, and \fBsnapshot\fR are read\-only
+observations\. The \fBwindow stack\-geometries\fR and \fBwindow
+apply\-geometries\fR commands are Borealis commands; they are not aether
+public actions\.
+.
+.SS "LAYOUT"
+.
+.IP "\(bu" 4
+\fBlayouts explode\fR: Capture the current overlap\-connected stack, save
+original geometry, and arrange those windows according to the existing layout
+rule\.
+.
+.IP "\(bu" 4
+\fBlayouts unexplode\fR: Restore saved geometry for surviving exploded
+windows\.
+.
+.IP "\(bu" 4
+\fBlayouts explode \-\-group\fR \fIgroup\fR: Place visible group members using
+the fold grid engine and save a dedicated identity\-bearing explode operation
+under \fB$WME/layout/explode:group:N\fR\. Each group retains independent
+state\.
+.
+.IP "\(bu" 4
+\fBlayouts unexplode \-\-group\fR \fIgroup\fR: Restore that recorded
+operation, including surviving clients that changed groups or became hidden\.
+New members and reused XIDs with different identity tokens are not restored\.
+Preserve current focus and remove the saved operation after restoration\.
+.
+.IP "\(bu" 4
+\fBlayouts fold COLUMNS [CLASS | \-\-group GROUP] [\-\-rows ROWS] [\-\-spread]
+[\-\-record]\fR: Fold matching mapped windows into a grid (ROWS defaults to 1;
+\-\-spread preserves window sizes), then raise participants in placement order
+within their effective stacking bands while preserving focus\. Repeating an
+unchanged fold still raises the selected set\. Group explode shares this
+stacking behavior without sharing fold transaction ownership\. Add
+\fB\-\-record\fR to create or extend a persistent checkpoint for the selected
+class, group, or all visible windows\. Without it, fold only arranges
+windows\.
+.
+.IP "\(bu" 4
+\fBlayouts unfold\fR [\fIclass\fR | \fB\-\-group\fR \fIgroup\fR]: Restore and
+consume the matching recorded class or group checkpoint\. With no selector,
+restore the checkpoint created by a recorded selector\-less fold\. Each scope
+preserves the first geometry per (winid, ClientToken) and adds newly
+encountered identities on later recorded folds; clients appearing after the
+last recorded fold are not included\. Restoration preserves current focus and
+does not restore stacking order or persistent layers\. Class names with path
+separators are percent\-encoded in the state directory name\. Ordinary fold
+history remains available independently\.
+.
+.IP "\(bu" 4
+\fBlayouts level\fR: Center mapped windows vertically\.
+.
+.IP "\(bu" 4
+\fBlayouts restore [\-\-all]\fR: Restore window geometry history for mapped
+clients, or all clients with \-\-all, preserving focus\.
+.
+.IP "\(bu" 4
+\fBlayouts spread COLUMNS [COLUMN] [\-\-rows ROWS] [\-\-position POSITION]
+[WINID]\fR: Place one target without resizing, using layout grid placement
+order. Rows and position default to 1; COLUMN overrides the column derived
+from POSITION\.
+.
+.IP "\(bu" 4
+\fBlayouts tile COLUMNS [COLUMN] [\-\-rows ROWS] [\-\-position POSITION]
+[WINID]\fR: Resize and position one target using layout grid placement order.
+Rows and position default to 1; COLUMN overrides the column derived from
+POSITION\.
+.
+.P
+\fBunexplode\fR ignores disappeared saved XIDs and preserves the current
+focus\.
+.
+.TP 7
+.B layouts grid COLUMNS [CLASS | \-\-group GROUP] [\-\-rows ROWS]
+Print an adjusted grid as COLUMNS \-\-rows ROWS for the selected mapped
+windows.
+Fail if there are no matches. Does not arrange windows.
+.P
+For layouts tile and layouts spread, no more than six arguments may follow
+the action name (each option name and value counts separately).
+Thus COLUMN, rows, position and WINID cannot all be supplied together.
+.SS "RULE"
+.
+.IP "\(bu" 4
+\fBrule NAME\fR: Apply a built-in application rule to the focused managed
+window. No additional arguments are accepted\.
+.
+.P
+Supported rule names are:
+aerc, asunder, audacious, btop, calibre, cbftp, chromium, Chromium,
+compose, darktable, email, feh, firefox, foliate, fontmatrix, gftp, gimp,
+halloy, kak, krita, luakit, manpage, mpv, music, nicotine, oculante,
+palette, pavucontrol, pcmanfm, qutebrowser, qutebrowser-whoops,
+rapidraw, rawtherapee, surf, term, tmux, wiki, xftp, yazi, yazi-root,
+youtube and zathura. Names are case-sensitive; rules are compiled in.
+.SS "STATE"
+.
+.IP "\(bu" 4
+\fBstate snapshot [WINID]\fR: Save geometry and client identity under
+$WME/snapshot/WINID, defaulting to the focused window\.
+.
+.IP "\(bu" 4
+\fBstate restore [WINID]\fR: Copy the saved snapshot into $WINFO/WINID after
+validating client identity. This updates geometry history; it does not apply
+geometry to the window. Use window restore afterwards to apply it\.
+.
+.P
+\fBaetherd\fR removes \fB$WINFO/<winid>\fR after receiving an actual X11
+\fBDestroyNotify\fR and confirming that the window no longer exists\. Hidden,
+unmapped, and inactive\-group windows retain their state\. Startup and X11
+reconnection also reconcile stale WINFO directories, including windows that
+died while the daemon was stopped\. Uncertain X11 errors preserve state\.
+.
+.P
+The same lifecycle handler reconciles \fB$HIDDEN/<winid>\fR on \fBMapNotify\fR
+and \fBDestroyNotify\fR, checking current X visibility before removing an
+entry\. Visible or destroyed windows lose hidden metadata; genuinely unmapped
+windows retain it\. Startup/reconnection scans both trees, including hidden
+entries without WINFO records\. No particular focus or restore command is
+required\.
+.
+.P
+WINFO cleanup waits for active restore\-history transactions and retries
+deferred work; HIDDEN cleanup proceeds independently\. Group membership and
+focus records remain owned by WM snapshot reconciliation\. Correctness does
+not require an explicit \fBaether group close\fR before closing an
+application\.
+.
+.SH "ENVIRONMENT AND FILES"
+Use the environment established by the intended CaelWM session.
+The controller does not load a configuration file on invocation.
+.TP 7
+.B DISPLAY, XAUTHORITY
+Select and authorize the X11 connection.
+.TP 7
+.B XDG_RUNTIME_DIR
+When nonempty, daemon IPC uses $XDG_RUNTIME_DIR/zephyr/zephyrd.sock.
+The legacy names are intentional compatibility paths.
+.TP 7
+.B WME
+Runtime state root: layout checkpoints are under $WME/layout,
+explicit snapshots under $WME/snapshot, and the daemon-published WM snapshot
+is $WME/wm/snapshot. If XDG_RUNTIME_DIR is empty, the IPC socket is
+$WME/zephyrd.sock. At least one socket-root variable must be set for IPC.
+.TP 7
+.B WINFO
+Per-window geometry history and identity records, under $WINFO/WINID.
+.TP 7
+.B GROUP
+Filesystem group mirror, with related roots $GROUP:focus and
+$GROUP:deactivated; $GROUP/current and $GROUP/last track selection history.
+.TP 7
+.B HIDDEN
+Per-window hidden metadata, under $HIDDEN/WINID.
+.TP 7
+.B WMSE
+Session settings tree. Screen metrics are read from $WMSE/ui and
+$WMSE/panel directory names and their numeric child directories.
+.TP 7
+.B CENTER_BIAS
+For spread placement with an even column count, choose left or right
+(default right) as the center column.
+.SH "EXIT STATUS"
+Successful commands normally return 0. Invalid commands, invalid arguments,
+daemon errors and failed predicates return nonzero (normally 1).
+With no arguments, usage is printed and the process exits 1.
+.SH "CHAINING"
+Commands can be sequenced with a separate period argument. They run in order;
+a failing command stops the chain. display width_test terminates the entire
+invocation with its predicate status, even on success. window size terminal
+also terminates the invocation after applying its saved terminal size.
+Each command resolves
+its own target:
+.
+.IP "" 4
+.
+.nf
+
+aether window move 10 10 . window size 800x600
+.
+.fi
+.
+.SH "EXAMPLES"
+.nf
+aether daemon await
+aether group focus "$(aether group next)"
+aether window ids \-\-all \-\-group 3
+aether layouts fold 3 \-\-group 3 \-\-record
+aether layouts unfold \-\-group 3
+aether state snapshot 0x01234567
+aether state restore 0x01234567 . window restore 0x01234567
+.fi
+.SH "SEE ALSO"
+\fBborealis\fR(1), \fBaureole\fR(1), \fBaetherd\fR(1)

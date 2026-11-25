@@ -1,0 +1,234 @@
+.\" Checked against aureole/aureole.nim, startup/, runtime/, model/ and x11/.
+.TH AUREOLE 1 "November 22, 2026" CaelWM "CaelWM Manual"
+.SH NAME
+aureole \- CaelWM X11 window manager
+.SH SYNOPSIS
+.B aureole
+.RB [ \-c " CONFIG_PATH"]
+.br
+.B aureole \-h
+.br
+.B aureole \-v
+.br
+.B aureole \-\-abi
+.SH DESCRIPTION
+.B aureole
+is the Nim X11 window-manager core of CaelWM. It owns the selected X screen's
+window-management event mask and manages client lifecycle, focus, stacking,
+geometry, decorations, groups, pointer actions, and EWMH/ICCCM integration
+through XCB. Startup fails if another window manager owns the screen.
+.PP
+.BR borealis (1)
+sends low-level commands directly to Aureole over X11.
+.BR aether (1)
+provides workflow, layout, rule and saved-state policy.
+.BR aetherd (1)
+observes WM snapshots and X11 lifecycle changes, maintains controller state
+and applies application rules. Panels, application autostart and keyboard
+bindings are supplied by the session configuration, rather than a built-in
+desktop shell.
+.SH OPTIONS
+.TP 7
+.B \-h
+Print short usage to standard error and exit 0 without connecting to X11.
+.TP
+.B \-v
+Print the compiled version and license notice to standard error and exit 0
+without connecting to X11. The source default version is 0.5.2; the build can
+override it.
+.TP
+.B \-c CONFIG_PATH
+Execute this startup script instead of the default aureolerc. An attached
+argument such as \-c/path/to/aureolerc is also accepted. If repeated, the last
+parsed value applies. A relative script path is resolved from the current
+directory.
+.TP
+.B \-\-
+Stop option processing; subsequent arguments are ignored.
+.PP
+Unrecognized options and a missing \-c argument produce diagnostics but do not
+by themselves abort normal startup. Positional arguments are ignored. There
+are no supported long help, version or configuration aliases.
+.SS Diagnostic entrypoints
+These implementation diagnostics are separate from normal startup. They can
+claim WM ownership and change event processing; they are not read-only
+inspection commands for a running desktop.
+.TP
+.B \-\-abi
+Print the compiled X event ABI report to standard output and exit before
+connecting to X11.
+.TP
+.B \-\-test\-events
+Log normalized events. Used alone, run the event observer without normal
+lifecycle dispatch.
+.TP
+.B \-\-test\-state
+Print startup state. Without a stage4, stage5 or stage6 mode, leave startup
+adoption observation-only.
+.TP
+.B \-\-test\-lifecycle
+Enable lifecycle tracing.
+.TP
+.B \-\-test\-pause\-before\-effects
+Enable lifecycle tracing and pause before effect realization.
+.TP
+.B \-\-test\-stage4
+Enable lifecycle tracing and test controls.
+.TP
+.B \-\-test\-stage5
+Enable lifecycle tracing, state output, test controls and geometry
+diagnostics.
+.TP
+.B \-\-test\-stage6
+Enable lifecycle tracing, test controls and stacking diagnostics.
+.TP
+.B \-\-test\-private\-effects
+Requires a special private-execution build. Rejected with status 2 by the
+ordinary Makefile build.
+.PP
+The test modes suppress the normal aureolerc launch and EWMH startup
+publication path. Their combinations are developer interfaces, not session
+configuration options.
+.SH CONFIGURATION
+The default startup script is
+.BR ~/.config/aureole/aureolerc .
+If XDG_CONFIG_HOME exists in the environment, the default is instead
+.BR $XDG_CONFIG_HOME/aureole/aureolerc ,
+even when its value is empty. An explicit nonempty \-c path takes precedence.
+With neither XDG_CONFIG_HOME nor HOME set, the script is skipped.
+.PP
+The file is an executable program, typically a shell script with a shebang,
+not a declarative file parsed by the WM. Aureole checks that it exists and has
+an execute permission bit, then launches it asynchronously using setsid found
+through PATH, inheriting the environment and standard streams. It passes no
+script arguments and does not wait for configuration to finish before adopting
+clients and servicing events. The XCB connection descriptor is closed on
+execution in the child.
+.PP
+Missing or nonexecutable scripts, unavailable setsid, launch failures and
+child exit statuses are diagnosed; these do not normally terminate the WM. On
+shutdown, a still-running startup process group receives SIGTERM, followed by
+SIGKILL if it remains running after about 750 milliseconds.
+.PP
+Use
+.B borealis wm config KEY VALUE ...
+inside the script to set the supported runtime settings documented in
+.BR borealis (1).
+The supplied session's script configures borders, gaps, groups, focus and
+mouse behavior, initializes filesystem state and invokes its autostart helper.
+Its recipe and autostart helpers are session dependencies, not Aureole
+configuration syntax. Aureole does not implement a signal-based configuration
+reload.
+.SH STARTUP AND AETHERD
+Normal startup connects to X11, claims WM ownership, publishes WM identity and
+initial EWMH state, initializes RandR, launches aureolerc, adopts eligible
+existing windows, completes management, establishes focus and publishes client
+lists before entering the event loop.
+.PP
+Startup adoption excludes override-redirect windows and dock, toolbar and
+desktop window types. Viewable eligible windows are adopted; an unmapped
+window is adopted when its WM_STATE is Normal and its desktop property names a
+valid group. Valid desktop assignments are retained; otherwise the startup
+default is group 1 when available.
+.PP
+Aureole itself does not spawn, stop or wait for Aetherd. The prepared
+.B config/aureole-session.sh
+fragment, sourced by the au* branch of the surrounding .xinitrc, provisions
+the session environment, starts Aetherd with output appended to WMLOG, starts
+sxhkd, and invokes Aureole through xexec. The fragment checks for an existing
+WM/controller before starting the session. Its ENV helper initializes the
+runtime tree; it is not a configuration reload mechanism.
+.PP
+Aetherd can start before the WM and retry attachment. Controller readiness is
+observed with
+.BR "aether daemon await" .
+The retained controller endpoint is $XDG_RUNTIME_DIR/zephyr/zephyrd.sock, or
+$WME/zephyrd.sock when XDG_RUNTIME_DIR is empty. This socket belongs to
+Aetherd; Aureole's Borealis command channel uses X11 properties and
+ClientMessage events.
+.SH WINDOWS AND GROUPS
+The WM owns window identity, membership, visibility, focus and stacking state.
+Ordinary new clients normally inherit a valid focused group, falling back to
+group 1; sticky_windows assigns new clients to the ungrouped state. Hidden and
+inactive-group clients remain managed until their actual lifecycle ends.
+.PP
+The default group-slot count is 10. The public Aether workflow uses numeric
+groups 1 through count minus 1. Borealis passes numbers unchanged to the WM,
+which also accepts slot 0 for several low-level actions; there is no
+one-based-to-zero-based subtraction. The internal ungrouped value is
+0xffffffff (4294967295), distinct from slot 0. Raw observations may report
+this sentinel.
+.PP
+Multiple groups may be active simultaneously. Activating a populated inactive
+group maps its members but does not select focus or change the current group
+merely by activation. The current group is derived from the focused managed
+window; without one it is the ungrouped sentinel. Deactivating the focused
+group clears focus and unmaps its members. To choose a window after
+activation, issue an explicit focus command or use Aether's group workflow.
+.PP
+Geometry commands and persistent normal, above and overlay layers are exposed
+through Borealis. Maximized and monocled clients participate in a separate
+zoomed stacking tier below overlay. Layout policies such as fold and explode
+belong to Aether.
+.SH RESTART AND EXIT
+.B borealis wm restart
+requests WM cleanup and exit status 75; Aureole does not exec itself. Restart
+cleanup detaches save-set clients and explicitly preserves hidden mapping
+state before closing the X connection.
+.PP
+.B borealis wm quit STATUS
+requests termination with the supplied status. The IPC word is interpreted as
+signed 32-bit by the WM; normal shell exit-status truncation applies.
+Supplying 75 to quit is not the same internal cleanup path as restart, though
+a surrounding supervisor may react to that status in the same way.
+.PP
+The prepared .xinitrc xexec loop launches the same command again only for
+status 75; other statuses break that loop. This restart policy and subsequent
+X session termination belong to the wrapper and X session, not the WM. The
+wrapper does not restart Aetherd for each WM restart.
+.PP
+SIGTERM and SIGINT wake and stop the event loop. That path normally returns 0
+and closes the startup child and X connection; it does not request the
+restart-specific cleanup path. Caught startup or runtime exceptions are
+reported and return 1. Errors rejected by diagnostic-mode selection can return
+2.
+.SH ENVIRONMENT AND FILES
+.TP
+.B DISPLAY, XAUTHORITY
+Select and authorize the X11 connection. No command-line display selector is
+implemented.
+.TP
+.B XDG_CONFIG_HOME, HOME
+Determine the startup script path as described above.
+.TP
+.B PATH
+Used to find setsid and inherited by aureolerc and its helpers.
+.TP
+.B ~/.config/aureole/aureolerc
+Default executable startup configuration.
+.TP
+.B ~/.config/aureole/ENV, ~/.session/aureole
+Environment helper and persistent settings used by the prepared session, not
+files read directly by the WM core.
+.TP
+.B WME, GROUP, HIDDEN, WINFO, WMSE, FIFO, WMLOG
+Session/controller paths inherited by helpers. The prepared ENV sets WME to
+/dev/shm/$WM, GROUP to $WME/group, HIDDEN to $WME/hidden, WINFO to
+$WME/window, WMSE to $HOME/.session/$WM, FIFO to $WME/fifo, and WMLOG to
+/tmp/$WM.log. Aureole does not itself maintain the controller's filesystem
+mirror.
+.SH DIAGNOSTICS
+Normal startup and configuration-child diagnostics go to standard error. The
+WM does not open a log file itself; the prepared supervisor redirects output
+to $ROOT/aureole.log, with ROOT normally /tmp.
+.PP
+Test flags add READY, EVENT, STATE and lifecycle messages. Retained diagnostic
+environment names include CIRRUS_STAGE5_TRACE=1 for geometry-effect traces and
+CIRRUS_NIM_LIFECYCLE_INVALIDATION_TRACE=1 for status/invalidation traces.
+Additional fault-injection and private-build controls are implementation test
+facilities, not normal configuration. Some X11 atoms retain CIRRUS or __WM_IPC
+names for compatibility.
+.SH SEE ALSO
+.BR borealis (1),
+.BR aether (1),
+.BR aetherd (1)

@@ -1,0 +1,412 @@
+.\" Checked against borealis/borealis.nim and Aureole's production handlers.
+.TH BOREALIS 1 "November 22, 2026" CaelWM "CaelWM Manual"
+.SH NAME
+borealis \- command-line X11 client for Aureole
+.SH SYNOPSIS
+.B borealis \-h
+.br
+.B borealis \-v
+.br
+.B borealis
+.I domain action
+.RI [ arguments ...]
+.br
+.B borealis
+.I action-command
+.RB [ . " action-command ..."]
+.SH DESCRIPTION
+.B borealis
+queries and controls
+.BR aureole (1)
+using its X11 command protocol. Window management is performed by the WM, not
+the client. Borealis connects to the display selected by XCB's environment; it
+does not use Aetherd's Unix socket or cache and does not require Aetherd for
+its own commands.
+.PP
+.BR aether (1)
+is the higher-level controller for layout, application rules, state history
+and group workflows. Its command grammar differs from Borealis.
+.SH OPTIONS AND ARGUMENTS
+.TP 7
+.B \-h
+As the first argument, print short usage to standard error and exit 0 without
+connecting to X11.
+.TP
+.B \-v
+As the first argument, print compiled version and license information to
+standard error and exit 0 without connecting to X11. The source version
+default is 0.5.2.
+.PP
+No other global options, long help/version aliases or end-of-options marker
+are implemented. Command words and option flags are case-sensitive. Direction
+and configuration-choice values are case-insensitive unless stated otherwise.
+.PP
+WINID is a nonzero unsigned 32-bit hexadecimal X window ID, optionally
+prefixed with 0x. Prefer the output form 0x followed by eight lowercase
+hexadecimal digits. Where WINID is optional, omission targets the focused
+managed window. Collection commands use selectors instead of WINID. window
+group requires an explicit ID; window classname always queries focus.
+.PP
+Signed coordinates and deltas accept decimal integers from -2147483648 through
+2147483647. Aureole narrows ordinary move coordinates and resize deltas to
+signed 16-bit values; use -32768 through 32767 to avoid wrapping. Bulk move
+coordinates also narrow to signed 16-bit values. Group numbers and quit
+statuses are unsigned decimal 32-bit
+values. Positive signs do not imply relative navigation. The geometry and
+stack query parsers retain permissive legacy integer conversion; use canonical
+IDs rather than relying on malformed-input acceptance.
+.SH WINDOW QUERIES
+.TP
+.B window focused
+Print the focused managed WINID; fail when none exists.
+.TP
+.B window classname
+Print the focused window's WM_CLASS class component. Unavailable or malformed
+class data produces empty output; lack of a focused managed window is an
+error.
+.TP
+.B window ids [SELECTOR] [\-\-group GROUP]
+Print matching IDs, one per line, in ascending numeric-XID order. Defaults to
+mapped managed clients. The group filter may be inserted among the other query
+arguments, is allowed once, and must be 1 through group count minus 1. It
+narrows the current visibility/selector scope without implying \-\-all.
+.TP
+.B window count [SELECTOR]
+Print a decimal count using the same visibility and selector rules. Does not
+accept \-\-group.
+.PP
+SELECTOR has exactly these supported forms:
+.PP
+.nf
+(no arguments)
+CLASS
+\-\-all
+\-\-all CLASS
+CLASS \-\-all
+\-\-name PATTERN
+\-\-all \-\-name PATTERN
+.fi
+.PP
+CLASS matches the WM_CLASS class component exactly and case-sensitively.
+PATTERN is a case-insensitive POSIX extended regular expression, matched
+against _NET_WM_NAME, falling back to WM_NAME. Quote patterns in the shell. A
+class and title selector cannot be combined. For a title query with \-\-all,
+the order shown above is required. Empty matches produce no ID lines or count
+0 and succeed; invalid title expressions fail.
+.TP
+.B window geometry [WINID]
+Print logical client geometry as four lines: X=number, Y=number, WIDTH=number
+and HEIGHT=number. The values describe the client, not an outer decoration
+rectangle.
+.TP
+.B window group WINID
+Print the client's raw decimal WM group ID, including the ungrouped sentinel
+where applicable.
+.TP
+.B window groups \-\-all
+Print every managed client's WINID and raw decimal GROUP, separated by a
+space, in managed-list order. The flag is mandatory.
+.TP
+.B window snapshot
+Print the normalized snapshot. Current Aureole emits:
+.PP
+.nf
+SNAPSHOT 2
+FOCUSED WINID_OR_NONE
+CURRENT GROUP
+CLIENT WINID GROUP MAPPED TOKEN
+\&...
+.fi
+.PP
+MAPPED is 0 or 1; TOKEN is the WM client-identity token. CLIENT records follow
+managed-list order. NONE means no focused managed client. Group values are raw
+decimal IDs, not EWMH-style rebased indices. Borealis also accepts a SNAPSHOT
+1 response from a compatible server.
+.TP
+.B window stack [WINID]
+Print the mapped overlap-connected set containing the reference window, in
+physical bottom-to-top stacking order. Connectivity is transitive through
+overlapping logical rectangles; this is not simply every window in a group.
+.TP
+.B window stack-geometries [WINID]
+Print the same stack as lines of WINID X Y WIDTH HEIGHT, using decimal
+geometry fields, without sorting by ID.
+.SH WINDOW ACTIONS
+.TP
+.B window move [\-\-relative] X Y [WINID]
+Set absolute client coordinates, or add signed pixel offsets with
+\-\-relative. The flag must precede the numbers. Relative movement can reset
+maximized/monocled state before moving.
+.TP
+.B window resize [\-\-relative] WIDTH HEIGHT [WINID]
+Set absolute size or apply signed size deltas. Absolute operands must be
+nonnegative signed 32-bit integers; Aureole uses their low 16 bits and
+compares the signed narrowed operands against minimum-size hints. Use positive
+values at most 32767 for ordinary sizes without signed wraparound; larger
+accepted operands may produce surprising minimum-hint results. Relative
+resizing applies the WM's resize-hint policy. Resulting geometry can differ
+from the requested values.
+.TP
+.B window maximize [\-\-horizontal|\-\-vertical] [WINID]
+Toggle full, horizontal or vertical maximization using the target's monitor
+bounds. The axis flag precedes the optional ID. Full maximization uses full
+monitor bounds; partial maximization accounts for configured gaps and borders.
+.TP
+.B window monocle [WINID]
+Toggle monocle geometry within the usable monitor region, respecting gaps and
+border extent. Repeating the same special mode restores its saved geometry.
+.TP
+.B window reset [WINID]
+Reset special geometry state to the WM's saved original geometry. When special
+geometry is reset, Aureole also focuses and raises the target. This is not
+Aether's filesystem geometry-history restore.
+.TP
+.B window close [WINID]
+Request graceful WM_DELETE_WINDOW when supported; otherwise the WM kills the X
+client connection.
+.TP
+.B window hide [WINID]
+Unmap the target while retaining management. Fail if unknown/unmanaged or
+already hidden. A later explicit focus can remap a hidden managed target.
+.TP
+.B window layer normal|above|overlay [WINID]
+Set an explicit persistent stacking layer without changing focus. Only the
+lowercase and title-case spellings Normal, Above and Overlay are accepted. The
+explicit choice survives hide/remap until the client is unmanaged.
+Maximized/monocled normal and above clients use a zoomed tier; overlay remains
+above that tier.
+.TP
+.B window focus WINID
+Focus and raise the managed target, mapping it if needed.
+.TP
+.B window focus \-\-last
+Choose the prior eligible mapped window from focus history.
+.TP
+.B window focus \-\-cardinal DIRECTION
+Focus a mapped adjacent candidate chosen by the WM's geometric directional
+search. DIRECTION is up/north, down/south, left/west or right/east,
+case-insensitively. With no candidate, the request has no effect.
+.TP
+.B window cycle [\-\-reverse] [\-\-group]
+Cycle mapped windows in managed-list order, optionally in reverse or
+restricted to the focused window's group. Each flag may occur once, in either
+order. This cycles windows, not group IDs.
+.TP
+.B window stack cycle [WINID]
+Focus and raise a window chosen from the reference's overlap-connected stack,
+respecting stacking tiers. This is distinct from window cycle. Uses the
+focused window as the default reference.
+.TP
+.B window apply-geometries WINID X Y WIDTH HEIGHT ...
+Submit one or more five-argument geometry records as one property-backed
+request. Each ID must name a managed client and occur once. X and Y are signed
+32-bit decimal; dimensions are 0 through 65535. Aureole validates the full
+record set first, then applies move followed by resize per record. Application
+is not a rollback transaction, and minimum hints may affect final sizes. It
+does not create Aether geometry history. Resetting a maximized, partially
+maximized or monocled target before applying the records can focus and raise
+that target; the command does not guarantee preservation of focus.
+.TP
+.B window raise-many WINID ...
+Raise one or more distinct mapped managed clients in argument order within
+their effective stacking tiers, preserving focus. Last listed is raised last
+within its tier. The server rejects duplicates and unmapped/unmanaged targets.
+Property-backed bulk requests are limited to 65536 bytes by Aureole.
+.SH GROUPS
+.TP
+.B group count
+Print the configured group-slot count (default 10), not the number of active
+groups.
+.TP
+.B group current
+Print the focused managed window's raw group ID. With no managed focus, print
+4294967295.
+.TP
+.B group add GROUP [WINID]
+Assign the target to a WM group. This changes actual WM membership, unlike
+Aether's filesystem group add bookkeeping. An out-of-range destination or
+missing target is silently ignored by the WM; this is a one-way action.
+.TP
+.B group remove [WINID]
+Remove WM membership, setting the ungrouped sentinel. Does not close the
+client.
+.TP
+.B group clear GROUP
+Remove membership from every client in that group and clear its active state.
+Does not close group members. Out-of-range groups are ignored.
+.TP
+.B group activate GROUP
+Map members of a populated inactive group and mark it active. Activation alone
+does not focus a member or select a current group. Empty or already active
+groups produce no mapping change. Wait for an acknowledgement; invalid group
+numbers fail.
+.TP
+.B group deactivate GROUP
+Unmap group members and clear active state. If the focused window belongs to
+that group, clear focus and current-group state. Wait for an acknowledgement;
+invalid group numbers fail.
+.SS Numbering and navigation
+The public controller workflow uses group IDs 1 through N minus 1, where N is
+group count. IDs pass unchanged through Borealis and Aureole: public group 1
+is WM slot 1, not slot 0. Group names such as CODE are Aether policy, not
+Borealis arguments.
+.PP
+The low-level add, clear, activate and deactivate handlers accept slot 0 when
+N is positive; their actual WM range is 0 through N minus 1. The IDs query's
+\-\-group filter deliberately rejects 0. Neither slot 0 nor an omitted group
+is the ungrouped sentinel: that value is 0xffffffff, printed as 4294967295 by
+group observations. Multiple groups can be active at once. Current-group
+queries reflect focus, not the last activation request.
+.PP
+There are no Borealis group next, previous, last or focus verbs, and no
+relative-group operands. Use Aether's navigation, for example
+.nf
+aether group focus "$(aether group next)"
+.fi
+or activate a numeric group and explicitly focus a member. A leading plus on a
+number denotes an absolute positive integer, not an offset; negative group
+operands are rejected.
+.SH WM CONTROL
+.TP
+.B wm restart
+Request Aureole cleanup and exit with status 75. The WM does not relaunch
+itself; a supervisor may relaunch it on that status.
+.TP
+.B wm quit STATUS
+Request WM exit with an unsigned 32-bit wire status, interpreted by Aureole as
+signed 32-bit. Shell process exit statuses expose only their normal low
+exit-status bits. This one-way request does not wait for termination.
+.TP
+.B wm config KEY VALUE ...
+Set a runtime configuration value. There is no configuration query or save
+command. Each key requires exactly the argument count shown below. Changes are
+one-way requests and are not written to aureolerc.
+.SS Configuration values
+Boolean keys accept true, yes, t, y or 1 as true, case-insensitively; every
+other string becomes false. They are apply_settings, enable_borders,
+enable_last_window_focusing, enable_resize_hints, enable_sloppy_focus,
+replay_click_on_focus and sticky_windows. apply_settings controls immediate
+refresh for subsequent border-setting changes; sticky_windows selects
+ungrouped placement for new ordinary clients.
+.TP
+.B border_style NUMBER
+Choose 0 for a full frame, 1 left, 2 top, 3 right, 4 bottom, or 5 corner
+segments. Other numbers take the full-frame rendering fallback.
+.TP
+.B outer_border_width NUMBER
+Outer decoration width in pixels.
+.TP
+.B inner_border_width NUMBER
+Inner decoration width in pixels.
+.TP
+.B outer_color_focused HEX
+Focused outer color in hexadecimal ARGB form, for example 0xffff0000.
+.TP
+.B outer_color_unfocused HEX
+Unfocused outer color.
+.TP
+.B inner_color_focused HEX
+Focused inner color.
+.TP
+.B inner_color_unfocused HEX
+Unfocused inner color.
+.TP
+.B corner_mask NUMBER
+Bit mask for corner segments: 8 top left, 4 top right, 2 bottom right and 1
+bottom left; add bits to combine corners.
+.TP
+.B corner_percent NUMBER
+Corner segment size relative to the smaller client dimension. Aureole caps the
+unsigned value at 100; zero selects full-length segments.
+.TP
+.B cursor_position POSITION
+Pointer-warp position used by geometry actions. POSITION is topleft, topright,
+bottomleft, bottomright, middle, center, centre, left, bottom, top, right or
+all. Values are case-insensitive.
+.TP
+.B click_to_focus left|middle|right|none|any
+Select the button triggering focus. Values are case-insensitive.
+.TP
+.B gap_width POSITION NUMBER
+Set a monitor-edge gap. Effective POSITION values are top, bottom, left, right
+or all. Other cursor-position words pass client parsing but have no
+gap-setting effect in Aureole.
+.TP
+.B groups_nr NUMBER
+Set the group-slot count. Shrinking the count activates affected removed
+groups and removes their clients' group membership. The implementation accepts
+a raw unsigned 32-bit count, including zero; there is no smaller enforced
+user-range limit.
+.TP
+.B pointer_actions LEFT MIDDLE RIGHT
+Choose each mouse-button action from nothing, focus, move, resize_corner or
+resize_side, case-insensitively.
+.TP
+.B pointer_modifier alt|super
+Select the pointer-action modifier, case-insensitively.
+.PP
+Configuration key names are case-sensitive. Retained aliases are border_width
+for outer_border_width, color_focused for outer_color_focused, color_unfocused
+for outer_color_unfocused, internal_border_width for inner_border_width,
+internal_color_focused for inner_color_focused and internal_color_unfocused
+for inner_color_unfocused.
+.PP
+Numeric configuration parsing is permissive strtol conversion (base 10, or
+base 16 for colors), cast to an unsigned 32-bit wire word; it does not
+consistently reject trailing text or negative values. Use complete nonnegative
+values for counts, masks, percentages and widths. Parsing success alone is not
+confirmation of a valid setting or successful WM execution.
+.SH LAYOUTS AND CHAINING
+Borealis has move, resize, maximize, monocle, reset, stack queries and bulk
+geometry operations. It has no layouts domain or tile, fold, unfold, explode
+or unexplode command. Those policy operations belong to Aether.
+.PP
+A separate period argument chains only the ordinary action dispatcher: wm
+config/quit/restart, group add/remove/clear/activate/deactivate and the window
+actions move/resize/maximize/monocle/close/hide/reset/layer/cycle/focus.
+Queries and the special stack and bulk commands are handled before that
+dispatcher and cannot be composed into these chains. Empty segments are
+skipped. An acknowledged error stops a chain; one-way actions give no
+completion barrier between requests.
+.SH OUTPUT AND EXIT STATUS
+Queries print the decoded payload without the protocol's OK envelope.
+Successful actions normally produce no standard output. Errors and
+help/version text go to standard error.
+.PP
+No arguments prints usage and exits 1. Help and version exit 0. Queries and
+acknowledged actions exit 0 on a valid success response and 1 on server
+errors, malformed responses, X11 failures or a response timeout of about two
+seconds.
+.PP
+Acknowledged actions are group activate/deactivate and window
+hide/reset/layer/stack cycle/apply-geometries/raise-many. Other actions send
+one-way ClientMessage requests and normally return 0 after submission. They
+can silently have no effect; even an X send error may only print an oops
+diagnostic without changing the final status. Exit 0 from such a command does
+not establish that Aureole applied it. Some diagnostics retain the
+compatibility name windowchef.
+.SH ENVIRONMENT
+.B DISPLAY
+and
+.B XAUTHORITY
+select and authorize X11 access. There is no command-line display or socket
+override. Borealis reads no configuration file and does not use WME or
+XDG_RUNTIME_DIR to communicate.
+.SH EXAMPLES
+.nf
+borealis window ids \-\-all \-\-group 3
+borealis window count \-\-all \-\-name 'terminal|editor'
+borealis window geometry 0x01234567
+borealis group add 3 0x01234567
+borealis group activate 3 . window focus 0x01234567
+borealis window move \-\-relative 10 \-20
+borealis window resize 800 600 0x01234567
+borealis window layer overlay 0x01234567
+borealis window apply-geometries 0x01234567 10 20 800 600
+borealis wm config gap_width top 45
+borealis wm config pointer_actions move resize_side resize_corner
+.fi
+.SH SEE ALSO
+.BR aureole (1),
+.BR aether (1),
+.BR aetherd (1)
