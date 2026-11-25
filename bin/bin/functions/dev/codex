@@ -1,0 +1,16 @@
+#!/usr/bin/dash
+# sdothum - 2016 (c) wtfpl
+
+# Dev
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Usage: codex update | <options>*
+
+# ........................................................................ codex
+
+case $1 in
+	update ) sudo npm install -g @openai/codex ;;
+	*      ) /usr/bin/codex $@ ;;
+esac
+
+# kak: filetype=sh

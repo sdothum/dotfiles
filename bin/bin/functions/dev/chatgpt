@@ -4,13 +4,8 @@
 # Dev
 # ══════════════════════════════════════════════════════════════════════════════
 
-# Usage: chatgpt [update]
-
 # ................................................................ chatgpt/codex
 
-case $1 in
-	u* ) sudo npm install -g @openai/codex; chatgpt ;;
-	*  ) exec $HOME/opt/chatgpt/usr/lib/chatgpt/ChatGPT --ozone-platform=x11 >>/tmp/chatgpt.log ;;
-esac
+exec $HOME/opt/chatgpt/usr/lib/chatgpt/ChatGPT --ozone-platform=x11 >>/tmp/chatgpt.log
 
 # kak: filetype=sh
