@@ -42,7 +42,7 @@ alpine && /usr/libexec/pipewire-launcher
 void 'runit' && pipewire >/dev/null 2>&1 &  # see windowschef autostart for mpd server
 clipit -d &                                 # for webkit selections
 
-# # ........................................................................ D-Bus
+# ........................................................................ D-Bus
 
 # d-bus for file management, authentication, and other essential system processes
 if exists dbus-launch && test -z "$DBUS_SESSION_BUS_ADDRESS"; then
@@ -176,7 +176,18 @@ case $wm in
 	xexec 2bwm ;;
 
 au* )
-	. "$HOME/stow/caelwm/config/aureole-session.sh" ;;
+	# . "$HOME/stow/caelwm/config/aureole-session.sh" ;;
+
+	# export PATH="$HOME/.local/bin:$PATH"
+	setpath "$HOME/.config/aureole"
+	. "$HOME/.config/aureole/ENV"
+	# Use the same persistent root as recipe/ENV, without assuming SESSION's value.
+	touch "$WMSE/autostart:oneshot"
+
+	aetherd >>"$WMLOG" 2>&1 &
+	# Preserve the existing Cirrus branch's desktop setup and restart wrapper.
+	sxhkd -t "$TIMEOUT" -c "$HOME/.config/aureole/sxhkdrc" >/tmp/sxhkd.log 2>&1 &
+	xexec aureole -c "$HOME/.config/aureole/aureolerc" ;;
 
 aw* ) xexec awesome ;;
 be* )
