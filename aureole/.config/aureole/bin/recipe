@@ -2,10 +2,10 @@
 # sdothum - 2016 (c) wtfpl
 # [ $TRACE ] && CHILD="recipe $@" . $PARENT
 
-# Cirrus
+# Aureole
 # ══════════════════════════════════════════════════════════════════════════════
 
-# .................................................... cirrus persistent states
+# .................................................... aureole persistent states
 
 usage() { echo "$(basename $0) -[a'dd | d'elete | r'eplace | p'ath | t'est | /'utf-8] <path>
 >       -[c'onfig | e'cho | /'utf-8 (escape)] <path> <value>" | usage:

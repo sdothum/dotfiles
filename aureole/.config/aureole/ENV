@@ -4,12 +4,12 @@
 export PARENT=$(which parent)
 [ $TRACE ] && CHILD="ENV $@" . $PARENT
 
-# Cirrus
+# Aureole
 # ══════════════════════════════════════════════════════════════════════════════
 
 # Usage: . $(which ENV)
 
-export ZEPHYR=aether  # unset to restore shell DSL
+export AETHERA=aether  # unset to restore shell DSL
 
 # ................................................................... Filesystem
 
@@ -20,7 +20,7 @@ export WMLOG=/tmp/$WM.log
 [ -d $WME ] && rm -rf $WME
 mkdir $WME
 
-# ............................................................. Cirrus state
+# ................................................................ Aureole state
 
 export SHELL=/usr/bin/dash
 export XDG_CONFIG_HOME=$HOME/.config

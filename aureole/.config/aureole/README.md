@@ -37,13 +37,13 @@ on the tree structure data versus file content manipulation for the same.
 
 
 This configuration is prepared and linked at ~/.config/aureole but is not
-selected by ~/.windowmanager. The rc filename remains cirrusrc. ENV retains
-the WM selection formula and ZEPHYR/ZEPHYR_TRACE compatibility keys, with
-ZEPHYR=aether. The zephyr/zephyrd compatibility links now select installed
+selected by ~/.windowmanager. The rc filename is aureolerc; Aureole-specific helpers use that name. ENV retains
+the WM selection formula and AETHERA/AETHERA_TRACE compatibility keys, with
+AETHERA=aether. The aether/aetherd compatibility links now select installed
 ~/.local/bin/aether and aetherd. Copied persistent settings are in
-~/.session/aureole; the original Cirrus configuration/settings are unchanged.
+~/.session/aureole; modeled after the original (c-lang) Cirrus configuration/settings.
 
-Do not source ENV while the Cirrus desktop is active: it initializes the
+Do not source ENV while the Aureole desktop is active: it initializes the
 runtime state tree. Startup templates and exact activation/rollback commands
 are in /home/shum/stow/caelwm/{config,BUILDING.md}. The inherited tvover helper
 is unresolved in the inspection shell and must be available in the normal

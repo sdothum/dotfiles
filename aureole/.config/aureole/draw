@@ -2,7 +2,7 @@
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="draw $@" . $PARENT
 
-# Cirrus
+# Aureole
 # ══════════════════════════════════════════════════════════════════════════════
 
 # .............................................................. Draw operations
@@ -41,13 +41,13 @@ if [ "$1" = '--' ] ;then
 	PANEL_UNDERLINE=2       # thickness
 
 	# panel symbols (tag numbers option dropped to simplify colour assignments)
-	case $($ZEPHYR display width) in
+	case $($AETHERA display width) in
 		3440 ) TAG_PAD='      '; STATPAD='   ' ;;  # tag bar separator (visual spacing)
 		1920 ) TAG_PAD='     ' ; STATPAD='  '  ;;
 		*    ) TAG_PAD='    '  ; STATPAD='  '  ;;
 	esac
 
-	[ $($ZEPHYR display width) -lt 1920 ] && scaledown=true
+	[ $($AETHERA display width) -lt 1920 ] && scaledown=true
 	[ $scaledown ] && { LSEP=${LSEP# }; LSEP=${LSEP% }; RSEP=${RSEP# }; RSEP=${RSEP% }; }
 
 	sep() {
@@ -62,22 +62,22 @@ if [ "$1" = '--' ] ;then
 
 	# ..................................................................... Geometry
 
-	# Cirrus panel geometry
-	PANEL_HEIGHT=$($ZEPHYR screen panel)
-	PANEL_INDENT=$($ZEPHYR screen indent)  # assumes equal left/right screen margins
+	# Aureole panel geometry
+	PANEL_HEIGHT=$($AETHERA screen panel)
+	PANEL_INDENT=$($AETHERA screen indent)  # assumes equal left/right screen margins
 
 	fontsize=$(fontsize panel)
 	# [ $scaledown ] && fontsize=$(echo "$fontsize - 1.0" | bc )
-	width=$($ZEPHYR display width)
+	width=$($AETHERA display width)
 
-	panel_offsetY=$(( $($ZEPHYR display height) - PANEL_HEIGHT ))  # bottombar (topbar = 0)
+	panel_offsetY=$(( $($AETHERA display height) - PANEL_HEIGHT ))  # bottombar (topbar = 0)
 	panel_offsetX=$PANEL_INDENT
 	panel_width=$(( width - PANEL_INDENT * 2 ))
 
 	# .................................................................... Tag state
 
 	# desktops
-	tagcount=$($ZEPHYR group tagcount)
+	tagcount=$($AETHERA group tagcount)
 	DESKTOPS=$(seq 1 $tagcount)
 
 	# desktop (group) windows NOTE: -1 is undefined group

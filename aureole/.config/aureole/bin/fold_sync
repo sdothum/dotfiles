@@ -2,7 +2,7 @@
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="fold_sync $@" . $PARENT
 
-# Cirrus
+# Aureole
 # ══════════════════════════════════════════════════════════════════════════════
 
 # .......................................................... Dangling fold check
@@ -21,7 +21,7 @@ if [ -d $WME/layout/fold:$layout:$1 ] ;then
 	for W in $(aether window ids --all $group $1) ;do
 		[ -e $WME/layout/fold:$layout:$1/*$W ] && exit
 	done
-	# ls "$WME/layout/fold:$layout:$1" | grep -Eq "$(zephyr window ids --all $group "$1" | tr '\n' '|')EOD" && exit  # 0x..|EOD regex
+	# ls "$WME/layout/fold:$layout:$1" | grep -Eq "$(aether window ids --all $group "$1" | tr '\n' '|')EOD" && exit  # 0x..|EOD regex
 	rm -rf $WME/layout/fold:$layout:$1
 fi
 

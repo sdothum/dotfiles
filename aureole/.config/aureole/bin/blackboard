@@ -2,7 +2,7 @@
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="cbonsai $@" . $PARENT
 
-# Cirrus
+# Aureole
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ................................................................ blackboard ui
@@ -24,13 +24,13 @@ case $1 in
 		[ $(recipe $THEME) != 'light' ] && invert_panel
 		# killall -q lemonbar
 		hide || statusbar windowunmap
-		cirrusrc blackboard  # SEE: sxhkdrc "monocle"
+		aureolerc blackboard  # SEE: sxhkdrc "monocle"
 		;;
 	off  )
 		recipe -t $BLACKBOARD && [ $(recipe $BLACKBOARD) != $(recipe $THEME) ] && invert_panel
 		recipe -d $BLACKBOARD
 		draw root
-		cirrusrc refresh
+		aureolerc refresh
 		statusbar windowmap
 		;;
 	hide ) hide ;;

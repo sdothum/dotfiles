@@ -1,10 +1,10 @@
 #!/usr/bin/dash
 # sdothum - 2016 (c) wtfpl
 
-# Cirrus
+# Aureole
 # ══════════════════════════════════════════════════════════════════════════════
 
-# Usage: cirrusrc [refresh | blackboard] SEE: play/videomode, blackboard
+# Usage: aureolerc [refresh | blackboard] SEE: play/videomode, blackboard
 
 # ...................................................................... Borders
 
@@ -33,7 +33,8 @@ borealis wm config gap_width top               $(recipe -c 'ui/gap_width top' 45
 borealis wm config gap_width bottom            $(recipe -c 'ui/gap_width bottom' 45)
 borealis wm config gap_width left              $(recipe -c 'ui/gap_width left' 58)
 borealis wm config gap_width right             $(recipe -c 'ui/gap_width right' $(recipe 'ui/gap_width left'))
-recipe -c 'ui/gap_width grid' 33 >/dev/null   # NOTE: cirrus does not implement layout policy
+
+recipe -c 'ui/gap_width grid' 33 >/dev/null    # NOTE: aureole does not implement layout policy
 
 [ $1 ] && exit  # SEE: aurora
 
@@ -73,6 +74,6 @@ recipe -d pfw  # pfw wrapper winid mismatch stats
 
 autostart
 
-# WM membership and current-group reconciliation is owned by zephyrd.
+# WM membership and current-group reconciliation is owned by aetherd.
 
 # kak: filetype=sh

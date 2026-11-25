@@ -1,6 +1,6 @@
 # sdothum - 2016 (c) wtfpl
 
-# Cirrus
+# Aureole
 # ══════════════════════════════════════════════════════════════════════════════
 
 # NOTE: only use groups 1-9 with group 0 reserved for special actions (typically, "last")
@@ -305,7 +305,7 @@ super + {F6,F5}
 super + ctrl + shift + space
 	xdotool mousemove $(( $(aether display width) / 2 )) $(( $(aether display height) / 2 ))
 
-# NOTE: restore mouse focus after group focus (of top of zephyr window stack)
+# NOTE: restore mouse focus after group focus (of top of aether window stack)
 # HACK: bypass QT apps to avoid interference with mouse menus
 
 ~button1
@@ -441,7 +441,7 @@ super + h
 super + shift + h
 	aether window toggle halloy || halloy
 
-# NOTE: nicotine (direct gui -- not docker browser) leaves dangling child zephyr window frames SEE: winids
+# NOTE: nicotine (direct gui -- not docker browser) leaves dangling child aether window frames SEE: winids
 
 super + shift + j
 	aether window toggle --name nicotine || nicotine

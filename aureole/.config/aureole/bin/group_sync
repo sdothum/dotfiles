@@ -2,7 +2,7 @@
 # sdothum - 2016 (c) wtfpl
 # [ $TRACE ] && CHILD="group_sync $@" . $PARENT
 
-# Cirrus
+# Aureole
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ................................................................ WM tree check
@@ -86,17 +86,17 @@ for membership_path in "$GROUP"/*/"$winid" ;do
 	membership_group=$group
 done
 
-# Zero or ambiguous membership is not actionable here. zephyrd owns
+# Zero or ambiguous membership is not actionable here. aetherd owns
 # authoritative membership reconciliation.
 [ "$membership_count" -eq 1 ] || exit 0
 
 # Do not reinforce a filesystem membership that disagrees with the same WM
-# observation. zephyrd owns repairing that disagreement.
+# observation. aetherd owns repairing that disagreement.
 [ "$membership_group" = "$snapshot_current" ] || exit 0
 
 current_group=$(group 2>/dev/null) || exit 0
 [ "$membership_group" = "$current_group" ] ||
-	$ZEPHYR group reconcile "$membership_group"
+	$AETHERA group reconcile "$membership_group"
 
 exit 0  # NOTE: required to suppress aether reporting $? -> 1
 

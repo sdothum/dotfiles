@@ -1,7 +1,7 @@
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="menu/layout $@" . $PARENT
 
-# Cirrus
+# Aureole
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ............................................................... Desktop layout
@@ -21,12 +21,12 @@ cmd=$(actions | rmenu 'Layout' $cmd -no-custom) || exit
 
 cmd=$(echo "$cmd" | sed "s/.*$SEP //")
 case $cmd in
-	T*browser ) $ZEPHYR layout fold 3 $BROWSER ;;
-	T*edit    ) $ZEPHYR layout fold 3 kak      ;;
-	Thirds    ) $ZEPHYR layout fold 3          ;;
-	Q*browser ) $ZEPHYR layout fold 4 $BROWSER ;;
-	Q*edit    ) $ZEPHYR layout fold 4 kak      ;;
-	Quarters  ) $ZEPHYR layout fold 4          ;;
+	T*browser ) $AETHERA layout fold 3 $BROWSER ;;
+	T*edit    ) $AETHERA layout fold 3 kak      ;;
+	Thirds    ) $AETHERA layout fold 3          ;;
+	Q*browser ) $AETHERA layout fold 4 $BROWSER ;;
+	Q*edit    ) $AETHERA layout fold 4 kak      ;;
+	Quarters  ) $AETHERA layout fold 4          ;;
 esac
 
 # kak: filetype=sh

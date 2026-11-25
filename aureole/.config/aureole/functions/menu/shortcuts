@@ -1,7 +1,7 @@
 # sdothum - 2016 (c) wtfpl
 [ $TRACE ] && CHILD="menu/shortcuts $@" . $PARENT
 
-# Cirrus
+# Aureole
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ........................................................... Keybourd shortcuts
@@ -14,9 +14,9 @@ export COLSEP=⁋  # NOTE: '^' used for kak split regex SEE: menu (picklist)
 shortcuts() {
 echo "
 |    ⁋ | xclip -selection clipboard
-<    ⁋ >/dev/null
+?    ⁋ >/dev/null
 !    ⁋ 2>/dev/null
-&    ⁋ >/dev/null 2>&1
+=    ⁋ >/dev/null 2>&1
 ^    ⁋ [^\\\\n]*
 ,    ⁋ & \" \" &
 r    ⁋ grep -E
