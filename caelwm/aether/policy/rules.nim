@@ -82,16 +82,10 @@ proc kak(winid: string) =
     of 0:
       discard w.tile("3", "2")
     else:
-      if orientation() == Left:
-        if qutebrowser > 0:
-          discard w.tile("3", "3")
-        else:
-          discard w.tile("4", "4")
+      if qutebrowser > 0:
+        discard w.tile("3", "3")
       else:
-        if qutebrowser > 0:
-          discard w.tile("3", "1")
-        else:
-          discard w.tile("4", "1")
+        discard w.tile("4", "4")
   of 2 .. 3:
     layouts.fold(@["4", ClassKak])
     setGeometry()

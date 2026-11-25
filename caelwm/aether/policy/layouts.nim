@@ -238,10 +238,15 @@ proc gridOperation(command: string, args: seq[string], action: GridAction,
   action(columns, rows, column, row, a.winid, screenGeometry, sourceGeometry)
 
 proc tile*(args: seq[string]) =
+  let rightToLeft = orientation() == Right
+
   gridOperation("tile", args,
     proc(columns, rows, column, row: int, winid: string,
         screen: ScreenGeometry, geometry: Geometry) =
-      window.tileGrid(columns, rows, column, row, winid, screen, geometry))
+      let physicalColumn =
+        if rightToLeft: columns - column + 1
+        else: column
+      window.tileGrid(columns, rows, physicalColumn, row, winid, screen, geometry))
 
 proc spread*(args: seq[string]) =
   gridOperation("spread", args,
