@@ -50,7 +50,8 @@ proc readAll(fd: SocketHandle, destination: var string, size: int): bool =
   true
 
 proc framePayload(version: uint16, kind: uint8, argument: string): string =
-  let hasArgument = kind == RequestQueryClientState or kind == RequestQueryClientClass
+  let hasArgument = kind in [RequestQueryClientState, RequestQueryClientClass,
+    RequestSetLayoutBias]
   let payloadSize = 3 + (if hasArgument: 2 + argument.len else: 0)
   result = newString(4 + payloadSize)
   result[0] = char((uint32(payloadSize) shr 24) and 0xff)

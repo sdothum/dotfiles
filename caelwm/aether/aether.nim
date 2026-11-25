@@ -57,7 +57,7 @@ proc dispatchCommand(cmd: seq[string]) =
   of "group":
     group.dispatch(verb, rest)
 
-  of "layouts":
+  of "layout", "layouts":
     layouts.dispatch(verb, rest)
 
   of "rule":
@@ -106,6 +106,7 @@ proc usage() =
   echo "  aether group remove [<args>]"
   echo "  aether group restore"
   echo "  aether group toggle <args>"
+  echo "  aether layout bias [left|right]"
   echo "  aether layouts explode"
   echo "  aether layouts fold <args>"
   echo "  aether layouts unfold [<class> | --group <group>]"

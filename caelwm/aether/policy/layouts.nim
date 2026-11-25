@@ -9,23 +9,44 @@ import std/uri
 import ../zephyr_errors
 import ../wm/cliargs
 import ../wm/compat
-import ../wm/constants
+import ../wm/daemon_client
 import ../wm/group as groups
 import ../wm/group_id
 import ../wm/placement
 import ../wm/types
 import ../wm/window
 import ../wm/window_query as query
+import ./layout_bias
 
-let defaultOrientation = Left  # to Right
+export layout_bias.LayoutBias
 
-proc orientation*(): string =
-  let side = shvArgs("recipe", "orientation", @[], 0, 0)
-  case side
-  of Left:  return Left
-  of Right: return Right
-  of "":    return defaultOrientation
-  else:     raiseZephyrError("unknown orientation: " & side)
+proc bias*(): LayoutBias =
+  let resident = localBias()
+  if resident.isSome:
+    return resident.get
+  let reply = queryDaemon(RequestQueryLayoutBias)
+  if not reply.ok:
+    raiseZephyrError("layout bias: " & reply.error)
+  if reply.responseKind != RequestQueryLayoutBias:
+    raiseZephyrError("layout bias: unexpected response")
+  parseLayoutBias(reply.body)
+
+proc setBias*(value: LayoutBias) =
+  if localBias().isSome:
+    setResidentBias(value)
+    return
+  let reply = queryDaemon(RequestSetLayoutBias, $value)
+  if not reply.ok:
+    raiseZephyrError("layout bias: " & reply.error)
+  if reply.responseKind != RequestSetLayoutBias or reply.body != $value:
+    raiseZephyrError("layout bias: unexpected response")
+
+proc biasCommand(args: seq[string]) =
+  requireArgs("layout bias", args, 0, 1)
+  if args.len == 0:
+    echo bias()
+  else:
+    setBias(parseLayoutBias(args[0]))
 
 proc snapshotWinids*(snapshot: query.WmSnapshot, mappedOnly: bool,
     groupNo = none(PublicGroupId)): seq[string] =
@@ -39,7 +60,8 @@ proc snapshotFocusedWinid*(snapshot: query.WmSnapshot): string =
   if snapshot.focused.isSome:
     result = snapshot.focused.get()
 
-proc columnOrder*(columns, rows, position: int): int
+proc columnOrder*(columns, rows, position: int,
+    layoutBias: LayoutBias): int
 
 proc clientsFor(snapshot: query.WmSnapshot,
     winids: seq[string]): seq[PlacementClient] =
@@ -49,9 +71,10 @@ proc clientsFor(snapshot: query.WmSnapshot,
   for winid in winids:
     result.add(PlacementClient(winid: winid, token: tokens.getOrDefault(winid)))
 
-proc gridCells(count, columns, rows: int): seq[PlacementCell] =
+proc gridCells(count, columns, rows: int,
+    layoutBias: LayoutBias): seq[PlacementCell] =
   for position in 1 .. count:
-    let column = columnOrder(columns, rows, position)
+    let column = columnOrder(columns, rows, position, layoutBias)
     let row = (position - 1) mod rows + 1
     result.add(PlacementCell(column: column, row: row))
 
@@ -72,9 +95,10 @@ proc spreadGrid*(count: int): Spread =
     result.columns = 5
     result.rows = 3
 
-proc columnOrder*(columns, rows, position: int): int =
+proc columnOrder*(columns, rows, position: int,
+    layoutBias: LayoutBias): int =
   let order =
-    if orientation() == Left:
+    if layoutBias == LayoutBias.Left:
       case columns
       of 1: @[1]
       of 2: @[2, 1]
@@ -132,6 +156,7 @@ proc fold*(args: seq[string]) =
   let a = parseArguments("layouts fold", args,
     [ArgColumns, ArgRows, ArgClassname, ArgGroupNo, ArgSpread, ArgRecord],
     groups.count)
+  let operationBias = bias()
   let snapshot = query.wmSnapshot()
   let winids = selectedWinids(snapshot, true, a.groupNo, a.classname)
   let columns = a.columns.get
@@ -146,7 +171,7 @@ proc fold*(args: seq[string]) =
     else:
       some(allFoldRoot())
   placement.applyFold(clientsFor(snapshot, winids),
-    gridCells(winids.len, columns, rows), columns, rows, a.spread,
+    gridCells(winids.len, columns, rows, operationBias), columns, rows, a.spread,
     checkpointRoot, snapshotFocusedWinid(snapshot))
 
 proc unfold*(args: seq[string]) =
@@ -166,13 +191,14 @@ proc unfold*(args: seq[string]) =
 proc explode*(args: seq[string]) =
   requireArgs("layouts explode", args, 0, 2)
   let a = parseArguments("layouts explode", args, [ArgGroupNo], groups.count)
+  let operationBias = bias()
   let snapshot = query.wmSnapshot()
   if a.groupNo.isSome:
     let group = a.groupNo.get
     let winids = snapshotWinids(snapshot, true, some(group))
     let dimensions = spreadGrid(winids.len)
     placement.applyGroupExplode(clientsFor(snapshot, winids),
-      gridCells(winids.len, dimensions.columns, dimensions.rows),
+      gridCells(winids.len, dimensions.columns, dimensions.rows, operationBias),
       dimensions.columns, dimensions.rows,
       getEnv("WME") / "layout" / ("explode:group:" & $group.intValue),
       snapshotFocusedWinid(snapshot))
@@ -185,7 +211,7 @@ proc explode*(args: seq[string]) =
     sources.add(PlacementSource(client: clients[index], geometry: entry.geometry))
   let dimensions = spreadGrid(stack.len)
   placement.applyStackExplode(sources,
-    gridCells(stack.len, dimensions.columns, dimensions.rows),
+    gridCells(stack.len, dimensions.columns, dimensions.rows, operationBias),
     dimensions.columns, dimensions.rows,
     getEnv("WME") / "layout" / "explode", query.focusedWinid())
 
@@ -218,7 +244,8 @@ proc grid*(args: seq[string]): string =
 type GridAction = proc(columns, rows, column, row: int, winid: string,
   screenGeometry: ScreenGeometry, sourceGeometry: Geometry)
 
-proc gridOperation(command: string, args: seq[string], action: GridAction,
+proc gridOperation(command: string, args: seq[string], layoutBias: LayoutBias,
+    action: GridAction,
     providedScreen = ScreenGeometry(), sourceGeometry = Geometry()) =
   requireArgs(command, args, 1, 6)
   let a = parseArguments(command, args,
@@ -233,14 +260,15 @@ proc gridOperation(command: string, args: seq[string], action: GridAction,
     else: providedScreen
   let column =
     if a.column.isSome: a.column.get
-    else: columnOrder(columns, rows, position)
+    else: columnOrder(columns, rows, position, layoutBias)
   let row = (position - 1) mod rows + 1
   action(columns, rows, column, row, a.winid, screenGeometry, sourceGeometry)
 
 proc tile*(args: seq[string]) =
-  let rightToLeft = orientation() == Right
+  let operationBias = bias()
+  let rightToLeft = operationBias == LayoutBias.Right
 
-  gridOperation("tile", args,
+  gridOperation("tile", args, operationBias,
     proc(columns, rows, column, row: int, winid: string,
         screen: ScreenGeometry, geometry: Geometry) =
       let physicalColumn =
@@ -249,7 +277,8 @@ proc tile*(args: seq[string]) =
       window.tileGrid(columns, rows, physicalColumn, row, winid, screen, geometry))
 
 proc spread*(args: seq[string]) =
-  gridOperation("spread", args,
+  let operationBias = bias()
+  gridOperation("spread", args, operationBias,
     proc(columns, rows, column, row: int, winid: string,
         screen: ScreenGeometry, geometry: Geometry) =
       window.spreadGrid(columns, column, rows, row, winid, screen, geometry))
@@ -270,6 +299,7 @@ proc restore*(args: seq[string]) =
 
 proc dispatch*(verb: string, rest: seq[string]) =
   case verb
+  of "bias": biasCommand(rest)
   of "explode": explode(rest)
   of "fold": fold(rest)
   of "grid": echo grid(rest)

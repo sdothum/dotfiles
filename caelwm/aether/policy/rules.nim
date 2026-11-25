@@ -98,7 +98,7 @@ proc luakit(winid: string) =
     .group(GroupComm)
     .size("690x1080")
     .snap(Center, Vertical)
-    .spread(orientation())
+    .spread($layouts.bias())
 
 proc manpage(winid: string) =
   discard window.target(winid)

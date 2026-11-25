@@ -7,6 +7,9 @@ import std/times
 import std/re
 import std/options
 
+import ../policy/layout_bias
+import ../zephyr_errors
+
 const
   ProtocolVersion* = 1'u16
   MaxFrameSize* = 64 * 1024
@@ -23,6 +26,8 @@ const
   RequestQueryClassList* = 10'u8
   RequestQueryNameList* = 11'u8
   RequestAwaitReady* = 12'u8
+  RequestQueryLayoutBias* = 14'u8
+  RequestSetLayoutBias* = 15'u8
   ResponsePong = 1'u8
   ResponseDaemonReady* = 13'u8
   StatusOk = 0'u8
@@ -43,7 +48,8 @@ type
   DaemonRequestKind* = enum
     drPing, drQueryFocused, drQueryCurrentGroup, drQuerySnapshot,
       drQueryClientState, drQueryClientList, drQueryClientClass, drWaitClass,
-      drWaitName, drQueryClassList, drQueryNameList, drAwaitReady
+      drWaitName, drQueryClassList, drQueryNameList, drAwaitReady,
+      drQueryLayoutBias, drSetLayoutBias
 
   DaemonRequest* = object
     version*: uint16
@@ -52,6 +58,7 @@ type
     timeoutMs*: uint32
     includeAll*: bool
     groupNo*: uint32 # Zero means no group filter in the daemon protocol.
+    layoutBias*: LayoutBias
     waitExpression: Regex
 
   DaemonCachedClient* = object
@@ -169,6 +176,9 @@ proc decodeRequest(payload: string): tuple[request: DaemonRequest, error: string
     of RequestAwaitReady:
       result.request = DaemonRequest(version: version, kind: drAwaitReady)
       return
+    of RequestQueryLayoutBias:
+      result.request = DaemonRequest(version: version, kind: drQueryLayoutBias)
+      return
     of RequestQueryFocused, RequestQueryCurrentGroup, RequestQuerySnapshot,
       RequestQueryClientList:
       result.request = DaemonRequest(version: version,
@@ -181,6 +191,17 @@ proc decodeRequest(payload: string): tuple[request: DaemonRequest, error: string
     return (DaemonRequest(version: version), "malformed request payload",
       ErrorMalformedRequest)
   let kind = uint8(ord(payload[2]))
+  if kind == RequestSetLayoutBias:
+    let argumentLength = (uint16(ord(payload[3])) shl 8) or uint16(ord(payload[4]))
+    if argumentLength == 0 or payload.len != 5 + int(argumentLength):
+      return (DaemonRequest(version: version), "malformed request payload",
+        ErrorMalformedRequest)
+    try:
+      result.request = DaemonRequest(version: version, kind: drSetLayoutBias,
+        layoutBias: parseLayoutBias(payload[5 .. ^1]))
+    except ZephyrError as error:
+      return (DaemonRequest(version: version), error.msg, ErrorMalformedRequest)
+    return
   if kind == RequestWaitClass or kind == RequestWaitName:
     let argumentLength = (uint16(ord(payload[3])) shl 8) or uint16(ord(payload[4]))
     if argumentLength == 0 or payload.len != 9 + int(argumentLength):
@@ -361,6 +382,18 @@ proc processInput(server: var IpcServer, client: var IpcClient): bool =
     case decoded.request.kind
     of drPing:
       queueResponse(client, responseOk(ResponsePong))
+    of drQueryLayoutBias, drSetLayoutBias:
+      # Policy state is independent of WM observation/readiness. No layout or
+      # X11 operation is performed by either request.
+      if localBias().isNone:
+        queueResponse(client, responseError(ProtocolVersion, ErrorInternal,
+          "layout bias: resident policy is not initialized"))
+      else:
+        if decoded.request.kind == drSetLayoutBias:
+          setResidentBias(decoded.request.layoutBias)
+        queueResponse(client, responseData(
+          if decoded.request.kind == drSetLayoutBias: RequestSetLayoutBias
+          else: RequestQueryLayoutBias, $localBias().get))
     of drAwaitReady:
       if server.ready:
         queueResponse(client, responseOk(ResponseDaemonReady))

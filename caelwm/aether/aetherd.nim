@@ -18,6 +18,7 @@ import wm/daemon_ipc
 
 import policy/rules
 import policy/types as policyTypes
+import policy/layout_bias
 
 proc baseline(snapshot: WmSnapshot): string =
   let focused =
@@ -168,6 +169,7 @@ proc refresh(
   previousMetadata = cachedClients
   true
 
+initializeResidentBias()
 var ipc: IpcServer
 while not ipc.open():
   stderr.writeLine("IPC_SOCKET_FAILED")

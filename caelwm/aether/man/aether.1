@@ -1,13 +1,15 @@
 .\" Adapted from ~/stow/zephyr/man/zephyr.1; checked against Aether Nim sources.
 .\" Maintained directly as man(7) source.
 .
-.TH "AETHER" "1" "November 22, 2026" "aether" "aether Manual"
+.TH "AETHER" "1" "November 25, 2026" "aether" "aether Manual"
 .
 .SH "NAME"
 \fBaether\fR \- Aureole policy and workflow controller
 .
 .SH "SYNOPSIS"
 \fBaether\fR \fIdomain\fR \fIaction\fR [\fIargs\fR\.\.\.]
+.br
+\fBaether layout bias\fR [\fBleft\fR | \fBright\fR]
 .
 .P
 Commands may be chained with a separate period argument (\fB.\fR).
@@ -267,10 +269,26 @@ public actions\.
 .
 .SS "LAYOUT"
 .
+The \fBlayout\fR and \fBlayouts\fR domains are interchangeable\.
+.
+.IP "\(bu" 4
+\fBlayout bias [left | right]\fR: Query or set the directional bias used by
+applicable layout policies\. Without an argument, print the current bias
+(\fBleft\fR or \fBright\fR)\. \fBleft\fR selects left\-to\-right layout
+progression; \fBright\fR selects right\-to\-left layout progression\.
+The default is \fBleft\fR\. Setting bias does not reposition existing windows
+or invoke a layout operation\. Invalid arguments are rejected without changing
+the current bias\.
+.
+.P
+A running \fBaetherd\fR is required to query or set bias\. The daemon maintains
+bias across independent \fBaether\fR invocations for its lifetime\.
+Restarting \fBaetherd\fR resets bias to \fBleft\fR\.
+.
 .IP "\(bu" 4
 \fBlayouts explode\fR: Capture the current overlap\-connected stack, save
 original geometry, and arrange those windows according to the existing layout
-rule\.
+rule and current bias\.
 .
 .IP "\(bu" 4
 \fBlayouts unexplode\fR: Restore saved geometry for surviving exploded
@@ -278,9 +296,9 @@ windows\.
 .
 .IP "\(bu" 4
 \fBlayouts explode \-\-group\fR \fIgroup\fR: Place visible group members using
-the fold grid engine and save a dedicated identity\-bearing explode operation
-under \fB$WME/layout/explode:group:N\fR\. Each group retains independent
-state\.
+the fold grid engine with the current bias and save a dedicated
+identity\-bearing explode operation under \fB$WME/layout/explode:group:N\fR\.
+Each group retains independent state\.
 .
 .IP "\(bu" 4
 \fBlayouts unexplode \-\-group\fR \fIgroup\fR: Restore that recorded
@@ -290,8 +308,9 @@ Preserve current focus and remove the saved operation after restoration\.
 .
 .IP "\(bu" 4
 \fBlayouts fold COLUMNS [CLASS | \-\-group GROUP] [\-\-rows ROWS] [\-\-spread]
-[\-\-record]\fR: Fold matching mapped windows into a grid (ROWS defaults to 1;
-\-\-spread preserves window sizes), then raise participants in placement order
+[\-\-record]\fR: Fold matching mapped windows into a grid using the current
+bias (ROWS defaults to 1; \-\-spread preserves window sizes), then raise
+participants in placement order
 within their effective stacking bands while preserving focus\. Repeating an
 unchanged fold still raises the selected set\. Group explode shares this
 stacking behavior without sharing fold transaction ownership\. Add
@@ -320,12 +339,13 @@ clients, or all clients with \-\-all, preserving focus\.
 .IP "\(bu" 4
 \fBlayouts spread COLUMNS [COLUMN] [\-\-rows ROWS] [\-\-position POSITION]
 [WINID]\fR: Place one target without resizing, using layout grid placement
-order. Rows and position default to 1; COLUMN overrides the column derived
-from POSITION\.
+order with the current bias. Rows and position default to 1; COLUMN overrides
+the column derived from POSITION\.
 .
 .IP "\(bu" 4
 \fBlayouts tile COLUMNS [COLUMN] [\-\-rows ROWS] [\-\-position POSITION]
-[WINID]\fR: Resize and position one target using layout grid placement order.
+[WINID]\fR: Resize and position one target using layout grid placement order
+with the current bias.
 Rows and position default to 1; COLUMN overrides the column derived from
 POSITION\.
 .
