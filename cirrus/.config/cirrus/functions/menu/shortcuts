@@ -17,7 +17,7 @@ echo "
 |    ⁋ | xclip -selection clipboard${CR}
 <    ⁋ >/dev/null
 !    ⁋ 2>/dev/null
-&    ⁋ >/dev/null 2>&1
+@    ⁋ >/dev/null 2>&1
 ^    ⁋ [^\\\\n]*
 ,    ⁋ & \" \" &
 r    ⁋ grep -E
