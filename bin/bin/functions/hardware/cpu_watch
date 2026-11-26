@@ -18,6 +18,6 @@ NOCOLOR=$(printf '\033[0m')
 
 clear
 # watch -fn 0.1 "grep MHz /proc/cpuinfo | sort -nr | grep ' 5[${1:-5}-9]'"
-TERM=xterm-256color watch -cfn 0.1 "grep MHz /proc/cpuinfo | sort -nr | grep ' 5[${1:-5}-9]' | sed '/: 56/s/ 5.*/${YELLOW}&${NOCOLOR}/; /: 57/s/ 5.*/${CYAN}&${NOCOLOR}/; /: 58/s/ 5.*/${GREEN}&${NOCOLOR}/; /: 59/s/ 5.*/${RED}&${NOCOLOR}/'"
+TERM=xterm-256color watch -cfn 0.1 "grep MHz /proc/cpuinfo | sort -nr | grep ' 5[${1:-5}-9]' | sed 's/^.*:/\tcpu MHz:   /; / 56/s/ 5.*/${YELLOW}&${NOCOLOR}/; / 57/s/ 5.*/${CYAN}&${NOCOLOR}/; / 58/s/ 5.*/${GREEN}&${NOCOLOR}/; / 59/s/ 5.*/${RED}&${NOCOLOR}/'"
 
 # kak: filetype=sh
