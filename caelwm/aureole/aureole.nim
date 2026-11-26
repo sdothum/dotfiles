@@ -16,8 +16,14 @@ import model/pointer
 import startup/[adoption, identity_service, legacy_cli]
 import startup/aureolerc
 
+
+# Prints the supported diagnostic and configuration invocation forms to stderr.
+
 proc usage() =
   stderr.writeLine("usage: aureole [-c CONFIG_PATH] [--test-events | --test-state | --test-lifecycle [--test-pause-before-effects]] | --abi")
+
+
+# Serializes managed clients, focus order and group state for diagnostic output.
 
 proc stateJson(state: WmState): string =
   var clients = newJArray()
@@ -55,6 +61,9 @@ proc stateJson(state: WmState): string =
        "focus_order": focusOrder, "current_group": state.currentGroup.raw,
        "active_groups": activeGroups})
 
+
+# Serializes the compact client identity and decoration diagnostic view.
+
 proc legacyStateJson(state: WmState): string =
   var clients = newJArray()
   for client in state.clientsInManagedOrder():
@@ -70,6 +79,10 @@ proc legacyStateJson(state: WmState): string =
           %(&"0x{client.decoration.get.raw:08x}") else: newJNull())
     })
   $(%*{"clients": clients})
+
+
+# Parses startup options, adopts clients and runs the event pump with ordered cleanup.
+# Diagnostic options select observation and reporting paths before normal shutdown.
 
 proc main(): int =
   let startupOptions = parseLegacyStartupOptions(commandLineParams(), paramStr(0))

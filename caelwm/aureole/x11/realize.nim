@@ -12,8 +12,10 @@ when defined(stage6FailureInjection):
   var stage6RestackCall = 0
   var stage6RaiseEffectCall = 0
 
+
+  # Diagnostic-only arm file contains `raise-effect-index subrequest-index`.
+
   proc stage6RaiseFailureSubrequest*(): int =
-    ## Diagnostic-only arm file contains `raise-effect-index subrequest-index`.
     let armPath = getEnv("CIRRUS_STAGE6_FAIL_RAISE_ARM_FILE")
     if armPath.len == 0 or not fileExists(armPath): return -1
     inc stage6RaiseEffectCall
@@ -23,9 +25,11 @@ when defined(stage6FailureInjection):
     removeFile(armPath)
     parseInt(fields[1])
 
+
+  # Diagnostic builds only: the arm file contains `call-index request-index`.
+  # The real checked ConfigureWindow request still reaches the X server.
+
   proc stage6FailureRequestIndex*(): int =
-    ## Diagnostic builds only: the arm file contains `call-index request-index`.
-    ## The real checked ConfigureWindow request still reaches the X server.
     let armPath = getEnv("CIRRUS_STAGE6_FAIL_ARM_FILE")
     if armPath.len == 0 or not fileExists(armPath): return -1
     inc stage6RestackCall
@@ -37,6 +41,9 @@ when defined(stage6FailureInjection):
     removeFile(armPath)
     wantedRequest
 
+
+  # Appends a diagnostic failure trace line when its output path is configured.
+
   proc stage6FailureTrace*(line: string) =
     let tracePath = getEnv("CIRRUS_STAGE6_FAIL_TRACE")
     if tracePath.len != 0:
@@ -47,6 +54,9 @@ when defined(stage6FailureInjection):
 type CheckedErrorDisposition* = enum
   cedRequestSucceeded, cedIgnoreMissingWindow, cedIgnoreBadValue, cedPropagate
 
+
+# Classifies a checked result under the caller's missing-window and bad-value allowances.
+
 proc checkedErrorDisposition*(errorCode: Option[uint8];
     missingIsOk: bool; badValueIsOk = false): CheckedErrorDisposition =
   if errorCode.isNone:
@@ -56,6 +66,10 @@ proc checkedErrorDisposition*(errorCode: Option[uint8];
   if badValueIsOk and errorCode.get == ErrorBadValue:
     return cedIgnoreBadValue
   cedPropagate
+
+
+# Observes a checked request, frees errors and raises unless its protocol failure is allowed.
+# Connection loss remains an error even when a protocol error is ignored.
 
 proc checked(connection: XConnection; cookie: XcbVoidCookie;
              operation: string; missingIsOk = false;
@@ -87,9 +101,11 @@ proc checked(connection: XConnection; cookie: XcbVoidCookie;
   if not connection.isConnected:
     raise newException(IOError, operation & " lost the X connection")
 
+
+# C's EWMH property helpers collect and free checked errors but ignore the
+# result. Preserve that per-path behavior without hiding connection loss.
+
 proc checkedIgnoringError(connection: XConnection; cookie: XcbVoidCookie) =
-  ## C's EWMH property helpers collect and free checked errors but ignore the
-  ## result. Preserve that per-path behavior without hiding connection loss.
   let error = xcbRequestCheck(connection.rawHandleForX11(), cookie)
   if error != nil: cFree(error)
   if not connection.isConnected:
@@ -98,9 +114,11 @@ proc checkedIgnoringError(connection: XConnection; cookie: XcbVoidCookie) =
 type ClientMapResult* = enum
   cmrSubmitted, cmrBadWindow
 
+
+# Submitted is a checked request outcome, not a visibility confirmation.
+
 proc realizeClientMap*(connection: var XConnection;
                        effect: WmEffect): ClientMapResult =
-  ## Submitted is a checked request outcome, not a visibility confirmation.
   let raw = connection.rawHandleForX11()
   let cookie = xcbMapWindowChecked(raw, effect.window.raw)
   if effect.ignoreFailure:
@@ -126,8 +144,10 @@ proc realizeClientMap*(connection: var XConnection;
   if xcbFlush(raw) <= 0:
     raise newException(IOError, "failed to flush client map")
 
+
+# XCB QueryTree returns root children bottom-to-top (index zero is bottom).
+
 proc queryRootChildren*(connection: XConnection): seq[uint32] =
-  ## XCB QueryTree returns root children bottom-to-top (index zero is bottom).
   let raw = connection.rawHandleForX11()
   var error: ptr XcbGenericError
   let reply = xcbQueryTreeReply(raw, xcbQueryTree(raw, connection.root), addr error)
@@ -144,26 +164,40 @@ proc queryRootChildren*(connection: XConnection): seq[uint32] =
     result.add(children[index])
   cFree(reply)
 
+
+# Acquires the server grab with checked error observation for explicit stacking.
+
 proc beginStackingGrab*(connection: XConnection) =
   checked(connection, xcbGrabServerChecked(connection.rawHandleForX11()),
       "grab server for stacking operation")
 
+
+# Releases the explicit stacking server grab with checked error observation.
+
 proc endStackingGrab*(connection: XConnection) =
   checked(connection, xcbUngrabServerChecked(connection.rawHandleForX11()),
       "release server after stacking operation")
+
+
+# Submits the source-compatible unchecked server grab before configure and layer repair.
 
 proc beginConfigureRequestStacking*(connection: XConnection) =
   # Frozen C uses unchecked GrabServer/UnGrabServer around the redirected
   # ConfigureWindow request and the subsequent checked layer enforcement.
   discard xcbGrabServer(connection.rawHandleForX11())
 
+
+# C configure_window_stacking submits the target raise unchecked while
+# holding the server grab; layer repair is checked separately afterward.
+
 proc raiseWindowUnchecked*(connection: XConnection; window: WindowId): uint32 =
-  ## C configure_window_stacking submits the target raise unchecked while
-  ## holding the server grab; layer repair is checked separately afterward.
   var values = XcbConfigureWindowValueList(data32: [0'u32, 0, 0, 0])
   let cookie = xcbConfigureWindow(connection.rawHandleForX11(), window.raw,
       1'u16 shl 6, addr values)
   uint32(cookie.sequence)
+
+
+# Submits and flushes the unchecked ungrab before control returns to polling.
 
 proc endConfigureRequestStacking*(connection: XConnection) =
   discard xcbUngrabServer(connection.rawHandleForX11())
@@ -171,19 +205,27 @@ proc endConfigureRequestStacking*(connection: XConnection) =
   # xcb_wait_for_event. Flush the unchecked ungrab before it returns to poll.
   discard xcbFlush(connection.rawHandleForX11())
 
+
+# Submits the unchecked server grab used around circulation and layer repair.
+
 proc beginCirculateRequestStacking*(connection: XConnection) =
   # Frozen C uses unchecked GrabServer around circulation plus layer repair.
   discard xcbGrabServer(connection.rawHandleForX11())
+
+
+# Submits and flushes the unchecked ungrab after circulation and layer repair.
 
 proc endCirculateRequestStacking*(connection: XConnection) =
   discard xcbUngrabServer(connection.rawHandleForX11())
   discard xcbFlush(connection.rawHandleForX11())
 
+
+# Realizes a previously model-ordered root list. The input direction is
+# bottom-to-top and XCB receives each child above its predecessor.
+
 proc restackPhysicalBottomToTop*(connection: XConnection;
                                  windows: openArray[WindowId];
                                  diagnosticFailureIndex = -1) =
-  ## Realize a previously model-ordered root list. The input direction is
-  ## bottom-to-top and XCB receives each child above its predecessor.
   let raw = connection.rawHandleForX11()
   for index in 1 ..< windows.len:
     let intended = windows[index].raw
@@ -202,12 +244,18 @@ proc restackPhysicalBottomToTop*(connection: XConnection;
     checked(connection, cookie,
         "restack root child above predecessor")
 
+
+# Filters supplied root children to managed XIDs while retaining physical order.
+
 proc projectManagedRootOrder*(rootChildren,
                               managedWindows: openArray[uint32]): seq[uint32] =
   let managed = toHashSet(managedWindows)
   for window in rootChildren:
     if window in managed:
       result.add(window)
+
+
+# Queries physical root order and projects it onto the supplied managed window set.
 
 proc managedClientRootOrder(connection: XConnection;
                             managedWindows: openArray[uint32]): seq[uint32] =
@@ -222,10 +270,12 @@ type
     property*: uint32
     window*: uint32
 
+
+# Matches C update_client_list(): clear both properties, then append each
+# managed root child to both properties in physical bottom-to-top order.
+
 proc clientListMutationPlan*(physicalOrder: openArray[uint32];
     clientListAtom, stackingAtom: uint32): seq[ClientListMutation] =
-  ## Match C update_client_list(): clear both properties, then append each
-  ## managed root child to both properties in physical bottom-to-top order.
   result.add(ClientListMutation(kind: clmkDelete, property: clientListAtom))
   result.add(ClientListMutation(kind: clmkDelete, property: stackingAtom))
   for window in physicalOrder:
@@ -233,6 +283,9 @@ proc clientListMutationPlan*(physicalOrder: openArray[uint32];
         window: window))
     result.add(ClientListMutation(kind: clmkAppend, property: stackingAtom,
         window: window))
+
+
+# Clears and appends both EWMH client lists using a fresh physical root ordering.
 
 proc republishClientLists*(connection: XConnection;
                            managedWindows: openArray[uint32]) =
@@ -251,9 +304,11 @@ proc republishClientLists*(connection: XConnection;
           connection.root, mutation.property, connection.atoms.window,
           32, 1, addr window), "append root client-list window")
 
+
+# Preserves the existing _NET_CLIENT_LIST trigger while allowing the
+# physical stacking property to be refreshed after restacking completes.
+
 proc publishClientLists*(connection: XConnection; managedWindows: openArray[uint32]) =
-  ## Preserve the existing _NET_CLIENT_LIST trigger while allowing the
-  ## physical stacking property to be refreshed after restacking completes.
   let physicalOrder = connection.managedClientRootOrder(managedWindows)
   let raw = connection.rawHandleForX11()
   if physicalOrder.len == 0:
@@ -265,10 +320,12 @@ proc publishClientLists*(connection: XConnection; managedWindows: openArray[uint
       connection.root, connection.atoms.netClientList, connection.atoms.window,
       32, uint32(physicalOrder.len), valuesPtr), "publish _NET_CLIENT_LIST")
 
+
+# Publishes managed root children in QueryTree's bottom-to-top order. The
+# query is deliberately independent of _NET_CLIENT_LIST publication.
+
 proc publishClientListStacking*(connection: XConnection;
                                 managedWindows: openArray[uint32]) =
-  ## Publish managed root children in QueryTree's bottom-to-top order. The
-  ## query is deliberately independent of _NET_CLIENT_LIST publication.
   let physicalOrder = connection.managedClientRootOrder(managedWindows)
   let raw = connection.rawHandleForX11()
   if physicalOrder.len == 0:
@@ -282,10 +339,12 @@ proc publishClientListStacking*(connection: XConnection;
       connection.atoms.window, 32, uint32(physicalOrder.len), valuesPtr),
       "publish _NET_CLIENT_LIST_STACKING")
 
+
+# Forwards only geometry fields. Stack/sibling behavior is a later stage.
+
 proc passUnmanagedConfigureGeometry*(connection: XConnection; window: uint32;
                                      mask: uint16; x, y: int16;
                                      width, height: uint16) =
-  ## Forward only geometry fields. Stack/sibling behavior is a later stage.
   var values: XcbConfigureWindowValueList
   let packed = packGeometryValues(mask, int32(x), int32(y), uint32(width), uint32(height))
   values.data32 = [packed.values[0], packed.values[1], packed.values[2], packed.values[3]]
@@ -294,10 +353,12 @@ proc passUnmanagedConfigureGeometry*(connection: XConnection; window: uint32;
       window, packed.mask, addr values), "forward unmanaged geometry ConfigureRequest",
       missingIsOk = true)
 
+
+# Shared compatibility path for the frozen-C unchecked move / resize
+# requests used by geometry batches and diagnostic execution.
+
 proc realizePrivateGeometryUnchecked*(connection: XConnection;
     effect: WmEffect): uint32 =
-  ## Shared compatibility path for the frozen-C unchecked move / resize
-  ## requests used by geometry batches and diagnostic execution.
   let raw = connection.rawHandleForX11()
   var values: XcbConfigureWindowValueList
   var mask: uint16
@@ -315,10 +376,12 @@ proc realizePrivateGeometryUnchecked*(connection: XConnection;
   let cookie = xcbConfigureWindow(raw, effect.window.raw, mask, addr values)
   result = uint32(cookie.sequence)
 
+
+# Realizes the unchecked button operations shared with the frozen-C handler.
+# Sequence numbers are available to the diagnostic coordinator for attribution.
+
 proc realizePrivateButtonEffect*(connection: XConnection;
                                  effect: PrivateEffect): seq[uint32] =
-  ## Realize the unchecked button operations shared with the frozen-C handler.
-  ## Sequence numbers are available to the diagnostic coordinator for attribution.
   let raw = connection.rawHandleForX11()
   case effect.kind
   of pfeUngrabButtons:
@@ -333,6 +396,9 @@ proc realizePrivateButtonEffect*(connection: XConnection;
       result.add(uint32(cookie.sequence))
   else:
     raise newException(ValueError, "not a button-grab private effect")
+
+
+# Sends WM_DELETE_WINDOW or kills the client according to the prepared close effect.
 
 proc realizeCloseEffect*(connection: var XConnection;
                          effect: PrivateEffect) =
@@ -351,6 +417,10 @@ proc realizeCloseEffect*(connection: var XConnection;
         "kill X11 client")
   else:
     raise newException(ValueError, "not a close private effect")
+
+
+# Issues the XCB operations for one lifecycle effect and flushes them before returning.
+# Per-effect checked-error allowances preserve the established protocol behavior.
 
 proc realize*(connection: var XConnection; effect: WmEffect;
               managedWindows: openArray[uint32]; diagnosticRaiseSubrequest = -1) =

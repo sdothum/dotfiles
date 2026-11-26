@@ -9,6 +9,9 @@ type
     Gt
     Ge
 
+
+# Parses a comparison operator enum, propagating ValueError for an unknown name.
+
 proc parseCompareOp*(s: string): CompareOp =
   parseEnum[CompareOp](s)
 

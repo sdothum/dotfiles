@@ -17,6 +17,9 @@ type
     normalHints*: Property32
     setByUser*: bool
 
+
+# Copies runtime attributes, geometry and policy properties, returning none for missing replies.
+
 proc queryRuntimeWindow*(connection: XConnection;
                          window: uint32): Option[RuntimeWindowObservation] =
   let raw = connection.rawHandleForX11()
@@ -51,11 +54,13 @@ proc queryRuntimeWindow*(connection: XConnection;
   observation.setByUser = hints.values.len > 0 and (hints.values[0] and 1'u32) != 0
   some(observation)
 
+
+# Observation used only after the model has resolved a managed target.
+# Frozen C's Above layer setter performs this attributes round trip before
+# committing its logical layer, which rejects a destroyed stale record but
+# still permits a replacement resource with the same XID.
+
 proc runtimeWindowExists*(connection: XConnection; window: uint32): bool =
-  ## Observation used only after the model has resolved a managed target.
-  ## Frozen C's Above layer setter performs this attributes round trip before
-  ## committing its logical layer, which rejects a destroyed stale record but
-  ## still permits a replacement resource with the same XID.
   let raw = connection.rawHandleForX11()
   var error: ptr XcbGenericError
   let reply = xcbGetWindowAttributesReply(raw,
@@ -65,9 +70,11 @@ proc runtimeWindowExists*(connection: XConnection; window: uint32): bool =
   cFree(reply)
   true
 
+
+# C layer enforcement subscribes to property changes on unmanaged root
+# children so later DOCK/ABOVE changes can trigger another refresh.
+
 proc selectPropertyChanges*(connection: XConnection; window: uint32) =
-  ## C layer enforcement subscribes to property changes on unmanaged root
-  ## children so later DOCK/ABOVE changes can trigger another refresh.
   let raw = connection.rawHandleForX11()
   var error: ptr XcbGenericError
   let reply = xcbGetWindowAttributesReply(raw,
@@ -80,10 +87,12 @@ proc selectPropertyChanges*(connection: XConnection; window: uint32) =
   var mask = existing or EventMaskPropertyChange
   discard xcbChangeWindowAttributes(raw, window, CwEventMask, addr mask)
 
+
+# Fresh WM_PROTOCOLS observation. `some(false)` is a valid absent or
+# unsupported capability; `none` means the property could not be trusted.
+
 proc queryWmDeleteSupported*(connection: XConnection;
                              window: uint32): Option[bool] =
-  ## Fresh WM_PROTOCOLS observation. `some(false)` is a valid absent or
-  ## unsupported capability; `none` means the property could not be trusted.
   let raw = connection.rawHandleForX11()
   var error: ptr XcbGenericError
   let reply = xcbGetPropertyReply(raw,
@@ -111,6 +120,9 @@ proc queryWmDeleteSupported*(connection: XConnection;
       return some(true)
   cFree(reply)
   some(false)
+
+
+# Detects dock, toolbar or desktop types excluded from ordinary runtime management.
 
 proc isSpecialRuntimeType*(observation: RuntimeWindowObservation;
                            connection: XConnection): bool =

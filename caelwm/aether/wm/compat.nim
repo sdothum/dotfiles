@@ -12,6 +12,9 @@ let TraceEnabled =
 # Tracing
 #
 
+
+# Formats a command and its arguments for diagnostics without shell quoting.
+
 proc argvText(cmd: string, args: openArray[string]): string =
   result = cmd
 
@@ -19,15 +22,24 @@ proc argvText(cmd: string, args: openArray[string]): string =
     result.add(" ")
     result.add(args.join(" "))
 
+
+# Logs the command text to stderr when controller tracing is enabled.
+
 proc traceCommand(cmd: string, args: openArray[string]) =
   if TraceEnabled:
     stderr.writeLine("aether: " & argvText(cmd, args))
+
+
+# Logs command text and exit status when controller tracing is enabled.
 
 proc traceStatus(cmd: string, args: openArray[string], code: int) =
   if TraceEnabled:
     stderr.writeLine(
       "aether: " & argvText(cmd, args) & " -> " & $code
     )
+
+
+# Logs captured output when controller tracing is enabled.
 
 proc traceOutput(output: string) =
   if TraceEnabled:
@@ -36,6 +48,9 @@ proc traceOutput(output: string) =
 #
 # Validation
 #
+
+
+# Checks a command verb's argument bounds and raises the established arity diagnostic.
 
 proc requireArgCount*(
   cmd: string,
@@ -55,6 +70,9 @@ proc requireArgCount*(
       $minLen & ".." & $maxLen & " arguments"
     )
 
+
+# Checks inclusive argument-count bounds and raises a controller error on mismatch.
+
 proc requireArgs*(
   command: string,
   args: seq[string],
@@ -62,6 +80,9 @@ proc requireArgs*(
 ) =
   if args.len < minArgs or args.len > maxArgs:
     raiseZephyrError(command & " expects " & $minArgs & ".." & $maxArgs & " arguments")
+
+
+# Requires an exact argument count and raises a controller error on mismatch.
 
 proc requireArgs*(
   command: string,
@@ -71,12 +92,18 @@ proc requireArgs*(
   if args.len != minArgs:
     raiseZephyrError(command & " expects " & $minArgs & " args")
 
+
+# Rejects any arguments for a command that expects none.
+
 proc requireNoArgs*(command: string, args: seq[string]) =
   requireArgs(command, args, 0)
 
 #
 # Process execution
 #
+
+
+# Runs an argv command with inherited streams, waits for exit and returns its status.
 
 proc statusv(
   cmd: string,
@@ -95,6 +122,9 @@ proc statusv(
 
   traceStatus(cmd, args, result)
 
+
+# Runs an argv command and terminates the controller with its nonzero exit status.
+
 proc runv(
   cmd: string,
   args: openArray[string]
@@ -106,6 +136,9 @@ proc runv(
       argvText(cmd, args) & " failed: " & $code,
       code
     )
+
+
+# Captures and strips command output using PATH lookup, with optional tracing.
 
 proc shv*(
   cmd: string,
@@ -120,6 +153,9 @@ proc shv*(
   ).strip()
 
   traceOutput(result)
+
+
+# Captures stripped command output and exit status, then closes the process handle.
 
 proc shvStatus*(
   cmd: string,
@@ -143,8 +179,14 @@ proc shvStatus*(
 # Validated argv helpers
 #
 
+
+# Prepends the verb to the argument sequence passed to a subprocess.
+
 proc commandArgs(verb: string, args: seq[string]): seq[string] =
   @[verb] & args
+
+
+# Validates verb arity before capturing stripped subprocess output.
 
 proc shvArgs*(
   cmd: string,
@@ -156,6 +198,9 @@ proc shvArgs*(
   requireArgCount(cmd, verb, args, minLen, maxLen)
   result = shv(cmd, commandArgs(verb, args))
 
+
+# Validates verb arity before executing a subprocess with inherited streams.
+
 proc runvArgs*(
   cmd: string,
   verb: string,
@@ -165,6 +210,9 @@ proc runvArgs*(
 ) =
   requireArgCount(cmd, verb, args, minLen, maxLen)
   runv(cmd, commandArgs(verb, args))
+
+
+# Validates verb arity before returning the subprocess exit status.
 
 proc statusvArgs*(
   cmd: string,
@@ -179,6 +227,9 @@ proc statusvArgs*(
 #
 # Templates
 #
+
+
+# Generates sequence and varargs command wrappers that use the validated process helper.
 
 template defineCommandProc*(
   name: untyped,

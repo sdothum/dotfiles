@@ -20,6 +20,10 @@ import ./layout_bias
 
 export layout_bias.LayoutBias
 
+
+# Reads authoritative layout bias from resident policy state or daemon IPC.
+# Raises an error if the remote query fails or returns an invalid response.
+
 proc bias*(): LayoutBias =
   let resident = localBias()
   if resident.isSome:
@@ -31,6 +35,10 @@ proc bias*(): LayoutBias =
     raiseZephyrError("layout bias: unexpected response")
   parseLayoutBias(reply.body)
 
+
+# Updates resident policy bias when initialized; otherwise sets it through daemon IPC.
+# Raises an error if the remote update fails or its acknowledgement differs.
+
 proc setBias*(value: LayoutBias) =
   if localBias().isSome:
     setResidentBias(value)
@@ -41,12 +49,19 @@ proc setBias*(value: LayoutBias) =
   if reply.responseKind != RequestSetLayoutBias or reply.body != $value:
     raiseZephyrError("layout bias: unexpected response")
 
+
+# Prints the current bias or sets it from a single left or right argument.
+
 proc biasCommand(args: seq[string]) =
   requireArgs("layout bias", args, 0, 1)
   if args.len == 0:
     echo bias()
   else:
     setBias(parseLayoutBias(args[0]))
+
+
+# Returns lexically sorted snapshot window IDs, optionally restricted to mapped clients
+# and a group.
 
 proc snapshotWinids*(snapshot: query.WmSnapshot, mappedOnly: bool,
     groupNo = none(PublicGroupId)): seq[string] =
@@ -56,12 +71,19 @@ proc snapshotWinids*(snapshot: query.WmSnapshot, mappedOnly: bool,
       result.add(client.winid)
   result.sort()
 
+
+# Returns the snapshot focus ID, or an empty string when no window is focused.
+
 proc snapshotFocusedWinid*(snapshot: query.WmSnapshot): string =
   if snapshot.focused.isSome:
     result = snapshot.focused.get()
 
 proc columnOrder*(columns, rows, position: int,
     layoutBias: LayoutBias): int
+
+
+# Attaches snapshot identity tokens to window IDs while preserving the supplied order.
+# Leaves tokens absent for IDs missing from the snapshot.
 
 proc clientsFor(snapshot: query.WmSnapshot,
     winids: seq[string]): seq[PlacementClient] =
@@ -71,12 +93,19 @@ proc clientsFor(snapshot: query.WmSnapshot,
   for winid in winids:
     result.add(PlacementClient(winid: winid, token: tokens.getOrDefault(winid)))
 
+
+# Assigns windows to logical grid cells using the supplied bias and column-first row order.
+# Wraps assignments when the count exceeds grid capacity; applies no geometry.
+
 proc gridCells(count, columns, rows: int,
     layoutBias: LayoutBias): seq[PlacementCell] =
   for position in 1 .. count:
     let column = columnOrder(columns, rows, position, layoutBias)
     let row = (position - 1) mod rows + 1
     result.add(PlacementCell(column: column, row: row))
+
+
+# Selects the fixed explode grid dimensions for a window count.
 
 proc spreadGrid*(count: int): Spread =
   result.columns = 1
@@ -94,6 +123,11 @@ proc spreadGrid*(count: int): Spread =
   else:
     result.columns = 5
     result.rows = 3
+
+
+# Maps a one-based window position to a logical column using the supplied bias.
+# Fills each column before advancing and wraps after grid capacity.
+# Requires positive column, row and position values; does not mirror physical coordinates.
 
 proc columnOrder*(columns, rows, position: int,
     layoutBias: LayoutBias): int =
@@ -119,6 +153,11 @@ proc columnOrder*(columns, rows, position: int,
   else:
     result = order[((position - 1) div rows) mod columns]
 
+
+# Keeps the requested grid when it fits, otherwise selects two or three rows.
+# For larger counts, uses three rows with an extra blank column
+# when count is divisible by three.
+
 proc gridDimensions*(count, columns, rows: int): Spread =
   result = Spread(columns: columns, rows: rows)
   if count <= columns * rows:
@@ -132,24 +171,42 @@ proc gridDimensions*(count, columns, rows: int): Spread =
   # Preserve the intended extra blank column when count is divisible by 3.
   result = Spread(columns: count div 3 + 1, rows: 3)
 
+
+# Selects snapshot IDs by group first, then live WM IDs by class, or snapshot IDs otherwise.
+# The class branch uses the live query's mapped-window filtering rather than mappedOnly.
+
 proc selectedWinids(snapshot: query.WmSnapshot, mappedOnly: bool,
     groupNo: Option[PublicGroupId], classname: string): seq[string] =
   if groupNo.isSome:
     return snapshotWinids(snapshot, mappedOnly, groupNo)
   if classname.len > 0:
     # Query the WM directly. A layout policy can run synchronously inside
-    # zephyrd, where a request to its own IPC socket would deadlock the loop.
+    # Aetherd, where a request to its own IPC socket would deadlock the loop.
     return window.liveIds(@[classname]).splitLines()
   snapshotWinids(snapshot, mappedOnly)
+
+
+# Returns the class fold checkpoint path under WME with the class name URL-encoded.
 
 proc classFoldRoot(classname: string): string =
   getEnv("WME") / "layout" / ("fold:class:" & encodeUrl(classname, usePlus = false))
 
+
+# Returns the group fold checkpoint path under WME using the public group number.
+
 proc groupFoldRoot(group: PublicGroupId): string =
   getEnv("WME") / "layout" / ("fold:group:" & $group.intValue)
 
+
+# Returns the checkpoint path under WME for folding all selected windows.
+
 proc allFoldRoot(): string =
   getEnv("WME") / "layout" / "fold:all"
+
+
+# Assigns selected windows to grid cells using one bias snapshot for the operation.
+# Delegates geometry application and restore history to placement, optionally recording
+# a group, class or all-windows checkpoint; spread mode preserves window sizes.
 
 proc fold*(args: seq[string]) =
   requireArgs("layouts fold", args, 1, 7)
@@ -174,6 +231,11 @@ proc fold*(args: seq[string]) =
     gridCells(winids.len, columns, rows, operationBias), columns, rows, a.spread,
     checkpointRoot, snapshotFocusedWinid(snapshot))
 
+
+# Restores the group, class or all-windows fold checkpoint, in that precedence order.
+# Delegates recovery, identity checks and checkpoint removal to placement;
+# raises an error when the selected checkpoint contains no recorded state.
+
 proc unfold*(args: seq[string]) =
   requireArgs("layouts unfold", args, 0, 3)
   let a = parseArguments("layouts unfold", args,
@@ -187,6 +249,12 @@ proc unfold*(args: seq[string]) =
   else:
     placement.restoreCheckpoint(allFoldRoot(), "layouts unfold",
       "layouts unfold: no fold state for all windows")
+
+
+# Assigns mapped group windows or the live stack to a count-based grid
+# using one bias snapshot.
+# Delegates geometry application and checkpoint recording to placement, using separate
+# group and stack checkpoint paths for later restoration.
 
 proc explode*(args: seq[string]) =
   requireArgs("layouts explode", args, 0, 2)
@@ -215,6 +283,11 @@ proc explode*(args: seq[string]) =
     dimensions.columns, dimensions.rows,
     getEnv("WME") / "layout" / "explode", query.focusedWinid())
 
+
+# Restores the selected group or stack explode checkpoint through placement.
+# Delegates recovery, identity checks and checkpoint removal;
+# errors on missing recorded state.
+
 proc unexplode*(args: seq[string]) =
   requireArgs("layouts unexplode", args, 0, 2)
   let a = parseArguments("layouts unexplode", args, [ArgGroupNo], groups.count)
@@ -224,6 +297,10 @@ proc unexplode*(args: seq[string]) =
   else:
     placement.restoreCheckpoint(getEnv("WME") / "layout" / "explode",
       "layouts unexplode")
+
+
+# Returns grid dimensions as command arguments for the selected window count.
+# Raises an error when no windows match; calculates dimensions without applying geometry.
 
 proc grid*(args: seq[string]): string =
   requireArgs("layouts grid", args, 1, 5)
@@ -236,6 +313,7 @@ proc grid*(args: seq[string]): string =
 
   proc format(columns, rows: int): string =
     $columns & " --rows " & $rows
+
   if winids.len == 0:
     raiseZephyrError("layouts grid: no matching windows")
   let dimensions = gridDimensions(winids.len, columns, rows)
@@ -243,6 +321,11 @@ proc grid*(args: seq[string]): string =
 
 type GridAction = proc(columns, rows, column, row: int, winid: string,
   screenGeometry: ScreenGeometry, sourceGeometry: Geometry)
+
+
+# Resolves grid arguments and invokes the action with a logical column and row.
+# Uses the supplied bias only when no explicit column is given and queries the screen
+# when its supplied width is zero; leaves geometry calculation and application to the action.
 
 proc gridOperation(command: string, args: seq[string], layoutBias: LayoutBias,
     action: GridAction,
@@ -264,6 +347,10 @@ proc gridOperation(command: string, args: seq[string], layoutBias: LayoutBias,
   let row = (position - 1) mod rows + 1
   action(columns, rows, column, row, a.winid, screenGeometry, sourceGeometry)
 
+
+# Tiles the target window using one bias snapshot for assignment and physical positioning.
+# Mirrors the logical column for right bias before delegating geometry application.
+
 proc tile*(args: seq[string]) =
   let operationBias = bias()
   let rightToLeft = operationBias == LayoutBias.Right
@@ -276,6 +363,10 @@ proc tile*(args: seq[string]) =
         else: column
       window.tileGrid(columns, rows, physicalColumn, row, winid, screen, geometry))
 
+
+# Positions the target window within a grid while preserving its size.
+# Uses one bias snapshot for logical assignment and passes the column without tile mirroring.
+
 proc spread*(args: seq[string]) =
   let operationBias = bias()
   gridOperation("spread", args, operationBias,
@@ -283,10 +374,18 @@ proc spread*(args: seq[string]) =
         screen: ScreenGeometry, geometry: Geometry) =
       window.spreadGrid(columns, column, rows, row, winid, screen, geometry))
 
+
+# Vertically centers mapped snapshot windows through placement and records restore geometry.
+
 proc level*(args: seq[string]) =
   requireNoArgs("layouts level", args)
   let snapshot = query.wmSnapshot()
   placement.applyLevel(clientsFor(snapshot, snapshotWinids(snapshot, true)))
+
+
+# Restores saved geometry for mapped snapshot clients, or all clients with --all.
+# Recovers restore history before acquiring the all-client snapshot; placement checks
+# identity-bound history and records current geometry for subsequent restoration.
 
 proc restore*(args: seq[string]) =
   requireArgs("layouts restore", args, 0, 1)
@@ -296,6 +395,9 @@ proc restore*(args: seq[string]) =
   let snapshot = query.wmSnapshot()
   let clients = clientsFor(snapshot, snapshotWinids(snapshot, not a.all))
   placement.applyRestore(clients, snapshotFocusedWinid(snapshot), a.all)
+
+
+# Routes layout actions, prints grid results and raises an error for unknown verbs.
 
 proc dispatch*(verb: string, rest: seq[string]) =
   case verb

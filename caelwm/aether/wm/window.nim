@@ -28,7 +28,13 @@ type
     id: string
     token: query.ClientToken
 
+
+# Returns the immutable XID captured by a window chain.
+
 proc capturedWinid*(chain: WindowChain): string = chain.id
+
+
+# Requires a fresh snapshot to contain the chain's captured XID and matching identity token.
 
 proc checkedChainTarget(chain: WindowChain) =
   var snapshot: query.WmSnapshot
@@ -41,6 +47,9 @@ proc checkedChainTarget(chain: WindowChain) =
       raiseZephyrError("window chain: captured window identity changed for " & chain.id)
   raiseZephyrError("window chain: captured window no longer exists: " & chain.id)
 
+
+# Restores the pre-operation focus when it changed, after revalidating the captured target.
+
 proc restoreChainFocus(chain: WindowChain, focusedBefore: string) =
   if focusedBefore.len == 0 or query.focusedWinid() == focusedBefore:
     return
@@ -50,6 +59,9 @@ proc restoreChainFocus(chain: WindowChain, focusedBefore: string) =
   # focusing the chain target or following focus between separate operations.
   ipc.focus(ipc.windowId(focusedBefore)).require()
 
+
+# Captures a managed XID and its required token from the supplied snapshot.
+
 proc chainForSnapshot(id: string, snapshot: query.WmSnapshot): WindowChain =
   for client in snapshot.clients:
     if client.winid == id:
@@ -58,6 +70,9 @@ proc chainForSnapshot(id: string, snapshot: query.WmSnapshot): WindowChain =
       return WindowChain(id: id, token: client.token.get)
   raiseZephyrError("window target: no managed window " & id)
 
+
+# Validates an explicit XID and captures its managed identity from a fresh snapshot.
+
 proc target*(winid: string): WindowChain =
   let parsed = parseArguments("window target", @[winid], [ArgWinid]).winid
   if parsed.len == 0:
@@ -65,11 +80,17 @@ proc target*(winid: string): WindowChain =
   let id = parsed.toLowerAscii()
   chainForSnapshot(id, query.wmSnapshot())
 
+
+# Captures the focused client's identity from one fresh snapshot, rejecting absent focus.
+
 proc target*(): WindowChain =
   let snapshot = query.wmSnapshot()
   if snapshot.focused.isNone:
     raiseZephyrError("window target: no focused window")
   chainForSnapshot(snapshot.focused.get(), snapshot)
+
+
+# Resolves an explicit, captured or focused target and rejects replacement of a captured XID.
 
 proc validateChainArgumentTarget(parsedWinid, targetOverride,
     action: string): string =
@@ -84,12 +105,21 @@ proc validateChainArgumentTarget(parsedWinid, targetOverride,
 # Queries
 #
 
+
+# Returns cached class metadata for the focused window through the no-argument query path.
+
 proc classname*(args: seq[string]): string =
   requireNoArgs("window classname", args)
   query.classname(query.focusedWinid())
 
+
+# Returns cached class metadata for the focused window through the no-argument query path.
+
 proc classname*(): string =
   classname(@[])
+
+
+# Validates collection arguments and returns sorted IDs from live native class or title queries.
 
 proc liveIds*(args: seq[string]): string =
   requireArgs("window ids", args, 0, 3)
@@ -123,6 +153,9 @@ proc liveIds*(args: seq[string]): string =
     else:
       ipc.ids(all = false, selector = ipc.NameSelector, pattern = a.name)
 
+
+# Returns daemon-cached class or title matches with optional mapped/all and public-group filters.
+
 proc cachedFilteredIds(includeAll: bool, classname, name: string,
     groupNo = none(PublicGroupId)): string =
   let kind = if name.len > 0: RequestQueryNameList else: RequestQueryClassList
@@ -131,6 +164,9 @@ proc cachedFilteredIds(includeAll: bool, classname, name: string,
   if not reply.ok:
     raiseZephyrError("window ids: " & reply.error)
   reply.body
+
+
+# Filters cached client records by mapping and optional group, then sorts their XIDs lexically.
 
 proc cachedIds(includeAll: bool, groupNo = none(PublicGroupId)): string =
   let reply = queryDaemonClientList()
@@ -145,6 +181,9 @@ proc cachedIds(includeAll: bool, groupNo = none(PublicGroupId)): string =
   # snapshot client order is WM list order and is not equivalent.
   values.sort()
   values.join("\n")
+
+
+# Parses IDs query filters and returns the corresponding daemon-cached collection.
 
 proc ids*(args: seq[string]): string =
   requireArgs("window ids", args, 0, 5)
@@ -166,11 +205,20 @@ proc ids*(args: seq[string]): string =
     return cachedFilteredIds(a.all, "", a.name, a.groupNo)
   liveIds(args)
 
+
+# Runs the cached IDs query with one selector argument.
+
 proc ids*(arg: string): string =
   ids(@[arg])
 
+
+# Returns mapped cached client IDs with no selector arguments.
+
 proc ids*(): string =
   ids(@[])
+
+
+# Counts cached or filtered clients while preserving the historical window-ids validation diagnostics.
 
 proc count*(args: seq[string]): string =
   # Keep the historical argument-validation contract: count delegated to the
@@ -197,11 +245,20 @@ proc count*(args: seq[string]): string =
   let filtered = cachedFilteredIds(a.all, a.classname, a.name)
   return $filtered.splitLines().filterIt(it.len > 0).len
 
+
+# Returns the parsed cached client count for a class selector.
+
 proc count*(classname: string): int =
   parseInt(count(@[classname]))
 
+
+# Returns the parsed mapped cached client count without a selector.
+
 proc count*(): int =
   parseInt(count(@[]))
+
+
+# Submits explicit or last-window focus, optionally validating chain identity before and after.
 
 proc focusTarget(winid: string, token = none(query.ClientToken)) =
   if token.isSome:
@@ -211,12 +268,21 @@ proc focusTarget(winid: string, token = none(query.ClientToken)) =
   if token.isSome:
     WindowChain(id: winid, token: token.get).checkedChainTarget()
 
+
+# Submits focus for an explicit XID or the last-window selector.
+
 proc focus*(winid: string) =
   focusTarget(winid)
+
+
+# Focuses the captured identity with validation and returns the chain for subsequent operations.
 
 proc focus*(chain: WindowChain): WindowChain =
   focusTarget(chain.id, some(chain.token))
   chain
+
+
+# Cycles the captured window's stack with identity validation before and after the request.
 
 proc stackCycle*(chain: WindowChain): WindowChain =
   chain.checkedChainTarget()
@@ -224,10 +290,16 @@ proc stackCycle*(chain: WindowChain): WindowChain =
   chain.checkedChainTarget()
   chain
 
+
+# Validates the captured identity, submits close and returns the chain without requiring survival.
+
 proc close*(chain: WindowChain): WindowChain =
   chain.checkedChainTarget()
   ipc.closeWindow(ipc.windowId(chain.id))
   chain
+
+
+# Applies an explicit window layer with optional identity validation around the acknowledged request.
 
 proc layerTarget(winid: string, layer: Layer,
     token = none(query.ClientToken)) =
@@ -237,6 +309,9 @@ proc layerTarget(winid: string, layer: Layer,
   if token.isSome:
     WindowChain(id: winid, token: token.get).checkedChainTarget()
 
+
+# Parses layer arguments and sets an explicit or focused target's layer through native IPC.
+
 proc layer*(args: seq[string]) =
   requireArgs("window layer", args, 1, 2)
   let a = parseArguments("window layer", args, [ArgLayer, ArgWinid])
@@ -245,12 +320,21 @@ proc layer*(args: seq[string]) =
   else:
     layerTarget(a.winid, a.layer)
 
+
+# Applies a layer to the captured identity and returns the validated chain.
+
 proc layer*(chain: WindowChain, layer: Layer): WindowChain =
   layerTarget(chain.id, layer, some(chain.token))
   chain
 
+
+# Invokes layer argument parsing with a value and optional XID.
+
 proc layer*(value: string, winid: string = "") =
   layer(@[value, winid])
+
+
+# Prints validated target geometry as X, Y, WIDTH and HEIGHT assignments.
 
 proc geometry*(args: seq[string]) =
   requireArgs("window geometry", args, 0, 1)
@@ -270,6 +354,9 @@ proc geometry*(args: seq[string]) =
   echo "WIDTH=" & $g.width
   echo "HEIGHT=" & $g.height
 
+
+# Prints daemon-observed group membership for one validated XID.
+
 proc wmGroup*(args: seq[string]) =
   requireArgs("window wm-group", args, 1, 1)
 
@@ -283,15 +370,24 @@ proc wmGroup*(args: seq[string]) =
 
   echo query.wmGroup(a.winid)
 
+
+# Prints window/group pairs from the daemon-cached snapshot.
+
 proc wmGroups*(args: seq[string]) =
   requireNoArgs("window wm-groups", args)
 
   for entry in query.wmGroups():
     echo entry.winid & " " & $entry.group
 
+
+# Writes the serialized daemon-cached WM snapshot after rejecting arguments.
+
 proc snapshot*(args: seq[string]) =
   requireNoArgs("window snapshot", args)
   stdout.write(query.serializeWmSnapshot(query.cachedWmSnapshot()))
+
+
+# Returns native stack text for an optional validated explicit target.
 
 proc stack*(args: seq[string]): string =
 
@@ -307,6 +403,9 @@ proc stack*(args: seq[string]): string =
     ipc.stack()
   else:
     ipc.stack(ipc.windowId(a.winid))
+
+
+# Combines root dimensions and UI spacing into usable width, height and coordinate offsets.
 
 proc screenGeometry*(): ScreenGeometry =
   let metrics = screen.metrics()
@@ -329,6 +428,9 @@ proc screenGeometry*(): ScreenGeometry =
 proc wtpTarget(rect: Geometry, winid: string,
     token: Option[query.ClientToken] = none(query.ClientToken))
 
+
+# Resolves an explicit or focused XID before submitting absolute move and resize operations.
+
 proc wtp*(rect: Geometry, winid: string = "") =
   let wid =
     if winid.len == 0:
@@ -337,6 +439,9 @@ proc wtp*(rect: Geometry, winid: string = "") =
       winid
 
   wtpTarget(rect, wid)
+
+
+# Moves then resizes an explicit target, optionally checking its identity at each boundary.
 
 proc wtpTarget(rect: Geometry, winid: string,
     token: Option[query.ClientToken]) =
@@ -349,6 +454,9 @@ proc wtpTarget(rect: Geometry, winid: string,
   if token.isSome:
     WindowChain(id: winid, token: token.get).checkedChainTarget()
 
+
+# Writes token-bound source geometry when the requested change warrants new restore history.
+
 proc saveOriginalForTarget(source, destination: Geometry, winid: string,
     token: query.ClientToken) =
   if source == destination:
@@ -358,6 +466,9 @@ proc saveOriginalForTarget(source, destination: Geometry, winid: string,
       query.geometry(winid) == source:
     return
   saveGeometryWithToken(source, winid, token)
+
+
+# Saves token-bound geometry unless the optional current-geometry precheck makes it redundant.
 
 proc saveGeometryForTarget(geometry: Geometry, winid: string,
     token: query.ClientToken, precheck = true) =
@@ -378,6 +489,9 @@ type CheckedGeometryApplication* = tuple[
 
 proc serializeCheckedGeometries*(entries: seq[CheckedGeometryApplication]): string
 
+
+# Serializes a nonempty ordered geometry batch and delegates acknowledged submission.
+
 proc applyGeometries*(entries: seq[GeometryApplication]) =
   if entries.len == 0:
     raiseZephyrError("window apply-geometries: no geometry records")
@@ -390,10 +504,16 @@ proc applyGeometries*(entries: seq[GeometryApplication]) =
 
   query.applyGeometriesBody(body)
 
+
+# Requires a nonempty identity-bearing geometry batch before acknowledged checked submission.
+
 proc applyGeometriesChecked*(entries: seq[CheckedGeometryApplication]) =
   if entries.len == 0:
     raiseZephyrError("window apply-geometries-checked: no geometry records")
   query.applyGeometriesCheckedBody(serializeCheckedGeometries(entries))
+
+
+# Validates client tokens and serializes ordered XID, identity and geometry records.
 
 proc serializeCheckedGeometries*(entries: seq[CheckedGeometryApplication]): string =
   if entries.len == 0:
@@ -406,6 +526,9 @@ proc serializeCheckedGeometries*(entries: seq[CheckedGeometryApplication]): stri
       $entry.geometry.height & "\n")
   result = body
 
+
+# Converts nonempty XID lists to validated native targets before ordered bulk raising.
+
 proc raiseMany*(winids: seq[string]) =
   if winids.len == 0:
     return
@@ -414,6 +537,9 @@ proc raiseMany*(winids: seq[string]) =
 #
 # Actions
 #
+
+
+# Submits relative motion with optional identity checks and explicit or prior-focus restoration.
 
 proc moveTarget(dx, dy: int, winid: string,
     token = none(query.ClientToken),
@@ -429,6 +555,9 @@ proc moveTarget(dx, dy: int, winid: string,
   elif token.isSome:
     WindowChain(id: winid, token: token.get).restoreChainFocus(focusedBefore)
 
+
+# Parses relative deltas, moves the focused target when present and refocuses it.
+
 proc move*(args: seq[string]) =
   requireArgs("window move", args, 2, 2)
   let a = parseArguments("window move", args, [ArgXY])
@@ -437,14 +566,23 @@ proc move*(args: seq[string]) =
     return
   moveTarget(a.xy.x, a.xy.y, winid, restoreFocus = true)
 
+
+# Moves the captured identity by relative deltas and returns the chain.
+
 proc move*(chain: WindowChain, dx, dy: int): WindowChain =
   moveTarget(dx, dy, chain.id, some(chain.token))
   chain
+
+
+# Parses relative motion arguments before moving the captured identity.
 
 proc move*(chain: WindowChain, args: seq[string]): WindowChain =
   requireArgs("window move", args, 2, 2)
   let a = parseArguments("window move", args, [ArgXY])
   chain.move(a.xy.x, a.xy.y)
+
+
+# Extends target geometry toward a selected usable-screen edge or side and records restore history.
 
 proc extend*(args: seq[string]) =
   requireArgs("window extend", args, 1, 3)
@@ -568,6 +706,10 @@ proc extend*(args: seq[string]) =
         height: verticalHeight
       ))
 
+
+# Moves an explicit target between controller and WM group state with optional identity checks.
+# Teleport mode tries to refocus a surviving source-group member after reassignment.
+
 proc groupTarget(group: PublicGroupId, winid: string, sourceGroup: int,
     token = none(query.ClientToken), teleport = false) =
   let groupNo = group.intValue
@@ -622,6 +764,9 @@ proc groupTarget(group: PublicGroupId, winid: string, sourceGroup: int,
           groups.add(source, client.winid)
           break
 
+
+# Parses focused-window group assignment and optional teleport, rejecting reserved VOID.
+
 proc group*(args: seq[string]) =
   requireArgs("window group", args, 1, 2)
 
@@ -633,22 +778,37 @@ proc group*(args: seq[string]) =
   groupTarget(publicGroupId(groupNo, groups.count(), "window group"),
     winid, groups.currentLiveId(), teleport = a.teleport)
 
+
+# Validates an integer destination before moving the focused client between groups.
+
 proc group*(groupNo: int) =
   if groupNo == 0:
     raiseZephyrError("window group: group 0 is reserved VOID")
   groupTarget(publicGroupId(groupNo, groups.count(), "window group"),
     query.focusedWinid(), groups.currentLiveId())
 
+
+# Moves the focused client to a validated public group using live source-group state.
+
 proc group*(group: PublicGroupId) =
   groupTarget(group, query.focusedWinid(), groups.currentLiveId())
 
+
+# Resolves a group name before moving the focused client to that public group.
+
 proc group*(groupname: string) =
   group(groups.publicId(groupname, "window group"))
+
+
+# Moves the captured identity to a named public group and returns the chain.
 
 proc group*(chain: WindowChain, groupname: string): WindowChain =
   groupTarget(groups.publicId(groupname, "window group"),
     chain.id, -1, some(chain.token))
   chain
+
+
+# Validates an integer destination and moves the captured identity to that public group.
 
 proc group*(chain: WindowChain, groupNo: int): WindowChain =
   if groupNo == 0:
@@ -657,9 +817,15 @@ proc group*(chain: WindowChain, groupNo: int): WindowChain =
     chain.id, -1, some(chain.token))
   chain
 
+
+# Moves the captured identity to a validated public group and returns the chain.
+
 proc group*(chain: WindowChain, group: PublicGroupId): WindowChain =
   groupTarget(group, chain.id, -1, some(chain.token))
   chain
+
+
+# Records hidden state after acknowledged hiding of an explicit or focused window, then focuses last.
 
 proc hide*(args: seq[string]) =
   requireArgs("window hide", args, 0, 1)
@@ -700,6 +866,8 @@ proc hide*(args: seq[string]) =
   focus("--last")
 
 
+# Restores token-matching saved geometry and saves the displaced geometry as new restore history.
+
 proc restore*(args: seq[string]) =
   requireArgs("window restore", args, 0, 1)
 
@@ -728,8 +896,15 @@ proc restore*(args: seq[string]) =
   applyGeometriesChecked(@[(a.winid, token.get, g)])
   saveGeometryWithToken(source, a.winid, token.get)
 
+
+# Restores geometry for one explicit XID through the validated command path.
+
 proc restore*(winid: string) =
   restore(@[winid])
+
+
+# Moves a target by its own dimensions in a cardinal direction and records original geometry.
+# Identity-bound calls preserve the pre-operation focus after validation.
 
 proc shiftTarget(cardinal, winid: string, token = none(query.ClientToken)) =
   let focusedBefore = if token.isSome: query.focusedWinid() else: ""
@@ -763,6 +938,9 @@ proc shiftTarget(cardinal, winid: string, token = none(query.ClientToken)) =
   else:
     saveGeometry(g, winid)
 
+
+# Parses a cardinal shift and resolves an optional target before applying the move.
+
 proc shift*(args: seq[string]) =
   requireArgs("window shift", args, 1, 2)
   var a = parseArguments("window shift", args, [ArgCardinal, ArgWinid])
@@ -770,10 +948,16 @@ proc shift*(args: seq[string]) =
     a.winid = query.focusedWinid()
   shiftTarget(a.cardinal, a.winid)
 
+
+# Validates a cardinal direction before shifting the captured identity and returning the chain.
+
 proc shift*(chain: WindowChain, cardinal: string): WindowChain =
   let a = parseArguments("window shift", @[cardinal], [ArgCardinal])
   shiftTarget(a.cardinal, chain.id, some(chain.token))
   chain
+
+
+# Swaps target width and height, applies the geometry and records a changed original.
 
 proc rotate*(args: seq[string]) =
   requireArgs("window rotate", args, 0, 1)
@@ -797,6 +981,10 @@ proc rotate*(args: seq[string]) =
 
   wtp(destination, a.winid)
   saveOriginalIfChanged(g, destination, a.winid)
+
+
+# Computes edge or center placement from usable screen bounds and requested axis.
+# Captured targets cannot be replaced; optional identity checks protect history and focus handling.
 
 proc snapTarget(args: seq[string], providedScreen: ScreenGeometry,
     targetOverride = "", token = none(query.ClientToken), restoreFocus = true) =
@@ -933,8 +1121,14 @@ proc snapTarget(args: seq[string], providedScreen: ScreenGeometry,
   elif token.isSome:
     WindowChain(id: winid, token: token.get).restoreChainFocus(focusedBefore)
 
+
+# Applies parsed snap arguments using supplied or queried screen geometry.
+
 proc snap*(args: seq[string], providedScreen = ScreenGeometry()) =
   snapTarget(args, providedScreen)
+
+
+# Normalizes snap arguments and positions the captured identity while preserving prior focus.
 
 proc snap*(chain: WindowChain, args: varargs[string]): WindowChain =
   let normalized = args.mapIt(it.toLowerAscii())
@@ -942,14 +1136,27 @@ proc snap*(chain: WindowChain, args: varargs[string]): WindowChain =
     restoreFocus = false)
   chain
 
+
+# Applies snap placement from two position arguments and an explicit XID.
+
 proc snap*(position1, position2, winid: string) =
   snap(@[position1, position2, winid])
+
+
+# Passes a position and its secondary argument through snap command validation.
 
 proc snap*(position, argument: string) =
   snap(@[position, argument])
 
+
+# Passes one position through snap command validation.
+
 proc snap*(position: string) =
   snap(@[position])
+
+
+# Resolves sizing presets, dimensions, aspect and zoom into destination geometry and restore history.
+# Captured targets remain identity-checked and preserve pre-operation focus.
 
 proc sizeTarget(args: seq[string], targetOverride = "",
     token = none(query.ClientToken)) =
@@ -1203,18 +1410,33 @@ proc sizeTarget(args: seq[string], targetOverride = "",
   if token.isSome:
     WindowChain(id: winid, token: token.get).restoreChainFocus(focusedBefore)
 
+
+# Applies the size command's parsed preset, dimensions or zoom arguments.
+
 proc size*(args: seq[string]) =
   sizeTarget(args)
+
+
+# Applies size arguments to the captured identity and returns the chain.
 
 proc size*(chain: WindowChain, args: varargs[string]): WindowChain =
   sizeTarget(@args, chain.id, some(chain.token))
   chain
 
+
+# Applies size and orientation strings through the size command parser.
+
 proc size*(size, orientation: string) =
   size(@[size, orientation])
 
+
+# Applies one size selector through the size command parser.
+
 proc size*(size: string) =
   size(@[size])
+
+
+# Centers unchanged window dimensions within a logical grid cell and saves original geometry.
 
 proc applySpreadGridGeometry(columns, column, rows, row: int,
     g: Geometry, s: ScreenGeometry, winid: string,
@@ -1236,6 +1458,10 @@ proc applySpreadGridGeometry(columns, column, rows, row: int,
     saveOriginalForTarget(g, destination, winid, token.get)
   else:
     saveOriginalIfChanged(g, destination, winid)
+
+
+# Parses spread selectors and places a size-preserving target within usable grid space.
+# Optional captured identity protects target selection, history and prior-focus restoration.
 
 proc spreadTarget(args: seq[string],
     providedScreen = ScreenGeometry(),
@@ -1371,6 +1597,9 @@ proc spreadTarget(args: seq[string],
   if token.isSome:
     WindowChain(id: winid, token: token.get).restoreChainFocus(focusedBefore)
 
+
+# Applies spread arguments using supplied or queried screen and source geometry.
+
 proc spread*(
   args: seq[string],
   providedScreen = ScreenGeometry(),
@@ -1378,12 +1607,21 @@ proc spread*(
 ) =
   spreadTarget(args, providedScreen, providedGeometry)
 
+
+# Applies a single spread selector through command validation.
+
 proc spread*(selector: string) =
   spread(@[selector])
+
+
+# Spreads the captured identity using validated arguments and returns the chain.
 
 proc spread*(chain: WindowChain, args: varargs[string]): WindowChain =
   spreadTarget(@args, ScreenGeometry(), Geometry(), chain.id, some(chain.token))
   chain
+
+
+# Validates grid capacity and cell coordinates before size-preserving target placement.
 
 proc spreadGridTarget(columns, column, rows, row: int, targetOverride: string,
     providedScreen: ScreenGeometry, providedGeometry: Geometry,
@@ -1415,10 +1653,16 @@ proc spreadGridTarget(columns, column, rows, row: int, targetOverride: string,
   if token.isSome:
     WindowChain(id: winid, token: token.get).restoreChainFocus(focusedBefore)
 
+
+# Places an explicit or focused target in a spread cell using supplied or queried geometry.
+
 proc spreadGrid*(columns, column, rows, row: int, winid = "",
     providedScreen = ScreenGeometry(), providedGeometry = Geometry()) =
   spreadGridTarget(columns, column, rows, row, winid,
     providedScreen, providedGeometry)
+
+
+# Selects a cardinal neighbor, exchanges window geometry and saves both source geometries.
 
 proc swap*(args: seq[string]) =
   requireArgs("window swap", args, 1)
@@ -1460,6 +1704,9 @@ proc swap*(args: seq[string]) =
 
   saveGeometry(sourceGeometry, source)
   saveGeometry(targetGeometry, target)
+
+
+# Waits through daemon class or title matching and focuses a single result when returned.
 
 proc await*(args: seq[string]) =
   requireArgs("window await", args, 1, 2)
@@ -1511,8 +1758,14 @@ proc await*(args: seq[string]) =
       raiseZephyrError("indeterminate window")
     discard ipc.focus(ipc.windowId(winids[0])).status
 
+
+# Passes a selector and property argument through the window-await command path.
+
 proc await*(selector, property: string) =
   await(@[selector, property])
+
+
+# Passes one selector through the window-await command path.
 
 proc await*(selector: string) =
   await(@[selector])
@@ -1520,6 +1773,10 @@ proc await*(selector: string) =
 proc applyTileGridGeometry(columns, rows, column, row: int,
     g: Geometry, s: ScreenGeometry, winid: string,
     token: Option[query.ClientToken])
+
+
+# Parses tiling arguments, resolves cell geometry and applies the target's new size and position.
+# Identity-bound calls preserve the captured target, restore history and prior focus.
 
 proc tileTarget(args: seq[string],
     providedScreen = ScreenGeometry(),
@@ -1601,6 +1858,9 @@ proc tileTarget(args: seq[string],
   if token.isSome:
     WindowChain(id: winid, token: token.get).restoreChainFocus(focusedBefore)
 
+
+# Applies tiling arguments with supplied or queried screen and source geometry.
+
 proc tile*(
   args: seq[string],
   providedScreen = ScreenGeometry(),
@@ -1608,9 +1868,15 @@ proc tile*(
 ) =
   tileTarget(args, providedScreen, providedGeometry)
 
+
+# Tiles the captured identity with validated arguments and returns the chain.
+
 proc tile*(chain: WindowChain, args: varargs[string]): WindowChain =
   tileTarget(@args, ScreenGeometry(), Geometry(), chain.id, some(chain.token))
   chain
+
+
+# Validates grid dimensions and cell range, then applies tiled geometry and records its original.
 
 proc applyTileGridGeometry(columns, rows, column, row: int,
     g: Geometry, s: ScreenGeometry, winid: string,
@@ -1637,6 +1903,9 @@ proc applyTileGridGeometry(columns, rows, column, row: int,
   else:
     saveOriginalIfChanged(g, destination, winid)
 
+
+# Resolves target and geometry, applies grid tiling and preserves prior focus for captured identities.
+
 proc tileGridTarget(columns, rows, column, row: int, targetOverride: string,
     providedScreen: ScreenGeometry, providedGeometry: Geometry,
     token = none(query.ClientToken)) =
@@ -1654,16 +1923,29 @@ proc tileGridTarget(columns, rows, column, row: int, targetOverride: string,
   if token.isSome:
     WindowChain(id: winid, token: token.get).restoreChainFocus(focusedBefore)
 
+
+# Tiles an explicit or focused target into a grid cell using supplied or queried geometry.
+
 proc tileGrid*(columns, rows, column, row: int, winid = "",
     providedScreen = ScreenGeometry(), providedGeometry = Geometry()) =
   tileGridTarget(columns, rows, column, row, winid,
     providedScreen, providedGeometry)
 
+
+# Passes column and position strings through tile command validation.
+
 proc tile*(columns, position: string) =
   tile(@[columns, position])
 
+
+# Passes one side selector through tile command validation.
+
 proc tile*(side: string) =
   tile(@[side])
+
+
+# Attempts to hide every matching client, submitting focus instead when that hide reply fails.
+# An empty class or title result exits with status 1.
 
 proc toggle*(args: seq[string]) =
   requireArgs("window toggle", args, 1, 2)
@@ -1696,6 +1978,9 @@ proc toggle*(args: seq[string]) =
 #
 # Dispatch
 #
+
+
+# Routes window queries and actions, retaining their established output and error contracts.
 
 proc dispatch*(verb: string, rest: seq[string]) =
   case verb

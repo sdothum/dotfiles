@@ -120,19 +120,31 @@ type X11Invalidation* = object
   atom: XcbAtom
   titleAtoms: array[2, XcbAtom]
 
+
+# Disconnects the owned invalidation connection and clears its handle.
+
 proc close*(event: var X11Invalidation) =
   if event.connection != nil:
     xcb_disconnect(cast[ptr XcbConnection](event.connection))
     event.connection = nil
+
+
+# Returns the invalidation connection descriptor, or -1 when closed.
 
 proc descriptor*(event: X11Invalidation): cint =
   if event.connection == nil:
     return -1
   xcb_get_file_descriptor(cast[ptr XcbConnection](event.connection))
 
+
+# Reports whether the invalidation handle exists without an XCB connection error.
+
 proc healthy*(event: X11Invalidation): bool =
   event.connection != nil and
     xcb_connection_has_error(cast[ptr XcbConnection](event.connection)) == 0
+
+
+# Reopens the invalidation connection and subscribes to the root's relevant state notifications.
 
 proc open*(event: var X11Invalidation): bool =
   event.close()
@@ -178,6 +190,9 @@ proc open*(event: var X11Invalidation): bool =
     return false
   true
 
+
+# Selects property and structure notifications on supplied clients and flushes the subscriptions.
+
 proc watchClients*(event: var X11Invalidation, clients: seq[uint32]) =
   if event.connection == nil:
     return
@@ -190,11 +205,17 @@ proc watchClients*(event: var X11Invalidation, clients: seq[uint32]) =
       addr mask)
   discard xcb_flush(connection)
 
+
+# Recognizes root property notifications for the state-invalidation atom.
+
 proc isInvalidation(event: X11Invalidation, value: ptr XcbGenericEvent): bool =
   if value == nil or (value.responseType and 0x7f'u8) != XcbPropertyNotify:
     return false
   let property = cast[ptr XcbPropertyNotifyEvent](value)
   property.window == event.root and property.atom == event.atom
+
+
+# Recognizes non-root property notifications for either watched title atom.
 
 proc isTitleChange(event: X11Invalidation, value: ptr XcbGenericEvent): bool =
   if value == nil or (value.responseType and 0x7f'u8) != XcbPropertyNotify:
@@ -209,6 +230,10 @@ type
   WindowVisibility* = enum
     WindowViewable, WindowUnmapped, VisibilityMissing, VisibilityUnknown
   DestroyHandler* = proc(window: uint32) {.closure.}
+
+
+# Queries mapped state, treating only BadWindow as proof of absence.
+# Connection or other protocol failures preserve an unknown result.
 
 proc windowVisibility*(event: X11Invalidation, window: uint32): WindowVisibility =
   # Only BadWindow proves absence. Connection/protocol errors preserve state.
@@ -227,21 +252,33 @@ proc windowVisibility*(event: X11Invalidation, window: uint32): WindowVisibility
   if reply != nil: c_free(reply)
   if error != nil: c_free(error)
 
+
+# Reduces observed visibility to exists, missing or unknown without guessing on query failure.
+
 proc windowExistence*(event: X11Invalidation, window: uint32): WindowExistence =
   case event.windowVisibility(window)
   of WindowViewable, WindowUnmapped: WindowExists
   of VisibilityMissing: WindowMissing
   of VisibilityUnknown: WindowUnknown
 
+
+# Invokes the optional handler only for an unsynthesized MapNotify event record.
+
 proc mapped(value: ptr XcbGenericEvent, handler: DestroyHandler) =
   if handler != nil and value.responseType == XcbMapNotify:
     handler(cast[ptr XcbMapNotifyEvent](value).window)
+
+
+# Invokes the optional handler only for an unsynthesized DestroyNotify event record.
 
 proc destroyed(value: ptr XcbGenericEvent, handler: DestroyHandler) =
   # Ignore SendEvent: an application can synthesize a DestroyNotify for a
   # still-live window. Real destruction is additionally checked for XID reuse.
   if handler != nil and value.responseType == XcbDestroyNotify:
     handler(cast[ptr XcbDestroyNotifyEvent](value).window)
+
+
+# Polls and frees all queued events, dispatching lifecycle callbacks and reporting invalidation facts.
 
 proc drain*(event: X11Invalidation, onDestroyed: DestroyHandler = nil,
     onMapped: DestroyHandler = nil): bool =
@@ -256,6 +293,9 @@ proc drain*(event: X11Invalidation, onDestroyed: DestroyHandler = nil,
       found = true
     c_free(value)
   found
+
+
+# Waits for an invalidation or title event while dispatching lifecycle callbacks and freeing records.
 
 proc wait*(event: X11Invalidation, onDestroyed: DestroyHandler = nil,
     onMapped: DestroyHandler = nil): bool =

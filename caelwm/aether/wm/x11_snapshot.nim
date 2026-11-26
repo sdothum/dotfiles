@@ -174,9 +174,15 @@ type X11SnapshotQuery* = object
   lastFailure*: string
   lastResponse*: string
 
+
+# Reports whether a query connection exists without an XCB connection error.
+
 proc isOpen*(query: X11SnapshotQuery): bool =
   query.connection != nil and
     xcb_connection_has_error(cast[ptr XcbConnection](query.connection)) == 0
+
+
+# Copies root dimensions and records a failure stage when the connection or reply is unavailable.
 
 proc tryRootGeometry*(query: var X11SnapshotQuery,
     width, height: var int): bool =
@@ -198,8 +204,10 @@ proc tryRootGeometry*(query: var X11SnapshotQuery,
   c_free(reply)
   true
 
+
+# Decodes exactly two NUL-terminated WM_CLASS strings with no trailing payload.
+
 proc parseWmClassProperty*(value: string, instanceName, className: var string): bool =
-  ## WM_CLASS is two NUL-terminated strings, with no trailing payload.
   let firstEnd = value.find('\0')
   if firstEnd < 0:
     return false
@@ -209,6 +217,9 @@ proc parseWmClassProperty*(value: string, instanceName, className: var string): 
   instanceName = value[0 ..< firstEnd]
   className = value[firstEnd + 1 ..< secondEnd]
   true
+
+
+# Copies and validates a client's WM_CLASS property, recording failure stages and freeing replies.
 
 proc tryWmClass*(query: var X11SnapshotQuery, winid: uint32,
     instanceName, className: var string): bool =
@@ -245,6 +256,9 @@ proc tryWmClass*(query: var X11SnapshotQuery, winid: uint32,
   true
 
 proc intern(connection: ptr XcbConnection, name: string, atom: var XcbAtom): bool
+
+
+# Copies the preferred UTF-8 title or legacy fallback into owned text, recording query failures.
 
 proc tryWmTitle*(query: var X11SnapshotQuery, winid: uint32,
     title: var string): bool =
@@ -289,9 +303,15 @@ proc tryWmTitle*(query: var X11SnapshotQuery, winid: uint32,
   c_free(reply)
   true
 
+
+# Stores the diagnostic failure stage and returns false.
+
 proc failed(query: var X11SnapshotQuery, stage: string): bool =
   query.lastFailure = stage
   false
+
+
+# Disconnects the query transport and resets session fields while retaining the failure diagnostic.
 
 proc close*(query: var X11SnapshotQuery) =
   if query.connection != nil:
@@ -308,6 +328,8 @@ proc close*(query: var X11SnapshotQuery) =
   # lastFailure is diagnostic only; failed() sets it after cleanup.
 
 
+# Resolves an atom and frees its XCB reply, returning false when no reply is available.
+
 proc intern(connection: ptr XcbConnection, name: string, atom: var XcbAtom): bool =
   let cookie = xcb_intern_atom(connection, 0, name.len.uint16, name.cstring)
   let reply = xcb_intern_atom_reply(connection, cookie, nil)
@@ -316,6 +338,9 @@ proc intern(connection: ptr XcbConnection, name: string, atom: var XcbAtom): boo
   atom = reply.atom
   c_free(reply)
   true
+
+
+# Opens the selected screen and interns IPC atoms, cleaning up partial initialization on failure.
 
 proc open*(query: var X11SnapshotQuery): bool =
   query.close()
@@ -338,6 +363,9 @@ proc open*(query: var X11SnapshotQuery): bool =
   query.root = screen.data.root
   true
 
+
+# Recognizes version 1 or 2 snapshot response envelopes and strips the successful body.
+
 proc snapshotBody*(response: string, body: var string): bool =
   if not (response.startsWith("OK\nSNAPSHOT 1\n") or
       response.startsWith("OK\nSNAPSHOT 2\n")):
@@ -345,6 +373,9 @@ proc snapshotBody*(response: string, body: var string): bool =
   # shvStatus() strips child output before the existing parser sees it.
   body = response[3 .. ^1].strip()
   true
+
+
+# Extracts an empty or newline-delimited successful response body.
 
 proc okBody*(response: string, body: var string): bool =
   if response == "OK":
@@ -361,6 +392,9 @@ proc okBody*(response: string, body: var string): bool =
 # allocation bookkeeping, not a wire-level request identifier.
 var retiredReplyWindows: seq[XcbWindow]
 
+
+# Retires an ambiguous reply XID, closes the transport and records the request failure stage.
+
 proc requestFailed(query: var X11SnapshotQuery, reason: string): bool =
   # Never reuse a reply window after an ambiguous failure: a late reply has
   # no request ID and could otherwise satisfy the next operation.
@@ -369,8 +403,14 @@ proc requestFailed(query: var X11SnapshotQuery, reason: string): bool =
   query.close()
   query.failed(reason)
 
+
+# Resolves an atom only while the query connection is open.
+
 proc atom*(query: var X11SnapshotQuery, name: string, value: var uint32): bool =
   query.isOpen() and intern(cast[ptr XcbConnection](query.connection), name, value)
+
+
+# Submits and checks one action message, closing the query transport on send or flush failure.
 
 proc trySend*(query: var X11SnapshotQuery, command: uint32,
     arguments: array[4, uint32]): bool =
@@ -387,6 +427,10 @@ proc trySend*(query: var X11SnapshotQuery, command: uint32,
     return query.requestFailed("SEND_REQUEST")
   if xcb_flush(connection) <= 0: return query.requestFailed("FLUSH")
   true
+
+
+# Uses a reusable non-retired reply window to submit a request and await its matching response.
+# Ambiguous failures retire the reply XID so a delayed reply cannot satisfy a later request.
 
 proc tryRequest*(query: var X11SnapshotQuery, command, data2, data3, data4: uint32,
     requestBody: string, output: var string, timeoutMs = QueryTimeoutMs,
@@ -468,6 +512,9 @@ const
   IpcActionWindowApplyGeometries = 33'u32
   IpcActionWindowApplyGeometriesChecked = 35'u32
 
+
+# Requests target geometry and returns its stripped successful response body.
+
 proc tryGeometry*(query: var X11SnapshotQuery, winid: uint32, explicit: bool,
     output: var string): bool =
   var response: string
@@ -479,6 +526,9 @@ proc tryGeometry*(query: var X11SnapshotQuery, winid: uint32, explicit: bool,
   output = output.strip()
   true
 
+
+# Requests ordered target stack geometries and validates the successful response envelope.
+
 proc tryStackGeometries*(query: var X11SnapshotQuery, winid: uint32,
     explicit: bool, output: var string): bool =
   var response: string
@@ -488,6 +538,9 @@ proc tryStackGeometries*(query: var X11SnapshotQuery, winid: uint32,
   if not okBody(response, output):
     return query.failed("RESPONSE_ENVELOPE " & response)
   true
+
+
+# Sends a geometry batch and reports whether a successful acknowledgement was received.
 
 proc tryApplyGeometries*(query: var X11SnapshotQuery, body: string): bool =
   var response: string
@@ -499,6 +552,9 @@ proc tryApplyGeometries*(query: var X11SnapshotQuery, body: string): bool =
     return query.failed("APPLY_RESPONSE " & response)
   true
 
+
+# Sends an identity-checked geometry batch and validates its acknowledgement.
+
 proc tryApplyGeometriesChecked*(query: var X11SnapshotQuery, body: string): bool =
   var response: string
   if not query.tryRequest(IpcActionWindowApplyGeometriesChecked,
@@ -509,6 +565,9 @@ proc tryApplyGeometriesChecked*(query: var X11SnapshotQuery, body: string): bool
     return query.failed("APPLY_CHECKED_RESPONSE " & response)
   true
 
+
+# Requests an all-client snapshot within the supplied timeout and validates its envelope.
+
 proc trySnapshotWithTimeout*(query: var X11SnapshotQuery, output: var string,
     timeoutMs = QueryTimeoutMs): bool =
   var response: string
@@ -517,6 +576,9 @@ proc trySnapshotWithTimeout*(query: var X11SnapshotQuery, output: var string,
   if not snapshotBody(response, output):
     return query.failed("RESPONSE_ENVELOPE " & response)
   true
+
+
+# Attempts a snapshot query and optionally retries once after reopening the transport.
 
 proc trySnapshot*(query: var X11SnapshotQuery, output: var string,
     reconnect: bool): bool =

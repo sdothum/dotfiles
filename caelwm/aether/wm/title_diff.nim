@@ -15,6 +15,9 @@ type
     oldTitle*: string
     newTitle*: string
 
+
+# Reports changed available titles only when XID and identity token match across observations.
+
 proc diffTitleChanges*(previous, current: openArray[ObservedTitle]): seq[TitleChanged] =
   for updated in current:
     if not updated.available:

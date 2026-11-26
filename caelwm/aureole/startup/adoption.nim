@@ -17,6 +17,9 @@ type
     group*: RawGroup
     wmState*: WmStateValue
 
+
+# Classifies a valid 32-bit WM_STATE value, treating unavailable properties as absent.
+
 proc decodeWmState(observation: StartupWindowObservation): WmStateValue =
   let value = observation.wmState.propertyValue()
   if value.isNone or observation.wmState.format != 32 or
@@ -28,6 +31,9 @@ proc decodeWmState(observation: StartupWindowObservation): WmStateValue =
   of WmStateWithdrawn: wsvWithdrawn
   else: wsvOther
 
+
+# Accepts a valid in-range desktop property as a raw group, otherwise returns none.
+
 proc desktopGroup(observation: StartupWindowObservation;
                   groupCount: uint32): Option[RawGroup] =
   let desktop = observation.desktop.propertyValue()
@@ -37,6 +43,9 @@ proc desktopGroup(observation: StartupWindowObservation;
   else:
     none(RawGroup)
 
+
+# Detects dock, toolbar and desktop types that startup adoption excludes.
+
 proc isSpecial(observation: StartupWindowObservation;
                atoms: Atoms): bool =
   for atom in observation.windowTypes.values:
@@ -44,6 +53,9 @@ proc isSpecial(observation: StartupWindowObservation;
         atom == atoms.netWmWindowTypeToolbar or
         atom == atoms.netWmWindowTypeDesktop:
       return true
+
+
+# Extracts minimum dimensions and nonzero resize increments from valid normal hints.
 
 proc parseResizeHints*(property: Property32): ResizeHints =
   let values = property.values
@@ -57,6 +69,9 @@ proc parseResizeHints*(property: Property32): ResizeHints =
   if (values[0] and (1'u32 shl 6)) != 0:
     result.widthIncrement = max(1'u32, values[9])
     result.heightIncrement = max(1'u32, values[10])
+
+
+# Determines startup eligibility, mapped state and group from copied window observations.
 
 proc decideAdoption*(observation: StartupWindowObservation;
                      atoms: Atoms; groupCount: uint32): AdoptionDecision =
@@ -81,6 +96,9 @@ proc decideAdoption*(observation: StartupWindowObservation;
       result.adopted = true
       result.group = group.get
       result.mapped = false
+
+
+# Registers eligible root children and copies resize, user-placement and ABOVE state.
 
 proc adoptStartup*(connection: XConnection; state: var WmState;
                    epoch: ProcessEpoch; groupCount: uint32 = 10) =

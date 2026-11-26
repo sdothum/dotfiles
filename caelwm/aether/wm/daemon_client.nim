@@ -25,12 +25,18 @@ type DaemonClientRecord* = object
   mapped*: bool
   token*: string
 
+
+# Resolves the daemon socket beneath XDG_RUNTIME_DIR, falling back to WME.
+
 proc socketPath(): string =
   let runtime = getEnv("XDG_RUNTIME_DIR")
   if runtime.len > 0:
     return runtime / "zephyr" / "zephyrd.sock"
   let wme = getEnv("WME")
   if wme.len > 0: wme / "zephyrd.sock" else: ""
+
+
+# Writes every request byte to the socket, returning false on a nonpositive write.
 
 proc writeAll(fd: SocketHandle, data: string): bool =
   var offset = 0
@@ -40,6 +46,9 @@ proc writeAll(fd: SocketHandle, data: string): bool =
     offset += count
   true
 
+
+# Allocates and fills an exact-size response buffer, returning false on a nonpositive read.
+
 proc readAll(fd: SocketHandle, destination: var string, size: int): bool =
   destination = newString(size)
   var offset = 0
@@ -48,6 +57,9 @@ proc readAll(fd: SocketHandle, destination: var string, size: int): bool =
     if count <= 0: return false
     offset += count
   true
+
+
+# Encodes the versioned request and optional argument with a big-endian length prefix.
 
 proc framePayload(version: uint16, kind: uint8, argument: string): string =
   let hasArgument = kind in [RequestQueryClientState, RequestQueryClientClass,
@@ -66,6 +78,9 @@ proc framePayload(version: uint16, kind: uint8, argument: string): string =
     result[8] = char(uint16(argument.len) and 0xff)
     for index, value in argument:
       result[9 + index] = value
+
+
+# Encodes a versioned class/name wait request with pattern length and timeout milliseconds.
 
 proc waitFrame(kind: uint8, pattern: string, timeoutMs: uint32): string =
   let payloadSize = 3 + 2 + pattern.len + 4
@@ -86,6 +101,9 @@ proc waitFrame(kind: uint8, pattern: string, timeoutMs: uint32): string =
   result[offset + 1] = char((timeoutMs shr 16) and 0xff)
   result[offset + 2] = char((timeoutMs shr 8) and 0xff)
   result[offset + 3] = char(timeoutMs and 0xff)
+
+
+# Encodes mapped/all scope, selector pattern and optional public group in a daemon frame.
 
 proc filteredFrame(kind: uint8, includeAll: bool, pattern: string,
     group: Option[PublicGroupId]): string =
@@ -109,6 +127,8 @@ proc filteredFrame(kind: uint8, includeAll: bool, pattern: string,
     for index in 0 .. 3:
       result[offset + index] = char((group shr (24 - index * 8)) and 0xff)
 
+
+# Performs one Unix-socket request and validates the bounded versioned response envelope.
 
 proc queryDaemon*(kind: uint8, argument = ""): DaemonReply =
   let path = socketPath()
@@ -148,9 +168,11 @@ proc queryDaemon*(kind: uint8, argument = ""): DaemonReply =
     if payload.len > 4:
       result.error = payload[4 .. ^1]
 
+
+# Retry only this startup synchronization command while the daemon socket
+# is not yet accepting connections. Other daemon commands remain fail-fast.
+
 proc awaitReady*() =
-  ## Retry only this startup synchronization command while the daemon socket
-  ## is not yet accepting connections. Other daemon commands remain fail-fast.
   while true:
     let reply = queryDaemon(RequestAwaitReady)
     if reply.ok:
@@ -161,6 +183,9 @@ proc awaitReady*() =
       sleep(100)
       continue
     raiseZephyrError("zephyr daemon await: " & reply.error)
+
+
+# Performs a filtered daemon query and returns validated response data or an error reply.
 
 proc queryDaemonFiltered*(kind: uint8, includeAll: bool,
     pattern: string, group = none(PublicGroupId)): DaemonReply =
@@ -190,6 +215,9 @@ proc queryDaemonFiltered*(kind: uint8, includeAll: bool,
   else:
     result.code = uint8(ord(payload[3]))
     if payload.len > 4: result.error = payload[4 .. ^1]
+
+
+# Sends a bounded class-wait request and returns its framed daemon result.
 
 proc waitForClass*(pattern: string, timeoutMs = 5000'u32): DaemonReply =
   let path = socketPath()
@@ -227,6 +255,9 @@ proc waitForClass*(pattern: string, timeoutMs = 5000'u32): DaemonReply =
     if payload.len > 4:
       result.error = payload[4 .. ^1]
 
+
+# Sends a bounded title-wait request and returns its framed daemon result.
+
 proc waitForName*(pattern: string, timeoutMs = 5000'u32): DaemonReply =
   let path = socketPath()
   if path.len == 0:
@@ -263,6 +294,9 @@ proc waitForName*(pattern: string, timeoutMs = 5000'u32): DaemonReply =
     if payload.len > 4:
       result.error = payload[4 .. ^1]
 
+
+# Parses cached client-list records, rejecting malformed fields before reporting success.
+
 proc queryDaemonClientList*(): tuple[ok: bool, clients: seq[DaemonClientRecord],
     error: string] =
   let reply = queryDaemon(RequestQueryClientList)
@@ -294,6 +328,9 @@ proc queryDaemonClientList*(): tuple[ok: bool, clients: seq[DaemonClientRecord],
       token: if fields.len == 5: fields[4] else: ""
     ))
   result.ok = true
+
+
+# Queries cached class metadata for the supplied window identifier.
 
 proc queryDaemonClientClass*(winid: string): DaemonReply =
   queryDaemon(RequestQueryClientClass, winid)

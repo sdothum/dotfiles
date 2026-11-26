@@ -16,13 +16,22 @@ const
       "--test-pause-before-effects", "--test-stage4", "--test-stage5",
       "--test-stage6", "--test-private-effects", "--abi"]
 
+
+# Returns the legacy-compatible startup usage line for the executable name.
+
 proc usageOutput*(executable: string): string =
   "Usage: " & executable & " [-h|-v|-c CONFIG_PATH]\n"
+
+
+# Returns the configured version and retained copyright and license text.
 
 proc versionOutput*(): string =
   "aureole " & LegacyVersion & "\n" &
       "Copyright (c) 2016-2019 Tudor Ioan Roman\n" &
       "Released under the ISC License\n"
+
+
+# Parses legacy startup options and preserves internal options for the diagnostic entrypoint.
 
 proc parseLegacyStartupOptions*(args: openArray[string];
                                 executable: string): LegacyStartupOptions =

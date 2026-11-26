@@ -128,9 +128,15 @@ proc rawPaintDecoration(raw: ptr XcbConnection; frame, format, width, height,
     outerColor, innerColor, borderStyle, cornerMask, cornerPercent: uint32;
     outerBorderWidth, innerBorderWidth: int32) {.importc: "cirrus_paint_decoration", nodecl.}
 
+
+# Delegates ARGB visual, format and colormap discovery to the native rendering bridge.
+
 proc decorationResources*(raw: ptr XcbConnection; screen: ptr XcbScreen;
     visual, format, colormap: ptr uint32) =
   rawDecorationResources(raw, screen, visual, format, colormap)
+
+
+# Delegates frame painting with explicit dimensions, colors and border configuration.
 
 proc paintDecoration*(raw: ptr XcbConnection; frame, format, width, height,
     outerColor, innerColor, borderStyle, cornerMask, cornerPercent: uint32;

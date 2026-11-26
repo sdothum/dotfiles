@@ -299,3 +299,41 @@ If instructions conflict, identify the conflict and follow the applicable higher
 
 Do not interpret this document as blanket authorization for implementation, testing, deployment or host modification.
 
+
+## 12. Source Documentation Style
+
+CAELWM prioritizes human-readable source documentation over generated API documentation.
+
+### Module-level procedures
+
+- Introduce each named module-level procedure implementation with ordinary `#` commentary preceding its declaration.
+- Use two blank lines before the commentary block and one blank line between the commentary and procedure declaration.
+- Align commentary with the declaration indentation.
+- Treat the commentary and procedure implementation as a single visual unit.
+- Do not embed introductory `##` documentation within procedure bodies.
+- Preserve existing meaningful module section headings without accumulating redundant whitespace.
+
+### Commentary content
+
+- Use concise, present-tense behavioural descriptions.
+- Prefer one line for straightforward procedures.
+- Add further lines when necessary to explain contracts, preconditions, invariants, side effects, ordering, failure behaviour or architectural boundaries.
+- Describe what the procedure accomplishes rather than paraphrasing its implementation.
+- Use approximately 90 characters per commentary line as a flexible readability target.
+- Avoid redundant descriptions, decorative separators and unnecessary verbosity.
+
+### Exceptions
+
+- Nested procedures require introductory commentary only when it materially improves understanding. Use normal single-blank-line spacing rather than the module-level heading convention.
+- Anonymous procedures and callbacks do not require introductory commentary.
+- Forward declarations do not require duplicate commentary. Use normal single-blank-line spacing.
+- Preserve meaningful internal comments explaining non-obvious implementation rationale, architectural constraints and invariants.
+- Generated API documentation is not an objective of this convention.
+
+### Documentation-only changes
+
+- Preserve executable source text, significant indentation and behaviour.
+- Verify non-comment compiler token equivalence against the immediate pre-edit source, accounting for intentional whitespace and source-location changes.
+- Run appropriate compiler checks for affected components.
+- Run scoped `git diff --check`.
+- Do not introduce unrelated refactoring, formatting, renaming or behavioural corrections during documentation-only assignments.

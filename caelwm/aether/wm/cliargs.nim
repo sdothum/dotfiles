@@ -18,6 +18,9 @@ type
     flags*: seq[string]
     options*: seq[OptionValue]
 
+
+# Separates positional arguments, flags and declared value options, rejecting missing values.
+
 proc parseArgs*(
   args: seq[string],
   valueOptions: openArray[string] = []
@@ -46,8 +49,14 @@ proc parseArgs*(
 
     inc i
 
+
+# Reports whether the parsed flag set contains the supplied name.
+
 proc hasFlag*(args: ParsedArgs, name: string): bool =
   name in args.flags
+
+
+# Returns the first matching parsed option value or the supplied default.
 
 proc optionValue*(
   args: ParsedArgs,
@@ -59,6 +68,9 @@ proc optionValue*(
       return option.value
 
   default
+
+
+# Raises a controller error for flags or value options outside the command's allowlists.
 
 proc rejectUnsupported*(
   args: ParsedArgs,
@@ -72,6 +84,9 @@ proc rejectUnsupported*(
   for option in args.options:
     if option.name notin allowedOptions:
       raiseZephyrError("unsupported option: " & option.name)
+
+
+# Parses option forms and rejects options outside the supplied command allowlists.
 
 proc validateOptions*(
   rest: seq[string],
@@ -151,6 +166,10 @@ type
     winid*: string
     xy*: tuple[x, y: int]
     zoom*: string
+
+
+# Validates command-specific argument forms and fills typed controller argument fields.
+# Group arguments use the supplied count callback; malformed or unsupported forms raise errors.
 
 proc parseArguments*(
   command: string,

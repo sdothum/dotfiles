@@ -45,7 +45,16 @@ static xcb_void_cookie_t sirocco_intern(xcb_connection_t *c, uint8_t o, uint16_t
 }
 """.}
 proc freeMem*(p: pointer) {.importc: "free", header: "<stdlib.h>".}
+
+
+# Borrows the first screen from the connection's setup roots.
+
 proc firstScreen*(c: ptr Connection): ptr Screen = roots(setup(c)).data
+
+
+# Interns a name and returns its atom, using 31 when the reply is unavailable.
+# Retains the intern reply to preserve the inherited allocation lifetime.
+
 proc atom*(c: ptr Connection, name: string): uint32 =
   let r = atomReply(c, internCompat(c, 0, uint16(name.len and 65535), name.cstring), nil)
   if r == nil: return 31
@@ -69,5 +78,8 @@ static xcb_get_property_reply_t *sirocco_property(xcb_connection_t *c, uint32_t 
 """.}
 proc valueLength*(r: ptr PropertyReply): cint {.importc: "xcb_get_property_value_length", header: "<xcb/xcb.h>".}
 proc value*(r: ptr PropertyReply): pointer {.importc: "xcb_get_property_value", header: "<xcb/xcb.h>".}
+
+
+# Returns the raw STRING property reply; the caller owns and must free the XCB allocation.
 
 proc property*(c: ptr Connection, window, atom: uint32): ptr PropertyReply = propertyRaw(c,window,atom)

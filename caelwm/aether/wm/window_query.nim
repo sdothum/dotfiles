@@ -14,8 +14,14 @@ import daemon_client
 # Queries
 #
 
+
+# Returns the focused XID from native WM IPC.
+
 proc focusedWinid*(): string =
   ipc.focused()
+
+
+# Reads a client's group from daemon state, returning false for failed or malformed replies.
 
 proc tryWmGroup*(winid: string, group: var uint32): bool =
   let reply = queryDaemon(RequestQueryClientState, winid)
@@ -34,6 +40,9 @@ proc tryWmGroup*(winid: string, group: var uint32): bool =
   except ValueError:
     return false
 
+
+# Returns a client's daemon-observed group or raises when it is unavailable.
+
 proc wmGroup*(winid: string): uint32 =
   if not tryWmGroup(winid, result):
     raiseZephyrError("window_query wm group: invalid or unavailable group for " & winid)
@@ -46,15 +55,27 @@ type WmGroupEntry* = tuple[
 type ClientToken* = object
   value: string
 
+
+# Returns nonempty token text, rejecting uninitialized client tokens with ValueError.
+
 proc tokenValue(token: ClientToken): string =
   if token.value.len == 0:
     raise newException(ValueError, "empty client token")
   token.value
 
+
+# Rejects a token whose stored text is empty.
+
 proc validateClientToken*(token: ClientToken) =
   discard token.tokenValue
 
+
+# Returns validated nonempty client-token text.
+
 proc `$`*(token: ClientToken): string = token.tokenValue
+
+
+# Validates the lowercase epoch:generation grammar and rejects generation zero.
 
 proc parseClientToken*(value: string): ClientToken =
   if value.len != 49 or value[32] != ':' or
@@ -81,6 +102,9 @@ type StackGeometryEntry* = object
   winid*: string
   geometry*: Geometry
 
+
+# Parses a decimal uint32 snapshot field and raises a field-specific ValueError on failure.
+
 proc parseSnapshotUInt(value: string, field: string): uint32 =
   if value.len == 0 or value.anyIt(it notin {'0'..'9'}):
     raise newException(ValueError, "invalid " & field & " " & value)
@@ -92,10 +116,17 @@ proc parseSnapshotUInt(value: string, field: string): uint32 =
   except ValueError:
     raise newException(ValueError, "invalid " & field & " " & value)
 
+
+# Validates an eight-digit hexadecimal snapshot XID and normalizes its case.
+
 proc parseSnapshotWinid(value: string): string =
   if not value.match(re(r"^0x[0-9a-fA-F]{8}$")):
     raise newException(ValueError, "invalid winid " & value)
   value.toLowerAscii()
+
+
+# Parses version 1 or 2 snapshots and validates record uniqueness and focus/group consistency.
+# Ignores one final newline while rejecting malformed or incomplete records.
 
 proc parseWmSnapshotChecked*(output: string): WmSnapshot =
   var lines = output.splitLines()
@@ -169,11 +200,17 @@ proc parseWmSnapshotChecked*(output: string): WmSnapshot =
     if result.currentGroup != focusedGroup:
       raise newException(ValueError, "focused/current group mismatch")
 
+
+# Parses a snapshot and translates ValueError into the public controller diagnostic.
+
 proc parseWmSnapshot*(output: string): WmSnapshot =
   try:
     result = parseWmSnapshotChecked(output)
   except ValueError as error:
     raiseZephyrError("window snapshot: " & error.msg)
+
+
+# Projects daemon-cached snapshot clients into window/group pairs.
 
 proc wmGroups*(): seq[WmGroupEntry] =
   let reply = queryDaemon(RequestQuerySnapshot)
@@ -183,17 +220,26 @@ proc wmGroups*(): seq[WmGroupEntry] =
   for client in snapshot.clients:
     result.add((client.winid, client.group))
 
+
+# Requests a fresh snapshot from native WM IPC and parses the validated reply body.
+
 proc wmSnapshot*(): WmSnapshot =
   let reply = ipc.snapshot()
   if reply.status != 0:
     raiseZephyrError("window_query wm snapshot failed: " & reply.error)
   result = parseWmSnapshot(reply.output)
 
+
+# Requests and parses the daemon's cached snapshot, raising on daemon query failure.
+
 proc cachedWmSnapshot*(): WmSnapshot =
   let reply = queryDaemon(RequestQuerySnapshot)
   if not reply.ok:
     raiseZephyrError("window_query wm snapshot failed: " & reply.error)
   result = parseWmSnapshot(reply.body)
+
+
+# Returns a known client's optional token from a fresh snapshot and rejects unknown windows.
 
 proc clientToken*(winid: string): Option[ClientToken] =
   let snapshot = wmSnapshot()
@@ -202,11 +248,17 @@ proc clientToken*(winid: string): Option[ClientToken] =
       return client.token
   raiseZephyrError("window_query client token: unknown window " & winid)
 
+
+# Requires an identity-bearing client token from a fresh WM snapshot.
+
 proc requireClientToken*(winid: string): ClientToken =
   let token = clientToken(winid)
   if token.isNone:
     raiseZephyrError("window_query client token: identity unavailable for " & winid)
   token.get
+
+
+# Fetches and parses a fresh native snapshot, converting transport and parse failures to false.
 
 proc tryWmSnapshot*(snapshot: var WmSnapshot): bool =
   try:
@@ -218,6 +270,9 @@ proc tryWmSnapshot*(snapshot: var WmSnapshot): bool =
   except CatchableError:
     result = false
 
+
+# Returns an observed token, or none when snapshot acquisition or client lookup fails.
+
 proc tryClientToken*(winid: string): Option[ClientToken] =
   var snapshot: WmSnapshot
   if not tryWmSnapshot(snapshot):
@@ -225,6 +280,9 @@ proc tryClientToken*(winid: string): Option[ClientToken] =
   for client in snapshot.clients:
     if client.winid == winid:
       return client.token
+
+
+# Serializes snapshot records, selecting version 2 only for uniformly token-bearing clients.
 
 proc serializeWmSnapshot*(snapshot: WmSnapshot): string =
   let focused =
@@ -240,6 +298,9 @@ proc serializeWmSnapshot*(snapshot: WmSnapshot): string =
       (if client.mapped: "1" else: "0") &
       (if version2: " " & $client.token.get else: "") & "\n")
 
+
+# Requires a nonempty class name from the daemon's client-class query.
+
 proc classname*(winid: string): string =
   let reply = queryDaemonClientClass(winid)
   if not reply.ok:
@@ -247,6 +308,9 @@ proc classname*(winid: string): string =
   if reply.body.len == 0:
     raiseZephyrError("window_query classname: empty WM_CLASS")
   reply.body
+
+
+# Parses x, y, width and height assignments and rejects missing or malformed geometry fields.
 
 proc parseGeometryBody*(output: string): Geometry =
   # proc fail(error: string) =
@@ -285,11 +349,17 @@ proc parseGeometryBody*(output: string): Geometry =
   if not (gotX and gotY and gotWidth and gotHeight):
     raiseZephyrError("incomplete window geometry")
 
+
+# Resolves an optional window target and parses its native geometry into controller values.
+
 proc geometry*(winid: string = ""): Geometry =
   let a = parseArguments("window geometry", (if winid.len == 0: @[] else: @[winid]), [ArgWinid])
   let body = if a.winid.len == 0: ipc.geometry()
     else: ipc.geometry(ipc.windowId(a.winid))
   parseGeometryBody(body)
+
+
+# Validates CLI geometry arguments and returns the native geometry reply text.
 
 proc geometry*(args: seq[string]): string =
   requireArgs("window geometry", args, 0, 1)
@@ -297,9 +367,15 @@ proc geometry*(args: seq[string]): string =
   if a.winid.len == 0: ipc.geometry()
   else: ipc.geometry(ipc.windowId(a.winid))
 
+
+# Returns stack reply lines for an explicit target or the currently focused window.
+
 proc stack*(winid: string = ""): seq[string] =
   if winid.len == 0: ipc.stack().splitLines()
   else: ipc.stack(ipc.windowId(winid)).splitLines()
+
+
+# Validates ordered XID/geometry records and converts their coordinates and dimensions.
 
 proc parseStackGeometries*(output: string): seq[StackGeometryEntry] =
   if output.len == 0:
@@ -329,14 +405,23 @@ proc parseStackGeometries*(output: string): seq[StackGeometryEntry] =
       geometry: Geometry(x: x, y: y, width: width, height: height)
     ))
 
+
+# Resolves the optional target and parses its ordered native stack geometry reply.
+
 proc stackGeometries*(winid: string = ""): seq[StackGeometryEntry] =
   let a = parseArguments("window stack-geometries", (if winid.len == 0: @[] else: @[winid]), [ArgWinid])
   let body = if a.winid.len == 0: ipc.stackGeometries()
     else: ipc.stackGeometries(ipc.windowId(a.winid))
   parseStackGeometries(body)
 
+
+# Delegates an unchecked-identity geometry body to acknowledged native WM IPC.
+
 proc applyGeometriesBody*(body: string) =
   ipc.applyGeometries(body)
+
+
+# Delegates an identity-bearing checked geometry body to acknowledged native WM IPC.
 
 proc applyGeometriesCheckedBody*(body: string) =
   ipc.applyGeometriesChecked(body)

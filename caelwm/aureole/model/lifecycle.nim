@@ -194,15 +194,24 @@ type
     detail*: string
   PrivateGeometryRecord = GeometryBatchRecord
 
+
+# Builds a lifecycle effect with explicit target, group and protocol-sized geometry.
+
 proc effect(kind: WmEffectKind; window: WindowId;
             decoration = WindowId(0); group = NullGroup;
             x = 0'i16; y = 0'i16; width = 0'u16; height = 0'u16): WmEffect =
   WmEffect(kind: kind, window: window, decoration: decoration, group: group,
            x: x, y: y, width: width, height: height)
 
+
+# Captures the active group IDs for later publication by the runtime.
+
 proc groupEffect(state: WmState; window: WindowId): WmEffect =
   result = WmEffect(kind: wePublishActiveGroups, window: window)
   result.groups = state.activeGroupIds
+
+
+# Captures client geometry and state flags for later status-property publication.
 
 proc statusEffect(client: ClientState): WmEffect =
   WmEffect(kind: wePublishStatus, window: client.window,
@@ -211,6 +220,9 @@ proc statusEffect(client: ClientState): WmEffect =
       mapped: client.mapped, setByUser: client.setByUser,
       resizeHints: client.resizeHints, maxed: client.maxed,
       hmaxed: client.hmaxed, vmaxed: client.vmaxed, monocled: client.monocled)
+
+
+# Selects focused or unfocused frame colors for a client that has a decoration.
 
 proc paintEffect(client: ClientState; focused: bool; config: WmConfiguration): WmEffect =
   WmEffect(kind: wePaintDecoration, window: client.window,
@@ -221,6 +233,9 @@ proc paintEffect(client: ClientState; focused: bool; config: WmConfiguration): W
       cornerPercent: config.cornerPercent,
       outerBorderWidth: config.outerBorderWidth,
       innerBorderWidth: config.innerBorderWidth)
+
+
+# Orders client geometry, eligible frame configuration and painting before status publication.
 
 proc geometryEffects(client: ClientState; moveClient, resizeClient: bool;
                      bounds: geometryMath.GeometryBounds; focused: bool;
@@ -240,6 +255,9 @@ proc geometryEffects(client: ClientState; moveClient, resizeClient: bool;
       result.add(paintEffect(client, focused, config))
   result.add(statusEffect(client))
 
+
+# Restores saved geometry and clears special geometry modes in the client and model.
+
 proc resetGeometry(state: var WmState; client: var ClientState) =
   client.geometry = client.origGeometry
   client.maxed = false
@@ -250,6 +268,9 @@ proc resetGeometry(state: var WmState; client: var ClientState) =
 
 proc focusEffects(state: var WmState; id: ClientId;
                   raiseClient: bool): seq[WmEffect]
+
+
+# Prepares EWMH geometry and eligible frame painting without issuing X requests.
 
 proc ewmhGeometryEffects(client: ClientState;
                          bounds: geometryMath.GeometryBounds;
@@ -265,10 +286,16 @@ proc ewmhGeometryEffects(client: ClientState;
   if geometry.decoration.raw != 0:
     result.add(paintEffect(client, focused, config))
 
+
+# Captures layer and maximization flags for EWMH state-property publication.
+
 proc ewmhStatePropertyEffect(client: ClientState): WmEffect =
   WmEffect(kind: wePublishEwmhState, window: client.window,
       layer: client.layer, maxed: client.maxed,
       hmaxed: client.hmaxed, vmaxed: client.vmaxed)
+
+
+# Captures managed clients and decoration layers for a later restack operation.
 
 proc ewmhRestackEffect(state: WmState; window: WindowId): WmEffect =
   result = WmEffect(kind: weRestackLayers, window: window)
@@ -277,6 +304,9 @@ proc ewmhRestackEffect(state: WmState; window: WindowId): WmEffect =
         window: client.window,
         decoration: if client.decoration.isSome: client.decoration.get else: WindowId(0),
         layer: client.layer, maxed: client.maxed, monocled: client.monocled))
+
+
+# Restores an active special geometry mode and appends geometry, stack and state effects.
 
 proc resetForEwmh(state: var WmState; client: var ClientState;
                   bounds: geometryMath.GeometryBounds;
@@ -291,6 +321,9 @@ proc resetForEwmh(state: var WmState; client: var ClientState;
   effects.add(state.ewmhRestackEffect(client.window))
   effects.add(ewmhStatePropertyEffect(client))
   effects.add(statusEffect(client))
+
+
+# Saves normal geometry, applies the requested maximize mode and appends publication effects.
 
 proc applyEwmhMaximize(state: var WmState; client: var ClientState;
                        kind: WmInputKind; bounds: geometryMath.GeometryBounds;
@@ -327,6 +360,9 @@ proc applyEwmhMaximize(state: var WmState; client: var ClientState;
   effects.add(ewmhStatePropertyEffect(client))
   effects.add(statusEffect(client))
 
+
+# Restores normal geometry and publications, optionally appending focus and raise effects.
+
 proc resetEwmhMaximize(state: var WmState; client: var ClientState;
                        focusAndRaise: bool;
                        bounds: geometryMath.GeometryBounds;
@@ -342,6 +378,9 @@ proc resetEwmhMaximize(state: var WmState; client: var ClientState;
   if focusAndRaise:
     effects.add(state.focusEffects(client.id, true))
 
+
+# Updates an unmanaged window's ABOVE atom list for valid remove, add or toggle actions.
+
 proc applyUnmanagedAbove(input: WmInput; stateAtoms: var seq[uint32];
                          effects: var seq[WmEffect]) =
   if input.ewmhAction > 2: return
@@ -356,6 +395,9 @@ proc applyUnmanagedAbove(input: WmInput; stateAtoms: var seq[uint32];
   effects.add(WmEffect(kind: weSetUnmanagedEwmhState,
       window: input.window, aboveAtom: input.ewmhAboveAtom,
       stateAtoms: stateAtoms))
+
+
+# Applies one managed EWMH state request and appends the required realization effects.
 
 proc applyManagedEwmhAtom(state: var WmState; client: var ClientState;
                           input: WmInput; atom: EwmhStateAtom;
@@ -405,6 +447,9 @@ proc applyManagedEwmhAtom(state: var WmState; client: var ClientState;
   of esaUnknown:
     discard
 
+
+# Toggles a supported special geometry mode while preserving the normal restore geometry.
+
 proc applySpecialGeometry(state: var WmState; client: var ClientState;
                           mode: WmInputKind;
                           bounds: geometryMath.GeometryBounds): bool =
@@ -449,6 +494,10 @@ proc applySpecialGeometry(state: var WmState; client: var ClientState;
   discard state.replaceClient(client)
   result = true
 
+
+# Updates model focus and orders mapping, painting, input-focus and desktop effects.
+# Missing identities produce no effects; the optional raise follows focus publication.
+
 proc focusEffects(state: var WmState; id: ClientId;
                   raiseClient: bool): seq[WmEffect] =
   let found = state.lookup(id)
@@ -477,6 +526,9 @@ proc focusEffects(state: var WmState; id: ClientId;
     result.add(effect(weRaiseClient, client.window,
         decoration = if client.decoration.isSome: client.decoration.get else: WindowId(0)))
 
+
+# Finds a mapped client in focus history, skipping its first entry when alternatives exist.
+
 proc chooseLast(state: WmState): Option[ClientId] =
   let order = state.focusOrderClients
   if order.len == 0: return none(ClientId)
@@ -484,6 +536,9 @@ proc chooseLast(state: WmState): Option[ClientId] =
   for index in start ..< order.len:
     if order[index].mapped: return some(order[index].id)
   none(ClientId)
+
+
+# Finds the next eligible mapped client in managed order, optionally within the current group.
 
 proc cycleTarget(state: WmState; reverse, sameGroup: bool): Option[ClientId] =
   let ordered = state.clientsInManagedOrder
@@ -512,6 +567,10 @@ proc cycleTarget(state: WmState; reverse, sameGroup: bool): Option[ClientId] =
         (focused.isNone or client.id != focused.get):
       return some(client.id)
   none(ClientId)
+
+
+# Applies a normalized lifecycle input to model state and returns ordered realization effects.
+# X11 observations arrive in the input; this procedure performs no server requests.
 
 proc transition*(state: var WmState; epoch: ProcessEpoch;
                  input: WmInput): TransitionResult =
@@ -1207,23 +1266,40 @@ proc transition*(state: var WmState; epoch: ProcessEpoch;
       result.client = client
       result.hasClient = true
 
+
+# The C transport casts through int32_t and then int16_t for these fields.
+
 proc privateSignedWord(value: uint32): int16 {.inline.} =
-  ## The C transport casts through int32_t and then int16_t for these fields.
   cast[int16](cast[int32](value))
+
+
+# Resolves a nonzero XID in the model, using current focus for a zero target.
 
 proc privateTarget(state: WmState; xid: uint32): Option[ClientState] =
   if xid == 0: return state.focusedClient
   state.lookup(WindowId(xid))
 
+
+# Decodes the unchecked private geometry-batch payload through the shared grammar.
+
 proc decodePrivateGeometry(payload: seq[byte]; state: WmState;
                            records: var seq[PrivateGeometryRecord]): bool =
   state.decodeGeometryBatch(33, payload, records)
 
+
+# Formats a window identifier as a lowercase, eight-digit hexadecimal XID.
+
 proc privateXid(window: WindowId): string =
   "0x" & toHex(window.raw, 8).toLowerAscii
 
+
+# Builds a required private reply intent that must follow realization effects.
+
 proc privateReply(payload: string): PrivateReplyIntent =
   PrivateReplyIntent(required: true, payload: payload, afterEffects: true)
+
+
+# Captures managed client identities, focus and current group for private snapshot replies.
 
 proc privateSnapshot(state: WmState): PrivateSnapshotIntent =
   let focused = state.focusedClient
@@ -1234,6 +1310,9 @@ proc privateSnapshot(state: WmState): PrivateSnapshotIntent =
     result.clients.add(PrivateSnapshotClient(window: client.window,
         group: client.group, mapped: client.mapped, token: client.token))
 
+
+# Resolves the explicit query target or the focused client according to the selector flag.
+
 proc privateQueryTarget(state: WmState; input: PrivateSemanticInput):
     Option[ClientState] =
   if input.words[1] != 0:
@@ -1241,9 +1320,15 @@ proc privateQueryTarget(state: WmState; input: PrivateSemanticInput):
   else:
     state.focusedClient
 
+
+# Selects the missing-target error for explicit or focused-window queries.
+
 proc privateQueryError(input: PrivateSemanticInput): string =
   if input.words[1] != 0: "ERROR unknown or unmanaged window"
   else: "ERROR no focused managed window"
+
+
+# Parses a hexadecimal raise target with C-compatible sign and trailing-text handling.
 
 proc parseRaiseWindow(value: string; window: var WindowId): bool =
   var index = 0
@@ -1272,6 +1357,9 @@ proc parseRaiseWindow(value: string; window: var WindowId): bool =
   if negative and raw != 0: return false
   window = WindowId(uint32(raw))
   true
+
+
+# Validates a bounded raise payload and resolves its managed window sequence.
 
 proc decodeRaiseMany(payload: seq[byte]; state: WmState):
     tuple[valid: bool, windows: seq[WindowId]] =
@@ -1306,6 +1394,9 @@ proc decodeRaiseMany(payload: seq[byte]; state: WmState):
   result.valid = true
   result.windows = seen
 
+
+# Decodes an optional native uint32 group filter and rejects out-of-range public groups.
+
 proc queryFilterGroup(payload: seq[byte]; groupCount: uint32):
     tuple[valid: bool, enabled: bool, group: RawGroup] =
   result.valid = true
@@ -1321,6 +1412,9 @@ proc queryFilterGroup(payload: seq[byte]; groupCount: uint32):
   result.enabled = true
   result.group = RawGroup(publicGroup)
 
+
+# Collects managed candidates under the query's mapped/all scope and optional group filter.
+
 proc privateQueryCandidates*(state: WmState; input: PrivateSemanticInput):
     tuple[valid: bool, candidates: seq[ClientState]] =
   let groupFilter = queryFilterGroup(input.propertyPayload, state.groupCount)
@@ -1332,9 +1426,15 @@ proc privateQueryCandidates*(state: WmState; input: PrivateSemanticInput):
     if groupFilter.enabled and client.group != groupFilter.group: continue
     result.candidates.add(client)
 
+
+# Decodes identity-checked private geometry records through the shared grammar.
+
 proc decodePrivateCheckedGeometry(payload: seq[byte]; state: WmState;
     records: var seq[PrivateGeometryRecord]): bool =
   state.decodeGeometryBatch(35, payload, records)
+
+
+# Appends every client ungrab before any replacement button grabs.
 
 proc appendPrivateButtonRegrab(result: var PrivateCommandResult;
                                 state: WmState) =
@@ -1349,6 +1449,9 @@ proc appendPrivateButtonRegrab(result: var PrivateCommandResult;
         buttonGrabs: sourceButtonGrabPlan(state.config.clickToFocus,
             state.config.pointerActions, state.pointerModifier,
             state.pointerLockMasks)))
+
+
+# Updates model decoration ownership and prepares frame refresh and layer effects.
 
 proc refreshBorderEffects(state: var WmState; input: PrivateSemanticInput;
                           output: var PrivateCommandResult) =
@@ -1398,12 +1501,14 @@ proc refreshBorderEffects(state: var WmState; input: PrivateSemanticInput;
     output.transition.effects.add(WmEffect(kind: weRestackLayers,
         window: client.window))
 
+
+# Pure semantic adapter for the Stage 7D-3 command subset. It only prepares
+# future reply metadata; it never publishes a private reply or performs an
+# XCB operation. Required server observations arrive in the owned normalized
+# `observations` value.
+
 proc applyPrivateCommand*(state: var WmState; epoch: ProcessEpoch;
                           input: PrivateSemanticInput): PrivateCommandResult =
-  ## Pure semantic adapter for the Stage 7D-3 command subset. It only prepares
-  ## future reply metadata; it never publishes a private reply or performs an
-  ## XCB operation. Required server observations arrive in the owned normalized
-  ## `observations` value.
   var request: WmInput
   if input.opcode in [0'u32, 1'u32, 12'u32, 13'u32, 14'u32, 15'u32,
       16'u32, 22'u32, 23'u32, 24'u32, 27'u32, 28'u32, 29'u32, 30'u32,

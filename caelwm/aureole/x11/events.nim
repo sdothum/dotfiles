@@ -32,6 +32,9 @@ type
     format*: uint8
     data32*: array[5, uint32]
 
+
+# Polls one XCB event, copies supported fields and frees the allocated event before returning.
+
 proc readEvent*(connection: ptr XcbConnection): Option[XEventData] =
   let raw = xcbPollForEvent(connection)
   if raw == nil:

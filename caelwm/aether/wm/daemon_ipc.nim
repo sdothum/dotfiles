@@ -109,12 +109,21 @@ proc close*(server: var IpcServer)
 
 proc queueResponse(client: var IpcClient, payload: string)
 
+
+# Encodes a uint16 as two big-endian bytes.
+
 proc be16(value: uint16): array[2, char] =
   result[0] = char((value shr 8) and 0xff)
   result[1] = char(value and 0xff)
 
+
+# Reads a uint16 from the first two bytes of a caller-validated buffer.
+
 proc readBe16(value: string): uint16 =
   (uint16(ord(value[0])) shl 8) or uint16(ord(value[1]))
+
+
+# Encodes a uint32 as four big-endian bytes.
 
 proc be32(value: uint32): array[4, char] =
   result[0] = char((value shr 24) and 0xff)
@@ -122,11 +131,17 @@ proc be32(value: uint32): array[4, char] =
   result[2] = char((value shr 8) and 0xff)
   result[3] = char(value and 0xff)
 
+
+# Reads a uint32 from the first four bytes of a caller-validated buffer.
+
 proc readBe32(value: string): uint32 =
   (uint32(ord(value[0])) shl 24) or
   (uint32(ord(value[1])) shl 16) or
   (uint32(ord(value[2])) shl 8) or
   uint32(ord(value[3]))
+
+
+# Prefixes a daemon payload with its four-byte big-endian length.
 
 proc frame(payload: string): string =
   let size = be32(uint32(payload.len))
@@ -134,11 +149,17 @@ proc frame(payload: string): string =
   for c in size: result.add(c)
   result.add(payload)
 
+
+# Frames a versioned successful acknowledgement with its response kind.
+
 proc responseOk(kind: uint8): string =
   let version = be16(ProtocolVersion)
   result.add(version[0]); result.add(version[1])
   result.add(char(StatusOk)); result.add(char(kind))
   result = frame(result)
+
+
+# Frames a versioned successful response with its kind and body.
 
 proc responseData(kind: uint8, body: string): string =
   let version = be16(ProtocolVersion)
@@ -147,6 +168,9 @@ proc responseData(kind: uint8, body: string): string =
   result.add(body)
   result = frame(result)
 
+
+# Frames a versioned error code and detail string.
+
 proc responseError(version: uint16, code: uint8, detail: string): string =
   let encodedVersion = be16(version)
   result.add(encodedVersion[0]); result.add(encodedVersion[1])
@@ -154,11 +178,17 @@ proc responseError(version: uint16, code: uint8, detail: string): string =
   result.add(detail)
   result = frame(result)
 
+
+# Builds a versioned ping request frame.
+
 proc pingFrame*(): string =
   let version = be16(ProtocolVersion)
   var payload = newStringOfCap(3)
   payload.add(version[0]); payload.add(version[1]); payload.add(char(RequestPing))
   frame(payload)
+
+
+# Validates request version, kind and payload fields before constructing a daemon request.
 
 proc decodeRequest(payload: string): tuple[request: DaemonRequest, error: string,
     code: uint8] =
@@ -257,6 +287,9 @@ proc decodeRequest(payload: string): tuple[request: DaemonRequest, error: string
     kind: DaemonRequestKind(ord(kind - RequestPing)),
     argument: payload[5 ..< 5 + int(argumentLength)])
 
+
+# Answers supported queries from accepted cached state and reports not-ready or unknown clients.
+
 proc cachedResponse(server: IpcServer, request: DaemonRequest): tuple[body: string,
     errorCode: uint8, error: string] =
   if not server.snapshotReady:
@@ -294,16 +327,25 @@ proc cachedResponse(server: IpcServer, request: DaemonRequest): tuple[body: stri
   else:
     return ("", ErrorUnknownRequest, "unknown request kind")
 
+
+# Collects mapped clients whose available cached class exactly matches the pattern.
+
 proc matchingClassClients(clients: seq[DaemonCachedClient], pattern: string): seq[string] =
   for client in clients:
     if client.mapped and client.metadataAvailable and client.className == pattern:
       result.add(client.winid)
+
+
+# Collects mapped clients whose available cached title matches the compiled expression.
 
 proc matchingNameClients(clients: seq[DaemonCachedClient],
     expression: Regex): seq[string] =
   for client in clients:
     if client.mapped and client.titleAvailable and client.title.match(expression):
       result.add(client.winid)
+
+
+# Filters cached clients by mapped/all scope, optional group and class or title selector.
 
 proc filteredClients(clients: seq[DaemonCachedClient], byName, includeAll: bool,
     pattern: string, groupNo: uint32): seq[string] =
@@ -321,6 +363,9 @@ proc filteredClients(clients: seq[DaemonCachedClient], byName, includeAll: bool,
           client.metadataAvailable and client.className == pattern:
         result.add(client.winid)
 
+
+# Queues a class/name wait response when cached clients contain a matching mapped window.
+
 proc queueWaitResult(client: var IpcClient, waiter: Waiter,
     clients: seq[DaemonCachedClient]) =
   let matches = case waiter.kind
@@ -330,6 +375,9 @@ proc queueWaitResult(client: var IpcClient, waiter: Waiter,
     queueResponse(client, responseData(
       if waiter.kind == WaitName: ResponseWaitName else: ResponseWaitClass,
       matches.join("\n")))
+
+
+# Queues timeout errors or currently matching cached results for pending waiters.
 
 proc serviceWaiters(server: var IpcServer) =
   let now = epochTime()
@@ -342,10 +390,16 @@ proc serviceWaiters(server: var IpcServer) =
       else:
         queueWaitResult(client, waiter, server.cachedClients)
 
+
+# Closes an IPC client descriptor and removes its connection state.
+
 proc closeClient(server: var IpcServer, index: int) =
   if server.clients[index].fd != osInvalidSocket:
     close(server.clients[index].fd)
   server.clients.delete(index)
+
+
+# Replaces pending output, marks the client for closing and clears readiness and wait state.
 
 proc queueResponse(client: var IpcClient, payload: string) =
   client.output = payload
@@ -354,8 +408,11 @@ proc queueResponse(client: var IpcClient, payload: string) =
   client.waiter = none(Waiter)
   client.awaitingReady = false
 
+
+# Consumes complete bounded request frames and queues replies or pending waits.
+# Returns false when the client should be disconnected.
+
 proc processInput(server: var IpcServer, client: var IpcClient): bool =
-  ## Returns false when the client should be disconnected.
   if client.input.len > 4 + MaxFrameSize:
     queueResponse(client, responseError(ProtocolVersion, ErrorFrameTooLarge,
       "frame exceeds limit"))
@@ -453,6 +510,9 @@ proc processInput(server: var IpcServer, client: var IpcClient): bool =
     return true
   true
 
+
+# Replaces accepted snapshot and client cache state, marks it available and services waiters.
+
 proc cacheSnapshot*(server: var IpcServer, body, focused: string,
     currentGroup: uint32, clients: seq[DaemonCachedClient]) =
   server.snapshotBody = body
@@ -461,6 +521,9 @@ proc cacheSnapshot*(server: var IpcServer, body, focused: string,
   server.cachedClients = clients
   server.snapshotReady = true
   serviceWaiters(server)
+
+
+# Clears accepted snapshot state and fails pending waiters with not-ready responses.
 
 proc invalidateCache*(server: var IpcServer) =
   server.snapshotReady = false
@@ -473,9 +536,11 @@ proc invalidateCache*(server: var IpcServer) =
       queueResponse(client, responseError(ProtocolVersion, ErrorNotReady,
         "daemon snapshot is not ready"))
 
+
+# Reuses available metadata only for an exact match of XID and accepted identity token.
+
 proc cachedMetadata*(server: IpcServer, winid, token: string,
     instanceName, className: var string): bool =
-  ## Reuse metadata only when it belongs to the currently accepted identity.
   for client in server.cachedClients:
     if client.winid == winid and client.token == token and client.metadataAvailable:
       instanceName = client.instanceName
@@ -483,8 +548,14 @@ proc cachedMetadata*(server: IpcServer, winid, token: string,
       return true
   false
 
+
+# Recognizes EAGAIN and EINTR as retryable nonblocking socket errors.
+
 proc retryableSocketError(): bool =
   osLastError().cint in [EAGAIN, EINTR]
+
+
+# Resolves the daemon listener path beneath XDG_RUNTIME_DIR or WME.
 
 proc socketPath*(): string =
   let runtime = getEnv("XDG_RUNTIME_DIR")
@@ -494,6 +565,9 @@ proc socketPath*(): string =
       return ""
     return wme / "zephyrd.sock"
   runtime / "zephyr" / "zephyrd.sock"
+
+
+# Creates the socket parent if needed and rejects missing paths or writable shared parents.
 
 proc ensureParent(path: string) =
   let parent = splitFile(path).dir
@@ -505,6 +579,9 @@ proc ensureParent(path: string) =
   if fpGroupWrite in permissions or fpOthersWrite in permissions:
     quit("zephyrd IPC: unsafe socket parent permissions")
 
+
+# Reports whether a temporary Unix socket can connect to the existing endpoint.
+
 proc probe(path: string): bool =
   let fd = createNativeSocket(AF_UNIX, SOCK_STREAM, 0)
   if fd == osInvalidSocket:
@@ -513,9 +590,15 @@ proc probe(path: string): bool =
   var address = makeUnixAddr(path)
   connect(fd, cast[ptr SockAddr](addr address), sizeof(address).SockLen) == 0
 
+
+# Uses lstat to detect an existing socket-path entry, including symlinks.
+
 proc socketPathExists(path: string): bool =
   var info: Stat
   lstat(path.cstring, info) == 0
+
+
+# Initializes the listener, refusing an active endpoint and removing a stale socket-path entry.
 
 proc open*(server: var IpcServer, path = socketPath()): bool =
   if server.initialized:
@@ -545,6 +628,9 @@ proc open*(server: var IpcServer, path = socketPath()): bool =
   server.initialized = true
   true
 
+
+# Closes listener and client descriptors and removes the initialized server's socket entry.
+
 proc close*(server: var IpcServer) =
   if not server.initialized:
     return
@@ -559,10 +645,15 @@ proc close*(server: var IpcServer) =
   server.path = ""
   server.initialized = false
 
+
+# Returns the listener descriptor for polling.
+
 proc descriptor*(server: IpcServer): cint = cint(server.listener)
 
+
+# Marks listener readiness once and queues acknowledgements for pending readiness clients.
+
 proc markReady*(server: var IpcServer) =
-  ## Readiness is monotonic for this daemon listener's lifetime.
   if server.ready:
     return
   server.ready = true
@@ -570,8 +661,10 @@ proc markReady*(server: var IpcServer) =
     if client.awaitingReady:
       queueResponse(client, responseOk(ResponseDaemonReady))
 
+
+# Services ready IPC descriptors and returns whether the supplied invalidation descriptor is ready.
+
 proc service*(server: var IpcServer, invalidationFd: cint): bool =
-  ## Services ready IPC descriptors and returns whether the invalidation fd is ready.
   serviceWaiters(server)
   var descriptors = newSeq[TPollfd](1 + server.clients.len)
   descriptors[0] = TPollfd(fd: cint(server.listener), events: POLLIN, revents: 0)

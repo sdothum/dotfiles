@@ -6,9 +6,11 @@ type
     count*: int
     values*: array[4, uint32]
 
+
+# XCB serializes values in ascending mask-bit order: X, Y, WIDTH, HEIGHT.
+
 proc packGeometryValues*(mask: uint16; x, y: int32;
                          width, height: uint32): PackedGeometryValues =
-  ## XCB serializes values in ascending mask-bit order: X, Y, WIDTH, HEIGHT.
   result.mask = uint32(mask and 0x000f'u16)
   if (mask and 1'u16) != 0:
     result.values[result.count] = uint32(x and 0xffff'i32)
@@ -27,12 +29,14 @@ proc packGeometryValues*(mask: uint16; x, y: int32;
     result.values[result.count] = height
     inc result.count
 
+
+# X ConfigureWindow values follow ascending mask-bit order. The caller
+# supplies only fields that were present in the received request mask.
+
 proc packConfigureRequestValues*(mask: uint16; x, y: int16;
                                  width, height, borderWidth: uint16;
                                  sibling: uint32; stackMode: uint8):
                                  array[7, uint32] =
-  ## X ConfigureWindow values follow ascending mask-bit order. The caller
-  ## supplies only fields that were present in the received request mask.
   var index = 0
   if (mask and (1'u16 shl 0)) != 0:
     result[index] = uint32(cast[uint16](x)); inc index

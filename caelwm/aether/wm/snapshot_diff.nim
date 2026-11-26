@@ -27,21 +27,33 @@ type
     oldNullGroupCount*: int
     newNullGroupCount*: int
 
+
+# Finds a client record by XID within the supplied snapshot.
+
 proc client(snapshot: WmSnapshot, winid: string): Option[WmClientState] =
   for item in snapshot.clients:
     if item.winid == winid:
       return some(item)
   none(WmClientState)
 
+
+# Returns lexically sorted snapshot client XIDs.
+
 proc clientIds(snapshot: WmSnapshot): seq[string] =
   for item in snapshot.clients:
     result.add(item.winid)
   result.sort()
 
+
+# Counts snapshot clients assigned to NullGroup.
+
 proc nullGroupCount(snapshot: WmSnapshot): int =
   for item in snapshot.clients:
     if item.group == NullGroup:
       result.inc
+
+
+# Produces focus, group, membership and mapped-state changes between two snapshots.
 
 proc diffSnapshots*(previous, current: WmSnapshot): seq[SnapshotChange] =
   if previous.focused != current.focused:
@@ -121,14 +133,23 @@ proc diffSnapshots*(previous, current: WmSnapshot): seq[SnapshotChange] =
       newNullGroupCount: newNullGroupCount
     ))
 
+
+# Formats a focused XID or the protocol's NONE marker.
+
 proc focusedText(value: Option[string]): string =
   if value.isSome:
     value.get()
   else:
     "NONE"
 
+
+# Formats mapped state as a 1 or 0 protocol field.
+
 proc mappedText(value: bool): string =
   if value: "1" else: "0"
+
+
+# Formats one snapshot change as a line-oriented event report.
 
 proc report*(change: SnapshotChange): string =
   case change.kind

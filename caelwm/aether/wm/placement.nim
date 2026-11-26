@@ -29,6 +29,10 @@ type
     history: seq[state.IdentityHistoryUpdate]
     records: seq[state.IdentityExplodeStateRecord]
 
+
+# Calculates a logical cell's tiled or size-preserving destination with screen gaps and offsets.
+# Spread placement rejects source heights that cannot fit the requested rows.
+
 proc foldDestination(cell: PlacementCell, columns, rows: int,
     screen: ScreenGeometry, source: Geometry, spread: bool): Geometry =
   let tileWidth = (screen.width - (columns - 1) * screen.gap) div columns
@@ -54,6 +58,10 @@ proc foldDestination(cell: PlacementCell, columns, rows: int,
     width: tileWidth,
     height: tileHeight
   )
+
+
+# Captures all source geometries before applying a validated fold plan and restore history.
+# Optional checkpoints, raising and focus restoration remain placement responsibilities.
 
 proc applyFold*(clients: seq[PlacementClient], cells: seq[PlacementCell],
     columns, rows: int, spread: bool, checkpointRoot: Option[string],
@@ -119,6 +127,9 @@ proc applyFold*(clients: seq[PlacementClient], cells: seq[PlacementCell],
   raisePlacement()
   restoreFocus()
 
+
+# Calculates a tiled cell's geometry using usable screen dimensions, gaps and offsets.
+
 proc explodeDestination(cell: PlacementCell, columns, rows: int,
     screen: ScreenGeometry): Geometry =
   let tileWidth = (screen.width - (columns - 1) * screen.gap) div columns
@@ -132,14 +143,23 @@ proc explodeDestination(cell: PlacementCell, columns, rows: int,
     height: tileHeight
   )
 
+
+# Raises application windows in plan order through the bulk raise boundary.
+
 proc raisePlacement(applications: seq[window.CheckedGeometryApplication]) =
   window.raiseMany(applications.mapIt(it.winid))
+
+
+# Restores a changed nonempty focus target, then reapplies placement stacking order.
 
 proc restoreFocus(focusedWinid: string,
     applications: seq[window.CheckedGeometryApplication]) =
   if focusedWinid.len > 0 and query.focusedWinid() != focusedWinid:
     window.focus(focusedWinid)
     raisePlacement(applications)
+
+
+# Requires identity-bearing group clients and records their explode checkpoint around placement.
 
 proc applyGroupExplode*(clients: seq[PlacementClient],
     cells: seq[PlacementCell], columns, rows: int, checkpointRoot: string,
@@ -173,6 +193,9 @@ proc applyGroupExplode*(clients: seq[PlacementClient],
   if focusedWinid.len > 0 and focusedWinid in window.liveIds(@["--all"]).splitLines():
     restoreFocus(focusedWinid, placement.applications)
 
+
+# Builds placements from captured stack geometry and commits the ordered explode operation.
+
 proc applyStackExplode*(sources: seq[PlacementSource],
     cells: seq[PlacementCell], columns, rows: int, checkpointRoot: string,
     focusedWinid: string) =
@@ -203,6 +226,9 @@ proc applyStackExplode*(sources: seq[PlacementSource],
   window.raiseMany(sources.mapIt(it.client.winid))
   state.commitExplodeOperation(operation)
   window.focus(focusedWinid)
+
+
+# Recovers and locks a checkpoint, restores matching live identities and removes consumed state.
 
 proc restoreCheckpoint*(root, command: string, missingState = "") =
   state.recoverExplodeOperation(root)
@@ -240,6 +266,9 @@ proc restoreCheckpoint*(root, command: string, missingState = "") =
       window.focus(focusedBefore)
   removeDir(root)
 
+
+# Vertically centers identity-bearing clients, recording restore history before checked geometry submission.
+
 proc applyLevel*(clients: seq[PlacementClient]) =
   if clients.len == 0:
     return
@@ -265,8 +294,15 @@ proc applyLevel*(clients: seq[PlacementClient]) =
   if applications.len > 0:
     window.applyGeometriesChecked(applications)
 
+
+# Recovers the pending restore-history transaction under WINFO.
+
 proc recoverRestoreHistory*() =
   state.recoverRestoreHistory(getEnv("WINFO"))
+
+
+# Restores saved geometry for eligible clients while recording the displaced geometry as history.
+# All-client mode skips absent or mismatched identities before checked submission.
 
 proc applyRestore*(clients: seq[PlacementClient], focusedWinid: string,
     all: bool) =

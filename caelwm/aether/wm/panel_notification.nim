@@ -9,6 +9,9 @@ type
     desktop*: bool
     system*: bool
 
+
+# Maps snapshot changes to desktop and system panel refresh requirements.
+
 proc panelRefreshTargets*(changes: openArray[SnapshotChange]): PanelRefreshTargets =
   for change in changes:
     case change.kind
@@ -21,6 +24,9 @@ proc panelRefreshTargets*(changes: openArray[SnapshotChange]): PanelRefreshTarge
     else:
       discard
 
+
+# Attempts one nonblocking FIFO write and reports whether the complete message was written.
+
 proc notifyFifo(path, message: string): bool =
   let descriptor = posix.open(path.cstring, O_WRONLY or O_NONBLOCK)
   if descriptor < 0:
@@ -28,6 +34,9 @@ proc notifyFifo(path, message: string): bool =
   let written = posix.write(descriptor, message.cstring, message.len)
   discard posix.close(descriptor)
   written == message.len
+
+
+# Sends only required panel messages under FIFO, returning false for missing paths or failed writes.
 
 proc notifyPanels*(changes: openArray[SnapshotChange]): bool =
   let targets = panelRefreshTargets(changes)

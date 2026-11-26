@@ -12,6 +12,9 @@ type
     rootChildrenBottomToTop*: seq[WindowId]
     unmanagedAbove*: seq[WindowId]
 
+
+# Tests strict rectangle overlap, excluding zero-sized rectangles and touching edges.
+
 proc overlaps*(a, b: Geometry): bool =
   if a.width == 0 or a.height == 0 or b.width == 0 or b.height == 0:
     return false
@@ -22,6 +25,9 @@ proc overlaps*(a, b: Geometry): bool =
   int64(a.x) < bx2 and ax2 > int64(b.x) and
     int64(a.y) < by2 and ay2 > int64(b.y)
 
+
+# Maps client layer and zoom state to the effective stacking tier.
+
 proc effectivePriority*(client: ClientState): StackPriority =
   case client.layer
   of wlOverlay: spOverlay
@@ -29,6 +35,9 @@ proc effectivePriority*(client: ClientState): StackPriority =
     if client.maxed or client.monocled: spZoomed else: spAbove
   of wlNormal:
     if client.maxed or client.monocled: spZoomed else: spNormal
+
+
+# Resolves unique mapped clients in the supplied physical bottom-to-top order.
 
 proc orderedMappedClients(state: WmState; observed: StackObservation): seq[ClientState] =
   var seen = initHashSet[WindowId]()
@@ -38,6 +47,9 @@ proc orderedMappedClients(state: WmState; observed: StackObservation): seq[Clien
     let found = state.lookup(window)
     if found.isSome and found.get.mapped:
       result.add(found.get)
+
+
+# Collects the anchor's transitive rectangle-overlap set in observed stacking order.
 
 proc overlapClosure*(state: WmState; observed: StackObservation;
                      anchor: WindowId): seq[ClientState] =
@@ -62,6 +74,9 @@ proc overlapClosure*(state: WmState; observed: StackObservation;
           break
   for index, client in candidates:
     if included[index]: result.add(client)
+
+
+# Selects an overlap-cycle target using stacking tiers and managed identity order.
 
 proc cycleTarget*(state: WmState; closure: openArray[ClientState];
                   anchor: WindowId): Option[ClientState] =
@@ -93,16 +108,21 @@ proc cycleTarget*(state: WmState; closure: openArray[ClientState];
         result = some(member)
         break
 
+
+# Filters a root order observation to mapped managed clients; never infer it
+# from managed identity order or _NET_CLIENT_LIST_STACKING.
+
 proc normalizedManagedOrder*(state: WmState; physicalBottomToTop: openArray[WindowId]):
     seq[WindowId] =
-  ## Filter a root order observation to mapped managed clients; never infer it
-  ## from managed identity order or _NET_CLIENT_LIST_STACKING.
   var seen = initHashSet[WindowId]()
   for window in physicalBottomToTop:
     if window in seen: continue
     seen.incl(window)
     let found = state.lookup(window)
     if found.isSome and found.get.mapped: result.add(window)
+
+
+# Resolves a root child's tier from snapshots, managed owners or unmanaged ABOVE observations.
 
 proc priorityForWindow(state: WmState; observation: StackObservation;
                        window: WindowId;
@@ -120,11 +140,13 @@ proc priorityForWindow(state: WmState; observation: StackObservation;
   if window in observation.unmanagedAbove: return int(spAbove)
   -1
 
+
+# Mirrors C restack_layers: stable ordering within each tier, while
+# unmanaged non-Above root children retain their physical slots.
+
 proc restackedRootOrder*(state: WmState; observation: StackObservation;
                          snapshot: openArray[StackingLayerSnapshot]):
     seq[WindowId] =
-  ## Mirrors C restack_layers: stable ordering within each tier, while
-  ## unmanaged non-Above root children retain their physical slots.
   let original = observation.rootChildrenBottomToTop
   result = original
   var slot = 0
@@ -137,6 +159,9 @@ proc restackedRootOrder*(state: WmState; observation: StackObservation;
       if slot < result.len:
         result[slot] = window
         inc slot
+
+
+# Computes root restacking order using current model layers without a supplied layer snapshot.
 
 proc restackedRootOrder*(state: WmState; observation: StackObservation):
     seq[WindowId] =

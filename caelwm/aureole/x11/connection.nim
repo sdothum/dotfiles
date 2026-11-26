@@ -30,6 +30,10 @@ type
 
 proc close*(connection: var XConnection)
 
+
+# Opens an XCB display connection, resolves its screen and initializes rendering and atoms.
+# Startup failures release the owned connection before propagating IOError.
+
 proc connect*(display: string = ""): XConnection =
   var screenNo: cint
   let displayArg = if display.len == 0: nil else: display.cstring
@@ -74,6 +78,9 @@ proc connect*(display: string = ""): XConnection =
     result.close()
     raise
 
+
+# Requests root event ownership and rejects checked errors or a failed flush.
+
 proc claimWindowManager*(connection: var XConnection) =
   if connection.raw == nil:
     raise newException(IOError, "cannot claim WM ownership on a closed X connection")
@@ -91,6 +98,9 @@ proc claimWindowManager*(connection: var XConnection) =
   if xcbFlush(connection.raw) <= 0:
     raise newException(IOError, "failed to flush X11 window-manager ownership request")
 
+
+# Initializes RandR once, copies active monitor observations and selects screen-change events.
+
 proc initializeRandr*(connection: var XConnection) =
   if connection.randrInitialized: return
   connection.randrInitialized = true
@@ -102,6 +112,9 @@ proc initializeRandr*(connection: var XConnection) =
   for monitor in observed:
     if monitor.active: connection.monitors.insert(monitor, 0)
   selectRandrEvents(connection.raw, connection.root)
+
+
+# Updates the active monitor list from a fresh snapshot and reports whether it changed.
 
 proc refreshRandr*(connection: var XConnection): bool =
   if connection.randrEventBase < 0: return false
@@ -123,11 +136,17 @@ proc refreshRandr*(connection: var XConnection): bool =
       connection.monitors.insert(monitor, 0)
   result = previous != connection.monitors
 
+
+# Returns the current monitor assigned to a window, or none when that output is absent.
+
 proc monitorBounds*(connection: XConnection; window: uint32): Option[RandrMonitor] =
   let assigned = connection.monitorAssignments.getOrDefault(window)
   if assigned != 0:
     for monitor in connection.monitors:
       if monitor.output == assigned: return some(monitor)
+
+
+# Assigns a containing monitor by coordinates, optionally falling back to the first monitor.
 
 proc assignMonitor*(connection: var XConnection; window: uint32;
                     x, y: int32; fallback = false) =
@@ -143,8 +162,10 @@ proc assignMonitor*(connection: var XConnection; window: uint32;
   else:
     connection.monitorAssignments[window] = selected
 
+
+# Publishes the name and PID before initial desktop properties, as C does.
+
 proc publishIdentity*(connection: XConnection; pid: uint32) =
-  ## Publish the name and PID before initial desktop properties, as C does.
   let root = connection.root
   discard xcbChangeProperty(connection.raw, PropModeReplace, root,
       connection.atoms.netWmPid, connection.atoms.cardinal, 32, 1,
@@ -156,6 +177,9 @@ proc publishIdentity*(connection: XConnection; pid: uint32) =
   if xcbFlush(connection.raw) <= 0:
     raise newException(IOError, "failed to publish root WM identity")
 
+
+# Observes a checked startup request and raises IOError on protocol or connection failure.
+
 proc checkStartupRequest(connection: XConnection; cookie: XcbVoidCookie;
                          operation: string) =
   let error = xcbRequestCheck(connection.raw, cookie)
@@ -165,6 +189,9 @@ proc checkStartupRequest(connection: XConnection; cookie: XcbVoidCookie;
     raise newException(IOError, operation & " failed (X error " & $code & ")")
   if xcbConnectionHasError(connection.raw) != 0:
     raise newException(IOError, operation & " lost the X connection")
+
+
+# Removes root advertisements before destroying the support child, optionally clearing identity.
 
 proc removeEwmhSupportingWindow(connection: var XConnection;
                                 clearIdentity: bool) =
@@ -187,6 +214,9 @@ proc removeEwmhSupportingWindow(connection: var XConnection;
     if destroyError != nil: cFree(destroyError)
     connection.supportWindow = 0'u32
   discard xcbFlush(raw)
+
+
+# Creates and initializes the EWMH support child, removing partial state on failure.
 
 proc createEwmhSupportingWindow(connection: var XConnection) =
   let raw = connection.raw
@@ -218,8 +248,10 @@ proc createEwmhSupportingWindow(connection: var XConnection) =
     connection.removeEwmhSupportingWindow(true)
     raise
 
+
+# Advertise a distinct EWMH support child only after its own properties exist.
+
 proc publishEwmhStartup*(connection: var XConnection) =
-  ## Advertise a distinct EWMH support child only after its own properties exist.
   let raw = connection.raw
   let root = connection.root
   # Clear stale EWMH advertisement while retaining the root identity just
@@ -260,13 +292,25 @@ proc publishEwmhStartup*(connection: var XConnection) =
     connection.removeEwmhSupportingWindow(true)
     raise
 
+
+# Returns the XCB descriptor, or -1 when the connection is closed.
+
 proc fileDescriptor*(connection: XConnection): cint =
   if connection.raw == nil: -1 else: xcbGetFileDescriptor(connection.raw)
 
+
+# Borrows the raw XCB handle for use inside the X11 boundary.
+
 proc rawHandleForX11*(connection: XConnection): ptr XcbConnection = connection.raw
+
+
+# Advances the uint32 invalidation counter with explicit wrap to zero.
 
 proc nextSnapshotInvalidation*(counter: uint32): uint32 =
   if counter == high(uint32): 0'u32 else: counter + 1'u32
+
+
+# Allocates a nonzero XID on an open connection, raising IOError on failure.
 
 proc allocateWindowId*(connection: XConnection): uint32 =
   if connection.raw == nil:
@@ -274,6 +318,9 @@ proc allocateWindowId*(connection: XConnection): uint32 =
   result = xcbGenerateId(connection.raw)
   if result == 0:
     raise newException(IOError, "XCB could not allocate a window ID")
+
+
+# Queries input focus and frees reply allocations, raising IOError for missing or failed replies.
 
 proc inputFocus*(connection: XConnection; callSite = "main.startup"): uint32 =
   var error: ptr XcbGenericError
@@ -294,21 +341,32 @@ proc inputFocus*(connection: XConnection; callSite = "main.startup"): uint32 =
   result = reply.focus
   cFree(reply)
 
+
+# Reports whether an owned XCB handle exists without a connection error.
+
 proc isConnected*(connection: XConnection): bool =
   connection.raw != nil and xcbConnectionHasError(connection.raw) == 0
+
+
+# Polls and copies one event when the connection is open, otherwise returns none.
 
 proc nextEvent*(connection: XConnection): Option[XEventData] =
   if connection.raw == nil: none(XEventData)
   else: readEvent(connection.raw)
 
+
+# Collects and frees a checked shutdown error without propagating protocol failure.
+
 proc checkShutdownRequest(connection: XConnection; cookie: XcbVoidCookie) =
   let error = xcbRequestCheck(connection.raw, cookie)
   if error != nil: cFree(error)
 
+
+# Matches cleanup()'s focus reset/ungrab behavior. Restart additionally
+# detaches save-set clients and preserves hidden mapped-state explicitly.
+
 proc prepareForTermination*(connection: var XConnection;
                             clients: openArray[ClientState]; restart: bool) =
-  ## Match cleanup()'s focus reset/ungrab behavior. Restart additionally
-  ## detaches save-set clients and preserves hidden mapped-state explicitly.
   if connection.raw == nil: return
   let raw = connection.raw
   # Preserve cleanup()'s exact legacy arguments: revert-to NONE, focus XID
@@ -334,6 +392,9 @@ proc prepareForTermination*(connection: var XConnection;
     discard xcbFlush(raw)
   for client in clients:
     discard xcbUngrabButton(raw, ButtonIndexAny, client.window.raw, ModMaskAny)
+
+
+# Removes any supporting window, disconnects XCB and clears the owned handle.
 
 proc close*(connection: var XConnection) =
   if connection.raw != nil:

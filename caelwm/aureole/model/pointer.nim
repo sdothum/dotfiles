@@ -5,9 +5,15 @@ type
     button*: uint8
     modifiers*: uint16
 
+
+# Supplies the fallback Caps Lock mask when discovery leaves that mask unset.
+
 proc normalizeLockMasks*(masks: array[3, uint16]; capsFallback: uint16): array[3, uint16] =
   result = masks
   if result[1] == 0: result[1] = capsFallback
+
+
+# Expands the base modifier across available lock combinations in source request order.
 
 proc modifierVariants*(base: uint16; locks: array[3, uint16]): seq[uint16] =
   let haveNum = locks[0] != 0
@@ -23,6 +29,9 @@ proc modifierVariants*(base: uint16; locks: array[3, uint16]): seq[uint16] =
   if haveCaps: result.add(base or locks[1])
   if haveScroll: result.add(base or locks[2])
 
+
+# Builds button 1–3 grabs for plain and pointer-modified lock combinations.
+
 proc buttonGrabPlan*(pointerModifier: uint16;
                      locks: array[3, uint16]): seq[ButtonGrabSpec] =
   for button in [1'u8, 2'u8, 3'u8]:
@@ -30,11 +39,13 @@ proc buttonGrabPlan*(pointerModifier: uint16;
       for modifiers in modifierVariants(base, locks):
         result.add(ButtonGrabSpec(button: button, modifiers: modifiers))
 
+
+# Mirrors input.c:window_grab_buttons. Preserve duplicate requests when
+# click-focus and pointer-action policies select the same button/mask.
+
 proc sourceButtonGrabPlan*(clickToFocus: int8;
     pointerActions: array[3, uint32]; pointerModifier: uint16;
     locks: array[3, uint16]): seq[ButtonGrabSpec] =
-  ## Mirrors input.c:window_grab_buttons. Preserve duplicate requests when
-  ## click-focus and pointer-action policies select the same button/mask.
   for index, button in [1'u8, 2'u8, 3'u8]:
     if clickToFocus == 0'i8 or clickToFocus == int8(button):
       for modifiers in modifierVariants(0'u16, locks):

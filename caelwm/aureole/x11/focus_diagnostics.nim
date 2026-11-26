@@ -4,6 +4,9 @@ when defined(stage1cFocusDiagnostics):
   var dispatchCounter, queryCounter, orderCounter: uint64
   var currentDispatch*: uint64
 
+
+  # Appends ordered JSON trace rows when a diagnostic trace path is configured.
+
   proc record*(row: JsonNode) =
     inc orderCounter
     row["relative_order"] = %orderCounter
@@ -12,6 +15,9 @@ when defined(stage1cFocusDiagnostics):
       let stream = open(path, fmAppend)
       stream.writeLine($row)
       stream.close()
+
+
+  # Starts a diagnostic dispatch context and returns the previous context for restoration.
 
   proc beginDispatch*(eventType: string; sequence, window: uint32;
       detail, mode: uint8): uint64 =
@@ -22,9 +28,15 @@ when defined(stage1cFocusDiagnostics):
       "event_sequence": sequence, "event_window": window,
       "event_detail": detail, "event_mode": mode, "handler_entry": true})
 
+
+  # Records handler exit and restores the previous diagnostic dispatch context.
+
   proc endDispatch*(previous: uint64) =
     record(%*{"dispatch_id": currentDispatch, "handler_exit": true})
     currentDispatch = previous
+
+
+  # Records focus-query metadata with its dispatch context and monotonically increasing query ID.
 
   proc queryRecord*(callSite: string; sequence, focus: uint32;
       revert: uint8; status: string) =

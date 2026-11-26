@@ -20,6 +20,9 @@ import policy/rules
 import policy/types as policyTypes
 import policy/layout_bias
 
+
+# Formats initial focus, current group, client count and null-group count for daemon reporting.
+
 proc baseline(snapshot: WmSnapshot): string =
   let focused =
     if snapshot.focused.isSome: snapshot.focused.get()
@@ -32,6 +35,10 @@ proc baseline(snapshot: WmSnapshot): string =
     " current=" & $snapshot.currentGroup &
     " clients=" & $snapshot.clients.len &
     " null=" & $nullCount
+
+
+# Accepts a fresh WM snapshot, updates metadata and IPC cache, and reconciles published state.
+# Later snapshots drive creation/title policies and panel notifications before replacing history.
 
 proc refresh(
   event: var X11Invalidation,
@@ -192,6 +199,9 @@ var
   nextReconnect = 0.0
   retry = true
 
+
+# Closes X11 observation transports and invalidates cached, published and prior snapshot state.
+
 proc loseObservation(
   event: var X11Invalidation,
   query: var X11SnapshotQuery,
@@ -208,6 +218,9 @@ proc loseObservation(
   previous = WmSnapshot()
   previousMetadata.setLen(0)
   pendingReconcile = none(WmSnapshot)
+
+
+# Drains lifecycle events and services deferred state cleanup, reporting deferred work to stderr.
 
 proc drainLifecycle(event: var X11Invalidation): bool =
   result = event.drain(

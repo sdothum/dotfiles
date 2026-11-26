@@ -7,6 +7,9 @@ type WindowLifecycle* = object
   pending: HashSet[string]
   reconcile*: bool
 
+
+# Recognizes a fixed-width hexadecimal XID before using it as a state-entry name.
+
 proc validWinid(winid: string): bool =
   if winid.len != 10 or not winid.startsWith("0x"):
     return false
@@ -14,6 +17,9 @@ proc validWinid(winid: string): bool =
     if character notin {'0'..'9', 'a'..'f', 'A'..'F'}:
       return false
   true
+
+
+# Removes a valid window's hidden-state entry and reports cleanup failure without raising.
 
 proc clearHiddenState*(winid: string): bool =
   let root = getEnv("HIDDEN")
@@ -31,16 +37,29 @@ proc clearHiddenState*(winid: string): bool =
   except CatchableError:
     false
 
+
+# Queues a destroyed XID for current-state validation rather than deleting state immediately.
+
 proc queueDestroyed*(lifecycle: var WindowLifecycle, window: uint32) =
   lifecycle.pending.incl("0x" & toHex(window, 8).toLowerAscii())
+
+
+# Queues a mapped XID for current-state validation rather than deleting state immediately.
 
 proc queueMapped*(lifecycle: var WindowLifecycle, window: uint32) =
   # Both events request current-state validation, never deletion by event alone.
   lifecycle.pending.incl("0x" & toHex(window, 8).toLowerAscii())
 
+
+# Reports whether a configured state root contains a file, directory or symlink for the XID.
+
 proc hasEntry(root, winid: string): bool =
   root.len > 0 and (dirExists(root / winid) or fileExists(root / winid) or
     symlinkExists(root / winid))
+
+
+# Validates queued and scanned state against current X11 existence before cleaning stale entries.
+# Pending WINFO transactions can defer that cleanup without blocking HIDDEN cleanup.
 
 proc service*(lifecycle: var WindowLifecycle, event: var X11Invalidation): bool =
   result = true

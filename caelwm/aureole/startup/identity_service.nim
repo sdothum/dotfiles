@@ -3,6 +3,9 @@
 import std/sysrand
 import ../model/types
 
+
+# Constructs a 128-bit epoch from OS entropy, raising IOError when entropy is unavailable.
+
 proc newProcessEpoch*(): ProcessEpoch =
   var bytes: array[16, byte]
   if not urandom(bytes):

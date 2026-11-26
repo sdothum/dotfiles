@@ -6,6 +6,9 @@ import std/tables
 import group as policyGroup
 import window_query
 
+
+# Recognizes an eight-digit 0x-prefixed hexadecimal window identifier.
+
 proc validWinid(value: string): bool =
   if value.len != 10 or value[0] != '0' or value[1] != 'x':
     return false
@@ -13,6 +16,9 @@ proc validWinid(value: string): bool =
     if value[index] notin {'0'..'9', 'a'..'f', 'A'..'F'}:
       return false
   true
+
+
+# Removes an existing file or directory entry and converts filesystem failures to false.
 
 proc removeEntry(path: string): bool =
   if not fileExists(path) and not dirExists(path):
@@ -26,10 +32,16 @@ proc removeEntry(path: string): bool =
   except CatchableError:
     result = false
 
+
+# Removes a client's membership and focus-history entries, reporting either failure.
+
 proc removeMembership(groupRoot, focusRoot, group, winid: string): bool =
   result = removeEntry(groupRoot / group / winid)
   if not removeEntry(focusRoot / group / winid):
     result = false
+
+
+# Prunes group and focus entries for valid XIDs absent from the managed snapshot.
 
 proc reconcileStaleGroupEntries(
   groupRoot, focusRoot: string,
@@ -67,6 +79,9 @@ proc reconcileStaleGroupEntries(
       except CatchableError:
         result = false
 
+
+# Accepts exactly one valid current-group directory and returns its numeric value.
+
 proc readCurrentGroup(groupRoot: string, groupCount: int, current: var uint32): bool =
   let currentRoot = groupRoot / "current"
   if not dirExists(currentRoot):
@@ -92,6 +107,9 @@ proc readCurrentGroup(groupRoot: string, groupCount: int, current: var uint32): 
     return false
   found == 1
 
+
+# Reports whether the focused XID has exactly one filesystem group membership.
+
 proc focusedMembership(
   groupRoot, winid: string,
   groupCount: int,
@@ -104,6 +122,9 @@ proc focusedMembership(
       found.inc
       membership = uint32(number)
   found == 1
+
+
+# Replaces current-group state only when snapshot and unique membership evidence agree.
 
 proc reconcileCurrent(
   snapshot: WmSnapshot,
@@ -149,6 +170,9 @@ proc reconcileCurrent(
   except CatchableError:
     discard removeEntry(temporary)
     result = false
+
+
+# Reconciles filesystem membership and current-group state from a validated managed snapshot.
 
 proc reconcileSnapshot*(snapshot: WmSnapshot): bool =
   let groupRoot = getEnv("GROUP")

@@ -360,6 +360,11 @@ when defined(stage1cFocusDiagnostics):
   import std/json
   import ./focus_diagnostics
   proc rawRequestCheck(connection: ptr XcbConnection; cookie: XcbVoidCookie): ptr XcbGenericError {.importc: "xcb_request_check", cdecl, header: "xcb/xcb.h".}
+
+
+  # Wraps the raw checked-request result with diagnostic entry and exit records.
+  # The returned error pointer retains the raw XCB caller-ownership contract.
+
   proc xcbRequestCheck*(connection: ptr XcbConnection; cookie: XcbVoidCookie): ptr XcbGenericError =
     record(%*{"check_entry": true, "dispatch_id": currentDispatch,
         "checked_cookie_sequence": cookie.sequence, "call_site": "xcb_request_check"})

@@ -23,11 +23,20 @@ proc rawSnapshot(connection: ptr XcbConnection; root: uint32;
 proc rawFree(monitors: ptr RandrMonitor)
     {.importc: "cirrus_randr_free", cdecl.}
 
+
+# Returns the native bridge's RandR initialization result and event base.
+
 proc initializeRandr*(connection: ptr XcbConnection): cint =
   rawInitialize(connection)
 
+
+# Delegates root screen-change event selection to the RandR bridge.
+
 proc selectRandrEvents*(connection: ptr XcbConnection; root: uint32) =
   rawSelect(connection, root)
+
+
+# Copies a successful native monitor snapshot and releases the bridge allocation.
 
 proc queryRandrMonitors*(connection: ptr XcbConnection; root: uint32;
                          available: var bool): seq[RandrMonitor] =

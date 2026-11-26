@@ -3,6 +3,10 @@ import std/strutils
 import x11_snapshot
 import window_query
 
+
+# Fetches and strictly parses a WM snapshot within the supplied timeout.
+# Transport failures return false; parse failures record diagnostics and lastFailure.
+
 proc tryWmSnapshotDirect*(query: var X11SnapshotQuery,
   snapshot: var WmSnapshot, timeoutMs = 2000): bool =
   var output: string

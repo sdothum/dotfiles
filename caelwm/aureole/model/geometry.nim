@@ -16,10 +16,16 @@ type
   ConfigureMask* = object
     x*, y*, width*, height*: bool
 
+
+# Expands client geometry by a uniform border, clamping negative size expansion to zero.
+
 proc decorationGeometry*(client: Geometry; border: int32): Geometry =
   Geometry(x: client.x - border, y: client.y - border,
       width: client.width + uint32(max(0, border * 2)),
       height: client.height + uint32(max(0, border * 2)))
+
+
+# Derives frame geometry from the configured border style and inner and outer extents.
 
 proc decorationGeometry*(client: Geometry; config: WmConfiguration): Geometry =
   let border = config.outerBorderWidth
@@ -43,9 +49,11 @@ proc decorationGeometry*(client: Geometry; config: WmConfiguration): Geometry =
         width: cast[uint32](int64(client.width) + int64(2 * extent)),
         height: cast[uint32](int64(client.height) + int64(2 * extent)))
 
+
+# Fits client geometry by correcting position, then clamping minima and screen bounds.
+
 proc fitConfigure*(geometry: Geometry; minimum: ResizeHints;
                    bounds: GeometryBounds): Geometry =
-  ## Port of fit_on_screen: position correction, min clamp, then screen clamp.
   result = geometry
   let left = bounds.x
   let top = bounds.y
@@ -76,6 +84,9 @@ proc fitConfigure*(geometry: Geometry; minimum: ResizeHints;
   elif result.y + int32(result.height) + 2 * border > bottom:
     result.y = bottom - int32(result.height) - 2 * border
 
+
+# Applies relative size changes and optional increments, retaining uint16 narrowing.
+
 proc resizeRelative*(geometry: Geometry; hints: ResizeHints;
                      deltaWidth, deltaHeight: int32;
                      useHints: bool): Geometry =
@@ -98,8 +109,10 @@ proc resizeRelative*(geometry: Geometry; hints: ResizeHints;
   result.width = uint32(width and int64(high(uint16)))
   result.height = uint32(height and int64(high(uint16)))
 
+
+# Adjusts frame geometry against the supplied bounds using the existing clipping arithmetic.
+
 proc fitDecoration*(decoration: Geometry; bounds: GeometryBounds): Geometry =
-  ## Safe geometric clipping corresponding to the visible intersection.
   result = decoration
   let right = int64(decoration.x) + int64(decoration.width)
   let bottom = int64(decoration.y) + int64(decoration.height)
@@ -122,20 +135,24 @@ proc fitDecoration*(decoration: Geometry; bounds: GeometryBounds): Geometry =
     result.height = uint32(max(0'i64, int64(result.height) -
         (bottom - maxBottom)))
 
+
+# border.c subtracts right/bottom overflow from unsigned dimensions. If a
+# frame starts beyond those edges, the result wraps and its ConfigureWindow
+# request can fail. Preserve the observable old-frame behavior without
+# emitting a wrapped or saturated dimension from Nim.
+
 proc decorationClipWouldFailC*(decoration: Geometry;
                                bounds: GeometryBounds): bool =
-  ## border.c subtracts right/bottom overflow from unsigned dimensions. If a
-  ## frame starts beyond those edges, the result wraps and its ConfigureWindow
-  ## request can fail. Preserve the observable old-frame behavior without
-  ## emitting a wrapped or saturated dimension from Nim.
   let right = int64(bounds.x) + int64(bounds.width)
   let bottom = int64(bounds.y) + int64(bounds.height)
   result = int64(decoration.x) >= right or int64(decoration.y) >= bottom
 
+
+# Selects a mapped directional focus candidate using the C-compatible scoring order.
+# Direction values are NORTH=0, EAST=1, SOUTH=2 and WEST=3.
+
 proc cardinalFocusCandidate*(focused: ClientState;
     clients: openArray[ClientState]; direction: uint32): Option[WindowId] =
-  ## Reproduce focus.c:cardinal_focus candidate filtering and score ordering.
-  ## Direction values are NORTH=0, EAST=1, SOUTH=2, WEST=3.
   if clients.len == 0: return none(WindowId)
   if direction > 3'u32: return none(WindowId)
   let focusLeft = int64(cast[int16](focused.geometry.x))

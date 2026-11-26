@@ -11,15 +11,27 @@ type LayoutBias* {.pure.} = enum
 # importing layout execution (which itself uses the daemon client).
 var residentBias = none(LayoutBias)
 
+
+# Initializes resident daemon policy with left layout bias.
+
 proc initializeResidentBias*() =
   residentBias = some(LayoutBias.Left)
 
+
+# Returns resident layout bias, leaving it absent outside initialized daemon policy.
+
 proc localBias*(): Option[LayoutBias] = residentBias
+
+
+# Updates initialized resident bias and rejects calls before policy initialization.
 
 proc setResidentBias*(value: LayoutBias) =
   if residentBias.isNone:
     raiseZephyrError("layout bias: resident policy is not initialized")
   residentBias = some(value)
+
+
+# Accepts left or right bias names and raises a controller error for other values.
 
 proc parseLayoutBias*(value: string): LayoutBias =
   case value

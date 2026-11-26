@@ -28,6 +28,9 @@ const GroupNames* = [
 # Queries
 #
 
+
+# Validates the no-argument command and parses the WM's configured group count.
+
 proc count*(args: seq[string]): int =
   requireNoArgs("group count", args)
   try:
@@ -35,10 +38,16 @@ proc count*(args: seq[string]): int =
   except ValueError:
     raiseZephyrError("group count: invalid WM group count")
 
+
+# Returns the parsed native WM group count through the validated command path.
+
 proc count*(): int =
   count(@[])
 
 proc currentLiveId*(): int
+
+
+# Returns the preceding public group relative to live current state, wrapping at group 1.
 
 proc previous*(args: seq[string]): string =
   requireNoArgs("group previous", args)
@@ -46,16 +55,25 @@ proc previous*(args: seq[string]): string =
   let currentGroup = currentLiveId()
   $relativeGroupId(currentGroup, groupCount, PreviousGroup)
 
+
+# Returns the following public group relative to live current state, wrapping at the last group.
+
 proc next*(args: seq[string]): string =
   requireNoArgs("group next", args)
   let groupCount = count()
   let currentGroup = currentLiveId()
   $relativeGroupId(currentGroup, groupCount, NextGroup)
 
+
+# Returns the configured named tag count excluding reserved VOID.
+
 proc tagcount*(args: seq[string]): int =
   requireNoArgs("group tagcount", args)
 
   GroupNames.len - 1
+
+
+# Returns daemon-cached current-group text after validating the no-argument command.
 
 proc current*(args: seq[string]): string =
   requireNoArgs("group current", args)
@@ -64,17 +82,29 @@ proc current*(args: seq[string]): string =
     raiseZephyrError("group current: " & reply.error)
   reply.body
 
+
+# Returns current-group text directly from native WM IPC.
+
 proc current*(): string =
   ipc.groupCurrent()
 
+
+# Returns current-group text directly from native WM IPC.
+
 proc currentLive*(): string =
   ipc.groupCurrent()
+
+
+# Parses the live current group and reports a controller error for a nonnumeric reply.
 
 proc currentLiveId*(): int =
   try:
     parseInt(currentLive())
   except ValueError:
     raiseZephyrError("group current: invalid WM group id")
+
+
+# Resolves a configured group name to its index and rejects missing or unknown names.
 
 proc id*(groupname: string): int =
   if groupname.len == 0:
@@ -85,6 +115,9 @@ proc id*(groupname: string): int =
       return i
 
   raiseZephyrError("group id: unknown group " & groupname)
+
+
+# Validates the group-name command argument and returns its configured index.
 
 proc id*(args: seq[string]): int =
   requireArgs("group id", args, 1)
@@ -99,11 +132,17 @@ proc id*(args: seq[string]): int =
 
   id(a.groupName)
 
+
+# Resolves a named public group, rejecting reserved VOID and out-of-range indices.
+
 proc publicId*(groupname: string, context = "group"): PublicGroupId =
   let value = id(groupname)
   if value == 0:
     raiseZephyrError(context & ": group 0 is reserved VOID")
   publicGroupId(value, count(), context)
+
+
+# Returns a configured or fallback group name after checking the live group-count range.
 
 proc name*(group: int): string =
   if group < 0 or group >= count():
@@ -112,6 +151,9 @@ proc name*(group: int): string =
     GroupNames[group]
   else:
     "GROUP " & $group
+
+
+# Resolves an optional CLI group number, using the live current group when omitted.
 
 proc name*(args: seq[string]): string =
   requireArgs("group name", args, 0, 1)
@@ -129,12 +171,18 @@ proc name*(args: seq[string]): string =
 
   name(a.group.get)
 
+
+# Returns the live current group's display name through the no-argument query path.
+
 proc name*(): string =
   name(@[])
 
 #
 # Helpers
 #
+
+
+# Returns the first nonempty directory name found under a path, or none.
 
 proc singleChildName*(path: string): Option[string] =
   for kind, child in walkDir(path):
@@ -145,8 +193,14 @@ proc singleChildName*(path: string): Option[string] =
       return none(string)
   none(string)
 
+
+# Returns the first child directory name beneath a configured group state path, or empty text.
+
 proc groupPath*(group: string, groupSuffix: string = ""): string =
   singleChildName((getEnv("GROUP") & groupSuffix) / group).get("")
+
+
+# Recognizes a fixed-width hexadecimal XID for remembered focus validation.
 
 proc validWinid(value: string): bool =
   if value.len != 10 or value[0 .. 1] != "0x":
@@ -155,6 +209,9 @@ proc validWinid(value: string): bool =
     if value[index] notin {'0'..'9', 'a'..'f', 'A'..'F'}:
       return false
   true
+
+
+# Reads optional remembered identity metadata and rejects malformed or duplicate identity entries.
 
 proc rememberedToken(entry: string): tuple[
     valid: bool,
@@ -179,6 +236,9 @@ proc rememberedToken(entry: string): tuple[
   except CatchableError:
     return (false, none(window.ClientToken))
 
+
+# Replaces a group's remembered focus entry with the client XID and available identity token.
+
 proc rememberClient(group: PublicGroupId, client: window.WmClientState) =
   let groupRoot = (getEnv("GROUP") & ":focus") / $group.intValue
   removeDir(groupRoot)
@@ -187,15 +247,25 @@ proc rememberClient(group: PublicGroupId, client: window.WmClientState) =
   if client.token.isSome:
     createDir(entry / ("ID=" & $client.token.get))
 
+
+# Accepts the group transition arguments without changing state in this implementation.
+
 proc setCurrentGroup(group, currentGroup: int) =
   discard group
   discard currentGroup
+
+
+# Returns without changing state, including when current and requested groups differ.
 
 proc reconcileCurrentGroup(group, currentGroup: int) =
   if currentGroup == group:
     return
 
   discard group
+
+
+# Validates remembered focus against live group membership and optional identity metadata.
+# Invalid saved identities are removed; legacy XID-only entries are upgraded when possible.
 
 proc validRememberedWinid(group: PublicGroupId): Option[string] =
   let groupRoot = (getEnv("GROUP") & ":focus") / $group.intValue
@@ -241,6 +311,9 @@ proc validRememberedWinid(group: PublicGroupId): Option[string] =
 proc add*(group: PublicGroupId, winid = "")
 proc focus*(group: PublicGroupId)
 
+
+# Validates CLI group assignment arguments before updating controller membership state.
+
 proc add*(args: seq[string]) =
   requireArgs("group add", args, 1, 2)
 
@@ -257,6 +330,10 @@ proc add*(args: seq[string]) =
   if group <= 0 or group >= count():
     raiseZephyrError("group add: invalid group id " & $group)
   add(publicGroupId(group, count(), "group add"), a.winid)
+
+
+# Records controller group membership and remembers matching snapshot identity for the target.
+# An omitted target uses snapshot focus; unavailable focus leaves state unchanged.
 
 proc add*(group: PublicGroupId, winid: string) =
   var snapshot: window.WmSnapshot
@@ -277,10 +354,16 @@ proc add*(group: PublicGroupId, winid: string) =
         return
   removeDir(focusRoot)
 
+
+# Validates an integer public group before recording target membership.
+
 proc add*(group: int, winid = "") =
   if group <= 0 or group >= count():
     raiseZephyrError("group add: invalid group id " & $group)
   add(publicGroupId(group, count(), "group add"), winid)
+
+
+# Removes target membership and remembered focus across groups, optionally submitting close.
 
 proc remove*(args: seq[string]) =
   requireArgs("group remove", args, 0, 2)
@@ -309,8 +392,14 @@ proc remove*(args: seq[string]) =
   if a.close:
     ipc.closeWindow(ipc.windowId(a.winid))
 
+
+# Removes the explicit XID through the group removal command path.
+
 proc remove*(winid: string) =
   remove(@[winid])
+
+
+# Submits close for recorded group members, clears their known state and submits group clearing.
 
 proc close*(args: seq[string]) =
   requireArgs("group close", args, 1)
@@ -370,6 +459,9 @@ proc close*(args: seq[string]) =
   removeDir(root & ":focus" / $groupNo)
   removeDir(root & ":deactivated" / $groupNo)
 
+
+# Deactivates other public groups, activates the selected group and restores valid remembered focus.
+
 proc desktop*(args: seq[string]) =
   requireArgs("group desktop", args, 1)
 
@@ -401,6 +493,9 @@ proc desktop*(args: seq[string]) =
   if winid.isSome:
     ipc.focus(ipc.windowId(winid.get)).require()
 
+
+# Validates CLI focus arguments and rejects reserved VOID before selecting a public group.
+
 proc focus*(args: seq[string]) =
   requireArgs("group focus", args, 1)
 
@@ -416,6 +511,10 @@ proc focus*(args: seq[string]) =
   if groupNo == 0:
     raiseZephyrError("group focus: group 0 is reserved VOID")
   focus(publicGroupId(groupNo, count(), "group focus"))
+
+
+# Activates the selected group and restores valid remembered focus.
+# Selecting the live current group instead records its focused client as a member.
 
 proc focus*(group: PublicGroupId) =
   let groupNo = group.intValue
@@ -440,13 +539,22 @@ proc focus*(group: PublicGroupId) =
   if winid.isSome:
     ipc.focus(ipc.windowId(winid.get)).require()
 
+
+# Validates an integer focus destination and delegates to public-group focus.
+
 proc focus*(group: int) =
   if group == 0:
     raiseZephyrError("group focus: group 0 is reserved VOID")
   focus(publicGroupId(group, count(), "group focus"))
 
+
+# Resolves a named focus destination before selecting its public group.
+
 proc focus*(groupname: string) =
   focus(publicId(groupname, "group focus"))
+
+
+# Validates a requested group and invokes the currently non-mutating reconciliation helper.
 
 proc reconcile*(args: seq[string]) =
   requireArgs("group reconcile", args, 1)
@@ -470,6 +578,9 @@ proc reconcile*(args: seq[string]) =
 
   reconcileCurrentGroup(group.intValue, currentGroup)
 
+
+# Reads the saved last-group directory and focuses it when present and valid.
+
 proc last*(args: seq[string]) =
   requireNoArgs("group last", args)
 
@@ -480,6 +591,9 @@ proc last*(args: seq[string]) =
       focus(publicGroupId(parseInt(group.get), count(), "group last"))
     except ValueError:
       raiseZephyrError("group last: invalid saved group id " & group.get)
+
+
+# Activates every public group, clears deactivation state and restores the prior nonempty focus.
 
 proc restore*(args: seq[string]) =
   requireNoArgs("group restore", args)
@@ -494,6 +608,9 @@ proc restore*(args: seq[string]) =
 
   if winid != "":
     ipc.focus(ipc.windowId(winid)).require()
+
+
+# Reactivates a marked group or deactivates a nonempty recorded group and updates its marker.
 
 proc toggle*(args: seq[string]) =
   requireArgs("group toggle", args, 1)
@@ -538,12 +655,18 @@ proc toggle*(args: seq[string]) =
 # Native Nim convenience overloads
 #
 
+
+# Selects the saved last group through the no-argument command path.
+
 proc last*() =
   last(@[])
 
 #
 # Dispatch
 #
+
+
+# Routes group queries and actions while preserving their output and error behavior.
 
 proc dispatch*(verb: string, rest: seq[string]) =
   case verb

@@ -44,6 +44,9 @@ type
     netWmStateMaximizedVert*, netWmStateMaximizedHorz*: uint32
     wmProtocols*, wmDeleteWindow*: uint32
 
+
+# Resolves an atom name, freeing XCB replies and raising IOError on failure.
+
 proc internAtom(connection: ptr XcbConnection; name: string): uint32 =
   let cookie = xcbInternAtom(connection, 0, uint16(name.len), name.cstring)
   var error: ptr XcbGenericError
@@ -57,6 +60,9 @@ proc internAtom(connection: ptr XcbConnection; name: string): uint32 =
     raise newException(IOError, "cannot intern atom " & name & ": no reply")
   result = reply.atom
   cFree(reply)
+
+
+# Interns the atom set used by startup, lifecycle, EWMH and private IPC operations.
 
 proc initializeAtoms*(connection: ptr XcbConnection): Atoms =
   result.netSupportingWmCheck = internAtom(connection, "_NET_SUPPORTING_WM_CHECK")

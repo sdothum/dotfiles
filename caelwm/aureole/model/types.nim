@@ -86,11 +86,42 @@ proc `==`*(a, b: ClientId): bool {.borrow.}
 proc `==`*(a, b: ClientGeneration): bool {.borrow.}
 proc `==`*(a, b: RawGroup): bool {.borrow.}
 
+
+# Returns the identifier's underlying unsigned representation at the protocol boundary.
+
 proc raw*(id: WindowId): uint32 {.inline.} = uint32(id)
+
+
+# Returns the identifier's underlying unsigned representation at the protocol boundary.
+
 proc raw*(id: ClientId): uint64 {.inline.} = uint64(id)
+
+
+# Returns the identifier's underlying unsigned representation at the protocol boundary.
+
 proc raw*(generation: ClientGeneration): uint64 {.inline.} = uint64(generation)
+
+
+# Returns the identifier's underlying unsigned representation at the protocol boundary.
+
 proc raw*(group: RawGroup): uint32 {.inline.} = uint32(group)
+
+
+# Narrows the client's horizontal coordinate to the signed X11 geometry field.
+
 proc x*(client: ClientState): int16 {.inline.} = int16(client.geometry.x)
+
+
+# Narrows the client's vertical coordinate to the signed X11 geometry field.
+
 proc y*(client: ClientState): int16 {.inline.} = int16(client.geometry.y)
+
+
+# Narrows the client's width to the unsigned X11 geometry field.
+
 proc width*(client: ClientState): uint16 {.inline.} = uint16(client.geometry.width)
+
+
+# Narrows the client's height to the unsigned X11 geometry field.
+
 proc height*(client: ClientState): uint16 {.inline.} = uint16(client.geometry.height)

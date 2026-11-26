@@ -28,12 +28,32 @@ proc printf(format: cstring): cint {.importc, header: "<stdio.h>", varargs, disc
 proc fprintf(f: File, format: cstring): cint {.importc, header: "<stdio.h>", varargs, discardable.}
 proc fputs(s: cstring, f: File): cint {.importc, header: "<stdio.h>", discardable.}
 proc errx(status: cint, format: cstring) {.importc, header: "<err.h>", varargs, noreturn.}
+
+
+# Prints the supplied fatal diagnostic through errx and exits with status 1.
+
 proc fail(s: string) = errx(1, "%s", s.cstring)
+
+
+# Terminates with the established invalid-action diagnostic.
+
 proc invalid() = fail("invalid action command")
+
+
+# Prints the usage line to stderr and terminates with the supplied status.
+
 proc usage(status: cint) =
   fprintf(stderr, "Usage: %s [-h|-v] <command> [args...]\n", cmdLine[0])
   cExit(status)
+
+
+# Compares command words using libc's case-insensitive string comparison.
+
 proc equalCI(a,b: string): bool = strcasecmp(a.cstring,b.cstring) == 0
+
+
+# Parses a complete decimal int32 argument, rejecting conversion errors and overflow.
+
 proc signed(s: string, v: var int32): bool =
   var tail: cstring
   errno = 0
@@ -41,6 +61,10 @@ proc signed(s: string, v: var int32): bool =
   if errno != 0 or s.len == 0 or tail[0] != '\0' or n < low(int32).clong or n > high(int32).clong: return false
   v = int32(n)
   true
+
+
+# Parses a complete uint32 argument in the supplied base, rejecting a leading minus sign.
+
 proc unsigned(s: string, base: cint, v: var uint32): bool =
   if s.len == 0 or s[0] == '-': return false
   var tail: cstring
@@ -49,20 +73,44 @@ proc unsigned(s: string, base: cint, v: var uint32): bool =
   if errno != 0 or tail[0] != '\0' or n > high(uint32).culong: return false
   v = uint32(n)
   true
+
+
+# Parses a nonzero hexadecimal uint32 window identifier.
+
 proc winid(s: string, v: var uint32): bool = unsigned(s,16,v) and v != 0
+
+
+# Converts a numeric prefix with strtol and narrows it to uint32, checking only errno.
+
 proc loose(s: string, base: cint, v: var uint32): bool =
   errno = 0
   v = cast[uint32](strtol(s.cstring,nil,base))
   errno == 0
+
+
+# Maps a case-insensitive command word to the corresponding protocol value.
+
 proc choice(s: string, options: openArray[string], values: openArray[uint32], v: var uint32): bool =
   for i,key in options:
     if equalCI(s,key):
       v = values[i]
       return true
+
+
+# Maps supported direction aliases to the cardinal-focus protocol codes.
+
 proc direction(s: string, v: var uint32): bool =
   choice(s,["up","north","down","south","left","west","right","east"],[0'u32,0,2,2,3,3,1,1],v)
+
+
+# Maps position aliases to their established geometry configuration codes.
+
 proc position(s: string, v: var uint32): bool =
   choice(s,["topleft","topright","bottomleft","bottomright","middle","center","centre","left","bottom","top","right","all"],[4'u32,5,7,6,8,8,8,2,1,0,3,9],v)
+
+
+# Parses zero or one window argument, using zero to select the implicit target.
+
 proc optional(a: seq[string]): uint32 =
   if a.len > 1: invalid()
   if a.len == 1 and not winid(a[0],result): fail("malformed winid")
@@ -71,6 +119,10 @@ include protocol
 var conn: ptr Connection
 var scr: ptr Screen
 var bulkBody, raiseBody: cstring
+
+
+# Sends and checks one action ClientMessage, reports protocol errors and flushes XCB.
+
 proc sendIpc(command: uint32, data: array[4,uint32]) =
   var msg: Message
   msg.response_type = 33
@@ -84,7 +136,14 @@ proc sendIpc(command: uint32, data: array[4,uint32]) =
     freeMem(error)
   flush(conn)
 
+
+# Borrows a C-string pointer advanced by the supplied byte offset.
+
 proc after(s: cstring, n: int): cstring = cast[cstring](cast[uint](s)+uint(n))
+
+
+# Compares C-string ID entries lexically for the libc qsort callback.
+
 proc compareIds(a,b: ConstPointer): cint {.cdecl.} =
   strcmp(cast[ptr cstring](a)[],cast[ptr cstring](b)[])
 
@@ -92,6 +151,10 @@ type GeometryRecord = object
   window: uint32
   x,y: int32
   width,height: uint32
+
+
+# Validates group or geometry reply records before printing them in reply order.
+# Temporary C buffers are released here; the retained historical parser behavior is unchanged.
 
 proc decodeRecords(response: cstring, geometries: bool): bool =
   if strcmp(response,"OK") == 0: return true
@@ -179,6 +242,10 @@ proc decodeRecords(response: cstring, geometries: bool): bool =
     else: printf("0x%08x %u\n",windows[j],groups[j])
   true
 
+
+# Validates the command-specific response, prints public output and returns its exit status.
+# ID queries are sorted except for stack queries, whose returned order is preserved.
+
 proc decode(q: uint32, response: cstring): cint =
   let ids = q in [IPCWindowIds,IPCWindowStack]
   let count = q in [IPCWindowCount,IPCGroupCount,IPCWindowGroup]
@@ -232,6 +299,10 @@ proc decode(q: uint32, response: cstring): cint =
   if strncmp(response,"ERROR ",6) == 0: fprintf(stderr,"borealis: %s\n",after(response,6))
   else: fprintf(stderr,"borealis: malformed windowchef response\n")
   1
+
+
+# Creates a reply window, sends a query and waits up to two seconds for its response.
+# Copies response bytes before decoding and destroys the reply window during cleanup.
 
 proc query(q: uint32, selector = "", scope = 0'u32, selectorType = 0'u32, explicit = false, window = 0'u32, hasSelector = false): cint =
   result = 1
@@ -319,6 +390,10 @@ type Collection = object
   selector: string
   scope, kind, group: uint32
   hasSelector: bool
+
+
+# Parses class or title selectors and mapped/all scope under the supported collection grammar.
+
 proc collectionVArgs(a: seq[string], c: var Collection): bool =
   c.scope = 0
   c.kind = 0
@@ -346,6 +421,10 @@ proc collectionVArgs(a: seq[string], c: var Collection): bool =
     c.scope = 1; c.selector = a[2]; c.kind = 2; c.hasSelector = true
     return true
   else: return false
+
+
+# Extracts one nonzero group filter before parsing the remaining collection arguments.
+
 proc idsVArgs(a: seq[string], c: var Collection): bool =
   var rest: seq[string]
   var i = 0
@@ -364,9 +443,15 @@ proc idsVArgs(a: seq[string], c: var Collection): bool =
     inc i
   collectionVArgs(rest,c)
 
+
+# Reports whether any option matches the supplied word case-insensitively.
+
 proc anyItCI(options: openArray[string], s: string): bool =
   for option in options:
     if equalCI(option,s): return true
+
+
+# Resolves configuration aliases and encodes validated arguments into the four protocol words.
 
 proc configVArgs(a: seq[string]): array[4,uint32] =
   if a.len == 0: fail("wm config requires a configuration key")
@@ -400,6 +485,9 @@ proc configVArgs(a: seq[string]): array[4,uint32] =
   else: valid = loose(a[1],10,result[1])
   if not valid: fail("malformed input")
 
+
+# Validates and submits config, quit and restart commands with their established arities.
+
 proc wmVArgs(a: seq[string]) =
   if a.len < 1: fail("invalid wm command")
   case a[0]
@@ -413,6 +501,10 @@ proc wmVArgs(a: seq[string]) =
     if a.len != 1: fail("wm restart expects no arguments")
     sendIpc(IPCWMRestart,[0'u32,0,0,0])
   else: fail("invalid wm command")
+
+
+# Encodes window or group actions, using acknowledged queries for commands that require replies.
+
 proc actionVArgs(domain: string, a: seq[string]) =
   if a.len < 1: invalid()
   let verb = a[0]
@@ -508,11 +600,18 @@ proc actionVArgs(domain: string, a: seq[string]) =
       command = IPCGroupRemoveAllWindows; data[0] = g
     else: invalid()
   sendIpc(command,data)
+
+
+# Routes one chained command to the WM, window or group argument handler.
+
 proc dispatch(a: seq[string]) =
   case a[0]
   of "wm": wmVArgs(a[1..^1])
   of "window","group": actionVArgs(a[0],a[1..^1])
   else: fail("no such command")
+
+
+# Validates geometry tuples and stores an allocated request body for the caller to send and free.
 
 proc bulkVArgs(a: seq[string]) =
   if a.len < 5 or a.len mod 5 != 0: fail("window apply-geometries requires XID X Y WIDTH HEIGHT records")
@@ -533,6 +632,10 @@ proc bulkVArgs(a: seq[string]) =
     used += csize_t(written)
     i += 5
   bulkBody = body
+
+
+# Validates XIDs and stores an allocated ordered raise body for the caller to send and free.
+
 proc raiseVArgs(a: seq[string]) =
   if a.len < 1 or csize_t(a.len) > (high(csize_t)-1) div 11: fail("window raise-many requires one or more XIDs")
   let capacity = csize_t(a.len)*11+1
@@ -546,6 +649,9 @@ proc raiseVArgs(a: seq[string]) =
     if written < 0 or csize_t(written) >= capacity-used: fail("raise request too large")
     used += csize_t(written)
   raiseBody = body
+
+
+# Parses the CLI, handles queries and chained actions, and releases the XCB connection on return.
 
 proc main(): cint =
   var a: seq[string]

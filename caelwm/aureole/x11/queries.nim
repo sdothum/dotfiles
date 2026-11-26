@@ -42,6 +42,10 @@ type
     enteredWindow*: uint32
     matchEnteredWindow*: bool
 
+
+# Copies a 32-bit property in chunks and frees each XCB reply.
+# A type mismatch returns metadata without values; stalled continuation raises IOError.
+
 proc readProperty(connection: XConnection; window, property,
                   expectedType: uint32): Property32 =
   let raw = connection.rawHandleForX11()
@@ -79,12 +83,17 @@ proc readProperty(connection: XConnection; window, property,
       raise newException(IOError, "X property query made no progress")
     offset += uint32(count)
 
+
+# Reads a runtime property through the shared owned-value query boundary.
+
 proc readRuntimeProperty*(connection: XConnection; window, property,
                           expectedType: uint32): Property32 =
   readProperty(connection, window, property, expectedType)
 
+
+# C's unmanaged-root-child tier is Above for DOCK or _NET_WM_STATE_ABOVE.
+
 proc hasDefaultAbovePriority*(connection: XConnection; window: uint32): bool =
-  ## C's unmanaged-root-child tier is Above for DOCK or _NET_WM_STATE_ABOVE.
   let types = connection.readRuntimeProperty(window,
       connection.atoms.netWmWindowType, connection.atoms.atom)
   let states = connection.readRuntimeProperty(window,
@@ -94,6 +103,9 @@ proc hasDefaultAbovePriority*(connection: XConnection; window: uint32): bool =
   for atom in states.values:
     if atom == connection.atoms.netWmStateAbove: return true
   false
+
+
+# Returns root-relative pointer facts and the request sequence, raising on query failure.
 
 proc queryRootPointer*(connection: XConnection): PointerPosition =
   let raw = connection.rawHandleForX11()
@@ -111,9 +123,11 @@ proc queryRootPointer*(connection: XConnection): PointerPosition =
       sequence: uint32(cookie.sequence))
   cFree(reply)
 
+
+# Captures C's explicit-stacking guard boundary. The sequence interval lets
+# the runtime distinguish restack-generated crossings from later motion.
+
 proc beginStackingEnterGuard*(connection: XConnection): StackingEnterGuard =
-  ## Capture C's explicit-stacking guard boundary. The sequence interval lets
-  ## the runtime distinguish restack-generated crossings from later motion.
   let raw = connection.rawHandleForX11()
   let cookie = xcbQueryPointer(raw, connection.root)
   var error: ptr XcbGenericError
@@ -129,6 +143,9 @@ proc beginStackingEnterGuard*(connection: XConnection): StackingEnterGuard =
     result.child = reply.child
     result.lowerSequence = uint32(cookie.sequence)
     cFree(reply)
+
+
+# Builds a crossing suppression only when focus and root pointer position remain unchanged.
 
 proc finishStackingEnterGuard*(connection: XConnection;
     guard: StackingEnterGuard; focusUnchanged: bool): Option[StackingEnterSuppression] =
@@ -150,6 +167,9 @@ proc finishStackingEnterGuard*(connection: XConnection;
         lowerSequence: guard.lowerSequence, upperSequence: uint32(cookie.sequence),
         focusWindow: guard.focusWindow))
   none(StackingEnterSuppression)
+
+
+# Copies root-child attributes, geometry and adoption properties in tree order.
 
 proc queryStartupWindows*(connection: XConnection): seq[StartupWindowObservation] =
   let raw = connection.rawHandleForX11()
@@ -200,6 +220,9 @@ proc queryStartupWindows*(connection: XConnection): seq[StartupWindowObservation
       result.add(observation)
   finally:
     cFree(tree)
+
+
+# Returns the first value of a present 32-bit property, or none.
 
 proc propertyValue*(property: Property32): Option[uint32] =
   if property.present and property.format == 32 and property.values.len > 0:

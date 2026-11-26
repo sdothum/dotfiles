@@ -2,8 +2,14 @@ import compat
 import std/strutils
 import native_ipc as ipc
 
+
+# Reads root width and height through native WM transport.
+
 proc rootDimensions(): tuple[width, height: int] =
   ipc.rootDimensions()
+
+
+# Returns display dimensions from the X root geometry query.
 
 proc dimensions*(): tuple[width, height: int] =
   rootDimensions()
@@ -12,13 +18,22 @@ proc dimensions*(): tuple[width, height: int] =
 # Queries
 #
 
+
+# Returns display height as decimal text, rejecting arguments in the CLI overload.
+
 proc height*(args: seq[string]): string =
   requireNoArgs("display height", args)
   $dimensions().height
 
+
+# Returns display width as decimal text, rejecting arguments in the CLI overload.
+
 proc width*(args: seq[string]): string =
   requireNoArgs("display width", args)
   $dimensions().width
+
+
+# Validates the no-argument query and formats display width and height as one line.
 
 proc dimensions(args: seq[string]): string =
   requireNoArgs("display dimensions", args)
@@ -28,6 +43,9 @@ proc dimensions(args: seq[string]): string =
 #
 # Predicates
 #
+
+
+# Compares display width with an integer and returns shell status 0 for a matching predicate.
 
 proc widthTest*(args: seq[string]): int =
   requireArgs("display width_test", args, 2, 2)
@@ -51,8 +69,14 @@ proc widthTest*(args: seq[string]): int =
 # Native Nim convenience overloads
 #
 
+
+# Returns display height as decimal text, rejecting arguments in the CLI overload.
+
 proc height*(): string =
   height(@[])
+
+
+# Returns display width as decimal text, rejecting arguments in the CLI overload.
 
 proc width*(): string =
   width(@[])
@@ -60,6 +84,9 @@ proc width*(): string =
 #
 # Dispatch
 #
+
+
+# Prints display queries or exits with the width predicate's status, rejecting unknown actions.
 
 proc dispatch*(verb: string, rest: seq[string]) =
   case verb

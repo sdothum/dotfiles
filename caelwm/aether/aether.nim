@@ -15,6 +15,9 @@ import zephyr_errors
 # Native Nim convenience overloads
 #
 
+
+# Splits dot-separated command chains and rejects empty commands before a separator.
+
 proc splitCommands(args: seq[string]): seq[seq[string]] =
   var cmd: seq[string] = @[]
 
@@ -29,6 +32,9 @@ proc splitCommands(args: seq[string]): seq[seq[string]] =
 
   if cmd.len > 0:
     result.add(cmd)
+
+
+# Resolves domain and verb arguments and delegates to controller command handlers.
 
 proc dispatchCommand(cmd: seq[string]) =
   if cmd.len < 2:
@@ -84,6 +90,9 @@ proc dispatchCommand(cmd: seq[string]) =
 
   else:
     quit("unknown domain: " & domain)
+
+
+# Prints the supported controller command forms.
 
 proc usage() =
   echo "usage:"

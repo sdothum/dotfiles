@@ -7,6 +7,9 @@ type
   PublicGroupId* = object
     value: int
 
+
+# Constructs a one-based public group below groupCount, terminating on an invalid value.
+
 proc publicGroupId*(value, groupCount: int,
     context = "group"): PublicGroupId =
   if value < 1:
@@ -15,13 +18,22 @@ proc publicGroupId*(value, groupCount: int,
     quit(context & ": invalid group id " & $value)
   PublicGroupId(value: value)
 
+
+# Returns the validated public group number as an integer.
+
 proc intValue*(group: PublicGroupId): int = group.value
+
+
+# Formats the validated public group number as decimal text.
 
 proc `$`*(group: PublicGroupId): string = $group.value
 
 type GroupNavigationDirection* = enum
   PreviousGroup,
   NextGroup
+
+
+# Selects the previous or next public group with wraparound, rejecting invalid current state.
 
 proc relativeGroupId*(currentGroup, groupCount: int,
     direction: GroupNavigationDirection): PublicGroupId =

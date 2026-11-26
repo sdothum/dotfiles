@@ -7,6 +7,9 @@ type GeometryBatchRecord* = object
   x*, y*: int32
   width*, height*: uint16
 
+
+# Parses a complete signed or unsigned field with explicit base and overflow bounds.
+
 proc number(text: string; base: uint64; unsigned: bool; value: var int64): bool =
   var index = 0
   while index < text.len and text[index] in {' ', '\t', '\r', '\v', '\f'}:
@@ -43,6 +46,10 @@ proc number(text: string; base: uint64; unsigned: bool; value: var int64): bool 
   else:
     value = if negative: -int64(magnitude) else: int64(magnitude)
   true
+
+
+# Validates property-backed geometry records before replacing the output sequence.
+# Checked records require matching client identities; malformed batches return false.
 
 proc decodeGeometryBatch*(state: WmState; opcode: uint32; payload: seq[byte];
                           records: var seq[GeometryBatchRecord]): bool =

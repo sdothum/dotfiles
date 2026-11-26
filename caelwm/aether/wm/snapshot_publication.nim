@@ -2,6 +2,9 @@ import std/os
 
 import window_query
 
+
+# Writes a serialized snapshot via a temporary file beneath absolute WME, returning success.
+
 proc publishWmSnapshot*(snapshot: WmSnapshot): bool =
   let wme = getEnv("WME")
   if wme.len == 0 or wme[0] != '/':
@@ -21,6 +24,9 @@ proc publishWmSnapshot*(snapshot: WmSnapshot): bool =
     except CatchableError:
       discard
     result = false
+
+
+# Removes the published WME snapshot when present and reports filesystem failure as false.
 
 proc clearWmSnapshot*(): bool =
   let wme = getEnv("WME")

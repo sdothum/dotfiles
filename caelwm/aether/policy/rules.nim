@@ -18,22 +18,37 @@ import ../zephyr_errors
 
 # FOR: revert geometry of newly launched fold windows
 
+
+# Captures and restores controller geometry state through the state module.
+
 proc setGeometry() =
   state.snapshot()
   state.restore()
 
+
+# Counts nonempty live WM ID records for the supplied class selector.
+
 proc liveCount(classname: string): int =
   window.liveIds(@[classname]).splitLines().filterIt(it.len > 0).len
+
+
+# Assigns the target group and centers the explicit window through the fluent window API.
 
 proc center(winid: string, groupname: string = GroupDesk) =
   discard window.target(winid)
     .group(groupname)
     .snap(Center)
 
+
+# Assigns the target group and applies the configured viewport size.
+
 proc viewport(winid: string, groupname: string = GroupDesk) =
   discard window.target(winid)
     .group(groupname)
     .size(Viewport)
+
+
+# Assigns the target group, applies rotated A4 sizing and centers the explicit window.
 
 proc sizeA4Centered(winid: string, groupname: string = GroupUtil) =
   discard window.target(winid)
@@ -41,10 +56,16 @@ proc sizeA4Centered(winid: string, groupname: string = GroupUtil) =
     .size(A4, Rotate)
     .snap(Center)
 
+
+# Assigns the target group, folds matching class windows into three columns and records geometry.
+
 proc tile3Columns(winid, groupname, classname: string) =
   discard window.target(winid).group(groupname)
   layouts.fold(@["3", classname])
   setGeometry()
+
+
+# Applies 1080p sizing, assigns the play group by default and centers the explicit window.
 
 proc video1080p(winid: string, groupname: string = GroupPlay) =
   discard window.target(winid)
@@ -56,6 +77,9 @@ proc video1080p(winid: string, groupname: string = GroupPlay) =
 # Application policies
 #
 
+
+# Places the monitor window in the utility group at centered rotated B5 size, then focuses the desk.
+
 proc btop(winid: string) =
   discard window.target(winid)
     .group(GroupUtil)
@@ -64,12 +88,18 @@ proc btop(winid: string) =
 
   groups.focus(GroupDesk)
 
+
+# Sizes the image viewer to 1080x1690 and centers it.
+
 proc feh(winid: string) =
   discard window.target(winid)
     .size("1080x1690")
     .snap(Center)
 
 # NOTE: save newly opened window geometry AFTER its intended sizing
+
+
+# Assigns the code group and selects editor tiling from current editor and browser counts.
 
 proc kak(winid: string) =
   let w = window.target(winid)
@@ -93,6 +123,9 @@ proc kak(winid: string) =
     layouts.fold(@["4", "--rows", "2", ClassKak])
     setGeometry()
 
+
+# Assigns the communication group and applies browser sizing, vertical centering and biased spread.
+
 proc luakit(winid: string) =
   discard window.target(winid)
     .group(GroupComm)
@@ -100,12 +133,18 @@ proc luakit(winid: string) =
     .snap(Center, Vertical)
     .spread($layouts.bias())
 
+
+# Assigns code-group A5 sizing and invokes the layout spread policy.
+
 proc manpage(winid: string) =
   discard window.target(winid)
     .group(GroupCode)
     .size(A5)
 
   layouts.spread(@["3", "1"])
+
+
+# Centers rotated B6 audio controls in the utility group, then focuses the desk.
 
 proc pavucontrol(winid: string) =
   discard window.target(winid)
@@ -115,10 +154,16 @@ proc pavucontrol(winid: string) =
 
   groups.focus(GroupDesk)
 
+
+# Tiles the compose window in the second of three columns and assigns the communication group.
+
 proc compose(winid: string) =
   discard window.target(winid)
     .tile("3", "2")
     .group(GroupComm)
+
+
+# Tiles the mail window in the communication group and cycles its overlapping stack.
 
 proc email(winid: string) =
   discard window.target(winid)
@@ -126,24 +171,42 @@ proc email(winid: string) =
     .group(GroupComm)
     .stackCycle()
 
+
+# Tiles the explicit transfer window in the second of three columns.
+
 proc cbftp(winid: string) =
   discard window.target(winid).tile("3", "2")
 
+
+# Tiles the explicit transfer window in the third of three columns.
+
 proc xftp(winid: string) =
   discard window.target(winid).tile("3", "3")
+
+
+# Assigns the player to the play group and centers it.
 
 proc audacious(winid: string) =
   discard window.target(winid)
     .group(GroupPlay)
     .snap(Center)
 
+
+# Applies the configured viewport size to the transfer window.
+
 proc gftp(winid: string) =
   discard window.target(winid).size(Viewport)
+
+
+# Assigns the file manager to the utility group and applies three-column tiling.
 
 proc pcmanfm(winid: string) =
   discard window.target(winid)
     .group(GroupUtil)
     .tile("3")
+
+
+# Assigns the code group and spreads class-matched terminals across one or two grid rows.
 
 proc term(winid: string, classname: string = ClassTerm) =
   discard window.target(winid).group(GroupCode)
@@ -156,9 +219,14 @@ proc term(winid: string, classname: string = ClassTerm) =
     layouts.fold(@["3", "--rows", "2", "--spread", classname])
     # setGeometry()
 
+
+# Exact WM_CLASS instance comparison for policies that explicitly use it.
+
 proc matchesInstance*(client: policyTypes.RuleClient, selector: string): bool =
-  ## Exact WM_CLASS instance comparison for policies that explicitly use it.
   client.instanceName == selector
+
+
+# Selects the first matching creation policy from observed instance, class and title metadata.
 
 proc matchCreated*(client: policyTypes.RuleClient): Option[string] =
 
@@ -221,10 +289,12 @@ proc matchCreated*(client: policyTypes.RuleClient): Option[string] =
   of "zathura": some("zathura")
   else: none(string)
 
+
+# These are semantic title transitions, not generic property callbacks.
+# The selectors mirror the current Surf marker and qutebrowser crash title.
+
 proc matchTitleChanged*(client: policyTypes.RuleClient,
     oldTitle: string): Option[string] =
-  ## These are semantic title transitions, not generic property callbacks.
-  ## The selectors mirror the current Surf marker and qutebrowser crash title.
   if client.className == "Surf" and client.title.contains("@cgDIS:T | "):
     return some("surf")
   if client.className == "qutebrowser" and client.title == "Whoops!" and
@@ -235,6 +305,9 @@ proc matchTitleChanged*(client: policyTypes.RuleClient,
 #
 # Dispatch
 #
+
+
+# Applies the selected application policy to the explicit window and rejects unknown policy verbs.
 
 proc applyRule*(verb, winid: string) =
   case verb
@@ -313,6 +386,9 @@ proc applyRule*(verb, winid: string) =
 #
 # layout direction
 #
+
+
+# Requires a focused managed snapshot client before applying a no-argument rule command.
 
 proc dispatch*(verb: string, rest: seq[string]) =
   requireNoArgs(verb, rest)

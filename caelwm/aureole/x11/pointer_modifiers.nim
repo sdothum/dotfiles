@@ -39,7 +39,13 @@ static uint16_t cirrus_default_pointer_modifier(void) { return XCB_MOD_MASK_4; }
 proc rawPointerModifierMasks(connection: ptr XcbConnection): uint32 {.importc: "cirrus_pointer_modifier_masks", nodecl.}
 proc rawDefaultPointerModifier(): uint16 {.importc: "cirrus_default_pointer_modifier", nodecl.}
 
+
+# Returns the native bridge's default pointer modifier mask.
+
 proc defaultPointerModifier*(): uint16 = rawDefaultPointerModifier()
+
+
+# Unpacks discovered Num Lock, Caps Lock and Scroll Lock modifier masks.
 
 proc discoverPointerLockMasks*(connection: ptr XcbConnection): array[3, uint16] =
   let packed = rawPointerModifierMasks(connection)

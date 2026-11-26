@@ -11,6 +11,9 @@ import ../zephyr_errors
 import types
 import window_query as query
 
+
+# Replaces a geometry directory with coordinate, dimension and optional identity entries.
+
 proc writeGeometry(g: Geometry, root: string,
     token = none(query.ClientToken)) =
   let identity = if token.isSome: $token.get else: ""
@@ -78,11 +81,20 @@ const ExplodeTxnName = ".explode.txn"
 const ExplodeTxnLockName = ".explode.lock"
 const ExplodeOperationName = ".explode-operation.txn"
 
+
+# Returns the sibling restore-history journal path for a WINFO root.
+
 proc restoreTxnMarkerPath(root: string): string =
   splitFile(root).dir / RestoreTxnName
 
+
+# Returns the sibling restore-history lock path for a WINFO root.
+
 proc restoreTxnLockPath(root: string): string =
   splitFile(root).dir / RestoreTxnLockName
+
+
+# Scopes layout journal and lock names to named checkpoints while retaining legacy explode names.
 
 proc explodeMetadataPath(root, legacyName: string): string =
   let name = extractFilename(root)
@@ -91,19 +103,34 @@ proc explodeMetadataPath(root, legacyName: string): string =
     return splitFile(root).dir / ("." & name & legacyName[".explode".len .. ^1])
   splitFile(root).dir / legacyName
 
+
+# Returns the checkpoint-specific explode-state journal path.
+
 proc explodeTxnMarkerPath(root: string): string =
   explodeMetadataPath(root, ExplodeTxnName)
+
+
+# Returns the checkpoint-specific explode lock path.
 
 proc explodeTxnLockPath(root: string): string =
   explodeMetadataPath(root, ExplodeTxnLockName)
 
+
+# Returns the journal path coordinating checkpoint and restore-history publication.
+
 proc explodeOperationMarkerPath(root: string): string =
   explodeMetadataPath(root, ExplodeOperationName)
+
+
+# Publishes phase, staging, backup and owner fields through a temporary marker file.
 
 proc writeRestoreMarker(path, phase, stage, backup: string, pid: int) =
   let temporary = path & ".tmp"
   writeFile(temporary, phase & "\n" & stage & "\n" & backup & "\n" & $pid & "\n")
   moveFile(temporary, path)
+
+
+# Treats a positive PID with a procfs directory as a live transaction owner.
 
 proc processAlive(pid: int): bool =
   pid > 0 and dirExists("/proc/" & $pid)
@@ -114,6 +141,9 @@ proc beginRestoreHistory*(updates: seq[RestoreHistoryUpdate]): RestoreHistoryTra
 proc beginRestoreHistoryIdentity*(updates: seq[IdentityHistoryUpdate]): RestoreHistoryTransaction
 proc commitRestoreHistory*(transaction: var RestoreHistoryTransaction)
 
+
+# Reads the restore lock's PID, returning zero for an absent or nonnumeric owner entry.
+
 proc transactionOwner(root: string): int =
   let ownerFile = restoreTxnLockPath(root) / "pid"
   if not fileExists(ownerFile):
@@ -123,6 +153,9 @@ proc transactionOwner(root: string): int =
   except ValueError:
     result = 0
 
+
+# Reads a lock directory's PID, returning zero for an absent or nonnumeric owner entry.
+
 proc lockOwner(lock: string): int =
   let ownerFile = lock / "pid"
   if not fileExists(ownerFile):
@@ -131,6 +164,10 @@ proc lockOwner(lock: string): int =
     result = parseInt(readFile(ownerFile).strip())
   except ValueError:
     result = 0
+
+
+# Recovers interrupted history and coordinates access with an existing restore transaction.
+# Foreign writers are rejected; readers wait for a bounded publication window.
 
 proc prepareWinfoAccess(root: string, write: bool) =
   if root.len == 0:
@@ -157,9 +194,10 @@ proc prepareWinfoAccess(root: string, write: bool) =
   if dirExists(lock):
     raiseZephyrError("state WINFO: restore-all transaction did not complete")
 
+
+# Recovers interrupted restore-history publication while leaving live owners untouched.
+
 proc recoverRestoreHistory*(root: string, fromExplodeOperation = false) =
-  ## Complete or discard an interrupted restore-all publication.  A live
-  ## owner is left alone; only a dead owner can have left durable residue.
   if root.len == 0:
     return
   if not fromExplodeOperation:
@@ -230,6 +268,9 @@ proc recoverRestoreHistory*(root: string, fromExplodeOperation = false) =
   if dirExists(lock):
     removeDir(lock)
 
+
+# Recovers a dead owner's checkpoint publication and clears abandoned marker and lock state.
+
 proc recoverExplodeState*(root: string) =
   if root.len == 0:
     return
@@ -262,6 +303,9 @@ proc recoverExplodeState*(root: string) =
   let lock = explodeTxnLockPath(root)
   if dirExists(lock): removeDir(lock)
 
+
+# Recovers the coordinated checkpoint/history generation according to its recorded phase.
+
 proc recoverExplodeOperation*(root: string) =
   let marker = explodeOperationMarkerPath(root)
   if not fileExists(marker): return
@@ -293,6 +337,9 @@ proc recoverExplodeOperation*(root: string) =
     recoverRestoreHistory(winfoRoot, true)
   if fileExists(marker): removeFile(marker)
 
+
+# Recovers checkpoint residue, rejects a live lock owner and records ownership of a new lock.
+
 proc acquireExplodeLock*(root: string): string =
   result = explodeTxnLockPath(root)
   recoverExplodeState(root)
@@ -305,8 +352,14 @@ proc acquireExplodeLock*(root: string): string =
   createDir(result)
   writeFile(result / "pid", $getCurrentProcessId())
 
+
+# Removes the checkpoint lock directory when it exists.
+
 proc releaseExplodeLock*(lock: string) =
   if dirExists(lock): removeDir(lock)
+
+
+# Acquires the checkpoint lock after recovery and records staging and backup paths.
 
 proc beginExplodeStateLock(root: string): ExplodeTransaction =
   result.root = root
@@ -318,6 +371,10 @@ proc beginExplodeStateLock(root: string): ExplodeTransaction =
   # publish it from a prepared transaction.
   result.lock = acquireExplodeLock(root)
 
+
+# Recreates the staged generation while the checkpoint lock is held.
+# Callers preserving original geometry must read the recovered root before this cleanup.
+
 proc prepareExplodeStateStaging(transaction: var ExplodeTransaction) =
   # Do not call this until preserveOriginal has read the recovered root.  It
   # removes abandoned sibling generations while the operation lock is held.
@@ -325,9 +382,15 @@ proc prepareExplodeStateStaging(transaction: var ExplodeTransaction) =
   if dirExists(transaction.backup): removeDir(transaction.backup)
   createDir(transaction.stage)
 
+
+# Acquires a recovered checkpoint lock and creates an empty staging generation.
+
 proc beginExplodeStateStaging(root: string): ExplodeTransaction =
   result = beginExplodeStateLock(root)
   prepareExplodeStateStaging(result)
+
+
+# Stages ordered tokenless checkpoint geometry and marks the generation prepared.
 
 proc beginExplodeState*(root: string, records: seq[ExplodeStateRecord]): ExplodeTransaction =
   result = beginExplodeStateStaging(root)
@@ -337,6 +400,10 @@ proc beginExplodeState*(root: string, records: seq[ExplodeStateRecord]): Explode
   result.active = true
 
 proc loadStateEntries*(root: string): seq[IdentityExplodeStateRecord]
+
+
+# Validates identities and stages ordered checkpoint records under the recovered operation lock.
+# Optional original preservation reads the committed generation before replacing staging state.
 
 proc beginExplodeStateIdentity*(root: string,
     records: seq[IdentityExplodeStateRecord],
@@ -385,12 +452,18 @@ proc beginExplodeStateIdentity*(root: string,
 
   result.active = true
 
+
+# Discards an active staged checkpoint and its marker, then releases its operation lock.
+
 proc abortExplodeState*(transaction: var ExplodeTransaction) =
   if not transaction.active: return
   if fileExists(transaction.marker): removeFile(transaction.marker)
   if dirExists(transaction.stage): removeDir(transaction.stage)
   releaseExplodeLock(transaction.lock)
   transaction.active = false
+
+
+# Marks checkpoint publication required, swaps the staged generation into place and cleans residue.
 
 proc commitExplodeState*(transaction: var ExplodeTransaction, releaseLock = true) =
   if not transaction.active: return
@@ -403,6 +476,9 @@ proc commitExplodeState*(transaction: var ExplodeTransaction, releaseLock = true
   if releaseLock: releaseExplodeLock(transaction.lock)
   transaction.active = false
 
+
+# Prepares a checkpoint and optional restore history under one operation journal.
+
 proc beginExplodeOperation*(root: string, records: seq[ExplodeStateRecord],
     history: seq[RestoreHistoryUpdate]): ExplodeOperation =
   result.root = root
@@ -413,6 +489,9 @@ proc beginExplodeOperation*(root: string, records: seq[ExplodeStateRecord],
     result.history = beginRestoreHistory(history)
   writeRestoreMarker(result.marker, "PREPARED", root, getEnv("WINFO"), getCurrentProcessId())
   result.active = true
+
+
+# Prepares identity-bearing checkpoint and history generations under one operation journal.
 
 proc beginExplodeOperationIdentity*(root: string,
     records: seq[IdentityExplodeStateRecord],
@@ -427,6 +506,9 @@ proc beginExplodeOperationIdentity*(root: string,
     getCurrentProcessId())
   result.active = true
 
+
+# Commits checkpoint state before optional history, then releases the shared operation lock.
+
 proc commitExplodeOperation*(operation: var ExplodeOperation) =
   if not operation.active: return
   writeRestoreMarker(operation.marker, "COMMIT_REQUIRED", operation.root,
@@ -438,13 +520,17 @@ proc commitExplodeOperation*(operation: var ExplodeOperation) =
   if fileExists(operation.marker): removeFile(operation.marker)
   operation.active = false
 
+
+# Records acknowledged geometry so later failure preserves prepared restoration generations.
+
 proc markExplodeGeometryApplied*(operation: var ExplodeOperation) =
-  ## Geometry has been acknowledged by the WM.  Preserve the prepared
-  ## restoration generations even if the subsequent stacking request fails.
   if not operation.active:
     return
   writeRestoreMarker(operation.marker, "GEOMETRY_APPLIED", operation.root,
     getEnv("WINFO"), getCurrentProcessId())
+
+
+# Recovers WINFO history, acquires its transaction lock and copies a staged generation.
 
 proc beginRestoreHistoryStaging(): RestoreHistoryTransaction =
   let root = getEnv("WINFO")
@@ -480,6 +566,9 @@ proc beginRestoreHistoryStaging(): RestoreHistoryTransaction =
     removeDir(result.backup)
   copyDir(root, result.stage)
 
+
+# Writes the prepared history marker and marks the transaction active.
+
 proc markRestoreHistoryPrepared(transaction: var RestoreHistoryTransaction) =
   writeRestoreMarker(
     transaction.marker,
@@ -490,6 +579,9 @@ proc markRestoreHistoryPrepared(transaction: var RestoreHistoryTransaction) =
   )
   transaction.active = true
 
+
+# Stages geometry updates in a copied WINFO generation and marks it prepared.
+
 proc beginRestoreHistory*(updates: seq[RestoreHistoryUpdate]): RestoreHistoryTransaction =
   result = beginRestoreHistoryStaging()
 
@@ -498,6 +590,9 @@ proc beginRestoreHistory*(updates: seq[RestoreHistoryUpdate]): RestoreHistoryTra
 
   markRestoreHistoryPrepared(result)
 
+
+# Validates tokens before staging identity-bearing restore-history updates.
+
 proc beginRestoreHistoryIdentity*(updates: seq[IdentityHistoryUpdate]): RestoreHistoryTransaction =
   for update in updates:
     query.validateClientToken(update.token)
@@ -505,6 +600,9 @@ proc beginRestoreHistoryIdentity*(updates: seq[IdentityHistoryUpdate]): RestoreH
   for update in updates:
     writeGeometry(update.geometry, result.stage / update.winid, some(update.token))
   markRestoreHistoryPrepared(result)
+
+
+# Discards an active history transaction's staging, backup, marker and lock.
 
 proc abortRestoreHistory*(transaction: var RestoreHistoryTransaction) =
   if not transaction.active:
@@ -518,6 +616,10 @@ proc abortRestoreHistory*(transaction: var RestoreHistoryTransaction) =
   if dirExists(transaction.lock):
     removeDir(transaction.lock)
   transaction.active = false
+
+
+# Marks history publication required before replacing the committed WINFO generation.
+# The journal permits roll-forward recovery after an interrupted publication.
 
 proc commitRestoreHistory*(transaction: var RestoreHistoryTransaction) =
   if not transaction.active:
@@ -550,6 +652,9 @@ proc commitRestoreHistory*(transaction: var RestoreHistoryTransaction) =
     removeDir(transaction.lock)
   transaction.active = false
 
+
+# Saves supplied geometry and optional live identity, with a precheck to preserve useful revert history.
+
 proc saveGeometry*(g: Geometry, winid: string = "", precheck = true) =
   prepareWinfoAccess(getEnv("WINFO"), true)
   recoverRestoreHistory(getEnv("WINFO"))
@@ -574,11 +679,17 @@ proc saveGeometry*(g: Geometry, winid: string = "", precheck = true) =
     token
   )
 
+
+# Validates the supplied identity and writes its geometry after coordinating WINFO access.
+
 proc saveGeometryWithToken*(g: Geometry, winid: string,
     token: query.ClientToken) =
   query.validateClientToken(token)
   prepareWinfoAccess(getEnv("WINFO"), true)
   writeGeometry(g, getEnv("WINFO") / winid, some(token))
+
+
+# Records source geometry only when the requested destination warrants updating revert history.
 
 proc saveOriginalIfChanged*(
   source: Geometry,
@@ -612,6 +723,9 @@ proc saveOriginalIfChanged*(
     token
   )
 
+
+# Captures an explicit or focused window's current geometry without the repeated-action precheck.
+
 proc saveGeometry*(winid: string = "") =
   let id =
     if winid.len == 0:
@@ -621,6 +735,9 @@ proc saveGeometry*(winid: string = "") =
 
   saveGeometry(query.geometry(id), id, false)
 
+
+# Writes supplied checkpoint geometry under a padded ordinal and window identifier.
+
 proc saveState*(root: string, position: int, winid: string, g: Geometry) =
 
   writeGeometry(
@@ -628,10 +745,16 @@ proc saveState*(root: string, position: int, winid: string, g: Geometry) =
     root / align($position, 3, '0') & "=" & winid
   )
 
+
+# Writes token-bound checkpoint geometry under its padded ordinal and window identifier.
+
 proc saveStateIdentity*(root: string, position: int, winid: string,
     token: query.ClientToken, g: Geometry) =
   query.validateClientToken(token)
   writeGeometry(g, root / align($position, 3, '0') & "=" & winid, some(token))
+
+
+# Queries current window geometry before writing its ordered checkpoint entry.
 
 proc saveState*(root: string, position: int, winid: string) =
   saveState(root, position, winid, query.geometry(winid))
@@ -639,6 +762,9 @@ proc saveState*(root: string, position: int, winid: string) =
 proc hasGeometryForToken*(winid: string, token: query.ClientToken,
     root: string = getEnv("WINFO")): bool
 proc historyToken(root, id: string): Option[query.ClientToken]
+
+
+# Checks saved geometry existence and, for live WINFO XIDs, matching client identity.
 
 proc hasGeometry*(winid: string = "", root: string = getEnv("WINFO")): bool =
   if root == getEnv("WINFO"):
@@ -658,6 +784,9 @@ proc hasGeometry*(winid: string = "", root: string = getEnv("WINFO")): bool =
     return hasGeometryForToken(id, token.get, root)
   result = true
 
+
+# Reads one saved identity entry, rejecting duplicate or malformed token metadata.
+
 proc historyToken(root, id: string): Option[query.ClientToken] =
   let path = root / id
   var found = ""
@@ -673,6 +802,9 @@ proc historyToken(root, id: string): Option[query.ClientToken] =
   except ValueError:
     raiseZephyrError("state history: malformed identity for " & id)
 
+
+# Checks saved geometry presence and exact stored-token agreement after WINFO coordination.
+
 proc hasGeometryForToken*(winid: string, token: query.ClientToken,
     root: string = getEnv("WINFO")): bool =
   if root == getEnv("WINFO"):
@@ -684,6 +816,9 @@ proc hasGeometryForToken*(winid: string, token: query.ClientToken,
   if stored.isNone or stored.get != token:
     return false
   result = true
+
+
+# Loads complete saved coordinate and size fields, optionally validating live WINFO identity.
 
 proc loadGeometry*(winid: string = "", root: string = getEnv("WINFO"),
     validateIdentity = true): Geometry =
@@ -739,6 +874,9 @@ proc loadGeometry*(winid: string = "", root: string = getEnv("WINFO"),
   if not (gotX and gotY and gotWidth and gotHeight):
     raiseZephyrError("incomplete saved geometry for window " & id)
 
+
+# Requires stored identity to match the supplied token before loading saved geometry.
+
 proc loadGeometryForToken*(winid: string, token: query.ClientToken,
     root: string = getEnv("WINFO")): Geometry =
   if root == getEnv("WINFO"):
@@ -750,6 +888,9 @@ proc loadGeometryForToken*(winid: string, token: query.ClientToken,
   if stored.isNone or stored.get != token:
     raiseZephyrError("state loadGeometry: history identity mismatch for window " & winid)
   result = loadGeometry(winid, root, false)
+
+
+# Validates sorted contiguous checkpoint records and geometry before returning ordered XIDs.
 
 proc loadStateWinids*(root: string): seq[string] =
   if not dirExists(root):
@@ -773,6 +914,9 @@ proc loadStateWinids*(root: string): seq[string] =
     # Validate the complete record before any caller can submit it to WM.
     discard loadGeometry(item.path, root)
     result.add(winid)
+
+
+# Loads contiguous identity-bearing checkpoint records for production restoration.
 
 proc loadStateEntries*(root: string): seq[IdentityExplodeStateRecord] =
   if not dirExists(root):
@@ -806,6 +950,9 @@ proc loadStateEntries*(root: string): seq[IdentityExplodeStateRecord] =
 
 #   result = ""
 
+
+# Captures an explicit or focused client's geometry and identity under the WME snapshot root.
+
 proc snapshot*(args: seq[string]) =
   let id =
     if args.len == 0:
@@ -821,8 +968,14 @@ proc snapshot*(args: seq[string]) =
     token
   )
 
+
+# Captures the focused client's geometry and identity using the snapshot command path.
+
 proc snapshot*() =
   snapshot(@[])
+
+
+# Validates snapshot identity against the live client before applying geometry and updating history.
 
 proc restore*(args: seq[string]) =
   let id =
@@ -850,12 +1003,18 @@ proc restore*(args: seq[string]) =
     some(token.get)
   )
 
+
+# Restores the focused client's identity-bound snapshot through the state command path.
+
 proc restore*() =
   restore(@[])
 
 #
 # Dispatch
 #
+
+
+# Routes state snapshot and restore commands, rejecting unknown actions.
 
 proc dispatch*(verb: string, rest: seq[string]) =
   case verb
@@ -868,8 +1027,10 @@ proc dispatch*(verb: string, rest: seq[string]) =
   else:
     raiseZephyrError("unknown state action: " & verb)
 
+
+# Recovers restore history and permits cleanup only when no WINFO transaction lock remains.
+
 proc windowStateCleanupReady*(): bool =
-  ## Defer daemon cleanup while restore-all may replace the entire WINFO tree.
   let root = getEnv("WINFO")
   if root.len == 0:
     return true
@@ -878,6 +1039,9 @@ proc windowStateCleanupReady*(): bool =
     return not dirExists(restoreTxnLockPath(root))
   except CatchableError:
     return false
+
+
+# Removes a valid XID's WINFO symlink or directory only when transaction state permits cleanup.
 
 proc cleanupWindowState*(winid: string): bool =
   let root = getEnv("WINFO")

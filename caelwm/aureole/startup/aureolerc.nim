@@ -5,6 +5,9 @@ type AureolercChild* = ref object
   process: Process
   scriptPath: string
 
+
+# Resolves an explicit startup path before XDG_CONFIG_HOME and HOME defaults.
+
 proc resolveAureolercPath*(explicitPath: string): string =
   if explicitPath.len > 0:
     return explicitPath
@@ -14,6 +17,9 @@ proc resolveAureolercPath*(explicitPath: string): string =
     return ""
   getEnv("HOME") & "/.config/aureole/aureolerc"
 
+
+# Marks the XCB descriptor close-on-exec, raising IOError if isolation fails.
+
 proc protectXcbDescriptor(fd: cint) =
   if fd < 0:
     raise newException(IOError, "cannot isolate invalid XCB descriptor")
@@ -22,6 +28,10 @@ proc protectXcbDescriptor(fd: cint) =
     raise newException(IOError, "cannot inspect XCB descriptor flags")
   if posix.fcntl(fd, posix.F_SETFD, currentFlags or posix.FD_CLOEXEC) < 0:
     raise newException(IOError, "cannot mark XCB descriptor close-on-exec")
+
+
+# Starts an eligible startup script in a separate session after protecting the XCB descriptor.
+# Missing prerequisites are diagnosed and skipped without launching a child.
 
 proc launchAureolerc*(explicitPath: string; xcbFd: cint): AureolercChild =
   let scriptPath = resolveAureolercPath(explicitPath)
@@ -53,6 +63,9 @@ proc launchAureolerc*(explicitPath: string; xcbFd: cint): AureolercChild =
           options = {poParentStreams}))
   stderr.writeLine(&"aureole: started aureolerc pid={result.process.processID} path={scriptPath}")
 
+
+# Reaps a finished startup child and reports whether its process is still running.
+
 proc pollExit*(child: AureolercChild): bool =
   if child == nil or child.process == nil:
     return false
@@ -64,6 +77,9 @@ proc pollExit*(child: AureolercChild): bool =
     child.process.close()
     child.process = nil
   false
+
+
+# Terminates the startup process group, escalating to SIGKILL after the bounded grace period.
 
 proc stop*(child: AureolercChild) =
   if child == nil or child.process == nil:
