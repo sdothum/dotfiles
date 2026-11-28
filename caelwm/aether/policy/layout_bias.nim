@@ -38,3 +38,11 @@ proc parseLayoutBias*(value: string): LayoutBias =
   of "left": LayoutBias.Left
   of "right": LayoutBias.Right
   else: raiseZephyrError("layout bias: expected left or right")
+
+
+# Resolves a logical numeric tile column to its physical position without reading policy.
+# Physical columns increase from left to right; the caller supplies one operation snapshot.
+
+proc physicalColumn*(columns, column: int, layoutBias: LayoutBias): int =
+  if layoutBias == LayoutBias.Right: columns - column + 1
+  else: column

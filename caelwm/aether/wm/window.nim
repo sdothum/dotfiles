@@ -6,6 +6,8 @@ import std/strutils
 import std/algorithm
 import std/sequtils
 import ../zephyr_errors
+import ../policy/layout_bias
+import ../policy/layout_bias_access
 
 import cliargs
 import compat
@@ -1775,7 +1777,21 @@ proc applyTileGridGeometry(columns, rows, column, row: int,
     token: Option[query.ClientToken])
 
 
-# Parses tiling arguments, resolves cell geometry and applies the target's new size and position.
+# Rejects invalid logical or physical grid cells in the established diagnostic order.
+
+proc validateTileGridCell(columns, rows, column, row: int) =
+  if columns < 1:
+    raiseZephyrError("window tile: columns must be >= 1")
+  if column < 1 or column > columns:
+    raiseZephyrError("window tile: column out of range")
+  if rows < 1:
+    raiseZephyrError("window tile: rows must be >= 1")
+  if row < 1 or row > rows:
+    raiseZephyrError("window tile: row out of range")
+
+
+# Validates logical cells before capturing bias once and resolving physical columns.
+# Omitted columns default to the logical last column; cardinal edges remain physical.
 # Identity-bound calls preserve the captured target, restore history and prior focus.
 
 proc tileTarget(args: seq[string],
@@ -1802,6 +1818,14 @@ proc tileTarget(args: seq[string],
   let focusedBefore = if token.isSome: query.focusedWinid() else: ""
   if token.isSome:
     WindowChain(id: winid, token: token.get).checkedChainTarget()
+
+  let operationBias =
+    if a.columns.isSome:
+      validateTileGridCell(a.columns.get, a.rows.get(1),
+        a.column.get(a.columns.get), a.row.get(1))
+      some(bias())
+    else:
+      none(LayoutBias)
 
   let rows = a.rows.get(1)
   let row = a.row.get(1)
@@ -1852,14 +1876,14 @@ proc tileTarget(args: seq[string],
     if a.columns.isNone:
       raiseZephyrError("columns must be >= 1")
     let columns = a.columns.get
-    let column = a.column.get(columns)
+    let column = physicalColumn(columns, a.column.get(columns), operationBias.get)
     applyTileGridGeometry(columns, rows, column, row, g, s, winid, token)
 
   if token.isSome:
     WindowChain(id: winid, token: token.get).restoreChainFocus(focusedBefore)
 
 
-# Applies tiling arguments with supplied or queried screen and source geometry.
+# Tiles numeric bias-relative columns or physical cardinal edges with supplied or queried geometry.
 
 proc tile*(
   args: seq[string],
@@ -1869,26 +1893,20 @@ proc tile*(
   tileTarget(args, providedScreen, providedGeometry)
 
 
-# Tiles the captured identity with validated arguments and returns the chain.
+# Tiles the captured identity with one numeric bias snapshot and returns the chain.
 
 proc tile*(chain: WindowChain, args: varargs[string]): WindowChain =
   tileTarget(@args, ScreenGeometry(), Geometry(), chain.id, some(chain.token))
   chain
 
 
-# Validates grid dimensions and cell range, then applies tiled geometry and records its original.
+# Validates a physical grid cell, applies deterministic geometry and records its original.
+# Reads no bias or environment preferences and performs no orientation transformation.
 
 proc applyTileGridGeometry(columns, rows, column, row: int,
     g: Geometry, s: ScreenGeometry, winid: string,
     token: Option[query.ClientToken]) =
-  if columns < 1:
-    raiseZephyrError("window tile: columns must be >= 1")
-  if column < 1 or column > columns:
-    raiseZephyrError("window tile: column out of range")
-  if rows < 1:
-    raiseZephyrError("window tile: rows must be >= 1")
-  if row < 1 or row > rows:
-    raiseZephyrError("window tile: row out of range")
+  validateTileGridCell(columns, rows, column, row)
   let tileWidth = (s.width - (columns - 1) * s.gap) div columns
   let tileHeight = (s.height - (rows - 1) * s.gap) div rows
   let destination = Geometry(
@@ -1904,7 +1922,7 @@ proc applyTileGridGeometry(columns, rows, column, row: int,
     saveOriginalIfChanged(g, destination, winid)
 
 
-# Resolves target and geometry, applies grid tiling and preserves prior focus for captured identities.
+# Resolves target and geometry for physical tiling and preserves captured-identity focus.
 
 proc tileGridTarget(columns, rows, column, row: int, targetOverride: string,
     providedScreen: ScreenGeometry, providedGeometry: Geometry,
@@ -1924,7 +1942,8 @@ proc tileGridTarget(columns, rows, column, row: int, targetOverride: string,
     WindowChain(id: winid, token: token.get).restoreChainFocus(focusedBefore)
 
 
-# Tiles an explicit or focused target into a grid cell using supplied or queried geometry.
+# Tiles an explicit or focused target into a physical cell using supplied or queried geometry.
+# Callers resolve orientation before entering this bias-independent geometry boundary.
 
 proc tileGrid*(columns, rows, column, row: int, winid = "",
     providedScreen = ScreenGeometry(), providedGeometry = Geometry()) =
@@ -1932,13 +1951,13 @@ proc tileGrid*(columns, rows, column, row: int, winid = "",
     providedScreen, providedGeometry)
 
 
-# Passes column and position strings through tile command validation.
+# Passes grid width and logical column strings through numeric tile validation.
 
 proc tile*(columns, position: string) =
   tile(@[columns, position])
 
 
-# Passes one side selector through tile command validation.
+# Passes one numeric grid width or physical edge selector through tile validation.
 
 proc tile*(side: string) =
   tile(@[side])

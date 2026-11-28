@@ -122,7 +122,7 @@ proc usage() =
   echo "  aether layouts level <args>"
   echo "  aether layouts restore <args>"
   echo "  aether layouts spread <args>"
-  echo "  aether layouts tile <args>"
+  echo "  aether layouts tile <args> (numeric columns are bias-relative)"
   echo "  aether layouts unexplode"
   echo "  aether layouts grid <args>"
   echo "  aether screen indent"
@@ -150,7 +150,7 @@ proc usage() =
   echo "  aether window stack [<winid>]"
   echo "  aether window spread <args>"
   echo "  aether window swap <args>"
-  echo "  aether window tile <args>"
+  echo "  aether window tile <args> (numeric columns are bias-relative; left/right are physical)"
   echo "  aether window toggle <args>"
   quit(1)
 

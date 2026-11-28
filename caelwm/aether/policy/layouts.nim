@@ -17,23 +17,10 @@ import ../wm/types
 import ../wm/window
 import ../wm/window_query as query
 import ./layout_bias
+import ./layout_bias_access
 
 export layout_bias.LayoutBias
-
-
-# Reads authoritative layout bias from resident policy state or daemon IPC.
-# Raises an error if the remote query fails or returns an invalid response.
-
-proc bias*(): LayoutBias =
-  let resident = localBias()
-  if resident.isSome:
-    return resident.get
-  let reply = queryDaemon(RequestQueryLayoutBias)
-  if not reply.ok:
-    raiseZephyrError("layout bias: " & reply.error)
-  if reply.responseKind != RequestQueryLayoutBias:
-    raiseZephyrError("layout bias: unexpected response")
-  parseLayoutBias(reply.body)
+export layout_bias_access.bias
 
 
 # Updates resident policy bias when initialized; otherwise sets it through daemon IPC.
@@ -94,7 +81,7 @@ proc clientsFor(snapshot: query.WmSnapshot,
     result.add(PlacementClient(winid: winid, token: tokens.getOrDefault(winid)))
 
 
-# Assigns windows to logical grid cells using the supplied bias and column-first row order.
+# Assigns windows to physical grid cells using the supplied bias and column-first row order.
 # Wraps assignments when the count exceeds grid capacity; applies no geometry.
 
 proc gridCells(count, columns, rows: int,
@@ -125,33 +112,22 @@ proc spreadGrid*(count: int): Spread =
     result.rows = 3
 
 
-# Maps a one-based window position to a logical column using the supplied bias.
-# Fills each column before advancing and wraps after grid capacity.
-# Requires positive column, row and position values; does not mirror physical coordinates.
+# Maps a one-based assignment position to a physical column using the captured bias.
+# Preserves left-bias preference, fills columns before advancing and wraps at capacity.
+# Requires positive column, row and position values; callers must not mirror the result.
 
 proc columnOrder*(columns, rows, position: int,
     layoutBias: LayoutBias): int =
   let order =
-    if layoutBias == LayoutBias.Left:
-      case columns
-      of 1: @[1]
-      of 2: @[2, 1]
-      of 3: @[2, 3, 1]
-      of 4: @[3, 4, 2, 1]
-      of 5: @[3, 4, 5, 2, 1]
-      else: toSeq(1 .. columns)
-    else:
-      case columns
-      of 1: @[1]
-      of 2: @[1, 2]
-      of 3: @[2, 1, 3]
-      of 4: @[2, 1, 3, 4]
-      of 5: @[3, 2, 1, 4, 5]
-      else: toSeq(1 .. columns)
-  if rows == 1:
-    result = order[(position - 1) mod columns]
-  else:
-    result = order[((position - 1) div rows) mod columns]
+    case columns
+    of 1: @[1]
+    of 2: @[2, 1]
+    of 3: @[2, 3, 1]
+    of 4: @[3, 4, 2, 1]
+    of 5: @[3, 4, 5, 2, 1]
+    else: toSeq(1 .. columns)
+  let logicalColumn = order[((position - 1) div rows) mod columns]
+  physicalColumn(columns, logicalColumn, layoutBias)
 
 
 # Keeps the requested grid when it fits, otherwise selects two or three rows.
@@ -323,12 +299,12 @@ type GridAction = proc(columns, rows, column, row: int, winid: string,
   screenGeometry: ScreenGeometry, sourceGeometry: Geometry)
 
 
-# Resolves grid arguments and invokes the action with a logical column and row.
-# Uses the supplied bias only when no explicit column is given and queries the screen
-# when its supplied width is zero; leaves geometry calculation and application to the action.
+# Resolves grid arguments into physical cells using the captured operation bias.
+# Implicit assignments are already oriented; only tile explicit columns are bias-relative.
+# Queries the screen when its supplied width is zero and delegates geometry to the action.
 
 proc gridOperation(command: string, args: seq[string], layoutBias: LayoutBias,
-    action: GridAction,
+    action: GridAction, biasRelativeColumn = false,
     providedScreen = ScreenGeometry(), sourceGeometry = Geometry()) =
   requireArgs(command, args, 1, 6)
   let a = parseArguments(command, args,
@@ -342,30 +318,28 @@ proc gridOperation(command: string, args: seq[string], layoutBias: LayoutBias,
     if providedScreen.width == 0: window.screenGeometry()
     else: providedScreen
   let column =
-    if a.column.isSome: a.column.get
+    if a.column.isSome:
+      if biasRelativeColumn: physicalColumn(columns, a.column.get, layoutBias)
+      else: a.column.get
     else: columnOrder(columns, rows, position, layoutBias)
   let row = (position - 1) mod rows + 1
   action(columns, rows, column, row, a.winid, screenGeometry, sourceGeometry)
 
 
-# Tiles the target window using one bias snapshot for assignment and physical positioning.
-# Mirrors the logical column for right bias before delegating geometry application.
+# Tiles the target using one bias snapshot, orienting explicit and implicit columns once.
+# Passes the resolved physical cell to the bias-independent geometry boundary.
 
 proc tile*(args: seq[string]) =
   let operationBias = bias()
-  let rightToLeft = operationBias == LayoutBias.Right
-
   gridOperation("tile", args, operationBias,
     proc(columns, rows, column, row: int, winid: string,
         screen: ScreenGeometry, geometry: Geometry) =
-      let physicalColumn =
-        if rightToLeft: columns - column + 1
-        else: column
-      window.tileGrid(columns, rows, physicalColumn, row, winid, screen, geometry))
+      window.tileGrid(columns, rows, column, row, winid, screen, geometry),
+    biasRelativeColumn = true)
 
 
 # Positions the target window within a grid while preserving its size.
-# Uses one bias snapshot for logical assignment and passes the column without tile mirroring.
+# Uses one bias snapshot for implicit assignment; explicit spread columns stay physical.
 
 proc spread*(args: seq[string]) =
   let operationBias = bias()

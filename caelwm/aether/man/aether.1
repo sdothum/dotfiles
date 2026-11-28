@@ -243,8 +243,11 @@ previously focused window; fail if no adjacent window is found\.
 .IP "\(bu" 4
 \fBwindow tile left|right|COLUMNS [COLUMN] [\-\-rows ROWS] [\-\-row ROW]
 [WINID]\fR: Resize and position the target in the grid (default COLUMN is
-COLUMNS; default row count and row are 1). left or right extends the target to
-that edge and fills the usable height\.
+COLUMNS; default row count and row are 1). Numeric COLUMN is relative to the
+current layout bias: physical column is COLUMN for left bias and
+COLUMNS \- COLUMN + 1 for right bias. Physical columns run left to right.
+The omitted COLUMN follows the same rule. left or right extends the target
+to that literal physical edge and fills the usable height, independently of bias\.
 .
 .IP "\(bu" 4
 \fBwindow toggle CLASS | \-\-name PATTERN\fR: Find matching windows including
@@ -272,10 +275,11 @@ public actions\.
 The \fBlayout\fR and \fBlayouts\fR domains are interchangeable\.
 .
 .IP "\(bu" 4
-\fBlayout bias [left | right]\fR: Query or set the directional bias used by
-applicable layout policies\. Without an argument, print the current bias
-(\fBleft\fR or \fBright\fR)\. \fBleft\fR selects left\-to\-right layout
-progression; \fBright\fR selects right\-to\-left layout progression\.
+\fBlayout bias [left | right]\fR: Query or set the global horizontal placement
+preference used by all numeric tile operations and applicable layout assignment
+policies\. Without an argument, print the current bias (\fBleft\fR or
+\fBright\fR)\. \fBleft\fR preserves the established assignment preference;
+\fBright\fR mirrors it horizontally\.
 The default is \fBleft\fR\. Setting bias does not reposition existing windows
 or invoke a layout operation\. Invalid arguments are rejected without changing
 the current bias\.
@@ -346,8 +350,21 @@ the column derived from POSITION\.
 \fBlayouts tile COLUMNS [COLUMN] [\-\-rows ROWS] [\-\-position POSITION]
 [WINID]\fR: Resize and position one target using layout grid placement order
 with the current bias.
-Rows and position default to 1; COLUMN overrides the column derived from
-POSITION\.
+Rows and position default to 1. Explicit numeric COLUMN is bias-relative:
+physical column is COLUMN for left bias and COLUMNS \- COLUMN + 1 for right
+bias. Without COLUMN, POSITION selects the established assignment order,
+mirrored horizontally for right bias exactly once. Rows, sizes and vertical
+positions are independent of bias\.
+.
+.P
+Numeric tile semantics also apply to fluent window operations and resident
+application rules; rules require no individual bias handling. Each numeric
+tile operation captures the authoritative bias once. Resident policy reads
+Aetherd state directly; remote commands query Aetherd. Later preference changes
+affect subsequent operations. Low-level physical grid placement receives
+resolved physical columns and performs no bias lookup or transformation.
+Explicit cardinal left and right operations remain physical. CENTER_BIAS is
+an independent centering preference\.
 .
 .P
 \fBunexplode\fR ignores disappeared saved XIDs and preserves the current

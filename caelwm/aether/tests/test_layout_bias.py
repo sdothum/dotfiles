@@ -364,16 +364,18 @@ class LayoutTests(FixtureTests):
     @classmethod
     def layout_tree(cls, name, source, baseline=False):
         tree = cls.root / name
+        legacy = baseline and "layoutBias: LayoutBias" not in source
         (tree / "policy").mkdir(parents=True)
         (tree / "wm").mkdir()
-        for file in ("zephyr_errors.nim", "policy/layout_bias.nim", "wm/cliargs.nim",
+        for file in ("zephyr_errors.nim", "policy/layout_bias.nim",
+                     "policy/layout_bias_access.nim", "wm/cliargs.nim",
                      "wm/constants.nim", "wm/group_id.nim", "wm/layer_types.nim", "wm/types.nim"):
             shutil.copy2(ROOT / file, tree / file)
         (tree / "policy/layouts.nim").write_text(source)
         (tree / "wm/window_query.nim").write_text(QUERY)
         (tree / "wm/group.nim").write_text("proc count*(): int = 10\n")
         shutil.copy2(ROOT / "wm/compat.nim", tree / "wm/compat.nim")
-        if baseline:
+        if legacy:
             # Replace the external recipe boundary only; policy stays unchanged.
             with (tree / "wm/compat.nim").open("a") as stream:
                 stream.write('''\nvar side* = "left"
@@ -387,7 +389,8 @@ proc shvArgs*(cmd, verb: string, args: seq[string], minLen, maxLen: int): string
         (tree / "wm/daemon_client.nim").write_text(DAEMON)
         (tree / "wm/state.nim").write_text(STATE)
         window = (ROOT / "wm/window.nim").read_text()
-        math = section(window, "proc applyTileGridGeometry(", "proc tileGridTarget(")
+        math = section(window, "proc validateTileGridCell(", "proc tileTarget(")
+        math += section(window, "proc applyTileGridGeometry(", "proc tileGridTarget(")
         math += section(window, "proc applySpreadGridGeometry(", "proc spreadTarget(")
         (tree / "wm/window.nim").write_text(WINDOW + math + WINDOW_WRAPPERS)
         placement = (ROOT / "wm/placement.nim").read_text()
@@ -397,10 +400,10 @@ proc shvArgs*(cmd, verb: string, args: seq[string], minLen, maxLen: int): string
         math += section(placement, "proc foldDestination(", "proc applyFold*(")
         math += section(placement, "proc explodeDestination(", "proc restoreCheckpoint*(")
         (tree / "wm/placement.nim").write_text(PLACEMENT + math + PLACEMENT_WRAPPERS)
-        driver = DRIVER.replace("SIDE_IMPORT", "import wm/compat" if baseline else
+        driver = DRIVER.replace("SIDE_IMPORT", "import wm/compat" if legacy else
                                 "import wm/daemon_client\nimport policy/layout_bias")
         driver = driver.replace("SET_SIDE", "side = sideValue")
-        driver = driver.replace("ORDER_CALL", "columnOrder(columns, rows, position)" if baseline else
+        driver = driver.replace("ORDER_CALL", "columnOrder(columns, rows, position)" if legacy else
                                 "columnOrder(columns, rows, position, parseLayoutBias(sideValue))")
         driver = driver.replace("EXTRA_TESTS", "" if baseline else EXTRA_TESTS)
         (tree / "driver.nim").write_text(driver)
@@ -409,7 +412,7 @@ proc shvArgs*(cmd, verb: string, args: seq[string], minLen, maxLen: int): string
         return run([str(binary)], env=cls.env).stdout
 
     def test_layout_snapshot_and_geometry_parity(self):
-        # Pre-refactor contract, independent of the candidate's order tables.
+        # Approved assignment contract: preserve left ordering and mirror right ordering.
         orders = {
             "left": {1: [1], 2: [2, 1], 3: [2, 3, 1],
                      4: [3, 4, 2, 1], 5: [3, 4, 5, 2, 1]},
@@ -421,15 +424,32 @@ proc shvArgs*(cmd, verb: string, args: seq[string], minLen, maxLen: int): string
             if line.startswith("ORDER "):
                 _, side, columns, rows, position, actual = line.split()
                 columns, rows, position = map(int, (columns, rows, position))
-                order = orders[side].get(columns, list(range(1, columns + 1)))
+                order = orders[side].get(columns, list(range(1, columns + 1)) if side == "left"
+                                         else list(range(columns, 0, -1)))
                 expected = order[((position - 1) // rows) % columns]
                 self.assertEqual(int(actual), expected, line)
                 order_records += 1
         self.assertEqual(order_records, 672)
         if self.baseline is not None:
-            self.assertEqual(self.candidate, self.baseline)
-            print(f"Compared {len(self.candidate)} baseline/candidate records; "
-                  f"{order_records} independent cell-order records")
+            self.assertEqual(len(self.candidate), len(self.baseline))
+            compared = changed = 0
+            side, columns = None, None
+            for candidate, baseline in zip(self.candidate, self.baseline):
+                if candidate.startswith("ORDER "):
+                    _, side, columns, *_ = candidate.split()
+                    columns = int(columns)
+                # Approved deltas: right implicit tile loses the duplicate mirror;
+                # right assignments >=6 reverse. Everything else remains identical.
+                permitted = side == "right" and (
+                    candidate.startswith("tile ") or columns >= 6 and
+                    candidate.startswith(("ORDER ", "spread ", "FOLD ")))
+                if not permitted:
+                    self.assertEqual(candidate, baseline)
+                    compared += 1
+                elif candidate != baseline:
+                    changed += 1
+            print(f"Compared {compared} unaffected baseline records; "
+                  f"{changed} records differ within approved correction scope")
 
     def test_independent_explode_geometry(self):
         # Independent contract: exact cell dimensions for the fixture's usable
@@ -471,6 +491,50 @@ proc shvArgs*(cmd, verb: string, args: seq[string], minLen, maxLen: int): string
         self.assertEqual(records, 68)
         self.assertEqual(windows, 612)
         print(f"Independently checked {records} explode records / {windows} window geometries")
+
+    def test_shared_assignment_reflection(self):
+        records = {}
+        fold_variants = {}
+        context = None
+        for line in self.candidate:
+            if line.startswith("ORDER "):
+                _, side, columns, rows, position, _ = line.split()
+                context = side, int(columns), int(rows), int(position)
+            elif line.startswith(("tile ", "spread ")):
+                side, columns, rows, position = context
+                action, geometry = line.split(" ", 1)
+                records[side, action, columns, rows, position] = [
+                    tuple(map(int, re.findall(r"-?\d+", geometry)))]
+            elif line.startswith("FOLD "):
+                _, side, count, applications = line.split(" ", 3)
+                _, columns, rows, _ = context
+                base = side, columns, rows, int(count)
+                variant = fold_variants.get(base, 0)
+                fold_variants[base] = variant + 1
+                records[side, "fold" + str(variant), columns, rows, int(count)] = [
+                    tuple(map(int, re.findall(r"-?\d+", entry)))
+                    for entry in applications.split(";")]
+        pairs = windows = 0
+        for key, left_entries in records.items():
+            side, action, columns, rows, position = key
+            if side != "left":
+                continue
+            right_entries = records["right", action, columns, rows, position]
+            self.assertEqual(len(left_entries), len(right_entries))
+            cell_width = (1919 - (columns - 1) * 7) // columns
+            for left, right in zip(left_entries, right_entries):
+                if action.startswith("fold"):
+                    self.assertEqual(left[0] + right[0], columns + 1)
+                    self.assertEqual(left[1], right[1])
+                    left, right = left[2:], right[2:]
+                self.assertEqual(left[1:], right[1:])  # y, width, height
+                inset = (cell_width - left[2]) // 2 if action in ("spread", "fold1") else 0
+                self.assertEqual(left[0] + right[0],
+                                 22 + (columns - 1) * (cell_width + 7) + 2 * inset)
+                windows += 1
+            pairs += 1
+        self.assertEqual(pairs, 924)
+        print(f"Checked {pairs} reflected tile/spread/fold plans / {windows} geometries")
 
     def test_single_snapshot_consumption(self):
         self.assertEqual(self.snapshots, ["SNAPSHOT " + name for name in
