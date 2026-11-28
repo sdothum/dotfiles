@@ -19,7 +19,7 @@ fi
 # stream youtube to mpv (to remove ads)
 # yt-dlp -o - "$1" | mpv --x11-name=youtube -
 WID=$(pfw)
-$ZEPHYR window group $($ZEPHYR group id "DESK")  # recover (potentially shifted) group to prevent restoration on mpv launch
+$AETHER window group $($AETHER group id "DESK")  # recover (potentially shifted) group to prevent restoration on mpv launch
 notify 10 "youtube" "loading..\n$1"
 sirocco window hide
 

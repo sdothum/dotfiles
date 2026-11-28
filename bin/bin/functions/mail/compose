@@ -8,7 +8,7 @@
 
 if [ "$1" ] ;then  # mail app hook
 	# focus management between aerc and compose windows SEE: rulerrc
-	trap "xdotool search --onlyvisible --classname mail windowactivate; $ZEPHYR window size monocle" EXIT
+	trap "xdotool search --onlyvisible --classname mail windowactivate; $AETHER window size monocle" EXIT
 
 	notify 60 Email "Complete <b>Recipients:</b> and <b>Subject:</b> before composing email"
 	class=email offsetY=1 kak ID=draft WAIT $@
