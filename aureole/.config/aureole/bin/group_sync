@@ -96,7 +96,7 @@ done
 
 current_group=$(group 2>/dev/null) || exit 0
 [ "$membership_group" = "$current_group" ] ||
-	$AETHERA group reconcile "$membership_group"
+	$AETHER group reconcile "$membership_group"
 
 exit 0  # NOTE: required to suppress aether reporting $? -> 1
 

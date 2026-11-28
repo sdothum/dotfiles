@@ -41,13 +41,13 @@ if [ "$1" = '--' ] ;then
 	PANEL_UNDERLINE=2       # thickness
 
 	# panel symbols (tag numbers option dropped to simplify colour assignments)
-	case $($AETHERA display width) in
+	case $($AETHER display width) in
 		3440 ) TAG_PAD='      '; STATPAD='   ' ;;  # tag bar separator (visual spacing)
 		1920 ) TAG_PAD='     ' ; STATPAD='  '  ;;
 		*    ) TAG_PAD='    '  ; STATPAD='  '  ;;
 	esac
 
-	[ $($AETHERA display width) -lt 1920 ] && scaledown=true
+	[ $($AETHER display width) -lt 1920 ] && scaledown=true
 	[ $scaledown ] && { LSEP=${LSEP# }; LSEP=${LSEP% }; RSEP=${RSEP# }; RSEP=${RSEP% }; }
 
 	sep() {
@@ -63,21 +63,21 @@ if [ "$1" = '--' ] ;then
 	# ..................................................................... Geometry
 
 	# Aureole panel geometry
-	PANEL_HEIGHT=$($AETHERA screen panel)
-	PANEL_INDENT=$($AETHERA screen indent)  # assumes equal left/right screen margins
+	PANEL_HEIGHT=$($AETHER screen panel)
+	PANEL_INDENT=$($AETHER screen indent)  # assumes equal left/right screen margins
 
 	fontsize=$(fontsize panel)
 	# [ $scaledown ] && fontsize=$(echo "$fontsize - 1.0" | bc )
-	width=$($AETHERA display width)
+	width=$($AETHER display width)
 
-	panel_offsetY=$(( $($AETHERA display height) - PANEL_HEIGHT ))  # bottombar (topbar = 0)
+	panel_offsetY=$(( $($AETHER display height) - PANEL_HEIGHT ))  # bottombar (topbar = 0)
 	panel_offsetX=$PANEL_INDENT
 	panel_width=$(( width - PANEL_INDENT * 2 ))
 
 	# .................................................................... Tag state
 
 	# desktops
-	tagcount=$($AETHERA group tagcount)
+	tagcount=$($AETHER group tagcount)
 	DESKTOPS=$(seq 1 $tagcount)
 
 	# desktop (group) windows NOTE: -1 is undefined group

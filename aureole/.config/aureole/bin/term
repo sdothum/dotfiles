@@ -25,7 +25,7 @@ blackboard=blackboard
 name="$NAME term"  # default class SEE: rulerrc
 
 # menu border calculation
-border() { echo $(( $($AETHERA display height) * 2 / 15 )); }
+border() { echo $(( $($AETHER display height) * 2 / 15 )); }
 theme()  { theme="$theme $@"; }
 
 while : ;do

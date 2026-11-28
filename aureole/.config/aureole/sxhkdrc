@@ -89,7 +89,7 @@ super + {_,ctrl,shift} + e
 super + w
 	echo "$(timestamp) sxhkd window close $(pfw)" >>$WMLOG ;\
 	W=$(pfw)                                               ;\
-	borealis window cycle --group                           ;\
+	borealis window cycle --group                          ;\
 	aether group remove --close $W                         ;\
 	refresh_panel  # for last visible window removal
 
@@ -124,7 +124,7 @@ super + ctrl + w
 
 super + {_,shift} + z
 	[ -z "$(pfw)" ] && exit                                                        ;\
-	borealis window {monocle,maximize}                                              ;\
+	borealis window {monocle,maximize}                                             ;\
 	W=$(aether window geometry | grep 'WIDTH=' | cut -d= -f2)                      ;\
 	V=$(( 2560 * (1440 - $(aether screen top) - $(aether screen bottom)) / 1440 )) ;\
 	[ $W -gt $V ] && [ $W -lt $(aether display width) ] && blackboard on || blackboard off

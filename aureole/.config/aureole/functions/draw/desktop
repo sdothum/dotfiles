@@ -17,8 +17,8 @@ sep
 
 # ............................................................... Current window
 
-tagcount=$($AETHERA group tagcount)
-groupcount=$($AETHERA group count)
+tagcount=$($AETHER group tagcount)
+groupcount=$($AETHER group count)
 
 map=$(for i in $(seq 1 "$tagcount") ;do echo -n '‧' ;done)
 
@@ -119,7 +119,7 @@ if read_wm_snapshot ;then
 	if [ "$snapshot_group" = "4294967295" ] ;then
 		groupno=$snapshot_group
 		groupname="----"
-	elif candidate_name=$($AETHERA group name "$snapshot_group" 2>/dev/null) &&
+	elif candidate_name=$($AETHER group name "$snapshot_group" 2>/dev/null) &&
 	     [ -n "$candidate_name" ] ;then
 		groupno=$snapshot_group
 		groupname=$candidate_name
@@ -157,7 +157,7 @@ active_window() {
 				# notify Group "$groupno $groupname"
 			fi
 		elif [ "$groupno" != "$snapshot_group" ] &&
-				candidate_name=$($AETHERA group name "$snapshot_group" 2>/dev/null) && [ -n "$candidate_name" ] ;then
+				candidate_name=$($AETHER group name "$snapshot_group" 2>/dev/null) && [ -n "$candidate_name" ] ;then
 			groupno=$snapshot_group
 			groupname=$candidate_name
 			dunstctl close-all
@@ -166,7 +166,7 @@ active_window() {
 	fi
 
 	title="$(map)  $groupname"  # current/last group
-	active=$($AETHERA group current)
+	active=$($AETHER group current)
 	if has_windows $active ;then
 		if deactivated $active ;then
 			title="${title}${SEP}%{U$DEFAULT_FG}%{+u}$(windows $active)%{-u}%{U-}"

@@ -42,7 +42,7 @@ while window=$(windows | sed "s/\^/&$SEP /" | column -s^ -t | rmenu 'raise' -no-
 	[ -d "$HIDDEN/$winid" ] || exit
 	borealis window ids --all | grep -qx "$winid" || exit
 	borealis window focus "$winid" || exit
-	$AETHERA window restore  # to last position
+	$AETHER window restore  # to last position
 	rm -rf -- "${HIDDEN:?}/$winid"  # see window hide
 	finished && break
 done

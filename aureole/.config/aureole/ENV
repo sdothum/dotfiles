@@ -9,7 +9,7 @@ export PARENT=$(which parent)
 
 # Usage: . $(which ENV)
 
-export AETHERA=aether  # unset to restore shell DSL
+export AETHER=aether  # unset to restore shell DSL
 
 # ................................................................... Filesystem
 

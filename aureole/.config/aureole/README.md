@@ -38,8 +38,8 @@ on the tree structure data versus file content manipulation for the same.
 
 This configuration is prepared and linked at ~/.config/aureole but is not
 selected by ~/.windowmanager. The rc filename is aureolerc; Aureole-specific helpers use that name. ENV retains
-the WM selection formula and AETHERA/AETHERA_TRACE compatibility keys, with
-AETHERA=aether. The aether/aetherd compatibility links now select installed
+the WM selection formula and AETHER/AETHER_TRACE compatibility keys, with
+AETHER=aether. The aether/aetherd compatibility links now select installed
 ~/.local/bin/aether and aetherd. Copied persistent settings are in
 ~/.session/aureole; modeled after the original (c-lang) Cirrus configuration/settings.
 
