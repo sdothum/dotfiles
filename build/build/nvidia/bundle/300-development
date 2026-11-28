@@ -141,6 +141,13 @@ m garmin
   time
 
 
+= performance tools
+= ═════════════════
+  clang
+  clang-analyzer
+  perf
+  valgrind
+
 = ai
 = ══
 ! sudo npm install -g @openai/codex
