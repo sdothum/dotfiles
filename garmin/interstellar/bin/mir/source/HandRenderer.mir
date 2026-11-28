@@ -28,7 +28,7 @@ class HandRenderer {
     var _minuteRadius = 8;
     [ @file = "/home/shum/stow/garmin/interstellar/source/HandRenderer.mc"; @line = 11; @position = 13; @symbol_vardef = [_minuteGap,11,13,23]; ]
     private
-    var _minuteGap = 17;
+    var _minuteGap = 15;
     [ @file = "/home/shum/stow/garmin/interstellar/source/HandRenderer.mc"; @line = 16; @position = 13; @symbol_vardef = [_secondsRadius,16,13,27]; ]
     private
     var _secondsRadius = 5;

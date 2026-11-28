@@ -8,7 +8,7 @@ class HandRenderer {
 	private var _hourOuterGap = 2;
 	private var _hourOuterWidth = 1;
 	private var _minuteRadius = 8;
-	private var _minuteGap = 17;
+	private var _minuteGap = 15;
 	// private var _minuteInnerGap = 3;
 	// private var _minuteInnerWidth = 1;
 	// private var _minuteOuterGap = 4;
